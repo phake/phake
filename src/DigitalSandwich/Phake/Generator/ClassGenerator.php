@@ -39,7 +39,7 @@ class ClassGenerator
 
 		$parent = NULL;
 		$interface = NULL;
-		var_dump($class->getMockedClassName(), class_exists($class->getMockedClassName()));
+
 		if (!empty($parentRflc) && $parentRflc->isInterface())
 		{
 			$interface = $class->getMockedClassName();
