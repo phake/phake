@@ -93,5 +93,21 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 			$rflClass->isSubclassOf($mockedClass),
 			'Phake_ClassGenerator_MockClass::generate() did not create a class that extends mocked class.');
 	}
+
+	/**
+	 * Tests that generated mock classes will accept and provide access too a call recorder.
+	 */
+	public function testGenerateCreatesClassWithExposedCallRecorder()
+	{
+		$newClassName = __CLASS__ . '_TestClass3';
+		$mockedClass = 'stdClass';
+
+		$this->classGen->generate($newClassName, $mockedClass);
+
+		$callRecorder = $this->getMock('Phake_CallRecorder_Recorder');
+		$mock = new $newClassName($callRecorder);
+
+		$this->assertSame($callRecorder, $mock->__PHAKE_getCallRecorder());
+	}
 }
 ?>

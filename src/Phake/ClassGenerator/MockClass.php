@@ -58,7 +58,21 @@ class Phake_ClassGenerator_MockClass
 	 */
 	public function generate($newClassName, $mockedClassName)
 	{
-		$classDef = "class {$newClassName} extends {$mockedClassName} { }";
+		$classDef = "
+class {$newClassName} extends {$mockedClassName}
+{
+	private \$__PHAKE_callRecorder;
+
+	public function __construct(\$callRecorder)
+	{
+		\$this->__PHAKE_callRecorder = \$callRecorder;
+	}
+
+	public function __PHAKE_getCallRecorder()
+	{
+		return \$this->__PHAKE_callRecorder;
+	}
+}";
 
 		eval($classDef);
 	}
