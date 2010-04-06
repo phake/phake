@@ -1,26 +1,26 @@
 <?php
-/*
+/* 
  * Phake - Mocking Framework
- *
+ * 
  * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
  * All rights reserved.
- *
+ * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
- *
+ * 
  *  *  Redistributions of source code must retain the above copyright
  *     notice, this list of conditions and the following disclaimer.
- *
+ * 
  *  *  Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in
  *     the documentation and/or other materials provided with the
  *     distribution.
- *
+ * 
  *  *  Neither the name of Mike Lively nor the names of his
  *     contributors may be used to endorse or promote products derived
  *     from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -33,7 +33,7 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- *
+ * 
  * @category   Testing
  * @package    Phake
  * @author     Mike Lively <m@digitalsandwich.com>
@@ -42,63 +42,39 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once('Phake.php');
-require_once('PhakeTest/MockedClass.php');
+require_once 'Phake/Stubber/StubMapper.php';
 
 /**
- * Tests the behavior of the Phake class.
- *
- * The tests below are really all integration tests.
+ * Tests the function of the StubMapper
  *
  * @author Mike Lively <m@digitalsandwich.com>
  */
-class PhakeTest extends PHPUnit_Framework_TestCase
+class Phake_Stubber_StubMapperTest extends PHPUnit_Framework_TestCase
 {
 	/**
-	 * General test for Phake::mock() that it returns a class that inherits from the passed class.
+	 * @var Phake_Stubber_StubMapper
 	 */
-	public function testMock()
+	private $mapper;
+
+	/**
+	 * Sets up the test fixture
+	 */
+	public function setUp()
 	{
-		$this->assertThat(Phake::mock('stdClass'), $this->isInstanceOf('stdClass'));
+		$this->mapper = new Phake_Stubber_StubMapper();
 	}
 
 	/**
-	 * Tests that a simple method call can be verified
+	 * Tests mapping and retrieving stubs.
 	 */
-	public function testSimpleVerifyPasses()
+	public function testStubMapping()
 	{
-		$mock = Phake::mock('PhakeTest_MockedClass');
+		$method = 'foo';
+		$stub = $this->getMock('Phake_Stubber_StaticAnswer', array(), array(), '', FALSE);
 
-		$mock->foo();
+		$this->mapper->mapStubToMethod($stub, $method);
 
-		Phake::verify($mock)->foo();
-	}
-
-	/**
-	 * Tests that a simple method call verification with throw an exception if that method was not
-	 * called.
-	 *
-	 * @expectedException Exception
-	 */
-	public function testSimpleVerifyThrowsExceptionOnFail()
-	{
-		$mock = Phake::mock('PhakeTest_MockedClass');
-
-		Phake::verify($mock)->foo();
-	}
-
-	/**
-	 * Tests that a simple method call can be stubbed to return an expected value.
-	 */
-	public function testSimpleStub()
-	{
-		$mock = Phake::mock('PhakeTest_MockedClass');
-
-		Phake::when($mock)->foo()
-			->thenReturn(42);
-
-		$this->assertEquals(42, $mock->foo());
+		$this->assertEquals($stub, $this->mapper->getStubByMethod($method));
 	}
 }
-
 ?>

@@ -42,6 +42,12 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+require_once 'Phake/Facade.php';
+require_once 'Phake/ClassGenerator/MockClass.php';
+require_once 'Phake/CallRecorder/Recorder.php';
+require_once 'Phake/Proxies/VerifierProxy.php';
+require_once 'Phake/Proxies/StubberProxy.php';
+
 /**
  * Phake - PHP Test Doubles Framework
  *
@@ -51,7 +57,73 @@
  *
  * @author Mike Lively <m@digitalsandwich.com>
  */
-class Phake {
-    
+class Phake
+{
+	/**
+	 * @var Phake_Facade
+	 */
+	private static $phake;
+
+	/**
+	 * Returns a new mock object based on the given class name.
+	 * @param string $className
+	 * @return mixed
+	 */
+	public static function mock($className)
+	{
+		return self::getPhake()->mock($className);
+	}
+
+	/**
+	 * Creates a new verifier for the given mock object.
+	 * @param Phake_CallRecorder_ICallRecorderContainer $mock
+	 * @return Phake_CallRecorder_VerifierProxy
+	 */
+	public static function verify(Phake_CallRecorder_ICallRecorderContainer $mock)
+	{
+		$verifier = self::getPhake()->verify($mock);
+
+		return new Phake_Proxies_VerifierProxy($verifier);
+	}
+
+	/**
+	 * Returns a new stubber for the given mock object.
+	 * @param Phake_Stubber_IStubbable $mock
+	 * @return Phake_Proxies_StubberProxy
+	 */
+	public static function when(Phake_Stubber_IStubbable $mock)
+	{
+		return new Phake_Proxies_StubberProxy($mock);
+	}
+
+	/**
+	 * @param Phake_Facade $phake
+	 */
+	public static function setPhake(Phake_Facade $phake)
+	{
+		self::$phake = $phake;
+	}
+
+	/**
+	 *
+	 * @return Phake_Facade
+	 */
+	public static function getPhake()
+	{
+		if (empty(self::$phake))
+		{
+			self::setPhake(self::createPhake());
+		}
+
+		return self::$phake;
+	}
+
+	/**
+	 * @return Phake_Facade
+	 */
+	public static function createPhake()
+	{
+		return new Phake_Facade(new Phake_ClassGenerator_MockClass(), new Phake_CallRecorder_Recorder());
+	}
 }
 ?>

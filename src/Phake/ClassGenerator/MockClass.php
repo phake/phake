@@ -42,6 +42,10 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+require_once 'Phake/CallRecorder/Call.php';
+require_once 'Phake/CallRecorder/ICallRecorderContainer.php';
+require_once 'Phake/Stubber/IStubbable.php';
+
 /**
  * Creates and executes the code necessary to create a mock class.
  *
@@ -60,21 +64,141 @@ class Phake_ClassGenerator_MockClass
 	{
 		$classDef = "
 class {$newClassName} extends {$mockedClassName}
+	implements Phake_CallRecorder_ICallRecorderContainer,
+						 Phake_Stubber_IStubbable
 {
 	private \$__PHAKE_callRecorder;
 
-	public function __construct(\$callRecorder)
+	private \$__PHAKE_stubMapper;
+
+	public function __construct(\$callRecorder, \$stubMapper)
 	{
 		\$this->__PHAKE_callRecorder = \$callRecorder;
+		\$this->__PHAKE_stubMapper = \$stubMapper;
 	}
 
 	public function __PHAKE_getCallRecorder()
 	{
 		return \$this->__PHAKE_callRecorder;
 	}
-}";
+
+	public function __PHAKE_addAnswer(Phake_Stubber_StaticAnswer \$answer, \$method)
+	{
+		\$this->__PHAKE_stubMapper->mapStubToMethod(\$answer, \$method);
+	}
+
+	{$this->generateMockedMethods(new ReflectionClass($mockedClassName))}
+}
+";
 
 		eval($classDef);
+	}
+
+	/**
+	 * Instantiates a new instance of the given mocked class.
+	 *
+	 * @param string $newClassName
+	 * @param Phake_CallRecorder_Recorder $recorder
+	 * @param Phake_Stubber_StubMapper $mapper
+	 * @return object of type $newClassName
+	 */
+	public function instantiate($newClassName, Phake_CallRecorder_Recorder $recorder, Phake_Stubber_StubMapper $mapper)
+	{
+		return new $newClassName($recorder, $mapper);
+	}
+
+	/**
+	 * Generate mock implementations of all public and protected methods in the mocked class.
+	 * @param ReflectionClass $mockedClass
+	 * @return string
+	 */
+	protected function generateMockedMethods(ReflectionClass $mockedClass)
+	{
+		$methodDefs = '';
+		$filter = ReflectionMethod::IS_ABSTRACT | ReflectionMethod::IS_PROTECTED | ReflectionMethod::IS_PUBLIC;
+		foreach ($mockedClass->getMethods($filter) as $method)
+		{
+			$methodDefs .= $this->implementMethod($method) . "\n";
+		}
+
+		return $methodDefs;
+	}
+
+	/**
+	 * Creates the implementation of a single method
+	 * @param ReflectionMethod $method
+	 */
+	protected function implementMethod(ReflectionMethod $method)
+	{
+		$modifiers = implode(' ', Reflection::getModifierNames($method->getModifiers()));
+
+		$methodDef = "
+	{$modifiers} function {$method->getName()}({$this->generateMethodParameters($method)})
+	{
+		\$this->__PHAKE_callRecorder->recordCall(new Phake_CallRecorder_Call(\$this, '{$method->getName()}'));
+
+		\$stub = \$this->__PHAKE_stubMapper->getStubByMethod('{$method->getName()}');
+
+		if (!empty(\$stub))
+		{
+			return \$stub->getAnswer();
+		}
+		else
+		{
+			return NULL;
+		}
+	}
+";
+
+		return $methodDef;
+	}
+
+	/**
+	 * Generates the code for all the parameters of a given method.
+	 * @param ReflectionMethod $method
+	 * @return string
+	 */
+	protected function generateMethodParameters(ReflectionMethod $method)
+	{
+		$parameters = array();
+		foreach ($method->getParameters() as $parameter)
+		{
+			$parameters[] = $this->implementParameter($parameter);
+		}
+
+		return implode(', ', $parameters);
+	}
+
+	/**
+	 * Generates the code for an individual method parameter.
+	 * @param ReflectionParameter $parameter
+	 * @return string
+	 */
+	protected function implementParameter(ReflectionParameter $parameter)
+	{
+		if ($parameter->isArray())
+		{
+			$type = 'array ';
+		}
+		elseif ($parameter->getClass() == NULL)
+		{
+			$type = $parameter->getClass() . ' ';
+		}
+		else
+		{
+			$type = '';
+		}
+
+		if ($parameter->isDefaultValueAvailable())
+		{
+			$default = ' = ' . var_export($parameter->getDefaultValue(), TRUE);
+		}
+		else
+		{
+			$default = '';
+		}
+
+		return $type . ($parameter->isPassedByReference() ? '&' : '') . '$' . $parameter->getName() . $default;
 	}
 }
 ?>

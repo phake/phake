@@ -1,26 +1,26 @@
 <?php
-/*
+/* 
  * Phake - Mocking Framework
- *
+ * 
  * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
  * All rights reserved.
- *
+ * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
- *
+ * 
  *  *  Redistributions of source code must retain the above copyright
  *     notice, this list of conditions and the following disclaimer.
- *
+ * 
  *  *  Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in
  *     the documentation and/or other materials provided with the
  *     distribution.
- *
+ * 
  *  *  Neither the name of Mike Lively nor the names of his
  *     contributors may be used to endorse or promote products derived
  *     from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -33,7 +33,7 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- *
+ * 
  * @category   Testing
  * @package    Phake
  * @author     Mike Lively <m@digitalsandwich.com>
@@ -42,63 +42,44 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once('Phake.php');
-require_once('PhakeTest/MockedClass.php');
+require_once 'Phake/Stubber/AnswerBinder.php';
+require_once 'Phake/Stubber/IStubbable.php';
+require_once 'Phake/Stubber/StaticAnswer.php';
 
 /**
- * Tests the behavior of the Phake class.
- *
- * The tests below are really all integration tests.
+ * Tests the Answer Factory
  *
  * @author Mike Lively <m@digitalsandwich.com>
  */
-class PhakeTest extends PHPUnit_Framework_TestCase
+class Phake_Stubber_AnswerBinderTest extends PHPUnit_Framework_TestCase
 {
 	/**
-	 * General test for Phake::mock() that it returns a class that inherits from the passed class.
+	 * @var Phake_Stubber_AnswerBinder
 	 */
-	public function testMock()
-	{
-		$this->assertThat(Phake::mock('stdClass'), $this->isInstanceOf('stdClass'));
-	}
+	private $binder;
 
 	/**
-	 * Tests that a simple method call can be verified
+	 * @var Phake_Stubber_IStubbable
 	 */
-	public function testSimpleVerifyPasses()
-	{
-		$mock = Phake::mock('PhakeTest_MockedClass');
-
-		$mock->foo();
-
-		Phake::verify($mock)->foo();
-	}
+	private $mock;
 
 	/**
-	 * Tests that a simple method call verification with throw an exception if that method was not
-	 * called.
-	 *
-	 * @expectedException Exception
+	 * Sets up the test fixture
 	 */
-	public function testSimpleVerifyThrowsExceptionOnFail()
+	public function setUp()
 	{
-		$mock = Phake::mock('PhakeTest_MockedClass');
-
-		Phake::verify($mock)->foo();
+		$this->mock = $this->getMock('Phake_Stubber_IStubbable');
+		$this->factory = new Phake_Stubber_AnswerBinder($this->mock, 'foo');
 	}
 
-	/**
-	 * Tests that a simple method call can be stubbed to return an expected value.
-	 */
-	public function testSimpleStub()
+	public function testBindAnswer()
 	{
-		$mock = Phake::mock('PhakeTest_MockedClass');
-
-		Phake::when($mock)->foo()
-			->thenReturn(42);
-
-		$this->assertEquals(42, $mock->foo());
+		$answer = $this->getMock('Phake_Stubber_StaticAnswer', array(), array(), '', FALSE);
+		$this->mock->expects($this->once())
+			->method('__PHAKE_addAnswer')
+			->with($this->equalTo($answer), $this->equalTo('foo'));
+		
+		$this->factory->bindAnswer($answer);
 	}
 }
-
 ?>

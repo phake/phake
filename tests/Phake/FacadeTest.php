@@ -44,6 +44,9 @@
 
 require_once 'Phake/Facade.php';
 require_once 'Phake/ClassGenerator/MockClass.php';
+require_once 'Phake/CallRecorder/Recorder.php';
+require_once 'Phake/CallRecorder/ICallRecorderContainer.php';
+require_once 'Phake/Stubber/StubMapper.php';
 
 /**
  * Tests the facade class for Phake
@@ -52,37 +55,97 @@ require_once 'Phake/ClassGenerator/MockClass.php';
  */
 class Phake_FacadeTest extends PHPUnit_Framework_TestCase
 {
+	/**
+	 * @var Phake_Facade
+	 */
+	private $facade;
+
+	/**
+	 * @var Phake_ClassGenerator_MockClass
+	 */
+	private $mockGenerator;
+
+	/**
+	 * @var Phake_CallRecorder_Recorder
+	 */
+	private $recorder;
+
+	/**
+	 * Sets up the mock generator
+	 */
+	public function setup()
+	{
+		$this->mockGenerator = $this->getMock('Phake_ClassGenerator_MockClass');
+		$this->recorder = $this->getMock('Phake_CallRecorder_Recorder');
+		$this->facade = new Phake_Facade($this->mockGenerator, $this->recorder);
+	}
+
+	/**
+	 * Tests that the mock generator is called properly
+	 */
 	public function testMock()
 	{
 		$mockedClass = 'stdClass';
 
-		$mockGenerator = $this->createMockGenerator();
-		$this->setMockGeneratorExpectations($mockGenerator, $mockedClass);
+		$this->setMockGeneratorExpectations($mockedClass);
 
-		$facade = new Phake_Facade($mockGenerator);
-		$facade->mock($mockedClass);
+		$this->facade->mock($mockedClass);
 	}
 
 	/**
-	 * Creates a mock mock generator class.
-	 * @return Phake_ClassGenerator_MockClass
+	 * Tests that the mock generator will fail when given a class that does not exist.
+	 * @expectedException InvalidArgumentException
 	 */
-	private function createMockGenerator()
+	public function testMockThrowsOnNonExistantClass()
 	{
-		return $this->getMock('Phake_ClassGenerator_MockClass');
+		$mockedClass = 'NonExistantClass';
+
+		$this->facade->mock($mockedClass);
+	}
+
+	/**
+	 * Tests that Phake will pass a call recorder to a generated class when instantiating it.
+	 */
+	public function testMockPassesCallRecorderToInstantiatedClass()
+	{
+		$mockedClass = 'stdClass';
+
+		$this->setMockInstantiatorExpectations();
+
+		$this->facade->mock($mockedClass);
+	}
+
+	public function testVerifierInstantiatesVerifier()
+	{
+		$mock = $this->getMock('Phake_CallRecorder_ICallRecorderContainer');
+		
+		$mock->expects($this->once())
+			->method('__PHAKE_getCallRecorder')
+			->will($this->returnValue($this->recorder));
+
+		$this->assertType('Phake_CallRecorder_Verifier', $this->facade->verify($mock));
 	}
 
 	/**
 	 * Sets expectations for how the generator should be called
 	 *
-	 * @param Phake_ClassGenerator_MockClass $generator - The mock mock generator
 	 * @param string $mockedClass - The class name that we expect to mock
 	 */
-	private function setMockGeneratorExpectations(Phake_ClassGenerator_MockClass $generator, $mockedClass)
+	private function setMockGeneratorExpectations($mockedClass)
 	{
-		$generator->expects($this->once())
+		$this->mockGenerator->expects($this->once())
 			->method('generate')
 			->with($this->matchesRegularExpression('#^[A-Za-z0-9_]+$#'), $this->equalTo($mockedClass));
+	}
+
+	/**
+	 * Sets expectations for how the mock class should be created from the class generator
+	 */
+	private function setMockInstantiatorExpectations()
+	{
+		$this->mockGenerator->expects($this->once())
+				->method('instantiate')
+				->with($this->matchesRegularExpression('#^[A-Za-z0-9_]+$#'), $this->equalTo($this->recorder));
 	}
 }
 ?>

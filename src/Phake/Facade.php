@@ -42,6 +42,9 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+require_once 'Phake/CallRecorder/Verifier.php';
+require_once 'Phake/Stubber/StubMapper.php';
+
 /**
  * A facade class providing functionality to interact with the Phake framework.
  *
@@ -52,14 +55,20 @@ class Phake_Facade
 	/**
 	 * @var Phake_ClassGenerator_MockClass
 	 */
-	protected $mockGenerator;
+	private $mockGenerator;
+
+	/**
+	 * @var Phake_CallRecorder_Recorder
+	 */
+	private $recorder;
 
 	/**
 	 * @param Phake_ClassGenerator_MockClass $mockGenerator - The generator used to construct mock classes
 	 */
-	public function  __construct(Phake_ClassGenerator_MockClass $mockGenerator)
+	public function  __construct(Phake_ClassGenerator_MockClass $mockGenerator, Phake_CallRecorder_Recorder $recorder)
 	{
 		$this->mockGenerator = $mockGenerator;
+		$this->recorder = $recorder;
 	}
 
 	/**
@@ -70,7 +79,26 @@ class Phake_Facade
 	 */
 	public function mock($mockedClass)
 	{
-		$this->mockGenerator->generate($this->generateUniqueClassName($mockedClass), $mockedClass);
+		if (!class_exists($mockedClass, TRUE))
+		{
+			throw new InvalidArgumentException("The class [{$mockedClass} does not exist");
+		}
+
+		$newClassName = $this->generateUniqueClassName($mockedClass);
+		$this->mockGenerator->generate($newClassName, $mockedClass);
+		return $this->mockGenerator->instantiate($newClassName, $this->recorder, new Phake_Stubber_StubMapper());
+	}
+
+	/**
+	 * Returns a verifier for the given mock object.
+	 *
+	 * @todo either remove this, or removed the call recorder container stuff, I only need one.
+	 * @param Phake_CallRecorder_ICallRecorderContainer $mockObj
+	 * @return Phake_CallRecorder_Verifier
+	 */
+	public function verify(Phake_CallRecorder_ICallRecorderContainer $mockObj)
+	{
+		return new Phake_CallRecorder_Verifier($mockObj->__PHAKE_getCallRecorder(), $mockObj);
 	}
 
 	/**
@@ -79,6 +107,7 @@ class Phake_Facade
 	 * The $base will be used as the prefix for the new class name.
 	 *
 	 * @param string $base
+	 * @return string
 	 */
 	private function generateUniqueClassName($base)
 	{

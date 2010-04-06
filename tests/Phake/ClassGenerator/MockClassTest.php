@@ -43,6 +43,11 @@
  */
 
 require_once 'Phake/ClassGenerator/MockClass.php';
+require_once 'Phake/CallRecorder/Recorder.php';
+require_once 'Phake/Stubber/StubMapper.php';
+require_once 'Phake/Stubber/StaticAnswer.php';
+
+require_once 'PhakeTest/MockedClass.php';
 
 /**
  * Description of MockClass
@@ -105,9 +110,100 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 		$this->classGen->generate($newClassName, $mockedClass);
 
 		$callRecorder = $this->getMock('Phake_CallRecorder_Recorder');
-		$mock = new $newClassName($callRecorder);
+		$stubMapper = $this->getMock('Phake_Stubber_StubMapper');
+		$mock = $this->classGen->instantiate($newClassName, $callRecorder, $stubMapper);
 
 		$this->assertSame($callRecorder, $mock->__PHAKE_getCallRecorder());
+	}
+
+	/**
+	 * Tests that generated mock classes will record calls to mocked methods.
+	 */
+	public function testCallingMockedMethodRecordsCall()
+	{
+		$newClassName = __CLASS__ . '_TestClass4';
+		$mockedClass = 'PhakeTest_MockedClass';
+
+		$this->classGen->generate($newClassName, $mockedClass);
+
+		$callRecorder = $this->getMock('Phake_CallRecorder_Recorder');
+		$stubMapper = $this->getMock('Phake_Stubber_StubMapper');
+		$mock = $this->classGen->instantiate($newClassName, $callRecorder, $stubMapper);
+
+		/* @var $callRecorder Phake_CallRecorder_Recorder */
+		$callRecorder->expects($this->once())
+			->method('recordCall')
+			->with($this->equalTo(new Phake_CallRecorder_Call($mock, 'foo')));
+
+		$mock->foo();
+	}
+
+	/**
+	 * Tests the instantiation functionality of the mock generator.
+	 */
+	public function testInstantiate()
+	{
+		$newClassName = __CLASS__ . '_TestClass5';
+		$mockedClass = 'PhakeTest_MockedClass';
+
+		$this->classGen->generate($newClassName, $mockedClass);
+
+		$callRecorder = $this->getMock('Phake_CallRecorder_Recorder');
+		$stubMapper = $this->getMock('Phake_Stubber_StubMapper');
+		$mock = $this->classGen->instantiate($newClassName, $callRecorder, $stubMapper);
+
+		$this->assertType($newClassName, $mock);
+	}
+
+	/**
+	 * Tests that calling a stubbed method will result in the stubbed answer being returned.
+	 */
+	public function testStubbedMethodsReturnStubbedAnswer()
+	{
+		$newClassName = __CLASS__ . '_TestClass7';
+		$mockedClass = 'PhakeTest_MockedClass';
+
+		$this->classGen->generate($newClassName, $mockedClass);
+
+		$callRecorder = $this->getMock('Phake_CallRecorder_Recorder');
+		$stubMapper = $this->getMock('Phake_Stubber_StubMapper');
+		$mock = $this->classGen->instantiate($newClassName, $callRecorder, $stubMapper);
+
+		$answer = $this->getMock('Phake_Stubber_StaticAnswer', array(), array(), '', FALSE);
+
+		$answer->expects($this->once())
+			->method('getAnswer');
+
+		$stubMapper->expects($this->once())
+			->method('getStubByMethod')
+			->with($this->equalTo('foo'))
+			->will($this->returnValue($answer));
+
+		$mock->foo();
+	}
+
+	/**
+	 * Tests that generated mock classes will allow setting stubs to methods. This is delegated
+	 * internally to the stubMapper
+	 */
+	public function testStubbableInterface()
+	{
+		$newClassName = __CLASS__ . '_TestClass8';
+		$mockedClass = 'stdClass';
+
+		$this->classGen->generate($newClassName, $mockedClass);
+
+		$callRecorder = $this->getMock('Phake_CallRecorder_Recorder');
+		$stubMapper = $this->getMock('Phake_Stubber_StubMapper');
+		$mock = $this->classGen->instantiate($newClassName, $callRecorder, $stubMapper);
+
+		$answer = $this->getMock('Phake_Stubber_StaticAnswer', array(), array(), '', FALSE);
+
+		$stubMapper->expects($this->once())
+			->method('mapStubToMethod')
+			->with($this->equalTo($answer), $this->equalTo('foo'));
+
+		$mock->__PHAKE_addAnswer($answer, 'foo');
 	}
 }
 ?>

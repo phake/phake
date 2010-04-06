@@ -1,26 +1,26 @@
 <?php
-/*
+/* 
  * Phake - Mocking Framework
- *
+ * 
  * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
  * All rights reserved.
- *
+ * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
- *
+ * 
  *  *  Redistributions of source code must retain the above copyright
  *     notice, this list of conditions and the following disclaimer.
- *
+ * 
  *  *  Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in
  *     the documentation and/or other materials provided with the
  *     distribution.
- *
+ * 
  *  *  Neither the name of Mike Lively nor the names of his
  *     contributors may be used to endorse or promote products derived
  *     from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -33,7 +33,7 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- *
+ * 
  * @category   Testing
  * @package    Phake
  * @author     Mike Lively <m@digitalsandwich.com>
@@ -42,63 +42,61 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once('Phake.php');
-require_once('PhakeTest/MockedClass.php');
+require_once('Phake/CallRecorder/Verifier.php');
+require_once('Phake/CallRecorder/Call.php');
+require_once('Phake/CallRecorder/Recorder.php');
 
 /**
- * Tests the behavior of the Phake class.
- *
- * The tests below are really all integration tests.
+ * Description of VerifierTest
  *
  * @author Mike Lively <m@digitalsandwich.com>
  */
-class PhakeTest extends PHPUnit_Framework_TestCase
+class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
 {
 	/**
-	 * General test for Phake::mock() that it returns a class that inherits from the passed class.
+	 * @var Phake_CallRecorder_Recorder
 	 */
-	public function testMock()
+	private $recorder;
+
+	/**
+	 * @var Phake_CallRecorder_Verifier
+	 */
+	private $verifier;
+
+	/**
+	 * Sets up the verifier and its call recorder
+	 */
+	public function setUp()
 	{
-		$this->assertThat(Phake::mock('stdClass'), $this->isInstanceOf('stdClass'));
+		$obj = new stdClass();
+		$this->recorder = $this->getMock('Phake_CallRecorder_Recorder');
+
+		$calls = array(
+			new Phake_CallRecorder_Call($obj, 'foo'),
+			new Phake_CallRecorder_Call($obj, 'bar'),
+		);
+
+		$this->recorder->expects($this->any())
+			->method('getAllCalls')
+			->will($this->returnValue($calls));
+
+		$this->verifier = new Phake_CallRecorder_Verifier($this->recorder, $obj);
 	}
 
 	/**
-	 * Tests that a simple method call can be verified
+	 * Tests that a verifier can find a call that has been recorded.
 	 */
-	public function testSimpleVerifyPasses()
+	public function testVerifierFindsCall()
 	{
-		$mock = Phake::mock('PhakeTest_MockedClass');
-
-		$mock->foo();
-
-		Phake::verify($mock)->foo();
+		$this->assertTrue($this->verifier->verifyCall('foo'), 'foo call was not found');
 	}
 
 	/**
-	 * Tests that a simple method call verification with throw an exception if that method was not
-	 * called.
-	 *
-	 * @expectedException Exception
+	 * Tests that a verifier can find a call that has been recorded.
 	 */
-	public function testSimpleVerifyThrowsExceptionOnFail()
+	public function testVerifierDoesNotFindCall()
 	{
-		$mock = Phake::mock('PhakeTest_MockedClass');
-
-		Phake::verify($mock)->foo();
-	}
-
-	/**
-	 * Tests that a simple method call can be stubbed to return an expected value.
-	 */
-	public function testSimpleStub()
-	{
-		$mock = Phake::mock('PhakeTest_MockedClass');
-
-		Phake::when($mock)->foo()
-			->thenReturn(42);
-
-		$this->assertEquals(42, $mock->foo());
+		$this->assertFalse($this->verifier->verifyCall('test'), 'test call was found but should not have been');
 	}
 }
-
 ?>
