@@ -183,8 +183,6 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testVerifyCallWithHamcrestMatcher()
 	{
-		$this->markTestIncomplete();
-
 		if (!HAMCREST_LOADED)
 		{
 			$this->markTestSkipped('Hamcrest library not available');
@@ -204,8 +202,6 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testVerifyCallWithHamcrestMatcherFails()
 	{
-		$this->markTestIncomplete();
-
 		if (!HAMCREST_LOADED)
 		{
 			$this->markTestSkipped('Hamcrest library not available');

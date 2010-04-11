@@ -46,6 +46,8 @@ require_once 'Phake/Proxies/VerifierProxy.php';
 require_once 'Phake/CallRecorder/Verifier.php';
 require_once 'PHPUnit/Framework/Constraint.php';
 require_once 'Phake/Matchers/PHPUnitConstraintAdapter.php';
+if (HAMCREST_LOADED) require_once 'Hamcrest/Matcher.php';
+require_once 'Phake/Matchers/HamcrestMatcherAdapter.php';
 require_once 'Phake/Matchers/EqualsMatcher.php';
 
 /**
@@ -146,5 +148,25 @@ class Phake_Proxies_VerifierProxyTest extends PHPUnit_Framework_TestCase
 		$this->proxy->foo($constraint);
 	}
 
+	/**
+	 * Tests that verifier calls given a Hamcrest matcher are transformed by the Phake matcher adapter.
+	 */
+	public function testProxyTransformsHamcrestMatchers()
+	{
+		if (!HAMCREST_LOADED)
+		{
+			$this->markTestSkipped('Hamcrest is not loaded');
+		}
+
+		$matcher = $this->getMock('Hamcrest_Matcher');
+		$argumentMatcher = new Phake_Matchers_HamcrestMatcherAdapter($matcher);
+
+		$this->verifier->expects($this->once())
+			->method('verifyCall')
+			->with($this->anything(), $this->equalTo(array($argumentMatcher)))
+			->will($this->returnValue(TRUE));
+
+		$this->proxy->foo($matcher);
+	}
 }
 ?>

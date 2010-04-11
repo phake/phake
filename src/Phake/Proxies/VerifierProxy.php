@@ -43,6 +43,7 @@
  */
 
 require_once 'Phake/Matchers/PHPUnitConstraintAdapter.php';
+require_once 'Phake/Matchers/HamcrestMatcherAdapter.php';
 require_once 'Phake/Matchers/EqualsMatcher.php';
 
 /**
@@ -99,6 +100,11 @@ class Phake_Proxies_VerifierProxy
 							&& $argument instanceof PHPUnit_Framework_Constraint)
 			{
 				$matchers[] = new Phake_Matchers_PHPUnitConstraintAdapter($argument);
+			}
+			elseif (interface_exists('Hamcrest_Matcher')
+							&& $argument instanceof Hamcrest_Matcher)
+			{
+				$matchers[] = new Phake_Matchers_HamcrestMatcherAdapter($argument);
 			}
 			else
 			{
