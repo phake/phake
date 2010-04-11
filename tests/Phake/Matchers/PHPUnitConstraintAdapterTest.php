@@ -42,63 +42,44 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+require_once 'Phake/Matchers/PHPUnitConstraintAdapter.php';
+require_once 'PHPUnit/Framework/Constraint.php';
+
 /**
- * Acts as a proxy to Phake_CallRecorder_Verifier that allows verifying methods using the magic
- * __call() method in PHP.
- *
- * Also throws an exception when a verification call fails.
- *
- * @author Mike Lively <m@digitalsandwich.com>
+ * Tests the adapting of phpunit constraints into Phake matchers
  */
-class Phake_Proxies_VerifierProxy
+class Phake_Matchers_PHPUnitConstraintAdapterTest extends PHPUnit_Framework_TestCase
 {
 	/**
-	 * @var Phake_CallRecorder_Verifier
+	 * @var Phake_Matchers_PHPUnitConstraintAdapter
 	 */
-	private $verifier;
+	private $adapter;
 
 	/**
-	 * @param Phake_CallRecorder_Verifier $verifier
+	 * @var PHPUnit_Framework_Constraint
 	 */
-	public function __construct(Phake_CallRecorder_Verifier $verifier)
+	private $constraint;
+
+	/**
+	 * Sets up the test fixture
+	 */
+	public function setUp()
 	{
-		$this->verifier = $verifier;
+		$this->constraint = $this->getMock('PHPUnit_Framework_Constraint');
+		$this->adapter = new Phake_Matchers_PHPUnitConstraintAdapter($this->constraint);
 	}
 
 	/**
-	 * A call magic method to provide a more fluent interface to the verifier.
-	 * @param string $method
-	 * @param array $arguments
+	 * Tests that matches() will forward calls to evaluate()
 	 */
-	public function __call($method, array $arguments)
+	public function testMatchesCallsForwarded()
 	{
-		if (!$this->verifier->verifyCall($method, $this->translateArguments($arguments)))
-		{
-			throw new Exception("Expected {$method} to be called.");
-		}
-	}
+		$this->constraint->expects($this->once())
+						->method('evaluate')
+						->with($this->equalTo('foo'));
 
-	/**
-	 * Takes an array of arguments and creates an array of matchers representing those arguments
-	 * @param array $arguments
-	 */
-	private function translateArguments(array $arguments)
-	{
-		$matchers = array();
-
-		foreach ($arguments as $argument)
-		{
-			if ($argument instanceof Phake_Matchers_IArgumentMatcher)
-			{
-				$matchers[] = $argument;
-			}
-			else
-			{
-				$matchers[] = new Phake_Matchers_EqualsMatcher($argument);
-			}
-		}
-
-		return $matchers;
+		$this->adapter->matches('foo');
 	}
 }
+
 ?>

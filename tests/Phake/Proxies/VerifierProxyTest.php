@@ -100,7 +100,7 @@ class Phake_Proxies_VerifierProxyTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testVerifierCallsAreForwardedArguments()
 	{
-		$argumentMatcher = $this->getMock('Phake_Matchers_EqualsMatcher', array(), array(), '', FALSE);
+		$argumentMatcher = $this->getMock('Phake_Matchers_IArgumentMatcher');
 
 		$this->verifier->expects($this->once())
 			->method('verifyCall')

@@ -43,62 +43,15 @@
  */
 
 /**
- * Acts as a proxy to Phake_CallRecorder_Verifier that allows verifying methods using the magic
- * __call() method in PHP.
- *
- * Also throws an exception when a verification call fails.
- *
- * @author Mike Lively <m@digitalsandwich.com>
+ * The interface for argument matchers
  */
-class Phake_Proxies_VerifierProxy
+interface Phake_Matchers_IArgumentMatcher
 {
 	/**
-	 * @var Phake_CallRecorder_Verifier
+	 * Executes the matcher on a given argument value. Returns TRUE on a match, FALSE otherwise.
+	 * @param mixed $argument
+	 * @return boolean
 	 */
-	private $verifier;
-
-	/**
-	 * @param Phake_CallRecorder_Verifier $verifier
-	 */
-	public function __construct(Phake_CallRecorder_Verifier $verifier)
-	{
-		$this->verifier = $verifier;
-	}
-
-	/**
-	 * A call magic method to provide a more fluent interface to the verifier.
-	 * @param string $method
-	 * @param array $arguments
-	 */
-	public function __call($method, array $arguments)
-	{
-		if (!$this->verifier->verifyCall($method, $this->translateArguments($arguments)))
-		{
-			throw new Exception("Expected {$method} to be called.");
-		}
-	}
-
-	/**
-	 * Takes an array of arguments and creates an array of matchers representing those arguments
-	 * @param array $arguments
-	 */
-	private function translateArguments(array $arguments)
-	{
-		$matchers = array();
-
-		foreach ($arguments as $argument)
-		{
-			if ($argument instanceof Phake_Matchers_IArgumentMatcher)
-			{
-				$matchers[] = $argument;
-			}
-			else
-			{
-				$matchers[] = new Phake_Matchers_EqualsMatcher($argument);
-			}
-		}
-
-		return $matchers;
-	}
+	public function matches($argument);
 }
 ?>

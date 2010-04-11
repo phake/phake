@@ -42,63 +42,39 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+require_once 'Phake/Matchers/IArgumentMatcher.php';
+
 /**
- * Acts as a proxy to Phake_CallRecorder_Verifier that allows verifying methods using the magic
- * __call() method in PHP.
- *
- * Also throws an exception when a verification call fails.
- *
- * @author Mike Lively <m@digitalsandwich.com>
+ * An adapter class allowing PHPUnit constraints to be treated as though they were Phake argument 
+ * matchers.
  */
-class Phake_Proxies_VerifierProxy
+class Phake_Matchers_PHPUnitConstraintAdapter implements Phake_Matchers_IArgumentMatcher
 {
 	/**
-	 * @var Phake_CallRecorder_Verifier
+	 * @var PHPUnit_Framework_Constraint
 	 */
-	private $verifier;
+	private $constraint;
 
 	/**
-	 * @param Phake_CallRecorder_Verifier $verifier
+	 * @param PHPUnit_Framework_Constraint $constraint
 	 */
-	public function __construct(Phake_CallRecorder_Verifier $verifier)
+	public function __construct(PHPUnit_Framework_Constraint $constraint)
 	{
-		$this->verifier = $verifier;
+		$this->constraint = $constraint;
 	}
 
 	/**
-	 * A call magic method to provide a more fluent interface to the verifier.
-	 * @param string $method
-	 * @param array $arguments
+	 * Executes the matcher on a given argument value.
+	 *
+	 * Forwards the call to PHPUnit's evaluate() method.
+	 *
+	 * @param mixed $argument
+	 * @return boolean
 	 */
-	public function __call($method, array $arguments)
+	public function matches($argument)
 	{
-		if (!$this->verifier->verifyCall($method, $this->translateArguments($arguments)))
-		{
-			throw new Exception("Expected {$method} to be called.");
-		}
-	}
-
-	/**
-	 * Takes an array of arguments and creates an array of matchers representing those arguments
-	 * @param array $arguments
-	 */
-	private function translateArguments(array $arguments)
-	{
-		$matchers = array();
-
-		foreach ($arguments as $argument)
-		{
-			if ($argument instanceof Phake_Matchers_IArgumentMatcher)
-			{
-				$matchers[] = $argument;
-			}
-			else
-			{
-				$matchers[] = new Phake_Matchers_EqualsMatcher($argument);
-			}
-		}
-
-		return $matchers;
+		return $this->constraint->evaluate($argument);
 	}
 }
+
 ?>

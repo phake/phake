@@ -110,12 +110,12 @@ class Phake_CallRecorder_Verifier
 			{
 				$matcher = current($argumentMatchers);
 
-				if (!$matcher instanceof Phake_Matchers_EqualsMatcher)
+				if (!$matcher instanceof Phake_Matchers_IArgumentMatcher)
 				{
 					throw new InvalidArgumentException("Argument matcher [{$i}] is not a valid matcher");
 				}
 
-				/* @var $matcher Phake_Matchers_EqualsMatcher */
+				/* @var $matcher Phake_Matchers_IArgumentMatcher */
 				if (!$matcher->matches($argument))
 				{
 					return FALSE;

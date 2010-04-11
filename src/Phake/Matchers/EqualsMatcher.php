@@ -42,12 +42,14 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+require_once 'Phake/Matchers/IArgumentMatcher.php';
+
 /**
  * A matcher to validate that an argument equals a particular value.
  *
  * This matcher utilizes the same functionality as non-strict equality in php, in other words '=='
  */
-class Phake_Matchers_EqualsMatcher
+class Phake_Matchers_EqualsMatcher implements Phake_Matchers_IArgumentMatcher
 {
 	/**
 	 * @var mixed
