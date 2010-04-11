@@ -45,6 +45,7 @@
 require_once('Phake/CallRecorder/Verifier.php');
 require_once('Phake/CallRecorder/Call.php');
 require_once('Phake/CallRecorder/Recorder.php');
+require_once('Phake/Matchers/EqualsMatcher.php');
 
 /**
  * Description of VerifierTest
@@ -74,6 +75,9 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
 		$calls = array(
 			new Phake_CallRecorder_Call($obj, 'foo', array()),
 			new Phake_CallRecorder_Call($obj, 'bar', array()),
+			new Phake_CallRecorder_Call($obj, 'foo', array(
+				'bar', 'foo'
+			)),
 		);
 
 		$this->recorder->expects($this->any())
@@ -88,15 +92,35 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testVerifierFindsCall()
 	{
-		$this->assertTrue($this->verifier->verifyCall('foo'), 'foo call was not found');
+		$this->assertTrue($this->verifier->verifyCall('foo', array()), 'foo call was not found');
 	}
 
 	/**
-	 * Tests that a verifier can find a call that has been recorded.
+	 * Tests that a verifier will not find a call that has not been recorded.
 	 */
 	public function testVerifierDoesNotFindCall()
 	{
-		$this->assertFalse($this->verifier->verifyCall('test'), 'test call was found but should not have been');
+		$this->assertFalse($this->verifier->verifyCall('test', array()), 'test call was found but should not have been');
+	}
+
+	/**
+	 * Tests that a verifier will not find a call that has been recorded with non matching parameters.
+	 */
+	public function testVerifierDoesNotFindCallWithUnmatchedArguments()
+	{
+		$this->assertFalse($this->verifier->verifyCall('foo', array(
+			new Phake_Matchers_EqualsMatcher('test'),
+			new Phake_Matchers_EqualsMatcher('test'))));
+	}
+
+	/**
+	 * Tests that a verifier will throw an exception if a matcher is not passed within the array.
+	 *
+	 * @expectedException InvalidArgumentException
+	 */
+	public function testVerifierThrowsWhenCalledWithNonMatchers()
+	{
+		$this->verifier->verifyCall('foo', array('blah', 'blah'));
 	}
 }
 ?>

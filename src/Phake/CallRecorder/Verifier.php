@@ -72,22 +72,58 @@ class Phake_CallRecorder_Verifier
 
 	/**
 	 * Returns whether or not a call has been made in the associated call recorder.
-	 * @param stromg $method
+	 * @param string $method
+	 * @param array $argumentMatcher
 	 * @return boolean
 	 */
-	public function verifyCall($method)
+	public function verifyCall($method, array $argumentMatchers)
 	{
 		$calls = $this->recorder->getAllCalls();
 
 		foreach ($calls as $call)
 		{
 			/* @var $call Phake_CallRecorder_Call */
-			if ($call->getMethod() == $method && $call->getObject() === $this->obj)
+			if ($call->getMethod() == $method 
+							&& $call->getObject() === $this->obj
+							&& count($call->getArguments()) == count($argumentMatchers))
 			{
-				return TRUE;
+				if ($this->validateArguments($call->getArguments(), $argumentMatchers))
+				{
+					return TRUE;
+				}
 			}
 		}
 		return FALSE;
+	}
+
+	/**
+	 * Returns whether or not the passed in arguments match all of the passed in argument matchers.
+	 * @param array $arguments
+	 * @param array $argumentMatchers
+	 * @return boolean
+	 */
+	private function validateArguments(array $arguments, array $argumentMatchers)
+	{
+			reset($argumentMatchers);
+			foreach ($arguments as  $i => $argument)
+			{
+				$matcher = current($argumentMatchers);
+
+				if (!$matcher instanceof Phake_Matchers_EqualsMatcher)
+				{
+					throw new InvalidArgumentException("Argument matcher [{$i}] is not a valid matcher");
+				}
+
+				/* @var $matcher Phake_Matchers_EqualsMatcher */
+				if (!$matcher->matches($argument))
+				{
+					return FALSE;
+				}
+
+				next($argumentMatchers);
+			}
+
+			return TRUE;
 	}
 }
 ?>
