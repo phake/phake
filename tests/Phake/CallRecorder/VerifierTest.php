@@ -72,8 +72,8 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
 		$this->recorder = $this->getMock('Phake_CallRecorder_Recorder');
 
 		$calls = array(
-			new Phake_CallRecorder_Call($obj, 'foo'),
-			new Phake_CallRecorder_Call($obj, 'bar'),
+			new Phake_CallRecorder_Call($obj, 'foo', array()),
+			new Phake_CallRecorder_Call($obj, 'bar', array()),
 		);
 
 		$this->recorder->expects($this->any())

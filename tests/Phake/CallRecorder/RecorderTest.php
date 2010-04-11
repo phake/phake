@@ -57,8 +57,8 @@ class Phake_CallRecorder_RecorderTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testRecord()
 	{
-		$call = new Phake_CallRecorder_Call($this, 'someMethod');
-		$call2 = new Phake_CallRecorder_Call($this, 'someMethod2');
+		$call = new Phake_CallRecorder_Call($this, 'someMethod', array());
+		$call2 = new Phake_CallRecorder_Call($this, 'someMethod2', array());
 		$callRecorder = new Phake_CallRecorder_Recorder();
 		$callRecorder->recordCall($call);
 		$callRecorder->recordCall($call2);

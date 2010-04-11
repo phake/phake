@@ -58,7 +58,7 @@ class Phake_CallRecorder_CallTest extends PHPUnit_Framework_TestCase
 
 	public function setUp()
 	{
-		$this->call = new Phake_CallRecorder_Call($this, 'someMethod');
+		$this->call = new Phake_CallRecorder_Call($this, 'someMethod', array('foo', 'bar'));
 	}
 
 	/**
@@ -75,6 +75,11 @@ class Phake_CallRecorder_CallTest extends PHPUnit_Framework_TestCase
 	public function testGetMethod()
 	{
 		$this->assertEquals('someMethod', $this->call->getMethod());
+	}
+
+	public function testGetArguments()
+	{
+		$this->assertEquals(array('foo', 'bar'), $this->call->getArguments());
 	}
 }
 ?>

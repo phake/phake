@@ -60,13 +60,19 @@ class Phake_CallRecorder_Call
 	private $method;
 
 	/**
+	 * @var array
+	 */
+	private $arguments;
+
+	/**
 	 * @param object $object - The object the method was called on
 	 * @param string $method - The method that was made
 	 */
-	public function __construct($object, $method)
+	public function __construct($object, $method, array $arguments)
 	{
 		$this->object = $object;
 		$this->method = $method;
+		$this->arguments = $arguments;
 	}
 
 	/**
@@ -83,6 +89,14 @@ class Phake_CallRecorder_Call
 	public function getMethod()
 	{
 		return $this->method;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getArguments()
+	{
+		return $this->arguments;
 	}
 }
 ?>

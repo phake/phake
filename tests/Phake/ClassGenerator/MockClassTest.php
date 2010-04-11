@@ -133,7 +133,7 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 		/* @var $callRecorder Phake_CallRecorder_Recorder */
 		$callRecorder->expects($this->once())
 			->method('recordCall')
-			->with($this->equalTo(new Phake_CallRecorder_Call($mock, 'foo')));
+			->with($this->equalTo(new Phake_CallRecorder_Call($mock, 'foo', array())));
 
 		$mock->foo();
 	}
