@@ -47,6 +47,7 @@ require_once 'Phake/ClassGenerator/MockClass.php';
 require_once 'Phake/CallRecorder/Recorder.php';
 require_once 'Phake/Proxies/VerifierProxy.php';
 require_once 'Phake/Proxies/StubberProxy.php';
+require_once 'Phake/Matchers/EqualsMatcher.php';
 
 /**
  * Phake - PHP Test Doubles Framework
@@ -126,8 +127,14 @@ class Phake
 		return new Phake_Facade(new Phake_ClassGenerator_MockClass(), new Phake_CallRecorder_Recorder());
 	}
 
-	public static function equalTo()
+	/**
+	 * Returns an equals matcher for the given value.
+	 * @param mixed $value
+	 * @return Phake_Matchers_EqualsMatcher
+	 */
+	public static function equalTo($value)
 	{
+		return new Phake_Matchers_EqualsMatcher($value);
 	}
 }
 ?>

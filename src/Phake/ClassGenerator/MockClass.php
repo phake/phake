@@ -135,7 +135,8 @@ class {$newClassName} extends {$mockedClassName}
 		$methodDef = "
 	{$modifiers} function {$method->getName()}({$this->generateMethodParameters($method)})
 	{
-		\$this->__PHAKE_callRecorder->recordCall(new Phake_CallRecorder_Call(\$this, '{$method->getName()}', array()));
+
+		\$this->__PHAKE_callRecorder->recordCall(new Phake_CallRecorder_Call(\$this, '{$method->getName()}', func_get_args()));
 
 		\$stub = \$this->__PHAKE_stubMapper->getStubByMethod('{$method->getName()}');
 

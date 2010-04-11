@@ -139,6 +139,28 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Tests that calls are recorded with arguments
+	 */
+	public function testCallingmockedMethodRecordsArguments()
+	{
+		$newClassName = __CLASS__ . '_TestClass9';
+		$mockedClass = 'PhakeTest_MockedClass';
+
+		$this->classGen->generate($newClassName, $mockedClass);
+
+		$callRecorder = $this->getMock('Phake_CallRecorder_Recorder');
+		$stubMapper = $this->getMock('Phake_Stubber_StubMapper');
+		$mock = $this->classGen->instantiate($newClassName, $callRecorder, $stubMapper);
+
+		/* @var $callRecorder Phake_CallRecorder_Recorder */
+		$callRecorder->expects($this->once())
+			->method('recordCall')
+			->with($this->equalTo(new Phake_CallRecorder_Call($mock, 'fooWithArgument', array('bar'))));
+
+		$mock->fooWithArgument('bar');
+	}
+
+	/**
 	 * Tests the instantiation functionality of the mock generator.
 	 */
 	public function testInstantiate()

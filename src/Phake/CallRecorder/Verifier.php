@@ -80,6 +80,7 @@ class Phake_CallRecorder_Verifier
 	{
 		$calls = $this->recorder->getAllCalls();
 
+		var_dump($calls, $argumentMatchers);
 		foreach ($calls as $call)
 		{
 			/* @var $call Phake_CallRecorder_Call */
