@@ -109,5 +109,21 @@ class Phake_Proxies_VerifierProxyTest extends PHPUnit_Framework_TestCase
 
 		$this->proxy->foo($argumentMatcher);
 	}
+
+	/**
+	 * Tests that verifier calls that are not given an argument matcher will generate an equals matcher
+	 * with the given value.
+	 */
+	public function testProxyTransformsNonMatchersToEqualsMatcher()
+	{
+		$argumentMatcher = new Phake_Matchers_EqualsMatcher('test');
+
+		$this->verifier->expects($this->once())
+			->method('verifyCall')
+			->with($this->anything(), $this->equalTo(array($argumentMatcher)))
+			->will($this->returnValue(TRUE));
+
+		$this->proxy->foo('test');
+	}
 }
 ?>

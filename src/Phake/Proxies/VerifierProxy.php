@@ -72,10 +72,33 @@ class Phake_Proxies_VerifierProxy
 	 */
 	public function __call($method, array $arguments)
 	{
-		if (!$this->verifier->verifyCall($method, $arguments))
+		if (!$this->verifier->verifyCall($method, $this->translateArguments($arguments)))
 		{
 			throw new Exception("Expected {$method} to be called.");
 		}
+	}
+
+	/**
+	 * Takes an array of arguments and creates an array of matchers representing those arguments
+	 * @param array $arguments
+	 */
+	private function translateArguments(array $arguments)
+	{
+		$matchers = array();
+
+		foreach ($arguments as $argument)
+		{
+			if ($argument instanceof Phake_Matchers_EqualsMatcher)
+			{
+				$matchers[] = $argument;
+			}
+			else
+			{
+				$matchers[] = new Phake_Matchers_EqualsMatcher($argument);
+			}
+		}
+
+		return $matchers;
 	}
 }
 ?>

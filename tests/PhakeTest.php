@@ -57,7 +57,7 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 	/**
 	 * General test for Phake::mock() that it returns a class that inherits from the passed class.
 	 */
-	public function atestMock()
+	public function testMock()
 	{
 		$this->assertThat(Phake::mock('stdClass'), $this->isInstanceOf('stdClass'));
 	}
@@ -65,7 +65,7 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Tests that a simple method call can be verified
 	 */
-	public function atestSimpleVerifyPasses()
+	public function testSimpleVerifyPasses()
 	{
 		$mock = Phake::mock('PhakeTest_MockedClass');
 
@@ -80,7 +80,7 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 	 *
 	 * @expectedException Exception
 	 */
-	public function atestSimpleVerifyThrowsExceptionOnFail()
+	public function testSimpleVerifyThrowsExceptionOnFail()
 	{
 		$mock = Phake::mock('PhakeTest_MockedClass');
 
@@ -90,7 +90,7 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Tests that a simple method call can be stubbed to return an expected value.
 	 */
-	public function atestSimpleStub()
+	public function testSimpleStub()
 	{
 		$mock = Phake::mock('PhakeTest_MockedClass');
 
@@ -117,7 +117,7 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 	 *
 	 * @expectedException Exception
 	 */
-	public function atestVerifyCallWithEqualsMatcherFails()
+	public function testVerifyCallWithEqualsMatcherFails()
 	{
 		$mock = Phake::mock('PhakeTest_MockedClass');
 
@@ -131,8 +131,6 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testVerifyCallWithDefaultMatcher()
 	{
-		$this->markTestIncomplete();
-
 		$mock = Phake::mock('PhakeTest_MockedClass');
 
 		$mock->fooWithArgument('bar');
@@ -147,8 +145,6 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testVerifyCallWithDefaultMatcherFails()
 	{
-		$this->markTestIncomplete();
-
 		$mock = Phake::mock('PhakeTest_MockedClass');
 
 		$mock->fooWithArgument('test');
