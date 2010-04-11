@@ -51,5 +51,9 @@ class PhakeTest_MockedClass {
     public function foo()
 		{
 		}
+
+		public function fooWithArgument($arg1)
+		{
+		}
 }
 ?>

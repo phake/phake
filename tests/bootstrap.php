@@ -47,4 +47,8 @@ $codeDir = dirname($testDir) . DIRECTORY_SEPARATOR . 'src';
 
 set_include_path($testDir . PATH_SEPARATOR . $codeDir . PATH_SEPARATOR . get_include_path());
 
+include_once('hamcrest.php');
+
+define('HAMCREST_LOADED', interface_exists('Hamcrest_Matcher', FALSE));
+
 ?>

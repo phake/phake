@@ -99,6 +99,120 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 
 		$this->assertEquals(42, $mock->foo());
 	}
+
+	/**
+	 * Tests passing a basic equals matcher to the verify method will correctly verify a call.
+	 */
+	public function testVerifyCallWithEqualsMatcher()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+
+		$mock->fooWithArgument('bar');
+
+		Phake::verify($mock)->fooWithArgument(Phake::equalTo('bar'));
+	}
+
+	/**
+	 * Tests passing a basic equals matcher to the verify method will correctly fail when matcher is not satisfied.
+	 *
+	 * @expectedException Exception
+	 */
+	public function testVerifyCallWithEqualsMatcherFails()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+
+		$mock->fooWithArgument('test');
+
+		Phake::verify($mock)->fooWithArgument(Phake::equalTo('bar'));
+	}
+
+	/**
+	 * Tests that we can implicitely indicate an equalTo matcher when we pass in a non-matcher value.
+	 */
+	public function testVerifyCallWithDefaultMatcher()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+
+		$mock->fooWithArgument('bar');
+
+		Phake::verify($mock)->fooWithArgument('bar');
+	}
+
+	/**
+	 * Tests passing a default matcher type to the verify method will correctly fail when matcher is not satisfied.
+	 *
+	 * @expectedException Exception
+	 */
+	public function testVerifyCallWithDefaultMatcherFails()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+
+		$mock->fooWithArgument('test');
+
+		Phake::verify($mock)->fooWithArgument('bar');
+	}
+
+	/**
+	 * Tests passing in a PHPUnit constraint to the verifier
+	 */
+	public function testVerifyCallWithPHPUnitMatcher()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+
+		$mock->fooWithArgument('bar');
+
+		Phake::verify($mock)->fooWithArgument($this->equalTo('bar'));
+	}
+
+	/**
+	 * Tests passing in a PHPUnit constraint to the verifier fails when constraint not met.
+	 *
+	 * @expectedException Exception
+	 */
+	public function testVerifyCallWithPHPUnitMatcherFails()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+
+		$mock->fooWithArgument('test');
+
+		Phake::verify($mock)->fooWithArgument($this->equalTo('bar'));
+	}
+
+	/**
+	 * Tests passing in a Hamcrest matcher to the verifier
+	 */
+	public function testVerifyCallWithHamcrestMatcher()
+	{
+		if (!HAMCREST_LOADED)
+		{
+			$this->markTestSkipped('Hamcrest library not available');
+		}
+
+		$mock = Phake::mock('PhakeTest_MockedClass');
+
+		$mock->fooWithArgument('bar');
+
+		Phake::verify($mock)->fooWithArgument(equalTo('bar'));
+	}
+
+	/**
+	 * Tests passing in a Hamcrest matcher to the verifier fails when constraint not met.
+	 *
+	 * @expectedException Exception
+	 */
+	public function testVerifyCallWithHamcrestMatcherFails()
+	{
+		if (!HAMCREST_LOADED)
+		{
+			$this->markTestSkipped('Hamcrest library not available');
+		}
+
+		$mock = Phake::mock('PhakeTest_MockedClass');
+
+		$mock->fooWithArgument('test');
+
+		Phake::verify($mock)->fooWithArgument(equalTo('bar'));
+	}
 }
 
 ?>

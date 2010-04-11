@@ -125,5 +125,9 @@ class Phake
 	{
 		return new Phake_Facade(new Phake_ClassGenerator_MockClass(), new Phake_CallRecorder_Recorder());
 	}
+
+	public static function equalTo()
+	{
+	}
 }
 ?>
