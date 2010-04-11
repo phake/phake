@@ -44,6 +44,9 @@
 
 require_once 'Phake/Proxies/VerifierProxy.php';
 require_once 'Phake/CallRecorder/Verifier.php';
+require_once 'PHPUnit/Framework/Constraint.php';
+require_once 'Phake/Matchers/PHPUnitConstraintAdapter.php';
+require_once 'Phake/Matchers/EqualsMatcher.php';
 
 /**
  * Description of VerifierProxyTest
@@ -125,5 +128,23 @@ class Phake_Proxies_VerifierProxyTest extends PHPUnit_Framework_TestCase
 
 		$this->proxy->foo('test');
 	}
+
+
+	/**
+	 * Tests that verifier calls given a PHPUnit constraint are transformed by the Phake matcher adapter.
+	 */
+	public function testProxyTransformsPHPUnitConstraintsToMatchers()
+	{
+		$constraint = $this->getMock('PHPUnit_Framework_Constraint');
+		$argumentMatcher = new Phake_Matchers_PHPUnitConstraintAdapter($constraint);
+
+		$this->verifier->expects($this->once())
+			->method('verifyCall')
+			->with($this->anything(), $this->equalTo(array($argumentMatcher)))
+			->will($this->returnValue(TRUE));
+
+		$this->proxy->foo($constraint);
+	}
+
 }
 ?>

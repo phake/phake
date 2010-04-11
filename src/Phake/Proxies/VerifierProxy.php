@@ -42,6 +42,9 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+require_once 'Phake/Matchers/PHPUnitConstraintAdapter.php';
+require_once 'Phake/Matchers/EqualsMatcher.php';
+
 /**
  * Acts as a proxy to Phake_CallRecorder_Verifier that allows verifying methods using the magic
  * __call() method in PHP.
@@ -91,6 +94,11 @@ class Phake_Proxies_VerifierProxy
 			if ($argument instanceof Phake_Matchers_IArgumentMatcher)
 			{
 				$matchers[] = $argument;
+			}
+			elseif (class_exists('PHPUnit_Framework_Constraint')
+							&& $argument instanceof PHPUnit_Framework_Constraint)
+			{
+				$matchers[] = new Phake_Matchers_PHPUnitConstraintAdapter($argument);
 			}
 			else
 			{

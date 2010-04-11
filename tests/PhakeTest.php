@@ -157,8 +157,6 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testVerifyCallWithPHPUnitMatcher()
 	{
-		$this->markTestIncomplete();
-
 		$mock = Phake::mock('PhakeTest_MockedClass');
 
 		$mock->fooWithArgument('bar');
@@ -173,8 +171,6 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testVerifyCallWithPHPUnitMatcherFails()
 	{
-		$this->markTestIncomplete();
-
 		$mock = Phake::mock('PhakeTest_MockedClass');
 
 		$mock->fooWithArgument('test');
