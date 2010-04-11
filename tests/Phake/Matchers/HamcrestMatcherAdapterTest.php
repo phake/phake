@@ -42,45 +42,50 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Matchers/PHPUnitConstraintAdapter.php';
-require_once 'PHPUnit/Framework/Constraint.php';
+require_once 'Phake/Matchers/HamcrestMatcherAdapter.php';
+
+if (HAMCREST_LOADED) require_once 'Hamcrest/Matcher.php';
 
 /**
- * Tests the adapting of phpunit constraints into Phake matchers
+ * Tests the adapting of Hamcrest matchers to Phake matchers
  */
-class Phake_Matchers_PHPUnitConstraintAdapterTest extends PHPUnit_Framework_TestCase
+class Phake_Matchers_HamcrestMatcherAdapterTest extends PHPUnit_Framework_TestCase
 {
 	/**
-	 * @var Phake_Matchers_PHPUnitConstraintAdapter
+	 * @var Phake_Matchers_HamcrestMatcherAdapter
 	 */
 	private $adapter;
 
 	/**
-	 * @var PHPUnit_Framework_Constraint
+	 * @var Hamcrest_Matcher
 	 */
-	private $constraint;
+	private $matcher;
 
 	/**
 	 * Sets up the test fixture
 	 */
 	public function setUp()
 	{
-		$this->constraint = $this->getMock('PHPUnit_Framework_Constraint');
-		$this->adapter = new Phake_Matchers_PHPUnitConstraintAdapter($this->constraint);
+		if (!HAMCREST_LOADED)
+		{
+			$this->markTestSkipped('Hamcrest is not available');
+		}
+
+		$this->matcher = $this->getMock('Hamcrest_Matcher');
+		$this->adapter = new Phake_Matchers_HamcrestMatcherAdapter($this->matcher);
 	}
 
 	/**
-	 * Tests that matches() will forward calls to evaluate()
+	 * Tests that calls to matches are forwarded to hamcrest's matcher method
 	 */
 	public function testMatchesCallsForwarded()
 	{
-		$this->constraint->expects($this->once())
-						->method('evaluate')
+		$this->matcher->expects($this->once())
+						->method('matches')
 						->with($this->equalTo('foo'))
 						->will($this->returnValue(TRUE));
 
 		$this->assertTrue($this->adapter->matches('foo'));
 	}
 }
-
 ?>

@@ -42,44 +42,37 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Matchers/PHPUnitConstraintAdapter.php';
-require_once 'PHPUnit/Framework/Constraint.php';
+require_once 'Phake/Matchers/IArgumentMatcher.php';
 
 /**
- * Tests the adapting of phpunit constraints into Phake matchers
+ * An adapter class allowing hamcrest matchers to be used as Phake matchers
  */
-class Phake_Matchers_PHPUnitConstraintAdapterTest extends PHPUnit_Framework_TestCase
+class Phake_Matchers_HamcrestMatcherAdapter implements Phake_Matchers_IArgumentMatcher
 {
 	/**
-	 * @var Phake_Matchers_PHPUnitConstraintAdapter
+	 * @var Hamcrest_Matcher
 	 */
-	private $adapter;
+	private $matcher;
 
 	/**
-	 * @var PHPUnit_Framework_Constraint
+	 * @param Hamcrest_Matcher $matcher
 	 */
-	private $constraint;
-
-	/**
-	 * Sets up the test fixture
-	 */
-	public function setUp()
+	public function __construct(Hamcrest_Matcher $matcher)
 	{
-		$this->constraint = $this->getMock('PHPUnit_Framework_Constraint');
-		$this->adapter = new Phake_Matchers_PHPUnitConstraintAdapter($this->constraint);
+		$this->matcher = $matcher;
 	}
 
 	/**
-	 * Tests that matches() will forward calls to evaluate()
+	 * Executes the matcher on a given argument value.
+	 *
+	 * Forwards the call to Hamcrest's matches() method.
+	 *
+	 * @param mixed $argument
+	 * @return boolean
 	 */
-	public function testMatchesCallsForwarded()
+	public function matches($argument)
 	{
-		$this->constraint->expects($this->once())
-						->method('evaluate')
-						->with($this->equalTo('foo'))
-						->will($this->returnValue(TRUE));
-
-		$this->assertTrue($this->adapter->matches('foo'));
+		return $this->matcher->matches($argument);
 	}
 }
 
