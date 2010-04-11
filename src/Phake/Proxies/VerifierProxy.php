@@ -72,7 +72,7 @@ class Phake_Proxies_VerifierProxy
 	 */
 	public function __call($method, array $arguments)
 	{
-		if (!$this->verifier->verifyCall($method, array()))
+		if (!$this->verifier->verifyCall($method, $arguments))
 		{
 			throw new Exception('Expected {$method} to be called.');
 		}

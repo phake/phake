@@ -69,7 +69,10 @@ class Phake_Proxies_VerifierProxyTest extends PHPUnit_Framework_TestCase
 		$this->proxy = new Phake_Proxies_VerifierProxy($this->verifier);
 	}
 
-	public function testVerifierCallsAreForwarded()
+	/**
+	 * Tests that the proxy will call the verifier with the method properly forwarded
+	 */
+	public function testVerifierCallsAreForwardedMethod()
 	{
 		$this->verifier->expects($this->once())
 			->method('verifyCall')
@@ -80,6 +83,7 @@ class Phake_Proxies_VerifierProxyTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Tests that exceptions are thrown when verifier calls fail
 	 * @expectedException Exception
 	 */
 	public function testVerifierCallsThrowExceptionWhenNotFound()
@@ -89,6 +93,21 @@ class Phake_Proxies_VerifierProxyTest extends PHPUnit_Framework_TestCase
 			->will($this->returnValue(FALSE));
 
 		$this->proxy->foo();
+	}
+
+	/**
+	 * Tests that verifier calls will forward method arguments properly
+	 */
+	public function testVerifierCallsAreForwardedArguments()
+	{
+		$argumentMatcher = $this->getMock('Phake_Matchers_EqualsMatcher');
+
+		$this->verifier->expects($this->once())
+			->method('verifyCall')
+			->with($this->anything(), $this->equalTo(array($argumentMatcher)))
+			->will($this->returnValue(TRUE));
+
+		$this->proxy->foo($argumentMatcher);
 	}
 }
 ?>
