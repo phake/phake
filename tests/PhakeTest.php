@@ -239,6 +239,32 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(42, $mock->fooWithArgument('bar'));
 		$this->assertNull($mock->fooWithArgument('test'));
 	}
+
+	/**
+	 * Tests using a phpunit constraint with a method stub
+	 */
+	public function testStubWithPHPUnitConstraint()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+
+		Phake::when($mock)->fooWithArgument($this->equalTo('bar'))->thenReturn(42);
+
+		$this->assertEquals(42, $mock->fooWithArgument('bar'));
+		$this->assertNull($mock->fooWithArgument('test'));
+	}
+
+	/**
+	 * Tests using a hamcrest matcher with a method stub
+	 */
+	public function testStubWithHamcrestConstraint()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+
+		Phake::when($mock)->fooWithArgument(equalTo('bar'))->thenReturn(42);
+
+		$this->assertEquals(42, $mock->fooWithArgument('bar'));
+		$this->assertNull($mock->fooWithArgument('test'));
+	}
 }
 
 ?>
