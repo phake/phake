@@ -43,6 +43,7 @@
  */
 
 require_once 'Phake/Stubber/StubMapper.php';
+require_once 'Phake/Matchers/MethodMatcher.php';
 
 /**
  * Tests the function of the StubMapper
@@ -76,5 +77,40 @@ class Phake_Stubber_StubMapperTest extends PHPUnit_Framework_TestCase
 
 		$this->assertEquals($stub, $this->mapper->getStubByMethod($method));
 	}
+
+	/**
+	 * Tests mapping matchers to answers.
+	 */
+	 public function testMappingMatchers()
+	 {
+		 $matcher = $this->getMock('Phake_Matchers_MethodMatcher', array(), array(), '', FALSE);
+		 $stub = $this->getMock('Phake_Stubber_StaticAnswer', array(), array(), '', FALSE);
+
+		 $matcher->expects($this->any())
+						 ->method('matches')
+						 ->with($this->equalTo('foo'), $this->equalTo(array('bar', 'test')))
+						 ->will($this->returnValue(TRUE));
+
+		 $this->mapper->mapStubToMatcher($stub, $matcher);
+
+		 $this->assertEquals($stub, $this->mapper->getStubByCall('foo', array('bar', 'test')));
+	 }
+
+	/**
+	 * Tests mapping matchers to answers.
+	 */
+	 public function testMappingMatchersFailsOnNonMatch()
+	 {
+		 $matcher = $this->getMock('Phake_Matchers_MethodMatcher', array(), array(), '', FALSE);
+		 $stub = $this->getMock('Phake_Stubber_StaticAnswer', array(), array(), '', FALSE);
+
+		 $matcher->expects($this->any())
+						 ->method('matches')
+						 ->will($this->returnValue(FALSE));
+
+		 $this->mapper->mapStubToMatcher($stub, $matcher);
+
+		 $this->assertNull($this->mapper->getStubByCall('foo', array('bar', 'test')));
+	 }
 }
 ?>
