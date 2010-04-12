@@ -49,6 +49,7 @@ require_once 'Phake/Matchers/PHPUnitConstraintAdapter.php';
 if (HAMCREST_LOADED) require_once 'Hamcrest/Matcher.php';
 require_once 'Phake/Matchers/HamcrestMatcherAdapter.php';
 require_once 'Phake/Matchers/EqualsMatcher.php';
+require_once 'Phake/Matchers/Factory.php';
 
 /**
  * Description of VerifierProxyTest
@@ -71,7 +72,7 @@ class Phake_Proxies_VerifierProxyTest extends PHPUnit_Framework_TestCase
 	{
 		$this->verifier = $this->getMock('Phake_CallRecorder_Verifier', array(), array(), '', FALSE);
 
-		$this->proxy = new Phake_Proxies_VerifierProxy($this->verifier);
+		$this->proxy = new Phake_Proxies_VerifierProxy($this->verifier, new Phake_Matchers_Factory());
 	}
 
 	/**

@@ -62,11 +62,18 @@ class Phake_Proxies_StubberProxy
 	private $obj;
 
 	/**
-	 * @param Phake_Stubber_IStubbable $obj
+	 * @var Phake_Matchers_Factory
 	 */
-	public function __construct(Phake_Stubber_IStubbable $obj)
+	private $matcherFactory;
+
+	/**
+	 * @param Phake_Stubber_IStubbable $obj
+	 * @param Phake_Matchers_Factory $matcherFactory
+	 */
+	public function __construct(Phake_Stubber_IStubbable $obj, Phake_Matchers_Factory $matcherFactory)
 	{
 		$this->obj = $obj;
+		$this->matcherFactory = $matcherFactory;
 	}
 
 	/**
@@ -77,42 +84,9 @@ class Phake_Proxies_StubberProxy
 	 */
 	public function __call($method, array $arguments)
 	{
-		$matcher = new Phake_Matchers_MethodMatcher($method, $this->translateArguments($arguments));
+		$matcher = new Phake_Matchers_MethodMatcher($method, $this->matcherFactory->createMatcherArray($arguments));
 		$binder = new Phake_Stubber_AnswerBinder($this->obj, $matcher);
 		return new Phake_Proxies_AnswerBinderProxy($binder);
-	}
-
-	/**
-	 * Takes an array of arguments and creates an array of matchers representing those arguments
-	 * @param array $arguments
-	 */
-	private function translateArguments(array $arguments)
-	{
-		$matchers = array();
-
-		foreach ($arguments as $argument)
-		{
-			if ($argument instanceof Phake_Matchers_IArgumentMatcher)
-			{
-				$matchers[] = $argument;
-			}
-			elseif (class_exists('PHPUnit_Framework_Constraint')
-							&& $argument instanceof PHPUnit_Framework_Constraint)
-			{
-				$matchers[] = new Phake_Matchers_PHPUnitConstraintAdapter($argument);
-			}
-			elseif (interface_exists('Hamcrest_Matcher')
-							&& $argument instanceof Hamcrest_Matcher)
-			{
-				$matchers[] = new Phake_Matchers_HamcrestMatcherAdapter($argument);
-			}
-			else
-			{
-				$matchers[] = new Phake_Matchers_EqualsMatcher($argument);
-			}
-		}
-
-		return $matchers;
 	}
 }
 ?>

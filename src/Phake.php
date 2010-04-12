@@ -48,6 +48,7 @@ require_once 'Phake/CallRecorder/Recorder.php';
 require_once 'Phake/Proxies/VerifierProxy.php';
 require_once 'Phake/Proxies/StubberProxy.php';
 require_once 'Phake/Matchers/EqualsMatcher.php';
+require_once 'Phake/Matchers/Factory.php';
 
 /**
  * Phake - PHP Test Doubles Framework
@@ -84,7 +85,7 @@ class Phake
 	{
 		$verifier = self::getPhake()->verify($mock);
 
-		return new Phake_Proxies_VerifierProxy($verifier);
+		return new Phake_Proxies_VerifierProxy($verifier, new Phake_Matchers_Factory());
 	}
 
 	/**
@@ -94,7 +95,7 @@ class Phake
 	 */
 	public static function when(Phake_Stubber_IStubbable $mock)
 	{
-		return new Phake_Proxies_StubberProxy($mock);
+		return new Phake_Proxies_StubberProxy($mock, new Phake_Matchers_Factory());
 	}
 
 	/**

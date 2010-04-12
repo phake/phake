@@ -62,11 +62,18 @@ class Phake_Proxies_VerifierProxy
 	private $verifier;
 
 	/**
-	 * @param Phake_CallRecorder_Verifier $verifier
+	 * @var Phake_Matchers_Factory
 	 */
-	public function __construct(Phake_CallRecorder_Verifier $verifier)
+	private $matcherFactory;
+
+	/**
+	 * @param Phake_CallRecorder_Verifier $verifier
+	 * @param Phake_Matchers_Factory $matcherFactory
+	 */
+	public function __construct(Phake_CallRecorder_Verifier $verifier, Phake_Matchers_Factory $matcherFactory)
 	{
 		$this->verifier = $verifier;
+		$this->matcherFactory = $matcherFactory;
 	}
 
 	/**
@@ -76,43 +83,10 @@ class Phake_Proxies_VerifierProxy
 	 */
 	public function __call($method, array $arguments)
 	{
-		if (!$this->verifier->verifyCall($method, $this->translateArguments($arguments)))
+		if (!$this->verifier->verifyCall($method, $this->matcherFactory->createMatcherArray($arguments)))
 		{
 			throw new Exception("Expected {$method} to be called.");
 		}
-	}
-
-	/**
-	 * Takes an array of arguments and creates an array of matchers representing those arguments
-	 * @param array $arguments
-	 */
-	private function translateArguments(array $arguments)
-	{
-		$matchers = array();
-
-		foreach ($arguments as $argument)
-		{
-			if ($argument instanceof Phake_Matchers_IArgumentMatcher)
-			{
-				$matchers[] = $argument;
-			}
-			elseif (class_exists('PHPUnit_Framework_Constraint')
-							&& $argument instanceof PHPUnit_Framework_Constraint)
-			{
-				$matchers[] = new Phake_Matchers_PHPUnitConstraintAdapter($argument);
-			}
-			elseif (interface_exists('Hamcrest_Matcher')
-							&& $argument instanceof Hamcrest_Matcher)
-			{
-				$matchers[] = new Phake_Matchers_HamcrestMatcherAdapter($argument);
-			}
-			else
-			{
-				$matchers[] = new Phake_Matchers_EqualsMatcher($argument);
-			}
-		}
-
-		return $matchers;
 	}
 }
 ?>

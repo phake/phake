@@ -42,45 +42,62 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Proxies/StubberProxy.php';
-require_once 'Phake/Matchers/Factory.php';
+require_once 'Phake/Matchers/PHPUnitConstraintAdapter.php';
+require_once 'Phake/Matchers/HamcrestMatcherAdapter.php';
+require_once 'Phake/Matchers/EqualsMatcher.php';
 
 /**
- * Description of StubberProxyTest
- *
- * @author Mike Lively <m@digitalsandwich.com>
+ * Creates (or passes through) instances of Phake_Matchers_IArgumentMatcher using Phake's
+ * translation rules
  */
-class Phake_Proxies_StubberProxyTest extends PHPUnit_Framework_TestCase
+class Phake_Matchers_Factory
 {
 	/**
-	 * @var Phake_Proxies_StubberProxy
+	 * Creates an argment matcher based on the given value.
+	 *
+	 * If the given values is already an instance of Phake_Matchers_IArgumentMatcher it is passed
+	 * through. If it is an instance of PHPUnit_Framework_Constraint a PHPUnit adapter is returned.
+	 * If it is an instance of Hamcrest_Matcher a Hamcrest adapter is returned. For everything else
+	 * a EqualsMatcher is returned set to the passed in value.
+	 *
+	 * @param mixed $argument
+	 * @return Phake_Matchers_IArgumentMatcher
 	 */
-	private $proxy;
-
-	/**
-	 * @var Phake_Stubber_IStubbable
-	 */
-	private $stubbable;
-
-	/**
-	 * Sets up test fixture
-	 */
-	public function setUp()
+	public function createMatcher($argument)
 	{
-		$this->stubbable = $this->getMock('Phake_Stubber_IStubbable');
-		$this->proxy = new Phake_Proxies_StubberProxy($this->stubbable, new Phake_Matchers_Factory());
+		if ($argument instanceof Phake_Matchers_IArgumentMatcher)
+		{
+			return $argument;
+		}
+		elseif (class_exists('PHPUnit_Framework_Constraint')
+						&& $argument instanceof PHPUnit_Framework_Constraint)
+		{
+			return new Phake_Matchers_PHPUnitConstraintAdapter($argument);
+		}
+		elseif (interface_exists('Hamcrest_Matcher')
+						&& $argument instanceof Hamcrest_Matcher)
+		{
+			return new Phake_Matchers_HamcrestMatcherAdapter($argument);
+		}
+		else
+		{
+			return new Phake_Matchers_EqualsMatcher($argument);
+		}
 	}
 
 	/**
-	 * Tests setting a stub on a method in the stubbable object
+	 * Converts an argument array into a matcher array
+	 * @param array $arguments
+	 * @return array of Phake_Matchers_IArgumentMatcher objects
 	 */
-	public function testCall()
+	public function createMatcherArray(array $arguments)
 	{
-		$answerBinder = $this->proxy->foo();
-
-		$this->assertThat($answerBinder, $this->isInstanceOf('Phake_Proxies_AnswerBinderProxy'));
-
-		$this->assertAttributeType('Phake_Stubber_AnswerBinder', 'binder', $answerBinder);
+		$matchers = array();
+		foreach ($arguments as $arg)
+		{
+			$matchers[] = $this->createMatcher($arg);
+		}
+		return $matchers;
 	}
 }
 ?>
