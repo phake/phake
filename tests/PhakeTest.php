@@ -219,10 +219,9 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testStubWithEqualsMatcher()
 	{
-		$this->markTestIncomplete();
 		$mock = Phake::mock('PhakeTest_MockedClass');
 
-		Phake::when($mock)->fooWithArgument('bar')->thenReturn(42);
+		Phake::when($mock)->fooWithArgument(Phake::equalTo('bar'))->thenReturn(42);
 
 		$this->assertEquals(42, $mock->fooWithArgument('bar'));
 		$this->assertNull($mock->fooWithArgument('test'));
