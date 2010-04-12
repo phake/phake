@@ -52,19 +52,7 @@ class Phake_Stubber_StubMapper
 	/**
 	 * @var array
 	 */
-	private $stubMap = array();
-
 	private $matcherStubMap = array();
-
-	/**
-	 * Maps a given $answer to a given $method
-	 * @param Phake_Stubber_StaticAnswer $answer
-	 * @param string $method
-	 */
-	public function mapStubToMethod(Phake_Stubber_StaticAnswer $answer, $method)
-	{
-		$this->stubMap[$method] = $answer;
-	}
 
 	/**
 	 * Maps a given $answer to a given $matcher
@@ -74,22 +62,6 @@ class Phake_Stubber_StubMapper
 	public function mapStubToMatcher(Phake_Stubber_StaticAnswer $answer, Phake_Matchers_MethodMatcher $matcher)
 	{
 		$this->matcherStubMap[] = array($matcher, $answer);
-	}
-
-	/**
-	 * @param string $method
-	 * @return Phake_Stubber_StaticAnswer
-	 */
-	public function getStubByMethod($method)
-	{
-		if (isset($this->stubMap[$method]))
-		{
-			return $this->stubMap[$method];
-		}
-		else
-		{
-			return NULL;
-		}
 	}
 
 	/**

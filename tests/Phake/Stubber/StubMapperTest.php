@@ -66,19 +66,6 @@ class Phake_Stubber_StubMapperTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Tests mapping and retrieving stubs.
-	 */
-	public function testStubMapping()
-	{
-		$method = 'foo';
-		$stub = $this->getMock('Phake_Stubber_StaticAnswer', array(), array(), '', FALSE);
-
-		$this->mapper->mapStubToMethod($stub, $method);
-
-		$this->assertEquals($stub, $this->mapper->getStubByMethod($method));
-	}
-
-	/**
 	 * Tests mapping matchers to answers.
 	 */
 	 public function testMappingMatchers()
