@@ -44,7 +44,7 @@
 
 require_once 'Phake/Stubber/AnswerBinder.php';
 require_once 'Phake/Proxies/AnswerBinderProxy.php';
-
+require_once 'Phake/Matchers/MethodMatcher.php';
 /**
  * A proxy to handle stubbing a method on a mock object.
  *
@@ -73,7 +73,8 @@ class Phake_Proxies_StubberProxy
 	 */
 	public function __call($method, array $arguments)
 	{
-		$binder = new Phake_Stubber_AnswerBinder($this->obj, $method);
+		$matcher = new Phake_Matchers_MethodMatcher($method, $arguments);
+		$binder = new Phake_Stubber_AnswerBinder($this->obj, $matcher);
 		return new Phake_Proxies_AnswerBinderProxy($binder);
 	}
 }

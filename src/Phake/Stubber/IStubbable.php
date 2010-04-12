@@ -51,8 +51,8 @@ interface Phake_Stubber_IStubbable
 	/**
 	 * Adds an answer to a stubbable object for the given method name.
 	 * @param Phake_Stubber_StaticAnswer $answer
-	 * @param string $method 
+	 * @param Phake_Matchers_MethodMatcher $method
 	 */
-	public function __PHAKE_addAnswer(Phake_Stubber_StaticAnswer $answer, $method);
+	public function __PHAKE_addAnswer(Phake_Stubber_StaticAnswer $answer, Phake_Matchers_MethodMatcher $method);
 }
 ?>

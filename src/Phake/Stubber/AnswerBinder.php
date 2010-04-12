@@ -55,19 +55,19 @@ class Phake_Stubber_AnswerBinder
 	private $obj;
 
 	/**
-	 * @var string
+	 * @var Phake_Matchers_MethodMatcher
 	 */
-	private $method;
+	private $matcher;
 
 	/**
 	 * Creates a new Answer Binder
 	 * @param Phake_Stubber_IStubbable $obj
-	 * @param string $method
+	 * @param Phake_Matchers_MethodMatcher $method
 	 */
-	public function __construct(Phake_Stubber_IStubbable $obj, $method)
+	public function __construct(Phake_Stubber_IStubbable $obj, Phake_Matchers_MethodMatcher $matcher)
 	{
 		$this->obj = $obj;
-		$this->method = $method;
+		$this->matcher = $matcher;
 	}
 
 	/**
@@ -76,7 +76,7 @@ class Phake_Stubber_AnswerBinder
 	 */
 	public function bindAnswer(Phake_Stubber_StaticAnswer $answer)
 	{
-		$this->obj->__PHAKE_addAnswer($answer, $this->method);
+		$this->obj->__PHAKE_addAnswer($answer, $this->matcher);
 	}
 }
 ?>

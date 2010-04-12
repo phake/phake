@@ -82,9 +82,9 @@ class {$newClassName} extends {$mockedClassName}
 		return \$this->__PHAKE_callRecorder;
 	}
 
-	public function __PHAKE_addAnswer(Phake_Stubber_StaticAnswer \$answer, \$method)
+	public function __PHAKE_addAnswer(Phake_Stubber_StaticAnswer \$answer, Phake_Matchers_MethodMatcher \$matcher)
 	{
-		\$this->__PHAKE_stubMapper->mapStubToMethod(\$answer, \$method);
+		\$this->__PHAKE_stubMapper->mapStubToMatcher(\$answer, \$matcher);
 	}
 
 	{$this->generateMockedMethods(new ReflectionClass($mockedClassName))}
@@ -135,10 +135,11 @@ class {$newClassName} extends {$mockedClassName}
 		$methodDef = "
 	{$modifiers} function {$method->getName()}({$this->generateMethodParameters($method)})
 	{
+		\$args = func_get_args();
 
-		\$this->__PHAKE_callRecorder->recordCall(new Phake_CallRecorder_Call(\$this, '{$method->getName()}', func_get_args()));
+		\$this->__PHAKE_callRecorder->recordCall(new Phake_CallRecorder_Call(\$this, '{$method->getName()}', \$args));
 
-		\$stub = \$this->__PHAKE_stubMapper->getStubByMethod('{$method->getName()}');
+		\$stub = \$this->__PHAKE_stubMapper->getStubByCall('{$method->getName()}', \$args);
 
 		if (!empty(\$stub))
 		{

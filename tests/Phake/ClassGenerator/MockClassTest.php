@@ -197,11 +197,11 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 			->method('getAnswer');
 
 		$stubMapper->expects($this->once())
-			->method('getStubByMethod')
-			->with($this->equalTo('foo'))
+			->method('getStubByCall')
+			->with($this->equalTo('fooWithArgument'), array('bar'))
 			->will($this->returnValue($answer));
 
-		$mock->foo();
+		$mock->fooWithArgument('bar');
 	}
 
 	/**
@@ -220,12 +220,13 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 		$mock = $this->classGen->instantiate($newClassName, $callRecorder, $stubMapper);
 
 		$answer = $this->getMock('Phake_Stubber_StaticAnswer', array(), array(), '', FALSE);
+		$matcher = $this->getMock('Phake_Matchers_MethodMatcher', array(), array(), '', FALSE);
 
 		$stubMapper->expects($this->once())
-			->method('mapStubToMethod')
-			->with($this->equalTo($answer), $this->equalTo('foo'));
+			->method('mapStubToMatcher')
+			->with($this->equalTo($answer), $this->equalTo($matcher));
 
-		$mock->__PHAKE_addAnswer($answer, 'foo');
+		$mock->__PHAKE_addAnswer($answer, $matcher);
 	}
 }
 ?>

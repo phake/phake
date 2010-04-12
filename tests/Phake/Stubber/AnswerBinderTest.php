@@ -45,6 +45,7 @@
 require_once 'Phake/Stubber/AnswerBinder.php';
 require_once 'Phake/Stubber/IStubbable.php';
 require_once 'Phake/Stubber/StaticAnswer.php';
+require_once 'Phake/Matchers/MethodMatcher.php';
 
 /**
  * Tests the Answer Factory
@@ -64,12 +65,18 @@ class Phake_Stubber_AnswerBinderTest extends PHPUnit_Framework_TestCase
 	private $mock;
 
 	/**
+	 * @var Phake_Matchers_MethodMatcher
+	 */
+	private $matcher;
+
+	/**
 	 * Sets up the test fixture
 	 */
 	public function setUp()
 	{
 		$this->mock = $this->getMock('Phake_Stubber_IStubbable');
-		$this->factory = new Phake_Stubber_AnswerBinder($this->mock, 'foo');
+		$this->matcher = $this->getMock('Phake_Matchers_MethodMatcher', array(), array(), '', FALSE);
+		$this->binder = new Phake_Stubber_AnswerBinder($this->mock, $this->matcher);
 	}
 
 	public function testBindAnswer()
@@ -77,9 +84,9 @@ class Phake_Stubber_AnswerBinderTest extends PHPUnit_Framework_TestCase
 		$answer = $this->getMock('Phake_Stubber_StaticAnswer', array(), array(), '', FALSE);
 		$this->mock->expects($this->once())
 			->method('__PHAKE_addAnswer')
-			->with($this->equalTo($answer), $this->equalTo('foo'));
+			->with($this->equalTo($answer), $this->equalTo($this->matcher));
 		
-		$this->factory->bindAnswer($answer);
+		$this->binder ->bindAnswer($answer);
 	}
 }
 ?>
