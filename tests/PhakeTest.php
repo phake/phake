@@ -226,6 +226,19 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(42, $mock->fooWithArgument('bar'));
 		$this->assertNull($mock->fooWithArgument('test'));
 	}
+
+	/**
+	 * Tests using an implicit equalTo argument matcher with a method stub
+	 */
+	public function testStubWithDefaultMatcher()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+
+		Phake::when($mock)->fooWithArgument('bar')->thenReturn(42);
+
+		$this->assertEquals(42, $mock->fooWithArgument('bar'));
+		$this->assertNull($mock->fooWithArgument('test'));
+	}
 }
 
 ?>
