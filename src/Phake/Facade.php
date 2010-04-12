@@ -53,31 +53,14 @@ require_once 'Phake/Stubber/StubMapper.php';
 class Phake_Facade
 {
 	/**
-	 * @var Phake_ClassGenerator_MockClass
-	 */
-	private $mockGenerator;
-
-	/**
-	 * @var Phake_CallRecorder_Recorder
-	 */
-	private $recorder;
-
-	/**
-	 * @param Phake_ClassGenerator_MockClass $mockGenerator - The generator used to construct mock classes
-	 */
-	public function  __construct(Phake_ClassGenerator_MockClass $mockGenerator, Phake_CallRecorder_Recorder $recorder)
-	{
-		$this->mockGenerator = $mockGenerator;
-		$this->recorder = $recorder;
-	}
-
-	/**
 	 * Creates a new mock class than can be stubbed and verified.
 	 *
 	 * @param string $mockedClass - The name of the class to mock
+	 * @param Phake_ClassGenerator_MockClass $mockGenerator - The generator used to construct mock classes
+	 * @param Phake_CallRecorder_Recorder $callRecorder
 	 * @return mixed
 	 */
-	public function mock($mockedClass)
+	public function mock($mockedClass, Phake_ClassGenerator_MockClass $mockGenerator, Phake_CallRecorder_Recorder $callRecorder)
 	{
 		if (!class_exists($mockedClass, TRUE))
 		{
@@ -85,8 +68,8 @@ class Phake_Facade
 		}
 
 		$newClassName = $this->generateUniqueClassName($mockedClass);
-		$this->mockGenerator->generate($newClassName, $mockedClass);
-		return $this->mockGenerator->instantiate($newClassName, $this->recorder, new Phake_Stubber_StubMapper());
+		$mockGenerator->generate($newClassName, $mockedClass);
+		return $mockGenerator->instantiate($newClassName, $callRecorder, new Phake_Stubber_StubMapper());
 	}
 
 	/**

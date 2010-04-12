@@ -73,7 +73,7 @@ class Phake
 	 */
 	public static function mock($className)
 	{
-		return self::getPhake()->mock($className);
+		return self::getPhake()->mock($className, new Phake_ClassGenerator_MockClass(), new Phake_CallRecorder_Recorder());
 	}
 
 	/**
@@ -125,7 +125,7 @@ class Phake
 	 */
 	public static function createPhake()
 	{
-		return new Phake_Facade(new Phake_ClassGenerator_MockClass(), new Phake_CallRecorder_Recorder());
+		return new Phake_Facade();
 	}
 
 	/**

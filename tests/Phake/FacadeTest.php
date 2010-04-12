@@ -66,18 +66,12 @@ class Phake_FacadeTest extends PHPUnit_Framework_TestCase
 	private $mockGenerator;
 
 	/**
-	 * @var Phake_CallRecorder_Recorder
-	 */
-	private $recorder;
-
-	/**
 	 * Sets up the mock generator
 	 */
 	public function setup()
 	{
 		$this->mockGenerator = $this->getMock('Phake_ClassGenerator_MockClass');
-		$this->recorder = $this->getMock('Phake_CallRecorder_Recorder');
-		$this->facade = new Phake_Facade($this->mockGenerator, $this->recorder);
+		$this->facade = new Phake_Facade($this->mockGenerator);
 	}
 
 	/**
@@ -86,10 +80,11 @@ class Phake_FacadeTest extends PHPUnit_Framework_TestCase
 	public function testMock()
 	{
 		$mockedClass = 'stdClass';
+		$mockGenerator = $this->getMock('Phake_ClassGenerator_MockClass');
 
-		$this->setMockGeneratorExpectations($mockedClass);
+		$this->setMockGeneratorExpectations($mockedClass, $mockGenerator);
 
-		$this->facade->mock($mockedClass);
+		$this->facade->mock($mockedClass, $mockGenerator, $this->getMock('Phake_CallRecorder_Recorder'));
 	}
 
 	/**
@@ -100,7 +95,7 @@ class Phake_FacadeTest extends PHPUnit_Framework_TestCase
 	{
 		$mockedClass = 'NonExistantClass';
 
-		$this->facade->mock($mockedClass);
+		$this->facade->mock($mockedClass, $this->getMock('Phake_ClassGenerator_MockClass'), $this->getMock('Phake_CallRecorder_Recorder'));
 	}
 
 	/**
@@ -110,18 +105,23 @@ class Phake_FacadeTest extends PHPUnit_Framework_TestCase
 	{
 		$mockedClass = 'stdClass';
 
-		$this->setMockInstantiatorExpectations();
+		$recorder = $this->getMock('Phake_CallRecorder_Recorder');
+		$classGenerator = $this->getMock('Phake_ClassGenerator_MockClass');
 
-		$this->facade->mock($mockedClass);
+		$this->setMockInstantiatorExpectations($classGenerator, $recorder);
+
+		$this->facade->mock($mockedClass, $classGenerator, $recorder);
 	}
 
 	public function testVerifierInstantiatesVerifier()
 	{
 		$mock = $this->getMock('Phake_CallRecorder_ICallRecorderContainer');
 		
+		$recorder = $this->getMock('Phake_CallRecorder_Recorder');
+
 		$mock->expects($this->once())
 			->method('__PHAKE_getCallRecorder')
-			->will($this->returnValue($this->recorder));
+			->will($this->returnValue($recorder));
 
 		$this->assertType('Phake_CallRecorder_Verifier', $this->facade->verify($mock));
 	}
@@ -130,22 +130,25 @@ class Phake_FacadeTest extends PHPUnit_Framework_TestCase
 	 * Sets expectations for how the generator should be called
 	 *
 	 * @param string $mockedClass - The class name that we expect to mock
+	 * @param Phake_ClassGenerator_MockClass $mockGenerator
 	 */
-	private function setMockGeneratorExpectations($mockedClass)
+	private function setMockGeneratorExpectations($mockedClass, Phake_ClassGenerator_MockClass $mockGenerator)
 	{
-		$this->mockGenerator->expects($this->once())
+		$mockGenerator->expects($this->once())
 			->method('generate')
 			->with($this->matchesRegularExpression('#^[A-Za-z0-9_]+$#'), $this->equalTo($mockedClass));
 	}
 
 	/**
 	 * Sets expectations for how the mock class should be created from the class generator
+	 * @param Phake_ClassGenerator_MockClass $mockGenerator
+	 * @param Phake_CallRecorder_Recorder $recorder
 	 */
-	private function setMockInstantiatorExpectations()
+	private function setMockInstantiatorExpectations(Phake_ClassGenerator_MockClass $mockGenerator, Phake_CallRecorder_Recorder $recorder)
 	{
-		$this->mockGenerator->expects($this->once())
+		$mockGenerator->expects($this->once())
 				->method('instantiate')
-				->with($this->matchesRegularExpression('#^[A-Za-z0-9_]+$#'), $this->equalTo($this->recorder));
+				->with($this->matchesRegularExpression('#^[A-Za-z0-9_]+$#'), $this->equalTo($recorder));
 	}
 }
 ?>
