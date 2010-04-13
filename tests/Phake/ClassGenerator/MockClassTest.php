@@ -228,5 +228,29 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 
 		$mock->__PHAKE_addAnswer($answer, $matcher);
 	}
+
+	/**
+	 * Tests that resetting a mock will remove all answers and calls from the stub mapper and call
+	 * recorder
+	 */
+	public function testReset()
+	{
+		$newClassName = __CLASS__ . '_TestClass10';
+		$mockedClass = 'stdClass';
+
+		$this->classGen->generate($newClassName, $mockedClass);
+
+		$callRecorder = $this->getMock('Phake_CallRecorder_Recorder');
+		$stubMapper = $this->getMock('Phake_Stubber_StubMapper');
+		$mock = $this->classGen->instantiate($newClassName, $callRecorder, $stubMapper);
+
+		$callRecorder->expects($this->once())
+						->method('removeAllCalls');
+
+		$stubMapper->expects($this->once())
+						->method('removeAllAnswers');
+
+		$mock->__PHAKE_resetMock();
+	}
 }
 ?>

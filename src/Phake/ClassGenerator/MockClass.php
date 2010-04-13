@@ -43,7 +43,7 @@
  */
 
 require_once 'Phake/CallRecorder/Call.php';
-require_once 'Phake/ITestDouble.php';
+require_once 'Phake/IMock.php';
 
 /**
  * Creates and executes the code necessary to create a mock class.
@@ -63,7 +63,7 @@ class Phake_ClassGenerator_MockClass
 	{
 		$classDef = "
 class {$newClassName} extends {$mockedClassName}
-	implements Phake_ITestDouble
+	implements Phake_IMock
 {
 	private \$__PHAKE_callRecorder;
 
@@ -83,6 +83,12 @@ class {$newClassName} extends {$mockedClassName}
 	public function __PHAKE_addAnswer(Phake_Stubber_StaticAnswer \$answer, Phake_Matchers_MethodMatcher \$matcher)
 	{
 		\$this->__PHAKE_stubMapper->mapStubToMatcher(\$answer, \$matcher);
+	}
+
+	public function __PHAKE_resetMock()
+	{
+		\$this->__PHAKE_stubMapper->removeAllAnswers();
+		\$this->__PHAKE_callRecorder->removeAllCalls();
 	}
 
 	{$this->generateMockedMethods(new ReflectionClass($mockedClassName))}

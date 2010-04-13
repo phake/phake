@@ -99,5 +99,23 @@ class Phake_Stubber_StubMapperTest extends PHPUnit_Framework_TestCase
 
 		 $this->assertNull($this->mapper->getStubByCall('foo', array('bar', 'test')));
 	 }
+
+	 /**
+	  * Tests resetting a stub mapper
+	  */
+	 public function testRemoveAllAnswers()
+	 {
+		 $matcher = $this->getMock('Phake_Matchers_MethodMatcher', array(), array(), '', FALSE);
+		 $stub = $this->getMock('Phake_Stubber_StaticAnswer', array(), array(), '', FALSE);
+
+		 $matcher->expects($this->never())
+						 ->method('matches');
+
+		 $this->mapper->mapStubToMatcher($stub, $matcher);
+
+		 $this->mapper->removeAllAnswers();
+
+		 $this->assertNull($this->mapper->getStubByCall('foo', array('bar', 'test')));
+	 }
 }
 ?>

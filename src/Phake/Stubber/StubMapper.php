@@ -85,5 +85,13 @@ class Phake_Stubber_StubMapper
 
 		return NULL;
 	}
+
+	/**
+	 * Removes all answers from the stub mapper.
+	 */
+	public function removeAllAnswers()
+	{
+		$this->matcherStubMap = array();
+	}
 }
 ?>

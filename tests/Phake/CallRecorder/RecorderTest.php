@@ -65,5 +65,21 @@ class Phake_CallRecorder_RecorderTest extends PHPUnit_Framework_TestCase
 
 		$this->assertSame(array($call, $call2), $callRecorder->getAllCalls());
 	}
+
+	/**
+	 * Tests that the recorder can be rest to contain no calls.
+	 */
+	public function testRemoveAllCalls()
+	{
+		$call = new Phake_CallRecorder_Call($this, 'someMethod', array());
+		$call2 = new Phake_CallRecorder_Call($this, 'someMethod2', array());
+		$callRecorder = new Phake_CallRecorder_Recorder();
+		$callRecorder->recordCall($call);
+		$callRecorder->recordCall($call2);
+
+		$callRecorder->removeAllCalls();
+
+		$this->assertSame(array(), $callRecorder->getAllCalls());
+	}
 }
 ?>

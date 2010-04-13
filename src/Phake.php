@@ -100,11 +100,11 @@ class Phake
 
 	/**
 	 * Resets all calls and stubs on the given mock object
-	 * @param Phake_ITestDouble $mock
+	 * @param Phake_IMock $mock
 	 */
-	public static function reset(Phake_ITestDouble $mock)
+	public static function reset(Phake_IMock $mock)
 	{
-
+		$mock->__PHAKE_resetMock();
 	}
 
 	/**

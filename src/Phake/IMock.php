@@ -48,9 +48,12 @@ require_once 'Phake/Stubber/IStubbable.php';
 /**
  * The interface for Phake test double objects.
  */
-interface Phake_ITestDouble extends Phake_CallRecorder_ICallRecorderContainer, Phake_Stubber_IStubbable
+interface Phake_IMock extends Phake_CallRecorder_ICallRecorderContainer, Phake_Stubber_IStubbable
 {
-
+	/**
+	 * Resets all calls and answers in the mock.
+	 */
+	public function __PHAKE_resetMock();
 }
 
 ?>

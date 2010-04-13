@@ -75,5 +75,13 @@ class Phake_CallRecorder_Recorder
 	{
 		return $this->calls;
 	}
+
+	/**
+	 * Removes all calls from the call recorder
+	 */
+	public function removeAllCalls()
+	{
+		$this->calls = array();
+	}
 }
 ?>
