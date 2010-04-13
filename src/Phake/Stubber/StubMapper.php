@@ -56,10 +56,10 @@ class Phake_Stubber_StubMapper
 
 	/**
 	 * Maps a given $answer to a given $matcher
-	 * @param Phake_Stubber_StaticAnswer $answer
+	 * @param Phake_Stubber_IAnswer $answer
 	 * @param Phake_Matchers_MethodMatcher $matcher
 	 */
-	public function mapStubToMatcher(Phake_Stubber_StaticAnswer $answer, Phake_Matchers_MethodMatcher $matcher)
+	public function mapStubToMatcher(Phake_Stubber_IAnswer $answer, Phake_Matchers_MethodMatcher $matcher)
 	{
 		$this->matcherStubMap[] = array($matcher, $answer);
 	}
@@ -68,7 +68,7 @@ class Phake_Stubber_StubMapper
 	 * Returns the stub based on a matcher that matches a given call
 	 * @param string $method
 	 * @param array $arguments
-	 * @return Phake_Stubber_StaticAnswer or NULL if a matcher is not found
+	 * @return Phake_Stubber_IAnswer or NULL if a matcher is not found
 	 */
 	public function getStubByCall($method, array $arguments)
 	{

@@ -52,9 +52,9 @@ interface Phake_Stubber_IAnswerBinder
 	 *
 	 * Returns an instance of itself
 	 * 
-	 * @param Phake_Stubber_StaticAnswer $answer
+	 * @param Phake_Stubber_IAnswer $answer
 	 * @return Phake_Stubber_IAnswerBinder
 	 */
-	public function bindAnswer(Phake_Stubber_StaticAnswer $answer);
+	public function bindAnswer(Phake_Stubber_IAnswer $answer);
 }
 ?>

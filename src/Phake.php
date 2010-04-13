@@ -51,7 +51,7 @@ require_once 'Phake/Proxies/AnswerBinderProxy.php';
 require_once 'Phake/Matchers/EqualsMatcher.php';
 require_once 'Phake/Matchers/Factory.php';
 require_once 'Phake/Stubber/SelfBindingAnswerBinder.php';
-require_once 'Phake/Stubber/StaticAnswer.php';
+require_once 'Phake/Stubber/Answers/StaticAnswer.php';
 
 /**
  * Phake - PHP Test Doubles Framework
@@ -77,10 +77,9 @@ class Phake
 	 */
 	public static function mock($className, Phake_Stubber_SelfBindingAnswerBinder $defaultAnswer = NULL)
 	{
-		var_dump($defaultAnswer);
 		if ($defaultAnswer === NULL)
 		{
-			$answer = new Phake_Stubber_StaticAnswer(NULL);
+			$answer = new Phake_Stubber_Answers_StaticAnswer(NULL);
 		}
 		else
 		{

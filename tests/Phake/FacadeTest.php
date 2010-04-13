@@ -84,7 +84,7 @@ class Phake_FacadeTest extends PHPUnit_Framework_TestCase
 
 		$this->setMockGeneratorExpectations($mockedClass, $mockGenerator);
 
-		$this->facade->mock($mockedClass, $mockGenerator, $this->getMock('Phake_CallRecorder_Recorder'), $this->getMock('Phake_Stubber_StaticAnswer', array(), array(), '', FALSE));
+		$this->facade->mock($mockedClass, $mockGenerator, $this->getMock('Phake_CallRecorder_Recorder'), $this->getMock('Phake_Stubber_IAnswer'));
 	}
 
 	/**
@@ -95,7 +95,7 @@ class Phake_FacadeTest extends PHPUnit_Framework_TestCase
 	{
 		$mockedClass = 'NonExistantClass';
 
-		$this->facade->mock($mockedClass, $this->getMock('Phake_ClassGenerator_MockClass'), $this->getMock('Phake_CallRecorder_Recorder'), $this->getMock('Phake_Stubber_StaticAnswer', array(), array(), '', FALSE));
+		$this->facade->mock($mockedClass, $this->getMock('Phake_ClassGenerator_MockClass'), $this->getMock('Phake_CallRecorder_Recorder'), $this->getMock('Phake_Stubber_IAnswer'));
 	}
 
 	/**
@@ -107,7 +107,7 @@ class Phake_FacadeTest extends PHPUnit_Framework_TestCase
 
 		$recorder = $this->getMock('Phake_CallRecorder_Recorder');
 		$classGenerator = $this->getMock('Phake_ClassGenerator_MockClass');
-		$answer = $this->getMock('Phake_Stubber_StaticAnswer', array(), array(), '', FALSE);
+		$answer = $this->getMock('Phake_Stubber_IAnswer');
 
 
 		$this->setMockInstantiatorExpectations($classGenerator, $recorder, $answer);
@@ -146,7 +146,7 @@ class Phake_FacadeTest extends PHPUnit_Framework_TestCase
 	 * @param Phake_ClassGenerator_MockClass $mockGenerator
 	 * @param Phake_CallRecorder_Recorder $recorder
 	 */
-	private function setMockInstantiatorExpectations(Phake_ClassGenerator_MockClass $mockGenerator, Phake_CallRecorder_Recorder $recorder, Phake_Stubber_StaticAnswer $answer)
+	private function setMockInstantiatorExpectations(Phake_ClassGenerator_MockClass $mockGenerator, Phake_CallRecorder_Recorder $recorder, Phake_Stubber_IAnswer $answer)
 	{
 		$mockGenerator->expects($this->once())
 				->method('instantiate')

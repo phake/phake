@@ -309,6 +309,18 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 
 		$this->assertEquals(42, $mock->foo());
 	}
+
+	/**
+	 * Tests stubbing a mocked method to call its parent.
+	 */
+	public function testStubbingMethodToCallParent()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+
+		Phake::when($mock)->fooWithReturnValue()->thenCallParent();
+
+		$this->assertEquals('blah', $mock->fooWithReturnValue());
+	}
 }
 
 ?>

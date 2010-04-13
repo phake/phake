@@ -42,42 +42,55 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Stubber/Answers/StaticAnswer.php';
 require_once 'Phake/Stubber/Answers/ParentDelegate.php';
 
 /**
- * A proxy class to provide a fluent interface into the answer binder.
- *
- * @author Mike Lively <m@digitalsandwich.com>
+ * Tests the functionality of the parent delegate
  */
-class Phake_Proxies_AnswerBinderProxy {
+class Phake_Stubber_Answers_ParentDelegateTest extends PHPUnit_Framework_TestCase
+{
 	/**
-	 * @var Phake_Stubber_IAnswerBinder
+	 * @var Phake_Stubber_Answers_ParentDelegate
 	 */
-	private $binder;
-
-	public function __construct(Phake_Stubber_IAnswerBinder $binder)
+	private $delegate;
+	
+	/**
+	 * Sets up the test fixture
+	 */
+	public function setUp()
 	{
-		$this->binder = $binder;
+		$this->delegate = new Phake_Stubber_Answers_ParentDelegate();
 	}
 
 	/**
-	 * Binds a static answer to the method and object in the proxied binder.
-	 * @param mixed $value
-	 * @return Phake_Stubber_IAnswerBinder
+	 * Tests that the delegate returns itself.
 	 */
-	public function thenReturn($value)
+	public function testThatDelegateReturnsItself()
 	{
-		return $this->binder->bindAnswer(new Phake_Stubber_Answers_StaticAnswer($value));
+		$answer = $this->delegate->getAnswer();
+		$this->assertType('Phake_Stubber_Answers_IDelegator', $answer);
+		$this->assertSame($this->delegate, $answer);
 	}
 
 	/**
-	 * Binds a delegated call that will call a given method's parent.
-	 * @return Phake_Stubber_IAnswerBinder
+	 * Tets that the delegate returns a callback to the parent class.
 	 */
-	public function thenCallParent()
+	public function testThatDelegateReturnsCorrectCallback()
 	{
-		return $this->binder->bindAnswer(new Phake_Stubber_Answers_ParentDelegate());
+		$callback = $this->delegate->getCallback('foo', array('bar'));
+
+		$this->assertSame(array('parent', 'foo'), $callback);
+	}
+
+	/**
+	 * Tests that the delegate passes through the given arguments.
+	 */
+	public function testThatDelegatePassesThroughArgs()
+	{
+		$args = $this->delegate->getArguments('foo', array('bar'));
+
+		$this->assertSame(array('bar'), $args);
 	}
 }
+
 ?>

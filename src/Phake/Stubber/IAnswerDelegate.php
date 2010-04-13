@@ -42,42 +42,26 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Stubber/Answers/StaticAnswer.php';
-require_once 'Phake/Stubber/Answers/ParentDelegate.php';
-
 /**
- * A proxy class to provide a fluent interface into the answer binder.
+ * Provides an interface for answer delegates.
  *
- * @author Mike Lively <m@digitalsandwich.com>
+ * Answer delegates do not immediately provide an answer but provide a mechanism to generate a call
+ * back answer instead.
  */
-class Phake_Proxies_AnswerBinderProxy {
+interface Phake_Stubber_IAnswerDelegate
+{
 	/**
-	 * @var Phake_Stubber_IAnswerBinder
+	 * Provides the callback that will give the correct answer.
+	 * @param string $calledMethod
+	 * @param array $calledParameters
 	 */
-	private $binder;
-
-	public function __construct(Phake_Stubber_IAnswerBinder $binder)
-	{
-		$this->binder = $binder;
-	}
+	public function getCallBack($calledMethod, array $calledParameters);
 
 	/**
-	 * Binds a static answer to the method and object in the proxied binder.
-	 * @param mixed $value
-	 * @return Phake_Stubber_IAnswerBinder
+	 * Provides the arguments for the callback that will give the correct answer.
+	 * @param string $calledMethod
+	 * @param array $calledParameters
 	 */
-	public function thenReturn($value)
-	{
-		return $this->binder->bindAnswer(new Phake_Stubber_Answers_StaticAnswer($value));
-	}
-
-	/**
-	 * Binds a delegated call that will call a given method's parent.
-	 * @return Phake_Stubber_IAnswerBinder
-	 */
-	public function thenCallParent()
-	{
-		return $this->binder->bindAnswer(new Phake_Stubber_Answers_ParentDelegate());
-	}
+	public function getArguments($calledMethod, array $calledParameters);
 }
 ?>

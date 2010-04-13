@@ -42,31 +42,34 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Stubber/StaticAnswer.php';
+require_once 'Phake/Stubber/IAnswer.php';
 
 /**
- * Description of StaticAnswerTest
+ * Allows providing a static answer to a stubbed method call.
  *
  * @author Mike Lively <m@digitalsandwich.com>
  */
-class Phake_Stubber_StaticAnswerTest extends PHPUnit_Framework_TestCase
+class Phake_Stubber_Answers_StaticAnswer implements Phake_Stubber_IAnswer
 {
 	/**
-	 * @var Phake_Stubber_StaticAnswer
+	 * @var mixed
 	 */
 	private $answer;
 
 	/**
-	 * Sets up the answer fixture
+	 * @param mixed $answer
 	 */
-	public function setUp()
+	public function __construct($answer)
 	{
-		$this->answer = new Phake_Stubber_StaticAnswer(42);
+		$this->answer = $answer;
 	}
 
-	public function testAnswer()
+	/**
+	 * @return mixed
+	 */
+	public function getAnswer()
 	{
-		$this->assertEquals(42, $this->answer->getAnswer());
+		return $this->answer;
 	}
 }
 ?>

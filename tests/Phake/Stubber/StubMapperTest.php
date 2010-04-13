@@ -68,54 +68,54 @@ class Phake_Stubber_StubMapperTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Tests mapping matchers to answers.
 	 */
-	 public function testMappingMatchers()
-	 {
-		 $matcher = $this->getMock('Phake_Matchers_MethodMatcher', array(), array(), '', FALSE);
-		 $stub = $this->getMock('Phake_Stubber_StaticAnswer', array(), array(), '', FALSE);
+	public function testMappingMatchers()
+	{
+		$matcher = $this->getMock('Phake_Matchers_MethodMatcher', array(), array(), '', FALSE);
+		$stub = $this->getMock('Phake_Stubber_IAnswer');
 
-		 $matcher->expects($this->any())
-						 ->method('matches')
-						 ->with($this->equalTo('foo'), $this->equalTo(array('bar', 'test')))
-						 ->will($this->returnValue(TRUE));
+		$matcher->expects($this->any())
+				 ->method('matches')
+				 ->with($this->equalTo('foo'), $this->equalTo(array('bar', 'test')))
+				 ->will($this->returnValue(TRUE));
 
-		 $this->mapper->mapStubToMatcher($stub, $matcher);
+		$this->mapper->mapStubToMatcher($stub, $matcher);
 
-		 $this->assertEquals($stub, $this->mapper->getStubByCall('foo', array('bar', 'test')));
-	 }
+		$this->assertEquals($stub, $this->mapper->getStubByCall('foo', array('bar', 'test')));
+	}
 
 	/**
 	 * Tests mapping matchers to answers.
 	 */
-	 public function testMappingMatchersFailsOnNonMatch()
-	 {
-		 $matcher = $this->getMock('Phake_Matchers_MethodMatcher', array(), array(), '', FALSE);
-		 $stub = $this->getMock('Phake_Stubber_StaticAnswer', array(), array(), '', FALSE);
+	public function testMappingMatchersFailsOnNonMatch()
+	{
+		$matcher = $this->getMock('Phake_Matchers_MethodMatcher', array(), array(), '', FALSE);
+		$stub = $this->getMock('Phake_Stubber_IAnswer');
 
-		 $matcher->expects($this->any())
-						 ->method('matches')
-						 ->will($this->returnValue(FALSE));
+		$matcher->expects($this->any())
+					 ->method('matches')
+					 ->will($this->returnValue(FALSE));
 
-		 $this->mapper->mapStubToMatcher($stub, $matcher);
+		$this->mapper->mapStubToMatcher($stub, $matcher);
 
-		 $this->assertNull($this->mapper->getStubByCall('foo', array('bar', 'test')));
-	 }
+		$this->assertNull($this->mapper->getStubByCall('foo', array('bar', 'test')));
+	}
 
-	 /**
-	  * Tests resetting a stub mapper
-	  */
-	 public function testRemoveAllAnswers()
-	 {
-		 $matcher = $this->getMock('Phake_Matchers_MethodMatcher', array(), array(), '', FALSE);
-		 $stub = $this->getMock('Phake_Stubber_StaticAnswer', array(), array(), '', FALSE);
+	/**
+	 * Tests resetting a stub mapper
+	 */
+	public function testRemoveAllAnswers()
+	{
+		$matcher = $this->getMock('Phake_Matchers_MethodMatcher', array(), array(), '', FALSE);
+		$stub = $this->getMock('Phake_Stubber_IAnswer');
 
-		 $matcher->expects($this->never())
-						 ->method('matches');
+		$matcher->expects($this->never())
+						->method('matches');
 
-		 $this->mapper->mapStubToMatcher($stub, $matcher);
+		$this->mapper->mapStubToMatcher($stub, $matcher);
 
-		 $this->mapper->removeAllAnswers();
+		$this->mapper->removeAllAnswers();
 
-		 $this->assertNull($this->mapper->getStubByCall('foo', array('bar', 'test')));
-	 }
+		$this->assertNull($this->mapper->getStubByCall('foo', array('bar', 'test')));
+	}
 }
 ?>

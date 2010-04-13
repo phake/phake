@@ -82,10 +82,23 @@ class Phake_Proxies_AnswerBinderProxyTest extends PHPUnit_Framework_TestCase
 	{
 		$this->binder->expects($this->once())
 			->method('bindAnswer')
-			->with($this->logicalAnd($this->isInstanceOf('Phake_Stubber_StaticAnswer'), $this->attributeEqualTo('answer', 42)))
+			->with($this->logicalAnd($this->isInstanceOf('Phake_Stubber_Answers_StaticAnswer'), $this->attributeEqualTo('answer', 42)))
 			->will($this->returnValue($this->binder));
 
 		$this->assertSame($this->binder, $this->proxy->thenReturn(42));
+	}
+
+	/**
+	 * Tests the thenCallParent functionality of the proxy
+	 */
+	public function testThenCallParent()
+	{
+		$this->binder->expects($this->once())
+			->method('bindAnswer')
+			->with($this->isInstanceOf('Phake_Stubber_Answers_ParentDelegate'))
+			->will($this->returnValue($this->binder));
+
+		$this->assertSame($this->binder, $this->proxy->thenCallParent());
 	}
 }
 ?>

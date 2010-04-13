@@ -52,15 +52,15 @@ require_once 'Phake/Stubber/IAnswerBinder.php';
 class Phake_Stubber_SelfBindingAnswerBinder implements Phake_Stubber_IAnswerBinder
 {
 	/**
-	 * @var Phake_Stubber_StaticAnswer
+	 * @var Phake_Stubber_IAnswer
 	 */
 	private $answer;
 
 	/**
 	 * Binds the given answer to the current object.
-	 * @param Phake_Stubber_StaticAnswer $answer
+	 * @param Phake_Stubber_IAnswer $answer
 	 */
-	public function bindAnswer(Phake_Stubber_StaticAnswer $answer)
+	public function bindAnswer(Phake_Stubber_IAnswer $answer)
 	{
 		$this->answer = $answer;
 
@@ -69,7 +69,7 @@ class Phake_Stubber_SelfBindingAnswerBinder implements Phake_Stubber_IAnswerBind
 
 	/**
 	 * Returns the answer bound to this object.
-	 * @return Phake_Stubber_StaticAnswer
+	 * @return Phake_Stubber_IAnswer
 	 */
 	public function getAnswer()
 	{

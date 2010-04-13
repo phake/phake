@@ -55,5 +55,10 @@ class PhakeTest_MockedClass {
 		public function fooWithArgument($arg1)
 		{
 		}
+
+		public function fooWithReturnValue()
+		{
+			return 'blah';
+		}
 }
 ?>

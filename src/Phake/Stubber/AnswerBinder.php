@@ -74,9 +74,9 @@ class Phake_Stubber_AnswerBinder implements Phake_Stubber_IAnswerBinder
 
 	/**
 	 * Binds an answer to the the classes
-	 * @param Phake_Stubber_StaticAnswer $answer
+	 * @param Phake_Stubber_IAnswer $answer
 	 */
-	public function bindAnswer(Phake_Stubber_StaticAnswer $answer)
+	public function bindAnswer(Phake_Stubber_IAnswer $answer)
 	{
 		$this->obj->__PHAKE_addAnswer($answer, $this->matcher);
 

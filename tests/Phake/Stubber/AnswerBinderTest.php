@@ -44,7 +44,7 @@
 
 require_once 'Phake/Stubber/AnswerBinder.php';
 require_once 'Phake/Stubber/IStubbable.php';
-require_once 'Phake/Stubber/StaticAnswer.php';
+require_once 'Phake/Stubber/IAnswer.php';
 require_once 'Phake/Matchers/MethodMatcher.php';
 
 /**
@@ -81,7 +81,7 @@ class Phake_Stubber_AnswerBinderTest extends PHPUnit_Framework_TestCase
 
 	public function testBindAnswer()
 	{
-		$answer = $this->getMock('Phake_Stubber_StaticAnswer', array(), array(), '', FALSE);
+		$answer = $this->getMock('Phake_Stubber_IAnswer');
 		$this->mock->expects($this->once())
 			->method('__PHAKE_addAnswer')
 			->with($this->equalTo($answer), $this->equalTo($this->matcher));

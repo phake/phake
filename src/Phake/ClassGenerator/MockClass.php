@@ -71,7 +71,7 @@ class {$newClassName} extends {$mockedClassName}
 
 	private \$__PHAKE_defaultAnswer;
 
-	public function __construct(Phake_CallRecorder_Recorder \$callRecorder, Phake_Stubber_StubMapper \$stubMapper, Phake_Stubber_StaticAnswer \$defaultAnswer)
+	public function __construct(Phake_CallRecorder_Recorder \$callRecorder, Phake_Stubber_StubMapper \$stubMapper, Phake_Stubber_IAnswer \$defaultAnswer)
 	{
 		\$this->__PHAKE_callRecorder = \$callRecorder;
 		\$this->__PHAKE_stubMapper = \$stubMapper;
@@ -83,7 +83,7 @@ class {$newClassName} extends {$mockedClassName}
 		return \$this->__PHAKE_callRecorder;
 	}
 
-	public function __PHAKE_addAnswer(Phake_Stubber_StaticAnswer \$answer, Phake_Matchers_MethodMatcher \$matcher)
+	public function __PHAKE_addAnswer(Phake_Stubber_IAnswer \$answer, Phake_Matchers_MethodMatcher \$matcher)
 	{
 		\$this->__PHAKE_stubMapper->mapStubToMatcher(\$answer, \$matcher);
 	}
@@ -107,10 +107,10 @@ class {$newClassName} extends {$mockedClassName}
 	 * @param string $newClassName
 	 * @param Phake_CallRecorder_Recorder $recorder
 	 * @param Phake_Stubber_StubMapper $mapper
-	 * @param Phake_Stubber_StaticAnswer $defaultAnswer
+	 * @param Phake_Stubber_IAnswer $defaultAnswer
 	 * @return Phake_IMock of type $newClassName
 	 */
-	public function instantiate($newClassName, Phake_CallRecorder_Recorder $recorder, Phake_Stubber_StubMapper $mapper, Phake_Stubber_StaticAnswer $defaultAnswer)
+	public function instantiate($newClassName, Phake_CallRecorder_Recorder $recorder, Phake_Stubber_StubMapper $mapper, Phake_Stubber_IAnswer $defaultAnswer)
 	{
 		return new $newClassName($recorder, $mapper, $defaultAnswer);
 	}
@@ -149,13 +149,26 @@ class {$newClassName} extends {$mockedClassName}
 
 		\$stub = \$this->__PHAKE_stubMapper->getStubByCall('{$method->getName()}', \$args);
 
-		if (!empty(\$stub))
+		if (\$stub !== NULL)
 		{
-			return \$stub->getAnswer();
+			\$answer = \$stub;
 		}
 		else
 		{
-			return \$this->__PHAKE_defaultAnswer->getAnswer();
+			\$answer = \$this->__PHAKE_defaultAnswer;
+		}
+
+		if (\$answer instanceof Phake_Stubber_Answers_IDelegator)
+		{
+			\$delegate = \$answer->getAnswer();
+			\$callback = \$delegate->getCallBack(__FUNCTION__, \$args);
+			\$arguments = \$delegate->getArguments(__FUNCTION__, \$args);
+
+			return call_user_func_array(\$callback, \$arguments);
+		}
+		else
+		{
+			return \$answer->getAnswer();
 		}
 	}
 ";

@@ -58,10 +58,10 @@ class Phake_Facade
 	 * @param string $mockedClass - The name of the class to mock
 	 * @param Phake_ClassGenerator_MockClass $mockGenerator - The generator used to construct mock classes
 	 * @param Phake_CallRecorder_Recorder $callRecorder
-	 * @param Phake_Stubber_StaticAnswer $defaultAnswer
+	 * @param Phake_Stubber_IAnswer $defaultAnswer
 	 * @return mixed
 	 */
-	public function mock($mockedClass, Phake_ClassGenerator_MockClass $mockGenerator, Phake_CallRecorder_Recorder $callRecorder, Phake_Stubber_StaticAnswer $defaultAnswer)
+	public function mock($mockedClass, Phake_ClassGenerator_MockClass $mockGenerator, Phake_CallRecorder_Recorder $callRecorder, Phake_Stubber_IAnswer $defaultAnswer)
 	{
 		if (!class_exists($mockedClass, TRUE))
 		{

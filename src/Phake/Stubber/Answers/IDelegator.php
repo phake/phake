@@ -42,42 +42,15 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Stubber/Answers/StaticAnswer.php';
-require_once 'Phake/Stubber/Answers/ParentDelegate.php';
+require_once 'Phake/Stubber/IAnswer.php';
 
 /**
- * A proxy class to provide a fluent interface into the answer binder.
- *
- * @author Mike Lively <m@digitalsandwich.com>
+ * A type interface to indicate that the given answer should not be used directly but is instead
+ * an answer delegate
  */
-class Phake_Proxies_AnswerBinderProxy {
-	/**
-	 * @var Phake_Stubber_IAnswerBinder
-	 */
-	private $binder;
+interface Phake_Stubber_Answers_IDelegator extends Phake_Stubber_IAnswer
+{
 
-	public function __construct(Phake_Stubber_IAnswerBinder $binder)
-	{
-		$this->binder = $binder;
-	}
-
-	/**
-	 * Binds a static answer to the method and object in the proxied binder.
-	 * @param mixed $value
-	 * @return Phake_Stubber_IAnswerBinder
-	 */
-	public function thenReturn($value)
-	{
-		return $this->binder->bindAnswer(new Phake_Stubber_Answers_StaticAnswer($value));
-	}
-
-	/**
-	 * Binds a delegated call that will call a given method's parent.
-	 * @return Phake_Stubber_IAnswerBinder
-	 */
-	public function thenCallParent()
-	{
-		return $this->binder->bindAnswer(new Phake_Stubber_Answers_ParentDelegate());
-	}
 }
+
 ?>
