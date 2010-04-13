@@ -60,5 +60,15 @@ class PhakeTest_MockedClass {
 		{
 			return 'blah';
 		}
+
+		public function callInnerFunc()
+		{
+			return $this->innerFunc();
+		}
+
+		protected function innerFunc()
+		{
+			return 'test';
+		}
 }
 ?>

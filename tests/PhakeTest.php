@@ -321,6 +321,16 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 
 		$this->assertEquals('blah', $mock->fooWithReturnValue());
 	}
+
+	/**
+	 * Tests calling through a chain of calls
+	 */
+	public function testStubbingChainedMethodsToCallParent()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass', Phake::ifUnstubbed()->thenCallParent());
+
+		$this->assertEquals('test', $mock->callInnerFunc());
+	}
 }
 
 ?>
