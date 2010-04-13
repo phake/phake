@@ -69,7 +69,7 @@ class Phake
 	/**
 	 * Returns a new mock object based on the given class name.
 	 * @param string $className
-	 * @return mixed
+	 * @return Phake_ITestDouble
 	 */
 	public static function mock($className)
 	{
@@ -100,8 +100,9 @@ class Phake
 
 	/**
 	 * Resets all calls and stubs on the given mock object
+	 * @param Phake_ITestDouble $mock
 	 */
-	public static function reset($mock)
+	public static function reset(Phake_ITestDouble $mock)
 	{
 
 	}

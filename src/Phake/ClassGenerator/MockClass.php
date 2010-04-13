@@ -43,8 +43,7 @@
  */
 
 require_once 'Phake/CallRecorder/Call.php';
-require_once 'Phake/CallRecorder/ICallRecorderContainer.php';
-require_once 'Phake/Stubber/IStubbable.php';
+require_once 'Phake/ITestDouble.php';
 
 /**
  * Creates and executes the code necessary to create a mock class.
@@ -64,8 +63,7 @@ class Phake_ClassGenerator_MockClass
 	{
 		$classDef = "
 class {$newClassName} extends {$mockedClassName}
-	implements Phake_CallRecorder_ICallRecorderContainer,
-						 Phake_Stubber_IStubbable
+	implements Phake_ITestDouble
 {
 	private \$__PHAKE_callRecorder;
 
