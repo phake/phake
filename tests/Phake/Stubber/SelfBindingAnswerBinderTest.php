@@ -42,23 +42,15 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Proxies/AnswerBinderProxy.php';
-require_once 'Phake/Stubber/AnswerBinder.php';
+require_once 'Phake/Stubber/SelfBindingAnswerBinder.php';
 
 /**
- * Description of AnswerBinderProxyTest
- *
- * @author Mike Lively <m@digitalsandwich.com>
+ * Tests the self binding answer binder
  */
-class Phake_Proxies_AnswerBinderProxyTest extends PHPUnit_Framework_TestCase
+class Phake_Stubber_SelfBindingAnswerBinderTest extends PHPUnit_Framework_TestCase
 {
 	/**
-	 * @var Phake_Proxies_AnswerBinderProxy
-	 */
-	private $proxy;
-
-	/**
-	 * @var Phake_Stubber_AnswerBinder
+	 * @var Phake_Stubber_SelfBindingAnswerBinder
 	 */
 	private $binder;
 
@@ -67,25 +59,19 @@ class Phake_Proxies_AnswerBinderProxyTest extends PHPUnit_Framework_TestCase
 	 */
 	public function setUp()
 	{
-		$this->binder = $this->getMock('Phake_Stubber_AnswerBinder', array(), array(), '', FALSE);
-		$this->proxy = new Phake_Proxies_AnswerBinderProxy($this->binder);
+		$this->binder = new Phake_Stubber_SelfBindingAnswerBinder();
 	}
 
 	/**
-	 * Tests the thenReturn functionality of the proxy.
-	 *
-	 * It should result in the binder being called with a static answer.
-	 *
-	 * @todo we need argument capturing so I can make sure the answer matches.
+	 * Tests that the given answer is exposed.
 	 */
-	public function testThenReturn()
+	public function testGetAnswer()
 	{
-		$this->binder->expects($this->once())
-			->method('bindAnswer')
-			->with($this->logicalAnd($this->isInstanceOf('Phake_Stubber_StaticAnswer'), $this->attributeEqualTo('answer', 42)))
-			->will($this->returnValue($this->binder));
+		$answer = $this->getMock('Phake_Stubber_StaticAnswer', array(), array(), '', FALSE);
+		$this->assertSame($this->binder, $this->binder->bindAnswer($answer));
 
-		$this->assertSame($this->binder, $this->proxy->thenReturn(42));
+		$this->assertSame($answer, $this->binder->getAnswer());
 	}
 }
+
 ?>

@@ -51,11 +51,11 @@ require_once 'Phake/Stubber/StaticAnswer.php';
  */
 class Phake_Proxies_AnswerBinderProxy {
 	/**
-	 * @var Phake_Stubber_AnswerBinder
+	 * @var Phake_Stubber_IAnswerBinder
 	 */
 	private $binder;
 
-	public function __construct(Phake_Stubber_AnswerBinder $binder)
+	public function __construct(Phake_Stubber_IAnswerBinder $binder)
 	{
 		$this->binder = $binder;
 	}
@@ -66,7 +66,7 @@ class Phake_Proxies_AnswerBinderProxy {
 	 */
 	public function thenReturn($value)
 	{
-		$this->binder->bindAnswer(new Phake_Stubber_StaticAnswer($value));
+		return $this->binder->bindAnswer(new Phake_Stubber_StaticAnswer($value));
 	}
 }
 ?>

@@ -69,10 +69,13 @@ class {$newClassName} extends {$mockedClassName}
 
 	private \$__PHAKE_stubMapper;
 
-	public function __construct(\$callRecorder, \$stubMapper)
+	private \$__PHAKE_defaultAnswer;
+
+	public function __construct(Phake_CallRecorder_Recorder \$callRecorder, Phake_Stubber_StubMapper \$stubMapper, Phake_Stubber_StaticAnswer \$defaultAnswer)
 	{
 		\$this->__PHAKE_callRecorder = \$callRecorder;
 		\$this->__PHAKE_stubMapper = \$stubMapper;
+		\$this->__PHAKE_defaultAnswer = \$defaultAnswer;
 	}
 
 	public function __PHAKE_getCallRecorder()
@@ -104,11 +107,12 @@ class {$newClassName} extends {$mockedClassName}
 	 * @param string $newClassName
 	 * @param Phake_CallRecorder_Recorder $recorder
 	 * @param Phake_Stubber_StubMapper $mapper
-	 * @return object of type $newClassName
+	 * @param Phake_Stubber_StaticAnswer $defaultAnswer
+	 * @return Phake_IMock of type $newClassName
 	 */
-	public function instantiate($newClassName, Phake_CallRecorder_Recorder $recorder, Phake_Stubber_StubMapper $mapper)
+	public function instantiate($newClassName, Phake_CallRecorder_Recorder $recorder, Phake_Stubber_StubMapper $mapper, Phake_Stubber_StaticAnswer $defaultAnswer)
 	{
-		return new $newClassName($recorder, $mapper);
+		return new $newClassName($recorder, $mapper, $defaultAnswer);
 	}
 
 	/**
@@ -151,7 +155,7 @@ class {$newClassName} extends {$mockedClassName}
 		}
 		else
 		{
-			return NULL;
+			return \$this->__PHAKE_defaultAnswer->getAnswer();
 		}
 	}
 ";

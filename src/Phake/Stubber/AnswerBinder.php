@@ -42,12 +42,14 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+require_once 'Phake/Stubber/IAnswerBinder.php';
+
 /**
  * Allows binding an answer to stubbable object's method.
  *
  * @author Mike Lively <m@digitalsandwich.com>
  */
-class Phake_Stubber_AnswerBinder
+class Phake_Stubber_AnswerBinder implements Phake_Stubber_IAnswerBinder
 {
 	/**
 	 * @var Phake_Stubber_IStubbable
@@ -77,6 +79,8 @@ class Phake_Stubber_AnswerBinder
 	public function bindAnswer(Phake_Stubber_StaticAnswer $answer)
 	{
 		$this->obj->__PHAKE_addAnswer($answer, $this->matcher);
+
+		return $this;
 	}
 }
 ?>

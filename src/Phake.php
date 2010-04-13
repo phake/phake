@@ -47,8 +47,11 @@ require_once 'Phake/ClassGenerator/MockClass.php';
 require_once 'Phake/CallRecorder/Recorder.php';
 require_once 'Phake/Proxies/VerifierProxy.php';
 require_once 'Phake/Proxies/StubberProxy.php';
+require_once 'Phake/Proxies/AnswerBinderProxy.php';
 require_once 'Phake/Matchers/EqualsMatcher.php';
 require_once 'Phake/Matchers/Factory.php';
+require_once 'Phake/Stubber/SelfBindingAnswerBinder.php';
+require_once 'Phake/Stubber/StaticAnswer.php';
 
 /**
  * Phake - PHP Test Doubles Framework
@@ -69,11 +72,22 @@ class Phake
 	/**
 	 * Returns a new mock object based on the given class name.
 	 * @param string $className
+	 * @param Phake_Stubber_SelfBindingAnswerBinder $defaultAnswer
 	 * @return Phake_ITestDouble
 	 */
-	public static function mock($className)
+	public static function mock($className, Phake_Stubber_SelfBindingAnswerBinder $defaultAnswer = NULL)
 	{
-		return self::getPhake()->mock($className, new Phake_ClassGenerator_MockClass(), new Phake_CallRecorder_Recorder());
+		var_dump($defaultAnswer);
+		if ($defaultAnswer === NULL)
+		{
+			$answer = new Phake_Stubber_StaticAnswer(NULL);
+		}
+		else
+		{
+			$answer = $defaultAnswer->getAnswer();
+		}
+
+		return self::getPhake()->mock($className, new Phake_ClassGenerator_MockClass(), new Phake_CallRecorder_Recorder(), $answer);
 	}
 
 	/**
@@ -105,6 +119,16 @@ class Phake
 	public static function reset(Phake_IMock $mock)
 	{
 		$mock->__PHAKE_resetMock();
+	}
+
+	/**
+	 * Provides methods for creating answers. Used in the api as a fluent way to set default stubs.
+	 * @return Phake_Proxies_AnswerBinderProxy
+	 */
+	public static function ifUnstubbed()
+	{
+		$binder = new Phake_Stubber_SelfBindingAnswerBinder();
+		return new Phake_Proxies_AnswerBinderProxy($binder);
 	}
 
 	/**

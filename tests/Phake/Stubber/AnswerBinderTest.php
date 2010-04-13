@@ -86,7 +86,7 @@ class Phake_Stubber_AnswerBinderTest extends PHPUnit_Framework_TestCase
 			->method('__PHAKE_addAnswer')
 			->with($this->equalTo($answer), $this->equalTo($this->matcher));
 		
-		$this->binder ->bindAnswer($answer);
+		$this->assertEquals($this->binder, $this->binder->bindAnswer($answer));
 	}
 }
 ?>

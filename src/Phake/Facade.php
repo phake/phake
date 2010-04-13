@@ -58,9 +58,10 @@ class Phake_Facade
 	 * @param string $mockedClass - The name of the class to mock
 	 * @param Phake_ClassGenerator_MockClass $mockGenerator - The generator used to construct mock classes
 	 * @param Phake_CallRecorder_Recorder $callRecorder
+	 * @param Phake_Stubber_StaticAnswer $defaultAnswer
 	 * @return mixed
 	 */
-	public function mock($mockedClass, Phake_ClassGenerator_MockClass $mockGenerator, Phake_CallRecorder_Recorder $callRecorder)
+	public function mock($mockedClass, Phake_ClassGenerator_MockClass $mockGenerator, Phake_CallRecorder_Recorder $callRecorder, Phake_Stubber_StaticAnswer $defaultAnswer)
 	{
 		if (!class_exists($mockedClass, TRUE))
 		{
@@ -69,7 +70,7 @@ class Phake_Facade
 
 		$newClassName = $this->generateUniqueClassName($mockedClass);
 		$mockGenerator->generate($newClassName, $mockedClass);
-		return $mockGenerator->instantiate($newClassName, $callRecorder, new Phake_Stubber_StubMapper());
+		return $mockGenerator->instantiate($newClassName, $callRecorder, new Phake_Stubber_StubMapper(), $defaultAnswer);
 	}
 
 	/**
