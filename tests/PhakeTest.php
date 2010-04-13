@@ -265,6 +265,40 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(42, $mock->fooWithArgument('bar'));
 		$this->assertNull($mock->fooWithArgument('test'));
 	}
+
+	/**
+	 * Tests that resetting a mock clears the call recorder
+	 */
+	public function testResettingCallRecorder()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+
+		$mock->foo();
+
+		Phake::verify($mock)->foo();
+
+		Phake::reset($mock);
+
+		$this->setExpectedException('Exception');
+
+		Phake::verify($mock)->foo();
+	}
+
+	/**
+	 * Tests that resetting a mock clears the stubber
+	 */
+	public function testResettingStubMapper()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+
+		Phake::when($mock)->foo()->thenReturn(42);
+
+		$this->assertEquals(42, $mock->foo());
+
+		Phake::reset($mock);
+
+		$this->assertNull($mock->foo());
+	}
 }
 
 ?>

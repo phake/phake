@@ -99,6 +99,14 @@ class Phake
 	}
 
 	/**
+	 * Resets all calls and stubs on the given mock object
+	 */
+	public static function reset($mock)
+	{
+
+	}
+
+	/**
 	 * @param Phake_Facade $phake
 	 */
 	public static function setPhake(Phake_Facade $phake)
