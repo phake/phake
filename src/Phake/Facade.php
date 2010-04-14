@@ -63,9 +63,9 @@ class Phake_Facade
 	 */
 	public function mock($mockedClass, Phake_ClassGenerator_MockClass $mockGenerator, Phake_CallRecorder_Recorder $callRecorder, Phake_Stubber_IAnswer $defaultAnswer)
 	{
-		if (!class_exists($mockedClass, TRUE))
+		if (!class_exists($mockedClass, TRUE) && !interface_exists($mockedClass, TRUE))
 		{
-			throw new InvalidArgumentException("The class [{$mockedClass} does not exist");
+			throw new InvalidArgumentException("The class / interface [{$mockedClass} does not exist");
 		}
 
 		$newClassName = $this->generateUniqueClassName($mockedClass);

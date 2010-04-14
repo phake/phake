@@ -50,6 +50,7 @@ require_once 'Phake/Stubber/Answers/IDelegator.php';
 require_once 'Phake/Stubber/IAnswerDelegate.php';
 
 require_once 'PhakeTest/MockedClass.php';
+require_once 'PhakeTest/MockedInterface.php';
 
 /**
  * Description of MockClass
@@ -331,5 +332,19 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 		$mock->fooWithArgument('bar');
 	}
 
+	/**
+	 * Tests generating a class definition for a mocked interface
+	 */
+	public function testGenerateOnInterface()
+	{
+		$newClassName = __CLASS__ . '_TestClass13';
+		$mockedClass = 'PhakeTest_MockedInterface';
+
+		$this->classGen->generate($newClassName, $mockedClass);
+
+		$this->assertTrue(
+			class_exists($newClassName, FALSE),
+			'Phake_ClassGenerator_MockClass::generate() did not create correct class');
+	}
 }
 ?>

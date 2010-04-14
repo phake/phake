@@ -47,6 +47,7 @@ require_once 'Phake/ClassGenerator/MockClass.php';
 require_once 'Phake/CallRecorder/Recorder.php';
 require_once 'Phake/CallRecorder/ICallRecorderContainer.php';
 require_once 'Phake/Stubber/StubMapper.php';
+require_once 'PhakeTest/MockedInterface.php';
 
 /**
  * Tests the facade class for Phake
@@ -80,6 +81,19 @@ class Phake_FacadeTest extends PHPUnit_Framework_TestCase
 	public function testMock()
 	{
 		$mockedClass = 'stdClass';
+		$mockGenerator = $this->getMock('Phake_ClassGenerator_MockClass');
+
+		$this->setMockGeneratorExpectations($mockedClass, $mockGenerator);
+
+		$this->facade->mock($mockedClass, $mockGenerator, $this->getMock('Phake_CallRecorder_Recorder'), $this->getMock('Phake_Stubber_IAnswer'));
+	}
+
+	/**
+	 * Tests that the mock generator is called properly
+	 */
+	public function testMockInterface()
+	{
+		$mockedClass = 'PhakeTest_MockedInterface';
 		$mockGenerator = $this->getMock('Phake_ClassGenerator_MockClass');
 
 		$this->setMockGeneratorExpectations($mockedClass, $mockGenerator);

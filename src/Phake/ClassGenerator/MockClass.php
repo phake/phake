@@ -61,9 +61,20 @@ class Phake_ClassGenerator_MockClass
 	 */
 	public function generate($newClassName, $mockedClassName)
 	{
+		if (class_exists($mockedClassName, TRUE))
+		{
+			$extends = "extends {$mockedClassName}";
+			$implements = '';
+		}
+		elseif (interface_exists($mockedClassName, TRUE))
+		{
+			$extends = '';
+			$implements = ", {$mockedClassName}";
+		}
+		
 		$classDef = "
-class {$newClassName} extends {$mockedClassName}
-	implements Phake_IMock
+class {$newClassName} {$extends}
+	implements Phake_IMock {$implements}
 {
 	private \$__PHAKE_callRecorder;
 
@@ -138,7 +149,7 @@ class {$newClassName} extends {$mockedClassName}
 	 */
 	protected function implementMethod(ReflectionMethod $method)
 	{
-		$modifiers = implode(' ', Reflection::getModifierNames($method->getModifiers()));
+		$modifiers = implode(' ', Reflection::getModifierNames($method->getModifiers() & ~ReflectionMethod::IS_ABSTRACT));
 
 		$methodDef = "
 	{$modifiers} function {$method->getName()}({$this->generateMethodParameters($method)})
@@ -203,9 +214,9 @@ class {$newClassName} extends {$mockedClassName}
 		{
 			$type = 'array ';
 		}
-		elseif ($parameter->getClass() == NULL)
+		elseif ($parameter->getClass() !== NULL)
 		{
-			$type = $parameter->getClass() . ' ';
+			$type = $parameter->getClass()->getName() . ' ';
 		}
 		else
 		{
