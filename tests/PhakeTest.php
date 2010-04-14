@@ -43,6 +43,7 @@
  */
 
 require_once('Phake.php');
+require_once('PhakeTest/AbstractClass.php');
 require_once('PhakeTest/MockedClass.php');
 require_once('PhakeTest/MockedInterface.php');
 
@@ -339,6 +340,18 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 	public function testMockingInterface()
 	{
 		$mock = Phake::mock('PhakeTest_MockedInterface');
+
+		Phake::when($mock)->foo()->thenReturn('bar');
+
+		$this->assertEquals('bar', $mock->foo());
+	}
+
+	/**
+	 * Tests mocking of an abstract class
+	 */
+	public function testMockingAbstract()
+	{
+		$mock = Phake::mock('PhakeTest_AbstractClass');
 
 		Phake::when($mock)->foo()->thenReturn('bar');
 
