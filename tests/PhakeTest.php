@@ -335,6 +335,51 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Tests spy functionality to make sure original method is called.
+	 */
+	public function testSpyCallsOriginal()
+	{
+		$spiedOn = $this->getMock('PhakeTest_MockedClass');
+		$spiedOn->expects($this->once())
+			->method('foo');
+
+		$spy = Phake::spy($spiedOn);
+		$spy->foo();
+	}
+
+	/**
+	 * Tests spy functionality to make sure original value is returned.
+	 */
+	public function testSpyReturnsValue()
+	{
+		$spiedOn = $this->getMock('PhakeTest_MockedClass');
+		$spiedOn->expects($this->any())
+			->method('foo')
+			->will($this->returnValue(42));
+
+
+		$spy = Phake::spy($spiedOn);
+
+		$this->assertEquals(42, $spy->foo());
+	}
+
+	/**
+	 * Tests spy calls are recorded
+	 */
+	public function testSpyRecordsCall()
+	{
+		$spiedOn = $this->getMock('PhakeTest_MockedClass');
+		$spiedOn->expects($this->any())
+			->method('foo');
+
+
+		$spy = Phake::spy($spiedOn);
+		$spy->foo();
+
+		Phake::verify($spy)->foo();
+	}
+
+	/**
 	 * Tests mocking of an interface
 	 */
 	public function testMockingInterface()

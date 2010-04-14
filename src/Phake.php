@@ -52,6 +52,7 @@ require_once 'Phake/Matchers/EqualsMatcher.php';
 require_once 'Phake/Matchers/Factory.php';
 require_once 'Phake/Stubber/SelfBindingAnswerBinder.php';
 require_once 'Phake/Stubber/Answers/StaticAnswer.php';
+require_once 'Phake/Stubber/Answers/SpyDelegate.php';
 
 /**
  * Phake - PHP Test Doubles Framework
@@ -87,6 +88,18 @@ class Phake
 		}
 
 		return self::getPhake()->mock($className, new Phake_ClassGenerator_MockClass(), new Phake_CallRecorder_Recorder(), $answer);
+	}
+
+	/**
+	 * Returns a new spy object that watches the given object.
+	 * @param object $spiedOn
+	 * @return Phake_ITestDouble
+	 */
+	public static function spy($spiedOn)
+	{
+		$answer = new Phake_Stubber_Answers_SpyDelegate($spiedOn);
+
+		return self::getPhake()->mock(get_class($spiedOn), new Phake_ClassGenerator_MockClass(), new Phake_CallRecorder_Recorder(), $answer);
 	}
 
 	/**
