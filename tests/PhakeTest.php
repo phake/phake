@@ -492,15 +492,30 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testMockFreezing()
 	{
-		$mock1 = Phake::mock('PhakeTest_MockedClass');
+		$mock = Phake::mock('PhakeTest_MockedClass');
 
-		$mock1->foo();
+		$mock->foo();
 
-		Phake::verifyNoFurtherInteraction($mock1);
+		Phake::verifyNoFurtherInteraction($mock);
 
 		$this->setExpectedException('Exception');
 
-		$mock1->foo();
+		$mock->foo();
+	}
+
+	/**
+	 * Tests verifying that no interaction occured
+	 */
+	public function testVerifyingZeroInteraction()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+
+		Phake::verifyNoInteraction($mock);
+
+		$mock->foo();
+
+		$this->setExpectedException('Exception');
+		Phake::verifyNoInteraction($mock);
 	}
 }
 

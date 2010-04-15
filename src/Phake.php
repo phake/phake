@@ -139,6 +139,20 @@ class Phake
 	}
 
 	/**
+	 * Allows for verifying that no interaction occured with a mock object
+	 * @param Phake_IMock $mock
+	 */
+	public static function verifyNoInteraction(Phake_IMock $mock)
+	{
+		$callRecorder = $mock->__PHAKE_getCallRecorder();
+		
+		if (count($callRecorder->getAllCalls()))
+		{
+			throw new Exception('Calls should not have been made against this mock');
+		}
+	}
+
+	/**
 	 * Converts a bunch of call info objects to position objects.
 	 * @param array $calls
 	 * @return array
