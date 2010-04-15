@@ -486,6 +486,22 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 						Phake::verify($mock1)->callInnerFunc()
 		);
 	}
+
+	/**
+	 * Tests freezing mocks
+	 */
+	public function testMockFreezing()
+	{
+		$mock1 = Phake::mock('PhakeTest_MockedClass');
+
+		$mock1->foo();
+
+		Phake::verifyNoFurtherInteraction($mock1);
+
+		$this->setExpectedException('Exception');
+
+		$mock1->foo();
+	}
 }
 
 ?>

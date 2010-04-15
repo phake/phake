@@ -54,6 +54,12 @@ interface Phake_IMock extends Phake_CallRecorder_ICallRecorderContainer, Phake_S
 	 * Resets all calls and answers in the mock.
 	 */
 	public function __PHAKE_resetMock();
+
+	/**
+	 * Freezes the mock. If this method is called, any further calls will fall unless the mock is
+	 * reset.
+	 */
+	public function __PHAKE_freezeMock();
 }
 
 ?>

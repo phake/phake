@@ -82,6 +82,8 @@ class {$newClassName} {$extends}
 
 	private \$__PHAKE_defaultAnswer;
 
+	private \$__PHAKE_isFrozen = FALSE;
+
 	public function __construct(Phake_CallRecorder_Recorder \$callRecorder, Phake_Stubber_StubMapper \$stubMapper, Phake_Stubber_IAnswer \$defaultAnswer)
 	{
 		\$this->__PHAKE_callRecorder = \$callRecorder;
@@ -103,6 +105,12 @@ class {$newClassName} {$extends}
 	{
 		\$this->__PHAKE_stubMapper->removeAllAnswers();
 		\$this->__PHAKE_callRecorder->removeAllCalls();
+		\$this->__PHAKE_isFrozen = FALSE;
+	}
+
+	public function __PHAKE_freezeMock()
+	{
+		\$this->__PHAKE_isFrozen = TRUE;
 	}
 
 	{$this->generateMockedMethods(new ReflectionClass($mockedClassName))}
@@ -154,6 +162,11 @@ class {$newClassName} {$extends}
 		$methodDef = "
 	{$modifiers} function {$method->getName()}({$this->generateMethodParameters($method)})
 	{
+		if (\$this->__PHAKE_isFrozen)
+		{
+			throw new Exception('This object has been frozen.');
+		}
+
 		\$args = func_get_args();
 
 		\$this->__PHAKE_callRecorder->recordCall(new Phake_CallRecorder_Call(\$this, '{$method->getName()}', \$args));

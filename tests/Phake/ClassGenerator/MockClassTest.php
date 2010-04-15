@@ -346,5 +346,50 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 			class_exists($newClassName, FALSE),
 			'Phake_ClassGenerator_MockClass::generate() did not create correct class');
 	}
+
+	/**
+	 * Tests that calling the freeze method on a mocked class will result in further calls throwing
+	 * an exception
+	 */
+	public function testMockFreezing()
+	{
+		$newClassName = __CLASS__ . '_TestClass14';
+		$mockedClass = 'PhakeTest_MockedClass';
+
+		$this->classGen->generate($newClassName, $mockedClass);
+
+		$callRecorder = $this->getMock('Phake_CallRecorder_Recorder');
+		$stubMapper = $this->getMock('Phake_Stubber_StubMapper');
+		$answer = $this->getMock('Phake_Stubber_IAnswer');
+		$mock = $this->classGen->instantiate($newClassName, $callRecorder, $stubMapper, $answer);
+
+		$mock->__PHAKE_freezeMock();
+
+		$this->setExpectedException('Exception');
+
+		$mock->foo();
+	}
+
+	/**
+	 * Tests that calling the freeze method on a mocked class will not throw an error if the mock
+	 * is reset
+	 */
+	public function testMockFreezingResets()
+	{
+		$newClassName = __CLASS__ . '_TestClass15';
+		$mockedClass = 'PhakeTest_MockedClass';
+
+		$this->classGen->generate($newClassName, $mockedClass);
+
+		$callRecorder = $this->getMock('Phake_CallRecorder_Recorder');
+		$stubMapper = $this->getMock('Phake_Stubber_StubMapper');
+		$answer = $this->getMock('Phake_Stubber_IAnswer');
+		$mock = $this->classGen->instantiate($newClassName, $callRecorder, $stubMapper, $answer);
+
+		$mock->__PHAKE_freezeMock();
+		$mock->__PHAKE_resetMock();
+
+		$mock->foo();
+	}
 }
 ?>

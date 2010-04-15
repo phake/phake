@@ -130,6 +130,15 @@ class Phake
 	}
 
 	/**
+	 * Allows for verifying that a mock object has no further calls made to it.
+	 * @param Phake_IMock $mock
+	 */
+	public static function verifyNoFurtherInteraction(Phake_IMock $mock)
+	{
+		$mock->__PHAKE_freezeMock();
+	}
+
+	/**
 	 * Converts a bunch of call info objects to position objects.
 	 * @param array $calls
 	 * @return array
