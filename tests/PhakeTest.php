@@ -517,6 +517,37 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 		$this->setExpectedException('Exception');
 		Phake::verifyNoInteraction($mock);
 	}
+
+	/**
+	 * Tests argument capturing
+	 */
+	public function testArugmentCapturing()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+
+		$mock->fooWithArgument('TEST');
+
+		Phake::verify($mock)->fooWithArgument(Phake::capture($toArgument));
+
+		$this->assertSame('TEST', $toArgument);
+	}
+
+	/**
+	 * Tests conditional argument capturing
+	 */
+	public function testConditionalArugmentCapturing()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+
+		$mock->fooWithArgument('FOO');
+
+		$mock->fooWithArgument('BAR');
+
+
+		Phake::verify($mock)->fooWithArgument(Phake::capture($toArgument)->when('BAR'));
+
+		$this->assertSame('BAR', $toArgument);
+	}
 }
 
 ?>

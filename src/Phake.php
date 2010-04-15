@@ -50,6 +50,7 @@ require_once 'Phake/Proxies/VerifierProxy.php';
 require_once 'Phake/Proxies/StubberProxy.php';
 require_once 'Phake/Proxies/AnswerBinderProxy.php';
 require_once 'Phake/Matchers/EqualsMatcher.php';
+require_once 'Phake/Matchers/ArgumentCaptor.php';
 require_once 'Phake/Matchers/Factory.php';
 require_once 'Phake/Stubber/SelfBindingAnswerBinder.php';
 require_once 'Phake/Stubber/Answers/StaticAnswer.php';
@@ -239,6 +240,16 @@ class Phake
 	public static function equalTo($value)
 	{
 		return new Phake_Matchers_EqualsMatcher($value);
+	}
+
+	/**
+	 * Returns a capturing matcher that will set the value of a given argument to given variable.
+	 * @param mixed $value - Will be set to the value of the called argument.
+	 * @return Phake_Matchers_ArgumentCaptor
+	 */
+	public static function capture(&$value)
+	{
+		return new Phake_Matchers_ArgumentCaptor($value);
 	}
 }
 ?>
