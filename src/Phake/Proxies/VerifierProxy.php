@@ -83,9 +83,14 @@ class Phake_Proxies_VerifierProxy
 	 */
 	public function __call($method, array $arguments)
 	{
-		if (!$this->verifier->verifyCall($method, $this->matcherFactory->createMatcherArray($arguments)))
+		$value = $this->verifier->verifyCall($method, $this->matcherFactory->createMatcherArray($arguments));
+		if (empty($value))
 		{
 			throw new Exception("Expected {$method} to be called.");
+		}
+		else
+		{
+			return $value;
 		}
 	}
 }

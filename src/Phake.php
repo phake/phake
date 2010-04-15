@@ -45,6 +45,7 @@
 require_once 'Phake/Facade.php';
 require_once 'Phake/ClassGenerator/MockClass.php';
 require_once 'Phake/CallRecorder/Recorder.php';
+require_once 'Phake/CallRecorder/OrderVerifier.php';
 require_once 'Phake/Proxies/VerifierProxy.php';
 require_once 'Phake/Proxies/StubberProxy.php';
 require_once 'Phake/Proxies/AnswerBinderProxy.php';
@@ -112,6 +113,40 @@ class Phake
 		$verifier = self::getPhake()->verify($mock);
 
 		return new Phake_Proxies_VerifierProxy($verifier, new Phake_Matchers_Factory());
+	}
+
+	/**
+	 * Allows verification of methods in a particular order
+	 */
+	public static function inOrder()
+	{
+		$calls = func_get_args();
+		$orderVerifier = new Phake_CallRecorder_OrderVerifier();
+
+		if (!$orderVerifier->verifyCallsInOrder(self::pullPositionsFromCallInfos($calls)))
+		{
+			throw new Exception("Calls not made in order");
+		}
+	}
+
+	/**
+	 * Converts a bunch of call info objects to position objects.
+	 * @param array $calls
+	 * @return array
+	 */
+	private static function pullPositionsFromCallInfos(array $calls)
+	{
+		$transformed = array();
+		foreach ($calls as $callList)
+		{
+			$transformedList = array();
+			foreach ($callList as $call)
+			{
+				$transformedList[] = $call->getPosition();
+			}
+			$transformed[] = $transformedList;
+		}
+		return $transformed;
 	}
 
 	/**

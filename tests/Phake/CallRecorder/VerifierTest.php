@@ -65,6 +65,11 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
 	private $verifier;
 
 	/**
+	 * @var array
+	 */
+	private $callArray;
+
+	/**
 	 * Sets up the verifier and its call recorder
 	 */
 	public function setUp()
@@ -72,17 +77,18 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
 		$obj = new stdClass();
 		$this->recorder = $this->getMock('Phake_CallRecorder_Recorder');
 
-		$calls = array(
+		$this->callArray = array(
 			new Phake_CallRecorder_Call($obj, 'foo', array()),
 			new Phake_CallRecorder_Call($obj, 'bar', array()),
 			new Phake_CallRecorder_Call($obj, 'foo', array(
 				'bar', 'foo'
 			)),
+			new Phake_CallRecorder_Call($obj, 'foo', array()),
 		);
 
 		$this->recorder->expects($this->any())
 			->method('getAllCalls')
-			->will($this->returnValue($calls));
+			->will($this->returnValue($this->callArray));
 
 		$this->verifier = new Phake_CallRecorder_Verifier($this->recorder, $obj);
 	}
@@ -92,7 +98,13 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testVerifierFindsCall()
 	{
-		$this->assertTrue($this->verifier->verifyCall('foo', array()), 'foo call was not found');
+		$return = new Phake_CallRecorder_CallInfo($this->callArray[1], new Phake_CallRecorder_Position(0));
+		$this->recorder->expects($this->once())
+						->method('getCallInfo')
+						->with($this->callArray[1])
+						->will($this->returnValue($return));
+
+		$this->assertSame(array($return), $this->verifier->verifyCall('bar', array()), 'bar call was not found');
 	}
 
 	/**
@@ -121,6 +133,21 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
 	public function testVerifierThrowsWhenCalledWithNonMatchers()
 	{
 		$this->verifier->verifyCall('foo', array('blah', 'blah'));
+	}
+
+	/**
+	 * Tests that a verifier returns an array of call info objects when it finds a call that matches
+	 */
+	public function testVerifierReturnsCallInfoForMatchedCalls()
+	{
+		$return = new Phake_CallRecorder_CallInfo($this->callArray[1], new Phake_CallRecorder_Position(0));
+		$this->recorder->expects($this->any())
+						->method('getCallInfo')
+						->will($this->returnValue($return));
+
+		$calls = $this->verifier->verifyCall('foo', array());
+
+		$this->assertSame(array($return, $return), $this->verifier->verifyCall('foo', array()));
 	}
 }
 ?>

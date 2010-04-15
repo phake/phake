@@ -42,90 +42,61 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+require_once 'Phake/CallRecorder/OrderVerifier.php';
+require_once 'Phake/CallRecorder/Position.php';
+
 /**
- * Can verify calls recorded into the given recorder.
- *
- * @author Mike Lively <m@digitalsandwich.com>
+ * Tests the call order verifier
  */
-class Phake_CallRecorder_Verifier
+class Phake_CallRecorder_OrderVerifierTest extends PHPUnit_Framework_TestCase
 {
-	
 	/**
-	 * @var Phake_CallRecorder_Recorder
+	 * @var Phake_CallRecorder_OrderVerifier
 	 */
-	protected $recorder;
+	private $verifier;
 
 	/**
-	 * @var object
+	 * Sets up the test fixture
 	 */
-	protected $obj;
-
-	/**
-	 * @param Phake_CallRecorder_Recorder $recorder
-	 * @param <type> $obj
-	 */
-	public function __construct(Phake_CallRecorder_Recorder $recorder, $obj)
+	public function setUp()
 	{
-		$this->recorder = $recorder;
-		$this->obj = $obj;
+		$this->verifier = new Phake_CallRecorder_OrderVerifier();
 	}
 
 	/**
-	 * Returns whether or not a call has been made in the associated call recorder.
-	 * @param string $method
-	 * @param array $argumentMatcher
-	 * @return boolean
+	 * Tests that in order items validate.
 	 */
-	public function verifyCall($method, array $argumentMatchers)
+	public function testInOrderValidation()
 	{
-		$calls = $this->recorder->getAllCalls();
+		$position1 = array(new Phake_CallRecorder_Position(1));
+		$position2 = array(new Phake_CallRecorder_Position(2));
+		$position3 = array(new Phake_CallRecorder_Position(3));
 
-		$matchedCalls = array();
-		foreach ($calls as $call)
-		{
-			/* @var $call Phake_CallRecorder_Call */
-			if ($call->getMethod() == $method 
-							&& $call->getObject() === $this->obj
-							&& count($call->getArguments()) == count($argumentMatchers))
-			{
-				if ($this->validateArguments($call->getArguments(), $argumentMatchers))
-				{
-					$matchedCalls[] = $this->recorder->getCallInfo($call);
-				}
-			}
-		}
-
-		return count($matchedCalls) ? $matchedCalls : FALSE;
+		$this->assertTrue($this->verifier->verifyCallsInOrder(array($position1, $position2, $position3)));
 	}
 
 	/**
-	 * Returns whether or not the passed in arguments match all of the passed in argument matchers.
-	 * @param array $arguments
-	 * @param array $argumentMatchers
-	 * @return boolean
+	 * Tests that out of order items don't validate.
 	 */
-	private function validateArguments(array $arguments, array $argumentMatchers)
+	public function testOutOfOrderValidation()
 	{
-			reset($argumentMatchers);
-			foreach ($arguments as  $i => $argument)
-			{
-				$matcher = current($argumentMatchers);
+		$position1 = array(new Phake_CallRecorder_Position(1));
+		$position2 = array(new Phake_CallRecorder_Position(3));
+		$position3 = array(new Phake_CallRecorder_Position(2));
 
-				if (!$matcher instanceof Phake_Matchers_IArgumentMatcher)
-				{
-					throw new InvalidArgumentException("Argument matcher [{$i}] is not a valid matcher");
-				}
+		$this->assertFalse($this->verifier->verifyCallsInOrder(array($position1, $position2, $position3)));
+	}
 
-				/* @var $matcher Phake_Matchers_IArgumentMatcher */
-				if (!$matcher->matches($argument))
-				{
-					return FALSE;
-				}
+	/**
+	 * Tests that out of order items validate with multiple calls.
+	 */
+	public function testOutOfOrderValidationWithMultipleCalls()
+	{
+		$position1 = array(new Phake_CallRecorder_Position(1));
+		$position2 = array(new Phake_CallRecorder_Position(3));
+		$position3 = array(new Phake_CallRecorder_Position(2), new Phake_CallRecorder_Position(4));
 
-				next($argumentMatchers);
-			}
-
-			return TRUE;
+		$this->assertTrue($this->verifier->verifyCallsInOrder(array($position1, $position2, $position3)));
 	}
 }
 ?>

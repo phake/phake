@@ -102,6 +102,23 @@ class Phake_Proxies_VerifierProxyTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Tests that call information from the proxied verifier is returned
+	 */
+	public function testVerifierReturnsCallInfoData()
+	{
+		$return = array(
+			$this->getMock('Phake_CallRecorder_CallInfo', array(), array(), '', FALSE),
+			$this->getMock('Phake_CallRecorder_CallInfo', array(), array(), '', FALSE),
+		);
+
+		$this->verifier->expects($this->any())
+			->method('verifyCall')
+			->will($this->returnValue($return));
+
+		$this->assertSame($return, $this->proxy->foo());
+	}
+
+	/**
 	 * Tests that verifier calls will forward method arguments properly
 	 */
 	public function testVerifierCallsAreForwardedArguments()

@@ -42,90 +42,54 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+require_once 'Phake/CallRecorder/Position.php';
+require_once 'Phake/CallRecorder/Call.php';
+
 /**
- * Can verify calls recorded into the given recorder.
- *
- * @author Mike Lively <m@digitalsandwich.com>
+ * Tests the call recorder position class.
  */
-class Phake_CallRecorder_Verifier
+class Phake_CallRecorder_PositionTest extends PHPUnit_Framework_TestCase
 {
-	
 	/**
-	 * @var Phake_CallRecorder_Recorder
+	 * @var Phake_CallRecorder_Position
 	 */
-	protected $recorder;
+	private $position;
 
 	/**
-	 * @var object
+	 * Sets up the test fixture
 	 */
-	protected $obj;
-
-	/**
-	 * @param Phake_CallRecorder_Recorder $recorder
-	 * @param <type> $obj
-	 */
-	public function __construct(Phake_CallRecorder_Recorder $recorder, $obj)
+	public function setUp()
 	{
-		$this->recorder = $recorder;
-		$this->obj = $obj;
+		$this->position = new Phake_CallRecorder_Position(10);
 	}
 
 	/**
-	 * Returns whether or not a call has been made in the associated call recorder.
-	 * @param string $method
-	 * @param array $argumentMatcher
-	 * @return boolean
+	 * Tests that the system can properly detect positions after the current
 	 */
-	public function verifyCall($method, array $argumentMatchers)
+	public function testIsAfterTrue()
 	{
-		$calls = $this->recorder->getAllCalls();
+		$position = new Phake_CallRecorder_Position(9);
 
-		$matchedCalls = array();
-		foreach ($calls as $call)
-		{
-			/* @var $call Phake_CallRecorder_Call */
-			if ($call->getMethod() == $method 
-							&& $call->getObject() === $this->obj
-							&& count($call->getArguments()) == count($argumentMatchers))
-			{
-				if ($this->validateArguments($call->getArguments(), $argumentMatchers))
-				{
-					$matchedCalls[] = $this->recorder->getCallInfo($call);
-				}
-			}
-		}
-
-		return count($matchedCalls) ? $matchedCalls : FALSE;
+		$this->assertTrue($this->position->thisIsAfter($position));
 	}
 
 	/**
-	 * Returns whether or not the passed in arguments match all of the passed in argument matchers.
-	 * @param array $arguments
-	 * @param array $argumentMatchers
-	 * @return boolean
+	 * Tests that the system can properly detect positions after the current
 	 */
-	private function validateArguments(array $arguments, array $argumentMatchers)
+	public function testIsAfterFalse()
 	{
-			reset($argumentMatchers);
-			foreach ($arguments as  $i => $argument)
-			{
-				$matcher = current($argumentMatchers);
+		$position = new Phake_CallRecorder_Position(11);
 
-				if (!$matcher instanceof Phake_Matchers_IArgumentMatcher)
-				{
-					throw new InvalidArgumentException("Argument matcher [{$i}] is not a valid matcher");
-				}
+		$this->assertFalse($this->position->thisIsAfter($position));
+	}
 
-				/* @var $matcher Phake_Matchers_IArgumentMatcher */
-				if (!$matcher->matches($argument))
-				{
-					return FALSE;
-				}
-
-				next($argumentMatchers);
-			}
-
-			return TRUE;
+	/**
+	 * Creates a call object
+	 * @return Phake_CallRecorder_Call
+	 */
+	private function getCall()
+	{
+		return $this->getMock('Phake_CallRecorder_Call', array(), array(), '', FALSE);
 	}
 }
 ?>

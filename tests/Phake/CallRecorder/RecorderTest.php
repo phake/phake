@@ -81,5 +81,32 @@ class Phake_CallRecorder_RecorderTest extends PHPUnit_Framework_TestCase
 
 		$this->assertSame(array(), $callRecorder->getAllCalls());
 	}
+
+	/**
+	 * Tests retrieving call info for a particular call.
+	 */
+	public function testRetrieveCallInfo()
+	{
+		$call = new Phake_CallRecorder_Call($this, 'someMethod', array());
+		$callRecorder = new Phake_CallRecorder_Recorder();
+		$callRecorder->recordCall($call);
+
+		$callInfo = $callRecorder->getCallInfo($call);
+
+		$this->assertType('Phake_CallRecorder_CallInfo', $callInfo);
+		$this->assertSame($call, $callInfo->getCall());
+		$this->assertType('Phake_CallRecorder_Position', $callInfo->getPosition());
+	}
+
+	/**
+	 * Tests that a non existant call returns null
+	 */
+	public function testRetrieveCallInfoReturnsNull()
+	{
+		$call = new Phake_CallRecorder_Call($this, 'someMethod', array());
+		$callRecorder = new Phake_CallRecorder_Recorder();
+
+		$this->assertNull($callRecorder->getCallInfo($call));
+	}
 }
 ?>

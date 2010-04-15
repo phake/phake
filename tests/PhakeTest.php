@@ -402,6 +402,90 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 
 		$this->assertEquals('bar', $mock->foo());
 	}
+
+	/**
+	 * Tests verifying the call order of particular methods within an object
+	 */
+	public function testCallOrderInObject()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+
+		$mock->foo();
+		$mock->fooWithReturnValue();
+		$mock->callInnerFunc();
+
+		Phake::inOrder(
+						Phake::verify($mock)->foo(),
+						Phake::verify($mock)->fooWithReturnValue(),
+						Phake::verify($mock)->callInnerFunc()
+		);
+	}
+
+	/**
+	 * Tests verifying the call order of particular methods within an object
+	 */
+	public function testCallOrderInObjectFails()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+
+		$mock->foo();
+		$mock->callInnerFunc();
+		$mock->fooWithReturnValue();
+
+		$this->setExpectedException('Exception');
+
+		Phake::inOrder(
+						Phake::verify($mock)->foo(),
+						Phake::verify($mock)->fooWithReturnValue(),
+						Phake::verify($mock)->callInnerFunc()
+		);
+	}
+
+	/**
+	 * Tests verifying the call order of particular methods across objects
+	 */
+	public function testCallOrderAccrossObjects()
+	{
+		$mock1 = Phake::mock('PhakeTest_MockedClass');
+		$mock2 = Phake::mock('PhakeTest_MockedClass');
+
+		$mock1->foo();
+		$mock2->foo();
+		$mock1->fooWithReturnValue();
+		$mock2->fooWithReturnValue();
+		$mock1->callInnerFunc();
+		$mock2->callInnerFunc();
+
+		Phake::inOrder(
+						Phake::verify($mock1)->foo(),
+						Phake::verify($mock2)->foo(),
+						Phake::verify($mock2)->fooWithReturnValue(),
+						Phake::verify($mock1)->callInnerFunc()
+		);
+	}
+
+	/**
+	 * Tests verifying the call order of particular methods across objects
+	 */
+	public function testCallOrderAccrossObjectsFail()
+	{
+		$mock1 = Phake::mock('PhakeTest_MockedClass');
+		$mock2 = Phake::mock('PhakeTest_MockedClass');
+
+		$mock1->foo();
+		$mock2->foo();
+		$mock1->fooWithReturnValue();
+		$mock1->callInnerFunc();
+		$mock2->fooWithReturnValue();
+		$mock2->callInnerFunc();
+
+		$this->setExpectedException('Exception');
+
+		Phake::inOrder(
+						Phake::verify($mock2)->fooWithReturnValue(),
+						Phake::verify($mock1)->callInnerFunc()
+		);
+	}
 }
 
 ?>

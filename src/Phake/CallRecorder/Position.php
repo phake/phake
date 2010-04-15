@@ -43,89 +43,32 @@
  */
 
 /**
- * Can verify calls recorded into the given recorder.
- *
- * @author Mike Lively <m@digitalsandwich.com>
+ * Provides information on the position of a given call.
  */
-class Phake_CallRecorder_Verifier
+class Phake_CallRecorder_Position
 {
-	
 	/**
-	 * @var Phake_CallRecorder_Recorder
+	 * @var int
 	 */
-	protected $recorder;
+	private $position;
 
 	/**
-	 * @var object
+	 * @param int $position
 	 */
-	protected $obj;
-
-	/**
-	 * @param Phake_CallRecorder_Recorder $recorder
-	 * @param <type> $obj
-	 */
-	public function __construct(Phake_CallRecorder_Recorder $recorder, $obj)
+	public function __construct($position)
 	{
-		$this->recorder = $recorder;
-		$this->obj = $obj;
+		$this->position = $position;
 	}
 
 	/**
-	 * Returns whether or not a call has been made in the associated call recorder.
-	 * @param string $method
-	 * @param array $argumentMatcher
+	 * Determines if this call position is after the given position
+	 * @param Phake_CallRecorder_Position $other
 	 * @return boolean
 	 */
-	public function verifyCall($method, array $argumentMatchers)
+	public function thisIsAfter(Phake_CallRecorder_Position $other)
 	{
-		$calls = $this->recorder->getAllCalls();
-
-		$matchedCalls = array();
-		foreach ($calls as $call)
-		{
-			/* @var $call Phake_CallRecorder_Call */
-			if ($call->getMethod() == $method 
-							&& $call->getObject() === $this->obj
-							&& count($call->getArguments()) == count($argumentMatchers))
-			{
-				if ($this->validateArguments($call->getArguments(), $argumentMatchers))
-				{
-					$matchedCalls[] = $this->recorder->getCallInfo($call);
-				}
-			}
-		}
-
-		return count($matchedCalls) ? $matchedCalls : FALSE;
-	}
-
-	/**
-	 * Returns whether or not the passed in arguments match all of the passed in argument matchers.
-	 * @param array $arguments
-	 * @param array $argumentMatchers
-	 * @return boolean
-	 */
-	private function validateArguments(array $arguments, array $argumentMatchers)
-	{
-			reset($argumentMatchers);
-			foreach ($arguments as  $i => $argument)
-			{
-				$matcher = current($argumentMatchers);
-
-				if (!$matcher instanceof Phake_Matchers_IArgumentMatcher)
-				{
-					throw new InvalidArgumentException("Argument matcher [{$i}] is not a valid matcher");
-				}
-
-				/* @var $matcher Phake_Matchers_IArgumentMatcher */
-				if (!$matcher->matches($argument))
-				{
-					return FALSE;
-				}
-
-				next($argumentMatchers);
-			}
-
-			return TRUE;
+		return ($this->position > $other->position);
 	}
 }
+
 ?>

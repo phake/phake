@@ -42,6 +42,9 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+require_once 'Phake/CallRecorder/CallInfo.php';
+require_once 'Phake/CallRecorder/Position.php';
+
 /**
  * Records calls made to particular objects.
  *
@@ -56,7 +59,17 @@ class Phake_CallRecorder_Recorder
 	/**
 	 * @var array
 	 */
-	protected $calls = array();
+	private $calls = array();
+
+	/**
+	 * @var array
+	 */
+	private $positions = array();
+
+	/**
+	 * @var int
+	 */
+	private static $lastPosition = 0;
 	
 	/**
 	 * Records that a given
@@ -65,6 +78,7 @@ class Phake_CallRecorder_Recorder
 	public function recordCall(Phake_CallRecorder_Call $call)
 	{
 		$this->calls[] = $call;
+		$this->positions[spl_object_hash($call)] = new Phake_CallRecorder_Position(self::$lastPosition++);
 	}
 
 	/**
@@ -77,11 +91,31 @@ class Phake_CallRecorder_Recorder
 	}
 
 	/**
-	 * Removes all calls from the call recorder
+	 * Removes all calls from the call recorder.
+	 *
+	 * Also removes all positions
 	 */
 	public function removeAllCalls()
 	{
 		$this->calls = array();
+		$this->positions = array();
+	}
+
+	/**
+	 * Retrieves call info for a particular call
+	 * @param Phake_CallRecorder_Call $call
+	 * @return Phake_CallRecorder_CallInfo
+	 */
+	public function getCallInfo(Phake_CallRecorder_Call $call)
+	{
+		if (in_array($call, $this->calls))
+		{
+			return new Phake_CallRecorder_CallInfo($call, $this->positions[spl_object_hash($call)]);
+		}
+		else
+		{
+			return NULL;
+		}
 	}
 }
 ?>

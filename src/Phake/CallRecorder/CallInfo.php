@@ -43,89 +43,44 @@
  */
 
 /**
- * Can verify calls recorded into the given recorder.
- *
- * @author Mike Lively <m@digitalsandwich.com>
+ * Aggregates various objects holding information about a particular call.
  */
-class Phake_CallRecorder_Verifier
+class Phake_CallRecorder_CallInfo
 {
-	
 	/**
-	 * @var Phake_CallRecorder_Recorder
+	 * @var Phake_CallRecorder_Call
 	 */
-	protected $recorder;
+	private $call;
 
 	/**
-	 * @var object
+	 * @var Phake_CallRecorder_Position
 	 */
-	protected $obj;
+	private $position;
 
 	/**
-	 * @param Phake_CallRecorder_Recorder $recorder
-	 * @param <type> $obj
+	 * @param Phake_CallRecorder_Call $call
+	 * @param Phake_CallRecorder_Position $position
 	 */
-	public function __construct(Phake_CallRecorder_Recorder $recorder, $obj)
+	public function __construct(Phake_CallRecorder_Call $call, Phake_CallRecorder_Position $position)
 	{
-		$this->recorder = $recorder;
-		$this->obj = $obj;
+		$this->call = $call;
+		$this->position = $position;
 	}
 
 	/**
-	 * Returns whether or not a call has been made in the associated call recorder.
-	 * @param string $method
-	 * @param array $argumentMatcher
-	 * @return boolean
+	 * @return Phake_CallRecorder_Call
 	 */
-	public function verifyCall($method, array $argumentMatchers)
+	public function getCall()
 	{
-		$calls = $this->recorder->getAllCalls();
-
-		$matchedCalls = array();
-		foreach ($calls as $call)
-		{
-			/* @var $call Phake_CallRecorder_Call */
-			if ($call->getMethod() == $method 
-							&& $call->getObject() === $this->obj
-							&& count($call->getArguments()) == count($argumentMatchers))
-			{
-				if ($this->validateArguments($call->getArguments(), $argumentMatchers))
-				{
-					$matchedCalls[] = $this->recorder->getCallInfo($call);
-				}
-			}
-		}
-
-		return count($matchedCalls) ? $matchedCalls : FALSE;
+		return $this->call;
 	}
 
 	/**
-	 * Returns whether or not the passed in arguments match all of the passed in argument matchers.
-	 * @param array $arguments
-	 * @param array $argumentMatchers
-	 * @return boolean
+	 * @return Phake_CallRecorder_Position
 	 */
-	private function validateArguments(array $arguments, array $argumentMatchers)
+	public function getPosition()
 	{
-			reset($argumentMatchers);
-			foreach ($arguments as  $i => $argument)
-			{
-				$matcher = current($argumentMatchers);
-
-				if (!$matcher instanceof Phake_Matchers_IArgumentMatcher)
-				{
-					throw new InvalidArgumentException("Argument matcher [{$i}] is not a valid matcher");
-				}
-
-				/* @var $matcher Phake_Matchers_IArgumentMatcher */
-				if (!$matcher->matches($argument))
-				{
-					return FALSE;
-				}
-
-				next($argumentMatchers);
-			}
-
-			return TRUE;
+		return $this->position;
 	}
 }
 ?>
