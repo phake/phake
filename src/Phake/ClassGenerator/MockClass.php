@@ -142,10 +142,13 @@ class {$newClassName} {$extends}
 	protected function generateMockedMethods(ReflectionClass $mockedClass)
 	{
 		$methodDefs = '';
-		$filter = ReflectionMethod::IS_ABSTRACT | ReflectionMethod::IS_PROTECTED | ReflectionMethod::IS_PUBLIC;
+		$filter = ReflectionMethod::IS_ABSTRACT | ReflectionMethod::IS_PROTECTED | ReflectionMethod::IS_PUBLIC | ~ReflectionMethod::IS_FINAL;
 		foreach ($mockedClass->getMethods($filter) as $method)
 		{
-			$methodDefs .= $this->implementMethod($method) . "\n";
+			if (!$method->isConstructor() && !$method->isDestructor())
+			{ 
+				$methodDefs .= $this->implementMethod($method) . "\n";
+			}
 		}
 
 		return $methodDefs;

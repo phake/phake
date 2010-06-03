@@ -95,6 +95,8 @@ class Phake_Facade
 	 */
 	private function generateUniqueClassName($base)
 	{
+		$ns_parts = explode('\\', $base);
+		$base = array_pop($ns_parts);
 		$base_class_name = uniqid($base . '_');
 		$i = 1;
 
