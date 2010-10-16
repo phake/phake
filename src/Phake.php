@@ -55,6 +55,7 @@ require_once 'Phake/Matchers/Factory.php';
 require_once 'Phake/Stubber/SelfBindingAnswerBinder.php';
 require_once 'Phake/Stubber/Answers/StaticAnswer.php';
 require_once 'Phake/Stubber/Answers/SpyDelegate.php';
+require_once 'Phake/CallRecorder/VerifierMode/Times.php';
 
 /**
  * Phake - PHP Test Doubles Framework
@@ -109,11 +110,16 @@ class Phake
 	 * @param Phake_CallRecorder_ICallRecorderContainer $mock
 	 * @return Phake_CallRecorder_VerifierProxy
 	 */
-	public static function verify(Phake_CallRecorder_ICallRecorderContainer $mock)
+	public static function verify(Phake_CallRecorder_ICallRecorderContainer $mock, Phake_CallRecorder_IVerifierMode $mode = null)
 	{
+		if (is_null($mode))
+		{
+			$mode = self::times(1);
+		}
+		
 		$verifier = self::getPhake()->verify($mock);
 
-		return new Phake_Proxies_VerifierProxy($verifier, new Phake_Matchers_Factory());
+		return new Phake_Proxies_VerifierProxy($verifier, new Phake_Matchers_Factory(), $mode);
 	}
 
 	/**
@@ -250,6 +256,17 @@ class Phake
 	public static function capture(&$value)
 	{
 		return new Phake_Matchers_ArgumentCaptor($value);
+	}
+	
+	/**
+	 * Allows verifying an exact number of invocations.
+	 * 
+	 * @param int $count
+	 * @return Phake_CallRecorder_VerifierMode_Times
+	 */
+	public static function times($count)
+	{
+		return new Phake_CallRecorder_VerifierMode_Times((int) $count);
 	}
 }
 ?>

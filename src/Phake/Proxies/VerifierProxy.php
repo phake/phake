@@ -65,15 +65,21 @@ class Phake_Proxies_VerifierProxy
 	 * @var Phake_Matchers_Factory
 	 */
 	private $matcherFactory;
+	
+	/**
+	 * @var Phake_CallRecorder_IVerifierMode
+	 */
+	private $mode;
 
 	/**
 	 * @param Phake_CallRecorder_Verifier $verifier
 	 * @param Phake_Matchers_Factory $matcherFactory
 	 */
-	public function __construct(Phake_CallRecorder_Verifier $verifier, Phake_Matchers_Factory $matcherFactory)
+	public function __construct(Phake_CallRecorder_Verifier $verifier, Phake_Matchers_Factory $matcherFactory, Phake_CallRecorder_IVerifierMode $mode)
 	{
 		$this->verifier = $verifier;
 		$this->matcherFactory = $matcherFactory;
+		$this->mode = $mode;
 	}
 
 	/**
@@ -84,14 +90,17 @@ class Phake_Proxies_VerifierProxy
 	public function __call($method, array $arguments)
 	{
 		$value = $this->verifier->verifyCall($method, $this->matcherFactory->createMatcherArray($arguments));
-		if (empty($value))
+		
+		try
 		{
-			throw new Exception("Expected {$method} to be called.");
+			$this->mode->verify($value);
 		}
-		else
+		catch (Exception $e)
 		{
-			return $value;
+			throw new Exception("Expected {$method} to be called " . $e->getMessage());
 		}
+		
+		return $value;
 	}
 }
 ?>

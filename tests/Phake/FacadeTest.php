@@ -132,6 +132,7 @@ class Phake_FacadeTest extends PHPUnit_Framework_TestCase
 	public function testVerifierInstantiatesVerifier()
 	{
 		$mock = $this->getMock('Phake_CallRecorder_ICallRecorderContainer');
+		$mode = $this->getMock('Phake_CallRecorder_IVerifierMode');
 		
 		$recorder = $this->getMock('Phake_CallRecorder_Recorder');
 
@@ -139,7 +140,7 @@ class Phake_FacadeTest extends PHPUnit_Framework_TestCase
 			->method('__PHAKE_getCallRecorder')
 			->will($this->returnValue($recorder));
 
-		$this->assertType('Phake_CallRecorder_Verifier', $this->facade->verify($mock));
+		$this->assertType('Phake_CallRecorder_Verifier', $this->facade->verify($mock, $mode));
 	}
 
 	/**

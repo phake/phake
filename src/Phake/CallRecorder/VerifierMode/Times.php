@@ -42,92 +42,41 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+require_once 'Phake/CallRecorder/IVerifierMode.php';
+
 /**
- * Can verify calls recorded into the given recorder.
- *
- * @author Mike Lively <m@digitalsandwich.com>
+ * Verifier mode that checks that the number of matched items are exactly equal
+ * to the expected amount.
+ * @author Brian Feaver <brian.feaver@gmail.com>
  */
-class Phake_CallRecorder_Verifier
+class Phake_CallRecorder_VerifierMode_Times implements Phake_CallRecorder_IVerifierMode
 {
+	/**
+	 * @var int
+	 */
+	private $times;
 	
 	/**
-	 * @var Phake_CallRecorder_Recorder
+	 * Constructs a Times verifier with the given <code>$times</code>.
+	 * @param unknown_type $times
 	 */
-	protected $recorder;
-
-	/**
-	 * @var object
-	 */
-	protected $obj;
-
-	/**
-	 * @param Phake_CallRecorder_Recorder $recorder
-	 * @param <type> $obj
-	 */
-	public function __construct(Phake_CallRecorder_Recorder $recorder, $obj)
+	public function __construct($times)
 	{
-		$this->recorder = $recorder;
-		$this->obj = $obj;
+		$this->times = $times;
 	}
-
+	
 	/**
-	 * Returns whether or not a call has been made in the associated call recorder.
-	 * 
-	 * @todo Maybe rename this to findMatchedCalls?
-	 * @param string $method
-	 * @param array $argumentMatcher
+	 * Verifies that the number of <code>$matchedCalls</code> is equal to the
+	 * value this object was instantiated with.
+	 * @param array $matchedCalls
 	 * @return boolean
 	 */
-	public function verifyCall($method, array $argumentMatchers)
+	public function verify(array $matchedCalls)
 	{
-		$calls = $this->recorder->getAllCalls();
-
-		$matchedCalls = array();
-		foreach ($calls as $call)
+		$calledTimes = count($matchedCalls);
+		if ($calledTimes != $this->times)
 		{
-			/* @var $call Phake_CallRecorder_Call */
-			if ($call->getMethod() == $method 
-							&& $call->getObject() === $this->obj
-							&& count($call->getArguments()) == count($argumentMatchers))
-			{
-				if ($this->validateArguments($call->getArguments(), $argumentMatchers))
-				{
-					$matchedCalls[] = $this->recorder->getCallInfo($call);
-				}
-			}
+			throw new Exception("<$this->times> times, called <$calledTimes>");
 		}
-
-		return $matchedCalls;
-	}
-
-	/**
-	 * Returns whether or not the passed in arguments match all of the passed in argument matchers.
-	 * @param array $arguments
-	 * @param array $argumentMatchers
-	 * @return boolean
-	 */
-	private function validateArguments(array $arguments, array $argumentMatchers)
-	{
-			reset($argumentMatchers);
-			foreach ($arguments as  $i => $argument)
-			{
-				$matcher = current($argumentMatchers);
-
-				if (!$matcher instanceof Phake_Matchers_IArgumentMatcher)
-				{
-					throw new InvalidArgumentException("Argument matcher [{$i}] is not a valid matcher");
-				}
-
-				/* @var $matcher Phake_Matchers_IArgumentMatcher */
-				if (!$matcher->matches($argument))
-				{
-					return FALSE;
-				}
-
-				next($argumentMatchers);
-			}
-
-			return TRUE;
 	}
 }
-?>

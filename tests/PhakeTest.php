@@ -548,6 +548,33 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 
 		$this->assertSame('BAR', $toArgument);
 	}
+	
+	/**
+	 * Tests times matches exactly
+	 */
+	public function testVerifyTimesExact()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+		
+		$mock->foo();
+		$mock->foo();
+		
+		Phake::verify($mock, Phake::times(2))->foo();
+	}
+	
+	/**
+	 * Tests times doesn't match
+	 * @expectedException Exception
+	 */
+	public function testVerifyTimesMismatch()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+		
+		$mock->foo();
+		$mock->foo();
+		
+		Phake::verify($mock)->foo();
+	}
 }
 
 ?>

@@ -43,91 +43,16 @@
  */
 
 /**
- * Can verify calls recorded into the given recorder.
- *
- * @author Mike Lively <m@digitalsandwich.com>
+ * Allows verifying that call invocations occured some number of times.
+ * 
+ * @author Brian Feaver <brian.feaver@gmail.com>
  */
-class Phake_CallRecorder_Verifier
+interface Phake_CallRecorder_IVerifierMode
 {
-	
 	/**
-	 * @var Phake_CallRecorder_Recorder
-	 */
-	protected $recorder;
-
-	/**
-	 * @var object
-	 */
-	protected $obj;
-
-	/**
-	 * @param Phake_CallRecorder_Recorder $recorder
-	 * @param <type> $obj
-	 */
-	public function __construct(Phake_CallRecorder_Recorder $recorder, $obj)
-	{
-		$this->recorder = $recorder;
-		$this->obj = $obj;
-	}
-
-	/**
-	 * Returns whether or not a call has been made in the associated call recorder.
+	 * Verifies that the number of <code>$matchedCalls</code> matches the number of invocations expected.
 	 * 
-	 * @todo Maybe rename this to findMatchedCalls?
-	 * @param string $method
-	 * @param array $argumentMatcher
-	 * @return boolean
+	 * @param array $matchedCalls
 	 */
-	public function verifyCall($method, array $argumentMatchers)
-	{
-		$calls = $this->recorder->getAllCalls();
-
-		$matchedCalls = array();
-		foreach ($calls as $call)
-		{
-			/* @var $call Phake_CallRecorder_Call */
-			if ($call->getMethod() == $method 
-							&& $call->getObject() === $this->obj
-							&& count($call->getArguments()) == count($argumentMatchers))
-			{
-				if ($this->validateArguments($call->getArguments(), $argumentMatchers))
-				{
-					$matchedCalls[] = $this->recorder->getCallInfo($call);
-				}
-			}
-		}
-
-		return $matchedCalls;
-	}
-
-	/**
-	 * Returns whether or not the passed in arguments match all of the passed in argument matchers.
-	 * @param array $arguments
-	 * @param array $argumentMatchers
-	 * @return boolean
-	 */
-	private function validateArguments(array $arguments, array $argumentMatchers)
-	{
-			reset($argumentMatchers);
-			foreach ($arguments as  $i => $argument)
-			{
-				$matcher = current($argumentMatchers);
-
-				if (!$matcher instanceof Phake_Matchers_IArgumentMatcher)
-				{
-					throw new InvalidArgumentException("Argument matcher [{$i}] is not a valid matcher");
-				}
-
-				/* @var $matcher Phake_Matchers_IArgumentMatcher */
-				if (!$matcher->matches($argument))
-				{
-					return FALSE;
-				}
-
-				next($argumentMatchers);
-			}
-
-			return TRUE;
-	}
+	public function verify(array $matchedCalls);
 }
-?>

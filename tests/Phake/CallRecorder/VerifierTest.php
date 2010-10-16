@@ -112,7 +112,9 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testVerifierDoesNotFindCall()
 	{
-		$this->assertFalse($this->verifier->verifyCall('test', array()), 'test call was found but should not have been');
+		$result = $this->verifier->verifyCall('test', array());
+		$this->assertTrue(is_array($result), 'verifyCall did not return an array');
+		$this->assertTrue(empty($result), 'test call was found but should not have been');
 	}
 
 	/**
@@ -120,9 +122,10 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testVerifierDoesNotFindCallWithUnmatchedArguments()
 	{
-		$this->assertFalse($this->verifier->verifyCall('foo', array(
+		$result = $this->verifier->verifyCall('foo', array(
 			new Phake_Matchers_EqualsMatcher('test'),
-			new Phake_Matchers_EqualsMatcher('test'))));
+			new Phake_Matchers_EqualsMatcher('test')));
+		$this->assertTrue(empty($result));
 	}
 
 	/**
