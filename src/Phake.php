@@ -263,7 +263,7 @@ class Phake
 	 * Allows verifying an exact number of invocations.
 	 * 
 	 * @param int $count
-	 * @return Phake_CallRecorder_VerifierMode_Times
+	 * @return Phake_CallRecorder_IVerifierMode
 	 */
 	public static function times($count)
 	{
@@ -271,10 +271,19 @@ class Phake
 	}
 	
 	/**
+	 * Allows verifying that there were no invocations. Alias of <code>times(0)</code>.
+	 * @return Phake_CallRecorder_IVerifierMode
+	 */
+	public static function never()
+	{
+		return new Phake_CallRecorder_VerifierMode_Times(0);
+	}
+	
+	/**
 	 * Allows verifying at least <code>$count</code> invocations.
 	 * 
 	 * @param int $count
-	 * @return Phake_CallRecorder_VerifierMode_AtLeast
+	 * @return Phake_CallRecorder_IVerifierMode
 	 */
 	public static function atLeast($count)
 	{

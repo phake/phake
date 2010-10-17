@@ -611,6 +611,26 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 		
 		Phake::verify($mock, Phake::atLeast(1))->foo();
 	}
+	
+	/**
+	 * Tests that never matches
+	 */
+	public function testNeverMatches()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+		Phake::verify($mock, Phake::never())->foo();
+	}
+	
+	/**
+	 * Tests that never catches an invocation
+	 * @expectedException Exception
+	 */
+	public function testNeverMismatch()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+		$mock->foo();
+		Phake::verify($mock, Phake::never())->foo();
+	}
 }
 
 ?>
