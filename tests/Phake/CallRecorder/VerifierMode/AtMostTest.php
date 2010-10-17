@@ -43,18 +43,18 @@
  */
 
 require_once('Phake/CallRecorder/IVerifierMode.php');
-require_once('Phake/CallRecorder/VerifierMode/AtLeast.php');
+require_once('Phake/CallRecorder/VerifierMode/AtMost.php');
 
 /**
- * Tests the functionality of the AtLeast class.
+ * Tests the functionality of the AtMost class.
  */
-class Phake_CallRecorder_VerifierMode_AtLeastTest extends PHPUnit_Framework_TestCase
+class Phake_CallRecorder_VerifierMode_AtMostTest extends PHPUnit_Framework_TestCase
 {
-	private $verifierModeAtLeast;
+	private $verifier;
 	
 	public function setUp()
 	{
-		$this->verifierModeAtLeast = new Phake_CallRecorder_VerifierMode_AtLeast(1);
+		$this->verifier = new Phake_CallRecorder_VerifierMode_AtMost(1);
 	}
 	
 	/**
@@ -64,25 +64,25 @@ class Phake_CallRecorder_VerifierMode_AtLeastTest extends PHPUnit_Framework_Test
 	{
 		// Will throw an exception if it wasn't working
 		$matchedCalls = array('1item');
-		$this->verifierModeAtLeast->verify($matchedCalls);
+		$this->verifier->verify($matchedCalls);
 	}
 	
 	/**
-	 * Tests that the verifier passes if there are more than enough items.
-	 */
-	public function testVerifyOver()
-	{
-		$matchedCalls = array('1item', '2items');
-		$this->verifierModeAtLeast->verify($matchedCalls);
-	}
-	
-	/**
-	 * Tests that the verifier fails if there weren't enough items.
+	 * Tests that the verifier fails if there are more than enough items.
 	 * @expectedException Exception
 	 */
-	public function testVerifyUnder()
+	public function testVerifyOnOver()
+	{
+		$matchedCalls = array('1item', '2items');
+		$this->verifier->verify($matchedCalls);
+	}
+	
+	/**
+	 * Tests that the verifier passes if there weren't enough items.
+	 */
+	public function testVerifyOnUnder()
 	{
 		$matchedCalls = array();
-		$this->verifierModeAtLeast->verify($matchedCalls);
+		$this->verifier->verify($matchedCalls);
 	}
 }

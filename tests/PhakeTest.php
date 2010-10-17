@@ -631,6 +631,37 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 		$mock->foo();
 		Phake::verify($mock, Phake::never())->foo();
 	}
+	
+	/**
+	 * Tests that atMost passes with exact
+	 */
+	public function testAtMostExactly()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+		$mock->foo();
+		Phake::verify($mock, Phake::atMost(1))->foo();
+	}
+	
+	/**
+	 * Tests that atMost passes with under expected calls
+	 */
+	public function testAtMostUnder()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+		Phake::verify($mock, Phake::atMost(1))->foo();
+	}
+	
+	/**
+	 * Tests that atMost fails on over calls
+	 * @expectedException Exception
+	 */
+	public function testAtMostOver()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+		$mock->foo();
+		$mock->foo();
+		Phake::verify($mock, Phake::atMost(1))->foo();
+	}
 }
 
 ?>

@@ -42,47 +42,40 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once('Phake/CallRecorder/IVerifierMode.php');
-require_once('Phake/CallRecorder/VerifierMode/AtLeast.php');
+require_once 'Phake/CallRecorder/IVerifierMode.php';
 
 /**
- * Tests the functionality of the AtLeast class.
+ * Verifier mode that checks that the number of matched items is less than or equal than the set amount.
+ * @author Brian Feaver <brian.feaver@gmail.com>
  */
-class Phake_CallRecorder_VerifierMode_AtLeastTest extends PHPUnit_Framework_TestCase
+class Phake_CallRecorder_VerifierMode_AtMost implements Phake_CallRecorder_IVerifierMode
 {
-	private $verifierModeAtLeast;
+	/**
+	 * @var int
+	 */
+	private $times;
 	
-	public function setUp()
+	/**
+	 * Constructs a verifier with the given <code>$times</code>.
+	 * @param int $times
+	 */
+	public function __construct($times)
 	{
-		$this->verifierModeAtLeast = new Phake_CallRecorder_VerifierMode_AtLeast(1);
+		$this->times = $times;
 	}
 	
 	/**
-	 * Tests that the verifier passes if there are exactly enough items.
+	 * Verifies that the number of <code>$matchedCalls</code> is less than or equal to the
+	 * value this object was instantiated with.
+	 * @param array $matchedCalls
+	 * @return boolean
 	 */
-	public function testVerifyMatches()
+	public function verify(array $matchedCalls)
 	{
-		// Will throw an exception if it wasn't working
-		$matchedCalls = array('1item');
-		$this->verifierModeAtLeast->verify($matchedCalls);
-	}
-	
-	/**
-	 * Tests that the verifier passes if there are more than enough items.
-	 */
-	public function testVerifyOver()
-	{
-		$matchedCalls = array('1item', '2items');
-		$this->verifierModeAtLeast->verify($matchedCalls);
-	}
-	
-	/**
-	 * Tests that the verifier fails if there weren't enough items.
-	 * @expectedException Exception
-	 */
-	public function testVerifyUnder()
-	{
-		$matchedCalls = array();
-		$this->verifierModeAtLeast->verify($matchedCalls);
+		$calledTimes = count($matchedCalls);
+		if ($calledTimes > $this->times)
+		{
+			throw new Exception("at least <$this->times> times, actually called <$calledTimes>");
+		}
 	}
 }

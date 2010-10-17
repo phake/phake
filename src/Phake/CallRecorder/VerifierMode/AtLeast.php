@@ -56,7 +56,7 @@ class Phake_CallRecorder_VerifierMode_AtLeast implements Phake_CallRecorder_IVer
 	private $times;
 	
 	/**
-	 * Constructs a Times verifier with the given <code>$times</code>.
+	 * Constructs a verifier with the given <code>$times</code>.
 	 * @param unknown_type $times
 	 */
 	public function __construct($times)
