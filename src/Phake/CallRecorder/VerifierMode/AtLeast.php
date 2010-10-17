@@ -42,48 +42,40 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once('Phake/CallRecorder/IVerifierMode.php');
-require_once('Phake/CallRecorder/VerifierMode/Times.php');
+require_once 'Phake/CallRecorder/IVerifierMode.php';
 
 /**
- * Tests the functionality of the Times class.
+ * Verifier mode that checks that the number of matched items are equal to or greater than the expected amount.
+ * @author Brian Feaver <brian.feaver@gmail.com>
  */
-class Phake_CallRecorder_VerifierMode_TimesTest extends PHPUnit_Framework_TestCase
+class Phake_CallRecorder_VerifierMode_AtLeast implements Phake_CallRecorder_IVerifierMode
 {
-	private $verifierModeTimes;
+	/**
+	 * @var int
+	 */
+	private $times;
 	
-	public function setUp()
+	/**
+	 * Constructs a Times verifier with the given <code>$times</code>.
+	 * @param unknown_type $times
+	 */
+	public function __construct($times)
 	{
-		$this->verifierModeTimes = new Phake_CallRecorder_VerifierMode_Times(1);
+		$this->times = $times;
 	}
 	
 	/**
-	 * Tests that the Times verifier passes if there are exactly enough items.
+	 * Verifies that the number of <code>$matchedCalls</code> is equal to or greater than the
+	 * value this object was instantiated with.
+	 * @param array $matchedCalls
+	 * @return boolean
 	 */
-	public function testVerifyMatches()
+	public function verify(array $matchedCalls)
 	{
-		// Will throw an exception if it wasn't working
-		$matchedCalls = array('1item');
-		$this->verifierModeTimes->verify($matchedCalls);
-	}
-	
-	/**
-	 * Tests that the Times verifier fails if there are more than enough items.
-	 * @expectedException Exception
-	 */
-	public function testVerifyFailsOnOver()
-	{
-		$matchedCalls = array('1item', '2items');
-		$this->verifierModeTimes->verify($matchedCalls);
-	}
-	
-	/**
-	 * Tests that the Times verifier fails if there weren't enough items.
-	 * @expectedException Exception
-	 */
-	public function testVerifyFailsOnUnder()
-	{
-		$matchedCalls = array();
-		$this->verifierModeTimes->verify($matchedCalls);
+		$calledTimes = count($matchedCalls);
+		if ($calledTimes < $this->times)
+		{
+			throw new Exception("at least <$this->times> times, actually called <$calledTimes>");
+		}
 	}
 }

@@ -56,6 +56,7 @@ require_once 'Phake/Stubber/SelfBindingAnswerBinder.php';
 require_once 'Phake/Stubber/Answers/StaticAnswer.php';
 require_once 'Phake/Stubber/Answers/SpyDelegate.php';
 require_once 'Phake/CallRecorder/VerifierMode/Times.php';
+require_once 'Phake/CallRecorder/VerifierMode/AtLeast.php';
 
 /**
  * Phake - PHP Test Doubles Framework
@@ -267,6 +268,17 @@ class Phake
 	public static function times($count)
 	{
 		return new Phake_CallRecorder_VerifierMode_Times((int) $count);
+	}
+	
+	/**
+	 * Allows verifying at least <code>$count</code> invocations.
+	 * 
+	 * @param int $count
+	 * @return Phake_CallRecorder_VerifierMode_AtLeast
+	 */
+	public static function atLeast($count)
+	{
+		return new Phake_CallRecorder_VerifierMode_AtLeast((int) $count);
 	}
 }
 ?>

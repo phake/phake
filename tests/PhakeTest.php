@@ -575,6 +575,42 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 		
 		Phake::verify($mock)->foo();
 	}
+	
+	/**
+	 * Tests at least matches with exact calls
+	 */
+	public function testVerifyAtLeastExact()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+		
+		$mock->foo();
+		
+		Phake::verify($mock, Phake::atLeast(1))->foo();
+	}
+	
+	/**
+	 * Tests at least matches with greater calls
+	 */
+	public function testVerifyAtLeastGreater()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+		
+		$mock->foo();
+		$mock->foo();
+		
+		Phake::verify($mock, Phake::atLeast(1))->foo();
+	}
+	
+	/**
+	 * Tests that at least doesn't match
+	 * @expectedException Exception
+	 */
+	public function testVerifyAtLeastMismatch()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+		
+		Phake::verify($mock, Phake::atLeast(1))->foo();
+	}
 }
 
 ?>

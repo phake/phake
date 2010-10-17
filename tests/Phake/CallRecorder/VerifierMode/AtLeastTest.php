@@ -43,38 +43,37 @@
  */
 
 require_once('Phake/CallRecorder/IVerifierMode.php');
-require_once('Phake/CallRecorder/VerifierMode/Times.php');
+require_once('Phake/CallRecorder/VerifierMode/AtLeast.php');
 
 /**
- * Tests the functionality of the Times class.
+ * Tests the functionality of the AtLeast class.
  */
-class Phake_CallRecorder_VerifierMode_TimesTest extends PHPUnit_Framework_TestCase
+class Phake_CallRecorder_VerifierMode_AtLeastTest extends PHPUnit_Framework_TestCase
 {
-	private $verifierModeTimes;
+	private $verifierModeAtLeast;
 	
 	public function setUp()
 	{
-		$this->verifierModeTimes = new Phake_CallRecorder_VerifierMode_Times(1);
+		$this->verifierModeAtLeast = new Phake_CallRecorder_VerifierMode_AtLeast(1);
 	}
 	
 	/**
-	 * Tests that the Times verifier passes if there are exactly enough items.
+	 * Tests that the verifier passes if there are exactly enough items.
 	 */
 	public function testVerifyMatches()
 	{
 		// Will throw an exception if it wasn't working
 		$matchedCalls = array('1item');
-		$this->verifierModeTimes->verify($matchedCalls);
+		$this->verifierModeAtLeast->verify($matchedCalls);
 	}
 	
 	/**
-	 * Tests that the Times verifier fails if there are more than enough items.
-	 * @expectedException Exception
+	 * Tests that the verifier passes if there are more than enough items.
 	 */
 	public function testVerifyFailsOnOver()
 	{
 		$matchedCalls = array('1item', '2items');
-		$this->verifierModeTimes->verify($matchedCalls);
+		$this->verifierModeAtLeast->verify($matchedCalls);
 	}
 	
 	/**
@@ -84,6 +83,6 @@ class Phake_CallRecorder_VerifierMode_TimesTest extends PHPUnit_Framework_TestCa
 	public function testVerifyFailsOnUnder()
 	{
 		$matchedCalls = array();
-		$this->verifierModeTimes->verify($matchedCalls);
+		$this->verifierModeAtLeast->verify($matchedCalls);
 	}
 }
