@@ -108,6 +108,24 @@ class Phake
 	}
 
 	/**
+	 * Returns a partial mock that is constructed with the given parameters
+	 *
+	 * Calls to this class will be recorded however they will still call the original functionality by default.
+	 *
+	 * @param string $className class name
+	 * @param mixed ... the remaining arguments will be passed as constructor arguments
+	 * @return Phake_ITestDouble
+	 */
+	public static function partMock()
+	{
+		$args = func_get_args();
+		$className = array_shift($args);
+		$answer = new Phake_Stubber_Answers_ParentDelegate();
+
+		return self::getPhake()->mock($className, new Phake_ClassGenerator_MockClass(), new Phake_CallRecorder_Recorder(), $answer, $args);
+	}
+
+	/**
 	 * Creates a new verifier for the given mock object.
 	 * @param Phake_CallRecorder_ICallRecorderContainer $mock
 	 * @return Phake_CallRecorder_VerifierProxy

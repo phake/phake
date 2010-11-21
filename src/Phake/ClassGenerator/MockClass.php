@@ -71,6 +71,8 @@ class Phake_ClassGenerator_MockClass
 			$extends = '';
 			$implements = ", {$mockedClassName}";
 		}
+
+		$mockedClass = new ReflectionClass($mockedClassName);
 		
 		$classDef = "
 class {$newClassName} {$extends}
@@ -84,11 +86,12 @@ class {$newClassName} {$extends}
 
 	private \$__PHAKE_isFrozen = FALSE;
 
-	public function __construct(Phake_CallRecorder_Recorder \$callRecorder, Phake_Stubber_StubMapper \$stubMapper, Phake_Stubber_IAnswer \$defaultAnswer)
+	public function __construct(Phake_CallRecorder_Recorder \$callRecorder, Phake_Stubber_StubMapper \$stubMapper, Phake_Stubber_IAnswer \$defaultAnswer, array \$constructorArgs = null)
 	{
 		\$this->__PHAKE_callRecorder = \$callRecorder;
 		\$this->__PHAKE_stubMapper = \$stubMapper;
 		\$this->__PHAKE_defaultAnswer = \$defaultAnswer;
+		{$this->getConstructorChaining($mockedClass)}
 	}
 
 	public function __PHAKE_getCallRecorder()
@@ -113,7 +116,7 @@ class {$newClassName} {$extends}
 		\$this->__PHAKE_isFrozen = TRUE;
 	}
 
-	{$this->generateMockedMethods(new ReflectionClass($mockedClassName))}
+	{$this->generateMockedMethods($mockedClass)}
 }
 ";
 
@@ -127,11 +130,12 @@ class {$newClassName} {$extends}
 	 * @param Phake_CallRecorder_Recorder $recorder
 	 * @param Phake_Stubber_StubMapper $mapper
 	 * @param Phake_Stubber_IAnswer $defaultAnswer
+	 * @param array $constructorArgs
 	 * @return Phake_IMock of type $newClassName
 	 */
-	public function instantiate($newClassName, Phake_CallRecorder_Recorder $recorder, Phake_Stubber_StubMapper $mapper, Phake_Stubber_IAnswer $defaultAnswer)
+	public function instantiate($newClassName, Phake_CallRecorder_Recorder $recorder, Phake_Stubber_StubMapper $mapper, Phake_Stubber_IAnswer $defaultAnswer, array $constructorArgs = null)
 	{
-		return new $newClassName($recorder, $mapper, $defaultAnswer);
+		return new $newClassName($recorder, $mapper, $defaultAnswer, $constructorArgs);
 	}
 
 	/**
@@ -152,6 +156,20 @@ class {$newClassName} {$extends}
 		}
 
 		return $methodDefs;
+	}
+
+	/**
+	 * Creates the constructor implementation
+	 */
+	protected function getConstructorChaining(ReflectionClass $originalClass)
+	{
+		return $originalClass->hasMethod('__construct') ? "
+
+		if (is_array(\$constructorArgs))
+		{
+			call_user_func_array(array('parent', '__construct'), \$constructorArgs);
+		}
+		" : "";
 	}
 
 	/**

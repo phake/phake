@@ -46,10 +46,11 @@ require_once 'Phake/ClassGenerator/MockClass.php';
 require_once 'Phake/CallRecorder/Recorder.php';
 require_once 'Phake/Stubber/StubMapper.php';
 require_once 'Phake/Stubber/IAnswer.php';
-require_once 'Phake/Stubber/Answers/IDelegator.php';
+require_once 'Phake/Stubber/Answers/ParentDelegate.php';
 require_once 'Phake/Stubber/IAnswerDelegate.php';
 
 require_once 'PhakeTest/MockedClass.php';
+require_once 'PhakeTest/MockedConstructedClass.php';
 require_once 'PhakeTest/MockedInterface.php';
 
 /**
@@ -59,6 +60,9 @@ require_once 'PhakeTest/MockedInterface.php';
  */
 class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 {
+	/**
+	 * @var Phake_ClassGenerator_MockClass
+	 */
 	private $classGen;
 
 	public function setUp()
@@ -390,6 +394,25 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 		$mock->__PHAKE_resetMock();
 
 		$mock->foo();
+	}
+
+	/**
+	 * Tests that passing constructor arguments to the derived class will cause the original constructor to be called.
+	 */
+	public function testCallingOriginalConstructor()
+	{
+		$newClassName = __CLASS__ . '_TestClass16';
+		$mockedClass = 'PhakeTest_MockedConstructedClass';
+		$this->classGen->generate($newClassName, $mockedClass);
+
+		$callRecorder = $this->getMock('Phake_CallRecorder_Recorder');
+		$stubMapper = $this->getMock('Phake_Stubber_StubMapper');
+		$answer = new Phake_Stubber_Answers_ParentDelegate();
+		$mock = $this->classGen->instantiate($newClassName, $callRecorder, $stubMapper, $answer, array('val1', 'val2', 'val3'));
+
+		$this->assertEquals('val1', $mock->getProp1());
+		$this->assertEquals('val2', $mock->getProp2());
+		$this->assertEquals('val3', $mock->getProp3());
 	}
 }
 ?>

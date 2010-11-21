@@ -45,6 +45,8 @@
 require_once('Phake.php');
 require_once('PhakeTest/AbstractClass.php');
 require_once('PhakeTest/MockedClass.php');
+require_once('PhakeTest/MockedConstructedClass.php');
+require_once('PhakeTest/ExtendedMockedConstructedClass.php');
 require_once('PhakeTest/MockedInterface.php');
 
 /**
@@ -335,48 +337,58 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Tests spy functionality to make sure original method is called.
+	 * Tests partial mock functionality to make sure original method is called.
 	 */
-	public function testSpyCallsOriginal()
+	public function testPartialMockCallsOriginal()
 	{
-		$spiedOn = $this->getMock('PhakeTest_MockedClass');
-		$spiedOn->expects($this->once())
-			->method('foo');
-
-		$spy = Phake::spy($spiedOn);
-		$spy->foo();
+		$spy = Phake::partMock('PhakeTest_MockedClass');
+		$this->assertEquals('blah', $spy->fooWithReturnValue());
 	}
 
 	/**
-	 * Tests spy functionality to make sure original value is returned.
+	 * Tests partial mock calls are recorded
 	 */
-	public function testSpyReturnsValue()
+	public function testPartialMockRecordsCall()
 	{
-		$spiedOn = $this->getMock('PhakeTest_MockedClass');
-		$spiedOn->expects($this->any())
-			->method('foo')
-			->will($this->returnValue(42));
-
-
-		$spy = Phake::spy($spiedOn);
-
-		$this->assertEquals(42, $spy->foo());
-	}
-
-	/**
-	 * Tests spy calls are recorded
-	 */
-	public function testSpyRecordsCall()
-	{
-		$spiedOn = $this->getMock('PhakeTest_MockedClass');
-		$spiedOn->expects($this->any())
-			->method('foo');
-
-
-		$spy = Phake::spy($spiedOn);
+		$spy = Phake::partMock('PhakeTest_MockedClass');
 		$spy->foo();
 
 		Phake::verify($spy)->foo();
+	}
+
+	/**
+	 * Tests that partial mock calls can chain properly
+	 */
+	public function testPartialMockInternalMethodCalls()
+	{
+		$spy = Phake::partMock('PhakeTest_MockedClass');
+		Phake::when($spy)->innerFunc()->thenReturn('blah');
+
+		$this->assertEquals('blah', $spy->chainedCall());
+	}
+
+	/**
+	 * Tests that partial mocks listen to the constructor args given
+	 */
+	public function testPartialMockCallsConstructor()
+	{
+		$spy = Phake::partMock('PhakeTest_MockedConstructedClass', 'val1', 'val2', 'val3');
+
+		$this->assertEquals('val1', $spy->getProp1());
+		$this->assertEquals('val2', $spy->getProp2());
+		$this->assertEquals('val3', $spy->getProp3());
+	}
+
+	/**
+	 * Tests that partial mocks with constructors higher in the chain have their constructors called
+	 */
+	public function testPartialMockCallsParentConstructor()
+	{
+		$spy = Phake::partMock('PhakeTest_ExtendedMockedConstructedClass', 'val1', 'val2', 'val3');
+
+		$this->assertEquals('val1', $spy->getProp1());
+		$this->assertEquals('val2', $spy->getProp2());
+		$this->assertEquals('val3', $spy->getProp3());
 	}
 
 	/**
