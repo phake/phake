@@ -341,8 +341,8 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testPartialMockCallsOriginal()
 	{
-		$spy = Phake::partMock('PhakeTest_MockedClass');
-		$this->assertEquals('blah', $spy->fooWithReturnValue());
+		$pmock = Phake::partMock('PhakeTest_MockedClass');
+		$this->assertEquals('blah', $pmock->fooWithReturnValue());
 	}
 
 	/**
@@ -350,10 +350,10 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testPartialMockRecordsCall()
 	{
-		$spy = Phake::partMock('PhakeTest_MockedClass');
-		$spy->foo();
+		$pmock = Phake::partMock('PhakeTest_MockedClass');
+		$pmock->foo();
 
-		Phake::verify($spy)->foo();
+		Phake::verify($pmock)->foo();
 	}
 
 	/**
@@ -361,10 +361,10 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testPartialMockInternalMethodCalls()
 	{
-		$spy = Phake::partMock('PhakeTest_MockedClass');
-		Phake::when($spy)->innerFunc()->thenReturn('blah');
+		$pmock = Phake::partMock('PhakeTest_MockedClass');
+		Phake::when($pmock)->innerFunc()->thenReturn('blah');
 
-		$this->assertEquals('blah', $spy->chainedCall());
+		$this->assertEquals('blah', $pmock->chainedCall());
 	}
 
 	/**
@@ -372,11 +372,11 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testPartialMockCallsConstructor()
 	{
-		$spy = Phake::partMock('PhakeTest_MockedConstructedClass', 'val1', 'val2', 'val3');
+		$pmock = Phake::partMock('PhakeTest_MockedConstructedClass', 'val1', 'val2', 'val3');
 
-		$this->assertEquals('val1', $spy->getProp1());
-		$this->assertEquals('val2', $spy->getProp2());
-		$this->assertEquals('val3', $spy->getProp3());
+		$this->assertEquals('val1', $pmock->getProp1());
+		$this->assertEquals('val2', $pmock->getProp2());
+		$this->assertEquals('val3', $pmock->getProp3());
 	}
 
 	/**
@@ -384,11 +384,11 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testPartialMockCallsParentConstructor()
 	{
-		$spy = Phake::partMock('PhakeTest_ExtendedMockedConstructedClass', 'val1', 'val2', 'val3');
+		$pmock = Phake::partMock('PhakeTest_ExtendedMockedConstructedClass', 'val1', 'val2', 'val3');
 
-		$this->assertEquals('val1', $spy->getProp1());
-		$this->assertEquals('val2', $spy->getProp2());
-		$this->assertEquals('val3', $spy->getProp3());
+		$this->assertEquals('val1', $pmock->getProp1());
+		$this->assertEquals('val2', $pmock->getProp2());
+		$this->assertEquals('val3', $pmock->getProp3());
 	}
 
 	/**
