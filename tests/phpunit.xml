@@ -2,4 +2,12 @@
 <phpunit
 		bootstrap="bootstrap.php"
 >
+	<filter>
+		<whitelist>
+			<directory>../src</directory>
+		</whitelist>
+	</filter>
+	<logging>
+		<log type="coverage-html" target="/tmp/coverage"></log>
+	</logging>
 </phpunit>
