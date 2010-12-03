@@ -560,7 +560,53 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 
 		$this->assertSame('BAR', $toArgument);
 	}
-	
+
+	/**
+	 * Make sure arguments aren't captured if the conditions don't match
+	 */
+	public function testConditionalArugmentCapturingFails()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+
+		$mock->fooWithArgument('FOO');
+
+		$this->setExpectedException('Exception');
+		Phake::verify($mock)->fooWithArgument(Phake::capture($toArgument)->when('BAR'));
+	}
+
+	/**
+	 * Make sure arguments are captured with no issues
+	 */
+	public function testArgumentCapturingWorksOnObjects()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+
+		$obj = new stdClass;
+
+		$mock->fooWithArgument($obj);
+
+		Phake::verify($mock)->fooWithArgument(Phake::capture($toArgument));
+
+		$this->assertSame($obj, $toArgument);
+	}
+
+	/**
+	 * Make sure arguments are captured with no issues
+	 */
+	public function testArgumentCapturingWorksOnStubbing()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+
+		$obj = new stdClass;
+
+		Phake::when($mock)->fooWithArgument(Phake::capture($toArgument))->thenReturn(TRUE);
+
+		$mock->fooWithArgument($obj);
+
+		$this->assertSame($obj, $toArgument);
+	}
+
+
 	/**
 	 * Tests times matches exactly
 	 */
