@@ -42,79 +42,34 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Proxies/AnswerBinderProxy.php';
-require_once 'Phake/Stubber/AnswerBinder.php';
+require_once 'Phake/Stubber/IAnswer.php';
 
 /**
- * Description of AnswerBinderProxyTest
+ * Allows providing an exception to throw to a stubbed method call.
  *
- * @author Mike Lively <m@digitalsandwich.com>
+ * @author Brian Feaver <brian.feaver@gmail.com>
  */
-class Phake_Proxies_AnswerBinderProxyTest extends PHPUnit_Framework_TestCase
+class Phake_Stubber_Answers_ExceptionAnswer implements Phake_Stubber_IAnswer
 {
 	/**
-	 * @var Phake_Proxies_AnswerBinderProxy
+	 * @var mixed
 	 */
-	private $proxy;
+	private $answer;
 
 	/**
-	 * @var Phake_Stubber_AnswerBinder
+	 * @param mixed $answer
 	 */
-	private $binder;
-
-	/**
-	 * Sets up the test fixture
-	 */
-	public function setUp()
+	public function __construct(Exception $answer)
 	{
-		$this->binder = $this->getMock('Phake_Stubber_AnswerBinder', array(), array(), '', FALSE);
-		$this->proxy = new Phake_Proxies_AnswerBinderProxy($this->binder);
+		$this->answer = $answer;
 	}
 
 	/**
-	 * Tests the thenReturn functionality of the proxy.
-	 *
-	 * It should result in the binder being called with a static answer.
-	 *
-	 * @todo we need argument capturing so I can make sure the answer matches.
+	 * @return mixed
 	 */
-	public function testThenReturn()
+	public function getAnswer()
 	{
-		$this->binder->expects($this->once())
-			->method('bindAnswer')
-			->with($this->logicalAnd($this->isInstanceOf('Phake_Stubber_Answers_StaticAnswer'), $this->attributeEqualTo('answer', 42)))
-			->will($this->returnValue($this->binder));
-
-		$this->assertSame($this->binder, $this->proxy->thenReturn(42));
-	}
-
-	/**
-	 * Tests the thenCallParent functionality of the proxy
-	 */
-	public function testThenCallParent()
-	{
-		$this->binder->expects($this->once())
-			->method('bindAnswer')
-			->with($this->isInstanceOf('Phake_Stubber_Answers_ParentDelegate'))
-			->will($this->returnValue($this->binder));
-
-		$this->assertSame($this->binder, $this->proxy->thenCallParent());
-	}
-	
-	/**
-	 * Tests the thenThrow functionality of the proxy.
-	 */
-	public function testThenThrow()
-	{
-		$exception = new RuntimeException();
-		
-		$this->binder->expects($this->once())
-			->method('bindAnswer')
-			->with($this->logicalAnd($this->isInstanceOf('Phake_Stubber_Answers_ExceptionAnswer'),
-				$this->attributeEqualTo('answer', $exception)))
-			->will($this->returnValue($this->binder));
-			
-		$this->assertSame($this->binder, $this->proxy->thenThrow($exception));
+		$class_name = get_class($this->answer);
+		throw new $class_name();
 	}
 }
-?>

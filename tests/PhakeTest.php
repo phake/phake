@@ -720,6 +720,17 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 		$mock->foo();
 		Phake::verify($mock, Phake::atMost(1))->foo();
 	}
+	
+	/**
+	 * Tests that the given exception is thrown on thenThrow.
+	 * @expectedException Exception
+	 */
+	public function testStubThenThrow()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+		Phake::when($mock)->foo()->thenThrow(new Exception());
+		$mock->foo();
+	}
 }
 
 ?>

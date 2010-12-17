@@ -79,5 +79,16 @@ class Phake_Proxies_AnswerBinderProxy {
 	{
 		return $this->binder->bindAnswer(new Phake_Stubber_Answers_ParentDelegate());
 	}
+	
+	/**
+	 * Binds an exception answer to the method and object in the proxied binder.
+	 * 
+	 * @param Exception $value
+	 * @return Phake_Stubber_IAnswerBinder
+	 */
+	public function thenThrow(Exception $value)
+	{
+		return $this->binder->bindAnswer(new Phake_Stubber_Answers_ExceptionAnswer($value));
+	}
 }
 ?>
