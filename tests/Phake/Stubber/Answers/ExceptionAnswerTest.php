@@ -53,13 +53,19 @@ class Phake_Stubber_Answers_ExceptionAnswerTest extends PHPUnit_Framework_TestCa
 	 * @var Phake_Stubber_ExcpetionAnswer
 	 */
 	private $answer;
+	
+	/**
+	 * @var RuntimeException
+	 */
+	private $exception;
 
 	/**
 	 * Sets up the answer fixture
 	 */
 	public function setUp()
 	{
-		$this->answer = new Phake_Stubber_Answers_ExceptionAnswer(new RuntimeException());
+		$this->exception = new RuntimeException();
+		$this->answer = new Phake_Stubber_Answers_ExceptionAnswer($this->exception);
 	}
 
 	/**
@@ -68,5 +74,20 @@ class Phake_Stubber_Answers_ExceptionAnswerTest extends PHPUnit_Framework_TestCa
 	public function testAnswer()
 	{
 		$this->answer->getAnswer();
+	}
+	
+	/**
+	 * Tests that we throw the same exception istantiated in the answer.
+	 */
+	public function testSameException()
+	{
+		try
+		{
+			$this->answer->getAnswer();
+		}
+		catch (Exception $e)
+		{
+			$this->assertSame($this->exception, $e);
+		}
 	}
 }

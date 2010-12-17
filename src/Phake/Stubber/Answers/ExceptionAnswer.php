@@ -69,7 +69,6 @@ class Phake_Stubber_Answers_ExceptionAnswer implements Phake_Stubber_IAnswer
 	 */
 	public function getAnswer()
 	{
-		$class_name = get_class($this->answer);
-		throw new $class_name();
+		throw $this->answer;
 	}
 }
