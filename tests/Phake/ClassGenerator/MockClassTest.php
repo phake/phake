@@ -52,6 +52,7 @@ require_once 'Phake/Stubber/IAnswerDelegate.php';
 require_once 'PhakeTest/MockedClass.php';
 require_once 'PhakeTest/MockedConstructedClass.php';
 require_once 'PhakeTest/MockedInterface.php';
+require_once 'PhakeTest/FinalMethod.php';
 
 /**
  * Description of MockClass
@@ -417,6 +418,17 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals('val1', $mock->getProp1());
 		$this->assertEquals('val2', $mock->getProp2());
 		$this->assertEquals('val3', $mock->getProp3());
+	}
+
+	/**
+	 * Tests that final methods are not overridden
+	 */
+	public function testFinalMethodsAreNotOverridden()
+	{
+		$newClassName = __CLASS__ . '_TestClass17';
+		$mockedClass = 'PhakeTest_FinalMethod';
+
+		$this->classGen->generate($newClassName, $mockedClass);
 	}
 }
 ?>
