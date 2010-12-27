@@ -55,7 +55,7 @@ class Phake_CallRecorder_VerifierMode_Times implements Phake_CallRecorder_IVerif
 	 * @var int
 	 */
 	private $times;
-	
+
 	/**
 	 * Constructs a Times verifier with the given <code>$times</code>.
 	 * @param unknown_type $times
@@ -64,7 +64,7 @@ class Phake_CallRecorder_VerifierMode_Times implements Phake_CallRecorder_IVerif
 	{
 		$this->times = $times;
 	}
-	
+
 	/**
 	 * Verifies that the number of <code>$matchedCalls</code> is equal to the
 	 * value this object was instantiated with.

@@ -55,4 +55,5 @@ interface Phake_Stubber_IStubbable
 	 */
 	public function __PHAKE_addAnswer(Phake_Stubber_IAnswer $answer, Phake_Matchers_MethodMatcher $method);
 }
+
 ?>

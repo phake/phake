@@ -51,12 +51,12 @@ require_once('Phake/CallRecorder/VerifierMode/Times.php');
 class Phake_CallRecorder_VerifierMode_TimesTest extends PHPUnit_Framework_TestCase
 {
 	private $verifierModeTimes;
-	
+
 	public function setUp()
 	{
 		$this->verifierModeTimes = new Phake_CallRecorder_VerifierMode_Times(1);
 	}
-	
+
 	/**
 	 * Tests that the Times verifier passes if there are exactly enough items.
 	 */
@@ -66,7 +66,7 @@ class Phake_CallRecorder_VerifierMode_TimesTest extends PHPUnit_Framework_TestCa
 		$matchedCalls = array('1item');
 		$this->verifierModeTimes->verify($matchedCalls);
 	}
-	
+
 	/**
 	 * Tests that the Times verifier fails if there are more than enough items.
 	 * @expectedException Exception
@@ -76,7 +76,7 @@ class Phake_CallRecorder_VerifierMode_TimesTest extends PHPUnit_Framework_TestCa
 		$matchedCalls = array('1item', '2items');
 		$this->verifierModeTimes->verify($matchedCalls);
 	}
-	
+
 	/**
 	 * Tests that the Times verifier fails if there weren't enough items.
 	 * @expectedException Exception

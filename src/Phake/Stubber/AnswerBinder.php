@@ -83,4 +83,5 @@ class Phake_Stubber_AnswerBinder implements Phake_Stubber_IAnswerBinder
 		return $this;
 	}
 }
+
 ?>

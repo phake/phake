@@ -51,12 +51,12 @@ require_once('Phake/CallRecorder/VerifierMode/AtLeast.php');
 class Phake_CallRecorder_VerifierMode_AtLeastTest extends PHPUnit_Framework_TestCase
 {
 	private $verifierModeAtLeast;
-	
+
 	public function setUp()
 	{
 		$this->verifierModeAtLeast = new Phake_CallRecorder_VerifierMode_AtLeast(1);
 	}
-	
+
 	/**
 	 * Tests that the verifier passes if there are exactly enough items.
 	 */
@@ -66,7 +66,7 @@ class Phake_CallRecorder_VerifierMode_AtLeastTest extends PHPUnit_Framework_Test
 		$matchedCalls = array('1item');
 		$this->verifierModeAtLeast->verify($matchedCalls);
 	}
-	
+
 	/**
 	 * Tests that the verifier passes if there are more than enough items.
 	 */
@@ -75,7 +75,7 @@ class Phake_CallRecorder_VerifierMode_AtLeastTest extends PHPUnit_Framework_Test
 		$matchedCalls = array('1item', '2items');
 		$this->verifierModeAtLeast->verify($matchedCalls);
 	}
-	
+
 	/**
 	 * Tests that the verifier fails if there weren't enough items.
 	 * @expectedException Exception

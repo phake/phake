@@ -58,7 +58,7 @@ class Phake_Stubber_Answers_ParentDelegate implements Phake_Stubber_Answers_IDel
 	{
 		$this->capturedReturn =& $captor;
 	}
-	
+
 	/**
 	 * Returns the answer delegate (itself)
 	 * @return Phake_Stubber_Answers_ParentDelegate
@@ -93,4 +93,5 @@ class Phake_Stubber_Answers_ParentDelegate implements Phake_Stubber_Answers_IDel
 		$this->capturedReturn = $answer;
 	}
 }
+
 ?>

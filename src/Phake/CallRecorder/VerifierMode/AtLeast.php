@@ -54,7 +54,7 @@ class Phake_CallRecorder_VerifierMode_AtLeast implements Phake_CallRecorder_IVer
 	 * @var int
 	 */
 	private $times;
-	
+
 	/**
 	 * Constructs a verifier with the given <code>$times</code>.
 	 * @param unknown_type $times
@@ -63,7 +63,7 @@ class Phake_CallRecorder_VerifierMode_AtLeast implements Phake_CallRecorder_IVer
 	{
 		$this->times = $times;
 	}
-	
+
 	/**
 	 * Verifies that the number of <code>$matchedCalls</code> is equal to or greater than the
 	 * value this object was instantiated with.

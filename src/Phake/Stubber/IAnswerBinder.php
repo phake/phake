@@ -51,10 +51,11 @@ interface Phake_Stubber_IAnswerBinder
 	 * Binds the given answer to an object.
 	 *
 	 * Returns an instance of itself
-	 * 
+	 *
 	 * @param Phake_Stubber_IAnswer $answer
 	 * @return Phake_Stubber_IAnswerBinder
 	 */
 	public function bindAnswer(Phake_Stubber_IAnswer $answer);
 }
+
 ?>
