@@ -42,6 +42,8 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+require_once 'Phake/Matchers/MethodMatcher.php';
+
 /**
  * Can verify calls recorded into the given recorder.
  *
@@ -80,63 +82,20 @@ class Phake_CallRecorder_Verifier
 	 */
 	public function verifyCall($method, array $argumentMatchers)
 	{
+		$matcher = new Phake_Matchers_MethodMatcher($method, $argumentMatchers);
 		$calls = $this->recorder->getAllCalls();
 
 		$matchedCalls = array();
 		foreach ($calls as $call)
 		{
 			/* @var $call Phake_CallRecorder_Call */
-			if ($call->getMethod() == $method
-					&& $call->getObject() === $this->obj)
+			if ($matcher->matches($call->getMethod(), $call->getArguments()))
 			{
-				if ($this->validateArguments($call->getArguments(), $argumentMatchers))
-				{
-					$matchedCalls[] = $this->recorder->getCallInfo($call);
-				}
+				$matchedCalls[] = $this->recorder->getCallInfo($call);
 			}
 		}
 
 		return $matchedCalls;
-	}
-
-	/**
-	 * Returns whether or not the passed in arguments match all of the passed in argument matchers.
-	 * @param array $arguments
-	 * @param array $argumentMatchers
-	 * @return boolean
-	 */
-	private function validateArguments(array $arguments, array $argumentMatchers)
-	{
-		if ($argumentMatchers[0] instanceof Phake_Matchers_AnyParameters)
-		{
-			return TRUE;
-
-		}
-
-		if (count($argumentMatchers) != count($arguments))
-		{
-			return FALSE;
-		}
-
-		reset($argumentMatchers);
-		foreach ($arguments as $i => $argument)
-		{
-			$matcher = current($argumentMatchers);
-			if (!$matcher instanceof Phake_Matchers_IArgumentMatcher)
-			{
-				throw new InvalidArgumentException("Argument matcher [{$i}] is not a valid matcher");
-			}
-
-			/* @var $matcher Phake_Matchers_IArgumentMatcher */
-			if (!$matcher->matches($argument))
-			{
-				return FALSE;
-			}
-
-			next($argumentMatchers);
-		}
-
-		return TRUE;
 	}
 }
 
