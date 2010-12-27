@@ -72,7 +72,7 @@ class Phake_Matchers_FactoryTest extends PHPUnit_Framework_TestCase
 	{
 		$matcher = $this->factory->createMatcher('foo');
 		
-		$this->assertType('Phake_Matchers_EqualsMatcher', $matcher);
+		$this->assertInstanceOf('Phake_Matchers_EqualsMatcher', $matcher);
 		
 		$this->assertTrue($matcher->matches('foo'));
 	}
@@ -139,9 +139,9 @@ class Phake_Matchers_FactoryTest extends PHPUnit_Framework_TestCase
 
 		$matchers = $this->factory->createMatcherArray($arguments);
 
-		$this->assertType('Phake_Matchers_EqualsMatcher', $matchers[0]);
+		$this->assertInstanceOf('Phake_Matchers_EqualsMatcher', $matchers[0]);
 		$this->assertSame($argMatcher, $matchers[1]);
-		$this->assertType('Phake_Matchers_PHPUnitConstraintAdapter', $matchers[2]);
+		$this->assertInstanceOf('Phake_Matchers_PHPUnitConstraintAdapter', $matchers[2]);
 	}
 }
 

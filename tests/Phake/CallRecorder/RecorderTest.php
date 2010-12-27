@@ -93,9 +93,9 @@ class Phake_CallRecorder_RecorderTest extends PHPUnit_Framework_TestCase
 
 		$callInfo = $callRecorder->getCallInfo($call);
 
-		$this->assertType('Phake_CallRecorder_CallInfo', $callInfo);
+		$this->assertInstanceOf('Phake_CallRecorder_CallInfo', $callInfo);
 		$this->assertSame($call, $callInfo->getCall());
-		$this->assertType('Phake_CallRecorder_Position', $callInfo->getPosition());
+		$this->assertInstanceOf('Phake_CallRecorder_Position', $callInfo->getPosition());
 	}
 
 	/**

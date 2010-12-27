@@ -68,7 +68,7 @@ class Phake_Stubber_Answers_ParentDelegateTest extends PHPUnit_Framework_TestCas
 	public function testThatDelegateReturnsItself()
 	{
 		$answer = $this->delegate->getAnswer();
-		$this->assertType('Phake_Stubber_Answers_IDelegator', $answer);
+		$this->assertInstanceOf('Phake_Stubber_Answers_IDelegator', $answer);
 		$this->assertSame($this->delegate, $answer);
 	}
 
