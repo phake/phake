@@ -43,6 +43,7 @@
  */
 
 require_once 'Phake/Matchers/MethodMatcher.php';
+require_once 'Phake/Matchers/AnyParameters.php';
 require_once 'Phake/Matchers/IArgumentMatcher.php';
 
 class PHake_Matchers_MethodMatcherTest extends PHPUnit_Framework_TestCase
@@ -150,6 +151,15 @@ class PHake_Matchers_MethodMatcherTest extends PHPUnit_Framework_TestCase
 						->will($this->returnValue(FALSE));
 
 		$this->assertFalse($this->matcher->matches('foo', array('foo', 'bar')));
+	}
+
+	public function testAnyParameterMatching()
+	{
+		$matcher = new Phake_Matchers_MethodMatcher('method', array(new Phake_Matchers_AnyParameters()));
+
+		$this->assertTrue($matcher->matches('method', array(1, 2, 3)));
+		$this->assertTrue($matcher->matches('method', array(2, 3, 4)));
+		$this->assertTrue($matcher->matches('method', array(3, 4, 5)));
 	}
 }
 

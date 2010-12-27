@@ -754,6 +754,35 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 		Phake::when($mock)->foo()->thenThrow(new Exception());
 		$mock->foo();
 	}
+
+	/**
+	 * Tests that Phake::anyParameters() returns an instance of Phake_Matchers_AnyParameters
+	 */
+	public function testAnyParameters()
+	{
+		$matcher = Phake::anyParameters();
+
+		$this->assertInstanceOf("Phake_Matchers_AnyParameters", $matcher);
+	}
+
+	/**
+	 * Tests that Phake::anyParameters() really matches any invocation
+	 */
+
+	public function testAnyParametersMatchesEverything()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+
+		$mock->fooWithLotsOfParameters(1, 2, 3);
+		$mock->fooWithLotsOfParameters(1, 3, 2);
+		$mock->fooWithLotsOfParameters(2, 1, 3);
+		$mock->fooWithLotsOfParameters(2, 3, 1);
+		$mock->fooWithLotsOfParameters(3, 1, 2);
+		$mock->fooWithLotsOfParameters(3, 2, 1);
+
+		Phake::verify($mock, Phake::times(6))->fooWithLotsOfParameters(Phake::anyParameters());
+	}
+
 }
 
 ?>

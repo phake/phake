@@ -46,6 +46,7 @@ require_once('Phake/CallRecorder/Verifier.php');
 require_once('Phake/CallRecorder/Call.php');
 require_once('Phake/CallRecorder/Recorder.php');
 require_once('Phake/Matchers/EqualsMatcher.php');
+require_once('Phake/Matchers/AnyParameters.php');
 
 /**
  * Description of VerifierTest
@@ -151,6 +152,21 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
 		$calls = $this->verifier->verifyCall('foo', array());
 
 		$this->assertSame(array($return, $return), $this->verifier->verifyCall('foo', array()));
+	}
+
+
+	/**
+	 * Tests that a verifier can find a call using AnyParameters matcher
+	 */
+	public function testVerifierFindsCallWithAnyParameters()
+	{
+		$return = new Phake_CallRecorder_CallInfo($this->callArray[1], new Phake_CallRecorder_Position(0));
+		$this->recorder->expects($this->once())
+						->method('getCallInfo')
+						->with($this->callArray[1])
+						->will($this->returnValue($return));
+
+		$this->assertSame(array($return), $this->verifier->verifyCall('bar', array(new Phake_Matchers_AnyParameters())), 'bar call was not found');
 	}
 }
 ?>

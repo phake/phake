@@ -52,6 +52,7 @@ require_once 'Phake/Proxies/AnswerBinderProxy.php';
 require_once 'Phake/Matchers/EqualsMatcher.php';
 require_once 'Phake/Matchers/ArgumentCaptor.php';
 require_once 'Phake/Matchers/Factory.php';
+require_once 'Phake/Matchers/AnyParameters.php';
 require_once 'Phake/Stubber/SelfBindingAnswerBinder.php';
 require_once 'Phake/Stubber/Answers/StaticAnswer.php';
 require_once 'Phake/CallRecorder/VerifierMode/Times.php';
@@ -304,6 +305,16 @@ class Phake
 	public static function atMost($count)
 	{
 		return new Phake_CallRecorder_VerifierMode_AtMost((int) $count);
+	}
+
+	/**
+	 * Returns an any parameters matcher to allow matching all invocations of a particular method.
+	 *
+	 * @return Phake_Matchers_AnyParameters
+	 */
+	public static function anyParameters()
+	{
+		return new Phake_Matchers_AnyParameters();
 	}
 }
 ?>

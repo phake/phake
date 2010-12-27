@@ -81,7 +81,6 @@ class Phake_Matchers_MethodMatcher
 	public function matches($method, array $arguments)
 	{
 		if ($this->expectedMethod == $method 
-						&& count($arguments) == count($this->argumentMatchers)
 						&& $this->doArgumentsMatch($arguments))
 		{
 			return TRUE;
@@ -100,6 +99,16 @@ class Phake_Matchers_MethodMatcher
 	 */
 	private function doArgumentsMatch(array $arguments)
 	{
+		if ($this->argumentMatchers[0] instanceof Phake_Matchers_AnyParameters)
+		{
+			return TRUE;
+		}
+		
+		if (count($arguments) != count($this->argumentMatchers))
+		{
+			return FALSE;
+		}
+
 		reset($this->argumentMatchers);
 
 		foreach ($arguments as $arg)
