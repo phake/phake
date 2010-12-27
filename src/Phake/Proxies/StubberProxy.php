@@ -89,4 +89,5 @@ class Phake_Proxies_StubberProxy
 		return new Phake_Proxies_AnswerBinderProxy($binder);
 	}
 }
+
 ?>

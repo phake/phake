@@ -54,4 +54,5 @@ interface Phake_CallRecorder_ICallRecorderContainer
 	 */
 	public function __PHAKE_getCallRecorder();
 }
+
 ?>

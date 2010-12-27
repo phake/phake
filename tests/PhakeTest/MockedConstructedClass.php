@@ -42,7 +42,8 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-class PhakeTest_MockedConstructedClass {
+class PhakeTest_MockedConstructedClass
+{
 	private $prop1;
 	private $prop2;
 	private $prop3;

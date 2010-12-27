@@ -87,4 +87,5 @@ class Phake_CallRecorder_CallInfoTest extends PHPUnit_Framework_TestCase
 		$this->assertSame($this->position, $this->callInfo->getPosition());
 	}
 }
+
 ?>

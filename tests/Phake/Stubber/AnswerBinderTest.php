@@ -83,10 +83,11 @@ class Phake_Stubber_AnswerBinderTest extends PHPUnit_Framework_TestCase
 	{
 		$answer = $this->getMock('Phake_Stubber_IAnswer');
 		$this->mock->expects($this->once())
-			->method('__PHAKE_addAnswer')
-			->with($this->equalTo($answer), $this->equalTo($this->matcher));
-		
+				->method('__PHAKE_addAnswer')
+				->with($this->equalTo($answer), $this->equalTo($this->matcher));
+
 		$this->assertEquals($this->binder, $this->binder->bindAnswer($answer));
 	}
 }
+
 ?>

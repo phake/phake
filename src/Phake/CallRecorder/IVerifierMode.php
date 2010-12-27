@@ -44,14 +44,14 @@
 
 /**
  * Allows verifying that call invocations occured some number of times.
- * 
+ *
  * @author Brian Feaver <brian.feaver@gmail.com>
  */
 interface Phake_CallRecorder_IVerifierMode
 {
 	/**
 	 * Verifies that the number of <code>$matchedCalls</code> matches the number of invocations expected.
-	 * 
+	 *
 	 * @param array $matchedCalls
 	 */
 	public function verify(array $matchedCalls);

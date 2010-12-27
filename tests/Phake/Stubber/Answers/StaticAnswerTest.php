@@ -69,4 +69,5 @@ class Phake_Stubber_Answers_StaticAnswerTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(42, $this->answer->getAnswer());
 	}
 }
+
 ?>

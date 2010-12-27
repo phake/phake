@@ -73,7 +73,7 @@ class Phake_ClassGenerator_MockClass
 		}
 
 		$mockedClass = new ReflectionClass($mockedClassName);
-		
+
 		$classDef = "
 class {$newClassName} {$extends}
 	implements Phake_IMock {$implements}
@@ -150,7 +150,7 @@ class {$newClassName} {$extends}
 		foreach ($mockedClass->getMethods($filter) as $method)
 		{
 			if (!$method->isConstructor() && !$method->isDestructor() && !$method->isFinal())
-			{ 
+			{
 				$methodDefs .= $this->implementMethod($method) . "\n";
 			}
 		}
@@ -271,4 +271,5 @@ class {$newClassName} {$extends}
 		return $type . ($parameter->isPassedByReference() ? '&' : '') . '$' . $parameter->getName() . $default;
 	}
 }
+
 ?>

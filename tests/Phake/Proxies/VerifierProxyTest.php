@@ -82,9 +82,9 @@ class Phake_Proxies_VerifierProxyTest extends PHPUnit_Framework_TestCase
 	public function testVerifierCallsAreForwardedMethod()
 	{
 		$this->verifier->expects($this->once())
-			->method('verifyCall')
-			->with($this->equalTo('foo'))
-			->will($this->returnValue(array()));
+				->method('verifyCall')
+				->with($this->equalTo('foo'))
+				->will($this->returnValue(array()));
 
 		$this->proxy->foo();
 	}
@@ -97,8 +97,8 @@ class Phake_Proxies_VerifierProxyTest extends PHPUnit_Framework_TestCase
 	public function xtestVerifierCallsThrowExceptionWhenNotFound()
 	{
 		$this->verifier->expects($this->any())
-			->method('verifyCall')
-			->will($this->returnValue(array()));
+				->method('verifyCall')
+				->will($this->returnValue(array()));
 
 		$this->proxy->foo();
 	}
@@ -114,8 +114,8 @@ class Phake_Proxies_VerifierProxyTest extends PHPUnit_Framework_TestCase
 		);
 
 		$this->verifier->expects($this->any())
-			->method('verifyCall')
-			->will($this->returnValue($return));
+				->method('verifyCall')
+				->will($this->returnValue($return));
 
 		$this->assertSame($return, $this->proxy->foo());
 	}
@@ -128,9 +128,9 @@ class Phake_Proxies_VerifierProxyTest extends PHPUnit_Framework_TestCase
 		$argumentMatcher = $this->getMock('Phake_Matchers_IArgumentMatcher');
 
 		$this->verifier->expects($this->once())
-			->method('verifyCall')
-			->with($this->anything(), $this->equalTo(array($argumentMatcher)))
-			->will($this->returnValue(array()));
+				->method('verifyCall')
+				->with($this->anything(), $this->equalTo(array($argumentMatcher)))
+				->will($this->returnValue(array()));
 
 		$this->proxy->foo($argumentMatcher);
 	}
@@ -144,9 +144,9 @@ class Phake_Proxies_VerifierProxyTest extends PHPUnit_Framework_TestCase
 		$argumentMatcher = new Phake_Matchers_EqualsMatcher('test');
 
 		$this->verifier->expects($this->once())
-			->method('verifyCall')
-			->with($this->anything(), $this->equalTo(array($argumentMatcher)))
-			->will($this->returnValue(array()));
+				->method('verifyCall')
+				->with($this->anything(), $this->equalTo(array($argumentMatcher)))
+				->will($this->returnValue(array()));
 
 		$this->proxy->foo('test');
 	}
@@ -161,9 +161,9 @@ class Phake_Proxies_VerifierProxyTest extends PHPUnit_Framework_TestCase
 		$argumentMatcher = new Phake_Matchers_PHPUnitConstraintAdapter($constraint);
 
 		$this->verifier->expects($this->once())
-			->method('verifyCall')
-			->with($this->anything(), $this->equalTo(array($argumentMatcher)))
-			->will($this->returnValue(array()));
+				->method('verifyCall')
+				->with($this->anything(), $this->equalTo(array($argumentMatcher)))
+				->will($this->returnValue(array()));
 
 		$this->proxy->foo($constraint);
 	}
@@ -182,11 +182,12 @@ class Phake_Proxies_VerifierProxyTest extends PHPUnit_Framework_TestCase
 		$argumentMatcher = new Phake_Matchers_HamcrestMatcherAdapter($matcher);
 
 		$this->verifier->expects($this->once())
-			->method('verifyCall')
-			->with($this->anything(), $this->equalTo(array($argumentMatcher)))
-			->will($this->returnValue(array()));
+				->method('verifyCall')
+				->with($this->anything(), $this->equalTo(array($argumentMatcher)))
+				->will($this->returnValue(array()));
 
 		$this->proxy->foo($matcher);
 	}
 }
+
 ?>

@@ -53,7 +53,7 @@ class Phake_Stubber_Answers_ExceptionAnswerTest extends PHPUnit_Framework_TestCa
 	 * @var Phake_Stubber_ExcpetionAnswer
 	 */
 	private $answer;
-	
+
 	/**
 	 * @var RuntimeException
 	 */
@@ -75,7 +75,7 @@ class Phake_Stubber_Answers_ExceptionAnswerTest extends PHPUnit_Framework_TestCa
 	{
 		$this->answer->getAnswer();
 	}
-	
+
 	/**
 	 * Tests that we throw the same exception istantiated in the answer.
 	 */

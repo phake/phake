@@ -109,4 +109,5 @@ class Phake_CallRecorder_RecorderTest extends PHPUnit_Framework_TestCase
 		$this->assertNull($callRecorder->getCallInfo($call));
 	}
 }
+
 ?>

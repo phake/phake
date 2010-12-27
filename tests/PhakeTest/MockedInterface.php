@@ -62,4 +62,5 @@ interface PhakeTest_MockedInterface
 
 	public function referenceDefault(&$hinted = 'blah');
 }
+
 ?>

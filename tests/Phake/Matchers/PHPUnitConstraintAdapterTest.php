@@ -75,9 +75,9 @@ class Phake_Matchers_PHPUnitConstraintAdapterTest extends PHPUnit_Framework_Test
 	public function testMatchesCallsForwarded()
 	{
 		$this->constraint->expects($this->once())
-						->method('evaluate')
-						->with($this->equalTo('foo'))
-						->will($this->returnValue(TRUE));
+				->method('evaluate')
+				->with($this->equalTo('foo'))
+				->will($this->returnValue(TRUE));
 
 		$this->assertTrue($this->adapter->matches('foo'));
 	}

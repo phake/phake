@@ -49,7 +49,7 @@
  */
 class Phake_CallRecorder_Verifier
 {
-	
+
 	/**
 	 * @var Phake_CallRecorder_Recorder
 	 */
@@ -72,7 +72,7 @@ class Phake_CallRecorder_Verifier
 
 	/**
 	 * Returns whether or not a call has been made in the associated call recorder.
-	 * 
+	 *
 	 * @todo Maybe rename this to findMatchedCalls?
 	 * @param string $method
 	 * @param array $argumentMatcher
@@ -86,8 +86,8 @@ class Phake_CallRecorder_Verifier
 		foreach ($calls as $call)
 		{
 			/* @var $call Phake_CallRecorder_Call */
-			if ($call->getMethod() == $method 
-							&& $call->getObject() === $this->obj)
+			if ($call->getMethod() == $method
+					&& $call->getObject() === $this->obj)
 			{
 				if ($this->validateArguments($call->getArguments(), $argumentMatchers))
 				{
@@ -118,25 +118,26 @@ class Phake_CallRecorder_Verifier
 			return FALSE;
 		}
 
-			reset($argumentMatchers);
-			foreach ($arguments as  $i => $argument)
+		reset($argumentMatchers);
+		foreach ($arguments as $i => $argument)
+		{
+			$matcher = current($argumentMatchers);
+			if (!$matcher instanceof Phake_Matchers_IArgumentMatcher)
 			{
-				$matcher = current($argumentMatchers);
-				if (!$matcher instanceof Phake_Matchers_IArgumentMatcher)
-				{
-					throw new InvalidArgumentException("Argument matcher [{$i}] is not a valid matcher");
-				}
-
-				/* @var $matcher Phake_Matchers_IArgumentMatcher */
-				if (!$matcher->matches($argument))
-				{
-					return FALSE;
-				}
-
-				next($argumentMatchers);
+				throw new InvalidArgumentException("Argument matcher [{$i}] is not a valid matcher");
 			}
 
-			return TRUE;
+			/* @var $matcher Phake_Matchers_IArgumentMatcher */
+			if (!$matcher->matches($argument))
+			{
+				return FALSE;
+			}
+
+			next($argumentMatchers);
+		}
+
+		return TRUE;
 	}
 }
+
 ?>

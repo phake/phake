@@ -45,7 +45,7 @@
 require_once 'Phake/Matchers/IArgumentMatcher.php';
 
 /**
- * An adapter class allowing PHPUnit constraints to be treated as though they were Phake argument 
+ * An adapter class allowing PHPUnit constraints to be treated as though they were Phake argument
  * matchers.
  */
 class Phake_Matchers_PHPUnitConstraintAdapter implements Phake_Matchers_IArgumentMatcher

@@ -65,7 +65,7 @@ class Phake_Proxies_VerifierProxy
 	 * @var Phake_Matchers_Factory
 	 */
 	private $matcherFactory;
-	
+
 	/**
 	 * @var Phake_CallRecorder_IVerifierMode
 	 */
@@ -90,7 +90,7 @@ class Phake_Proxies_VerifierProxy
 	public function __call($method, array $arguments)
 	{
 		$value = $this->verifier->verifyCall($method, $this->matcherFactory->createMatcherArray($arguments));
-		
+
 		try
 		{
 			$this->mode->verify($value);
@@ -99,8 +99,9 @@ class Phake_Proxies_VerifierProxy
 		{
 			throw new Exception("Expected {$method} to be called " . $e->getMessage());
 		}
-		
+
 		return $value;
 	}
 }
+
 ?>

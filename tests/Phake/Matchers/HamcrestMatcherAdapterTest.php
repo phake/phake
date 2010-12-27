@@ -81,11 +81,12 @@ class Phake_Matchers_HamcrestMatcherAdapterTest extends PHPUnit_Framework_TestCa
 	public function testMatchesCallsForwarded()
 	{
 		$this->matcher->expects($this->once())
-						->method('matches')
-						->with($this->equalTo('foo'))
-						->will($this->returnValue(TRUE));
+				->method('matches')
+				->with($this->equalTo('foo'))
+				->will($this->returnValue(TRUE));
 
 		$this->assertTrue($this->adapter->matches('foo'));
 	}
 }
+
 ?>

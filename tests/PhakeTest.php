@@ -99,7 +99,7 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 		$mock = Phake::mock('PhakeTest_MockedClass');
 
 		Phake::when($mock)->foo()
-			->thenReturn(42);
+				->thenReturn(42);
 
 		$this->assertEquals(42, $mock->foo());
 	}
@@ -427,9 +427,9 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 		$mock->callInnerFunc();
 
 		Phake::inOrder(
-						Phake::verify($mock)->foo(),
-						Phake::verify($mock)->fooWithReturnValue(),
-						Phake::verify($mock)->callInnerFunc()
+			Phake::verify($mock)->foo(),
+			Phake::verify($mock)->fooWithReturnValue(),
+			Phake::verify($mock)->callInnerFunc()
 		);
 	}
 
@@ -447,9 +447,9 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 		$this->setExpectedException('Exception');
 
 		Phake::inOrder(
-						Phake::verify($mock)->foo(),
-						Phake::verify($mock)->fooWithReturnValue(),
-						Phake::verify($mock)->callInnerFunc()
+			Phake::verify($mock)->foo(),
+			Phake::verify($mock)->fooWithReturnValue(),
+			Phake::verify($mock)->callInnerFunc()
 		);
 	}
 
@@ -469,10 +469,10 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 		$mock2->callInnerFunc();
 
 		Phake::inOrder(
-						Phake::verify($mock1)->foo(),
-						Phake::verify($mock2)->foo(),
-						Phake::verify($mock2)->fooWithReturnValue(),
-						Phake::verify($mock1)->callInnerFunc()
+			Phake::verify($mock1)->foo(),
+			Phake::verify($mock2)->foo(),
+			Phake::verify($mock2)->fooWithReturnValue(),
+			Phake::verify($mock1)->callInnerFunc()
 		);
 	}
 
@@ -494,8 +494,8 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 		$this->setExpectedException('Exception');
 
 		Phake::inOrder(
-						Phake::verify($mock2)->fooWithReturnValue(),
-						Phake::verify($mock1)->callInnerFunc()
+			Phake::verify($mock2)->fooWithReturnValue(),
+			Phake::verify($mock1)->callInnerFunc()
 		);
 	}
 
@@ -626,7 +626,7 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 		Phake::when($mock)->fooWithReturnValue()->captureReturnTo($return);
 
 		$mock->fooWithReturnValue();
-		
+
 		$this->assertEquals('blah', $return);
 	}
 
@@ -636,13 +636,13 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 	public function testVerifyTimesExact()
 	{
 		$mock = Phake::mock('PhakeTest_MockedClass');
-		
+
 		$mock->foo();
 		$mock->foo();
-		
+
 		Phake::verify($mock, Phake::times(2))->foo();
 	}
-	
+
 	/**
 	 * Tests times doesn't match
 	 * @expectedException Exception
@@ -650,38 +650,38 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 	public function testVerifyTimesMismatch()
 	{
 		$mock = Phake::mock('PhakeTest_MockedClass');
-		
+
 		$mock->foo();
 		$mock->foo();
-		
+
 		Phake::verify($mock)->foo();
 	}
-	
+
 	/**
 	 * Tests at least matches with exact calls
 	 */
 	public function testVerifyAtLeastExact()
 	{
 		$mock = Phake::mock('PhakeTest_MockedClass');
-		
+
 		$mock->foo();
-		
+
 		Phake::verify($mock, Phake::atLeast(1))->foo();
 	}
-	
+
 	/**
 	 * Tests at least matches with greater calls
 	 */
 	public function testVerifyAtLeastGreater()
 	{
 		$mock = Phake::mock('PhakeTest_MockedClass');
-		
+
 		$mock->foo();
 		$mock->foo();
-		
+
 		Phake::verify($mock, Phake::atLeast(1))->foo();
 	}
-	
+
 	/**
 	 * Tests that at least doesn't match
 	 * @expectedException Exception
@@ -689,10 +689,10 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 	public function testVerifyAtLeastMismatch()
 	{
 		$mock = Phake::mock('PhakeTest_MockedClass');
-		
+
 		Phake::verify($mock, Phake::atLeast(1))->foo();
 	}
-	
+
 	/**
 	 * Tests that never matches
 	 */
@@ -701,7 +701,7 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 		$mock = Phake::mock('PhakeTest_MockedClass');
 		Phake::verify($mock, Phake::never())->foo();
 	}
-	
+
 	/**
 	 * Tests that never catches an invocation
 	 * @expectedException Exception
@@ -712,7 +712,7 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 		$mock->foo();
 		Phake::verify($mock, Phake::never())->foo();
 	}
-	
+
 	/**
 	 * Tests that atMost passes with exact
 	 */
@@ -722,7 +722,7 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 		$mock->foo();
 		Phake::verify($mock, Phake::atMost(1))->foo();
 	}
-	
+
 	/**
 	 * Tests that atMost passes with under expected calls
 	 */
@@ -731,7 +731,7 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 		$mock = Phake::mock('PhakeTest_MockedClass');
 		Phake::verify($mock, Phake::atMost(1))->foo();
 	}
-	
+
 	/**
 	 * Tests that atMost fails on over calls
 	 * @expectedException Exception
@@ -743,7 +743,7 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 		$mock->foo();
 		Phake::verify($mock, Phake::atMost(1))->foo();
 	}
-	
+
 	/**
 	 * Tests that the given exception is thrown on thenThrow.
 	 * @expectedException Exception

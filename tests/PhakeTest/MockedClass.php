@@ -47,29 +47,30 @@
  *
  * @author Mike Lively <m@digitalsandwich.com>
  */
-class PhakeTest_MockedClass {
-    public function foo()
-		{
-		}
+class PhakeTest_MockedClass
+{
+	public function foo()
+	{
+	}
 
-		public function fooWithArgument($arg1)
-		{
-		}
+	public function fooWithArgument($arg1)
+	{
+	}
 
-		public function fooWithReturnValue()
-		{
-			return 'blah';
-		}
+	public function fooWithReturnValue()
+	{
+		return 'blah';
+	}
 
-		public function callInnerFunc()
-		{
-			return $this->innerFunc();
-		}
+	public function callInnerFunc()
+	{
+		return $this->innerFunc();
+	}
 
-		protected function innerFunc()
-		{
-			return 'test';
-		}
+	protected function innerFunc()
+	{
+		return 'test';
+	}
 
 	public function chainedCall()
 	{
@@ -78,7 +79,8 @@ class PhakeTest_MockedClass {
 
 	public function fooWithLotsOfParameters($parm1, $parm2, $parm3)
 	{
-		
+
 	}
 }
+
 ?>

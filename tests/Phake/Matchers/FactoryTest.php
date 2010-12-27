@@ -56,7 +56,7 @@ class Phake_Matchers_FactoryTest extends PHPUnit_Framework_TestCase
 	 * @var Phake_Matchers_Factory
 	 */
 	private $factory;
-	
+
 	/**
 	 * Sets up the test fixture
 	 */
@@ -64,31 +64,31 @@ class Phake_Matchers_FactoryTest extends PHPUnit_Framework_TestCase
 	{
 		$this->factory = new Phake_Matchers_Factory();
 	}
-	
+
 	/**
 	 * Tests creating a default matcher
 	 */
 	public function testDefaultMatcher()
 	{
 		$matcher = $this->factory->createMatcher('foo');
-		
+
 		$this->assertInstanceOf('Phake_Matchers_EqualsMatcher', $matcher);
-		
+
 		$this->assertTrue($matcher->matches('foo'));
 	}
-	
+
 	/**
 	 * Tests creating a pass through matcher
 	 */
 	public function testPassThroughMatcher()
 	{
 		$matcher = $this->getMock('Phake_Matchers_IArgumentMatcher');
-		
+
 		$retMatcher = $this->factory->createMatcher($matcher);
-		
+
 		$this->assertSame($matcher, $retMatcher);
 	}
-	
+
 	/**
 	 * Tests creating a phpunit adapter matcher
 	 */
@@ -96,15 +96,15 @@ class Phake_Matchers_FactoryTest extends PHPUnit_Framework_TestCase
 	{
 		$matcher = $this->getMock('PHPUnit_Framework_Constraint');
 		$matcher->expects($this->once())
-						->method('evaluate')
-						->with($this->equalTo('foo'))
-						->will($this->returnValue(TRUE));
-		
+				->method('evaluate')
+				->with($this->equalTo('foo'))
+				->will($this->returnValue(TRUE));
+
 		$retMatcher = $this->factory->createMatcher($matcher);
-		
+
 		$this->assertTrue($retMatcher->matches('foo'));
 	}
-	
+
 	/**
 	 * Tests creating a hamcrest adapter matcher
 	 */
@@ -114,15 +114,15 @@ class Phake_Matchers_FactoryTest extends PHPUnit_Framework_TestCase
 		{
 			$this->markTestSkipped('Hamcrest is not available');
 		}
-		
+
 		$matcher = $this->getMock('Hamcrest_Matcher');
 		$matcher->expects($this->once())
-						->method('matches')
-						->with($this->equalTo('foo'))
-						->will($this->returnValue(TRUE));
-		
+				->method('matches')
+				->with($this->equalTo('foo'))
+				->will($this->returnValue(TRUE));
+
 		$retMatcher = $this->factory->createMatcher($matcher);
-		
+
 		$this->assertTrue($retMatcher->matches('foo'));
 	}
 

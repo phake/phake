@@ -51,7 +51,8 @@ require_once 'Phake/Stubber/Answers/ExceptionAnswer.php';
  *
  * @author Mike Lively <m@digitalsandwich.com>
  */
-class Phake_Proxies_AnswerBinderProxy {
+class Phake_Proxies_AnswerBinderProxy
+{
 	/**
 	 * @var Phake_Stubber_IAnswerBinder
 	 */
@@ -80,10 +81,10 @@ class Phake_Proxies_AnswerBinderProxy {
 	{
 		return $this->binder->bindAnswer(new Phake_Stubber_Answers_ParentDelegate());
 	}
-	
+
 	/**
 	 * Binds an exception answer to the method and object in the proxied binder.
-	 * 
+	 *
 	 * @param Exception $value
 	 * @return Phake_Stubber_IAnswerBinder
 	 */
@@ -102,4 +103,5 @@ class Phake_Proxies_AnswerBinderProxy {
 		return $this->binder->bindAnswer(new Phake_Stubber_Answers_ParentDelegate($captor));
 	}
 }
+
 ?>

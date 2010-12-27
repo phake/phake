@@ -54,4 +54,5 @@ interface Phake_Matchers_IArgumentMatcher
 	 */
 	public function matches($argument);
 }
+
 ?>

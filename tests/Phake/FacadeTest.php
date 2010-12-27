@@ -133,12 +133,12 @@ class Phake_FacadeTest extends PHPUnit_Framework_TestCase
 	{
 		$mock = $this->getMock('Phake_CallRecorder_ICallRecorderContainer');
 		$mode = $this->getMock('Phake_CallRecorder_IVerifierMode');
-		
+
 		$recorder = $this->getMock('Phake_CallRecorder_Recorder');
 
 		$mock->expects($this->once())
-			->method('__PHAKE_getCallRecorder')
-			->will($this->returnValue($recorder));
+				->method('__PHAKE_getCallRecorder')
+				->will($this->returnValue($recorder));
 
 		$this->assertInstanceOf('Phake_CallRecorder_Verifier', $this->facade->verify($mock, $mode));
 	}
@@ -152,8 +152,8 @@ class Phake_FacadeTest extends PHPUnit_Framework_TestCase
 	private function setMockGeneratorExpectations($mockedClass, Phake_ClassGenerator_MockClass $mockGenerator)
 	{
 		$mockGenerator->expects($this->once())
-			->method('generate')
-			->with($this->matchesRegularExpression('#^[A-Za-z0-9_]+$#'), $this->equalTo($mockedClass));
+				->method('generate')
+				->with($this->matchesRegularExpression('#^[A-Za-z0-9_]+$#'), $this->equalTo($mockedClass));
 	}
 
 	/**
@@ -168,4 +168,5 @@ class Phake_FacadeTest extends PHPUnit_Framework_TestCase
 				->with($this->matchesRegularExpression('#^[A-Za-z0-9_]+$#'), $this->equalTo($recorder), $this->isInstanceOf('Phake_Stubber_StubMapper'), $this->equalTo($answer));
 	}
 }
+
 ?>

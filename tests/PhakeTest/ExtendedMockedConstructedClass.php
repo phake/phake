@@ -43,6 +43,7 @@
  */
 
 
-class PhakeTest_ExtendedMockedConstructedClass extends PhakeTest_MockedConstructedClass {
+class PhakeTest_ExtendedMockedConstructedClass extends PhakeTest_MockedConstructedClass
+{
 
 }

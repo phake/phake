@@ -92,4 +92,5 @@ class Phake_CallRecorder_PositionTest extends PHPUnit_Framework_TestCase
 		return $this->getMock('Phake_CallRecorder_Call', array(), array(), '', FALSE);
 	}
 }
+
 ?>

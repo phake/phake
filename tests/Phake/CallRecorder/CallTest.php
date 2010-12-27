@@ -52,7 +52,7 @@ require_once 'Phake/CallRecorder/Call.php';
 class Phake_CallRecorder_CallTest extends PHPUnit_Framework_TestCase
 {
 	/**
-	 * @var Phake_CallRecorder_Call 
+	 * @var Phake_CallRecorder_Call
 	 */
 	private $call;
 
@@ -82,4 +82,5 @@ class Phake_CallRecorder_CallTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(array('foo', 'bar'), $this->call->getArguments());
 	}
 }
+
 ?>

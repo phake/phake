@@ -142,8 +142,8 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 
 		/* @var $callRecorder Phake_CallRecorder_Recorder */
 		$callRecorder->expects($this->once())
-			->method('recordCall')
-			->with($this->equalTo(new Phake_CallRecorder_Call($mock, 'foo', array())));
+				->method('recordCall')
+				->with($this->equalTo(new Phake_CallRecorder_Call($mock, 'foo', array())));
 
 		$mock->foo();
 	}
@@ -165,8 +165,8 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 
 		/* @var $callRecorder Phake_CallRecorder_Recorder */
 		$callRecorder->expects($this->once())
-			->method('recordCall')
-			->with($this->equalTo(new Phake_CallRecorder_Call($mock, 'fooWithArgument', array('bar'))));
+				->method('recordCall')
+				->with($this->equalTo(new Phake_CallRecorder_Call($mock, 'fooWithArgument', array('bar'))));
 
 		$mock->fooWithArgument('bar');
 	}
@@ -207,12 +207,12 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 		$answer = $this->getMock('Phake_Stubber_IAnswer');
 
 		$answer->expects($this->once())
-			->method('getAnswer');
+				->method('getAnswer');
 
 		$stubMapper->expects($this->once())
-			->method('getStubByCall')
-			->with($this->equalTo('fooWithArgument'), array('bar'))
-			->will($this->returnValue($answer));
+				->method('getStubByCall')
+				->with($this->equalTo('fooWithArgument'), array('bar'))
+				->will($this->returnValue($answer));
 
 		$mock->fooWithArgument('bar');
 	}
@@ -237,8 +237,8 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 		$matcher = $this->getMock('Phake_Matchers_MethodMatcher', array(), array(), '', FALSE);
 
 		$stubMapper->expects($this->once())
-			->method('mapStubToMatcher')
-			->with($this->equalTo($answer), $this->equalTo($matcher));
+				->method('mapStubToMatcher')
+				->with($this->equalTo($answer), $this->equalTo($matcher));
 
 		$mock->__PHAKE_addAnswer($answer, $matcher);
 	}
@@ -260,10 +260,10 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 		$mock = $this->classGen->instantiate($newClassName, $callRecorder, $stubMapper, $answer);
 
 		$callRecorder->expects($this->once())
-						->method('removeAllCalls');
+				->method('removeAllCalls');
 
 		$stubMapper->expects($this->once())
-						->method('removeAllAnswers');
+				->method('removeAllAnswers');
 
 		$mock->__PHAKE_resetMock();
 	}
@@ -285,7 +285,7 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 		$mock = $this->classGen->instantiate($newClassName, $callRecorder, $stubMapper, $answer);
 
 		$answer->expects($this->once())
-			->method('getAnswer');
+				->method('getAnswer');
 
 		$mock->fooWithArgument('bar');
 	}
@@ -310,33 +310,33 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 		$delegate = $this->getMock('Phake_Stubber_IAnswerDelegate');
 
 		$answer->expects($this->once())
-			->method('getAnswer')
-			->will($this->returnValue($delegate));
+				->method('getAnswer')
+				->will($this->returnValue($delegate));
 
 		$answer->expects($this->once())
-			->method('processAnswer')
-			->with(null);
+				->method('processAnswer')
+				->with(null);
 
 		$realAnswer = $this->getMock('PhakeTest_MockedClass');
 
 		$realAnswer->expects($this->once())
-						->method('fooWithArgument')
-						->with($this->equalTo('bar'));
+				->method('fooWithArgument')
+				->with($this->equalTo('bar'));
 
 		$delegate->expects($this->any())
-						->method('getCallBack')
-						->with($this->equalTo('fooWithArgument'), $this->equalTo(array('bar')))
-						->will($this->returnValue(array($realAnswer, 'fooWithArgument')));
+				->method('getCallBack')
+				->with($this->equalTo('fooWithArgument'), $this->equalTo(array('bar')))
+				->will($this->returnValue(array($realAnswer, 'fooWithArgument')));
 
 		$delegate->expects($this->any())
-						->method('getArguments')
-						->with($this->equalTo('fooWithArgument'), $this->equalTo(array('bar')))
-						->will($this->returnValue(array('bar')));
+				->method('getArguments')
+				->with($this->equalTo('fooWithArgument'), $this->equalTo(array('bar')))
+				->will($this->returnValue(array('bar')));
 
 		$stubMapper->expects($this->once())
-			->method('getStubByCall')
-			->with($this->equalTo('fooWithArgument'), array('bar'))
-			->will($this->returnValue($answer));
+				->method('getStubByCall')
+				->with($this->equalTo('fooWithArgument'), array('bar'))
+				->will($this->returnValue($answer));
 
 		$mock->fooWithArgument('bar');
 	}
@@ -431,4 +431,5 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 		$this->classGen->generate($newClassName, $mockedClass);
 	}
 }
+
 ?>

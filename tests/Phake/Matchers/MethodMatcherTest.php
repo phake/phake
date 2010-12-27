@@ -82,10 +82,10 @@ class PHake_Matchers_MethodMatcherTest extends PHPUnit_Framework_TestCase
 		$arguments = array($this->getMock('Phake_Matchers_IArgumentMatcher'));
 		$matcher = new Phake_Matchers_MethodMatcher('foo', $arguments);
 		$arguments[0]->expects($this->any())
-						->method('matches')
-						->with($this->equalTo('foo'))
-						->will($this->returnValue(TRUE));
-		
+				->method('matches')
+				->with($this->equalTo('foo'))
+				->will($this->returnValue(TRUE));
+
 		$matcher->matches('foo', array('foo'));
 	}
 
@@ -95,12 +95,12 @@ class PHake_Matchers_MethodMatcherTest extends PHPUnit_Framework_TestCase
 	public function testMatchesSuccessfullyMatches()
 	{
 		$this->arguments[0]->expects($this->any())
-						->method('matches')
-						->will($this->returnValue(TRUE));
+				->method('matches')
+				->will($this->returnValue(TRUE));
 
 		$this->arguments[1]->expects($this->any())
-						->method('matches')
-						->will($this->returnValue(TRUE));
+				->method('matches')
+				->will($this->returnValue(TRUE));
 
 		$this->assertTrue($this->matcher->matches('foo', array('foo', 'bar')));
 	}
@@ -111,12 +111,12 @@ class PHake_Matchers_MethodMatcherTest extends PHPUnit_Framework_TestCase
 	public function testNoMatcherOnBadMethod()
 	{
 		$this->arguments[0]->expects($this->any())
-						->method('matches')
-						->will($this->returnValue(TRUE));
+				->method('matches')
+				->will($this->returnValue(TRUE));
 
 		$this->arguments[1]->expects($this->any())
-						->method('matches')
-						->will($this->returnValue(TRUE));
+				->method('matches')
+				->will($this->returnValue(TRUE));
 
 		$this->assertFalse($this->matcher->matches('test', array('foo', 'bar')));
 	}
@@ -127,12 +127,12 @@ class PHake_Matchers_MethodMatcherTest extends PHPUnit_Framework_TestCase
 	public function testNoMatcherOnBadArg1()
 	{
 		$this->arguments[0]->expects($this->any())
-						->method('matches')
-						->will($this->returnValue(FALSE));
+				->method('matches')
+				->will($this->returnValue(FALSE));
 
 		$this->arguments[1]->expects($this->any())
-						->method('matches')
-						->will($this->returnValue(TRUE));
+				->method('matches')
+				->will($this->returnValue(TRUE));
 
 		$this->assertFalse($this->matcher->matches('foo', array('foo', 'bar')));
 	}
@@ -143,12 +143,12 @@ class PHake_Matchers_MethodMatcherTest extends PHPUnit_Framework_TestCase
 	public function testNoMatcherOnBadArg2()
 	{
 		$this->arguments[0]->expects($this->any())
-						->method('matches')
-						->will($this->returnValue(TRUE));
+				->method('matches')
+				->will($this->returnValue(TRUE));
 
 		$this->arguments[1]->expects($this->any())
-						->method('matches')
-						->will($this->returnValue(FALSE));
+				->method('matches')
+				->will($this->returnValue(FALSE));
 
 		$this->assertFalse($this->matcher->matches('foo', array('foo', 'bar')));
 	}

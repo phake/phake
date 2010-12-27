@@ -99,4 +99,5 @@ class Phake_CallRecorder_OrderVerifierTest extends PHPUnit_Framework_TestCase
 		$this->assertTrue($this->verifier->verifyCallsInOrder(array($position1, $position2, $position3)));
 	}
 }
+
 ?>

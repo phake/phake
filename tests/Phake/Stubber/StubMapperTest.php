@@ -74,9 +74,9 @@ class Phake_Stubber_StubMapperTest extends PHPUnit_Framework_TestCase
 		$stub = $this->getMock('Phake_Stubber_IAnswer');
 
 		$matcher->expects($this->any())
-				 ->method('matches')
-				 ->with($this->equalTo('foo'), $this->equalTo(array('bar', 'test')))
-				 ->will($this->returnValue(TRUE));
+				->method('matches')
+				->with($this->equalTo('foo'), $this->equalTo(array('bar', 'test')))
+				->will($this->returnValue(TRUE));
 
 		$this->mapper->mapStubToMatcher($stub, $matcher);
 
@@ -92,8 +92,8 @@ class Phake_Stubber_StubMapperTest extends PHPUnit_Framework_TestCase
 		$stub = $this->getMock('Phake_Stubber_IAnswer');
 
 		$matcher->expects($this->any())
-					 ->method('matches')
-					 ->will($this->returnValue(FALSE));
+				->method('matches')
+				->will($this->returnValue(FALSE));
 
 		$this->mapper->mapStubToMatcher($stub, $matcher);
 
@@ -109,7 +109,7 @@ class Phake_Stubber_StubMapperTest extends PHPUnit_Framework_TestCase
 		$stub = $this->getMock('Phake_Stubber_IAnswer');
 
 		$matcher->expects($this->never())
-						->method('matches');
+				->method('matches');
 
 		$this->mapper->mapStubToMatcher($stub, $matcher);
 
@@ -118,4 +118,5 @@ class Phake_Stubber_StubMapperTest extends PHPUnit_Framework_TestCase
 		$this->assertNull($this->mapper->getStubByCall('foo', array('bar', 'test')));
 	}
 }
+
 ?>

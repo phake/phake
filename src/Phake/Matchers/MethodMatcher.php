@@ -65,7 +65,7 @@ class Phake_Matchers_MethodMatcher
 		{
 			throw new InvalidArgumentException('All arguments passed must implement Phake_Matchers_IArgumentMatcher');
 		}
-		
+
 		$this->expectedMethod = $expectedMethod;
 		$this->argumentMatchers = $argumentMatchers;
 	}
@@ -80,8 +80,8 @@ class Phake_Matchers_MethodMatcher
 	 */
 	public function matches($method, array $arguments)
 	{
-		if ($this->expectedMethod == $method 
-						&& $this->doArgumentsMatch($arguments))
+		if ($this->expectedMethod == $method
+				&& $this->doArgumentsMatch($arguments))
 		{
 			return TRUE;
 		}
@@ -103,7 +103,7 @@ class Phake_Matchers_MethodMatcher
 		{
 			return TRUE;
 		}
-		
+
 		if (count($arguments) != count($this->argumentMatchers))
 		{
 			return FALSE;
@@ -145,4 +145,5 @@ class Phake_Matchers_MethodMatcher
 		return TRUE;
 	}
 }
+
 ?>

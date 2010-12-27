@@ -99,4 +99,5 @@ class Phake_CallRecorder_Call
 		return $this->arguments;
 	}
 }
+
 ?>

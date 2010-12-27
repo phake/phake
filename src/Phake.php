@@ -124,7 +124,7 @@ class Phake
 		{
 			$mode = self::times(1);
 		}
-		
+
 		$verifier = self::getPhake()->verify($mock);
 
 		return new Phake_Proxies_VerifierProxy($verifier, new Phake_Matchers_Factory(), $mode);
@@ -160,7 +160,7 @@ class Phake
 	public static function verifyNoInteraction(Phake_IMock $mock)
 	{
 		$callRecorder = $mock->__PHAKE_getCallRecorder();
-		
+
 		if (count($callRecorder->getAllCalls()))
 		{
 			throw new Exception('Calls should not have been made against this mock');
@@ -265,10 +265,10 @@ class Phake
 	{
 		return new Phake_Matchers_ArgumentCaptor($value);
 	}
-	
+
 	/**
 	 * Allows verifying an exact number of invocations.
-	 * 
+	 *
 	 * @param int $count
 	 * @return Phake_CallRecorder_IVerifierMode
 	 */
@@ -276,7 +276,7 @@ class Phake
 	{
 		return new Phake_CallRecorder_VerifierMode_Times((int) $count);
 	}
-	
+
 	/**
 	 * Allows verifying that there were no invocations. Alias of <code>times(0)</code>.
 	 * @return Phake_CallRecorder_IVerifierMode
@@ -285,10 +285,10 @@ class Phake
 	{
 		return new Phake_CallRecorder_VerifierMode_Times(0);
 	}
-	
+
 	/**
 	 * Allows verifying at least <code>$count</code> invocations.
-	 * 
+	 *
 	 * @param int $count
 	 * @return Phake_CallRecorder_IVerifierMode
 	 */
@@ -296,7 +296,7 @@ class Phake
 	{
 		return new Phake_CallRecorder_VerifierMode_AtLeast((int) $count);
 	}
-	
+
 	/**
 	 * Allows verifying at most <code>$count</code> invocations.
 	 * @param int $count
@@ -317,4 +317,5 @@ class Phake
 		return new Phake_Matchers_AnyParameters();
 	}
 }
+
 ?>

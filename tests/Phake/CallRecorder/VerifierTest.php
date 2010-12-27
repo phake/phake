@@ -88,8 +88,8 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
 		);
 
 		$this->recorder->expects($this->any())
-			->method('getAllCalls')
-			->will($this->returnValue($this->callArray));
+				->method('getAllCalls')
+				->will($this->returnValue($this->callArray));
 
 		$this->verifier = new Phake_CallRecorder_Verifier($this->recorder, $obj);
 	}
@@ -101,9 +101,9 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
 	{
 		$return = new Phake_CallRecorder_CallInfo($this->callArray[1], new Phake_CallRecorder_Position(0));
 		$this->recorder->expects($this->once())
-						->method('getCallInfo')
-						->with($this->callArray[1])
-						->will($this->returnValue($return));
+				->method('getCallInfo')
+				->with($this->callArray[1])
+				->will($this->returnValue($return));
 
 		$this->assertSame(array($return), $this->verifier->verifyCall('bar', array()), 'bar call was not found');
 	}
@@ -146,8 +146,8 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
 	{
 		$return = new Phake_CallRecorder_CallInfo($this->callArray[1], new Phake_CallRecorder_Position(0));
 		$this->recorder->expects($this->any())
-						->method('getCallInfo')
-						->will($this->returnValue($return));
+				->method('getCallInfo')
+				->will($this->returnValue($return));
 
 		$calls = $this->verifier->verifyCall('foo', array());
 
@@ -162,11 +162,12 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
 	{
 		$return = new Phake_CallRecorder_CallInfo($this->callArray[1], new Phake_CallRecorder_Position(0));
 		$this->recorder->expects($this->once())
-						->method('getCallInfo')
-						->with($this->callArray[1])
-						->will($this->returnValue($return));
+				->method('getCallInfo')
+				->with($this->callArray[1])
+				->will($this->returnValue($return));
 
 		$this->assertSame(array($return), $this->verifier->verifyCall('bar', array(new Phake_Matchers_AnyParameters())), 'bar call was not found');
 	}
 }
+
 ?>

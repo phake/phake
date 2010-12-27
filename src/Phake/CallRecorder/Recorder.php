@@ -70,7 +70,7 @@ class Phake_CallRecorder_Recorder
 	 * @var int
 	 */
 	private static $lastPosition = 0;
-	
+
 	/**
 	 * Records that a given
 	 * @param Phake_CallRecorder_Call $call
@@ -118,4 +118,5 @@ class Phake_CallRecorder_Recorder
 		}
 	}
 }
+
 ?>
