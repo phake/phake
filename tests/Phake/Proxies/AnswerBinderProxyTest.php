@@ -100,6 +100,19 @@ class Phake_Proxies_AnswerBinderProxyTest extends PHPUnit_Framework_TestCase
 
 		$this->assertSame($this->binder, $this->proxy->thenCallParent());
 	}
+
+	/**
+	 * Tests that captureReturnTo does it's thing
+	 */
+	public function testCaptureReturnTo()
+	{
+		$this->binder->expects($this->once())
+				->method('bindAnswer')
+				->with($this->isInstanceOf('Phake_Stubber_Answers_ParentDelegate'))
+				->will($this->returnValue($this->binder));
+
+		$this->assertSame($this->binder, $this->proxy->captureReturnTo($var));
+	}
 	
 	/**
 	 * Tests the thenThrow functionality of the proxy.

@@ -52,6 +52,13 @@ require_once 'Phake/Stubber/IAnswerDelegate.php';
  */
 class Phake_Stubber_Answers_ParentDelegate implements Phake_Stubber_Answers_IDelegator, Phake_Stubber_IAnswerDelegate
 {
+	private $capturedReturn;
+
+	public function __construct(&$captor = null)
+	{
+		$this->capturedReturn =& $captor;
+	}
+	
 	/**
 	 * Returns the answer delegate (itself)
 	 * @return Phake_Stubber_Answers_ParentDelegate
@@ -79,6 +86,11 @@ class Phake_Stubber_Answers_ParentDelegate implements Phake_Stubber_Answers_IDel
 	public function getArguments($calledMethod, array $calledParameters)
 	{
 		return $calledParameters;
+	}
+
+	public function processAnswer($answer)
+	{
+		$this->capturedReturn = $answer;
 	}
 }
 ?>

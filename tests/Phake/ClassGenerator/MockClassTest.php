@@ -312,6 +312,10 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 			->method('getAnswer')
 			->will($this->returnValue($delegate));
 
+		$answer->expects($this->once())
+			->method('processAnswer')
+			->with(null);
+
 		$realAnswer = $this->getMock('PhakeTest_MockedClass');
 
 		$realAnswer->expects($this->once())

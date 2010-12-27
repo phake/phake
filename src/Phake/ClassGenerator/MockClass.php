@@ -209,7 +209,9 @@ class {$newClassName} {$extends}
 			\$callback = \$delegate->getCallBack(__FUNCTION__, \$args);
 			\$arguments = \$delegate->getArguments(__FUNCTION__, \$args);
 
-			return call_user_func_array(\$callback, \$arguments);
+			\$realAnswer = call_user_func_array(\$callback, \$arguments);
+			\$answer->processAnswer(\$realAnswer);
+			return \$realAnswer;
 		}
 		else
 		{

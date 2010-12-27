@@ -606,6 +606,29 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 		$this->assertSame($obj, $toArgument);
 	}
 
+	/**
+	 * Make sure stub return value capturing returns the parent value
+	 */
+	public function testCaptureAnswerReturnsParentValue()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+		Phake::when($mock)->fooWithReturnValue()->captureReturnTo($return);
+
+		$this->assertEquals('blah', $mock->fooWithReturnValue());
+	}
+
+	/**
+	 * Make sure stub return value capturing returns the parent value
+	 */
+	public function testCaptureAnswerCapturesParentValue()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+		Phake::when($mock)->fooWithReturnValue()->captureReturnTo($return);
+
+		$mock->fooWithReturnValue();
+		
+		$this->assertEquals('blah', $return);
+	}
 
 	/**
 	 * Tests times matches exactly

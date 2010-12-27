@@ -53,7 +53,7 @@ class Phake_Stubber_Answers_ParentDelegateTest extends PHPUnit_Framework_TestCas
 	 * @var Phake_Stubber_Answers_ParentDelegate
 	 */
 	private $delegate;
-	
+
 	/**
 	 * Sets up the test fixture
 	 */
@@ -90,6 +90,18 @@ class Phake_Stubber_Answers_ParentDelegateTest extends PHPUnit_Framework_TestCas
 		$args = $this->delegate->getArguments('foo', array('bar'));
 
 		$this->assertSame(array('bar'), $args);
+	}
+
+	/**
+	 * Tests that processAnswer will set the captured value
+	 */
+	public function testProcessAnswerSetsCapturedValue()
+	{
+		$value = null;
+		$delegate = new Phake_Stubber_Answers_ParentDelegate($value);
+		$delegate->processAnswer("test");
+
+		$this->assertEquals("test", $value);
 	}
 }
 
