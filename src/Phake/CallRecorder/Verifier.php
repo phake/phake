@@ -89,7 +89,7 @@ class Phake_CallRecorder_Verifier
 		foreach ($calls as $call)
 		{
 			/* @var $call Phake_CallRecorder_Call */
-			if ($matcher->matches($call->getMethod(), $call->getArguments()))
+			if ($call->getObject() === $this->obj && $matcher->matches($call->getMethod(), $call->getArguments()))
 			{
 				$matchedCalls[] = $this->recorder->getCallInfo($call);
 			}

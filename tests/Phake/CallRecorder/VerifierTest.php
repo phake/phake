@@ -168,6 +168,23 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
 
 		$this->assertSame(array($return), $this->verifier->verifyCall('bar', array(new Phake_Matchers_AnyParameters())), 'bar call was not found');
 	}
+
+	/**
+	 * Tests that the verifier will only return calls made on the same object
+	 */
+	public function testVerifierBeingCalledWithMixedCallRecorder()
+	{
+		$recorder = new Phake_CallRecorder_Recorder();
+		$obj1 = new stdClass;
+		$obj2 = new stdClass;
+
+		$recorder->recordCall(new Phake_CallRecorder_Call($obj1, 'foo', array()));
+		$recorder->recordCall(new Phake_CallRecorder_Call($obj2, 'foo', array()));
+
+		$verifier = new Phake_CallRecorder_Verifier($recorder, $obj1);
+
+		$this->assertEquals(1, count($verifier->verifyCall('foo', array())));
+	}
 }
 
 ?>
