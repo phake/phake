@@ -67,6 +67,9 @@ class Phake_Matchers_PHPUnitConstraintAdapterTest extends PHPUnit_Framework_Test
 	{
 		$this->constraint = $this->getMock('PHPUnit_Framework_Constraint');
 		$this->adapter = new Phake_Matchers_PHPUnitConstraintAdapter($this->constraint);
+		$this->constraint->expects($this->any())
+				->method('toString')
+				->will($this->returnValue('phpunit matcher'));
 	}
 
 	/**
@@ -80,6 +83,11 @@ class Phake_Matchers_PHPUnitConstraintAdapterTest extends PHPUnit_Framework_Test
 				->will($this->returnValue(TRUE));
 
 		$this->assertTrue($this->adapter->matches('foo'));
+	}
+
+	public function testToString()
+	{
+		$this->assertEquals('phpunit matcher', $this->adapter->__toString());
 	}
 }
 

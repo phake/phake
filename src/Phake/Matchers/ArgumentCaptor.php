@@ -109,6 +109,11 @@ class Phake_Matchers_ArgumentCaptor implements Phake_Matchers_IArgumentMatcher
 
 		return $this;
 	}
+
+	public function __toString()
+	{
+		return 'captured parameter';
+	}
 }
 
 ?>

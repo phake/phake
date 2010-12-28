@@ -58,4 +58,8 @@ class Phake_Matchers_AnyParametersTest extends PHPUnit_Framework_TestCase
 		$this->assertTrue($this->matcher->matches('blah'));
 	}
 
+	public function testToString()
+	{
+		$this->assertEquals('any parameters', $this->matcher->__toString());
+	}
 }

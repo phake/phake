@@ -78,4 +78,9 @@ class Phake_CallRecorder_VerifierMode_AtMost implements Phake_CallRecorder_IVeri
 			throw new Exception("at least <$this->times> times, actually called <$calledTimes>");
 		}
 	}
+
+	public function __toString()
+	{
+		return "at most {$this->times} times";
+	}
 }

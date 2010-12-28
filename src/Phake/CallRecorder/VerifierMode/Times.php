@@ -79,4 +79,9 @@ class Phake_CallRecorder_VerifierMode_Times implements Phake_CallRecorder_IVerif
 			throw new Exception("<$this->times> times, actually called <$calledTimes>");
 		}
 	}
+
+	public function __toString()
+	{
+		return "exactly {$this->times} times";
+	}
 }

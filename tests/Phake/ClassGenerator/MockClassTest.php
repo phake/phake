@@ -402,6 +402,24 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Test retrieving mock name
+	 */
+	public function testMockName()
+	{
+		$newClassName = __CLASS__ . '_TestClass18';
+		$mockedClass = 'PhakeTest_MockedClass';
+
+		$this->classGen->generate($newClassName, $mockedClass);
+
+		$callRecorder = $this->getMock('Phake_CallRecorder_Recorder');
+		$stubMapper = $this->getMock('Phake_Stubber_StubMapper');
+		$answer = $this->getMock('Phake_Stubber_IAnswer');
+		$mock = $this->classGen->instantiate($newClassName, $callRecorder, $stubMapper, $answer);
+
+		$this->assertEquals('PhakeTest_MockedClass', $mock->__PHAKE_getName());
+	}
+
+	/**
 	 * Tests that passing constructor arguments to the derived class will cause the original constructor to be called.
 	 */
 	public function testCallingOriginalConstructor()

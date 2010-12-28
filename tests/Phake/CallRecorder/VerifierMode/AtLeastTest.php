@@ -85,4 +85,9 @@ class Phake_CallRecorder_VerifierMode_AtLeastTest extends PHPUnit_Framework_Test
 		$matchedCalls = array();
 		$this->verifierModeAtLeast->verify($matchedCalls);
 	}
+
+	public function testToString()
+	{
+		$this->assertEquals("at least 1 times", $this->verifierModeAtLeast->__toString());
+	}
 }

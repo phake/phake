@@ -71,7 +71,11 @@ class Phake_Matchers_HamcrestMatcherAdapterTest extends PHPUnit_Framework_TestCa
 			$this->markTestSkipped('Hamcrest is not available');
 		}
 
-		$this->matcher = $this->getMock('Hamcrest_Matcher');
+		$this->matcher = $this->getMock('Hamcrest_BaseMatcher');
+		$this->matcher->expects($this->any())
+				->method('__toString')
+				->will($this->returnValue('hamcrest matcher'));
+		
 		$this->adapter = new Phake_Matchers_HamcrestMatcherAdapter($this->matcher);
 	}
 
@@ -86,6 +90,11 @@ class Phake_Matchers_HamcrestMatcherAdapterTest extends PHPUnit_Framework_TestCa
 				->will($this->returnValue(TRUE));
 
 		$this->assertTrue($this->adapter->matches('foo'));
+	}
+
+	public function testToString()
+	{
+		$this->assertEquals('hamcrest matcher', $this->adapter->__toString());
 	}
 }
 

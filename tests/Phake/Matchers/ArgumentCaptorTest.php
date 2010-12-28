@@ -120,6 +120,11 @@ class Phake_Matchers_ArgumentCaptorTest extends PHPUnit_Framework_TestCase
 	{
 		$this->assertSame($this->captor, $this->captor->when(NULL));
 	}
+
+	public function testToString()
+	{
+		$this->assertEquals('captured parameter', $this->captor->__toString());
+	}
 }
 
 ?>

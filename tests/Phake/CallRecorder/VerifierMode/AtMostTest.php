@@ -85,4 +85,9 @@ class Phake_CallRecorder_VerifierMode_AtMostTest extends PHPUnit_Framework_TestC
 		$matchedCalls = array();
 		$this->verifier->verify($matchedCalls);
 	}
+
+	public function testToString()
+	{
+		$this->assertEquals("at most 1 times", $this->verifier->__toString());
+	}
 }

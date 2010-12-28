@@ -53,6 +53,12 @@ interface Phake_Matchers_IArgumentMatcher
 	 * @return boolean
 	 */
 	public function matches($argument);
+
+	/**
+	 * Returns a human readable description of the argument matcher
+	 * @return string
+	 */
+	public function __toString();
 }
 
 ?>

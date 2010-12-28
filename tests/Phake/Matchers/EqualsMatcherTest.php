@@ -77,6 +77,11 @@ class Phake_Matchers_EqualsMatcherTest extends PHPUnit_Framework_TestCase
 	{
 		$this->assertFalse($this->matcher->matches('test'));
 	}
+
+	public function testToString()
+	{
+		$this->assertEquals('equal to \'foo\'', $this->matcher->__toString());
+	}
 }
 
 ?>

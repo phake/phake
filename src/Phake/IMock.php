@@ -60,6 +60,12 @@ interface Phake_IMock extends Phake_CallRecorder_ICallRecorderContainer, Phake_S
 	 * reset.
 	 */
 	public function __PHAKE_freezeMock();
+
+	/**
+	 * Returns the name of the mock object for reference purposes.
+ 	 * @return string
+	 */
+	public function __PHAKE_getName();
 }
 
 ?>

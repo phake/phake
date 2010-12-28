@@ -54,6 +54,11 @@ class Phake_Matchers_AnyParameters implements Phake_Matchers_IArgumentMatcher
 	{
 		return TRUE;
 	}
+
+	public function __toString()
+	{
+		return 'any parameters';
+	}
 }
 
 ?>

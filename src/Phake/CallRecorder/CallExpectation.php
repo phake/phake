@@ -1,26 +1,26 @@
 <?php
-/* 
+/*
  * Phake - Mocking Framework
- * 
+ *
  * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
- * 
+ *
  *  *  Redistributions of source code must retain the above copyright
  *     notice, this list of conditions and the following disclaimer.
- * 
+ *
  *  *  Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in
  *     the documentation and/or other materials provided with the
  *     distribution.
- * 
+ *
  *  *  Neither the name of Mike Lively nor the names of his
  *     contributors may be used to endorse or promote products derived
  *     from this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -33,7 +33,7 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  * @category   Testing
  * @package    Phake
  * @author     Mike Lively <m@digitalsandwich.com>
@@ -43,22 +43,85 @@
  */
 
 /**
- * Allows verifying that call invocations occured some number of times.
- *
- * @author Brian Feaver <brian.feaver@gmail.com>
+ * A call or set of calls that was expected
  */
-interface Phake_CallRecorder_IVerifierMode
+class Phake_CallRecorder_CallExpectation
 {
 	/**
-	 * Verifies that the number of <code>$matchedCalls</code> matches the number of invocations expected.
-	 *
-	 * @param array $matchedCalls
+	 * @var Phake_IMock
 	 */
-	public function verify(array $matchedCalls);
+	private $object;
 
 	/**
-	 * Returns a human readable description of the verifier mode
+	 * @var string
+	 */
+	private $method;
+
+	/**
+	 * @var array
+	 */
+	private $argumentMatchers;
+
+	/**
+	 * @var Phake_CallRecorder_IVerifierMode
+	 */
+	private $verifierMode;
+
+	/**
+	 * @param Phake_IMock $object
+	 * @param string $method
+	 * @param array $argumentMatchers
+	 * @param Phake_CallRecorder_IVerifierMode $verificationMode
+	 * @return void
+	 */
+	public function __construct(Phake_IMock $object, $method, array $argumentMatchers, Phake_CallRecorder_IVerifierMode $verificationMode)
+	{
+		$this->object = $object;
+		$this->method = $method;
+		$this->argumentMatchers = $argumentMatchers;
+		$this->verifierMode = $verificationMode;
+	}
+
+	/**
+	 * @return Phake_IMock
+	 */
+	public function getObject()
+	{
+		return $this->object;
+	}
+
+	/**
 	 * @return string
 	 */
-	public function __toString();
+	public function getMethod()
+	{
+		return $this->method;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getArgumentMatchers()
+	{
+		return $this->argumentMatchers;
+	}
+
+	/**
+	 * @return Phake_CallRecorder_IVerifierMode
+	 */
+	public function getVerifierMode()
+	{
+		return $this->verifierMode;
+	}
+
+	public function __toString()
+	{
+		$arguments = array();
+		foreach ($this->argumentMatchers as $argumentMatcher)
+		{
+			$arguments[] = '<' . $argumentMatcher->__toString() . '>';
+		}
+
+		return "Expected {$this->getObject()->__PHAKE_getName()}->{$this->getMethod()}(" . implode(', ', $arguments) . ") to be called {$this->getVerifierMode()->__toString()}";
+	}
 }

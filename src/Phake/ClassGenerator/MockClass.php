@@ -116,6 +116,11 @@ class {$newClassName} {$extends}
 		\$this->__PHAKE_isFrozen = TRUE;
 	}
 
+	public function __PHAKE_getName()
+	{
+		return '{$mockedClassName}';
+	}
+
 	{$this->generateMockedMethods($mockedClass)}
 }
 ";

@@ -72,6 +72,11 @@ class Phake_Matchers_EqualsMatcher implements Phake_Matchers_IArgumentMatcher
 	{
 		return ($argument == $this->value);
 	}
+
+	public function __toString()
+	{
+		return "equal to '{$this->value}'";
+	}
 }
 
 ?>

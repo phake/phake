@@ -86,4 +86,9 @@ class Phake_CallRecorder_VerifierMode_TimesTest extends PHPUnit_Framework_TestCa
 		$matchedCalls = array();
 		$this->verifierModeTimes->verify($matchedCalls);
 	}
+
+	public function testToString()
+	{
+		$this->assertEquals("exactly 1 times", $this->verifierModeTimes->__toString());
+	}
 }
