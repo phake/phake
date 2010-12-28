@@ -76,26 +76,30 @@ class Phake_CallRecorder_Verifier
 	 * Returns whether or not a call has been made in the associated call recorder.
 	 *
 	 * @todo Maybe rename this to findMatchedCalls?
-	 * @param string $method
-	 * @param array $argumentMatcher
+	 * @param Phake_CallRecorder_CallExpectation $expectation
 	 * @return boolean
 	 */
-	public function verifyCall($method, array $argumentMatchers)
+	public function verifyCall(Phake_CallRecorder_CallExpectation $expectation)
 	{
-		$matcher = new Phake_Matchers_MethodMatcher($method, $argumentMatchers);
+		$matcher = new Phake_Matchers_MethodMatcher($expectation->getMethod(), $expectation->getArgumentMatchers());
 		$calls = $this->recorder->getAllCalls();
 
 		$matchedCalls = array();
 		foreach ($calls as $call)
 		{
 			/* @var $call Phake_CallRecorder_Call */
-			if ($call->getObject() === $this->obj && $matcher->matches($call->getMethod(), $call->getArguments()))
+			if ($call->getObject() === $expectation->getObject() && $matcher->matches($call->getMethod(), $call->getArguments()))
 			{
 				$matchedCalls[] = $this->recorder->getCallInfo($call);
 			}
 		}
 
 		return $matchedCalls;
+	}
+
+	public function getObject()
+	{
+		return $this->obj;
 	}
 }
 

@@ -89,7 +89,7 @@ class Phake_Proxies_VerifierProxy
 	 */
 	public function __call($method, array $arguments)
 	{
-		$value = $this->verifier->verifyCall($method, $this->matcherFactory->createMatcherArray($arguments));
+		$value = $this->verifier->verifyCall(new Phake_CallRecorder_CallExpectation($this->verifier->getObject(), $method, $this->matcherFactory->createMatcherArray($arguments), $this->mode));
 
 		try
 		{
