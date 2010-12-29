@@ -72,7 +72,9 @@ class Phake_Stubber_StubMapper
 	 */
 	public function getStubByCall($method, array $arguments)
 	{
-		foreach ($this->matcherStubMap as $item)
+		$matcherStubMap = array_reverse($this->matcherStubMap);
+		
+		foreach ($matcherStubMap as $item)
 		{
 			list($matcher, $answer) = $item;
 

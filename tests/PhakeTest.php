@@ -782,6 +782,19 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 
 		Phake::verify($mock, Phake::times(6))->fooWithLotsOfParameters(Phake::anyParameters());
 	}
+	
+	/**
+	 * Tests that when stubs are defined, they're matched in reverse order.
+	 */
+	public function testMatchesInReverseOrder()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+		
+		Phake::when($mock)->fooWithArgument($this->anything())->thenReturn(FALSE);
+		Phake::when($mock)->fooWithArgument('foo')->thenReturn(TRUE);
+		
+		$this->assertTrue($mock->fooWithArgument('foo'));
+	}
 
 }
 
