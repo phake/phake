@@ -44,6 +44,7 @@
 
 require_once 'Phake/Proxies/VerifierProxy.php';
 require_once 'Phake/CallRecorder/Verifier.php';
+require_once 'Phake/CallRecorder/CallExpectation.php';
 require_once 'PHPUnit/Framework/Constraint.php';
 require_once 'Phake/Matchers/PHPUnitConstraintAdapter.php';
 if (HAMCREST_LOADED) require_once 'Hamcrest/Matcher.php';
@@ -74,7 +75,10 @@ class Phake_Proxies_VerifierProxyTest extends PHPUnit_Framework_TestCase
 		$this->mode = Phake::mock('Phake_CallRecorder_IVerifierMode');
 
 		$this->proxy = new Phake_Proxies_VerifierProxy($this->verifier, new Phake_Matchers_Factory(), $this->mode);
-		Phake::when($this->verifier)->getObject()->thenReturn($this->getMock('Phake_IMock'));
+		$obj = $this->getMock('Phake_IMock');
+		$obj->expects($this->any())->method('__PHAKE_getName')->will($this->returnValue('mock'));
+		Phake::when($this->verifier)->getObject()->thenReturn($obj);
+		Phake::when($this->mode)->__toString()->thenReturn('exactly 1 times');
 	}
 
 	/**
@@ -82,7 +86,7 @@ class Phake_Proxies_VerifierProxyTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testVerifierCallsAreForwardedMethod()
 	{
-		Phake::when($this->verifier)->verifyCall(Phake::anyParameters())->thenReturn(array());
+		Phake::when($this->verifier)->verifyCall(Phake::anyParameters())->thenReturn(array(Phake::mock('Phake_CallRecorder_CallInfo')));
 		$this->proxy->foo();
 
 		Phake::verify($this->verifier)->verifyCall(Phake::capture($expectation));
@@ -95,10 +99,10 @@ class Phake_Proxies_VerifierProxyTest extends PHPUnit_Framework_TestCase
 	public function testVerifierReturnsCallInfoData()
 	{
 		$return = array(
-			$this->getMock('Phake_CallRecorder_CallInfo', array(), array(), '', FALSE),
-			$this->getMock('Phake_CallRecorder_CallInfo', array(), array(), '', FALSE),
+			Phake::mock('Phake_CallRecorder_CallInfo'),
+			Phake::mock('Phake_CallRecorder_CallInfo'),
 		);
-
+		
 		Phake::when($this->verifier)->verifyCall(Phake::anyParameters())->thenReturn($return);
 
 		$this->assertSame($return, $this->proxy->foo());
@@ -111,7 +115,7 @@ class Phake_Proxies_VerifierProxyTest extends PHPUnit_Framework_TestCase
 	{
 		$argumentMatcher = Phake::mock('Phake_Matchers_IArgumentMatcher');
 
-		Phake::when($this->verifier)->verifyCall(Phake::anyParameters())->thenReturn(array());
+		Phake::when($this->verifier)->verifyCall(Phake::anyParameters())->thenReturn(array(Phake::mock('Phake_CallRecorder_CallInfo')));
 		$this->proxy->foo($argumentMatcher);
 
 		Phake::verify($this->verifier)->verifyCall(Phake::capture($expectation));
@@ -125,7 +129,7 @@ class Phake_Proxies_VerifierProxyTest extends PHPUnit_Framework_TestCase
 	public function testProxyTransformsNonMatchersToEqualsMatcher()
 	{
 		$argumentMatcher = new Phake_Matchers_EqualsMatcher('test');
-		Phake::when($this->verifier)->verifyCall(Phake::anyParameters())->thenReturn(array());
+		Phake::when($this->verifier)->verifyCall(Phake::anyParameters())->thenReturn(array(Phake::mock('Phake_CallRecorder_CallInfo')));
 		$this->proxy->foo('test');
 
 		Phake::verify($this->verifier)->verifyCall(Phake::capture($expectation));

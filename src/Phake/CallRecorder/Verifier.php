@@ -94,6 +94,15 @@ class Phake_CallRecorder_Verifier
 			}
 		}
 
+		try
+		{
+			$expectation->getVerifierMode()->verify($matchedCalls);
+		}
+		catch (Exception $e)
+		{
+			throw new Exception($expectation->__toString() . ', ' . $e->getMessage());
+		}
+
 		return $matchedCalls;
 	}
 

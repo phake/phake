@@ -89,18 +89,8 @@ class Phake_Proxies_VerifierProxy
 	 */
 	public function __call($method, array $arguments)
 	{
-		$value = $this->verifier->verifyCall(new Phake_CallRecorder_CallExpectation($this->verifier->getObject(), $method, $this->matcherFactory->createMatcherArray($arguments), $this->mode));
-
-		try
-		{
-			$this->mode->verify($value);
-		}
-		catch (Exception $e)
-		{
-			throw new Exception("Expected {$method} to be called " . $e->getMessage());
-		}
-
-		return $value;
+		$expectation = new Phake_CallRecorder_CallExpectation($this->verifier->getObject(), $method, $this->matcherFactory->createMatcherArray($arguments), $this->mode);
+		return $this->verifier->verifyCall($expectation);
 	}
 }
 
