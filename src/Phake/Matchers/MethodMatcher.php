@@ -99,7 +99,7 @@ class Phake_Matchers_MethodMatcher
 	 */
 	private function doArgumentsMatch(array $arguments)
 	{
-		if ($this->argumentMatchers[0] instanceof Phake_Matchers_AnyParameters)
+		if (!empty($this->argumentMatchers) && $this->argumentMatchers[0] instanceof Phake_Matchers_AnyParameters)
 		{
 			return TRUE;
 		}
