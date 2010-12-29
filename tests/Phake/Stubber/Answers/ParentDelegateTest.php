@@ -77,9 +77,9 @@ class Phake_Stubber_Answers_ParentDelegateTest extends PHPUnit_Framework_TestCas
 	 */
 	public function testThatDelegateReturnsCorrectCallback()
 	{
-		$callback = $this->delegate->getCallback('foo', array('bar'));
+		$callback = $this->delegate->getCallback($this, 'foo', array('bar'));
 
-		$this->assertSame(array('parent', 'foo'), $callback);
+		$this->assertSame(array($this, 'parent::foo'), $callback);
 	}
 
 	/**

@@ -172,7 +172,7 @@ class {$newClassName} {$extends}
 
 		if (is_array(\$constructorArgs))
 		{
-			call_user_func_array(array('parent', '__construct'), \$constructorArgs);
+			call_user_func_array(array(\$this, 'parent::__construct'), \$constructorArgs);
 		}
 		" : "";
 	}
@@ -211,7 +211,7 @@ class {$newClassName} {$extends}
 		if (\$answer instanceof Phake_Stubber_Answers_IDelegator)
 		{
 			\$delegate = \$answer->getAnswer();
-			\$callback = \$delegate->getCallBack(__FUNCTION__, \$args);
+			\$callback = \$delegate->getCallBack(\$this, __FUNCTION__, \$args);
 			\$arguments = \$delegate->getArguments(__FUNCTION__, \$args);
 
 			\$realAnswer = call_user_func_array(\$callback, \$arguments);

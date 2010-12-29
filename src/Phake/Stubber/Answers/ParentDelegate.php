@@ -70,12 +70,13 @@ class Phake_Stubber_Answers_ParentDelegate implements Phake_Stubber_Answers_IDel
 
 	/**
 	 * Provides the callback to the parent
+	 * @param object $calledObject
 	 * @param string $calledMethod
 	 * @param array $calledParameters
 	 */
-	public function getCallBack($calledMethod, array $calledParameters)
+	public function getCallBack($calledObject, $calledMethod, array $calledParameters)
 	{
-		return array('parent', $calledMethod);
+		return array($calledObject, "parent::{$calledMethod}");
 	}
 
 	/**
