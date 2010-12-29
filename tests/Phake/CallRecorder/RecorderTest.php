@@ -52,13 +52,20 @@ require_once 'Phake/CallRecorder/Call.php';
  */
 class Phake_CallRecorder_RecorderTest extends PHPUnit_Framework_TestCase
 {
+	private $mock;
+
+	public function setUp()
+	{
+		$this->mock = $this->getMock('Phake_IMock');
+	}
+	
 	/**
 	 * Tests that the recorder can log a call and then pull that same call back out.
 	 */
 	public function testRecord()
 	{
-		$call = new Phake_CallRecorder_Call($this, 'someMethod', array());
-		$call2 = new Phake_CallRecorder_Call($this, 'someMethod2', array());
+		$call = new Phake_CallRecorder_Call($this->mock, 'someMethod', array());
+		$call2 = new Phake_CallRecorder_Call($this->mock, 'someMethod2', array());
 		$callRecorder = new Phake_CallRecorder_Recorder();
 		$callRecorder->recordCall($call);
 		$callRecorder->recordCall($call2);
@@ -71,8 +78,8 @@ class Phake_CallRecorder_RecorderTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testRemoveAllCalls()
 	{
-		$call = new Phake_CallRecorder_Call($this, 'someMethod', array());
-		$call2 = new Phake_CallRecorder_Call($this, 'someMethod2', array());
+		$call = new Phake_CallRecorder_Call($this->mock, 'someMethod', array());
+		$call2 = new Phake_CallRecorder_Call($this->mock, 'someMethod2', array());
 		$callRecorder = new Phake_CallRecorder_Recorder();
 		$callRecorder->recordCall($call);
 		$callRecorder->recordCall($call2);
@@ -87,7 +94,7 @@ class Phake_CallRecorder_RecorderTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testRetrieveCallInfo()
 	{
-		$call = new Phake_CallRecorder_Call($this, 'someMethod', array());
+		$call = new Phake_CallRecorder_Call($this->mock, 'someMethod', array());
 		$callRecorder = new Phake_CallRecorder_Recorder();
 		$callRecorder->recordCall($call);
 
@@ -103,7 +110,7 @@ class Phake_CallRecorder_RecorderTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testRetrieveCallInfoReturnsNull()
 	{
-		$call = new Phake_CallRecorder_Call($this, 'someMethod', array());
+		$call = new Phake_CallRecorder_Call($this->mock, 'someMethod', array());
 		$callRecorder = new Phake_CallRecorder_Recorder();
 
 		$this->assertNull($callRecorder->getCallInfo($call));

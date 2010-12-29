@@ -68,7 +68,7 @@ class Phake_CallRecorder_Call
 	 * @param object $object - The object the method was called on
 	 * @param string $method - The method that was made
 	 */
-	public function __construct($object, $method, array $arguments)
+	public function __construct(Phake_IMock $object, $method, array $arguments)
 	{
 		$this->object = $object;
 		$this->method = $method;

@@ -56,9 +56,12 @@ class Phake_CallRecorder_CallTest extends PHPUnit_Framework_TestCase
 	 */
 	private $call;
 
+	private $mock;
+
 	public function setUp()
 	{
-		$this->call = new Phake_CallRecorder_Call($this, 'someMethod', array('foo', 'bar'));
+		$this->mock = $this->getMock('Phake_IMock');
+		$this->call = new Phake_CallRecorder_Call($this->mock, 'someMethod', array('foo', 'bar'));
 	}
 
 	/**
@@ -66,7 +69,7 @@ class Phake_CallRecorder_CallTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testGetObject()
 	{
-		$this->assertSame($this, $this->call->getObject());
+		$this->assertSame($this->mock, $this->call->getObject());
 	}
 
 	/**
