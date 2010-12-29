@@ -42,6 +42,7 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+require_once 'Phake/CallRecorder/CallExpectation.php';
 require_once 'Phake/Matchers/PHPUnitConstraintAdapter.php';
 require_once 'Phake/Matchers/HamcrestMatcherAdapter.php';
 require_once 'Phake/Matchers/EqualsMatcher.php';

@@ -76,7 +76,7 @@ class Phake_CallRecorder_VerifierMode_Times implements Phake_CallRecorder_IVerif
 		$calledTimes = count($matchedCalls);
 		if ($calledTimes != $this->times)
 		{
-			throw new Exception("<$this->times> times, actually called <$calledTimes>");
+			throw new Exception("actually called $calledTimes times");
 		}
 	}
 

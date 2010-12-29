@@ -796,6 +796,26 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 		$this->assertTrue($mock->fooWithArgument('foo'));
 	}
 
+	public function testFailedVerificationWithNoMockInteractions()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+
+		$this->setExpectedException('Exception', 'Expected PhakeTest_MockedClass->foo() to be called exactly 1 times, actually called 0 times. In fact, there are no interactions with this mock.');
+		Phake::verify($mock)->foo();
+	}
+
+	public function testFailedVerificationWithNonmatchingMethodCalls()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+
+		$mock->foo('test');
+
+		$this->setExpectedException('Exception', 'Expected PhakeTest_MockedClass->foo() to be called exactly 1 times, actually called 0 times.' . "\n"
+		. "Other Invocations:\n" .
+		  "  PhakeTest_MockedClass->foo(<string:test>)");
+
+		Phake::verify($mock)->foo();
+	}
 }
 
 ?>

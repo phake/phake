@@ -291,6 +291,73 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
 
 		Phake::verify($this->verifierMode)->verify(array($return, $return));
 	}
+
+	public function testVerifierModifiesExceptionIfThereAreNoInteractions()
+	{
+		$obj2 = $this->getMock('Phake_IMock');
+		$expectation = new Phake_CallRecorder_CallExpectation(
+			$obj2,
+			'foo',
+			array(),
+			$this->verifierMode
+		);
+
+		$obj2->expects($this->any())
+				->method('__PHAKE_getName')
+				->will($this->returnValue('mock'));
+
+		Phake::when($this->verifierMode)->__toString()->thenReturn('exactly 1 times');
+
+		$return = new Phake_CallRecorder_CallInfo($this->callArray[1], new Phake_CallRecorder_Position(0));
+		$this->recorder->expects($this->any())
+				->method('getCallInfo')
+				->will($this->returnValue($return));
+
+		Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenThrow(new Exception("actually called 0 times"));
+
+		$this->setExpectedException('Exception', 'Expected mock->foo() to be called exactly 1 times, actually called 0 times. In fact, there are no interactions with this mock.');
+		$this->assertSame(array($return, $return), $this->verifier->verifyCall($expectation));
+
+		Phake::verify($this->verifierMode)->verify(array($return, $return));
+	}
+
+	public function testVerifierModifiesExceptionWithOtherCalls()
+	{
+		$this->obj->expects($this->any())
+				->method('__PHAKE_getName')
+				->will($this->returnValue('mock'));
+
+		$expectation = new Phake_CallRecorder_CallExpectation(
+			$this->obj,
+			'foo',
+			array(new Phake_Matchers_EqualsMatcher('test')),
+			$this->verifierMode
+		);
+
+		Phake::when($this->verifierMode)->__toString()->thenReturn('exactly 1 times');
+
+		$return = new Phake_CallRecorder_CallInfo($this->callArray[1], new Phake_CallRecorder_Position(0));
+		$this->recorder->expects($this->any())
+				->method('getCallInfo')
+				->will($this->returnValue($return));
+
+		Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenThrow(new Exception("actually called 0 times"));
+
+		$expected_msg =
+			"Expected mock->foo(<equal to 'test'>) to be called exactly 1 times, actually called 0 times.\n"
+					. "Other Invocations:\n"
+					. "  mock->foo()\n"
+					. "  mock->foo(<string:bar>, <string:foo>)\n"
+					. "  mock->foo()";
+		try
+		{
+			$this->verifier->verifyCall($expectation);
+		}
+		catch (Exception $e)
+		{
+			$this->assertEquals($expected_msg, $e->getMessage());
+		}
+	}
 }
 
 ?>

@@ -85,12 +85,22 @@ class Phake_CallRecorder_Verifier
 		$calls = $this->recorder->getAllCalls();
 
 		$matchedCalls = array();
+		$methodNonMatched = array();
+		$obj_interactions = FALSE;
 		foreach ($calls as $call)
 		{
 			/* @var $call Phake_CallRecorder_Call */
-			if ($call->getObject() === $expectation->getObject() && $matcher->matches($call->getMethod(), $call->getArguments()))
+			if ($call->getObject() === $expectation->getObject())
 			{
-				$matchedCalls[] = $this->recorder->getCallInfo($call);
+				$obj_interactions = TRUE;
+				if ($matcher->matches($call->getMethod(), $call->getArguments()))
+				{
+					$matchedCalls[] = $this->recorder->getCallInfo($call);
+				}
+				elseif ($call->getMethod() == $expectation->getMethod())
+				{
+					$methodNonMatched[] = $call->__toString();
+				}
 			}
 		}
 
@@ -100,7 +110,18 @@ class Phake_CallRecorder_Verifier
 		}
 		catch (Exception $e)
 		{
-			throw new Exception($expectation->__toString() . ', ' . $e->getMessage());
+			$additions = '';
+			if (!$obj_interactions)
+			{
+				$additions .= ' In fact, there are no interactions with this mock.';
+			}
+
+			if (count($methodNonMatched))
+			{
+				$additions .= "\nOther Invocations:\n  " . implode("\n  ", $methodNonMatched);
+			}
+			
+			throw new Exception($expectation->__toString() . ', ' . $e->getMessage() . '.' . $additions);
 		}
 
 		return $matchedCalls;
