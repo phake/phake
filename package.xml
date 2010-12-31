@@ -16,15 +16,15 @@
  <date>2010-12-30</date>
  <time>21:03:39</time>
  <version>
-  <release>1.0.0aplha1</release>
-  <api>1.0.0aplha1</api>
+  <release>1.0.0alpha</release>
+  <api>1.0.0alpha</api>
  </version>
  <stability>
   <release>alpha</release>
   <api>alpha</api>
  </stability>
  <license uri="https://github.com/mlively/Phake/raw/master/LICENSE">BSD Style</license>
- <notes></notes>
+ <notes>https://github.com/mlively/Phake/raw/master/README</notes>
  <contents>
   <dir baseinstalldir="../" name="/">
    <file baseinstalldir="../" md5sum="9d5088d2d966d672e6cc1916fc22f3d6" name="src/Phake.php" role="php" />
@@ -121,8 +121,8 @@
  <changelog>
   <release>
    <version>
-    <release>1.0.0aplha1</release>
-    <api>1.0.0aplha1</api>
+    <release>1.0.0aplha</release>
+    <api>1.0.0aplha</api>
    </version>
    <stability>
     <release>alpha</release>
@@ -130,7 +130,7 @@
    </stability>
    <date>2010-12-30</date>
    <license uri="https://github.com/mlively/Phake/raw/master/LICENSE">BSD Style</license>
-   <notes></notes>
+   <notes>https://github.com/mlively/Phake/raw/master/README</notes>
   </release>
  </changelog>
 </package>
