@@ -341,7 +341,7 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testPartialMockCallsOriginal()
 	{
-		$pmock = Phake::partMock('PhakeTest_MockedClass');
+		$pmock = Phake::partialMock('PhakeTest_MockedClass');
 		$this->assertEquals('blah', $pmock->fooWithReturnValue());
 	}
 
@@ -350,7 +350,7 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testPartialMockRecordsCall()
 	{
-		$pmock = Phake::partMock('PhakeTest_MockedClass');
+		$pmock = Phake::partialMock('PhakeTest_MockedClass');
 		$pmock->foo();
 
 		Phake::verify($pmock)->foo();
@@ -361,7 +361,7 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testPartialMockInternalMethodCalls()
 	{
-		$pmock = Phake::partMock('PhakeTest_MockedClass');
+		$pmock = Phake::partialMock('PhakeTest_MockedClass');
 		Phake::when($pmock)->innerFunc()->thenReturn('blah');
 
 		$this->assertEquals('blah', $pmock->chainedCall());
@@ -372,7 +372,7 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testPartialMockCallsConstructor()
 	{
-		$pmock = Phake::partMock('PhakeTest_MockedConstructedClass', 'val1', 'val2', 'val3');
+		$pmock = Phake::partialMock('PhakeTest_MockedConstructedClass', 'val1', 'val2', 'val3');
 
 		$this->assertEquals('val1', $pmock->getProp1());
 		$this->assertEquals('val2', $pmock->getProp2());
@@ -384,7 +384,7 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testPartialMockCallsParentConstructor()
 	{
-		$pmock = Phake::partMock('PhakeTest_ExtendedMockedConstructedClass', 'val1', 'val2', 'val3');
+		$pmock = Phake::partialMock('PhakeTest_ExtendedMockedConstructedClass', 'val1', 'val2', 'val3');
 
 		$this->assertEquals('val1', $pmock->getProp1());
 		$this->assertEquals('val2', $pmock->getProp2());
