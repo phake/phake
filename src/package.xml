@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package packagerversion="1.9.1" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
+    http://pear.php.net/dtd/tasks-1.0.xsd
+    http://pear.php.net/dtd/package-2.0
+    http://pear.php.net/dtd/package-2.0.xsd">
+ <name>Phake</name>
+ <channel>pear.digitalsandwich.com</channel>
+ <summary>PHP Mocking Framework</summary>
+ <description>Phake is a PHP mocking framework that is based on Mockito.</description>
+ <lead>
+  <name>Mike Lively</name>
+  <user>mjlivelyjr</user>
+  <email>m@digitalsandwich.com</email>
+  <active>yes</active>
+ </lead>
+ <date>2010-12-30</date>
+ <time>21:03:39</time>
+ <version>
+  <release>1.0.0alpha</release>
+  <api>1.0.0alpha</api>
+ </version>
+ <stability>
+  <release>alpha</release>
+  <api>alpha</api>
+ </stability>
+ <license uri="https://github.com/mlively/Phake/raw/master/LICENSE">BSD Style</license>
+ <notes>https://github.com/mlively/Phake/raw/master/README</notes>
+ <contents>
+  <dir baseinstalldir="/" name="/">
+   <file baseinstalldir="/" md5sum="9d5088d2d966d672e6cc1916fc22f3d6" name="Phake.php" role="php" />
+   <file baseinstalldir="/" md5sum="1f2bb405ca6532f1741af981732d9e1c" name="Phake/Facade.php" role="php" />
+   <file baseinstalldir="/" md5sum="7ca642549568eb2219b9f1facb3ac0b8" name="Phake/IMock.php" role="php" />
+   <file baseinstalldir="/" md5sum="3db86fe68092c5d0d8c7e3af3f41509f" name="Phake/CallRecorder/Call.php" role="php" />
+   <file baseinstalldir="/" md5sum="83ff7a5ae38e7f100aa562981ffef9ad" name="Phake/CallRecorder/CallExpectation.php" role="php" />
+   <file baseinstalldir="/" md5sum="c05156adc57570acb866d261dc396303" name="Phake/CallRecorder/CallInfo.php" role="php" />
+   <file baseinstalldir="/" md5sum="18e35825c1fa7edf0eb219fdd21ea92f" name="Phake/CallRecorder/ICallRecorderContainer.php" role="php" />
+   <file baseinstalldir="/" md5sum="4ea93385f537806545a1c17d2fcb38ac" name="Phake/CallRecorder/IVerificationFailureHandler.php" role="php" />
+   <file baseinstalldir="/" md5sum="f1f5a633b93beb5e0f2f526a4bd8fd16" name="Phake/CallRecorder/IVerifierMode.php" role="php" />
+   <file baseinstalldir="/" md5sum="c38416256d2362a967e03860b6548485" name="Phake/CallRecorder/OrderVerifier.php" role="php" />
+   <file baseinstalldir="/" md5sum="c1b46a949d516f86063a6b845a139c10" name="Phake/CallRecorder/Position.php" role="php" />
+   <file baseinstalldir="/" md5sum="8be679c4f8fc18073421e498ebe9d883" name="Phake/CallRecorder/Recorder.php" role="php" />
+   <file baseinstalldir="/" md5sum="b6f0413e50ab1ada2ee04bfcacb5c029" name="Phake/CallRecorder/Verifier.php" role="php" />
+   <file baseinstalldir="/" md5sum="6c093a99e075dd2c32716cf1b86bf44c" name="Phake/CallRecorder/VerifierMode/AtLeast.php" role="php" />
+   <file baseinstalldir="/" md5sum="d8532acc1fe320b712132de0ed083593" name="Phake/CallRecorder/VerifierMode/AtMost.php" role="php" />
+   <file baseinstalldir="/" md5sum="8bfd124b462a739bc6d372034b9b2ec7" name="Phake/CallRecorder/VerifierMode/Times.php" role="php" />
+   <file baseinstalldir="/" md5sum="f9c19eaacfb71f5deb33b962cd94a60f" name="Phake/ClassGenerator/MockClass.php" role="php" />
+   <file baseinstalldir="/" md5sum="a8a5b8cdace065f0cc26d64d65b76cc4" name="Phake/Matchers/AnyParameters.php" role="php" />
+   <file baseinstalldir="/" md5sum="65f6d258163457ba59803c9332b94640" name="Phake/Matchers/ArgumentCaptor.php" role="php" />
+   <file baseinstalldir="/" md5sum="521cbf5a296c54f86a84f98d23892e45" name="Phake/Matchers/EqualsMatcher.php" role="php" />
+   <file baseinstalldir="/" md5sum="9962268147f8489ed9fb3ba87de3f298" name="Phake/Matchers/Factory.php" role="php" />
+   <file baseinstalldir="/" md5sum="0dcfe9a59eea748da28c67a27e05a716" name="Phake/Matchers/HamcrestMatcherAdapter.php" role="php" />
+   <file baseinstalldir="/" md5sum="bf379fdf22e44edb740977b0d2e5de2d" name="Phake/Matchers/IArgumentMatcher.php" role="php" />
+   <file baseinstalldir="/" md5sum="d1aa2b82a9448f1040c3863297b5930c" name="Phake/Matchers/MethodMatcher.php" role="php" />
+   <file baseinstalldir="/" md5sum="52e39f7f1f000b188192afc371125137" name="Phake/Matchers/PHPUnitConstraintAdapter.php" role="php" />
+   <file baseinstalldir="/" md5sum="860c1466d90e53ef34619baadf870493" name="Phake/Proxies/AnswerBinderProxy.php" role="php" />
+   <file baseinstalldir="/" md5sum="e6e7cb943c43abca36d3c7af25fab271" name="Phake/Proxies/StubberProxy.php" role="php" />
+   <file baseinstalldir="/" md5sum="55c8ebd2a647087dbf0caf4f84c42188" name="Phake/Proxies/VerifierProxy.php" role="php" />
+   <file baseinstalldir="/" md5sum="d81f7a54b535288283602b1a5d5763ce" name="Phake/Stubber/AnswerBinder.php" role="php" />
+   <file baseinstalldir="/" md5sum="fd1aba203815387574ca5ed3f4a7b49c" name="Phake/Stubber/IAnswer.php" role="php" />
+   <file baseinstalldir="/" md5sum="a577c9b9bfeabdaa792de37fa282a802" name="Phake/Stubber/IAnswerBinder.php" role="php" />
+   <file baseinstalldir="/" md5sum="23dedd36d209d5ee497e02a36e1a43d1" name="Phake/Stubber/IAnswerDelegate.php" role="php" />
+   <file baseinstalldir="/" md5sum="264553124452caad6a7483bbaabbc315" name="Phake/Stubber/IStubbable.php" role="php" />
+   <file baseinstalldir="/" md5sum="b54b13c76d8990033f29cfb111a1f232" name="Phake/Stubber/SelfBindingAnswerBinder.php" role="php" />
+   <file baseinstalldir="/" md5sum="4747d80615db088cc5e46da38f7f327b" name="Phake/Stubber/StubMapper.php" role="php" />
+   <file baseinstalldir="/" md5sum="ca7703ecf5b9702fb581352f58faa98f" name="Phake/Stubber/Answers/ExceptionAnswer.php" role="php" />
+   <file baseinstalldir="/" md5sum="9ce452787a5221ae0c3c4176fde6c9bf" name="Phake/Stubber/Answers/IDelegator.php" role="php" />
+   <file baseinstalldir="/" md5sum="c0784a6f2d4fc0d907738e97ec16a6d4" name="Phake/Stubber/Answers/ParentDelegate.php" role="php" />
+   <file baseinstalldir="/" md5sum="ce1ceed83cab5c00a40d9e4d2a64a9b1" name="Phake/Stubber/Answers/StaticAnswer.php" role="php" />
+  </dir>
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>5.2.0</min>
+   </php>
+   <pearinstaller>
+    <min>1.4.0</min>
+   </pearinstaller>
+  </required>
+ </dependencies>
+ <phprelease />
+ <changelog>
+  <release>
+   <version>
+    <release>1.0.0aplha</release>
+    <api>1.0.0aplha</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2010-12-30</date>
+   <license uri="https://github.com/mlively/Phake/raw/master/LICENSE">BSD Style</license>
+   <notes>https://github.com/mlively/Phake/raw/master/README</notes>
+  </release>
+ </changelog>
+</package>
