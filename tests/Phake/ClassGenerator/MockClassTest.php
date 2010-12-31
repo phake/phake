@@ -50,6 +50,7 @@ require_once 'Phake/Stubber/Answers/ParentDelegate.php';
 require_once 'Phake/Stubber/IAnswerDelegate.php';
 
 require_once 'PhakeTest/MockedClass.php';
+require_once 'PhakeTest/MagicClass.php';
 require_once 'PhakeTest/MockedConstructedClass.php';
 require_once 'PhakeTest/MockedInterface.php';
 require_once 'PhakeTest/FinalMethod.php';
@@ -290,6 +291,28 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 		$mock->fooWithArgument('bar');
 	}
 
+	/**
+	 * Tests that __call on an unmatched method will return a default value
+	 */
+	public function testUnstubbedCallReturnsDefaultAnswer()
+	{
+		$newClassName = __CLASS__ . '_TestClass19';
+		$mockedClass = 'PhakeTest_MagicClass';
+
+		$this->classGen->generate($newClassName, $mockedClass);
+
+		$callRecorder = $this->getMock('Phake_CallRecorder_Recorder');
+		$stubMapper = $this->getMock('Phake_Stubber_StubMapper');
+		$answer = $this->getMock('Phake_Stubber_IAnswer');
+
+		$mock = $this->classGen->instantiate($newClassName, $callRecorder, $stubMapper, $answer);
+
+		$answer->expects($this->once())
+				->method('getAnswer');
+
+		$mock->fooWithArgument('bar');
+	}
+
 
 	/**
 	 * Tests that calling a stubbed method will result in the stubbed answer being returned.
@@ -298,6 +321,56 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 	{
 		$newClassName = __CLASS__ . '_TestClass12';
 		$mockedClass = 'PhakeTest_MockedClass';
+
+		$this->classGen->generate($newClassName, $mockedClass);
+
+		$callRecorder = $this->getMock('Phake_CallRecorder_Recorder');
+		$stubMapper = $this->getMock('Phake_Stubber_StubMapper');
+		$answer = $this->getMock('Phake_Stubber_IAnswer');
+		$mock = $this->classGen->instantiate($newClassName, $callRecorder, $stubMapper, $answer);
+
+		$answer = $this->getMock('Phake_Stubber_Answers_IDelegator');
+		$delegate = $this->getMock('Phake_Stubber_IAnswerDelegate');
+
+		$answer->expects($this->once())
+				->method('getAnswer')
+				->will($this->returnValue($delegate));
+
+		$answer->expects($this->once())
+				->method('processAnswer')
+				->with(null);
+
+		$realAnswer = $this->getMock('PhakeTest_MockedClass');
+
+		$realAnswer->expects($this->once())
+				->method('fooWithArgument')
+				->with($this->equalTo('bar'));
+
+		$delegate->expects($this->any())
+				->method('getCallBack')
+				->with($this->equalTo($mock), $this->equalTo('fooWithArgument'), $this->equalTo(array('bar')))
+				->will($this->returnValue(array($realAnswer, 'fooWithArgument')));
+
+		$delegate->expects($this->any())
+				->method('getArguments')
+				->with($this->equalTo('fooWithArgument'), $this->equalTo(array('bar')))
+				->will($this->returnValue(array('bar')));
+
+		$stubMapper->expects($this->once())
+				->method('getStubByCall')
+				->with($this->equalTo('fooWithArgument'), array('bar'))
+				->will($this->returnValue($answer));
+
+		$mock->fooWithArgument('bar');
+	}
+
+	/**
+	 * Tests that calling a stubbed method will result in the stubbed answer being returned.
+	 */
+	public function testStubbedCallMethodsCallDelegatedAnswer()
+	{
+		$newClassName = __CLASS__ . '_TestClass20';
+		$mockedClass = 'PhakeTest_MagicClass';
 
 		$this->classGen->generate($newClassName, $mockedClass);
 

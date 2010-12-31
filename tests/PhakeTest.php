@@ -45,6 +45,7 @@
 require_once('Phake.php');
 require_once('PhakeTest/AbstractClass.php');
 require_once('PhakeTest/MockedClass.php');
+require_once('PhakeTest/MagicClass.php');
 require_once('PhakeTest/MockedConstructedClass.php');
 require_once('PhakeTest/ExtendedMockedConstructedClass.php');
 require_once('PhakeTest/MockedInterface.php');
@@ -832,6 +833,24 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 		  "  PhakeTest_MockedClass->foo(<string:test>)");
 
 		Phake::verify($mock)->foo();
+	}
+
+	public function testStubbingMagicCallMethod()
+	{
+		$mock = Phake::mock('PhakeTest_MagicClass');
+
+		Phake::when($mock)->magicCall()->thenReturn('magicCalled');
+
+		$this->assertEquals('magicCalled', $mock->magicCall());
+	}
+
+	public function testVerifyingMagicCallMethod()
+	{
+		$mock = Phake::mock('PhakeTest_MagicClass');
+
+		$mock->magicCall();
+
+		Phake::verify($mock)->magicCall();
 	}
 }
 

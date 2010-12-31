@@ -193,11 +193,18 @@ class {$newClassName} {$extends}
 			throw new Exception('This object has been frozen.');
 		}
 
+		\$methodName = '{$method->getName()}';
 		\$args = func_get_args();
 
-		\$this->__PHAKE_callRecorder->recordCall(new Phake_CallRecorder_Call(\$this, '{$method->getName()}', \$args));
+		if (__FUNCTION__ == '__call')
+		{
+			\$methodName = \$args[0];
+			\$args = \$args[1];
+		}
 
-		\$stub = \$this->__PHAKE_stubMapper->getStubByCall('{$method->getName()}', \$args);
+		\$this->__PHAKE_callRecorder->recordCall(new Phake_CallRecorder_Call(\$this, \$methodName, \$args));
+
+		\$stub = \$this->__PHAKE_stubMapper->getStubByCall(\$methodName, \$args);
 
 		if (\$stub !== NULL)
 		{
@@ -211,8 +218,8 @@ class {$newClassName} {$extends}
 		if (\$answer instanceof Phake_Stubber_Answers_IDelegator)
 		{
 			\$delegate = \$answer->getAnswer();
-			\$callback = \$delegate->getCallBack(\$this, __FUNCTION__, \$args);
-			\$arguments = \$delegate->getArguments(__FUNCTION__, \$args);
+			\$callback = \$delegate->getCallBack(\$this, \$methodName, \$args);
+			\$arguments = \$delegate->getArguments(\$methodName, \$args);
 
 			\$realAnswer = call_user_func_array(\$callback, \$arguments);
 			\$answer->processAnswer(\$realAnswer);
