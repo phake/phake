@@ -114,6 +114,21 @@ class Phake
 	}
 
 	/**
+	 * For backwards compatibility
+	 *
+	 * @see Phake::partialMock()
+	 * @param string $className class name
+	 * @param mixed ... the remaining arguments will be passed as constructor arguments
+	 * @return Phake_ITestDouble
+	 * @deprecated Please use Phake::partialMock() instead
+	 */
+	public static function partMock()
+	{
+		$args = func_get_args();
+		return call_user_func_array('Phake::partialMock', $args);
+	}
+
+	/**
 	 * Creates a new verifier for the given mock object.
 	 * @param Phake_CallRecorder_ICallRecorderContainer $mock
 	 * @return Phake_CallRecorder_VerifierProxy

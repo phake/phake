@@ -397,6 +397,18 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Tests that the deprecated partMock works
+	 */
+	public function testPartMock()
+	{
+		$pmock = Phake::partMock('PhakeTest_ExtendedMockedConstructedClass', 'val1', 'val2', 'val3');
+
+		$this->assertEquals('val1', $pmock->getProp1());
+		$this->assertEquals('val2', $pmock->getProp2());
+		$this->assertEquals('val3', $pmock->getProp3());
+	}
+
+	/**
 	 * Tests mocking of an interface
 	 */
 	public function testMockingInterface()
