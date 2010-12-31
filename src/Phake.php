@@ -104,7 +104,7 @@ class Phake
 	 * @param mixed ... the remaining arguments will be passed as constructor arguments
 	 * @return Phake_ITestDouble
 	 */
-	public static function partMock()
+	public static function partialMock()
 	{
 		$args = func_get_args();
 		$className = array_shift($args);
