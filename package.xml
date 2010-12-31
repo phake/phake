@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package packagerversion="1.9.1" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
+    http://pear.php.net/dtd/tasks-1.0.xsd
+    http://pear.php.net/dtd/package-2.0
+    http://pear.php.net/dtd/package-2.0.xsd">
+ <name>Phake</name>
+ <channel>pear.digitalsandwich.com</channel>
+ <summary>PHP Mocking Framework</summary>
+ <description>Phake is a PHP mocking framework that is based on Mockito.</description>
+ <lead>
+  <name>Mike Lively</name>
+  <user>mjlivelyjr</user>
+  <email>m@digitalsandwich.com</email>
+  <active>yes</active>
+ </lead>
+ <date>2010-12-30</date>
+ <time>21:03:39</time>
+ <version>
+  <release>1.0.0aplha1</release>
+  <api>1.0.0aplha1</api>
+ </version>
+ <stability>
+  <release>alpha</release>
+  <api>alpha</api>
+ </stability>
+ <license uri="https://github.com/mlively/Phake/raw/master/LICENSE">BSD Style</license>
+ <notes></notes>
+ <contents>
+  <dir baseinstalldir="../" name="/">
+   <file baseinstalldir="../" md5sum="9d5088d2d966d672e6cc1916fc22f3d6" name="src/Phake.php" role="php" />
+   <file baseinstalldir="../" md5sum="1f2bb405ca6532f1741af981732d9e1c" name="src/Phake/Facade.php" role="php" />
+   <file baseinstalldir="../" md5sum="7ca642549568eb2219b9f1facb3ac0b8" name="src/Phake/IMock.php" role="php" />
+   <file baseinstalldir="../" md5sum="3db86fe68092c5d0d8c7e3af3f41509f" name="src/Phake/CallRecorder/Call.php" role="php" />
+   <file baseinstalldir="../" md5sum="83ff7a5ae38e7f100aa562981ffef9ad" name="src/Phake/CallRecorder/CallExpectation.php" role="php" />
+   <file baseinstalldir="../" md5sum="c05156adc57570acb866d261dc396303" name="src/Phake/CallRecorder/CallInfo.php" role="php" />
+   <file baseinstalldir="../" md5sum="18e35825c1fa7edf0eb219fdd21ea92f" name="src/Phake/CallRecorder/ICallRecorderContainer.php" role="php" />
+   <file baseinstalldir="../" md5sum="4ea93385f537806545a1c17d2fcb38ac" name="src/Phake/CallRecorder/IVerificationFailureHandler.php" role="php" />
+   <file baseinstalldir="../" md5sum="f1f5a633b93beb5e0f2f526a4bd8fd16" name="src/Phake/CallRecorder/IVerifierMode.php" role="php" />
+   <file baseinstalldir="../" md5sum="c38416256d2362a967e03860b6548485" name="src/Phake/CallRecorder/OrderVerifier.php" role="php" />
+   <file baseinstalldir="../" md5sum="c1b46a949d516f86063a6b845a139c10" name="src/Phake/CallRecorder/Position.php" role="php" />
+   <file baseinstalldir="../" md5sum="8be679c4f8fc18073421e498ebe9d883" name="src/Phake/CallRecorder/Recorder.php" role="php" />
+   <file baseinstalldir="../" md5sum="b6f0413e50ab1ada2ee04bfcacb5c029" name="src/Phake/CallRecorder/Verifier.php" role="php" />
+   <file baseinstalldir="../" md5sum="6c093a99e075dd2c32716cf1b86bf44c" name="src/Phake/CallRecorder/VerifierMode/AtLeast.php" role="php" />
+   <file baseinstalldir="../" md5sum="d8532acc1fe320b712132de0ed083593" name="src/Phake/CallRecorder/VerifierMode/AtMost.php" role="php" />
+   <file baseinstalldir="../" md5sum="8bfd124b462a739bc6d372034b9b2ec7" name="src/Phake/CallRecorder/VerifierMode/Times.php" role="php" />
+   <file baseinstalldir="../" md5sum="f9c19eaacfb71f5deb33b962cd94a60f" name="src/Phake/ClassGenerator/MockClass.php" role="php" />
+   <file baseinstalldir="../" md5sum="a8a5b8cdace065f0cc26d64d65b76cc4" name="src/Phake/Matchers/AnyParameters.php" role="php" />
+   <file baseinstalldir="../" md5sum="65f6d258163457ba59803c9332b94640" name="src/Phake/Matchers/ArgumentCaptor.php" role="php" />
+   <file baseinstalldir="../" md5sum="521cbf5a296c54f86a84f98d23892e45" name="src/Phake/Matchers/EqualsMatcher.php" role="php" />
+   <file baseinstalldir="../" md5sum="9962268147f8489ed9fb3ba87de3f298" name="src/Phake/Matchers/Factory.php" role="php" />
+   <file baseinstalldir="../" md5sum="0dcfe9a59eea748da28c67a27e05a716" name="src/Phake/Matchers/HamcrestMatcherAdapter.php" role="php" />
+   <file baseinstalldir="../" md5sum="bf379fdf22e44edb740977b0d2e5de2d" name="src/Phake/Matchers/IArgumentMatcher.php" role="php" />
+   <file baseinstalldir="../" md5sum="d1aa2b82a9448f1040c3863297b5930c" name="src/Phake/Matchers/MethodMatcher.php" role="php" />
+   <file baseinstalldir="../" md5sum="52e39f7f1f000b188192afc371125137" name="src/Phake/Matchers/PHPUnitConstraintAdapter.php" role="php" />
+   <file baseinstalldir="../" md5sum="860c1466d90e53ef34619baadf870493" name="src/Phake/Proxies/AnswerBinderProxy.php" role="php" />
+   <file baseinstalldir="../" md5sum="e6e7cb943c43abca36d3c7af25fab271" name="src/Phake/Proxies/StubberProxy.php" role="php" />
+   <file baseinstalldir="../" md5sum="55c8ebd2a647087dbf0caf4f84c42188" name="src/Phake/Proxies/VerifierProxy.php" role="php" />
+   <file baseinstalldir="../" md5sum="d81f7a54b535288283602b1a5d5763ce" name="src/Phake/Stubber/AnswerBinder.php" role="php" />
+   <file baseinstalldir="../" md5sum="fd1aba203815387574ca5ed3f4a7b49c" name="src/Phake/Stubber/IAnswer.php" role="php" />
+   <file baseinstalldir="../" md5sum="a577c9b9bfeabdaa792de37fa282a802" name="src/Phake/Stubber/IAnswerBinder.php" role="php" />
+   <file baseinstalldir="../" md5sum="23dedd36d209d5ee497e02a36e1a43d1" name="src/Phake/Stubber/IAnswerDelegate.php" role="php" />
+   <file baseinstalldir="../" md5sum="264553124452caad6a7483bbaabbc315" name="src/Phake/Stubber/IStubbable.php" role="php" />
+   <file baseinstalldir="../" md5sum="b54b13c76d8990033f29cfb111a1f232" name="src/Phake/Stubber/SelfBindingAnswerBinder.php" role="php" />
+   <file baseinstalldir="../" md5sum="4747d80615db088cc5e46da38f7f327b" name="src/Phake/Stubber/StubMapper.php" role="php" />
+   <file baseinstalldir="../" md5sum="ca7703ecf5b9702fb581352f58faa98f" name="src/Phake/Stubber/Answers/ExceptionAnswer.php" role="php" />
+   <file baseinstalldir="../" md5sum="9ce452787a5221ae0c3c4176fde6c9bf" name="src/Phake/Stubber/Answers/IDelegator.php" role="php" />
+   <file baseinstalldir="../" md5sum="c0784a6f2d4fc0d907738e97ec16a6d4" name="src/Phake/Stubber/Answers/ParentDelegate.php" role="php" />
+   <file baseinstalldir="../" md5sum="ce1ceed83cab5c00a40d9e4d2a64a9b1" name="src/Phake/Stubber/Answers/StaticAnswer.php" role="php" />
+   <file baseinstalldir="../" md5sum="dd94caebbbc84a74f2e31939a0c4360b" name="tests/bootstrap.php" role="test" />
+   <file baseinstalldir="../" md5sum="a3e06c92f784aff729dd644ffc908705" name="tests/PhakeTest.php" role="test" />
+   <file baseinstalldir="../" md5sum="9a6aebb915510d6f85178edae8cd2a2d" name="tests/phpunit.xml" role="test" />
+   <file baseinstalldir="../" md5sum="47a28a6d5d88a1093de0937b506caa27" name="tests/Phake/FacadeTest.php" role="test" />
+   <file baseinstalldir="../" md5sum="590535d46a01580bafe34a4e417f2d06" name="tests/Phake/CallRecorder/CallExpectationTest.php" role="test" />
+   <file baseinstalldir="../" md5sum="396fdf7e8f01508f778d838a000df830" name="tests/Phake/CallRecorder/CallInfoTest.php" role="test" />
+   <file baseinstalldir="../" md5sum="04146cc57cf3c7f8a83fcbabc34b99df" name="tests/Phake/CallRecorder/CallTest.php" role="test" />
+   <file baseinstalldir="../" md5sum="113841f681219e2591cd1f9fb2606da9" name="tests/Phake/CallRecorder/OrderVerifierTest.php" role="test" />
+   <file baseinstalldir="../" md5sum="485e60eef05cc834869c943a337fc996" name="tests/Phake/CallRecorder/PositionTest.php" role="test" />
+   <file baseinstalldir="../" md5sum="d432db42d7cfdc24942f53b7bf3827fe" name="tests/Phake/CallRecorder/RecorderTest.php" role="test" />
+   <file baseinstalldir="../" md5sum="de410ec7557d3886efd821e9c7db6c0d" name="tests/Phake/CallRecorder/VerifierTest.php" role="test" />
+   <file baseinstalldir="../" md5sum="9ff06614544647b29d141af716adf99d" name="tests/Phake/CallRecorder/VerifierMode/AtLeastTest.php" role="test" />
+   <file baseinstalldir="../" md5sum="52e85612b54ce0dd4da903acb9e0c9e3" name="tests/Phake/CallRecorder/VerifierMode/AtMostTest.php" role="test" />
+   <file baseinstalldir="../" md5sum="fc4629b52ec1e4ed21af358e71401432" name="tests/Phake/CallRecorder/VerifierMode/TimesTest.php" role="test" />
+   <file baseinstalldir="../" md5sum="8204768c4519da8a16e2fd45c65b3eca" name="tests/Phake/ClassGenerator/MockClassTest.php" role="test" />
+   <file baseinstalldir="../" md5sum="7e13549c3877f59443f50912cbd955b4" name="tests/Phake/Matchers/AnyParametersTest.php" role="test" />
+   <file baseinstalldir="../" md5sum="0f3218a4e8cfbf385317ee286062d940" name="tests/Phake/Matchers/ArgumentCaptorTest.php" role="test" />
+   <file baseinstalldir="../" md5sum="7b1dd889810a57d5e6fee57cc4de83f3" name="tests/Phake/Matchers/EqualsMatcherTest.php" role="test" />
+   <file baseinstalldir="../" md5sum="855350d5fe59ee9d39ea98a8849db97f" name="tests/Phake/Matchers/FactoryTest.php" role="test" />
+   <file baseinstalldir="../" md5sum="df5d1b77ca22f8e9ee3e4d3983a7f362" name="tests/Phake/Matchers/HamcrestMatcherAdapterTest.php" role="test" />
+   <file baseinstalldir="../" md5sum="c15ad35fda9f6426306eb0d0356daaba" name="tests/Phake/Matchers/MethodMatcherTest.php" role="test" />
+   <file baseinstalldir="../" md5sum="6df69e3ac584459f2516d861031c584d" name="tests/Phake/Matchers/PHPUnitConstraintAdapterTest.php" role="test" />
+   <file baseinstalldir="../" md5sum="4ad62006c28ec3ea03070b039cfd346c" name="tests/Phake/Proxies/AnswerBinderProxyTest.php" role="test" />
+   <file baseinstalldir="../" md5sum="927fadda23705317af546bbf31f7011a" name="tests/Phake/Proxies/StubberProxyTest.php" role="test" />
+   <file baseinstalldir="../" md5sum="73bcf8eead0a9c353d4cfa27988b10fd" name="tests/Phake/Proxies/VerifierProxyTest.php" role="test" />
+   <file baseinstalldir="../" md5sum="acff26779a1c24311bfcc16aa9d5e1b1" name="tests/Phake/Stubber/AnswerBinderTest.php" role="test" />
+   <file baseinstalldir="../" md5sum="3c0bae6ce730e170abe24e19e97676cc" name="tests/Phake/Stubber/SelfBindingAnswerBinderTest.php" role="test" />
+   <file baseinstalldir="../" md5sum="0aac9b288bed2a9f40af39a247bdae50" name="tests/Phake/Stubber/StubMapperTest.php" role="test" />
+   <file baseinstalldir="../" md5sum="7a2b9cc4617ee320546af4ec37471d3c" name="tests/Phake/Stubber/Answers/ExceptionAnswerTest.php" role="test" />
+   <file baseinstalldir="../" md5sum="10f2da0fbad6c6fc555779829030ef6a" name="tests/Phake/Stubber/Answers/ParentDelegateTest.php" role="test" />
+   <file baseinstalldir="../" md5sum="e4b3f19ba0e537eeffaaa79a22f83628" name="tests/Phake/Stubber/Answers/StaticAnswerTest.php" role="test" />
+   <file baseinstalldir="../" md5sum="12432b51aad13abfff51d0cba4f83ed3" name="tests/PhakeTest/AbstractClass.php" role="test" />
+   <file baseinstalldir="../" md5sum="cca378b9b4710d04fa391e2485d763c4" name="tests/PhakeTest/ExtendedMockedConstructedClass.php" role="test" />
+   <file baseinstalldir="../" md5sum="0925d5b3235fb712c07df2fb3e7c48c2" name="tests/PhakeTest/FinalMethod.php" role="test" />
+   <file baseinstalldir="../" md5sum="211925fe2266831d1be17ebc6d5bfb9b" name="tests/PhakeTest/MockedClass.php" role="test" />
+   <file baseinstalldir="../" md5sum="ca781b30ddb0aaa7d79f5a1b0d86f1af" name="tests/PhakeTest/MockedConstructedClass.php" role="test" />
+   <file baseinstalldir="../" md5sum="f23f23535d716cd12f729c91c483bf59" name="tests/PhakeTest/MockedInterface.php" role="test" />
+   <file baseinstalldir="../" md5sum="f8081cf4f35cff8e272ec4f60be6e76e" name="LICENSE" role="doc" />
+   <file baseinstalldir="../" md5sum="fcc927a5d606b833e6a8e90760ac0a39" name="README" role="doc" />
+  </dir>
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>5.2.0</min>
+   </php>
+   <pearinstaller>
+    <min>1.4.0</min>
+   </pearinstaller>
+  </required>
+ </dependencies>
+ <phprelease />
+ <changelog>
+  <release>
+   <version>
+    <release>1.0.0aplha1</release>
+    <api>1.0.0aplha1</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2010-12-30</date>
+   <license uri="https://github.com/mlively/Phake/raw/master/LICENSE">BSD Style</license>
+   <notes></notes>
+  </release>
+ </changelog>
+</package>
