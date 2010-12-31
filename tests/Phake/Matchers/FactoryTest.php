@@ -48,7 +48,8 @@ require_once 'Phake/Matchers/HamcrestMatcherAdapter.php';
 require_once 'Phake/Matchers/PHPUnitConstraintAdapter.php';
 
 require_once 'PHPUnit/Framework/Constraint.php';
-require_once 'Hamcrest/Matcher.php';
+
+if (HAMCREST_LOADED) require_once 'Hamcrest/Matcher.php';
 
 class Phake_Matchers_FactoryTest extends PHPUnit_Framework_TestCase
 {
