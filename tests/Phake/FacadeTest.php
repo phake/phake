@@ -142,6 +142,30 @@ class Phake_FacadeTest extends PHPUnit_Framework_TestCase
 		$this->assertType('Phake_CallRecorder_Verifier', $this->facade->verify($mock));
 	}
 
+
+	/**
+	 * Test that autoload doesn't get called on generated classes
+	 */
+	public function testAutoLoadNotCalledOnMock()
+	{
+		spl_autoload_register(array(__CLASS__, 'autoload'));
+		$mockedClass = 'stdClass';
+		$mockGenerator = $this->getMock('Phake_ClassGenerator_MockClass');
+
+		//This test will fail if the autoload below is called
+		$this->facade->mock($mockedClass, $mockGenerator, $this->getMock('Phake_CallRecorder_Recorder'), $this->getMock('Phake_Stubber_IAnswer'));
+		spl_autoload_unregister(array(__CLASS__, 'autoload'));
+	}
+
+	/**
+	 * An autoload function that should never be called
+	 */
+	public static function autoload()
+	{
+		$e = new Exception;
+		self::fail("The autoloader should not be called: \n{$e->getTraceAsString()}");
+	}
+
 	/**
 	 * Sets expectations for how the generator should be called
 	 *

@@ -95,12 +95,10 @@ class Phake_Facade
 	 */
 	private function generateUniqueClassName($base)
 	{
-		$base_class_name = uniqid($base . '_');
+		$base_class_name = uniqid($base . '_PHAKE');
 		$i = 1;
 
-		// I am purposely trying to autoload to ensure the edge case of a newly generated name
-		// conflicting with a class that maybe should autoload.
-		while (class_exists($base_class_name . $i, TRUE))
+		while (class_exists($base_class_name . $i, FALSE))
 		{
 			$i++;
 		}
