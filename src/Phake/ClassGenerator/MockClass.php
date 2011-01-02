@@ -193,8 +193,8 @@ class {$newClassName} {$extends}
 			throw new Exception('This object has been frozen.');
 		}
 
-		\$methodName = '{$method->getName()}';
-		\$args = func_get_args();
+		\$methodName = \$actualMethodName = '{$method->getName()}';
+		\$args = \$actualArgs = func_get_args();
 
 		if (__FUNCTION__ == '__call')
 		{
@@ -218,8 +218,8 @@ class {$newClassName} {$extends}
 		if (\$answer instanceof Phake_Stubber_Answers_IDelegator)
 		{
 			\$delegate = \$answer->getAnswer();
-			\$callback = \$delegate->getCallBack(\$this, \$methodName, \$args);
-			\$arguments = \$delegate->getArguments(\$methodName, \$args);
+			\$callback = \$delegate->getCallBack(\$this, \$actualMethodName, \$actualArgs);
+			\$arguments = \$delegate->getArguments(\$actualMethodName, \$actualArgs);
 
 			\$realAnswer = call_user_func_array(\$callback, \$arguments);
 			\$answer->processAnswer(\$realAnswer);

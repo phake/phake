@@ -852,6 +852,17 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 
 		Phake::verify($mock)->magicCall();
 	}
+
+	public function testStubbingMagicMethodsAlsoResortsToCallIfNoStubsDefined()
+	{
+		$expected = '__call';
+		$mock = Phake::partialMock('PhakeTest_MagicClass');
+
+		Phake::when($mock)->magicCall()->thenReturn('magicCalled');
+
+		$this->assertEquals('magicCalled', $mock->magicCall());
+		$this->assertEquals($expected, $mock->unStubbedCall());
+	}
 }
 
 ?>

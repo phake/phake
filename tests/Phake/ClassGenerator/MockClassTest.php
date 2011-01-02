@@ -398,12 +398,12 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 
 		$delegate->expects($this->any())
 				->method('getCallBack')
-				->with($this->equalTo($mock), $this->equalTo('fooWithArgument'), $this->equalTo(array('bar')))
+				->with($this->equalTo($mock), $this->equalTo('__call'), $this->equalTo(array('fooWithArgument', array('bar'))))
 				->will($this->returnValue(array($realAnswer, 'fooWithArgument')));
 
 		$delegate->expects($this->any())
 				->method('getArguments')
-				->with($this->equalTo('fooWithArgument'), $this->equalTo(array('bar')))
+				->with($this->equalTo('__call'), $this->equalTo(array('fooWithArgument', array('bar'))))
 				->will($this->returnValue(array('bar')));
 
 		$stubMapper->expects($this->once())
