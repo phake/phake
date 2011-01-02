@@ -2,7 +2,7 @@
 /* 
  * Phake - Mocking Framework
  * 
- * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
+ * Copyright (c) 2010, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -61,7 +61,7 @@ class Phake_Facade
 	 * @param Phake_Stubber_IAnswer $defaultAnswer
 	 * @return mixed
 	 */
-	public function mock($mockedClass, Phake_ClassGenerator_MockClass $mockGenerator, Phake_CallRecorder_Recorder $callRecorder, Phake_Stubber_IAnswer $defaultAnswer)
+	public function mock($mockedClass, Phake_ClassGenerator_MockClass $mockGenerator, Phake_CallRecorder_Recorder $callRecorder, Phake_Stubber_IAnswer $defaultAnswer, array $constructorArgs = null)
 	{
 		if (!class_exists($mockedClass, TRUE) && !interface_exists($mockedClass, TRUE))
 		{
@@ -70,7 +70,7 @@ class Phake_Facade
 
 		$newClassName = $this->generateUniqueClassName($mockedClass);
 		$mockGenerator->generate($newClassName, $mockedClass);
-		return $mockGenerator->instantiate($newClassName, $callRecorder, new Phake_Stubber_StubMapper(), $defaultAnswer);
+		return $mockGenerator->instantiate($newClassName, $callRecorder, new Phake_Stubber_StubMapper(), $defaultAnswer, $constructorArgs);
 	}
 
 	/**
@@ -95,6 +95,8 @@ class Phake_Facade
 	 */
 	private function generateUniqueClassName($base)
 	{
+		$ns_parts = explode('\\', $base);
+		$base = array_pop($ns_parts);
 		$base_class_name = uniqid($base . '_PHAKE');
 		$i = 1;
 
@@ -106,4 +108,5 @@ class Phake_Facade
 		return $base_class_name;
 	}
 }
+
 ?>

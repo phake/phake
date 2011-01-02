@@ -2,7 +2,7 @@
 /* 
  * Phake - Mocking Framework
  * 
- * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
+ * Copyright (c) 2010, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -45,7 +45,7 @@
 require_once 'Phake/Matchers/IArgumentMatcher.php';
 
 /**
- * An adapter class allowing PHPUnit constraints to be treated as though they were Phake argument 
+ * An adapter class allowing PHPUnit constraints to be treated as though they were Phake argument
  * matchers.
  */
 class Phake_Matchers_PHPUnitConstraintAdapter implements Phake_Matchers_IArgumentMatcher
@@ -74,6 +74,11 @@ class Phake_Matchers_PHPUnitConstraintAdapter implements Phake_Matchers_IArgumen
 	public function matches($argument)
 	{
 		return $this->constraint->evaluate($argument);
+	}
+
+	public function __toString()
+	{
+		return $this->constraint->toString();
 	}
 }
 

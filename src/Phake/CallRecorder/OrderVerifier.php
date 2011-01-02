@@ -2,7 +2,7 @@
 /* 
  * Phake - Mocking Framework
  * 
- * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
+ * Copyright (c) 2010, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -52,7 +52,8 @@ class Phake_CallRecorder_OrderVerifier
 	 */
 	public function verifyCallsInOrder(array $calls)
 	{
-		$call2 = array_shift(array_shift($calls));
+		$call1 = array_shift($calls);
+		$call2 = array_shift($call1);
 
 		while (count($calls))
 		{
@@ -79,4 +80,5 @@ class Phake_CallRecorder_OrderVerifier
 		return TRUE;
 	}
 }
+
 ?>

@@ -2,7 +2,7 @@
 /* 
  * Phake - Mocking Framework
  * 
- * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
+ * Copyright (c) 2010, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -70,7 +70,7 @@ class Phake_CallRecorder_Recorder
 	 * @var int
 	 */
 	private static $lastPosition = 0;
-	
+
 	/**
 	 * Records that a given
 	 * @param Phake_CallRecorder_Call $call
@@ -118,4 +118,5 @@ class Phake_CallRecorder_Recorder
 		}
 	}
 }
+
 ?>

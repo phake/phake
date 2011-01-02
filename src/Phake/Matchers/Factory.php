@@ -2,7 +2,7 @@
 /* 
  * Phake - Mocking Framework
  * 
- * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
+ * Copyright (c) 2010, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -70,12 +70,12 @@ class Phake_Matchers_Factory
 			return $argument;
 		}
 		elseif (class_exists('PHPUnit_Framework_Constraint')
-						&& $argument instanceof PHPUnit_Framework_Constraint)
+				&& $argument instanceof PHPUnit_Framework_Constraint)
 		{
 			return new Phake_Matchers_PHPUnitConstraintAdapter($argument);
 		}
 		elseif (interface_exists('Hamcrest_Matcher')
-						&& $argument instanceof Hamcrest_Matcher)
+				&& $argument instanceof Hamcrest_Matcher)
 		{
 			return new Phake_Matchers_HamcrestMatcherAdapter($argument);
 		}
@@ -100,4 +100,5 @@ class Phake_Matchers_Factory
 		return $matchers;
 	}
 }
+
 ?>

@@ -2,7 +2,7 @@
 /* 
  * Phake - Mocking Framework
  * 
- * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
+ * Copyright (c) 2010, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -53,7 +53,7 @@ class Phake_Stubber_Answers_ParentDelegateTest extends PHPUnit_Framework_TestCas
 	 * @var Phake_Stubber_Answers_ParentDelegate
 	 */
 	private $delegate;
-	
+
 	/**
 	 * Sets up the test fixture
 	 */
@@ -68,7 +68,7 @@ class Phake_Stubber_Answers_ParentDelegateTest extends PHPUnit_Framework_TestCas
 	public function testThatDelegateReturnsItself()
 	{
 		$answer = $this->delegate->getAnswer();
-		$this->assertType('Phake_Stubber_Answers_IDelegator', $answer);
+		$this->assertInstanceOf('Phake_Stubber_Answers_IDelegator', $answer);
 		$this->assertSame($this->delegate, $answer);
 	}
 
@@ -77,9 +77,9 @@ class Phake_Stubber_Answers_ParentDelegateTest extends PHPUnit_Framework_TestCas
 	 */
 	public function testThatDelegateReturnsCorrectCallback()
 	{
-		$callback = $this->delegate->getCallback('foo', array('bar'));
+		$callback = $this->delegate->getCallback($this, 'foo', array('bar'));
 
-		$this->assertSame(array('parent', 'foo'), $callback);
+		$this->assertSame(array($this, 'parent::foo'), $callback);
 	}
 
 	/**
@@ -90,6 +90,18 @@ class Phake_Stubber_Answers_ParentDelegateTest extends PHPUnit_Framework_TestCas
 		$args = $this->delegate->getArguments('foo', array('bar'));
 
 		$this->assertSame(array('bar'), $args);
+	}
+
+	/**
+	 * Tests that processAnswer will set the captured value
+	 */
+	public function testProcessAnswerSetsCapturedValue()
+	{
+		$value = null;
+		$delegate = new Phake_Stubber_Answers_ParentDelegate($value);
+		$delegate->processAnswer("test");
+
+		$this->assertEquals("test", $value);
 	}
 }
 

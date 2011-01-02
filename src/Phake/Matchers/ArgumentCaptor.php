@@ -2,7 +2,7 @@
 /* 
  * Phake - Mocking Framework
  * 
- * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
+ * Copyright (c) 2010, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -108,6 +108,11 @@ class Phake_Matchers_ArgumentCaptor implements Phake_Matchers_IArgumentMatcher
 		$this->matcher = $factory->createMatcher($matcher);
 
 		return $this;
+	}
+
+	public function __toString()
+	{
+		return 'captured parameter';
 	}
 }
 

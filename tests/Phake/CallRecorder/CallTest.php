@@ -2,7 +2,7 @@
 /* 
  * Phake - Mocking Framework
  * 
- * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
+ * Copyright (c) 2010, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -52,13 +52,19 @@ require_once 'Phake/CallRecorder/Call.php';
 class Phake_CallRecorder_CallTest extends PHPUnit_Framework_TestCase
 {
 	/**
-	 * @var Phake_CallRecorder_Call 
+	 * @var Phake_CallRecorder_Call
 	 */
 	private $call;
 
+	private $mock;
+
 	public function setUp()
 	{
-		$this->call = new Phake_CallRecorder_Call($this, 'someMethod', array('foo', 'bar'));
+		$this->mock = $this->getMock('Phake_IMock');
+		$this->mock->expects($this->any())
+				->method('__PHAKE_getName')
+				->will($this->returnValue('Phake_IMock'));
+		$this->call = new Phake_CallRecorder_Call($this->mock, 'someMethod', array('foo', 'bar'));
 	}
 
 	/**
@@ -66,7 +72,7 @@ class Phake_CallRecorder_CallTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testGetObject()
 	{
-		$this->assertSame($this, $this->call->getObject());
+		$this->assertSame($this->mock, $this->call->getObject());
 	}
 
 	/**
@@ -81,5 +87,17 @@ class Phake_CallRecorder_CallTest extends PHPUnit_Framework_TestCase
 	{
 		$this->assertEquals(array('foo', 'bar'), $this->call->getArguments());
 	}
+
+	public function testToString()
+	{
+		$this->assertEquals('Phake_IMock->someMethod(<string:foo>, <string:bar>)', $this->call->__toString());
+	}
+
+	public function testToStringOnAllArgumentTypes()
+	{
+		$call = new Phake_CallRecorder_Call($this->mock, 'someMethod', array(new stdClass, array(), null, opendir('.'), 'foo', 42, true));
+		$this->assertEquals('Phake_IMock->someMethod(<object:stdClass>, <array>, <null>, <resource>, <string:foo>, <integer:42>, <boolean:true>)', $call->__toString());
+	}
 }
+
 ?>

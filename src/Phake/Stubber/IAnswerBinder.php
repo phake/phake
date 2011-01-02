@@ -2,7 +2,7 @@
 /* 
  * Phake - Mocking Framework
  * 
- * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
+ * Copyright (c) 2010, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -51,10 +51,11 @@ interface Phake_Stubber_IAnswerBinder
 	 * Binds the given answer to an object.
 	 *
 	 * Returns an instance of itself
-	 * 
+	 *
 	 * @param Phake_Stubber_IAnswer $answer
 	 * @return Phake_Stubber_IAnswerBinder
 	 */
 	public function bindAnswer(Phake_Stubber_IAnswer $answer);
 }
+
 ?>

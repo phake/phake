@@ -2,7 +2,7 @@
 /* 
  * Phake - Mocking Framework
  * 
- * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
+ * Copyright (c) 2010, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -71,7 +71,9 @@ class Phake_ClassGenerator_MockClass
 			$extends = '';
 			$implements = ", {$mockedClassName}";
 		}
-		
+
+		$mockedClass = new ReflectionClass($mockedClassName);
+
 		$classDef = "
 class {$newClassName} {$extends}
 	implements Phake_IMock {$implements}
@@ -84,11 +86,12 @@ class {$newClassName} {$extends}
 
 	private \$__PHAKE_isFrozen = FALSE;
 
-	public function __construct(Phake_CallRecorder_Recorder \$callRecorder, Phake_Stubber_StubMapper \$stubMapper, Phake_Stubber_IAnswer \$defaultAnswer)
+	public function __construct(Phake_CallRecorder_Recorder \$callRecorder, Phake_Stubber_StubMapper \$stubMapper, Phake_Stubber_IAnswer \$defaultAnswer, array \$constructorArgs = null)
 	{
 		\$this->__PHAKE_callRecorder = \$callRecorder;
 		\$this->__PHAKE_stubMapper = \$stubMapper;
 		\$this->__PHAKE_defaultAnswer = \$defaultAnswer;
+		{$this->getConstructorChaining($mockedClass)}
 	}
 
 	public function __PHAKE_getCallRecorder()
@@ -113,7 +116,12 @@ class {$newClassName} {$extends}
 		\$this->__PHAKE_isFrozen = TRUE;
 	}
 
-	{$this->generateMockedMethods(new ReflectionClass($mockedClassName))}
+	public function __PHAKE_getName()
+	{
+		return '{$mockedClassName}';
+	}
+
+	{$this->generateMockedMethods($mockedClass)}
 }
 ";
 
@@ -127,11 +135,12 @@ class {$newClassName} {$extends}
 	 * @param Phake_CallRecorder_Recorder $recorder
 	 * @param Phake_Stubber_StubMapper $mapper
 	 * @param Phake_Stubber_IAnswer $defaultAnswer
+	 * @param array $constructorArgs
 	 * @return Phake_IMock of type $newClassName
 	 */
-	public function instantiate($newClassName, Phake_CallRecorder_Recorder $recorder, Phake_Stubber_StubMapper $mapper, Phake_Stubber_IAnswer $defaultAnswer)
+	public function instantiate($newClassName, Phake_CallRecorder_Recorder $recorder, Phake_Stubber_StubMapper $mapper, Phake_Stubber_IAnswer $defaultAnswer, array $constructorArgs = null)
 	{
-		return new $newClassName($recorder, $mapper, $defaultAnswer);
+		return new $newClassName($recorder, $mapper, $defaultAnswer, $constructorArgs);
 	}
 
 	/**
@@ -142,13 +151,30 @@ class {$newClassName} {$extends}
 	protected function generateMockedMethods(ReflectionClass $mockedClass)
 	{
 		$methodDefs = '';
-		$filter = ReflectionMethod::IS_ABSTRACT | ReflectionMethod::IS_PROTECTED | ReflectionMethod::IS_PUBLIC;
+		$filter = ReflectionMethod::IS_ABSTRACT | ReflectionMethod::IS_PROTECTED | ReflectionMethod::IS_PUBLIC | ~ReflectionMethod::IS_FINAL;
 		foreach ($mockedClass->getMethods($filter) as $method)
 		{
-			$methodDefs .= $this->implementMethod($method) . "\n";
+			if (!$method->isConstructor() && !$method->isDestructor() && !$method->isFinal())
+			{
+				$methodDefs .= $this->implementMethod($method) . "\n";
+			}
 		}
 
 		return $methodDefs;
+	}
+
+	/**
+	 * Creates the constructor implementation
+	 */
+	protected function getConstructorChaining(ReflectionClass $originalClass)
+	{
+		return $originalClass->hasMethod('__construct') ? "
+
+		if (is_array(\$constructorArgs))
+		{
+			call_user_func_array(array(\$this, 'parent::__construct'), \$constructorArgs);
+		}
+		" : "";
 	}
 
 	/**
@@ -167,11 +193,18 @@ class {$newClassName} {$extends}
 			throw new Exception('This object has been frozen.');
 		}
 
+		\$methodName = '{$method->getName()}';
 		\$args = func_get_args();
 
-		\$this->__PHAKE_callRecorder->recordCall(new Phake_CallRecorder_Call(\$this, '{$method->getName()}', \$args));
+		if (__FUNCTION__ == '__call')
+		{
+			\$methodName = \$args[0];
+			\$args = \$args[1];
+		}
 
-		\$stub = \$this->__PHAKE_stubMapper->getStubByCall('{$method->getName()}', \$args);
+		\$this->__PHAKE_callRecorder->recordCall(new Phake_CallRecorder_Call(\$this, \$methodName, \$args));
+
+		\$stub = \$this->__PHAKE_stubMapper->getStubByCall(\$methodName, \$args);
 
 		if (\$stub !== NULL)
 		{
@@ -185,10 +218,12 @@ class {$newClassName} {$extends}
 		if (\$answer instanceof Phake_Stubber_Answers_IDelegator)
 		{
 			\$delegate = \$answer->getAnswer();
-			\$callback = \$delegate->getCallBack(__FUNCTION__, \$args);
-			\$arguments = \$delegate->getArguments(__FUNCTION__, \$args);
+			\$callback = \$delegate->getCallBack(\$this, \$methodName, \$args);
+			\$arguments = \$delegate->getArguments(\$methodName, \$args);
 
-			return call_user_func_array(\$callback, \$arguments);
+			\$realAnswer = call_user_func_array(\$callback, \$arguments);
+			\$answer->processAnswer(\$realAnswer);
+			return \$realAnswer;
 		}
 		else
 		{
@@ -248,4 +283,5 @@ class {$newClassName} {$extends}
 		return $type . ($parameter->isPassedByReference() ? '&' : '') . '$' . $parameter->getName() . $default;
 	}
 }
+
 ?>

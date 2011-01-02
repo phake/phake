@@ -2,7 +2,7 @@
 /* 
  * Phake - Mocking Framework
  * 
- * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
+ * Copyright (c) 2010, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -53,5 +53,12 @@ interface Phake_Matchers_IArgumentMatcher
 	 * @return boolean
 	 */
 	public function matches($argument);
+
+	/**
+	 * Returns a human readable description of the argument matcher
+	 * @return string
+	 */
+	public function __toString();
 }
+
 ?>

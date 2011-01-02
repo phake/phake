@@ -2,7 +2,7 @@
 /* 
  * Phake - Mocking Framework
  * 
- * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
+ * Copyright (c) 2010, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -60,6 +60,12 @@ interface Phake_IMock extends Phake_CallRecorder_ICallRecorderContainer, Phake_S
 	 * reset.
 	 */
 	public function __PHAKE_freezeMock();
+
+	/**
+	 * Returns the name of the mock object for reference purposes.
+ 	 * @return string
+	 */
+	public function __PHAKE_getName();
 }
 
 ?>

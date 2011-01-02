@@ -2,7 +2,7 @@
 /* 
  * Phake - Mocking Framework
  * 
- * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
+ * Copyright (c) 2010, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -54,4 +54,5 @@ interface Phake_CallRecorder_ICallRecorderContainer
 	 */
 	public function __PHAKE_getCallRecorder();
 }
+
 ?>

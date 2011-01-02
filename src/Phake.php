@@ -2,7 +2,7 @@
 /*
  * Phake - Mocking Framework
  *
- * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
+ * Copyright (c) 2010, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -52,9 +52,12 @@ require_once 'Phake/Proxies/AnswerBinderProxy.php';
 require_once 'Phake/Matchers/EqualsMatcher.php';
 require_once 'Phake/Matchers/ArgumentCaptor.php';
 require_once 'Phake/Matchers/Factory.php';
+require_once 'Phake/Matchers/AnyParameters.php';
 require_once 'Phake/Stubber/SelfBindingAnswerBinder.php';
 require_once 'Phake/Stubber/Answers/StaticAnswer.php';
-require_once 'Phake/Stubber/Answers/SpyDelegate.php';
+require_once 'Phake/CallRecorder/VerifierMode/Times.php';
+require_once 'Phake/CallRecorder/VerifierMode/AtLeast.php';
+require_once 'Phake/CallRecorder/VerifierMode/AtMost.php';
 
 /**
  * Phake - PHP Test Doubles Framework
@@ -93,15 +96,36 @@ class Phake
 	}
 
 	/**
-	 * Returns a new spy object that watches the given object.
-	 * @param object $spiedOn
+	 * Returns a partial mock that is constructed with the given parameters
+	 *
+	 * Calls to this class will be recorded however they will still call the original functionality by default.
+	 *
+	 * @param string $className class name
+	 * @param mixed ... the remaining arguments will be passed as constructor arguments
 	 * @return Phake_ITestDouble
 	 */
-	public static function spy($spiedOn)
+	public static function partialMock()
 	{
-		$answer = new Phake_Stubber_Answers_SpyDelegate($spiedOn);
+		$args = func_get_args();
+		$className = array_shift($args);
+		$answer = new Phake_Stubber_Answers_ParentDelegate();
 
-		return self::getPhake()->mock(get_class($spiedOn), new Phake_ClassGenerator_MockClass(), new Phake_CallRecorder_Recorder(), $answer);
+		return self::getPhake()->mock($className, new Phake_ClassGenerator_MockClass(), new Phake_CallRecorder_Recorder(), $answer, $args);
+	}
+
+	/**
+	 * For backwards compatibility
+	 *
+	 * @see Phake::partialMock()
+	 * @param string $className class name
+	 * @param mixed ... the remaining arguments will be passed as constructor arguments
+	 * @return Phake_ITestDouble
+	 * @deprecated Please use Phake::partialMock() instead
+	 */
+	public static function partMock()
+	{
+		$args = func_get_args();
+		return call_user_func_array('Phake::partialMock', $args);
 	}
 
 	/**
@@ -109,11 +133,16 @@ class Phake
 	 * @param Phake_CallRecorder_ICallRecorderContainer $mock
 	 * @return Phake_CallRecorder_VerifierProxy
 	 */
-	public static function verify(Phake_CallRecorder_ICallRecorderContainer $mock)
+	public static function verify(Phake_CallRecorder_ICallRecorderContainer $mock, Phake_CallRecorder_IVerifierMode $mode = null)
 	{
+		if (is_null($mode))
+		{
+			$mode = self::times(1);
+		}
+
 		$verifier = self::getPhake()->verify($mock);
 
-		return new Phake_Proxies_VerifierProxy($verifier, new Phake_Matchers_Factory());
+		return new Phake_Proxies_VerifierProxy($verifier, new Phake_Matchers_Factory(), $mode);
 	}
 
 	/**
@@ -146,7 +175,7 @@ class Phake
 	public static function verifyNoInteraction(Phake_IMock $mock)
 	{
 		$callRecorder = $mock->__PHAKE_getCallRecorder();
-		
+
 		if (count($callRecorder->getAllCalls()))
 		{
 			throw new Exception('Calls should not have been made against this mock');
@@ -251,5 +280,57 @@ class Phake
 	{
 		return new Phake_Matchers_ArgumentCaptor($value);
 	}
+
+	/**
+	 * Allows verifying an exact number of invocations.
+	 *
+	 * @param int $count
+	 * @return Phake_CallRecorder_IVerifierMode
+	 */
+	public static function times($count)
+	{
+		return new Phake_CallRecorder_VerifierMode_Times((int) $count);
+	}
+
+	/**
+	 * Allows verifying that there were no invocations. Alias of <code>times(0)</code>.
+	 * @return Phake_CallRecorder_IVerifierMode
+	 */
+	public static function never()
+	{
+		return new Phake_CallRecorder_VerifierMode_Times(0);
+	}
+
+	/**
+	 * Allows verifying at least <code>$count</code> invocations.
+	 *
+	 * @param int $count
+	 * @return Phake_CallRecorder_IVerifierMode
+	 */
+	public static function atLeast($count)
+	{
+		return new Phake_CallRecorder_VerifierMode_AtLeast((int) $count);
+	}
+
+	/**
+	 * Allows verifying at most <code>$count</code> invocations.
+	 * @param int $count
+	 * @return Phake_CallRecorder_IVerifierMode
+	 */
+	public static function atMost($count)
+	{
+		return new Phake_CallRecorder_VerifierMode_AtMost((int) $count);
+	}
+
+	/**
+	 * Returns an any parameters matcher to allow matching all invocations of a particular method.
+	 *
+	 * @return Phake_Matchers_AnyParameters
+	 */
+	public static function anyParameters()
+	{
+		return new Phake_Matchers_AnyParameters();
+	}
 }
+
 ?>

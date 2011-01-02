@@ -2,7 +2,7 @@
 /* 
  * Phake - Mocking Framework
  * 
- * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
+ * Copyright (c) 2010, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -81,9 +81,9 @@ class Phake_Proxies_AnswerBinderProxyTest extends PHPUnit_Framework_TestCase
 	public function testThenReturn()
 	{
 		$this->binder->expects($this->once())
-			->method('bindAnswer')
-			->with($this->logicalAnd($this->isInstanceOf('Phake_Stubber_Answers_StaticAnswer'), $this->attributeEqualTo('answer', 42)))
-			->will($this->returnValue($this->binder));
+				->method('bindAnswer')
+				->with($this->logicalAnd($this->isInstanceOf('Phake_Stubber_Answers_StaticAnswer'), $this->attributeEqualTo('answer', 42)))
+				->will($this->returnValue($this->binder));
 
 		$this->assertSame($this->binder, $this->proxy->thenReturn(42));
 	}
@@ -94,11 +94,41 @@ class Phake_Proxies_AnswerBinderProxyTest extends PHPUnit_Framework_TestCase
 	public function testThenCallParent()
 	{
 		$this->binder->expects($this->once())
-			->method('bindAnswer')
-			->with($this->isInstanceOf('Phake_Stubber_Answers_ParentDelegate'))
-			->will($this->returnValue($this->binder));
+				->method('bindAnswer')
+				->with($this->isInstanceOf('Phake_Stubber_Answers_ParentDelegate'))
+				->will($this->returnValue($this->binder));
 
 		$this->assertSame($this->binder, $this->proxy->thenCallParent());
 	}
+
+	/**
+	 * Tests that captureReturnTo does it's thing
+	 */
+	public function testCaptureReturnTo()
+	{
+		$this->binder->expects($this->once())
+				->method('bindAnswer')
+				->with($this->isInstanceOf('Phake_Stubber_Answers_ParentDelegate'))
+				->will($this->returnValue($this->binder));
+
+		$this->assertSame($this->binder, $this->proxy->captureReturnTo($var));
+	}
+
+	/**
+	 * Tests the thenThrow functionality of the proxy.
+	 */
+	public function testThenThrow()
+	{
+		$exception = new RuntimeException();
+
+		$this->binder->expects($this->once())
+				->method('bindAnswer')
+				->with($this->logicalAnd($this->isInstanceOf('Phake_Stubber_Answers_ExceptionAnswer'),
+			$this->attributeEqualTo('answer', $exception)))
+				->will($this->returnValue($this->binder));
+
+		$this->assertSame($this->binder, $this->proxy->thenThrow($exception));
+	}
 }
+
 ?>

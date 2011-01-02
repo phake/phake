@@ -2,7 +2,7 @@
 /* 
  * Phake - Mocking Framework
  * 
- * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
+ * Copyright (c) 2010, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -72,7 +72,9 @@ class Phake_Stubber_StubMapper
 	 */
 	public function getStubByCall($method, array $arguments)
 	{
-		foreach ($this->matcherStubMap as $item)
+		$matcherStubMap = array_reverse($this->matcherStubMap);
+		
+		foreach ($matcherStubMap as $item)
 		{
 			list($matcher, $answer) = $item;
 
@@ -94,4 +96,5 @@ class Phake_Stubber_StubMapper
 		$this->matcherStubMap = array();
 	}
 }
+
 ?>

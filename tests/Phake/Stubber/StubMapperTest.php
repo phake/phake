@@ -2,7 +2,7 @@
 /* 
  * Phake - Mocking Framework
  * 
- * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
+ * Copyright (c) 2010, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -74,9 +74,9 @@ class Phake_Stubber_StubMapperTest extends PHPUnit_Framework_TestCase
 		$stub = $this->getMock('Phake_Stubber_IAnswer');
 
 		$matcher->expects($this->any())
-				 ->method('matches')
-				 ->with($this->equalTo('foo'), $this->equalTo(array('bar', 'test')))
-				 ->will($this->returnValue(TRUE));
+				->method('matches')
+				->with($this->equalTo('foo'), $this->equalTo(array('bar', 'test')))
+				->will($this->returnValue(TRUE));
 
 		$this->mapper->mapStubToMatcher($stub, $matcher);
 
@@ -92,8 +92,8 @@ class Phake_Stubber_StubMapperTest extends PHPUnit_Framework_TestCase
 		$stub = $this->getMock('Phake_Stubber_IAnswer');
 
 		$matcher->expects($this->any())
-					 ->method('matches')
-					 ->will($this->returnValue(FALSE));
+				->method('matches')
+				->will($this->returnValue(FALSE));
 
 		$this->mapper->mapStubToMatcher($stub, $matcher);
 
@@ -109,7 +109,7 @@ class Phake_Stubber_StubMapperTest extends PHPUnit_Framework_TestCase
 		$stub = $this->getMock('Phake_Stubber_IAnswer');
 
 		$matcher->expects($this->never())
-						->method('matches');
+				->method('matches');
 
 		$this->mapper->mapStubToMatcher($stub, $matcher);
 
@@ -117,5 +117,31 @@ class Phake_Stubber_StubMapperTest extends PHPUnit_Framework_TestCase
 
 		$this->assertNull($this->mapper->getStubByCall('foo', array('bar', 'test')));
 	}
+	
+	/**
+	 * Tests matches in reverse order.
+	 */
+	public function testMatchesInReverseOrder()
+	{
+		$match_me = $this->getMock('Phake_Matchers_MethodMatcher', array(), array(), '', FALSE);
+		$match_me_stub = $this->getMock('Phake_Stubber_IAnswer');
+		
+		$also_matches = $this->getMock('Phake_Matchers_MethodMatcher', array(), array(), '', FALSE);
+		$also_matches_stub = $this->getMock('Phake_Stubber_IAnswer');
+		
+		$also_matches->expects($this->never())
+			->method('matches');
+
+		$match_me->expects($this->any())
+			->method('matches')
+			->with('foo', array('bar', 'test'))
+			->will($this->returnValue(TRUE));
+
+		$this->mapper->mapStubToMatcher($also_matches_stub, $also_matches);
+		$this->mapper->mapStubToMatcher($match_me_stub, $match_me);
+
+		$this->assertEquals($match_me_stub, $this->mapper->getStubByCall('foo', array('bar', 'test')));
+	}
 }
+
 ?>

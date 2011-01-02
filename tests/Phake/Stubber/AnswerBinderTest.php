@@ -2,7 +2,7 @@
 /* 
  * Phake - Mocking Framework
  * 
- * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
+ * Copyright (c) 2010, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -83,10 +83,11 @@ class Phake_Stubber_AnswerBinderTest extends PHPUnit_Framework_TestCase
 	{
 		$answer = $this->getMock('Phake_Stubber_IAnswer');
 		$this->mock->expects($this->once())
-			->method('__PHAKE_addAnswer')
-			->with($this->equalTo($answer), $this->equalTo($this->matcher));
-		
+				->method('__PHAKE_addAnswer')
+				->with($this->equalTo($answer), $this->equalTo($this->matcher));
+
 		$this->assertEquals($this->binder, $this->binder->bindAnswer($answer));
 	}
 }
+
 ?>

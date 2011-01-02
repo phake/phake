@@ -2,7 +2,7 @@
 /* 
  * Phake - Mocking Framework
  * 
- * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
+ * Copyright (c) 2010, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -48,7 +48,8 @@ require_once 'Phake/Matchers/HamcrestMatcherAdapter.php';
 require_once 'Phake/Matchers/PHPUnitConstraintAdapter.php';
 
 require_once 'PHPUnit/Framework/Constraint.php';
-require_once 'Hamcrest/Matcher.php';
+
+if (HAMCREST_LOADED) require_once 'Hamcrest/Matcher.php';
 
 class Phake_Matchers_FactoryTest extends PHPUnit_Framework_TestCase
 {
@@ -56,7 +57,7 @@ class Phake_Matchers_FactoryTest extends PHPUnit_Framework_TestCase
 	 * @var Phake_Matchers_Factory
 	 */
 	private $factory;
-	
+
 	/**
 	 * Sets up the test fixture
 	 */
@@ -64,31 +65,31 @@ class Phake_Matchers_FactoryTest extends PHPUnit_Framework_TestCase
 	{
 		$this->factory = new Phake_Matchers_Factory();
 	}
-	
+
 	/**
 	 * Tests creating a default matcher
 	 */
 	public function testDefaultMatcher()
 	{
 		$matcher = $this->factory->createMatcher('foo');
-		
-		$this->assertType('Phake_Matchers_EqualsMatcher', $matcher);
-		
+
+		$this->assertInstanceOf('Phake_Matchers_EqualsMatcher', $matcher);
+
 		$this->assertTrue($matcher->matches('foo'));
 	}
-	
+
 	/**
 	 * Tests creating a pass through matcher
 	 */
 	public function testPassThroughMatcher()
 	{
 		$matcher = $this->getMock('Phake_Matchers_IArgumentMatcher');
-		
+
 		$retMatcher = $this->factory->createMatcher($matcher);
-		
+
 		$this->assertSame($matcher, $retMatcher);
 	}
-	
+
 	/**
 	 * Tests creating a phpunit adapter matcher
 	 */
@@ -96,15 +97,15 @@ class Phake_Matchers_FactoryTest extends PHPUnit_Framework_TestCase
 	{
 		$matcher = $this->getMock('PHPUnit_Framework_Constraint');
 		$matcher->expects($this->once())
-						->method('evaluate')
-						->with($this->equalTo('foo'))
-						->will($this->returnValue(TRUE));
-		
+				->method('evaluate')
+				->with($this->equalTo('foo'))
+				->will($this->returnValue(TRUE));
+
 		$retMatcher = $this->factory->createMatcher($matcher);
-		
+
 		$this->assertTrue($retMatcher->matches('foo'));
 	}
-	
+
 	/**
 	 * Tests creating a hamcrest adapter matcher
 	 */
@@ -114,15 +115,15 @@ class Phake_Matchers_FactoryTest extends PHPUnit_Framework_TestCase
 		{
 			$this->markTestSkipped('Hamcrest is not available');
 		}
-		
+
 		$matcher = $this->getMock('Hamcrest_Matcher');
 		$matcher->expects($this->once())
-						->method('matches')
-						->with($this->equalTo('foo'))
-						->will($this->returnValue(TRUE));
-		
+				->method('matches')
+				->with($this->equalTo('foo'))
+				->will($this->returnValue(TRUE));
+
 		$retMatcher = $this->factory->createMatcher($matcher);
-		
+
 		$this->assertTrue($retMatcher->matches('foo'));
 	}
 
@@ -139,9 +140,9 @@ class Phake_Matchers_FactoryTest extends PHPUnit_Framework_TestCase
 
 		$matchers = $this->factory->createMatcherArray($arguments);
 
-		$this->assertType('Phake_Matchers_EqualsMatcher', $matchers[0]);
+		$this->assertInstanceOf('Phake_Matchers_EqualsMatcher', $matchers[0]);
 		$this->assertSame($argMatcher, $matchers[1]);
-		$this->assertType('Phake_Matchers_PHPUnitConstraintAdapter', $matchers[2]);
+		$this->assertInstanceOf('Phake_Matchers_PHPUnitConstraintAdapter', $matchers[2]);
 	}
 }
 

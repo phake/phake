@@ -2,7 +2,7 @@
 /* 
  * Phake - Mocking Framework
  * 
- * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
+ * Copyright (c) 2010, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -44,6 +44,7 @@
 
 require_once 'Phake/Proxies/VerifierProxy.php';
 require_once 'Phake/CallRecorder/Verifier.php';
+require_once 'Phake/CallRecorder/CallExpectation.php';
 require_once 'PHPUnit/Framework/Constraint.php';
 require_once 'Phake/Matchers/PHPUnitConstraintAdapter.php';
 if (HAMCREST_LOADED) require_once 'Hamcrest/Matcher.php';
@@ -70,9 +71,14 @@ class Phake_Proxies_VerifierProxyTest extends PHPUnit_Framework_TestCase
 
 	public function setUp()
 	{
-		$this->verifier = $this->getMock('Phake_CallRecorder_Verifier', array(), array(), '', FALSE);
+		$this->verifier = Phake::mock('Phake_CallRecorder_Verifier');
+		$this->mode = Phake::mock('Phake_CallRecorder_IVerifierMode');
 
-		$this->proxy = new Phake_Proxies_VerifierProxy($this->verifier, new Phake_Matchers_Factory());
+		$this->proxy = new Phake_Proxies_VerifierProxy($this->verifier, new Phake_Matchers_Factory(), $this->mode);
+		$obj = $this->getMock('Phake_IMock');
+		$obj->expects($this->any())->method('__PHAKE_getName')->will($this->returnValue('mock'));
+		Phake::when($this->verifier)->getObject()->thenReturn($obj);
+		Phake::when($this->mode)->__toString()->thenReturn('exactly 1 times');
 	}
 
 	/**
@@ -80,25 +86,11 @@ class Phake_Proxies_VerifierProxyTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testVerifierCallsAreForwardedMethod()
 	{
-		$this->verifier->expects($this->once())
-			->method('verifyCall')
-			->with($this->equalTo('foo'))
-			->will($this->returnValue(TRUE));
-
+		Phake::when($this->verifier)->verifyCall(Phake::anyParameters())->thenReturn(array(Phake::mock('Phake_CallRecorder_CallInfo')));
 		$this->proxy->foo();
-	}
 
-	/**
-	 * Tests that exceptions are thrown when verifier calls fail
-	 * @expectedException Exception
-	 */
-	public function testVerifierCallsThrowExceptionWhenNotFound()
-	{
-		$this->verifier->expects($this->any())
-			->method('verifyCall')
-			->will($this->returnValue(FALSE));
-
-		$this->proxy->foo();
+		Phake::verify($this->verifier)->verifyCall(Phake::capture($expectation));
+		$this->assertEquals('foo', $expectation->getMethod());
 	}
 
 	/**
@@ -107,13 +99,11 @@ class Phake_Proxies_VerifierProxyTest extends PHPUnit_Framework_TestCase
 	public function testVerifierReturnsCallInfoData()
 	{
 		$return = array(
-			$this->getMock('Phake_CallRecorder_CallInfo', array(), array(), '', FALSE),
-			$this->getMock('Phake_CallRecorder_CallInfo', array(), array(), '', FALSE),
+			Phake::mock('Phake_CallRecorder_CallInfo'),
+			Phake::mock('Phake_CallRecorder_CallInfo'),
 		);
-
-		$this->verifier->expects($this->any())
-			->method('verifyCall')
-			->will($this->returnValue($return));
+		
+		Phake::when($this->verifier)->verifyCall(Phake::anyParameters())->thenReturn($return);
 
 		$this->assertSame($return, $this->proxy->foo());
 	}
@@ -123,14 +113,13 @@ class Phake_Proxies_VerifierProxyTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testVerifierCallsAreForwardedArguments()
 	{
-		$argumentMatcher = $this->getMock('Phake_Matchers_IArgumentMatcher');
+		$argumentMatcher = Phake::mock('Phake_Matchers_IArgumentMatcher');
 
-		$this->verifier->expects($this->once())
-			->method('verifyCall')
-			->with($this->anything(), $this->equalTo(array($argumentMatcher)))
-			->will($this->returnValue(TRUE));
-
+		Phake::when($this->verifier)->verifyCall(Phake::anyParameters())->thenReturn(array(Phake::mock('Phake_CallRecorder_CallInfo')));
 		$this->proxy->foo($argumentMatcher);
+
+		Phake::verify($this->verifier)->verifyCall(Phake::capture($expectation));
+		$this->assertEquals(array($argumentMatcher), $expectation->getArgumentMatchers());
 	}
 
 	/**
@@ -140,51 +129,12 @@ class Phake_Proxies_VerifierProxyTest extends PHPUnit_Framework_TestCase
 	public function testProxyTransformsNonMatchersToEqualsMatcher()
 	{
 		$argumentMatcher = new Phake_Matchers_EqualsMatcher('test');
-
-		$this->verifier->expects($this->once())
-			->method('verifyCall')
-			->with($this->anything(), $this->equalTo(array($argumentMatcher)))
-			->will($this->returnValue(TRUE));
-
+		Phake::when($this->verifier)->verifyCall(Phake::anyParameters())->thenReturn(array(Phake::mock('Phake_CallRecorder_CallInfo')));
 		$this->proxy->foo('test');
-	}
 
-
-	/**
-	 * Tests that verifier calls given a PHPUnit constraint are transformed by the Phake matcher adapter.
-	 */
-	public function testProxyTransformsPHPUnitConstraintsToMatchers()
-	{
-		$constraint = $this->getMock('PHPUnit_Framework_Constraint');
-		$argumentMatcher = new Phake_Matchers_PHPUnitConstraintAdapter($constraint);
-
-		$this->verifier->expects($this->once())
-			->method('verifyCall')
-			->with($this->anything(), $this->equalTo(array($argumentMatcher)))
-			->will($this->returnValue(TRUE));
-
-		$this->proxy->foo($constraint);
-	}
-
-	/**
-	 * Tests that verifier calls given a Hamcrest matcher are transformed by the Phake matcher adapter.
-	 */
-	public function testProxyTransformsHamcrestMatchers()
-	{
-		if (!HAMCREST_LOADED)
-		{
-			$this->markTestSkipped('Hamcrest is not loaded');
-		}
-
-		$matcher = $this->getMock('Hamcrest_Matcher');
-		$argumentMatcher = new Phake_Matchers_HamcrestMatcherAdapter($matcher);
-
-		$this->verifier->expects($this->once())
-			->method('verifyCall')
-			->with($this->anything(), $this->equalTo(array($argumentMatcher)))
-			->will($this->returnValue(TRUE));
-
-		$this->proxy->foo($matcher);
+		Phake::verify($this->verifier)->verifyCall(Phake::capture($expectation));
+		$this->assertEquals(array($argumentMatcher), $expectation->getArgumentMatchers());
 	}
 }
+
 ?>

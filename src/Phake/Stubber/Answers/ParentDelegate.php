@@ -2,7 +2,7 @@
 /* 
  * Phake - Mocking Framework
  * 
- * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
+ * Copyright (c) 2010, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -52,6 +52,13 @@ require_once 'Phake/Stubber/IAnswerDelegate.php';
  */
 class Phake_Stubber_Answers_ParentDelegate implements Phake_Stubber_Answers_IDelegator, Phake_Stubber_IAnswerDelegate
 {
+	private $capturedReturn;
+
+	public function __construct(&$captor = null)
+	{
+		$this->capturedReturn =& $captor;
+	}
+
 	/**
 	 * Returns the answer delegate (itself)
 	 * @return Phake_Stubber_Answers_ParentDelegate
@@ -63,12 +70,13 @@ class Phake_Stubber_Answers_ParentDelegate implements Phake_Stubber_Answers_IDel
 
 	/**
 	 * Provides the callback to the parent
+	 * @param object $calledObject
 	 * @param string $calledMethod
 	 * @param array $calledParameters
 	 */
-	public function getCallBack($calledMethod, array $calledParameters)
+	public function getCallBack($calledObject, $calledMethod, array $calledParameters)
 	{
-		return array('parent', $calledMethod);
+		return array($calledObject, "parent::{$calledMethod}");
 	}
 
 	/**
@@ -80,5 +88,11 @@ class Phake_Stubber_Answers_ParentDelegate implements Phake_Stubber_Answers_IDel
 	{
 		return $calledParameters;
 	}
+
+	public function processAnswer($answer)
+	{
+		$this->capturedReturn = $answer;
+	}
 }
+
 ?>

@@ -2,7 +2,7 @@
 /*
  * Phake - Mocking Framework
  *
- * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
+ * Copyright (c) 2010, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -47,8 +47,9 @@ $codeDir = dirname($testDir) . DIRECTORY_SEPARATOR . 'src';
 
 set_include_path($testDir . PATH_SEPARATOR . $codeDir . PATH_SEPARATOR . get_include_path());
 
-include_once('hamcrest.php');
+define('HAMCREST_LOADED', @fopen('hamcrest.php', 'r', true));
+if (HAMCREST_LOADED) include_once('hamcrest.php');
 
-define('HAMCREST_LOADED', interface_exists('Hamcrest_Matcher', FALSE));
+include_once('Phake.php');
 
 ?>

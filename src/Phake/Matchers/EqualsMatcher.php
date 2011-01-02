@@ -2,7 +2,7 @@
 /* 
  * Phake - Mocking Framework
  * 
- * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
+ * Copyright (c) 2010, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -58,7 +58,7 @@ class Phake_Matchers_EqualsMatcher implements Phake_Matchers_IArgumentMatcher
 
 	/**
 	 * Pass in the value that the upcoming arguments is expected to equal.
-	 * @param mixed $value 
+	 * @param mixed $value
 	 */
 	public function __construct($value)
 	{
@@ -71,6 +71,11 @@ class Phake_Matchers_EqualsMatcher implements Phake_Matchers_IArgumentMatcher
 	public function matches($argument)
 	{
 		return ($argument == $this->value);
+	}
+
+	public function __toString()
+	{
+		return "equal to '{$this->value}'";
 	}
 }
 

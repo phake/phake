@@ -2,7 +2,7 @@
 /* 
  * Phake - Mocking Framework
  * 
- * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
+ * Copyright (c) 2010, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -71,7 +71,11 @@ class Phake_Matchers_HamcrestMatcherAdapterTest extends PHPUnit_Framework_TestCa
 			$this->markTestSkipped('Hamcrest is not available');
 		}
 
-		$this->matcher = $this->getMock('Hamcrest_Matcher');
+		$this->matcher = $this->getMock('Hamcrest_BaseMatcher');
+		$this->matcher->expects($this->any())
+				->method('__toString')
+				->will($this->returnValue('hamcrest matcher'));
+		
 		$this->adapter = new Phake_Matchers_HamcrestMatcherAdapter($this->matcher);
 	}
 
@@ -81,11 +85,17 @@ class Phake_Matchers_HamcrestMatcherAdapterTest extends PHPUnit_Framework_TestCa
 	public function testMatchesCallsForwarded()
 	{
 		$this->matcher->expects($this->once())
-						->method('matches')
-						->with($this->equalTo('foo'))
-						->will($this->returnValue(TRUE));
+				->method('matches')
+				->with($this->equalTo('foo'))
+				->will($this->returnValue(TRUE));
 
 		$this->assertTrue($this->adapter->matches('foo'));
 	}
+
+	public function testToString()
+	{
+		$this->assertEquals('hamcrest matcher', $this->adapter->__toString());
+	}
 }
+
 ?>

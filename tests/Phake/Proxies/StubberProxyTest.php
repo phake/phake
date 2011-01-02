@@ -2,7 +2,7 @@
 /* 
  * Phake - Mocking Framework
  * 
- * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
+ * Copyright (c) 2010, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -80,7 +80,8 @@ class Phake_Proxies_StubberProxyTest extends PHPUnit_Framework_TestCase
 
 		$this->assertThat($answerBinder, $this->isInstanceOf('Phake_Proxies_AnswerBinderProxy'));
 
-		$this->assertAttributeType('Phake_Stubber_AnswerBinder', 'binder', $answerBinder);
+		$this->assertAttributeInstanceOf('Phake_Stubber_AnswerBinder', 'binder', $answerBinder);
 	}
 }
+
 ?>

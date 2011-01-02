@@ -2,7 +2,7 @@
 /* 
  * Phake - Mocking Framework
  * 
- * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
+ * Copyright (c) 2010, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -44,13 +44,15 @@
 
 require_once 'Phake/Stubber/Answers/StaticAnswer.php';
 require_once 'Phake/Stubber/Answers/ParentDelegate.php';
+require_once 'Phake/Stubber/Answers/ExceptionAnswer.php';
 
 /**
  * A proxy class to provide a fluent interface into the answer binder.
  *
  * @author Mike Lively <m@digitalsandwich.com>
  */
-class Phake_Proxies_AnswerBinderProxy {
+class Phake_Proxies_AnswerBinderProxy
+{
 	/**
 	 * @var Phake_Stubber_IAnswerBinder
 	 */
@@ -79,5 +81,27 @@ class Phake_Proxies_AnswerBinderProxy {
 	{
 		return $this->binder->bindAnswer(new Phake_Stubber_Answers_ParentDelegate());
 	}
+
+	/**
+	 * Binds an exception answer to the method and object in the proxied binder.
+	 *
+	 * @param Exception $value
+	 * @return Phake_Stubber_IAnswerBinder
+	 */
+	public function thenThrow(Exception $value)
+	{
+		return $this->binder->bindAnswer(new Phake_Stubber_Answers_ExceptionAnswer($value));
+	}
+
+	/**
+	 * Binds a delegated call that will call a given method's parent while capturing that value to the passed in variable.
+	 * @param mixed $captor
+	 * @return Phake_Stubber_IAnswerBinder
+	 */
+	public function captureReturnTo(&$captor)
+	{
+		return $this->binder->bindAnswer(new Phake_Stubber_Answers_ParentDelegate($captor));
+	}
 }
+
 ?>

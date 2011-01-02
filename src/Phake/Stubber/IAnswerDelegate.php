@@ -2,7 +2,7 @@
 /* 
  * Phake - Mocking Framework
  * 
- * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
+ * Copyright (c) 2010, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -52,10 +52,11 @@ interface Phake_Stubber_IAnswerDelegate
 {
 	/**
 	 * Provides the callback that will give the correct answer.
+	 * @param object $calledObject
 	 * @param string $calledMethod
 	 * @param array $calledParameters
 	 */
-	public function getCallBack($calledMethod, array $calledParameters);
+	public function getCallBack($calledObject, $calledMethod, array $calledParameters);
 
 	/**
 	 * Provides the arguments for the callback that will give the correct answer.
@@ -64,4 +65,5 @@ interface Phake_Stubber_IAnswerDelegate
 	 */
 	public function getArguments($calledMethod, array $calledParameters);
 }
+
 ?>

@@ -2,7 +2,7 @@
 /* 
  * Phake - Mocking Framework
  * 
- * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
+ * Copyright (c) 2010, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -50,7 +50,12 @@ require_once 'Phake/Stubber/IAnswer.php';
  */
 interface Phake_Stubber_Answers_IDelegator extends Phake_Stubber_IAnswer
 {
-
+	/**
+	 * Implement to perform further processing of a delegated answer.
+	 * @param mixed $answer The value to processed.
+	 * @return void
+	 */
+	public function processAnswer($answer);
 }
 
 ?>

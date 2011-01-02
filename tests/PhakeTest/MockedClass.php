@@ -2,7 +2,7 @@
 /* 
  * Phake - Mocking Framework
  * 
- * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
+ * Copyright (c) 2010, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -47,28 +47,40 @@
  *
  * @author Mike Lively <m@digitalsandwich.com>
  */
-class PhakeTest_MockedClass {
-    public function foo()
-		{
-		}
+class PhakeTest_MockedClass
+{
+	public function foo()
+	{
+	}
 
-		public function fooWithArgument($arg1)
-		{
-		}
+	public function fooWithArgument($arg1)
+	{
+	}
 
-		public function fooWithReturnValue()
-		{
-			return 'blah';
-		}
+	public function fooWithReturnValue()
+	{
+		return 'blah';
+	}
 
-		public function callInnerFunc()
-		{
-			return $this->innerFunc();
-		}
+	public function callInnerFunc()
+	{
+		return $this->innerFunc();
+	}
 
-		protected function innerFunc()
-		{
-			return 'test';
-		}
+	protected function innerFunc()
+	{
+		return 'test';
+	}
+
+	public function chainedCall()
+	{
+		return $this->callInnerFunc();
+	}
+
+	public function fooWithLotsOfParameters($parm1, $parm2, $parm3)
+	{
+
+	}
 }
+
 ?>

@@ -2,7 +2,7 @@
 /* 
  * Phake - Mocking Framework
  * 
- * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
+ * Copyright (c) 2010, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -65,7 +65,7 @@ class Phake_Matchers_MethodMatcher
 		{
 			throw new InvalidArgumentException('All arguments passed must implement Phake_Matchers_IArgumentMatcher');
 		}
-		
+
 		$this->expectedMethod = $expectedMethod;
 		$this->argumentMatchers = $argumentMatchers;
 	}
@@ -80,9 +80,8 @@ class Phake_Matchers_MethodMatcher
 	 */
 	public function matches($method, array $arguments)
 	{
-		if ($this->expectedMethod == $method 
-						&& count($arguments) == count($this->argumentMatchers)
-						&& $this->doArgumentsMatch($arguments))
+		if ($this->expectedMethod == $method
+				&& $this->doArgumentsMatch($arguments))
 		{
 			return TRUE;
 		}
@@ -100,6 +99,16 @@ class Phake_Matchers_MethodMatcher
 	 */
 	private function doArgumentsMatch(array $arguments)
 	{
+		if (!empty($this->argumentMatchers) && $this->argumentMatchers[0] instanceof Phake_Matchers_AnyParameters)
+		{
+			return TRUE;
+		}
+
+		if (count($arguments) != count($this->argumentMatchers))
+		{
+			return FALSE;
+		}
+
 		reset($this->argumentMatchers);
 
 		foreach ($arguments as $arg)
@@ -136,4 +145,5 @@ class Phake_Matchers_MethodMatcher
 		return TRUE;
 	}
 }
+
 ?>

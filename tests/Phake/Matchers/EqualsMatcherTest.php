@@ -2,7 +2,7 @@
 /* 
  * Phake - Mocking Framework
  * 
- * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
+ * Copyright (c) 2010, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -76,6 +76,11 @@ class Phake_Matchers_EqualsMatcherTest extends PHPUnit_Framework_TestCase
 	public function testBadMatches()
 	{
 		$this->assertFalse($this->matcher->matches('test'));
+	}
+
+	public function testToString()
+	{
+		$this->assertEquals('equal to \'foo\'', $this->matcher->__toString());
 	}
 }
 

@@ -2,7 +2,7 @@
 /* 
  * Phake - Mocking Framework
  * 
- * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
+ * Copyright (c) 2010, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -68,7 +68,7 @@ class Phake_CallRecorder_Call
 	 * @param object $object - The object the method was called on
 	 * @param string $method - The method that was made
 	 */
-	public function __construct($object, $method, array $arguments)
+	public function __construct(Phake_IMock $object, $method, array $arguments)
 	{
 		$this->object = $object;
 		$this->method = $method;
@@ -98,5 +98,42 @@ class Phake_CallRecorder_Call
 	{
 		return $this->arguments;
 	}
+
+	/**
+	 * @return string
+	 */
+	public function __toString()
+	{
+		$arguments = array();
+		foreach ($this->arguments as $argument)
+		{
+			if (is_object($argument))
+			{
+				$arguments[] = '<object:' . get_class($argument) . '>';
+			}
+			elseif (is_array($argument))
+			{
+				$arguments[] = '<array>';
+			}
+			elseif (is_null($argument))
+			{
+				$arguments[] = '<null>';
+			}
+			elseif (is_resource($argument))
+			{
+				$arguments[] = '<resource>';
+			}
+			elseif (is_bool($argument))
+			{
+				$arguments[] = '<boolean:' . ($argument ? 'true' : 'false') . '>';
+			}
+			else
+			{
+				$arguments[] = '<' . gettype($argument) . ':' . $argument . '>';
+			}
+		}
+		return "{$this->object->__PHAKE_getName()}->{$this->method}(" . implode(', ', $arguments) . ")";
+	}
 }
+
 ?>

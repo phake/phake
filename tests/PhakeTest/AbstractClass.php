@@ -2,7 +2,7 @@
 /*
  * Phake - Mocking Framework
  *
- * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
+ * Copyright (c) 2010, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -46,27 +46,28 @@ require_once 'PhakeTest/MockedInterface.php';
 
 abstract class PhakeTest_AbstractClass implements PhakeTest_MockedInterface
 {
-    public function foo()
-		{
-		}
+	public function foo()
+	{
+	}
 
-		public function fooWithArgument($arg1)
-		{
-		}
+	public function fooWithArgument($arg1)
+	{
+	}
 
-		public function fooWithReturnValue()
-		{
-			return 'blah';
-		}
+	public function fooWithReturnValue()
+	{
+		return 'blah';
+	}
 
-		public function callInnerFunc()
-		{
-			return $this->innerFunc();
-		}
+	public function callInnerFunc()
+	{
+		return $this->innerFunc();
+	}
 
-		protected function innerFunc()
-		{
-			return 'test';
-		}
+	protected function innerFunc()
+	{
+		return 'test';
+	}
 }
+
 ?>

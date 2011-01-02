@@ -2,7 +2,7 @@
 /*
  * Phake - Mocking Framework
  *
- * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
+ * Copyright (c) 2010, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -41,62 +41,12 @@
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link       http://www.digitalsandwich.com/
  */
-
-require_once 'Phake/Stubber/Answers/SpyDelegate.php';
-
-/**
- * Tests the functionality of the spy delegate
- */
-class Phake_Stubber_Answers_SpyDelegateTest extends PHPUnit_Framework_TestCase
+ 
+class PhakeTest_MagicClass
 {
-	/**
-	 * @var stdCalss
-	 */
-	protected $spiedOn;
-
-	/**
-	 * @var Phake_Stubber_Answers_SpyDelegate
-	 */
-	private $delegate;
-
-	/**
-	 * Sets up the test fixture
-	 */
-	public function setUp()
+	public function __call($method, $args)
 	{
-		$this->spiedOn = $this->getMock('stdClass');
-		$this->delegate = new Phake_Stubber_Answers_SpyDelegate($this->spiedOn);
+		return '__call';
 	}
 
-	/**
-	 * Tests that the delegate returns itself.
-	 */
-	public function testThatDelegateReturnsItself()
-	{
-		$answer = $this->delegate->getAnswer();
-		$this->assertType('Phake_Stubber_Answers_IDelegator', $answer);
-		$this->assertSame($this->delegate, $answer);
-	}
-
-	/**
-	 * Tets that the delegate returns a callback to the spied on class.
-	 */
-	public function testThatDelegateReturnsCorrectCallback()
-	{
-		$callback = $this->delegate->getCallback('foo', array('bar'));
-
-		$this->assertSame(array($this->spiedOn, 'foo'), $callback);
-	}
-
-	/**
-	 * Tests that the delegate passes through the given arguments.
-	 */
-	public function testThatDelegatePassesThroughArgs()
-	{
-		$args = $this->delegate->getArguments('foo', array('bar'));
-
-		$this->assertSame(array('bar'), $args);
-	}
 }
-
-?>

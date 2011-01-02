@@ -1,26 +1,26 @@
 <?php
-/*
+/* 
  * Phake - Mocking Framework
- *
- * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
+ * 
+ * Copyright (c) 2010, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
- *
+ * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
- *
+ * 
  *  *  Redistributions of source code must retain the above copyright
  *     notice, this list of conditions and the following disclaimer.
- *
+ * 
  *  *  Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in
  *     the documentation and/or other materials provided with the
  *     distribution.
- *
+ * 
  *  *  Neither the name of Mike Lively nor the names of his
  *     contributors may be used to endorse or promote products derived
  *     from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -33,7 +33,7 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- *
+ * 
  * @category   Testing
  * @package    Phake
  * @author     Mike Lively <m@digitalsandwich.com>
@@ -42,56 +42,46 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Stubber/Answers/IDelegator.php';
-require_once 'Phake/Stubber/IAnswerDelegate.php';
+require_once 'Phake/CallRecorder/IVerifierMode.php';
 
 /**
- * An answer delegate that allows methods on spy objects to call the methods on the object that is being spied on.
- *
- * This class is both the delegator and the delegate.
+ * Verifier mode that checks that the number of matched items are exactly equal
+ * to the expected amount.
+ * @author Brian Feaver <brian.feaver@gmail.com>
  */
-class Phake_Stubber_Answers_SpyDelegate implements Phake_Stubber_Answers_IDelegator, Phake_Stubber_IAnswerDelegate
+class Phake_CallRecorder_VerifierMode_Times implements Phake_CallRecorder_IVerifierMode
 {
 	/**
-	 * @var object
+	 * @var int
 	 */
-	protected $spiedOn;
+	private $times;
 
 	/**
-	 * @param object $spiedOn
+	 * Constructs a Times verifier with the given <code>$times</code>.
+	 * @param unknown_type $times
 	 */
-	public function __construct($spiedOn)
+	public function __construct($times)
 	{
-		$this->spiedOn = $spiedOn;
+		$this->times = $times;
 	}
 
 	/**
-	 * Returns the answer delegate (itself)
-	 * @return Phake_Stubber_Answers_SpyDelegate
+	 * Verifies that the number of <code>$matchedCalls</code> is equal to the
+	 * value this object was instantiated with.
+	 * @param array $matchedCalls
+	 * @return boolean
 	 */
-	public function getAnswer()
+	public function verify(array $matchedCalls)
 	{
-		return $this;
+		$calledTimes = count($matchedCalls);
+		if ($calledTimes != $this->times)
+		{
+			throw new Exception("actually called $calledTimes times");
+		}
 	}
 
-	/**
-	 * Provides the callback to the spied on object
-	 * @param string $calledMethod
-	 * @param array $calledParameters
-	 */
-	public function getCallBack($calledMethod, array $calledParameters)
+	public function __toString()
 	{
-		return array($this->spiedOn, $calledMethod);
-	}
-
-	/**
-	 * Passes through the given arguments.
-	 * @param string $calledMethod
-	 * @param array $calledParameters
-	 */
-	public function getArguments($calledMethod, array $calledParameters)
-	{
-		return $calledParameters;
+		return "exactly {$this->times} times";
 	}
 }
-?>

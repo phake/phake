@@ -2,7 +2,7 @@
 /* 
  * Phake - Mocking Framework
  * 
- * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
+ * Copyright (c) 2010, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -42,6 +42,8 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+require_once 'Phake/Matchers/MethodMatcher.php';
+
 /**
  * Can verify calls recorded into the given recorder.
  *
@@ -49,7 +51,7 @@
  */
 class Phake_CallRecorder_Verifier
 {
-	
+
 	/**
 	 * @var Phake_CallRecorder_Recorder
 	 */
@@ -72,60 +74,63 @@ class Phake_CallRecorder_Verifier
 
 	/**
 	 * Returns whether or not a call has been made in the associated call recorder.
-	 * @param string $method
-	 * @param array $argumentMatcher
+	 *
+	 * @todo Maybe rename this to findMatchedCalls?
+	 * @param Phake_CallRecorder_CallExpectation $expectation
 	 * @return boolean
 	 */
-	public function verifyCall($method, array $argumentMatchers)
+	public function verifyCall(Phake_CallRecorder_CallExpectation $expectation)
 	{
+		$matcher = new Phake_Matchers_MethodMatcher($expectation->getMethod(), $expectation->getArgumentMatchers());
 		$calls = $this->recorder->getAllCalls();
 
 		$matchedCalls = array();
+		$methodNonMatched = array();
+		$obj_interactions = FALSE;
 		foreach ($calls as $call)
 		{
 			/* @var $call Phake_CallRecorder_Call */
-			if ($call->getMethod() == $method 
-							&& $call->getObject() === $this->obj
-							&& count($call->getArguments()) == count($argumentMatchers))
+			if ($call->getObject() === $expectation->getObject())
 			{
-				if ($this->validateArguments($call->getArguments(), $argumentMatchers))
+				$obj_interactions = TRUE;
+				if ($matcher->matches($call->getMethod(), $call->getArguments()))
 				{
 					$matchedCalls[] = $this->recorder->getCallInfo($call);
+				}
+				elseif ($call->getMethod() == $expectation->getMethod())
+				{
+					$methodNonMatched[] = $call->__toString();
 				}
 			}
 		}
 
-		return count($matchedCalls) ? $matchedCalls : FALSE;
-	}
-
-	/**
-	 * Returns whether or not the passed in arguments match all of the passed in argument matchers.
-	 * @param array $arguments
-	 * @param array $argumentMatchers
-	 * @return boolean
-	 */
-	private function validateArguments(array $arguments, array $argumentMatchers)
-	{
-			reset($argumentMatchers);
-			foreach ($arguments as  $i => $argument)
+		try
+		{
+			$expectation->getVerifierMode()->verify($matchedCalls);
+		}
+		catch (Exception $e)
+		{
+			$additions = '';
+			if (!$obj_interactions)
 			{
-				$matcher = current($argumentMatchers);
-
-				if (!$matcher instanceof Phake_Matchers_IArgumentMatcher)
-				{
-					throw new InvalidArgumentException("Argument matcher [{$i}] is not a valid matcher");
-				}
-
-				/* @var $matcher Phake_Matchers_IArgumentMatcher */
-				if (!$matcher->matches($argument))
-				{
-					return FALSE;
-				}
-
-				next($argumentMatchers);
+				$additions .= ' In fact, there are no interactions with this mock.';
 			}
 
-			return TRUE;
+			if (count($methodNonMatched))
+			{
+				$additions .= "\nOther Invocations:\n  " . implode("\n  ", $methodNonMatched);
+			}
+			
+			throw new Exception($expectation->__toString() . ', ' . $e->getMessage() . '.' . $additions);
+		}
+
+		return $matchedCalls;
+	}
+
+	public function getObject()
+	{
+		return $this->obj;
 	}
 }
+
 ?>

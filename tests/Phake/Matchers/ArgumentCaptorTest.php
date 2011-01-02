@@ -2,7 +2,7 @@
 /* 
  * Phake - Mocking Framework
  * 
- * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
+ * Copyright (c) 2010, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -53,12 +53,12 @@ class Phake_Matchers_ArgumentCaptorTest extends PHPUnit_Framework_TestCase
 	 * @var Phake_Matchers_ArgumentCaptor
 	 */
 	private $captor;
-	
+
 	/**
 	 * @var string
 	 */
 	private $refVariable;
-	
+
 	/**
 	 * Sets up the test fixture
 	 */
@@ -66,14 +66,14 @@ class Phake_Matchers_ArgumentCaptorTest extends PHPUnit_Framework_TestCase
 	{
 		$this->captor = new Phake_Matchers_ArgumentCaptor($this->refVariable);
 	}
-	
+
 	/**
 	 * Tests that arguments are captured when matches() is called
 	 */
 	public function testArgumentCapturing()
 	{
 		$this->captor->matches('blah');
-		
+
 		$this->assertEquals('blah', $this->refVariable);
 	}
 
@@ -84,9 +84,9 @@ class Phake_Matchers_ArgumentCaptorTest extends PHPUnit_Framework_TestCase
 	{
 		$matcher = $this->getMock('Phake_Matchers_IArgumentMatcher');
 		$matcher->expects($this->once())
-						->method('matches')
-						->with($this->equalTo('blah'))
-						->will($this->returnValue(TRUE));
+				->method('matches')
+				->with($this->equalTo('blah'))
+				->will($this->returnValue(TRUE));
 
 		$this->captor->when($matcher);
 
@@ -102,9 +102,9 @@ class Phake_Matchers_ArgumentCaptorTest extends PHPUnit_Framework_TestCase
 	{
 		$matcher = $this->getMock('Phake_Matchers_IArgumentMatcher');
 		$matcher->expects($this->once())
-						->method('matches')
-						->with($this->equalTo('blah'))
-						->will($this->returnValue(FALSE));
+				->method('matches')
+				->with($this->equalTo('blah'))
+				->will($this->returnValue(FALSE));
 
 		$this->captor->when($matcher);
 
@@ -119,6 +119,11 @@ class Phake_Matchers_ArgumentCaptorTest extends PHPUnit_Framework_TestCase
 	public function testWhenReturn()
 	{
 		$this->assertSame($this->captor, $this->captor->when(NULL));
+	}
+
+	public function testToString()
+	{
+		$this->assertEquals('captured parameter', $this->captor->__toString());
 	}
 }
 

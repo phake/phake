@@ -2,7 +2,7 @@
 /* 
  * Phake - Mocking Framework
  * 
- * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
+ * Copyright (c) 2010, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -42,6 +42,7 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+require_once 'Phake/CallRecorder/CallExpectation.php';
 require_once 'Phake/Matchers/PHPUnitConstraintAdapter.php';
 require_once 'Phake/Matchers/HamcrestMatcherAdapter.php';
 require_once 'Phake/Matchers/EqualsMatcher.php';
@@ -67,13 +68,19 @@ class Phake_Proxies_VerifierProxy
 	private $matcherFactory;
 
 	/**
+	 * @var Phake_CallRecorder_IVerifierMode
+	 */
+	private $mode;
+
+	/**
 	 * @param Phake_CallRecorder_Verifier $verifier
 	 * @param Phake_Matchers_Factory $matcherFactory
 	 */
-	public function __construct(Phake_CallRecorder_Verifier $verifier, Phake_Matchers_Factory $matcherFactory)
+	public function __construct(Phake_CallRecorder_Verifier $verifier, Phake_Matchers_Factory $matcherFactory, Phake_CallRecorder_IVerifierMode $mode)
 	{
 		$this->verifier = $verifier;
 		$this->matcherFactory = $matcherFactory;
+		$this->mode = $mode;
 	}
 
 	/**
@@ -83,15 +90,9 @@ class Phake_Proxies_VerifierProxy
 	 */
 	public function __call($method, array $arguments)
 	{
-		$value = $this->verifier->verifyCall($method, $this->matcherFactory->createMatcherArray($arguments));
-		if (empty($value))
-		{
-			throw new Exception("Expected {$method} to be called.");
-		}
-		else
-		{
-			return $value;
-		}
+		$expectation = new Phake_CallRecorder_CallExpectation($this->verifier->getObject(), $method, $this->matcherFactory->createMatcherArray($arguments), $this->mode);
+		return $this->verifier->verifyCall($expectation);
 	}
 }
+
 ?>
