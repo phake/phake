@@ -414,6 +414,43 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 		$mock->fooWithArgument('bar');
 	}
 
+	public function testMagicCallMethodsRecordTwice()
+	{
+		$newClassName = __CLASS__ . '_TestClass21';
+		$mockedClass = 'PhakeTest_MagicClass';
+
+		$this->classGen->generate($newClassName, $mockedClass);
+
+		$callRecorder = Phake::mock('Phake_CallRecorder_Recorder');
+		$stubMapper = $this->getMock('Phake_Stubber_StubMapper');
+		$answer = $this->getMock('Phake_Stubber_IAnswer');
+		$mock = $this->classGen->instantiate($newClassName, $callRecorder, $stubMapper, $answer);
+
+		$mock->foo('blah');
+
+		Phake::verify($callRecorder)->recordCall(new Phake_CallRecorder_Call($mock, 'foo', array('blah')));
+		Phake::verify($callRecorder)->recordCall(new Phake_CallRecorder_Call($mock, '__call', array('foo', array('blah'))));
+	}
+
+	public function testMagicCallChecksFallbackStub()
+	{
+		$newClassName = __CLASS__ . '_TestClass22';
+		$mockedClass = 'PhakeTest_MagicClass';
+
+		$this->classGen->generate($newClassName, $mockedClass);
+
+		$callRecorder = Phake::mock('Phake_CallRecorder_Recorder');
+		$stubMapper = Phake::mock('Phake_Stubber_StubMapper');
+		$answer = $this->getMock('Phake_Stubber_IAnswer');
+		$mock = $this->classGen->instantiate($newClassName, $callRecorder, $stubMapper, $answer);
+
+
+		$mock->foo('blah');
+
+		Phake::verify($stubMapper)->getStubByCall('foo', array('blah'));
+		Phake::verify($stubMapper)->getStubByCall('__call', array('foo', array('blah')));
+	}
+
 	/**
 	 * Tests generating a class definition for a mocked interface
 	 */

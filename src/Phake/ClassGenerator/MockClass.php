@@ -198,6 +198,7 @@ class {$newClassName} {$extends}
 
 		if (__FUNCTION__ == '__call')
 		{
+			\$this->__PHAKE_callRecorder->recordCall(new Phake_CallRecorder_Call(\$this, \$methodName, \$args));
 			\$methodName = \$args[0];
 			\$args = \$args[1];
 		}
@@ -205,6 +206,11 @@ class {$newClassName} {$extends}
 		\$this->__PHAKE_callRecorder->recordCall(new Phake_CallRecorder_Call(\$this, \$methodName, \$args));
 
 		\$stub = \$this->__PHAKE_stubMapper->getStubByCall(\$methodName, \$args);
+
+		if (__FUNCTION__ == '__call' && \$stub === NULL)
+		{
+			\$stub = \$this->__PHAKE_stubMapper->getStubByCall(\$actualMethodName, \$actualArgs);
+		}
 
 		if (\$stub !== NULL)
 		{

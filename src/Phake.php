@@ -48,6 +48,8 @@ require_once 'Phake/CallRecorder/Recorder.php';
 require_once 'Phake/CallRecorder/OrderVerifier.php';
 require_once 'Phake/Proxies/VerifierProxy.php';
 require_once 'Phake/Proxies/StubberProxy.php';
+require_once 'Phake/Proxies/CallVerifierProxy.php';
+require_once 'Phake/Proxies/CallStubberProxy.php';
 require_once 'Phake/Proxies/AnswerBinderProxy.php';
 require_once 'Phake/Matchers/EqualsMatcher.php';
 require_once 'Phake/Matchers/ArgumentCaptor.php';
@@ -146,6 +148,18 @@ class Phake
 	}
 
 	/**
+	 * Creates a new verifier for verifying the magic __call method
+	 * @param mixed ... A vararg containing the expected arguments for this call
+	 * @return Phake_Proxies_CallVerifierProxy
+	 */
+	public static function verifyCallMethodWith()
+	{
+		$arguments = func_get_args();
+		$factory = new Phake_Matchers_Factory();
+		return new Phake_Proxies_CallVerifierProxy($factory->createMatcherArray($arguments));
+	}
+
+	/**
 	 * Allows verification of methods in a particular order
 	 */
 	public static function inOrder()
@@ -210,6 +224,17 @@ class Phake
 	public static function when(Phake_Stubber_IStubbable $mock)
 	{
 		return new Phake_Proxies_StubberProxy($mock, new Phake_Matchers_Factory());
+	}
+
+	/**
+	 * Returns a new stubber specifically for the __call() method
+	 * @param mixed ... A vararg containing the expected arguments for this call
+	 */
+	public static function whenCallMethodWith()
+	{
+		$arguments = func_get_args();
+		$factory = new Phake_Matchers_Factory();
+		return new Phake_Proxies_CallStubberProxy($factory->createMatcherArray($arguments));
 	}
 
 	/**
