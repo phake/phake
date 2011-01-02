@@ -121,6 +121,24 @@ class {$newClassName} {$extends}
 		return '{$mockedClassName}';
 	}
 
+	private function __PHAKE_processAnswer(\$methodName, \$args, \$answer)
+	{
+		if (\$answer instanceof Phake_Stubber_Answers_IDelegator)
+		{
+			\$delegate = \$answer->getAnswer();
+			\$callback = \$delegate->getCallBack(\$this, \$methodName, \$args);
+			\$arguments = \$delegate->getArguments(\$methodName, \$args);
+
+			\$realAnswer = call_user_func_array(\$callback, \$arguments);
+			\$answer->processAnswer(\$realAnswer);
+			return \$realAnswer;
+		}
+		else
+		{
+			return \$answer->getAnswer();
+		}
+	}
+
 	{$this->generateMockedMethods($mockedClass)}
 }
 ";
@@ -156,7 +174,15 @@ class {$newClassName} {$extends}
 		{
 			if (!$method->isConstructor() && !$method->isDestructor() && !$method->isFinal())
 			{
-				$methodDefs .= $this->implementMethod($method) . "\n";
+				if (strtolower($method->getName()) === '__call')
+				{
+					$methodDefs .= $this->implementCallMethod($method);
+				}
+				else
+				{
+					$methodDefs .= $this->implementMethod($method);
+				}
+				$methodDefs .= "\n";
 			}
 		}
 
@@ -196,20 +222,53 @@ class {$newClassName} {$extends}
 		\$methodName = \$actualMethodName = '{$method->getName()}';
 		\$args = \$actualArgs = func_get_args();
 
-		if (__FUNCTION__ == '__call')
-		{
-			\$this->__PHAKE_callRecorder->recordCall(new Phake_CallRecorder_Call(\$this, \$methodName, \$args));
-			\$methodName = \$args[0];
-			\$args = \$args[1];
-		}
-
 		\$this->__PHAKE_callRecorder->recordCall(new Phake_CallRecorder_Call(\$this, \$methodName, \$args));
 
 		\$stub = \$this->__PHAKE_stubMapper->getStubByCall(\$methodName, \$args);
 
-		if (__FUNCTION__ == '__call' && \$stub === NULL)
+		if (\$stub !== NULL)
 		{
-			\$stub = \$this->__PHAKE_stubMapper->getStubByCall(\$actualMethodName, \$actualArgs);
+			\$answer = \$stub;
+		}
+		else
+		{
+			\$answer = \$this->__PHAKE_defaultAnswer;
+		}
+
+		return \$this->__PHAKE_processAnswer(\$methodName, \$args, \$answer);
+	}
+";
+
+		return $methodDef;
+	}
+
+	/**
+	 * Creates the implementation of __call if necessary
+	 * @param ReflectionMethod $method
+	 */
+	protected function implementCallMethod(ReflectionMethod $method)
+	{
+		$modifiers = implode(' ', Reflection::getModifierNames($method->getModifiers() & ~ReflectionMethod::IS_ABSTRACT));
+
+		$methodDef = "
+	{$modifiers} function __call({$this->generateMethodParameters($method)})
+	{
+		if (\$this->__PHAKE_isFrozen)
+		{
+			throw new Exception('This object has been frozen.');
+		}
+
+		\$args = func_get_args();
+
+		\$this->__PHAKE_callRecorder->recordCall(new Phake_CallRecorder_Call(\$this, '__call' , \$args));
+		\$this->__PHAKE_callRecorder->recordCall(new Phake_CallRecorder_Call(\$this, \$args[0], \$args[1]));
+
+
+		\$stub = \$this->__PHAKE_stubMapper->getStubByCall(\$args[0], \$args[1]);
+
+		if (\$stub === NULL)
+		{
+			\$stub = \$this->__PHAKE_stubMapper->getStubByCall('__call', \$args);
 		}
 
 		if (\$stub !== NULL)
@@ -221,20 +280,7 @@ class {$newClassName} {$extends}
 			\$answer = \$this->__PHAKE_defaultAnswer;
 		}
 
-		if (\$answer instanceof Phake_Stubber_Answers_IDelegator)
-		{
-			\$delegate = \$answer->getAnswer();
-			\$callback = \$delegate->getCallBack(\$this, \$actualMethodName, \$actualArgs);
-			\$arguments = \$delegate->getArguments(\$actualMethodName, \$actualArgs);
-
-			\$realAnswer = call_user_func_array(\$callback, \$arguments);
-			\$answer->processAnswer(\$realAnswer);
-			return \$realAnswer;
-		}
-		else
-		{
-			return \$answer->getAnswer();
-		}
+		return \$this->__PHAKE_processAnswer('__call', \$args, \$answer);
 	}
 ";
 
