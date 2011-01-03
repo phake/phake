@@ -13,18 +13,18 @@
   <email>m@digitalsandwich.com</email>
   <active>yes</active>
  </lead>
- <date>2010-12-30</date>
- <time>21:03:39</time>
+ <date>2010-01-02</date>
+ <time>16:29:00</time>
  <version>
-  <release>1.0.0alpha</release>
-  <api>1.0.0alpha</api>
+  <release>1.0.0alpha2</release>
+  <api>1.0.0alpha2</api>
  </version>
  <stability>
   <release>alpha</release>
   <api>alpha</api>
  </stability>
  <license uri="https://github.com/mlively/Phake/raw/master/LICENSE">BSD Style</license>
- <notes>https://github.com/mlively/Phake/raw/master/README</notes>
+ <notes>https://github.com/mlively/Phake/blob/v1.0.1alpha/CHANGELOG.markdown</notes>
  <contents>
   <dir baseinstalldir="/" name="/">
    <file baseinstalldir="/" md5sum="9d5088d2d966d672e6cc1916fc22f3d6" name="Phake.php" role="php" />
@@ -79,19 +79,4 @@
   </required>
  </dependencies>
  <phprelease />
- <changelog>
-  <release>
-   <version>
-    <release>1.0.0aplha</release>
-    <api>1.0.0aplha</api>
-   </version>
-   <stability>
-    <release>alpha</release>
-    <api>alpha</api>
-   </stability>
-   <date>2010-12-30</date>
-   <license uri="https://github.com/mlively/Phake/raw/master/LICENSE">BSD Style</license>
-   <notes>https://github.com/mlively/Phake/raw/master/README</notes>
-  </release>
- </changelog>
 </package>

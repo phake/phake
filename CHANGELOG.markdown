@@ -1,7 +1,7 @@
 Phake 1.0
 ===========
 
-Phake 1.0.1 (dev)
+Phake 1.0.0 (alpha2)
 -------------
 
 * Fix #9 and #10 - Issues with hamcrest tests and includes
