@@ -45,6 +45,7 @@
 require_once 'Phake/Stubber/Answers/StaticAnswer.php';
 require_once 'Phake/Stubber/Answers/ParentDelegate.php';
 require_once 'Phake/Stubber/Answers/ExceptionAnswer.php';
+require_once 'Phake/Stubber/Answers/LambdaAnswer.php';
 
 /**
  * A proxy class to provide a fluent interface into the answer binder.
@@ -71,6 +72,17 @@ class Phake_Proxies_AnswerBinderProxy
 	public function thenReturn($value)
 	{
 		return $this->binder->bindAnswer(new Phake_Stubber_Answers_StaticAnswer($value));
+	}
+	
+	/**
+	 * Binds a Lambda answer to the method
+	 */
+	public function thenGetReturnByLambda($value)
+	{
+		if (!is_callable($value))
+			throw new InvalidArgumentException("Given lambda is not callable");
+			
+		return $this->binder->bindAnswer(new Phake_Stubber_Answers_LambdaAnswer($value));
 	}
 
 	/**
