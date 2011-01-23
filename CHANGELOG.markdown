@@ -1,6 +1,13 @@
 Phake 1.0
 ===========
 
+Phake 1.0.0 (alpha3)
+-------------
+
+* Fix #15 - Forgot to add some additional files to package.xml
+
+* Fix #17 - Add Lambda Callbacks
+
 Phake 1.0.0 (alpha2)
 -------------
 
