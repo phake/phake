@@ -87,7 +87,34 @@ class Phake_Proxies_AnswerBinderProxyTest extends PHPUnit_Framework_TestCase
 
 		$this->assertSame($this->binder, $this->proxy->thenReturn(42));
 	}
+	
+	/**
+	 * Tests the thenGetReturnByLambda functionality of the proxy
+	 *
+	 * It should result in the binder being called with a lambda answer
+	 */
+	public function testThenGetReturnByLambda()
+	{
+		$func = create_function('$arg1', 'return $arg1;');
+		
+		$this->binder->expects($this->once())
+				->method('bindAnswer')
+				->with($this->logicalAnd($this->isInstanceOf('Phake_Stubber_Answers_LambdaAnswer'), $this->attributeEqualTo('answerLambda', $func)))
+				->will($this->returnValue($this->binder));
 
+		$this->assertSame($this->binder, $this->proxy->thenGetReturnByLambda($func));	
+	}
+	
+	/**
+	 * Tests that thenGetReturnByLambda throws an exception if the given lambda is not callable
+	 */
+	public function testThenGetReturnByLambdaThrowsExceptionForUncallableLambda()
+	{
+		$this->setExpectedException('InvalidArgumentException');
+        
+		$func = 'some_unknown_function';
+		$this->proxy->thenGetReturnByLambda($func);
+	}
 	/**
 	 * Tests the thenCallParent functionality of the proxy
 	 */
