@@ -13,11 +13,11 @@
   <email>m@digitalsandwich.com</email>
   <active>yes</active>
  </lead>
- <date>2010-01-02</date>
- <time>16:29:00</time>
+ <date>2010-01-23</date>
+ <time>07:40:00</time>
  <version>
-  <release>1.0.0alpha2</release>
-  <api>1.0.0alpha2</api>
+  <release>1.0.0alpha3</release>
+  <api>1.0.0alpha3</api>
  </version>
  <stability>
   <release>alpha</release>
@@ -53,6 +53,8 @@
    <file baseinstalldir="/" md5sum="d1aa2b82a9448f1040c3863297b5930c" name="Phake/Matchers/MethodMatcher.php" role="php" />
    <file baseinstalldir="/" md5sum="52e39f7f1f000b188192afc371125137" name="Phake/Matchers/PHPUnitConstraintAdapter.php" role="php" />
    <file baseinstalldir="/" md5sum="860c1466d90e53ef34619baadf870493" name="Phake/Proxies/AnswerBinderProxy.php" role="php" />
+   <file baseinstalldir="/" md5sum="860c1466d90e53ef34619baadf870493" name="Phake/Proxies/CallStubberProxy.php" role="php" />
+   <file baseinstalldir="/" md5sum="860c1466d90e53ef34619baadf870493" name="Phake/Proxies/CallVerifierProxy.php" role="php" />
    <file baseinstalldir="/" md5sum="e6e7cb943c43abca36d3c7af25fab271" name="Phake/Proxies/StubberProxy.php" role="php" />
    <file baseinstalldir="/" md5sum="55c8ebd2a647087dbf0caf4f84c42188" name="Phake/Proxies/VerifierProxy.php" role="php" />
    <file baseinstalldir="/" md5sum="d81f7a54b535288283602b1a5d5763ce" name="Phake/Stubber/AnswerBinder.php" role="php" />
@@ -64,6 +66,7 @@
    <file baseinstalldir="/" md5sum="4747d80615db088cc5e46da38f7f327b" name="Phake/Stubber/StubMapper.php" role="php" />
    <file baseinstalldir="/" md5sum="ca7703ecf5b9702fb581352f58faa98f" name="Phake/Stubber/Answers/ExceptionAnswer.php" role="php" />
    <file baseinstalldir="/" md5sum="9ce452787a5221ae0c3c4176fde6c9bf" name="Phake/Stubber/Answers/IDelegator.php" role="php" />
+   <file baseinstalldir="/" md5sum="9ce452787a5221ae0c3c4176fde6c9bf" name="Phake/Stubber/Answers/LambdaAnswer.php" role="php" />
    <file baseinstalldir="/" md5sum="c0784a6f2d4fc0d907738e97ec16a6d4" name="Phake/Stubber/Answers/ParentDelegate.php" role="php" />
    <file baseinstalldir="/" md5sum="ce1ceed83cab5c00a40d9e4d2a64a9b1" name="Phake/Stubber/Answers/StaticAnswer.php" role="php" />
   </dir>
