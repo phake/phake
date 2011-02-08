@@ -42,6 +42,8 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+require_once 'Phake/String/Converter.php';
+
 /**
  * Represents a call. For use in storing with a call recorder.
  *
@@ -104,33 +106,11 @@ class Phake_CallRecorder_Call
 	 */
 	public function __toString()
 	{
+		$converter = new Phake_String_Converter();
 		$arguments = array();
 		foreach ($this->arguments as $argument)
 		{
-			if (is_object($argument))
-			{
-				$arguments[] = '<object:' . get_class($argument) . '>';
-			}
-			elseif (is_array($argument))
-			{
-				$arguments[] = '<array>';
-			}
-			elseif (is_null($argument))
-			{
-				$arguments[] = '<null>';
-			}
-			elseif (is_resource($argument))
-			{
-				$arguments[] = '<resource>';
-			}
-			elseif (is_bool($argument))
-			{
-				$arguments[] = '<boolean:' . ($argument ? 'true' : 'false') . '>';
-			}
-			else
-			{
-				$arguments[] = '<' . gettype($argument) . ':' . $argument . '>';
-			}
+			$arguments[] = $converter->convertToString($argument);
 		}
 		return "{$this->object->__PHAKE_getName()}->{$this->method}(" . implode(', ', $arguments) . ")";
 	}

@@ -80,7 +80,19 @@ class Phake_Matchers_EqualsMatcherTest extends PHPUnit_Framework_TestCase
 
 	public function testToString()
 	{
-		$this->assertEquals('equal to \'foo\'', $this->matcher->__toString());
+		$this->assertEquals('equal to <string:foo>', $this->matcher->__toString());
+	}
+
+	/**
+	 * Tests that the equals matcher __toString function will work on values that don't implement __toString.
+	 *
+	 * Closes Issue #14
+	 */
+	public function testToStringOnNonStringableObject()
+	{
+		$this->matcher = new Phake_Matchers_EqualsMatcher(new stdClass);
+
+		$this->assertEquals('equal to <object:stdClass>', $this->matcher->__toString());
 	}
 }
 

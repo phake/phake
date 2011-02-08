@@ -42,22 +42,78 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Matchers/IArgumentMatcher.php';
-require_once 'Phake/Matchers/Factory.php';
+require_once 'Phake/String/Converter.php';
 
 /**
- * A matcher that will return true for any invocation of a particular method
+ * Tests the facade class for Phake
+ *
+ * @author Mike Lively <m@digitalsandwich.com>
  */
-class Phake_Matchers_AnyParameters implements Phake_Matchers_IArgumentMatcher
+class Phake_String_ConverterTest extends PHPUnit_Framework_TestCase
 {
-	public function matches($argument)
+	/**
+	 * @var Phake_String_Converter
+	 */
+	private $converter;
+
+	/**
+	 * Sets up the mock generator
+	 */
+	public function setup()
 	{
-		return TRUE;
+		$this->converter = new Phake_String_Converter();
 	}
 
-	public function __toString()
+	public function testObjectConversion()
 	{
-		return '<any parameters>';
+		$this->assertEquals('<object:stdClass>', $this->converter->convertToString(new stdClass()));
+	}
+
+	public function testArrayConversion()
+	{
+		$this->assertEquals('<array>', $this->converter->convertToString(array()));
+	}
+
+	public function testNullConversion()
+	{
+		$this->assertEquals('<null>', $this->converter->convertToString(null));
+	}
+
+	public function testResourceConversion()
+	{
+		$dir = opendir('/tmp');
+		try
+		{
+			$this->assertEquals('<resource>', $this->converter->convertToString($dir));
+		}
+		catch (Exception $e)
+		{
+			closedir($dir);
+			throw $e;
+		}
+
+		closedir($dir);
+	}
+
+	public function testBoolConversion()
+	{
+		$this->assertEquals('<boolean:true>', $this->converter->convertToString(true));
+		$this->assertEquals('<boolean:false>', $this->converter->convertToString(false));
+	}
+
+	public function testStringConversion()
+	{
+		$this->assertEquals('<string:foo>', $this->converter->convertToString('foo'));
+	}
+
+	public function testIntConversion()
+	{
+		$this->assertEquals('<integer:42>', $this->converter->convertToString(42));
+	}
+
+	public function testFloatConversion()
+	{
+		$this->assertEquals('<double:42.01>', $this->converter->convertToString(42.01));
 	}
 }
 

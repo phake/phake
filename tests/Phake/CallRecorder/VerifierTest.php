@@ -344,7 +344,7 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
 		Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenThrow(new Exception("actually called 0 times"));
 
 		$expected_msg =
-			"Expected mock->foo(<equal to 'test'>) to be called exactly 1 times, actually called 0 times.\n"
+			"Expected mock->foo(equal to <string:test>) to be called exactly 1 times, actually called 0 times.\n"
 					. "Other Invocations:\n"
 					. "  mock->foo()\n"
 					. "  mock->foo(<string:bar>, <string:foo>)\n"

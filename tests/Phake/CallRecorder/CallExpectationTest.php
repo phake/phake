@@ -63,7 +63,7 @@ class Phake_CallRecorder_CallExpectationTest extends PHPUnit_Framework_TestCase
 
 		$expectation = new Phake_CallRecorder_CallExpectation($mock, 'method', array($matcher1, $matcher2), $verifierMode);
 		$this->assertEquals(
-			"Expected Phake_IMock->method(<100>, <200>) to be called 2 times",
+			"Expected Phake_IMock->method(100, 200) to be called 2 times",
 			$expectation->__toString());
 	}
 }

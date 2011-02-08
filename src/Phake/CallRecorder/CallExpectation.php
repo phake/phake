@@ -119,7 +119,7 @@ class Phake_CallRecorder_CallExpectation
 		$arguments = array();
 		foreach ($this->argumentMatchers as $argumentMatcher)
 		{
-			$arguments[] = '<' . $argumentMatcher->__toString() . '>';
+			$arguments[] = $argumentMatcher->__toString();
 		}
 
 		return "Expected {$this->getObject()->__PHAKE_getName()}->{$this->getMethod()}(" . implode(', ', $arguments) . ") to be called {$this->getVerifierMode()->__toString()}";

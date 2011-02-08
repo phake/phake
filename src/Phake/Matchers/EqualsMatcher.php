@@ -43,6 +43,8 @@
  */
 
 require_once 'Phake/Matchers/IArgumentMatcher.php';
+require_once 'Phake/String/Converter.php';
+
 
 /**
  * A matcher to validate that an argument equals a particular value.
@@ -73,9 +75,13 @@ class Phake_Matchers_EqualsMatcher implements Phake_Matchers_IArgumentMatcher
 		return ($argument == $this->value);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function __toString()
 	{
-		return "equal to '{$this->value}'";
+		$converter = new Phake_String_Converter();
+		return "equal to {$converter->convertToString($this->value)}";
 	}
 }
 
