@@ -8,6 +8,8 @@ Phake 1.0.0 (alpha3)
 
 * Fix #17 - Add Lambda Callbacks
 
+* Fix #14 - Fixed issue with Equals matcher returning a fatal error.
+
 Phake 1.0.0 (alpha2)
 -------------
 
