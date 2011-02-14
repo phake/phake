@@ -27,7 +27,7 @@ This pear channel can be added to PEAR with the following command:
 
 You should only need to do that once. After this you can install Phake with the following command
 
-    pear install channel://pear.digitalsandwich.com/Phake-1.0.0alpha2
+    pear install channel://pear.digitalsandwich.com/Phake-1.0.0alpha3
 
 After the installation you can find the Phake source files inside your local PEAR directory
 
