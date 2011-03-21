@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<example xmlns="http://docbook.org/ns/docbook" id="Introduction.examples.CardGame.php">
+	<title>CardGame class</title>
+		<programlisting><![CDATA[<?php
+
+class CardGame
+{
+	private $dealerStrategy;
+	private $deck;
+	private $players;
+
+	public function CardGame(DealerStrategy $dealerStrategy, CardCollection $deck, PlayerCollection $players)
+	{
+		$this->dealerStrategy = $dealerStrategy;
+		$this->deck = $deck;
+		$this->players = $players;
+	}
+
+	public function dealCards()
+	{
+		$this->deck->shuffle();
+		$this->dealerStrategy->deal($deck, $players);
+	}
+}
+
+?>]]></programlisting>
+</example>

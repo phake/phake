@@ -1,0 +1,5 @@
+xsltproc --xinclude -o ../html/index.html /usr/share/xml/docbook/stylesheet/nwalsh/xhtml/chunk.xsl ../docbook/book.xml
+xsltproc --xinclude -o ../html-single/index.html /usr/share/xml/docbook/stylesheet/nwalsh/xhtml/docbook.xsl ../docbook/book.xml
+xsltproc --xinclude -o ../pdf/intermediate.fo /usr/share/xml/docbook/stylesheet/nwalsh/fo/docbook.xsl ../docbook/book.xml
+fop -pdf ../pdf/phake.pdf -fo ../pdf/intermediate.fo
+rm ../pdf/intermediate.fo

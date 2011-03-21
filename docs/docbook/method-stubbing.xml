@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xi="http://www.w3.org/2001/XInclude">
+	<title>Method Stubbing</title>
+	<section><title>Basic Method Stubbing</title>
+		<para>
+			To Phake::when() method is used to stub methods in Phake. As discussed in the introduction, stubbing allows an object method to be forced to return a particular value given a set of parameters. Similarly to Phake::verify(), Phake::when() accepts a mock object generated from Phake::mock() as its first parameter. A basic example of stubbing can be found below.
+		</para>
+		<xi:include href="method-stubbing/.xml" />
+		<para>
+			The Phake::when() call here ensures that whenever the method foo() is called with no parameters on the object $mock the string ‘bar’ will be returned. If the method you are stubbing normally accepts parameters you can use any of the Method Parameter Matchers that you would also use for Phake::verify(). The various method matchers are discussed later on in Method Parameter Matchers.
+		</para>
+		<para>
+			Whenever a mock object is created using Phake::mock() all methods by default will simply return null. The reasoning behind this is that generally speaking, each method you test should depend on only what it needs to perform the (hopefully one) responsibility assigned to it. Normally you will have very controlled delegation to other objects. To help with localization of errors in your test it is assumed that you will always want to mock external dependencies to keep them from influencing the results of unit tests dedicated to the behavior of other parts of the system. Another reason for this default behavior is that it provides consistent and predictable behavior regardless of whether you are testing concrete classes, abstract classes, or interfaces. It should be noted that this default behavior for concrete methods in classes is different then the default behavior in PHPUnit. In PHPUnit, you have to explicitly indicate that you are mocking a method, otherwise it will call the actual method code. There are certainly cases where this is useful and this behavior can be achieved in Phake. I will discuss this aspect of Phake later in this chapter.
+		</para>
+	</section>
+	<section><title>Overwriting Existing Stubs</title>
+		<para>
+			Users of Phake will often setup stubs as a part of a common test fixture. (setUp() in PHPUnit.) This helps reduce duplicate code which in turn makes your tests more maintainable. However, it often happens that for all but one test, the stubbing needs to be the same, and then you have a single test that is reponsible for an error condition of some sort. Phake allows you to redefine a previously defined stub. The way that stubbing works internally in Phake is that each stub defined with Phake::when() is kept in what is essentially an array. Then, when a method call is made, this array is iterated through in reverse order and the first stub that matches the current method invocation is used to provide the answer to that call. So, by virtue of redefining a stub using the same parameters, the new stub will always be the first to match. An example of how this works is shown below.
+		</para>
+		<xi:include href="method-stubbing/.xml" />
+	</section>
+	<section><title>Stubbing Multiple Calls</title>
+		<para>
+			It is very easy to stub multiple calls to the same method in Phake. If the various calls to a method that are being stubbed utilize different parameters in each call then you can simply create multiple stubs using Phake::when(). An example of this can be seen below.
+		</para>
+		<xi:include href="method-stubbing/.xml" />
+		<para>
+			In the above example, I have stubbed two variations of the add() method. The first stub will return 4 when add() is called with the parameters 2 and 2. The second stub will return 8 when add() is called with the parameters 3 and 5.
+		</para>
+	</section>
+	<section><title>Stubbing Consecutive Calls</title>
+		<para>
+			Occasionally you may also want to stub multiple calls to the same method. A very common case for this is a test that involves iterators. When you step through an iterator, you normally expect multiple calls to Iterator::next() to return different elements. To achieve a different result on each call to a stub you can chain the answer portion of Phake::when() together. So your stubbing may start to look like this: Phake::when($itr)->thenReturn(1)->thenReturn(2)->thenReturn(3).
+		</para>
+		<para>
+			Below is an example that utilizes this functionality to test a custom function named iterator_sum() which is supposed to take all of the values in an iterator and return their sum.
+		</para>
+		<xi:include href="method-stubbing/.xml" />
+	</section>
+	<section><title>Answers</title>
+		<para>
+			In all of the examples so far, the thenReturn() answer is being used. There are other answers that are remarkably useful writing your tests.
+		</para>
+	</section>
+	<section><title>Throwing Exceptions</title>
+		<para>
+			Exception handling is a common aspect of most object oriented systems that should be tested. The key to being able to test your exception handling is to be able to control the throwing of your exceptions. Phake allows this using the thenThrow() answer. This answer allows you to throw a specific exception from any mocked method. Below is an example of a piece of code that catches an exception from the method foo() and then logs a message with the exception message.
+		</para>
+		<xi:include href="method-stubbing/.xml" />
+		<para>
+			In order to test this we must mock foo() so that it throws an exception when it is called. Then we can verify that log() is called with the appropriate message.
+		</para>
+	</section>
+	<section><title>Calling the Parent</title>
+		<para>
+			Phake provides the ability to allow calling the actual method of an object on a method by method basis by using the thenCallParent() answer. This will result in the actual method being called. Please avoid using this answer as much as possible especially when testing newly written code. If you find yourself requiring a class to be only partially mocked then that is a code smell for a class that is likely doing too much. An example of when this is being done is why you are testing a class that has a singular method that has a lot of side effects that you want to mock while you allow the other methods to be called as normal. In this case that method that you are desiring to mock should belong to a completely separate class. It is obvious by the very fact that you are able to mock it without needing to mock other messages that it performs a different function.
+		</para>
+		<para>
+			Even though partial mocking should be avoided with new code, it is often very necessary to allow creating tests while refactoring legacy code, tests involving 3rd party code that can’t be changed, or new tests of already written code that cannot yet be changed. This is precisely the reason why this answer exists and is also why it is not the default answer in Phake.
+		</para>
+	</section>
+	<section><title>Capturing a Return Value</title>
+		<para>
+			Another tool in Phake for testing legacy code is the captureReturnTo() answer. This performs a function similar to argument capturing, however it instead captures what the actual method of a mock object returns to the variable passed as its parameter. Again, this should never be needed if you are testing newly written code. However I have ran across cases several times where legacy code calls protected factory methods and the result of the method call is never exposed. This answer gives you a way to access that variable to ensure that the factory was called and is operating correctly in the context of your method that is being tested.
+		</para>
+	</section>
+	<section><title>Custom Answers</title>
+		<para>
+			While the answers provided in Phake should be able to cover most of the scenarios you will run into when using mocks in your unit tests there may occasionally be times when you need more control over what is returned from your mock methods. When this is the case, you can use a custom answer. All answers in Phake implement the Phake_Stubber_IAnswer interface. This interface defines a single method called getAnswer() that can be used to return what will be returned from a call to the method being stubbed. If you need to get access to how the method you are stubbing was invoked, there is a more complex set of interfaces that can be implemented: Phake_Stubber_Answers_IDelegator and Phake_Stubber_IAnswerDelegate.
+		</para>
+		<para>
+			Phake_Stubber_Answers_IDelegator extends Phake_Stubber_IAnswer and defines an additional method called processAnswer() that is used to perform processing on the results of getAnswer() prior to passing it on to the stub’s caller. Phake_Stubber_IAnswerDelegate defines an interface that allows you to create a callback that is called to generate the answer from the stub. It defines getCallBack() which allows you to generate a PHP callback based on the object, method, and arguments that a stub was called with. It also defines getArguments() which allows you to generate the arguments that will be passed to the callback based on the method name and arguments the stub was called with.
+		</para>
+	</section>
+	<section><title>Partial Mocks</title>
+		<para>
+			When testing legacy code, if you find that the majority of the methods in the mock are using the thenCallParent() answer, you may find it easier to just use a partial mock in Phake. Phake partial mocks also allow you to call the actual constructor of the class being mocked. They are created using Phake::partialMock(). Like Phake::mock(), the first parameter is the name of the class that you are mocking. However, you can pass additional parameters that will then be passed as the respective parameters to that class’ constructor. The other notable feature of a partial mock in Phake is that its default answer is to pass the call through to the parent as if you were using thenCallParent().
+		</para>
+		<para>
+			An example of this can be seen below.
+		</para>
+		<xi:include href="method-stubbing/.xml" />
+		<para>
+			Again, partial mocks should not be used when you are testing new code. If you find yourself using them be sure to inspect your design to make sure that the class you are creating a partial mock is not doing too much.
+		</para>
+	</section>
+	<section><title>Setting Default Stubs</title>
+		<para>
+			You can also change the default stubbing for mocks created with Phake::mock(). This is done by using the second parameter to Phake::mock() in conjunction with the Phake::ifUnstubbed() method. The second parameter to Phake::mock() is reserved for configuring the behavior of an individual mock. Phake::ifUnstubbed() allows you to specify any of the matchers mentioned above as the default answer if any method invocation is not explicitly stubbed. If this configuration directive is not provided then the method will return NULL by default.
+		</para>
+	</section>
+	<section><title>Stubbing Magic Methods</title>
+		<para>
+			The verification of __call() was discussed in the previous chapter. Magic methods can also be stubbed in much the same way. If you want to verify a particular invocation of __call() you can stub the actual method call by mocking the method passed in as the first parameter.
+		</para>
+		<para>
+			Consider the following class.
+		</para>
+		<xi:include href="method-stubbing/.xml" />
+		<para>
+			You could stub an invocation of the __call() method through a userspace call to magicCall() with the following code.
+		</para>
+		<xi:include href="method-stubbing/.xml" />
+		<para>
+			If for any reason you need to explicitly stub calls to __call() then you can use Phake::whenCallMethodWith().
+		</para>
+		<xi:include href="method-stubbing/.xml" />
+	</section>
+</chapter>

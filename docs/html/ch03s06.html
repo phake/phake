@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Throwing Exceptions</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2" /><link rel="home" href="index.html" title="Phake - PHP Mocking Framework" /><link rel="up" href="ch03.html" title="Chapter 3. Method Stubbing" /><link rel="prev" href="ch03s05.html" title="Answers" /><link rel="next" href="ch03s07.html" title="Calling the Parent" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Throwing Exceptions</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s05.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Method Stubbing</th><td width="20%" align="right"> <a accesskey="n" href="ch03s07.html">Next</a></td></tr></table><hr /></div><div class="section" title="Throwing Exceptions"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id1406839"></a>Throwing Exceptions</h2></div></div></div>
+		<p>
+			Exception handling is a common aspect of most object oriented systems that should be tested. The key to being able to test your exception handling is to be able to control the throwing of your exceptions. Phake allows this using the thenThrow() answer. This answer allows you to throw a specific exception from any mocked method. Below is an example of a piece of code that catches an exception from the method foo() and then logs a message with the exception message.
+		</p>
+		<div class="example"><a id="Introduction.examples.CardGame.php"></a><p class="title"><b>Example 3.5. CardGame class</b></p><div class="example-contents">
+	
+		<pre class="programlisting">&lt;?php
+
+class CardGame
+{
+	private $dealerStrategy;
+	private $deck;
+	private $players;
+
+	public function CardGame(DealerStrategy $dealerStrategy, CardCollection $deck, PlayerCollection $players)
+	{
+		$this-&gt;dealerStrategy = $dealerStrategy;
+		$this-&gt;deck = $deck;
+		$this-&gt;players = $players;
+	}
+
+	public function dealCards()
+	{
+		$this-&gt;deck-&gt;shuffle();
+		$this-&gt;dealerStrategy-&gt;deal($deck, $players);
+	}
+}
+
+?&gt;</pre>
+</div></div><br class="example-break" />
+		<p>
+			In order to test this we must mock foo() so that it throws an exception when it is called. Then we can verify that log() is called with the appropriate message.
+		</p>
+	</div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03s05.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ch03s07.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Answers </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Calling the Parent</td></tr></table></div></body></html>

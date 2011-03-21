@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Introduction to Phake</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2" /><link rel="home" href="index.html" title="Phake - PHP Mocking Framework" /><link rel="up" href="index.html" title="Phake - PHP Mocking Framework" /><link rel="prev" href="index.html" title="Phake - PHP Mocking Framework" /><link rel="next" href="ch01.html" title="Chapter 1. Getting Started" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Introduction to Phake</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="index.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch01.html">Next</a></td></tr></table><hr /></div><div class="preface" title="Introduction to Phake"><div class="titlepage"><div><div><h2 class="title"><a id="id1406182"></a>Introduction to Phake</h2></div></div></div>
+	
+	<p>
+		Phake is a mocking framework for PHP. It allows for the creation of objects that mimic real
+		object in a predictable and controlled manner. This allows you to treat external method calls
+		made by your system under test (SUT) as just another form of input to your SUT and output from
+		your SUT. This is done by stubbing methods that supply indirect input into your test and by
+		verifying parameters to methods that receive indirect output from your test.
+	</p>
+	<p>
+		In true Las Vegas spirit I am implementing a new framework that allows you to easily create
+		new card games. Most every card game at one point or another needs a dealer. I have created
+		a new class called CardGame that implements the basic functionality for a card game.
+	</p>
+	<div class="example"><a id="Introduction.examples.CardGame.php"></a><p class="title"><b>Example 1. CardGame class</b></p><div class="example-contents">
+	
+		<pre class="programlisting">&lt;?php
+
+class CardGame
+{
+	private $dealerStrategy;
+	private $deck;
+	private $players;
+
+	public function CardGame(DealerStrategy $dealerStrategy, CardCollection $deck, PlayerCollection $players)
+	{
+		$this-&gt;dealerStrategy = $dealerStrategy;
+		$this-&gt;deck = $deck;
+		$this-&gt;players = $players;
+	}
+
+	public function dealCards()
+	{
+		$this-&gt;deck-&gt;shuffle();
+		$this-&gt;dealerStrategy-&gt;deal($deck, $players);
+	}
+}
+
+?&gt;</pre>
+</div></div><br class="example-break" />
+	<p>
+		If I want to create a new test to ensure that dealCards() works properly, what do I need to test? Everything I read about testing says that I need to establish known input for my test, and then test its output. However, in this case, I don’t have any parameters that are passed into dealCards() nor do I have any return values I can check. I could just run the dealCards() method and make sure I don’t get any errors or exceptions, but that proves little more than my method isn’t blowing up spectacularly. It is apparent that I need to ensure that what I actually need to assert is that the shuffle() and deal() methods are being called. If I want to continue testing this using concrete classes that already exist in me system, I could conjure up one of my implementations of DealerStrategy, CardCollection and PlayerCollection. All of those objects are closer to being true value objects with a testable state. I could feasibly construct instances of those objects, pass them into an instance of CardGame, call dealCards() and then assert the state of those same objects. A test doing this might look something like this.
+	</p>
+	<div class="example"><a id="example"></a><p class="title"><b>Example 2. Example</b></p><div class="example-contents">
+	
+		<pre class="programlisting">INSERT EXAMPLE HERE</pre>
+</div></div><br class="example-break" />
+	<p>
+		This test isn’t all that bad, it’s not difficult to understand and it does make sure that cards are dealt through making sure that each player has 5 cards. There are at least two significant problems with this test however. The first problem is that there is not any isolation of the SUT which in this case is dealCards(). If something is broken in the FiveCardPokerDealer class, the Player class, or the PlayerCollection class, it will manifest itself here as a broken CardGame class. Thinking about how each of these classes might be implemented, one could easily make the argument that this really tests the FiveCardPokerDealer class much more than the dealCards() method. The second problem is significantly more problematic. It is perfectly feasible that I could remove the call to $this-&gt;deck-&gt;shuffle() in my SUT and the test I have created will still test just fine. In order to solidify my test I need to introduce logic to ensure that the deck has been shuffled. With the current mindset of using real objects in my tests I could wind up with incredibly complicated logic. I could feasibly add an identifier of some sort to DealerStrategy::shuffle() to mark the deck as shuffled thereby making it checkable state, however that makes my design more fragile as I would have to ensure that identifier was set probably on every implementation of shuffle().
+	</p>
+	<p>
+		This is the type of problem that mock object frameworks solve. A mock framework such as Phake can be used to create implementations of my DealerStrategy, CardCollection, and PlayerCollection classes. I can then exercise my SUT. Finally, I can verify that the methods that should be called on these objects were called correctly. An example of this usage of Phake would alter the above test case to look like this.
+	</p>
+	<div class="example"><a id="example"></a><p class="title"><b>Example 3. Example</b></p><div class="example-contents">
+	
+		<pre class="programlisting">INSERT EXAMPLE HERE</pre>
+</div></div><br class="example-break" />
+	<p>
+		There are three benefits of using mock objects that can be seen through this example. The first is the brittleness of the fixture is reduced. In our previous example you see that I have to construct a full object graph based on the dependencies of all of the classes involved. I am fortunate in the first example that there are only 4 classes involved. In real world problems and especially long lived, legacy code the object graphs can be much, much larger. When using mock objects you typically only have to worry about the direct dependencies of your SUT. Specifically, direct dependencies required to instantiate the dependencies of the class under test, the parameters passed to the method under test (direct dependencies,) and the values returned by additional method calls within the method under test (indirect dependencies.)
+	</p>
+	<p>
+		The second benefit is the test is only testing the SUT. If this test fails due to a change in anything but the interfaces of the classes involved, the change would have had to been made in either the constructor of CardGame, or the dealCards() method itself. Obviously, if an interface change is made (such as removing the shuffle()) method, then I would have a scenario where the changed code is outside of this class. However, provided the removal of that method was intentional, I will know that this code needs to be addressed as it is depending on a method that no longer exists.
+	</p>
+	<p>
+		The third benefit is that I have truer verification and assertions of the outcome of exercising my SUT. In this case for instance, I can be sure that if the call to shuffle() is removed, this test will fail. It also does it in a way that keeps the code necessary to assert your final state simple and concise. This makes my test overall much easier to understand and maintain. There is still one flaw with this example however. There is nothing here to ensure that shuffle() is called before deal() it is quite possible for someone to mistakenly reverse the order of these two calls. The Phake framework does have the ability to track call order to make this test even more bullet proof via the Phake::inOrder() method. I will go over this in more detail later. In the next chapter I will go over how you can install Phake and show you some of the basic usage.
+	</p>
+</div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="index.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch01.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Phake - PHP Mocking Framework </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 1. Getting Started</td></tr></table></div></body></html>

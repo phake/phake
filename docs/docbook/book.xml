@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<book xmlns="http://docbook.org/ns/docbook" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0">
+	<title>Phake - PHP Mocking Framework</title>
+	<info>
+		<author>
+			<personname>
+				<firstname>Mike</firstname>
+				<surname>Lively</surname>
+			</personname>
+			<email>m@digitalsandwich.com</email>
+		</author>
+		<copyright><year>2011</year><holder>Mike Lively</holder></copyright>
+	</info>
+	<xi:include href="introduction.xml" />
+	<xi:include href="getting-started.xml" />
+	<xi:include href="method-verification.xml" />
+	<xi:include href="method-stubbing.xml" />
+	<xi:include href="method-parameter-matchers.xml" />
+</book>
