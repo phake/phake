@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<example xmlns="http://docbook.org/ns/docbook" id="method-stubbing.redefine-stub">
+	<title>Redefining Stubs</title>
+		<programlisting><![CDATA[<?php
+class PhakeTest extends PHPUnit_Framework_TestCase
+{
+	public function testRedefineStub()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+
+		Phake::when($mock)->foo()->thenReturn(24);
+		Phake::when($mock)->foo()->thenReturn(42);
+
+		$this->assertEquals(42, $mock->foo());
+	}
+}
+?>]]></programlisting>
+</example>

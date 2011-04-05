@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<example xmlns="http://docbook.org/ns/docbook" id="method-stubbing.default-stubs">
+	<title>Setting the default stub</title>
+		<programlisting><![CDATA[<?php
+class MyClassTest extends PHPUnit_Framework_TestCase
+{
+	public function testDefaultStubs()
+	{
+		$mock = Phake::mock('MyClass', Phake::ifUnstubbed()->thenReturn(42));
+
+		$this->assertEquals(42, $mock->foo());
+	}
+}
+?>]]></programlisting>
+</example>

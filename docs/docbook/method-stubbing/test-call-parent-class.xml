@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<example xmlns="http://docbook.org/ns/docbook" id="method-stubbing.test-call-parent-class">
+	<title>Using thenCallParent() to Force a Stub to Call its Parent</title>
+		<programlisting><![CDATA[<?php
+class MyClassTest extends PHPUnit_Framework_TestCase
+{
+	public function testCallingParent()
+	{
+		$mock = Phake::mock('MyClass');
+		Phake::when($mock)->foo()->thenCallParent();
+
+		$this->assertEquals(42, $mock->foo());
+	}
+}
+?>]]></programlisting>
+</example>

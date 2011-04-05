@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<example xmlns="http://docbook.org/ns/docbook" id="method-stubbing.simple-stubbing">
+	<title>Simple Stubbing</title>
+		<programlisting><![CDATA[<?php
+class PhakeTest extends PHPUnit_Framework_TestCase
+{
+	public function testSimpleStub()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+
+		Phake::when($mock)->foo()->thenReturn(42);
+
+		$this->assertEquals(42, $mock->foo());
+	}
+}
+?>]]></programlisting>
+</example>

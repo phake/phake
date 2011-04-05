@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<example xmlns="http://docbook.org/ns/docbook" id="method-stubbing.call-parent-class">
+	<title>A Test Class</title>
+		<programlisting><![CDATA[<?php
+class MyClass
+{
+	public function foo()
+	{
+		return '42';
+	}
+}
+?>]]></programlisting>
+</example>

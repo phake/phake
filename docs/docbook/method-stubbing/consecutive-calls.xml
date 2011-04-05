@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<example xmlns="http://docbook.org/ns/docbook" id="method-stubbing.consecutive-calls">
+	<title>Multiple Stubs</title>
+		<programlisting><![CDATA[<?php
+class PhakeTest extends PHPUnit_Framework_TestCase
+{
+	public function testConsecutiveCalls()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+
+		Phake::when($mock)->foo()->thenReturn(24)->thenReturn(42);
+
+		$this->assertEquals(24, $mock->foo());
+		$this->assertEquals(42, $mock->foo());
+	}
+}
+?>]]></programlisting>
+</example>

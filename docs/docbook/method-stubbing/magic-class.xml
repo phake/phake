@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<example xmlns="http://docbook.org/ns/docbook" id="method-stubbing.magic-class">
+	<title>A Magic Class</title>
+		<programlisting><![CDATA[<?php
+class MagicClass
+{
+public function __call($method, $args)
+{
+return '__call';
+}
+}
+?>]]></programlisting>
+</example>

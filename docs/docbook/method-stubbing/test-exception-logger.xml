@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<example xmlns="http://docbook.org/ns/docbook" id="method-stubbing.test-exception-logger">
+	<title>Using thenThrow() to Throw Exceptions</title>
+		<programlisting><![CDATA[<?php
+class MyClassTest extends PHPUnit_Framework_TestCase
+{
+	public function testProcessSomeDataLogsExceptions()
+	{
+		$logger = Phake::mock('LOGGER');
+		$data = Phake::mock('MyData');
+		$processor = Phake::mock('MyDataProcessor');
+		
+		Phake::when($processor)->process($data)->thenThrow(new Exception('My error message!');
+
+		$sut = new MyClass($logger);
+		$sut->processSomeData($processor, $data);
+
+		//This comes from the exception we created above
+		Phake::verify($logger)->log('My error message!');
+	}
+}
+?>]]></programlisting>
+</example>

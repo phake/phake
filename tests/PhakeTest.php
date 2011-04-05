@@ -106,6 +106,46 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Tests that a stub can be redefined.
+	 */
+	public function testRedefineStub()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+
+		Phake::when($mock)->foo()->thenReturn(24);
+		Phake::when($mock)->foo()->thenReturn(42);
+
+		$this->assertEquals(42, $mock->foo());
+	}
+
+	/**
+	 * Tests using multiple stubs.
+	 */
+	public function testMultipleStubs()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+
+		Phake::when($mock)->foo()->thenReturn(24);
+		Phake::when($mock)->fooWithReturnValue()->thenReturn(42);
+
+		$this->assertEquals(24, $mock->foo());
+		$this->assertEquals(42, $mock->fooWithReturnValue());
+	}
+
+	/**
+	 * Tests using multiple stubs.
+	 */
+	public function testConsecutiveCalls()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+
+		Phake::when($mock)->foo()->thenReturn(24)->thenReturn(42);
+
+		$this->assertEquals(24, $mock->foo());
+		$this->assertEquals(42, $mock->foo());
+	}
+
+	/**
 	 * Tests passing a basic equals matcher to the verify method will correctly verify a call.
 	 */
 	public function testVerifyCallWithEqualsMatcher()

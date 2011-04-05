@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<example xmlns="http://docbook.org/ns/docbook" id="method-stubbing.exception-logger">
+	<title>A class with exception logging</title>
+		<programlisting><![CDATA[<?php
+class MyClass
+{
+	private $logger;
+	
+	public function __construct(LOGGER $logger)
+	{
+		$this->logger = $logger;
+	}
+
+	public function processSomeData(MyDataProcessor $processor, MyData $data)
+	{
+		try
+		{
+			$processor->process($data);
+		}
+		catch (Exception $e)
+		{
+			$this->logger->log($e->getMessage());
+		}
+	}
+}
+?>]]></programlisting>
+</example>
