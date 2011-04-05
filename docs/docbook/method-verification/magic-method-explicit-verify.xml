@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<example xmlns="http://docbook.org/ns/docbook" id="method-verification.magic-method-explicit-verify">
+	<title>Explicitly Verify __call()</title>
+		<programlisting><![CDATA[<?php
+class MagicClassTest extends PHPUnit_Framework_TestCase
+{
+  public function testMagicCall()
+  {
+    $mock = Phake::mock('MagicClass');
+
+    $mock->magicCall();
+
+    Phake::verifyCallMethodWith('magicCall')->isCalledOn($mock);
+  }
+}
+?>]]></programlisting>
+</example>

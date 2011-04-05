@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<example xmlns="http://docbook.org/ns/docbook" id="method-verification.simple-verify">
+	<title>Simple Verification</title>
+		<programlisting><![CDATA[<?php
+class PhakeTest1 extends PHPUnit_Framework_TestCase
+{
+  public function testBasicVerify()
+  {
+    $mock = Phake::mock('MyClass');
+
+    $mock->foo();
+
+    Phake::verify($mock)->foo();
+  }
+}
+?>]]></programlisting>
+</example>

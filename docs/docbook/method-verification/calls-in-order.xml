@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<example xmlns="http://docbook.org/ns/docbook" id="method-verification.calls-in-order">
+	<title>Verifying Multiple Calls in Order</title>
+		<programlisting><![CDATA[<?php
+class MyTest extends PHPUnit_Framework_TestCase
+{
+  public function testPHPUnitMock()
+  {
+    $mock = Phake::mock('PhakeTest_MockedClass');
+
+    $mock->fooWithArgument('foo');
+    $mock->fooWithArgument('bar');
+
+    Phake::inOrder(
+      Phake::verify($mock)->fooWithArgument('foo'),
+      Phake::verify($mock)->fooWithArgument('bar')
+    );
+  }
+}
+?>]]></programlisting>
+</example>

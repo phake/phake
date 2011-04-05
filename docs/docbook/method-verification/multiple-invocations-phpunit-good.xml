@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<example xmlns="http://docbook.org/ns/docbook" id="method-verification.multiple-invocations-phpunit-good">
+	<title>Multiple Invocations With PHPUnit Mocks - Good Example</title>
+		<programlisting><![CDATA[<?php
+class MyTest extends PHPUnit_Framework_TestCase
+{
+  public function testPHPUnitMock()
+  {
+    $mock = $this->getMock('PhakeTest_MockedClass');
+
+    //NOTICE this is now at() instead of once()
+    $mock->expects($this->at(0))->method('fooWithArgument')
+            ->with('foo');
+
+    //NOTICE this is now at() instead of once()
+    $mock->expects($this->at(1))->method('fooWithArgument')
+            ->with('bar');
+
+    $mock->fooWithArgument('foo');
+    $mock->fooWithArgument('bar');
+  }
+}
+?>]]></programlisting>
+</example>
