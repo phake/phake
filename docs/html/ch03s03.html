@@ -1,28 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Stubbing Multiple Calls</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2" /><link rel="home" href="index.html" title="Phake - PHP Mocking Framework" /><link rel="up" href="ch03.html" title="Chapter 3. Method Stubbing" /><link rel="prev" href="ch03s02.html" title="Overwriting Existing Stubs" /><link rel="next" href="ch03s04.html" title="Stubbing Consecutive Calls" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Stubbing Multiple Calls</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s02.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Method Stubbing</th><td width="20%" align="right"> <a accesskey="n" href="ch03s04.html">Next</a></td></tr></table><hr /></div><div class="section" title="Stubbing Multiple Calls"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id1409790"></a>Stubbing Multiple Calls</h2></div></div></div>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Stubbing Multiple Calls</title><meta name="generator" content="DocBook XSL Stylesheets V1.75.2"/><link rel="home" href="index.html" title="Phake - PHP Mocking Framework"/><link rel="up" href="ch03.html" title="Chapter 3. Method Stubbing"/><link rel="prev" href="ch03s02.html" title="Overwriting Existing Stubs"/><link rel="next" href="ch03s04.html" title="Stubbing Consecutive Calls"/></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Stubbing Multiple Calls</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s02.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Method Stubbing</th><td width="20%" align="right"> <a accesskey="n" href="ch03s04.html">Next</a></td></tr></table><hr/></div><div class="section" title="Stubbing Multiple Calls"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a xmlns:saxon="http://icl.com/saxon" id="d4e124"/>Stubbing Multiple Calls</h2></div></div></div>
 		<p>
 			It is very easy to stub multiple calls to the same method in Phake. If the various calls to a method that are being stubbed utilize different parameters in each call then you can simply create multiple stubs using Phake::when(). An example of this can be seen below.
 		</p>
-		<div class="example"><a id="method-stubbing.multiple-stubs"></a><p class="title"><b>Example 3.3. Multiple Stubs</b></p><div class="example-contents">
+		<div class="example"><a xmlns:saxon="http://icl.com/saxon" id="method-stubbing.multiple-stubs"/><p class="title"><b>Example 3.3. Multiple Stubs</b></p><div class="example-contents">
 	
-		<pre class="programlisting">&lt;?php
-class PhakeTest extends PHPUnit_Framework_TestCase
+		<pre class="programlisting"><span class="hl-directive" style="color: maroon">&lt;?php</span>
+<b class="hl-keyword">class</b> PhakeTest <b class="hl-keyword">extends</b> PHPUnit_Framework_TestCase
 {
-	public function testMultipleStubs()
+	<b class="hl-keyword">public</b> <b class="hl-keyword">function</b> testMultipleStubs()
 	{
-		$mock = Phake::mock('PhakeTest_MockedClass');
+		$mock = Phake::mock(<b class="hl-string"><i style="color:red">'PhakeTest_MockedClass'</i></b>);
 
-		Phake::when($mock)-&gt;foo()-&gt;thenReturn(24);
-		Phake::when($mock)-&gt;fooWithReturnValue()-&gt;thenReturn(42);
+		Phake::when($mock)-&gt;foo()-&gt;thenReturn(<span class="hl-number">24</span>);
+		Phake::when($mock)-&gt;fooWithReturnValue()-&gt;thenReturn(<span class="hl-number">42</span>);
 
-		$this-&gt;assertEquals(24, $mock-&gt;foo());
-		$this-&gt;assertEquals(42, $mock-&gt;fooWithReturnValue());
+		$this-&gt;assertEquals(<span class="hl-number">24</span>, $mock-&gt;foo());
+		$this-&gt;assertEquals(<span class="hl-number">42</span>, $mock-&gt;fooWithReturnValue());
 	}
 }
-?&gt;</pre>
-</div></div><br class="example-break" />
+<span class="hl-directive" style="color: maroon">?&gt;</span></pre>
+</div></div><br class="example-break"/>
 		<p>
 			In the above example, I have stubbed two variations of the add() method. The first stub will return 4 when add() is called with the parameters 2 and 2. The second stub will return 8 when add() is called with the parameters 3 and 5.
 		</p>
-	</div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03s02.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ch03s04.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Overwriting Existing Stubs </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Stubbing Consecutive Calls</td></tr></table></div></body></html>
+	</div><div class="navfooter"><hr/><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03s02.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch03.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ch03s04.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Overwriting Existing Stubs </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Stubbing Consecutive Calls</td></tr></table></div></body></html>
