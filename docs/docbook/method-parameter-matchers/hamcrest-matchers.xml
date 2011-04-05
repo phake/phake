@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<example xmlns="http://docbook.org/ns/docbook" id="method-parameter-matchers.hamcrest-matchers">
+	<title>Using Hamcrest Matchers</title>
+		<programlisting><![CDATA[<?php
+class TestHamcrestMatcher extends UnitTestCase
+{
+  public function testDealNumberOfCards()
+  {
+    $deck = Phake::mock('CardCollection');
+    $players = Phake::mock('PlayerCollection');
+
+    $dealer = Phake::mock('DealerStrategy');
+    $dealer->deal($deck, $players, 11);
+
+    Phake::verify($dealer)->deal($deck, $players, greaterThan(10));
+  }
+}
+?>]]></programlisting>
+</example>

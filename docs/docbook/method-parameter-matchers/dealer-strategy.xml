@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<example xmlns="http://docbook.org/ns/docbook" id="method-parameter-matchers.dealer-strategy">
+	<title>Dealer Strategy Interface</title>
+		<programlisting><![CDATA[<?php
+interface DealerStrategy
+{
+  public function deal(
+      CardCollection $deck,
+      PlayerCollection $players);
+}
+
+?>]]></programlisting>
+</example>

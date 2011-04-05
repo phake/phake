@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<example xmlns="http://docbook.org/ns/docbook" id="method-parameter-matchers.simple-equals-fail">
+	<title>Failed Simple Equals Test</title>
+		<programlisting><![CDATA[Expected DealerStrategy->fooWithArgument(equal to
+<object:CardCollection>, equal to <object:PlayerCollection>)
+to be called exactly 1 times, actually called 0 times.
+Other Invocations:
+  PhakeTest_MockedClass->fooWithArgument(<null>,
+equal to <object:PlayerCollection>)]]></programlisting>
+</example>

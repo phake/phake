@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<example xmlns="http://docbook.org/ns/docbook" id="method-parameter-matchers.custom-argument-matcher">
+	<title>Custom Argument Matcher</title>
+		<programlisting><![CDATA[<?php
+class FiftyTwoCardDeckMatcher implements Phake_Matchers_IArgumentMatcher
+{
+  public function matches($argument)
+  {
+    return ($argument instanceof CardCollection
+        && $argument->getNumberOfCards() == 52);
+  }
+
+  public function __toString()
+  {
+    return '<object:CardCollection with 52 cards>';
+  }
+}
+
+class MyBestPokerGameTest extends PHPUnit_Framework_TestCase
+{
+  public function testDealCards()
+  {
+    $dealer = Phake::mock('MyPokerDealer');
+    $players = Phake::mock('PlayerCollection');
+
+    $cardGame = new MyPokerGame($dealer, $players);
+
+    Phake::verify($dealer)->deal(new 52CardDeckMatcher(), $players);
+  }
+}
+?>]]></programlisting>
+</example>

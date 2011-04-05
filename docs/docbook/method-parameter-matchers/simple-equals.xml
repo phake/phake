@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<example xmlns="http://docbook.org/ns/docbook" id="method-parameter-matchers.simple-equals">
+	<title>Example of Default 'Equals' Matching</title>
+		<programlisting><![CDATA[<?php
+//I don't have Concrete versions of
+// CardCollection or PlayerCollection yet
+$deck = Phake::mock('CardCollection');
+$players = Phake::mock('PlayerCollection');
+
+
+$dealer = Phake::mock('DealerStrategy');
+
+$dealer->deal($deck, $players);
+
+Phake::verify($dealer)->deal($deck, $players);
+?>]]></programlisting>
+</example>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<example xmlns="http://docbook.org/ns/docbook" id="method-parameter-matchers.conditional-argument-capture-fail">
+	<title>Failed Test of Argument Captor</title>
+		<programlisting><![CDATA[Exception: Expected MyPokerDealer->deal(<captured parameter>,
+equal to <object:PlayerCollection>) to be called exactly 1
+times, actually called 0 times.
+Other Invocations:
+  PhakeTest_MockedClass->fooWithArgument(<array>,
+<object:PlayerCollection>)]]></programlisting>
+</example>

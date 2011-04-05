@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<example xmlns="http://docbook.org/ns/docbook" id="method-parameter-matchers.argument-capture">
+	<title>Using Argument Captors</title>
+		<programlisting><![CDATA[<?php
+class MyPokerGameTest extends PHPUnit_Framework_TestCase
+{
+  public function testDealCards()
+  {
+    $dealer = Phake::mock('MyPokerDealer');
+    $players = Phake::mock('PlayerCollection');
+
+    $cardGame = new MyPokerGame($dealer, $players);
+
+    Phake::verify($dealer)->deal(Phake::capture($deck), $players);
+
+    $this->assertEquals(52, $deck->getNumberOfCards());
+  }
+}
+?>]]></programlisting>
+</example>
