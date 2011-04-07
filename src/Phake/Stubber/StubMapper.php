@@ -43,7 +43,7 @@
  */
 
 /**
- * Allows mapping of Answers to methods.
+ * Allows mapping of Answer collections to methods.
  *
  * @author Mike Lively <m@digitalsandwich.com>
  */
@@ -55,20 +55,20 @@ class Phake_Stubber_StubMapper
 	private $matcherStubMap = array();
 
 	/**
-	 * Maps a given $answer to a given $matcher
-	 * @param Phake_Stubber_IAnswer $answer
+	 * Maps a given answer collection to a given $matcher
+	 * @param Phake_Stubber_AnswerCollection $answer
 	 * @param Phake_Matchers_MethodMatcher $matcher
 	 */
-	public function mapStubToMatcher(Phake_Stubber_IAnswer $answer, Phake_Matchers_MethodMatcher $matcher)
+	public function mapStubToMatcher(Phake_Stubber_AnswerCollection $answer, Phake_Matchers_MethodMatcher $matcher)
 	{
 		$this->matcherStubMap[] = array($matcher, $answer);
 	}
 
 	/**
-	 * Returns the stub based on a matcher that matches a given call
+	 * Returns the answer collection based on a matcher that matches a given call
 	 * @param string $method
 	 * @param array $arguments
-	 * @return Phake_Stubber_IAnswer or NULL if a matcher is not found
+	 * @return Phake_Stubber_AnswerCollection or NULL if a matcher is not found
 	 */
 	public function getStubByCall($method, array $arguments)
 	{
@@ -89,7 +89,7 @@ class Phake_Stubber_StubMapper
 	}
 
 	/**
-	 * Removes all answers from the stub mapper.
+	 * Removes all answer collections from the stub mapper.
 	 */
 	public function removeAllAnswers()
 	{

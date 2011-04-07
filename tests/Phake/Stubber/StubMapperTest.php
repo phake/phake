@@ -71,7 +71,7 @@ class Phake_Stubber_StubMapperTest extends PHPUnit_Framework_TestCase
 	public function testMappingMatchers()
 	{
 		$matcher = $this->getMock('Phake_Matchers_MethodMatcher', array(), array(), '', FALSE);
-		$stub = $this->getMock('Phake_Stubber_IAnswer');
+		$stub = $this->getMock('Phake_Stubber_AnswerCollection', array(), array(), '', FALSE);
 
 		$matcher->expects($this->any())
 				->method('matches')
@@ -89,7 +89,7 @@ class Phake_Stubber_StubMapperTest extends PHPUnit_Framework_TestCase
 	public function testMappingMatchersFailsOnNonMatch()
 	{
 		$matcher = $this->getMock('Phake_Matchers_MethodMatcher', array(), array(), '', FALSE);
-		$stub = $this->getMock('Phake_Stubber_IAnswer');
+		$stub = $this->getMock('Phake_Stubber_AnswerCollection', array(), array(), '', FALSE);
 
 		$matcher->expects($this->any())
 				->method('matches')
@@ -106,7 +106,7 @@ class Phake_Stubber_StubMapperTest extends PHPUnit_Framework_TestCase
 	public function testRemoveAllAnswers()
 	{
 		$matcher = $this->getMock('Phake_Matchers_MethodMatcher', array(), array(), '', FALSE);
-		$stub = $this->getMock('Phake_Stubber_IAnswer');
+		$stub = $this->getMock('Phake_Stubber_AnswerCollection', array(), array(), '', FALSE);
 
 		$matcher->expects($this->never())
 				->method('matches');
@@ -124,10 +124,10 @@ class Phake_Stubber_StubMapperTest extends PHPUnit_Framework_TestCase
 	public function testMatchesInReverseOrder()
 	{
 		$match_me = $this->getMock('Phake_Matchers_MethodMatcher', array(), array(), '', FALSE);
-		$match_me_stub = $this->getMock('Phake_Stubber_IAnswer');
+		$match_me_stub = $this->getMock('Phake_Stubber_AnswerCollection', array(), array(), '', FALSE);
 		
 		$also_matches = $this->getMock('Phake_Matchers_MethodMatcher', array(), array(), '', FALSE);
-		$also_matches_stub = $this->getMock('Phake_Stubber_IAnswer');
+		$also_matches_stub = $this->getMock('Phake_Stubber_AnswerCollection', array(), array(), '', FALSE);
 		
 		$also_matches->expects($this->never())
 			->method('matches');

@@ -53,14 +53,17 @@
    <file baseinstalldir="/" name="Phake/Matchers/MethodMatcher.php" role="php" />
    <file baseinstalldir="/" name="Phake/Matchers/PHPUnitConstraintAdapter.php" role="php" />
    <file baseinstalldir="/" name="Phake/Proxies/AnswerBinderProxy.php" role="php" />
+   <file baseinstalldir="/" name="Phake/Proxies/AnswerCollectionProxy.php" role="php" />
    <file baseinstalldir="/" name="Phake/Proxies/CallStubberProxy.php" role="php" />
    <file baseinstalldir="/" name="Phake/Proxies/CallVerifierProxy.php" role="php" />
    <file baseinstalldir="/" name="Phake/Proxies/StubberProxy.php" role="php" />
    <file baseinstalldir="/" name="Phake/Proxies/VerifierProxy.php" role="php" />
    <file baseinstalldir="/" name="Phake/String/Converter.php" role="php" />
    <file baseinstalldir="/" name="Phake/Stubber/AnswerBinder.php" role="php" />
+   <file baseinstalldir="/" name="Phake/Stubber/AnswerCollection.php" role="php" />
    <file baseinstalldir="/" name="Phake/Stubber/IAnswer.php" role="php" />
    <file baseinstalldir="/" name="Phake/Stubber/IAnswerBinder.php" role="php" />
+   <file baseinstalldir="/" name="Phake/Stubber/IAnswerContainer.php" role="php" />
    <file baseinstalldir="/" name="Phake/Stubber/IAnswerDelegate.php" role="php" />
    <file baseinstalldir="/" name="Phake/Stubber/IStubbable.php" role="php" />
    <file baseinstalldir="/" name="Phake/Stubber/SelfBindingAnswerBinder.php" role="php" />

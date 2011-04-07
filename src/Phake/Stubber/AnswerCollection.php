@@ -2,7 +2,7 @@
 /* 
  * Phake - Mocking Framework
  * 
- * Copyright (c) 2010-2011, Mike Lively <m@digitalsandwich.com>
+ * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -42,20 +42,59 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+require_once('Phake/Stubber/IAnswerContainer.php');
+
 /**
- * Provides the interface for an answer binder
+ * Allows iteration over a series of answers. Simply calling getAnswer() will result in the appropriate
+ * answer being returned. You do not need to manage the iteration manually.
+ *
+ * If there are no answers left to return, the last answer is returned again.
  */
-interface Phake_Stubber_IAnswerBinder
+class Phake_Stubber_AnswerCollection implements Phake_Stubber_IAnswerContainer
 {
 	/**
-	 * Binds the given answer to an object.
-	 *
-	 * Returns an answer container that will contain the given answer.
-	 *
-	 * @param Phake_Stubber_IAnswer $answer
-	 * @return Phake_Stubber_IAnswerContainer
+	 * @var array
 	 */
-	public function bindAnswer(Phake_Stubber_IAnswer $answer);
+	private $answers;
+
+	/**
+	 * Adds the passed answer to a new answer collection.
+	 * 
+	 * @param Phake_Stubber_IAnswer $answer
+	 */
+	public function __construct(Phake_Stubber_IAnswer $answer)
+	{
+		$this->answers = array($answer);
+	}
+
+	/**
+	 * Adds a new answer to the end of the collection.
+	 * 
+	 * @param Phake_Stubber_IAnswer $answer
+	 */
+	public function addAnswer(Phake_Stubber_IAnswer $answer)
+	{
+		$this->answers[] = $answer;
+	}
+
+	/**
+	 * Returns the next answer in the collection.
+	 *
+	 * @return Phake_Stubber_IAnswer
+	 */
+	public function getAnswer()
+	{
+		$answer = current($this->answers);
+
+		if ($answer === FALSE)
+		{
+			$answer = end($this->answers);
+		}
+
+		next($this->answers);
+
+		return $answer;
+	}
 }
 
 ?>

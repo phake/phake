@@ -2,7 +2,7 @@
 /* 
  * Phake - Mocking Framework
  * 
- * Copyright (c) 2010-2011, Mike Lively <m@digitalsandwich.com>
+ * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -42,80 +42,92 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Stubber/Answers/StaticAnswer.php';
-require_once 'Phake/Stubber/Answers/ParentDelegate.php';
-require_once 'Phake/Stubber/Answers/ExceptionAnswer.php';
-require_once 'Phake/Stubber/Answers/LambdaAnswer.php';
-
 /**
- * A proxy class to provide a fluent interface into the answer binder.
+ * A proxy class to provide Stub Chaining through use of an AnswerCollection
  *
  * @author Mike Lively <m@digitalsandwich.com>
  */
-class Phake_Proxies_AnswerBinderProxy
+class Phake_Proxies_AnswerCollectionProxy implements Phake_Stubber_IAnswerContainer
 {
 	/**
-	 * @var Phake_Stubber_IAnswerBinder
+	 * @var Phake_Stubber_AnswerCollection
 	 */
-	private $binder;
-
-	public function __construct(Phake_Stubber_IAnswerBinder $binder)
-	{
-		$this->binder = $binder;
-	}
+	private $collection;
 
 	/**
-	 * Binds a static answer to the method and object in the proxied binder.
-	 * @param mixed $value
-	 * @return Phake_Stubber_IAnswerContainer
+	 * @param Phake_Stubber_AnswerCollection $collection
 	 */
-	public function thenReturn($value)
+	public function __construct(Phake_Stubber_AnswerCollection $collection)
 	{
-		return $this->binder->bindAnswer(new Phake_Stubber_Answers_StaticAnswer($value));
+		$this->collection = $collection;
 	}
 	
 	/**
+	 * Binds a static answer to the method and object in the proxied binder.
+	 * @param mixed $value
+	 * @return Phake_Proxies_AnswerCollectionProxy
+	 */
+	public function thenReturn($value)
+	{
+		$this->collection->addAnswer(new Phake_Stubber_Answers_StaticAnswer($value));
+		return $this;
+	}
+
+	/**
 	 * Binds a Lambda answer to the method
 	 * @param callback $value
-	 * @return Phake_Stubber_IAnswerContainer
+	 * @return Phake_Proxies_AnswerCollectionProxy
 	 */
 	public function thenGetReturnByLambda($value)
 	{
 		if (!is_callable($value))
 			throw new InvalidArgumentException("Given lambda is not callable");
-			
-		return $this->binder->bindAnswer(new Phake_Stubber_Answers_LambdaAnswer($value));
+
+		$this->collection->addAnswer(new Phake_Stubber_Answers_LambdaAnswer($value));
+
+		return $this;
 	}
 
 	/**
 	 * Binds a delegated call that will call a given method's parent.
-	 * @return Phake_Stubber_IAnswerContainer
+	 * @return Phake_Proxies_AnswerCollectionProxy
 	 */
 	public function thenCallParent()
 	{
-		return $this->binder->bindAnswer(new Phake_Stubber_Answers_ParentDelegate());
+		$this->collection->addAnswer(new Phake_Stubber_Answers_ParentDelegate());
+		return $this;
 	}
 
 	/**
 	 * Binds an exception answer to the method and object in the proxied binder.
 	 *
 	 * @param Exception $value
-	 * @return Phake_Stubber_IAnswerContainer
+	 * @return Phake_Proxies_AnswerCollectionProxy
 	 */
 	public function thenThrow(Exception $value)
 	{
-		return $this->binder->bindAnswer(new Phake_Stubber_Answers_ExceptionAnswer($value));
+		$this->collection->addAnswer(new Phake_Stubber_Answers_ExceptionAnswer($value));
+		return $this;
 	}
 
 	/**
 	 * Binds a delegated call that will call a given method's parent while capturing that value to the passed in variable.
 	 * @param mixed $captor
-	 * @return Phake_Stubber_IAnswerContainer
+	 * @return Phake_Proxies_AnswerCollectionProxy
 	 */
 	public function captureReturnTo(&$captor)
 	{
-		return $this->binder->bindAnswer(new Phake_Stubber_Answers_ParentDelegate($captor));
+		$this->collection->addAnswer(new Phake_Stubber_Answers_ParentDelegate($captor));
+		return $this;
+	}
+
+	/**
+	 * Returns an answer from the container
+	 * @return Phake_Stubber_IAnswer
+	 */
+	public function getAnswer()
+	{
+		return $this->collection->getAnswer();
 	}
 }
-
 ?>

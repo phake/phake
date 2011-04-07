@@ -43,13 +43,14 @@
  */
 
 require_once 'Phake/Stubber/IAnswerBinder.php';
+require_once('Phake/Stubber/IAnswerContainer.php');
 
 /**
  * An answer binder that binds the answer to itself providing access via getAnswer()
  *
  * @todo probably not the best to do this, kindof dual purposing an interface :(
  */
-class Phake_Stubber_SelfBindingAnswerBinder implements Phake_Stubber_IAnswerBinder
+class Phake_Stubber_SelfBindingAnswerBinder implements Phake_Stubber_IAnswerBinder, Phake_Stubber_IAnswerContainer
 {
 	/**
 	 * @var Phake_Stubber_IAnswer

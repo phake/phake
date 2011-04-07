@@ -43,6 +43,8 @@
  */
 
 require_once 'Phake/Stubber/IAnswerBinder.php';
+require_once 'Phake/Stubber/AnswerCollection.php';
+require_once 'Phake/Proxies/AnswerCollectionProxy.php';
 
 /**
  * Allows binding an answer to stubbable object's method.
@@ -78,9 +80,10 @@ class Phake_Stubber_AnswerBinder implements Phake_Stubber_IAnswerBinder
 	 */
 	public function bindAnswer(Phake_Stubber_IAnswer $answer)
 	{
-		$this->obj->__PHAKE_addAnswer($answer, $this->matcher);
+		$collection = new Phake_Stubber_AnswerCollection($answer);
+		$this->obj->__PHAKE_addAnswer($collection, $this->matcher);
 
-		return $this;
+		return new Phake_Proxies_AnswerCollectionProxy($collection);
 	}
 }
 

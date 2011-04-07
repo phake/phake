@@ -2,7 +2,7 @@
 /* 
  * Phake - Mocking Framework
  * 
- * Copyright (c) 2010-2011, Mike Lively <m@digitalsandwich.com>
+ * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -43,19 +43,14 @@
  */
 
 /**
- * Provides the interface for an answer binder
+ * Answer containers are classes used to store answers.
  */
-interface Phake_Stubber_IAnswerBinder
+interface Phake_Stubber_IAnswerContainer
 {
 	/**
-	 * Binds the given answer to an object.
-	 *
-	 * Returns an answer container that will contain the given answer.
-	 *
-	 * @param Phake_Stubber_IAnswer $answer
-	 * @return Phake_Stubber_IAnswerContainer
+	 * Returns an answer from the container
+	 * @return Phake_Stubber_IAnswer
 	 */
-	public function bindAnswer(Phake_Stubber_IAnswer $answer);
+	public function getAnswer();
 }
-
 ?>

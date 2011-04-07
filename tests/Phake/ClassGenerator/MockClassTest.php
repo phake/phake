@@ -46,6 +46,7 @@ require_once 'Phake/ClassGenerator/MockClass.php';
 require_once 'Phake/CallRecorder/Recorder.php';
 require_once 'Phake/Stubber/StubMapper.php';
 require_once 'Phake/Stubber/IAnswer.php';
+require_once 'Phake/Stubber/AnswerCollection.php';
 require_once 'Phake/Stubber/Answers/ParentDelegate.php';
 require_once 'Phake/Stubber/IAnswerDelegate.php';
 
@@ -213,7 +214,7 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 		$stubMapper->expects($this->once())
 				->method('getStubByCall')
 				->with($this->equalTo('fooWithArgument'), array('bar'))
-				->will($this->returnValue($answer));
+				->will($this->returnValue(new Phake_Stubber_AnswerCollection($answer)));
 
 		$mock->fooWithArgument('bar');
 	}
@@ -235,13 +236,14 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 		$mock = $this->classGen->instantiate($newClassName, $callRecorder, $stubMapper, $answer);
 
 		$answer = $this->getMock('Phake_Stubber_IAnswer');
+		$answerCollection = new Phake_Stubber_AnswerCollection($answer);
 		$matcher = $this->getMock('Phake_Matchers_MethodMatcher', array(), array(), '', FALSE);
 
 		$stubMapper->expects($this->once())
 				->method('mapStubToMatcher')
-				->with($this->equalTo($answer), $this->equalTo($matcher));
+				->with($this->equalTo($answerCollection), $this->equalTo($matcher));
 
-		$mock->__PHAKE_addAnswer($answer, $matcher);
+		$mock->__PHAKE_addAnswer($answerCollection, $matcher);
 	}
 
 	/**
@@ -359,7 +361,7 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 		$stubMapper->expects($this->once())
 				->method('getStubByCall')
 				->with($this->equalTo('fooWithArgument'), array('bar'))
-				->will($this->returnValue($answer));
+				->will($this->returnValue(new Phake_Stubber_AnswerCollection($answer)));
 
 		$mock->fooWithArgument('bar');
 	}
@@ -409,7 +411,7 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 		$stubMapper->expects($this->once())
 				->method('getStubByCall')
 				->with($this->equalTo('fooWithArgument'), array('bar'))
-				->will($this->returnValue($answer));
+				->will($this->returnValue(new Phake_Stubber_AnswerCollection($answer)));
 
 		$mock->fooWithArgument('bar');
 	}

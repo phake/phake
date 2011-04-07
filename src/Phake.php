@@ -83,7 +83,7 @@ class Phake
 	 * @param Phake_Stubber_SelfBindingAnswerBinder $defaultAnswer
 	 * @return Phake_ITestDouble
 	 */
-	public static function mock($className, Phake_Stubber_SelfBindingAnswerBinder $defaultAnswer = NULL)
+	public static function mock($className, Phake_Stubber_IAnswerContainer $defaultAnswer = NULL)
 	{
 		if ($defaultAnswer === NULL)
 		{

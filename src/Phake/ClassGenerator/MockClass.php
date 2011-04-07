@@ -99,7 +99,7 @@ class {$newClassName} {$extends}
 		return \$this->__PHAKE_callRecorder;
 	}
 
-	public function __PHAKE_addAnswer(Phake_Stubber_IAnswer \$answer, Phake_Matchers_MethodMatcher \$matcher)
+	public function __PHAKE_addAnswer(Phake_Stubber_AnswerCollection \$answer, Phake_Matchers_MethodMatcher \$matcher)
 	{
 		\$this->__PHAKE_stubMapper->mapStubToMatcher(\$answer, \$matcher);
 	}
@@ -228,7 +228,7 @@ class {$newClassName} {$extends}
 
 		if (\$stub !== NULL)
 		{
-			\$answer = \$stub;
+			\$answer = \$stub->getAnswer();
 		}
 		else
 		{
@@ -273,7 +273,7 @@ class {$newClassName} {$extends}
 
 		if (\$stub !== NULL)
 		{
-			\$answer = \$stub;
+			\$answer = \$stub->getAnswer();
 		}
 		else
 		{

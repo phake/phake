@@ -43,9 +43,11 @@
  */
 
 require_once 'Phake/Stubber/AnswerBinder.php';
+require_once 'Phake/Stubber/AnswerCollection.php';
 require_once 'Phake/Stubber/IStubbable.php';
 require_once 'Phake/Stubber/IAnswer.php';
 require_once 'Phake/Matchers/MethodMatcher.php';
+require_once 'Phake/Proxies/AnswerCollectionProxy.php';
 
 /**
  * Tests the Answer Factory
@@ -84,9 +86,20 @@ class Phake_Stubber_AnswerBinderTest extends PHPUnit_Framework_TestCase
 		$answer = $this->getMock('Phake_Stubber_IAnswer');
 		$this->mock->expects($this->once())
 				->method('__PHAKE_addAnswer')
-				->with($this->equalTo($answer), $this->equalTo($this->matcher));
+				->with($this->equalTo(new Phake_Stubber_AnswerCollection($answer)), $this->equalTo($this->matcher));
 
-		$this->assertEquals($this->binder, $this->binder->bindAnswer($answer));
+		$this->binder->bindAnswer($answer);
+	}
+
+	public function testBindAnswerReturnsAnswerCollectionBinder()
+	{
+		$answer = $this->getMock('Phake_Stubber_IAnswer');
+
+		$newBinder = $this->binder->bindAnswer($answer);
+
+		$this->assertInstanceOf('Phake_Proxies_AnswerCollectionProxy', $newBinder);
+
+		$this->assertEquals($answer, $newBinder->getAnswer());
 	}
 }
 
