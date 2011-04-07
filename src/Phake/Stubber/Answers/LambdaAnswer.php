@@ -37,7 +37,8 @@ class Phake_Stubber_Answers_LambdaAnswer implements Phake_Stubber_Answers_IDeleg
 	public function getActualAnswer()
 	{	
 		$lambda = $this->answerLambda;
-		return call_user_func_array($lambda, func_get_args());
+		$args = func_get_args();
+		return call_user_func_array($lambda, $args);
 	}
 	
 	/**
