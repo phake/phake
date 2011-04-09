@@ -2,7 +2,7 @@
 /* 
  * Phake - Mocking Framework
  * 
- * Copyright (c) 2010-2011, Mike Lively <m@digitalsandwich.com>
+ * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -42,60 +42,72 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Matchers/HamcrestMatcherAdapter.php';
+require_once('Phake/Matchers/IArgumentMatcher.php');
 
-if (HAMCREST_LOADED) require_once 'Hamcrest/Matcher.php';
-
-/**
- * Tests the adapting of Hamcrest matchers to Phake matchers
- */
-class Phake_Matchers_HamcrestMatcherAdapterTest extends PHPUnit_Framework_TestCase
+class Phake_Matchers_ReferenceSetter implements Phake_Matchers_IArgumentMatcher
 {
 	/**
-	 * @var Phake_Matchers_HamcrestMatcherAdapter
+	 * @var mixed
 	 */
-	private $adapter;
+	private $value;
 
 	/**
-	 * @var Hamcrest_Matcher
+	 * @var Phake_Matchers_IArgumentMatcher
 	 */
 	private $matcher;
 
 	/**
-	 * Sets up the test fixture
+	 * @param mixed $value The value to set the reference parameter to.
 	 */
-	public function setUp()
+	public function __construct($value)
 	{
-		if (!HAMCREST_LOADED)
-		{
-			$this->markTestSkipped('Hamcrest is not available');
-		}
-
-		$this->matcher = $this->getMock('Hamcrest_BaseMatcher');
-		$this->matcher->expects($this->any())
-				->method('__toString')
-				->will($this->returnValue('hamcrest matcher'));
-		
-		$this->adapter = new Phake_Matchers_HamcrestMatcherAdapter($this->matcher);
+		$this->value = $value;
 	}
 
 	/**
-	 * Tests that calls to matches are forwarded to hamcrest's matcher method
+	 * Executes the matcher on a given argument value.
+	 *
+	 * Sets the $argument to the value passed in the constructor
+	 * @param mixed $argument
+	 * @return boolean
 	 */
-	public function testMatchesCallsForwarded()
+	public function matches(&$argument)
 	{
-		$this->matcher->expects($this->once())
-				->method('matches')
-				->with($this->equalTo('foo'))
-				->will($this->returnValue(TRUE));
+		if ($this->matcher === NULL || $this->matcher->matches($argument))
+		{
+			$argument = $this->value;
+			return TRUE;
+		}
 
-		$value = 'foo';
-		$this->assertTrue($this->adapter->matches($value));
+		return FALSE;
 	}
 
-	public function testToString()
+	/**
+	 * Returns a human readable description of the argument matcher
+	 * @return string
+	 */
+	public function __toString()
 	{
-		$this->assertEquals('hamcrest matcher', $this->adapter->__toString());
+		return '<reference parameter>';
+	}
+
+	/**
+	 * Assigns a matcher to the setter.
+	 *
+	 * This allows an argument to only be set if the original argument meets a specific criteria.
+	 *
+	 * The same matcher factory used by the verifier and stubber is used here.
+	 *
+	 * @param mixed $matcher
+	 * @return Phake_Matchers_ReferenceSetter the current instance
+	 */
+	public function when($matcher)
+	{
+		$factory = new Phake_Matchers_Factory();
+
+		$this->matcher = $factory->createMatcher($matcher);
+
+		return $this;
 	}
 }
 

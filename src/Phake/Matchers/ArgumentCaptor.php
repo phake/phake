@@ -77,7 +77,7 @@ class Phake_Matchers_ArgumentCaptor implements Phake_Matchers_IArgumentMatcher
 	 * @param mixed $argument
 	 * @return boolean
 	 */
-	public function matches($argument)
+	public function matches(&$argument)
 	{
 		if ($this->matcher === NULL || $this->matcher->matches($argument))
 		{

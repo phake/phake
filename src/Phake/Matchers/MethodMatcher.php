@@ -78,7 +78,7 @@ class Phake_Matchers_MethodMatcher
 	 * @param array $arguments
 	 * @return boolean
 	 */
-	public function matches($method, array $arguments)
+	public function matches($method, array &$arguments)
 	{
 		if ($this->expectedMethod == $method
 				&& $this->doArgumentsMatch($arguments))
@@ -97,7 +97,7 @@ class Phake_Matchers_MethodMatcher
 	 * @param array $arguments
 	 * @return boolean
 	 */
-	private function doArgumentsMatch(array $arguments)
+	private function doArgumentsMatch(array &$arguments)
 	{
 		if (!empty($this->argumentMatchers) && $this->argumentMatchers[0] instanceof Phake_Matchers_AnyParameters)
 		{
@@ -111,7 +111,7 @@ class Phake_Matchers_MethodMatcher
 
 		reset($this->argumentMatchers);
 
-		foreach ($arguments as $arg)
+		foreach ($arguments as &$arg)
 		{
 			$matcher = current($this->argumentMatchers);
 			/* @var $matcher Phake_Matchers_IArgumentMatcher */

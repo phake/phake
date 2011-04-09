@@ -70,7 +70,7 @@ class Phake_Stubber_StubMapper
 	 * @param array $arguments
 	 * @return Phake_Stubber_AnswerCollection or NULL if a matcher is not found
 	 */
-	public function getStubByCall($method, array $arguments)
+	public function getStubByCall($method, array &$arguments)
 	{
 		$matcherStubMap = array_reverse($this->matcherStubMap);
 		

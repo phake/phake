@@ -71,7 +71,7 @@ class Phake_Matchers_PHPUnitConstraintAdapter implements Phake_Matchers_IArgumen
 	 * @param mixed $argument
 	 * @return boolean
 	 */
-	public function matches($argument)
+	public function matches(&$argument)
 	{
 		return $this->constraint->evaluate($argument);
 	}

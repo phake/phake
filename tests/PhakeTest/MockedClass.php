@@ -81,6 +81,11 @@ class PhakeTest_MockedClass
 	{
 
 	}
+
+	public function fooWithRefParm($parm1, &$parm2 = null)
+	{
+
+	}
 }
 
 ?>

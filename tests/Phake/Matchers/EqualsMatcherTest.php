@@ -67,7 +67,8 @@ class Phake_Matchers_EqualsMatcherTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testMatches()
 	{
-		$this->assertTrue($this->matcher->matches('foo'));
+		$value = 'foo';
+		$this->assertTrue($this->matcher->matches($value));
 	}
 
 	/**
@@ -75,7 +76,8 @@ class Phake_Matchers_EqualsMatcherTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testBadMatches()
 	{
-		$this->assertFalse($this->matcher->matches('test'));
+		$value = 'test';
+		$this->assertFalse($this->matcher->matches($value));
 	}
 
 	public function testToString()

@@ -713,6 +713,66 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Tests setting reference parameters
+	 */
+	public function testSettingReferenceParameters()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+
+		Phake::when($mock)->fooWithRefParm('test', Phake::setReference(42))->thenReturn(NULL);
+
+		$mock->fooWithRefParm('test', $value);
+
+		$this->assertSame(42, $value);
+	}
+
+	/**
+	 * Tests conditional reference parameter setting
+	 */
+	public function testConditionalReferenceParameterSetting()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+
+		Phake::when($mock)->fooWithRefParm('test', Phake::setReference(42)->when(24))->thenReturn(NULL);
+
+		$value = 24;
+		$mock->fooWithRefParm('test', $value);
+
+		$this->assertSame(42, $value);
+	}
+
+	/**
+	 * Make sure reference parameters aren't set if the conditions don't match
+	 */
+	public function testConditionalReferenceParameterSettingFails()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+
+		Phake::when($mock)->fooWithRefParm('test', Phake::setReference(42)->when(24))->thenReturn(NULL);
+
+		$value = 25;
+		$mock->fooWithRefParm('test', $value);
+
+		$this->assertSame(25, $value);
+	}
+
+	/**
+	 * Make sure paremeters are set to objects with no issues
+	 */
+	public function testReferenceParameterSettingWorksOnObjects()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+
+		$obj = new stdClass;
+		Phake::when($mock)->fooWithRefParm('test', Phake::setReference($obj))->thenReturn(NULL);
+
+		$value = 25;
+		$mock->fooWithRefParm('test', $value);
+
+		$this->assertSame($obj, $value);
+	}
+
+	/**
 	 * Tests times matches exactly
 	 */
 	public function testVerifyTimesExact()

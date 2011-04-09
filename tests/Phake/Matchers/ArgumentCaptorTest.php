@@ -72,7 +72,8 @@ class Phake_Matchers_ArgumentCaptorTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testArgumentCapturing()
 	{
-		$this->captor->matches('blah');
+		$value = 'blah';
+		$this->captor->matches($value);
 
 		$this->assertEquals('blah', $this->refVariable);
 	}
@@ -90,7 +91,8 @@ class Phake_Matchers_ArgumentCaptorTest extends PHPUnit_Framework_TestCase
 
 		$this->captor->when($matcher);
 
-		$this->captor->matches('blah');
+		$value = 'blah';
+		$this->captor->matches($value);
 
 		$this->assertEquals('blah', $this->refVariable);
 	}
@@ -108,7 +110,8 @@ class Phake_Matchers_ArgumentCaptorTest extends PHPUnit_Framework_TestCase
 
 		$this->captor->when($matcher);
 
-		$this->captor->matches('blah');
+		$value = 'blah';
+		$this->captor->matches($value);
 
 		$this->assertNull($this->refVariable);
 	}

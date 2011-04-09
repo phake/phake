@@ -53,6 +53,7 @@ require_once 'Phake/Proxies/CallStubberProxy.php';
 require_once 'Phake/Proxies/AnswerBinderProxy.php';
 require_once 'Phake/Matchers/EqualsMatcher.php';
 require_once 'Phake/Matchers/ArgumentCaptor.php';
+require_once 'Phake/Matchers/ReferenceSetter.php';
 require_once 'Phake/Matchers/Factory.php';
 require_once 'Phake/Matchers/AnyParameters.php';
 require_once 'Phake/Stubber/SelfBindingAnswerBinder.php';
@@ -304,6 +305,17 @@ class Phake
 	public static function capture(&$value)
 	{
 		return new Phake_Matchers_ArgumentCaptor($value);
+	}
+
+	/**
+	 * Returns a setter matcher that will set a reference parameter passed in as an argument to the
+	 * given value.
+	 * @param mixed $value - Will be written the reference parameter used by the calling method.
+	 * @return Phake_Matchers_ReferenceSetter
+	 */
+	public static function setReference($value)
+	{
+		return new Phake_Matchers_ReferenceSetter($value);
 	}
 
 	/**

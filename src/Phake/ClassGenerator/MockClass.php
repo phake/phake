@@ -219,10 +219,15 @@ class {$newClassName} {$extends}
 			throw new Exception('This object has been frozen.');
 		}
 
-		\$methodName = \$actualMethodName = '{$method->getName()}';
-		\$args = \$actualArgs = func_get_args();
+		\$methodName = '{$method->getName()}';
 
-		\$this->__PHAKE_callRecorder->recordCall(new Phake_CallRecorder_Call(\$this, \$methodName, \$args));
+		\$args = array();
+		{$this->copyMethodParameters($method)}
+
+		\$argsCopy = func_get_args();
+
+
+		\$this->__PHAKE_callRecorder->recordCall(new Phake_CallRecorder_Call(\$this, \$methodName, \$argsCopy));
 
 		\$stub = \$this->__PHAKE_stubMapper->getStubByCall(\$methodName, \$args);
 
@@ -258,10 +263,13 @@ class {$newClassName} {$extends}
 			throw new Exception('This object has been frozen.');
 		}
 
-		\$args = func_get_args();
+		\$args = array();
+		{$this->copyMethodParameters($method)}
 
-		\$this->__PHAKE_callRecorder->recordCall(new Phake_CallRecorder_Call(\$this, '__call' , \$args));
-		\$this->__PHAKE_callRecorder->recordCall(new Phake_CallRecorder_Call(\$this, \$args[0], \$args[1]));
+		\$argsCopy = func_get_args();
+
+		\$this->__PHAKE_callRecorder->recordCall(new Phake_CallRecorder_Call(\$this, '__call' , \$argsCopy));
+		\$this->__PHAKE_callRecorder->recordCall(new Phake_CallRecorder_Call(\$this, \$argsCopy[0], \$argsCopy[1]));
 
 
 		\$stub = \$this->__PHAKE_stubMapper->getStubByCall(\$args[0], \$args[1]);
@@ -304,6 +312,22 @@ class {$newClassName} {$extends}
 	}
 
 	/**
+	 * Generates the code for all the parameters of a given method.
+	 * @param ReflectionMethod $method
+	 * @return string
+	 */
+	protected function copyMethodParameters(ReflectionMethod $method)
+	{
+		$copies = '';
+		foreach ($method->getParameters() as $parameter)
+		{
+			$copies .= "\$args[] =& \$parm{$parameter->getPosition()};\n\t\t";
+		}
+
+		return $copies;
+	}
+
+	/**
 	 * Generates the code for an individual method parameter.
 	 * @param ReflectionParameter $parameter
 	 * @return string
@@ -332,7 +356,7 @@ class {$newClassName} {$extends}
 			$default = '';
 		}
 
-		return $type . ($parameter->isPassedByReference() ? '&' : '') . '$' . $parameter->getName() . $default;
+		return $type . ($parameter->isPassedByReference() ? '&' : '') . '$parm' . $parameter->getPosition() . $default;
 	}
 }
 

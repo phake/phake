@@ -52,7 +52,7 @@ interface Phake_Matchers_IArgumentMatcher
 	 * @param mixed $argument
 	 * @return boolean
 	 */
-	public function matches($argument);
+	public function matches(&$argument);
 
 	/**
 	 * Returns a human readable description of the argument matcher

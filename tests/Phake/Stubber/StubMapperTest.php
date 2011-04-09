@@ -80,7 +80,7 @@ class Phake_Stubber_StubMapperTest extends PHPUnit_Framework_TestCase
 
 		$this->mapper->mapStubToMatcher($stub, $matcher);
 
-		$this->assertEquals($stub, $this->mapper->getStubByCall('foo', array('bar', 'test')));
+		$this->assertEquals($stub, $this->mapper->getStubByCall('foo', $arguments = array('bar', 'test')));
 	}
 
 	/**
@@ -97,7 +97,7 @@ class Phake_Stubber_StubMapperTest extends PHPUnit_Framework_TestCase
 
 		$this->mapper->mapStubToMatcher($stub, $matcher);
 
-		$this->assertNull($this->mapper->getStubByCall('foo', array('bar', 'test')));
+		$this->assertNull($this->mapper->getStubByCall('foo', $arguments = array('bar', 'test')));
 	}
 
 	/**
@@ -115,9 +115,9 @@ class Phake_Stubber_StubMapperTest extends PHPUnit_Framework_TestCase
 
 		$this->mapper->removeAllAnswers();
 
-		$this->assertNull($this->mapper->getStubByCall('foo', array('bar', 'test')));
+		$this->assertNull($this->mapper->getStubByCall('foo', $arguments = array('bar', 'test')));
 	}
-	
+
 	/**
 	 * Tests matches in reverse order.
 	 */
@@ -125,10 +125,10 @@ class Phake_Stubber_StubMapperTest extends PHPUnit_Framework_TestCase
 	{
 		$match_me = $this->getMock('Phake_Matchers_MethodMatcher', array(), array(), '', FALSE);
 		$match_me_stub = $this->getMock('Phake_Stubber_AnswerCollection', array(), array(), '', FALSE);
-		
+
 		$also_matches = $this->getMock('Phake_Matchers_MethodMatcher', array(), array(), '', FALSE);
 		$also_matches_stub = $this->getMock('Phake_Stubber_AnswerCollection', array(), array(), '', FALSE);
-		
+
 		$also_matches->expects($this->never())
 			->method('matches');
 
@@ -140,7 +140,23 @@ class Phake_Stubber_StubMapperTest extends PHPUnit_Framework_TestCase
 		$this->mapper->mapStubToMatcher($also_matches_stub, $also_matches);
 		$this->mapper->mapStubToMatcher($match_me_stub, $match_me);
 
-		$this->assertEquals($match_me_stub, $this->mapper->getStubByCall('foo', array('bar', 'test')));
+		$this->assertEquals($match_me_stub, $this->mapper->getStubByCall('foo', $arguments = array('bar', 'test')));
+	}
+
+	public function testMappingParameterSetter()
+	{
+		$matcher = new Phake_Matchers_MethodMatcher('method', array(new Phake_Matchers_ReferenceSetter(42)));
+		$stub = $this->getMock('Phake_Stubber_AnswerCollection', array(), array(), '', FALSE);
+
+		$value = 'blah';
+		$arguments = array();
+		$arguments[0] =& $value;
+
+		$this->mapper->mapStubToMatcher($stub, $matcher);
+
+		$this->assertEquals($stub, $this->mapper->getStubByCall('method', $arguments));
+
+		$this->assertEquals(42, $value);
 	}
 }
 

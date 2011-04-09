@@ -70,7 +70,7 @@ class Phake_Matchers_HamcrestMatcherAdapter implements Phake_Matchers_IArgumentM
 	 * @param mixed $argument
 	 * @return boolean
 	 */
-	public function matches($argument)
+	public function matches(&$argument)
 	{
 		return $this->matcher->matches($argument);
 	}

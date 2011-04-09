@@ -52,6 +52,7 @@
    <file baseinstalldir="/" name="Phake/Matchers/IArgumentMatcher.php" role="php" />
    <file baseinstalldir="/" name="Phake/Matchers/MethodMatcher.php" role="php" />
    <file baseinstalldir="/" name="Phake/Matchers/PHPUnitConstraintAdapter.php" role="php" />
+   <file baseinstalldir="/" name="Phake/Matchers/ReferenceSetter.php" role="php" />
    <file baseinstalldir="/" name="Phake/Proxies/AnswerBinderProxy.php" role="php" />
    <file baseinstalldir="/" name="Phake/Proxies/AnswerCollectionProxy.php" role="php" />
    <file baseinstalldir="/" name="Phake/Proxies/CallStubberProxy.php" role="php" />

@@ -2,7 +2,7 @@
 /* 
  * Phake - Mocking Framework
  * 
- * Copyright (c) 2010-2011, Mike Lively <m@digitalsandwich.com>
+ * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -42,60 +42,85 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Matchers/HamcrestMatcherAdapter.php';
-
-if (HAMCREST_LOADED) require_once 'Hamcrest/Matcher.php';
+require_once 'Phake/Matchers/ReferenceSetter.php';
 
 /**
- * Tests the adapting of Hamcrest matchers to Phake matchers
+ * Tests the reference setter functionality.
  */
-class Phake_Matchers_HamcrestMatcherAdapterTest extends PHPUnit_Framework_TestCase
+class Phake_Matchers_ReferenceSetterTest extends PHPUnit_Framework_TestCase
 {
 	/**
-	 * @var Phake_Matchers_HamcrestMatcherAdapter
+	 * @var Phake_Matchers_ReferenceSetter
 	 */
-	private $adapter;
-
-	/**
-	 * @var Hamcrest_Matcher
-	 */
-	private $matcher;
+	private $setter;
 
 	/**
 	 * Sets up the test fixture
 	 */
 	public function setUp()
 	{
-		if (!HAMCREST_LOADED)
-		{
-			$this->markTestSkipped('Hamcrest is not available');
-		}
-
-		$this->matcher = $this->getMock('Hamcrest_BaseMatcher');
-		$this->matcher->expects($this->any())
-				->method('__toString')
-				->will($this->returnValue('hamcrest matcher'));
-		
-		$this->adapter = new Phake_Matchers_HamcrestMatcherAdapter($this->matcher);
+		$this->setter = new Phake_Matchers_ReferenceSetter(42);
 	}
 
 	/**
-	 * Tests that calls to matches are forwarded to hamcrest's matcher method
+	 * Tests that reference parameter is set
 	 */
-	public function testMatchesCallsForwarded()
+	public function testSettingParameter()
 	{
-		$this->matcher->expects($this->once())
+		$this->assertTrue($this->setter->matches($value));
+
+		$this->assertEquals(42, $value);
+	}
+
+	/**
+	 * Tests that when a matcher is set on setter it will run the matcher first
+	 */
+	public function testConditionalSetting()
+	{
+		$matcher = $this->getMock('Phake_Matchers_IArgumentMatcher');
+		$matcher->expects($this->once())
 				->method('matches')
-				->with($this->equalTo('foo'))
+				->with($this->equalTo('blah'))
 				->will($this->returnValue(TRUE));
 
-		$value = 'foo';
-		$this->assertTrue($this->adapter->matches($value));
+		$this->setter->when($matcher);
+
+		$value = 'blah';
+		$this->assertTrue($this->setter->matches($value));
+
+		$this->assertEquals(42, $value);
+	}
+
+	/**
+	 * Tests that when a matcher is set on setter it will run the matcher first
+	 */
+	public function testConditionalSettingWontSet()
+	{
+		$matcher = $this->getMock('Phake_Matchers_IArgumentMatcher');
+		$matcher->expects($this->once())
+				->method('matches')
+				->with($this->equalTo('blah'))
+				->will($this->returnValue(FALSE));
+
+		$this->setter->when($matcher);
+
+		$value = 'blah';
+		$this->assertFalse($this->setter->matches($value));
+
+		$this->assertEquals('blah', $value);
+	}
+
+	/**
+	 * Tests that when returns an instance of the setter
+	 */
+	public function testWhenReturn()
+	{
+		$this->assertSame($this->setter, $this->setter->when(NULL));
 	}
 
 	public function testToString()
 	{
-		$this->assertEquals('hamcrest matcher', $this->adapter->__toString());
+		$this->assertEquals('<reference parameter>', $this->setter->__toString());
 	}
 }
 
