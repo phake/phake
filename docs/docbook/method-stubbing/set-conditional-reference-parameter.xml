@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <example xmlns="http://docbook.org/ns/docbook" id="method-stubbing.set-conditional-reference-parameter">
-	<title>Stubbing a Reference Paramter</title>
+	<title>Conditionally Stubbing a Reference Paramter</title>
 		<programlisting><![CDATA[<?php
 
 class ValidationLoggerTest extends PHPUnit_Framework_TestCase
