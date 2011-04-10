@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<example xmlns="http://docbook.org/ns/docbook" id="method-stubbing.set-reference-parameter">
+	<title>Stubbing a Reference Parameter</title>
+		<programlisting><![CDATA[<?php
+
+
+interface IValidator
+{
+	/**
+	 * @parm array $data Data to validate
+	 * @parm array &$errors contains all validation errors if the data is not valid
+	 * @return boolean True when the data is valid
+	 */
+	public function validate(array $data, array &$errors);
+}
+
+class ValidationLogger implements IValidator
+{
+	private $validator;
+	private $log;
+
+	public function __construct(IValidator $validator, Logger $log)
+	{
+		$this->validator = $validator;
+		$this->log = $log;
+	}
+
+	public function validate(array $data, array &$errors)
+	{
+		if (!$this->validator->validate($data, $errors))
+		{
+			foreach ($errors as $error)
+			{
+				$this->log->info("Validation Error: {$error}");
+			}
+
+			return FALSE;
+		}
+
+		return TRUE;
+	}
+}
+
+class ValidationLoggerTest extends PHPUnit_Framework_TestCase
+{
+	public function testValidate()
+	{
+		//Mock the dependencies
+		$validator = Phake::mock('IValidator');
+		$log = Phake::mock('Logger');
+		$data = array('data1' => 'value');
+		$expectedErrors = array('data1 is not valid');
+
+		//Setup the stubs (Notice the Phake::setReference()
+		Phake::when($validator)->validate($data, Phake::setReference($expectedErrors))->thenReturn(FALSE);
+
+		//Instantiate the SUT
+		$validationLogger = new ValidationLogger($validator, $log);
+
+		//verify the validation is false and the message is logged
+		$errors = array();
+		$this->assertFalse($validationLogger->validate($data, $errors));
+		Phake::verify($log)->info('Validation Error: data1 is not valid');
+	}
+}
+
+?>]]></programlisting>
+</example>

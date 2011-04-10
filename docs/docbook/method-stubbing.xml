@@ -84,6 +84,50 @@
 			Phake_Stubber_Answers_IDelegator extends Phake_Stubber_IAnswer and defines an additional method called processAnswer() that is used to perform processing on the results of getAnswer() prior to passing it on to the stub’s caller. Phake_Stubber_IAnswerDelegate defines an interface that allows you to create a callback that is called to generate the answer from the stub. It defines getCallBack() which allows you to generate a PHP callback based on the object, method, and arguments that a stub was called with. It also defines getArguments() which allows you to generate the arguments that will be passed to the callback based on the method name and arguments the stub was called with.
 		</para>
 	</section>
+	<section><title>Stubbing Reference Parameters</title>
+		<para>
+			Occasionally you may run into code that utilizes reference parameters to provide additional output
+			from a method. This is not an uncommon thing to run into with legacy code. Phake provides a custom
+			parameter matcher (these are discussed further in <xref linkend="chapter.method-parameter-matchers" />)
+			that allows you to set reference parameters. It can be accessed using <function>Phake::setReference()</function>.
+			The only parameter to this matcher is the value you would like to set the reference parameter 
+			to provided all other parameters match. In <xref linkend="method-stubbing.set-reference-parameter" /> you can see an example of how
+			<function>Phake::setReference()</function> can be used.
+		</para>
+		<xi:include href="method-stubbing/set-reference-parameter.xml" />
+		<para>
+			In <xref linkend="method-stubbing.set-reference-parameter" /> I am testing a new class I have created called <classname>ValidationLogger</classname>.
+			It is a decorator for other implementations of <classname>IValidator</classname> that allows adding
+			logging to any other validator. The <function>IValidator::validate()</function> method will always
+			return an array of errors into the second parameter (a reference parameter) provided to the method.
+			These errors are what my logger is responsible for logging. So in order for my test to work properly,
+			I will need to be able to set that second parameter as a part of my stubbing call.
+		</para>
+		<para>
+			In the call to <literal>Phake::when($validator)->validate()</literal> I have passed a call to
+			<function>Phake::setReference()</function> as the second parameter. This is causing the mock
+			implementation of <classname>IValidator</classname> to set <literal>$errors</literal> in
+			<function>ValidationLogger::validate()</function> to the array specified by <literal>$expectedErrors</literal>.
+			This allows me to quickly and easily validate that I am actually logging the errors returned back
+			in the reference parameter.
+		</para>
+		<para>
+			By default <function>Phake::setReference()</function> will always return true regardless of the 
+			parameter initially passed in. If you would like to only set a reference parameter when that reference
+			parameter was passed in as a certain value you can use the <function>when()</function> modifier.
+			This takes a single parameter matcher as an argument. In <xref linkend="method-stubbing.set-conditional-reference-parameter" />
+			you will see that the test has been modified to call <function>when()</function> on the result
+			of <function>Phake::setReference()</function>. This modification will cause the reference parameter
+			to be set only if the <literal>$errors</literal> parameter passed to <function>IValidatore::validate()</function>
+			is initially passed as an empty array.
+		</para>
+		<xi:include href="method-stubbing/set-conditional-reference-parameter.xml" />
+		<para>
+			Please note, when you are using <function>Phake::setReference()</function> you still must provide
+			an answer for the stub. If you use this function and your reference parameter is never changed,
+			that is generally the most common reason.
+		</para>
+	</section>
 	<section><title>Partial Mocks</title>
 		<para>
 			When testing legacy code, if you find that the majority of the methods in the mock are using the thenCallParent() answer, you may find it easier to just use a partial mock in Phake. Phake partial mocks also allow you to call the actual constructor of the class being mocked. They are created using Phake::partialMock(). Like Phake::mock(), the first parameter is the name of the class that you are mocking. However, you can pass additional parameters that will then be passed as the respective parameters to that class’ constructor. The other notable feature of a partial mock in Phake is that its default answer is to pass the call through to the parent as if you were using thenCallParent().
