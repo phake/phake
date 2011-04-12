@@ -24,6 +24,7 @@
   <api>alpha</api>
  </stability>
  <license uri="https://github.com/mlively/Phake/raw/master/LICENSE">BSD Style</license>
+ <notes>https://github.com/mlively/Phake/blob/master/CHANGELOG.markdown</notes>
  <contents>
   <dir baseinstalldir="/" name="/">
    <file baseinstalldir="/" name="Phake.php" role="php" />
