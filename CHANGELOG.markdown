@@ -1,6 +1,15 @@
 Phake 1.0
 ===========
 
+Phake 1.0.0 (alpha4)
+-------------
+
+* Added #20 - Added support for mocking consecutive calls to a stub. (http://phake.digitalsandwich.com/docs/html/ch03s04.html)
+
+* Fixed a small issue with PHP 5.2 compatibility in the Lambda Answer functionality
+
+* Added #19 - Added support for stubbing results to reference parameters (http://phake.digitalsandwich.com/docs/html/ch03s10.html)
+
 Phake 1.0.0 (alpha3)
 -------------
 
