@@ -75,13 +75,13 @@ class Phake_Matchers_MethodMatcher
 	 * in this object. Returns true on success, false otherwise.
 	 *
 	 * @param string $method
-	 * @param array $arguments
+	 * @param array $args
 	 * @return boolean
 	 */
-	public function matches($method, array &$arguments)
+	public function matches($method, array &$args)
 	{
 		if ($this->expectedMethod == $method
-				&& $this->doArgumentsMatch($arguments))
+				&& $this->doArgumentsMatch($args))
 		{
 			return TRUE;
 		}
@@ -94,24 +94,24 @@ class Phake_Matchers_MethodMatcher
 	/**
 	 * Determines whether or not given arguments match the argument matchers configured in the object.
 	 *
-	 * @param array $arguments
+	 * @param array $args
 	 * @return boolean
 	 */
-	private function doArgumentsMatch(array &$arguments)
+	private function doArgumentsMatch(array &$args)
 	{
 		if (!empty($this->argumentMatchers) && $this->argumentMatchers[0] instanceof Phake_Matchers_AnyParameters)
 		{
 			return TRUE;
 		}
 
-		if (count($arguments) != count($this->argumentMatchers))
+		if (count($args) != count($this->argumentMatchers))
 		{
 			return FALSE;
 		}
 
 		reset($this->argumentMatchers);
 
-		foreach ($arguments as &$arg)
+		foreach ($args as &$arg)
 		{
 			$matcher = current($this->argumentMatchers);
 			/* @var $matcher Phake_Matchers_IArgumentMatcher */

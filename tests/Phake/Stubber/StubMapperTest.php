@@ -75,7 +75,7 @@ class Phake_Stubber_StubMapperTest extends PHPUnit_Framework_TestCase
 
 		$matcher->expects($this->any())
 				->method('matches')
-				->with($this->equalTo('foo'), $this->equalTo(array('bar', 'test')))
+				->with('foo', array('bar', 'test'))
 				->will($this->returnValue(TRUE));
 
 		$this->mapper->mapStubToMatcher($stub, $matcher);

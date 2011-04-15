@@ -87,8 +87,9 @@ class Phake_Matchers_ReferenceSetterTest extends PHPUnit_Framework_TestCase
 
 		$value = 'blah';
 		$this->assertTrue($this->setter->matches($value));
-
 		$this->assertEquals(42, $value);
+
+		$value = 'blah'; //@TODO placed here to fix an issue with PHPUnit's mocks
 	}
 
 	/**

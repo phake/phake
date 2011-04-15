@@ -67,10 +67,10 @@ class Phake_Stubber_StubMapper
 	/**
 	 * Returns the answer collection based on a matcher that matches a given call
 	 * @param string $method
-	 * @param array $arguments
+	 * @param array $args
 	 * @return Phake_Stubber_AnswerCollection or NULL if a matcher is not found
 	 */
-	public function getStubByCall($method, array &$arguments)
+	public function getStubByCall($method, array &$args)
 	{
 		$matcherStubMap = array_reverse($this->matcherStubMap);
 		
@@ -79,7 +79,7 @@ class Phake_Stubber_StubMapper
 			list($matcher, $answer) = $item;
 
 			/* @var $matcher Phake_Matchers_MethodMatcher */
-			if ($matcher->matches($method, $arguments))
+			if ($matcher->matches($method, $args))
 			{
 				return $answer;
 			}
