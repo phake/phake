@@ -1,6 +1,11 @@
 Phake 1.0
 ===========
 
+Phake 1.0.0 (alpha5)
+-------------
+
+* Added #21 - Fixed a bug that caused issues when stubbing default parameters
+
 Phake 1.0.0 (alpha4)
 -------------
 

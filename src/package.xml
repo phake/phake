@@ -13,11 +13,11 @@
   <email>m@digitalsandwich.com</email>
   <active>yes</active>
  </lead>
- <date>2011-04-12</date>
- <time>14:02:00</time>
+ <date>2011-04-15</date>
+ <time>23:30:00</time>
  <version>
-  <release>1.0.0alpha4</release>
-  <api>1.0.0alpha4</api>
+  <release>1.0.0alpha5</release>
+  <api>1.0.0alpha5</api>
  </version>
  <stability>
   <release>alpha</release>
