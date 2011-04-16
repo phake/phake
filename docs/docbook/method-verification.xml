@@ -3,9 +3,15 @@
 	<title>Method Verification</title>
 	<section><title>Basic Method Verification</title>
 		<para>
-			Method call verification (or mocking) is accomplished via the Phake::verify() method. Phake::verify() accepts a mock object generated from Phake::mock() as its first object. The most basic way to use this method can be seen below.
+			The <function>Phake::verify()</function> method is used to assert that method calls have been
+			made on a mock object that you can create with <function>Phake::mock()</function>. 
+			<function>Phake::verify()</function> accepts the mock object you want to verify calls against.
+			Mock objects in Phake can almost be viewed as a tape recorder. Any time the code you are testing
+			calls a method on an object you create with <function>Phake::mock()</function> it is going to
+			record the method that you called along with all of the parameters used to call that method. Then
+			<function>Phake::verify()</function> will look at that recording and allow you to assert wether
+			or not a certain call was made.
 		</para>
-		<xi:include href="method-verification/simple-verify.xml" />
 		<para>
 			The Phake::verify() call here, verifies that the method foo() has been called once (and only once) with no parameters on the object $mock. A very important thing to note here that is a departure from most (if not all) other PHP mocking frameworks is that you want to verify the method call AFTER the method call takes place. Other mocking frameworks such as the one built into PHPUnit depend on you setting the expectations of what will get called prior to running the system under test.
 		</para>

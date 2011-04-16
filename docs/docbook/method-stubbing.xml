@@ -3,6 +3,40 @@
 	<title>Method Stubbing</title>
 	<section><title>Basic Method Stubbing</title>
 		<para>
+			Imagine I was in the process of building the next great online shopping cart. The first thing any
+			good shopping cart allows is to be able to add items. The most important thing I want to know from
+			the shopping cart is how much money in merchandise is in there. So, I need to make myself a
+			<classname>ShoppingCart</classname> class. I also am going to need some class to define my items.
+			I am more worried about the money right now and because of that I am keenly aware that any item
+			in a shopping cart is going to have a price. So I will just create an interface to represent those
+			items called <classname>Item</classname>. Now take a minute to marvel at the creativity of those
+			names. Great, now check out the initial definitions for my objects.
+		</para>
+		<xi:include href="method-stubbing/simple-stubbing/order-v1.xml" />
+		<para>
+			So, I am furiously coding away at this fantastic new <classname>ShoppingCart</classname> class when I
+			realize, I am doing it wrong! You see, a few years ago I went to this conference with a bunch of
+			other geeky people to talk about how to make quality software. I am supposed to be writing unit
+			tests. Here I am, a solid thirteen lines (not counting comments) of code into my awe inspiring
+			new software and I haven't written a single test. I tell myself, "There's no better time to change
+			than right now!" So I decide to start testing. After looking at the options I decide PHPUnit with
+			this sweet new mock library called Phake is the way to go.
+		</para>
+		<para>
+			My first test is going to be for the currently unimplemented <function>ShoppingCart::getSubTotal()</function>
+			method. I already have a pretty good idea of what this function is going to need to do. It will
+			need to look at all of the items in the cart, retrieve their price, add it all together and return
+			the result. So, in my test I know I am going to need a fixture that sets up a shopping cart with
+			a few items added. Then I am going to need a test that calls <function>ShoppingCart::getSubTotal()</function>
+			and asserts that it returns a value equal to the price of the items I added to the cart. One catch
+			though, I don't have any concrete instances of an Item. I wasn't even planning on doing any of
+			that until tomorrow. I really want to just focus on the <classname>ShoppingCart</classname> class.
+			Never fear, this is why I decided to use Phake. I remember reading about how it will allow me to
+			quickly create instance of my classes and interfaces that I can set up stubs for so that method
+			calls return predictable values. This project is all coming together and I am really excited.
+		</para>
+		<xi:include href="method-stubbing/simple-stubbing/ordertest-v1.xml" />
+		<para>
 			To Phake::when() method is used to stub methods in Phake. As discussed in the introduction, stubbing allows an object method to be forced to return a particular value given a set of parameters. Similarly to Phake::verify(), Phake::when() accepts a mock object generated from Phake::mock() as its first parameter. A basic example of stubbing can be found below.
 		</para>
 		<xi:include href="method-stubbing/simple-stubbing.xml" />

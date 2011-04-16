@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <example xmlns="http://docbook.org/ns/docbook" id="Introduction.examples.CardGameTest1.php">
-	<title>CardGameTest1 Unit Test</title>
+	<title>CardGame Unit Test</title>
 		<programlisting><![CDATA[<?php
 
 class CardGameTest1 extends PHPUnit_Framework_TestCase

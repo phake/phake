@@ -1,17 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xi="http://www.w3.org/2001/XInclude" id="chapter.getting-started">
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xlink="http://www.w3.org/1999/xlink" id="chapter.getting-started">
 	<title>Getting Started</title>
 	<para>
-		Phake depends on PHP 5.2 or greater. It has no dependency on PHPUnit and should be usable with any version of PHPUnit so long as the PHP version is 5.2 or greater.
+		Phake depends on PHP 5.2.4 or greater. It has no dependency on PHPUnit and should be usable with
+		any version of PHPUnit so long as the PHP version is 5.2.4 or greater.
 	</para>
 	<para>
-		Phake can be installed via the digitalsandwich pear channel.
+		Phake can be installed via the digitalsandwich pear channel. This channel is located at
+		<link xlink:href="http://pear.digitalsandwich.com">pear.digitalsandwich.com</link>.
 	</para>
 	<xi:include href="getting-started/pear.xml" />
 	<para>
-		Once Phake is installed, so long as the pear directory (usually something like /usr/share/php) is in your include_path, you can simply include “Phake.php” in your code and you will be able to utilize the functionality of Phake.
+		Once Phake is installed, so long as the pear directory (usually something like /usr/share/php) is 
+		in your include_path, you can simply include “Phake.php” in your code and you will be able to utilize
+		the functionality of Phake.
 	</para>
 	<para>
-		For those that you like to live more on the edge, you can also clone a copy of Phake from the Phake GitHub repository at git://github.com/mlively/Phake.git. Every attempt is made to keep the master branch stable and this should be usable for those that immediately need features before they get released or in the event that you enjoy the bleeding edge. Always remember, until something goes into a rc state, there is always a chance that the functionality may change. However as an early adopter that uses GitHub, you can have a chance to mold the software as it is built.
+		For those that you like to live more on the edge, you can also clone a copy of Phake from the Phake 
+		GitHub repository at <link xlink:href="http://github.com/mlively/Phake">git://github.com/mlively/Phake.git</link>.
+		Every attempt is made to keep the master branch stable and this should be usable for those that
+		immediately need features before they get released or in the event that you enjoy the bleeding edge.
+		Always remember, until something goes into a rc state, there is always a chance that the functionality
+		may change. However as an early adopter that uses GitHub, you can have a chance to mold the software
+		as it is built.
 	</para>
 </chapter>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<example xmlns="http://docbook.org/ns/docbook" id="method-stubbing.simple-stubbing.order-v1">
+	<title>Cool Cart</title>
+		<programlisting><![CDATA[<?php
+
+/**
+ * An item that is going to make me rich.
+ */
+interface Item
+{
+	/**
+	 * @return money
+	 */
+	public function getPrice();
+}
+
+/**
+ * A customer's cart that will contain items that are going to make me rich.
+ */
+class ShoppingCart
+{
+	private $items = array();
+
+	/**
+	 * Adds an item to the customer's order
+	 * @param BillableItem $item
+	 */
+	public function addItem(BillableItem $item)
+	{
+		$this->items[] = BillableItem;
+	}
+
+	/**
+	 * Returns the current sub total of the customer's order
+	 * @return money
+	 */
+	public function getSubTotal();
+}
+?>]]></programlisting>
+</example>
