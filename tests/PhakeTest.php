@@ -106,6 +106,19 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Tests default parameters
+	 */
+	public function testStubWithDefaultParam()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+
+		Phake::when($mock)->fooWithDefault()
+				->thenReturn(42);
+
+		$this->assertEquals(42, $mock->fooWithDefault());
+	}
+
+	/**
 	 * Tests that a stub can be redefined.
 	 */
 	public function testRedefineStub()

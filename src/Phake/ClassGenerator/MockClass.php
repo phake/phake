@@ -225,7 +225,7 @@ class {$newClassName} {$extends}
 		{$this->copyMethodParameters($method)}
 
 		\$argsCopy = func_get_args();
-
+	
 
 		\$this->__PHAKE_callRecorder->recordCall(new Phake_CallRecorder_Call(\$this, \$methodName, \$argsCopy));
 
@@ -318,10 +318,11 @@ class {$newClassName} {$extends}
 	 */
 	protected function copyMethodParameters(ReflectionMethod $method)
 	{
-		$copies = '';
+		$copies = "\$numArgs = count(func_get_args());\n";
 		foreach ($method->getParameters() as $parameter)
 		{
-			$copies .= "\$args[] =& \$parm{$parameter->getPosition()};\n\t\t";
+			$pos = $parameter->getPosition();
+			$copies .= "if ({$pos} < \$numArgs) \$args[] =& \$parm{$pos};\n\t\t";
 		}
 
 		return $copies;

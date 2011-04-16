@@ -53,6 +53,10 @@ class PhakeTest_MockedClass
 	{
 	}
 
+	public function fooWithDefault($default = NULL)
+	{
+	}
+
 	public function fooWithArgument($arg1)
 	{
 	}
