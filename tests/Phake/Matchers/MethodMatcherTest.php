@@ -87,7 +87,8 @@ class PHake_Matchers_MethodMatcherTest extends PHPUnit_Framework_TestCase
 				->with($this->equalTo('foo'))
 				->will($this->returnValue(TRUE));
 
-		$matcher->matches('foo', $arguments = array('foo'));
+		$arguments = array('foo');
+		$matcher->matches('foo', $arguments);
 	}
 
 	/**
@@ -103,7 +104,8 @@ class PHake_Matchers_MethodMatcherTest extends PHPUnit_Framework_TestCase
 				->method('matches')
 				->will($this->returnValue(TRUE));
 
-		$this->assertTrue($this->matcher->matches('foo', $arguments = array('foo', 'bar')));
+		$arguments = array('foo', 'bar');
+		$this->assertTrue($this->matcher->matches('foo', $arguments));
 	}
 
 	/**
@@ -119,7 +121,8 @@ class PHake_Matchers_MethodMatcherTest extends PHPUnit_Framework_TestCase
 				->method('matches')
 				->will($this->returnValue(TRUE));
 
-		$this->assertFalse($this->matcher->matches('test', $arguments = array('foo', 'bar')));
+		$arguments = array('foo', 'bar');
+		$this->assertFalse($this->matcher->matches('test', $arguments));
 	}
 
 	/**
@@ -135,7 +138,8 @@ class PHake_Matchers_MethodMatcherTest extends PHPUnit_Framework_TestCase
 				->method('matches')
 				->will($this->returnValue(TRUE));
 
-		$this->assertFalse($this->matcher->matches('foo', $arguments = array('foo', 'bar')));
+		$arguments = array('foo', 'bar');
+		$this->assertFalse($this->matcher->matches('foo', $arguments));
 	}
 
 	/**
@@ -151,16 +155,20 @@ class PHake_Matchers_MethodMatcherTest extends PHPUnit_Framework_TestCase
 				->method('matches')
 				->will($this->returnValue(FALSE));
 
-		$this->assertFalse($this->matcher->matches('foo', $arguments = array('foo', 'bar')));
+		$arguments = array('foo', 'bar');
+		$this->assertFalse($this->matcher->matches('foo', $arguments));
 	}
 
 	public function testAnyParameterMatching()
 	{
 		$matcher = new Phake_Matchers_MethodMatcher('method', array(new Phake_Matchers_AnyParameters()));
 
-		$this->assertTrue($matcher->matches('method', $arguments = array(1, 2, 3)));
-		$this->assertTrue($matcher->matches('method', $arguments = array(2, 3, 4)));
-		$this->assertTrue($matcher->matches('method', $arguments = array(3, 4, 5)));
+		$arguments = array(1, 2, 3);
+		$this->assertTrue($matcher->matches('method', $arguments));
+		$arguments = array(2, 3, 4);
+		$this->assertTrue($matcher->matches('method', $arguments));
+		$arguments = array(3, 4, 5);
+		$this->assertTrue($matcher->matches('method', $arguments));
 	}
 
 	public function testSetterMatcher()

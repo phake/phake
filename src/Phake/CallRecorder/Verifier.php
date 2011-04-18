@@ -93,7 +93,8 @@ class Phake_CallRecorder_Verifier
 			if ($call->getObject() === $expectation->getObject())
 			{
 				$obj_interactions = TRUE;
-				if ($matcher->matches($call->getMethod(), $call->getArguments()))
+				$args = $call->getArguments();
+				if ($matcher->matches($call->getMethod(), $args))
 				{
 					$matchedCalls[] = $this->recorder->getCallInfo($call);
 				}

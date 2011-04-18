@@ -80,7 +80,8 @@ class Phake_Stubber_StubMapperTest extends PHPUnit_Framework_TestCase
 
 		$this->mapper->mapStubToMatcher($stub, $matcher);
 
-		$this->assertEquals($stub, $this->mapper->getStubByCall('foo', $arguments = array('bar', 'test')));
+		$arguments = array('bar', 'test');
+		$this->assertEquals($stub, $this->mapper->getStubByCall('foo', $arguments));
 	}
 
 	/**
@@ -97,7 +98,8 @@ class Phake_Stubber_StubMapperTest extends PHPUnit_Framework_TestCase
 
 		$this->mapper->mapStubToMatcher($stub, $matcher);
 
-		$this->assertNull($this->mapper->getStubByCall('foo', $arguments = array('bar', 'test')));
+		$arguments = array('bar', 'test');
+		$this->assertNull($this->mapper->getStubByCall('foo', $arguments));
 	}
 
 	/**
@@ -115,7 +117,8 @@ class Phake_Stubber_StubMapperTest extends PHPUnit_Framework_TestCase
 
 		$this->mapper->removeAllAnswers();
 
-		$this->assertNull($this->mapper->getStubByCall('foo', $arguments = array('bar', 'test')));
+		$arguments = array('bar', 'test');
+		$this->assertNull($this->mapper->getStubByCall('foo', $arguments));
 	}
 
 	/**
@@ -140,7 +143,8 @@ class Phake_Stubber_StubMapperTest extends PHPUnit_Framework_TestCase
 		$this->mapper->mapStubToMatcher($also_matches_stub, $also_matches);
 		$this->mapper->mapStubToMatcher($match_me_stub, $match_me);
 
-		$this->assertEquals($match_me_stub, $this->mapper->getStubByCall('foo', $arguments = array('bar', 'test')));
+		$arguments = array('bar', 'test');
+		$this->assertEquals($match_me_stub, $this->mapper->getStubByCall('foo', $arguments));
 	}
 
 	public function testMappingParameterSetter()
