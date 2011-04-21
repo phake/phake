@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<example xmlns="http://docbook.org/ns/docbook" id="method-stubbing.simple-stubbing.ordertest-v1-output">
+	<title>ShoppingCartTest Output</title>
+		<screen><![CDATA[
+$ phpunit ExampleTests/ShoppingCartTest.php
+PHPUnit 3.5.13 by Sebastian Bergmann.
+
+F
+
+Time: 0 seconds, Memory: 8.50Mb
+
+There was 1 failure:
+
+1) ShoppingCartTest::testGetSub
+Failed asserting that <null> matches expected <integer:600>.
+
+/home/mikel/Documents/Projects/Phake/tests/ShoppingCartTest.php:69
+
+FAILURES!
+Tests: 1, Assertions: 1, Failures: 1.
+
+Generating code coverage report, this may take a moment.
+]]></screen>
+</example>

@@ -23,18 +23,20 @@ class ShoppingCart
 
 	/**
 	 * Adds an item to the customer's order
-	 * @param BillableItem $item
+	 * @param Item $item
 	 */
-	public function addItem(BillableItem $item)
+	public function addItem(Item $item)
 	{
-		$this->items[] = BillableItem;
+		$this->items[] = $item;
 	}
 
 	/**
 	 * Returns the current sub total of the customer's order
 	 * @return money
 	 */
-	public function getSubTotal();
+	public function getSubTotal()
+	{
+	}
 }
 ?>]]></programlisting>
 </example>

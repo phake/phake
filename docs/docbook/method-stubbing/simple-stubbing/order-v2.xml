@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<example xmlns="http://docbook.org/ns/docbook" id="method-stubbing.simple-stubbing.order-v2">
+	<title>Cool Cart</title>
+		<programlisting><![CDATA[<?php
+
+class ShoppingCart
+{
+	// I am ]cutting out the already seen code. If you want to see it again look at the previous examples!
+
+	/**
+	 * Returns the current sub total of the customer's order
+	 * @return money
+	 */
+	public function getSubTotal()
+	{
+		$total = 0;
+
+		foreach ($this->items as $item)
+		{
+			$total += $item->getPrice();
+		}
+
+		return $total;
+	}
+}
+?>]]></programlisting>
+</example>

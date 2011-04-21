@@ -3,6 +3,12 @@
 	<title>Method Stubbing</title>
 	<section><title>Basic Method Stubbing</title>
 		<para>
+			The <function>Phake::when()</function> method is used to stub methods in Phake. As discussed in the introduction,
+			stubbing allows an object method to be forced to return a particular value given a set of parameters. Similarly to
+			<function>Phake::verify()</function>, <function>Phake::when()</function> accepts a mock object generated from
+			<function>Phake::mock()</function> as its first parameter.
+		</para>
+		<para>
 			Imagine I was in the process of building the next great online shopping cart. The first thing any
 			good shopping cart allows is to be able to add items. The most important thing I want to know from
 			the shopping cart is how much money in merchandise is in there. So, I need to make myself a
@@ -37,9 +43,41 @@
 		</para>
 		<xi:include href="method-stubbing/simple-stubbing/ordertest-v1.xml" />
 		<para>
-			To Phake::when() method is used to stub methods in Phake. As discussed in the introduction, stubbing allows an object method to be forced to return a particular value given a set of parameters. Similarly to Phake::verify(), Phake::when() accepts a mock object generated from Phake::mock() as its first parameter. A basic example of stubbing can be found below.
+			My test here shows a very basic use of Phake for creating method stubs. I am creating three different mock
+			implementations of the <classname>Item</classname> class. Then for each of those item classes, I am creating
+			a stub using <function>Phake::when()</function> that will return 100, 200, and 300 respectively. I know my method
+			that I am getting ready to implement will need to call those methods in order to calculate the total cost of the
+			order.
 		</para>
-		<xi:include href="method-stubbing/simple-stubbing.xml" />
+		<para>
+			My test is written so now it is time to see how it fails. I run it with phpunit and see the output in <xref linkend="method-stubbing.simple-stubbing.ordertest-v1-output" />
+		</para>
+		<xi:include href="method-stubbing/simple-stubbing/ordertest-v1-output.xml" />
+		<para>
+			Now that I have a working (and I by working I mean breaking!) test it is time to look at the code necessary to make
+			the test pass.
+		</para>
+		<xi:include href="method-stubbing/simple-stubbing/order-v2.xml" />
+		<para>
+			The code here is pretty simple. I am just iterating over the <property>ShoppingCart::$item</property> property,
+			calling the <function>Item::getPrice()</function> method, and adding them all together. Now when I run my test, I
+			get <xref linkend="method-stubbing.simple-stubbing.ordertest-v2-output" />. The tests were successful and I am getting
+			off to a great start with my shopping cart.
+		</para>
+		<xi:include href="method-stubbing/simple-stubbing/ordertest-v2-output.xml" />
+		<para>
+			So, what is Phake doing here? Phake is providing us a predictable implementation of the <function>Item::getPrice()</function>
+			method that we can use in our test. It helps me to ensure the when my test breaks I know exactly where it is breaking.
+			I will not have to be worried that a bad implementation of <function>Item::getPrice()</function> is breaking my tests.
+		</para>
+		<para>
+			Internally Phake is doing quite a bit when this test runs. The three calls to <function>Phake::mock()</function> are
+			creating three new classes that in this case each implement the <classname>Item</classname> interface. These new classes
+			each define implementations of any method defined in the <classname>Item</classname> interface. If <classname>Item</classname>
+			extended another interface, implementations of all of that parent's defined methods would be created as well. Each
+			method being implemented in these new classes does a few different things. The first thing that it does is record
+			the fact that the method was called and stores the parameters that were used to call it.
+		</para>
 		<para>
 			The Phake::when() call here ensures that whenever the method foo() is called with no parameters on the object $mock the string ‘bar’ will be returned. If the method you are stubbing normally accepts parameters you can use any of the Method Parameter Matchers that you would also use for Phake::verify(). The various method matchers are discussed later on in Method Parameter Matchers.
 		</para>

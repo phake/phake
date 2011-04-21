@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<example xmlns="http://docbook.org/ns/docbook" id="method-stubbing.simple-stubbing.ordertest-v2-output">
+	<title>ShoppingCartTest Output</title>
+		<screen><![CDATA[
+$ phpunit ExampleTests/ShoppingCartTest.php
+PHPUnit 3.5.13 by Sebastian Bergmann.
+
+.
+
+Time: 0 seconds, Memory: 8.25Mb
+
+OK (1 test, 1 assertion)
+
+Generating code coverage report, this may take a moment.
+]]></screen>
+</example>
