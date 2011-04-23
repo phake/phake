@@ -605,14 +605,10 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 
 		$mock = $this->classGen->instantiate($newClassName, $recorder, $mapper, $answer);
 
-		try
-		{
-			$this->assertInternalType('string', (string) $mock);
-		}
-		catch (Exception $e)
-		{
-			$this->fail("mocked object's __toString() must return a string value");
-		}
+		$string = $mock->__toString();
+
+		$this->assertNotNull($string, '__toString() should not return NULL');
+		$this->assertEquals('Mock for PhakeTest_ToStringMethod', $string);
 	}
 }
 
