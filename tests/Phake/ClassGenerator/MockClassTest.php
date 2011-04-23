@@ -55,6 +55,7 @@ require_once 'PhakeTest/MagicClass.php';
 require_once 'PhakeTest/MockedConstructedClass.php';
 require_once 'PhakeTest/MockedInterface.php';
 require_once 'PhakeTest/FinalMethod.php';
+require_once 'PhakeTest/ToStringMethod.php';
 
 /**
  * Description of MockClass
@@ -587,6 +588,31 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 		$mockedClass = 'PhakeTest_FinalMethod';
 
 		$this->classGen->generate($newClassName, $mockedClass);
+	}
+
+	/**
+	 * Tests that the mocked object's __toString() method returns a string by default.
+	 */
+	public function testToStringReturnsString()
+	{
+		$newClassName = __CLASS__ . '_TestClass24';
+		$mockedClass = 'PhakeTest_ToStringMethod';
+		$this->classGen->generate($newClassName, $mockedClass);
+		
+		$recorder = $this->getMock('Phake_CallRecorder_Recorder');
+		$mapper = $this->getMock('Phake_Stubber_StubMapper');
+		$answer = new Phake_Stubber_Answers_ParentDelegate();
+
+		$mock = $this->classGen->instantiate($newClassName, $recorder, $mapper, $answer);
+
+		try
+		{
+			$this->assertInternalType('string', (string) $mock);
+		}
+		catch (Exception $e)
+		{
+			$this->fail("mocked object's __toString() must return a string value");
+		}
 	}
 }
 
