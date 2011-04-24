@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<example xmlns="http://docbook.org/ns/docbook" id="method-stubbing.stubbing-multiple-calls.itemgrouptest-1">
+		<programlisting><![CDATA[<?php
+
+class ItemGroupTest extends PHPUnit_Framework_TestCase
+{
+	private $itemGroup;
+
+	private $item1;
+
+	private $item2;
+
+	private $item3;
+
+	public function setUp()
+	{
+		$this->item1 = Phake::mock('Item');
+		$this->item2 = Phake::mock('Item');
+		$this->item3 = Phake::mock('Item');
+
+		$this->itemGroup = new ItemGroup(array($this->item1, $this->item2, $this->item3));
+	}
+
+	public function testAddItemsToCart()
+	{
+		$cart = Phake::mock('ShoppingCart');
+		Phake::when($cart)->addItem($this->item1)->thenReturn(10);
+		Phake::when($cart)->addItem($this->item2)->thenReturn(20);
+		Phake::when($cart)->addItem($this->item3)->thenReturn(30);
+
+		$totalCost = $this->itemGroup->addItemsToCart($cart);
+		$this->assertEquals(30, $totalCost);
+	}
+}
+
+?>]]></programlisting>
+</example>

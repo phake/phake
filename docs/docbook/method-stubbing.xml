@@ -156,23 +156,67 @@
 			of the parameters all being the same.
 		</para>
 	</section>
-	<section><title>Stubbing Multiple Calls</title>
+	<section id="stubbing-multiple-calls"><title>Stubbing Multiple Calls</title>
 		<para>
-			It is very easy to stub multiple calls to the same method in Phake. If the various calls to a method that are being stubbed utilize different parameters in each call then you can simply create multiple stubs using Phake::when(). An example of this can be seen below.
+			Another benefit of the stub mapping in Phake is that it allows you to very easily stub multiple calls to the same
+			method that use different parameters. In my shopping cart I have decided to add some functionality that will allow
+			me to easily add multiple products that are a part of a group to the shopping cart. To facilitate this I have decided
+			to create a new class called <classname>ItemGroup</classname>. The <classname>ItemGroup</classname> object will be
+			constructed with an array of <classname>Items</classname>. It will have a method on the class that will add all of
+			the items in the group to the given cart and then the total price of items in the cart will be returned.
 		</para>
-		<xi:include href="method-stubbing/multiple-stubs.xml" />
 		<para>
-			In the above example, I have stubbed two variations of the add() method. The first stub will return 4 when add() is called with the parameters 2 and 2. The second stub will return 8 when add() is called with the parameters 3 and 5.
+			It should be noted that earlier I decided to make a small change to the <function>ShoppingCart::addItem()</function>
+			method to have it return the total price of items in the cart. I figured that this would be nice api level functionality
+			to make working with the system a little bit easier. I would like to take advantage of that change with this code.
+			Here's a stub of the functionality I am considering.
+		</para>
+		<xi:include href="method-stubbing/stubbing-multiple-calls/itemgroup.1.xml" />
+		<para>
+			The next test I am going to write now is going to be focusing on this new <function>ItemGroup::addItemsToCart()</function>
+			method. In my test's <function>setUp()</function> method I'll create a new instance of <classname>ItemGroup</classname>
+			which will require one or more <classname>Item</classname> implementations. I'll use mocks for those. Then the actual
+			test case I am going to start with will be a test to assert that <function>ItemGroup::addItemsToCart()</function>
+			returns the new shopping cart value. I already know that I am going to need to get this value by looking at the
+			last return value from calls to <function>ShoppingCart::addItem()</function>. To allow for checking this I will mock
+			<classname>ShoppingCart</classname> and create three stubs for <function>ShoppingCart::addItem()</function>. Each
+			stub will be for a call with a different <classname>Item</classname>.
+		</para>
+		<xi:include href="method-stubbing/stubbing-multiple-calls/itemgrouptest.1.xml" />
+		<para>
+			In this example the <function>ShoppingCart::addItem()</function> method is being stubbed three times. Each time it
+			is being stubbed with a different parameter being passed to <function>addItem()</function>. This a good example of
+			how parameters are also checked whenever Phake looks at a mock object's stub map for answers. The default behavior
+			of argument matching is again a loose equality check. Similar to how you would use the double equals operator in PHP.
+			The other options for argument matching are discussed further in <xref linkend="chapter.matchers" />.
 		</para>
 	</section>
 	<section><title>Stubbing Consecutive Calls</title>
 		<para>
-			Occasionally you may also want to stub multiple calls to the same method. A very common case for this is a test that involves iterators. When you step through an iterator, you normally expect multiple calls to Iterator::next() to return different elements. To achieve a different result on each call to a stub you can chain the answer portion of Phake::when() together. So your stubbing may start to look like this: Phake::when($itr)->thenReturn(1)->thenReturn(2)->thenReturn(3).
+			The previous test was a great example for how you can make multiple stubs for a single method however in reality it
+			is not the best way for that particular test to be written. What if the <classname>Item</classname> objects in an
+			<classname>ItemGroup</classname> aren't stored in the order they were passed in? I am needlessly binding my test
+			to the order objects are stored. Phake provides the ability to map multiple answers to the same stub. This is done
+			simply by chaining the answers together. I could rewrite the test from the previous chapter to utilize this feature
+			of Phake.
+		</para>
+		<xi:include href="method-stubbing/stubbing-consecutive-calls/itemgrouptest.1.xml" />
+		<para>
+			You will notice a few of differences with <xref linkend="method-stubbing.stubbing-multiple-calls.itemgrouptest-1" />
+			and <xref linkend="method-stubbing.stubbing-consecutive-calls.itemgrouptest-1" />. The first difference is that there
+			is only one call to <function>Phake::when()</function>. The second difference is that I have chained together three
+			calls to <function>thenReturn()</function>. The third difference is instead of passing one of my mock <classname>Item</classname>
+			objects I have passed the result of the <function>Phake::anyParameters()</function> method. This is a special argument
+			matcher in Phake that essentially says match any call to the method regardless of the number of parameters or the
+			value of those parameters.
 		</para>
 		<para>
-			Below is an example that utilizes this functionality to test a custom function named iterator_sum() which is supposed to take all of the values in an iterator and return their sum.
+			So, this single call to <function>Phake::when()</function> is saying: "Whenever a call to <literal>$cart->addItem()</literal>
+			is made, regardless of the parameters, return 10 for the first call, 20 for the second call, and 30 for the third
+			call." If you are using consecutive call stubbing and you call the method more times than you have answers set, the
+			last answer will continue to be returned. In this example, if <literal>$cart->addItem()</literal> were called a fourth
+			time, then 30 would be returned again.
 		</para>
-		<xi:include href="method-stubbing/consecutive-calls.xml" />
 	</section>
 	<section><title>Answers</title>
 		<para>

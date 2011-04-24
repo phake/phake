@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<example xmlns="http://docbook.org/ns/docbook" id="method-stubbing.stubbing-multiple-calls.itemgroup-1">
+		<programlisting><![CDATA[<?php
+
+/**
+ * A group of items that can be added to a cart all at the same time
+ */
+class ItemGroup
+{
+	/**
+	 * @param array $items an array of Item objects
+	 */
+	public function __construct(array $items)
+	{
+	}
+
+	/**
+	 * @param ShoppingCart $cart
+	 * @return money The new total value of the cart
+	 */
+	public function addItemsToCart(ShoppingCart $cart)
+	{
+	}
+}
+
+?>]]></programlisting>
+</example>
