@@ -81,11 +81,11 @@
 			the fact that the method was called and stores the parameters that were used to call it. The next significant thing
 			it does is looks at the stub map for that mock object. The stub map is a map that associates answers to method matchers.
 			An answer is what a mocked object will return when it is called. By default, a call to a mock object returns a static
-			answer of NULL. We will discuss answers more in <xref linkend="chapter.answers" />. A method matcher has two parts. The
+			answer of NULL. We will discuss answers more in <xref linkend="answers" />. A method matcher has two parts. The
 			first is the method name. The second is an array of arugments. The array of arguments will then contain various constraints
 			that are applied to each argument to see if a given argument will match. The most common constraint is an equality constraint
 			that will match loosely along the same lines as the double equals sign in PHP. We will talk about matchers more in
-			<xref linkend="chapter.matchers" />.
+			<xref linkend="matchers" />.
 		</para>
 		<para>
 			When each mock object is initially created, its stub map will be empty. This means that any call to a method on a mock object
@@ -188,10 +188,10 @@
 			is being stubbed with a different parameter being passed to <function>addItem()</function>. This a good example of
 			how parameters are also checked whenever Phake looks at a mock object's stub map for answers. The default behavior
 			of argument matching is again a loose equality check. Similar to how you would use the double equals operator in PHP.
-			The other options for argument matching are discussed further in <xref linkend="chapter.matchers" />.
+			The other options for argument matching are discussed further in <xref linkend="matchers" />.
 		</para>
 	</section>
-	<section><title>Stubbing Consecutive Calls</title>
+	<section id="stubbing-consecutive-calls"><title>Stubbing Consecutive Calls</title>
 		<para>
 			The previous test was a great example for how you can make multiple stubs for a single method however in reality it
 			is not the best way for that particular test to be written. What if the <classname>Item</classname> objects in an
@@ -218,64 +218,16 @@
 			time, then 30 would be returned again.
 		</para>
 	</section>
-	<section><title>Answers</title>
-		<para>
-			In all of the examples so far, the thenReturn() answer is being used. There are other answers that are remarkably useful writing your tests.
-		</para>
-	</section>
-	<section><title>Throwing Exceptions</title>
-		<para>
-			Exception handling is a common aspect of most object oriented systems that should be tested. The key to being able to test your exception handling is to be able to control the throwing of your exceptions. Phake allows this using the thenThrow() answer. This answer allows you to throw a specific exception from any mocked method. Below is an example of a piece of code that catches an exception from the method foo() and then logs a message with the exception message.
-		</para>
-		<xi:include href="method-stubbing/exception-logger.xml" />
-		<para>
-			In order to test this we must mock foo() so that it throws an exception when it is called. Then we can verify that log() is called with the appropriate message.
-		</para>
-		<xi:include href="method-stubbing/test-exception-logger.xml" />
-	</section>
-	<section><title>Calling the Parent</title>
-		<para>
-			Phake provides the ability to allow calling the actual method of an object on a method by method
-			basis by using the thenCallParent() answer. This will result in the actual method being called.
-			Consider the following class.
-		</para>
-		<xi:include href="method-stubbing/call-parent-class.xml" />
-		<para>
-			The thenCallParent() answer can be used here to ensure that the actual method in the class is 
-			called resulting in the value 42 being returned from calls to that mocked method.
-		</para>
-		<xi:include href="method-stubbing/test-call-parent-class.xml" />
-		<para>
-			Please avoid using this answer as much as possible especially when testing newly written code. If you find yourself requiring a class to be only partially mocked then that is a code smell for a class that is likely doing too much. An example of when this is being done is why you are testing a class that has a singular method that has a lot of side effects that you want to mock while you allow the other methods to be called as normal. In this case that method that you are desiring to mock should belong to a completely separate class. It is obvious by the very fact that you are able to mock it without needing to mock other messages that it performs a different function.
-		</para>
-		<para>
-			Even though partial mocking should be avoided with new code, it is often very necessary to allow creating tests while refactoring legacy code, tests involving 3rd party code that can’t be changed, or new tests of already written code that cannot yet be changed. This is precisely the reason why this answer exists and is also why it is not the default answer in Phake.
-		</para>
-	</section>
-	<section><title>Capturing a Return Value</title>
-		<para>
-			Another tool in Phake for testing legacy code is the captureReturnTo() answer. This performs a function similar to argument capturing, however it instead captures what the actual method of a mock object returns to the variable passed as its parameter. Again, this should never be needed if you are testing newly written code. However I have ran across cases several times where legacy code calls protected factory methods and the result of the method call is never exposed. This answer gives you a way to access that variable to ensure that the factory was called and is operating correctly in the context of your method that is being tested.
-		</para>
-	</section>
-	<section><title>Custom Answers</title>
-		<para>
-			While the answers provided in Phake should be able to cover most of the scenarios you will run into when using mocks in your unit tests there may occasionally be times when you need more control over what is returned from your mock methods. When this is the case, you can use a custom answer. All answers in Phake implement the Phake_Stubber_IAnswer interface. This interface defines a single method called getAnswer() that can be used to return what will be returned from a call to the method being stubbed. If you need to get access to how the method you are stubbing was invoked, there is a more complex set of interfaces that can be implemented: Phake_Stubber_Answers_IDelegator and Phake_Stubber_IAnswerDelegate.
-		</para>
-		<para>
-			Phake_Stubber_Answers_IDelegator extends Phake_Stubber_IAnswer and defines an additional method called processAnswer() that is used to perform processing on the results of getAnswer() prior to passing it on to the stub’s caller. Phake_Stubber_IAnswerDelegate defines an interface that allows you to create a callback that is called to generate the answer from the stub. It defines getCallBack() which allows you to generate a PHP callback based on the object, method, and arguments that a stub was called with. It also defines getArguments() which allows you to generate the arguments that will be passed to the callback based on the method name and arguments the stub was called with.
-		</para>
-	</section>
-	<section><title>Stubbing Reference Parameters</title>
+	<section id="stubbing-reference-parameters"><title>Stubbing Reference Parameters</title>
 		<para>
 			Occasionally you may run into code that utilizes reference parameters to provide additional output
 			from a method. This is not an uncommon thing to run into with legacy code. Phake provides a custom
-			parameter matcher (these are discussed further in <xref linkend="chapter.method-parameter-matchers" />)
+			parameter matcher (these are discussed further in <xref linkend="matchers" />)
 			that allows you to set reference parameters. It can be accessed using <function>Phake::setReference()</function>.
 			The only parameter to this matcher is the value you would like to set the reference parameter 
-			to provided all other parameters match. In <xref linkend="method-stubbing.set-reference-parameter" /> you can see an example of how
-			<function>Phake::setReference()</function> can be used.
+			to provided all other parameters match.
 		</para>
-		<xi:include href="method-stubbing/set-reference-parameter.xml" />
+		<xi:include href="method-stubbing/stubbing-reference-parameters/set-reference-parameter.xml" />
 		<para>
 			In <xref linkend="method-stubbing.set-reference-parameter" /> I am testing a new class I have created called <classname>ValidationLogger</classname>.
 			It is a decorator for other implementations of <classname>IValidator</classname> that allows adding
@@ -302,14 +254,14 @@
 			to be set only if the <literal>$errors</literal> parameter passed to <function>IValidatore::validate()</function>
 			is initially passed as an empty array.
 		</para>
-		<xi:include href="method-stubbing/set-conditional-reference-parameter.xml" />
+		<xi:include href="method-stubbing/stubbing-reference-parameters/set-conditional-reference-parameter.xml" />
 		<para>
 			Please note, when you are using <function>Phake::setReference()</function> you still must provide
 			an answer for the stub. If you use this function and your reference parameter is never changed,
 			that is generally the most common reason.
 		</para>
 	</section>
-	<section><title>Partial Mocks</title>
+	<section id="partial-mocks"><title>Partial Mocks</title>
 		<para>
 			When testing legacy code, if you find that the majority of the methods in the mock are using the thenCallParent() answer, you may find it easier to just use a partial mock in Phake. Phake partial mocks also allow you to call the actual constructor of the class being mocked. They are created using Phake::partialMock(). Like Phake::mock(), the first parameter is the name of the class that you are mocking. However, you can pass additional parameters that will then be passed as the respective parameters to that class’ constructor. The other notable feature of a partial mock in Phake is that its default answer is to pass the call through to the parent as if you were using thenCallParent().
 		</para>
