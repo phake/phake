@@ -178,6 +178,10 @@ class {$newClassName} {$extends}
 				{
 					$methodDefs .= $this->implementCallMethod($method);
 				}
+				elseif (strtolower($method->getName()) === '__tostring')
+				{
+					$methodDefs .= $this->implementToStringMethod($method, $mockedClass->getName());
+				}
 				else
 				{
 					$methodDefs .= $this->implementMethod($method);
@@ -289,6 +293,55 @@ class {$newClassName} {$extends}
 		}
 
 		return \$this->__PHAKE_processAnswer('__call', \$args, \$answer);
+	}
+";
+
+		return $methodDef;
+	}
+
+	/**
+	 * Creates a mocked __toString() method if needed.
+	 *
+	 * Mocked objects with __toString() methods will currently ignore default answers, but can be stubbed to return any
+	 * value as normal.
+	 *
+	 * @param ReflectionMethod $method
+	 * @return string definition for the mocked __toString() method
+	 */
+	protected function implementToStringMethod(ReflectionMethod $method, $className)
+	{
+		$modifiers = implode(' ', Reflection::getModifierNames($method->getModifiers() & ~ReflectionMethod::IS_ABSTRACT));
+
+		$methodDef = "
+	{$modifiers} function {$method->getName()}({$this->generateMethodParameters($method)})
+	{
+		if (\$this->__PHAKE_isFrozen)
+		{
+			throw new Exception('This object has been frozen.');
+		}
+
+		\$methodName = '{$method->getName()}';
+
+		\$args = array();
+		{$this->copyMethodParameters($method)}
+
+		\$argsCopy = func_get_args();
+
+
+		\$this->__PHAKE_callRecorder->recordCall(new Phake_CallRecorder_Call(\$this, \$methodName, \$argsCopy));
+
+		\$stub = \$this->__PHAKE_stubMapper->getStubByCall(\$methodName, \$args);
+
+		if (\$stub !== NULL)
+		{
+			\$answer = \$stub->getAnswer();
+		}
+		else
+		{
+			\$answer = new Phake_Stubber_Answers_StaticAnswer('Mock for {$className}');
+		}
+
+		return \$this->__PHAKE_processAnswer(\$methodName, \$args, \$answer);
 	}
 ";
 
