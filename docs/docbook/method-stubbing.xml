@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xi="http://www.w3.org/2001/XInclude">
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xi="http://www.w3.org/2001/XInclude" id="stubbing">
 	<title>Method Stubbing</title>
-	<section><title>Basic Method Stubbing</title>
+	<section id="basic-stubbing"><title>Basic Method Stubbing</title>
 		<para>
 			The <function>Phake::when()</function> method is used to stub methods in Phake. As discussed in the introduction,
 			stubbing allows an object method to be forced to return a particular value given a set of parameters. Similarly to
@@ -70,20 +70,51 @@
 			method that we can use in our test. It helps me to ensure the when my test breaks I know exactly where it is breaking.
 			I will not have to be worried that a bad implementation of <function>Item::getPrice()</function> is breaking my tests.
 		</para>
+	</section>
+	<section id="how-phake-when-works"><title>How Phake::when() Works</title>
 		<para>
 			Internally Phake is doing quite a bit when this test runs. The three calls to <function>Phake::mock()</function> are
 			creating three new classes that in this case each implement the <classname>Item</classname> interface. These new classes
 			each define implementations of any method defined in the <classname>Item</classname> interface. If <classname>Item</classname>
 			extended another interface, implementations of all of that parent's defined methods would be created as well. Each
 			method being implemented in these new classes does a few different things. The first thing that it does is record
-			the fact that the method was called and stores the parameters that were used to call it.
+			the fact that the method was called and stores the parameters that were used to call it. The next significant thing
+			it does is looks at the stub map for that mock object. The stub map is a map that associates answers to method matchers.
+			An answer is what a mocked object will return when it is called. By default, a call to a mock object returns a static
+			answer of NULL. We will discuss answers more in <xref linkend="chapter.answers" />. A method matcher has two parts. The
+			first is the method name. The second is an array of arugments. The array of arguments will then contain various constraints
+			that are applied to each argument to see if a given argument will match. The most common constraint is an equality constraint
+			that will match loosely along the same lines as the double equals sign in PHP. We will talk about matchers more in
+			<xref linkend="chapter.matchers" />.
 		</para>
 		<para>
-			The Phake::when() call here ensures that whenever the method foo() is called with no parameters on the object $mock the string ‘bar’ will be returned. If the method you are stubbing normally accepts parameters you can use any of the Method Parameter Matchers that you would also use for Phake::verify(). The various method matchers are discussed later on in Method Parameter Matchers.
+			When each mock object is initially created, its stub map will be empty. This means that any call to a method on a mock object
+			is going to return a default answer of NULL. If you want your mock object's methods to return something else you must add answers
+			to the stub map. The <function>Phake::when()</function> method allows you to map an answer to a method matcher for a given mock object.
+			The mock object you want to add the mapping to is passed as the first parameter to <function>Phake::when()</function>. The
+			<function>Phake::when()</function> method will then return a proxy that can be used add answers to your mock object's stub
+			map. The answers are added by making method calls on the proxy just as you would on the mock object you are proxying. In
+			<xref linkend="method-stubbing.simple-stubbing.ordertest-v1" /> above you saw a call to <literal>Phake::when($this->item1)->getPrice()</literal>.
+			The <function>getPrice()</function> call here was telling Phake that I am about to define a new answer that will be returned
+			any time <literal>$this->item->getPrice()</literal> is called in my code. The call to <literal>$this->item->getPrice()</literal>
+			returns another object that you can set the answer on using Phake's fluent api. In the example I called
+			<literal>Phake::when($this->item1)->getPrice()->thenReturn(100)</literal>. The <function>thenReturn()</function> method will
+			bind a static answer to a matcher for <function>getPrice()</function> in the stub map for <literal>$this->item1</literal>.
 		</para>
-		<para>
-			Whenever a mock object is created using Phake::mock() all methods by default will simply return null. The reasoning behind this is that generally speaking, each method you test should depend on only what it needs to perform the (hopefully one) responsibility assigned to it. Normally you will have very controlled delegation to other objects. To help with localization of errors in your test it is assumed that you will always want to mock external dependencies to keep them from influencing the results of unit tests dedicated to the behavior of other parts of the system. Another reason for this default behavior is that it provides consistent and predictable behavior regardless of whether you are testing concrete classes, abstract classes, or interfaces. It should be noted that this default behavior for concrete methods in classes is different then the default behavior in PHPUnit. In PHPUnit, you have to explicitly indicate that you are mocking a method, otherwise it will call the actual method code. There are certainly cases where this is useful and this behavior can be achieved in Phake. I will discuss this aspect of Phake later in this chapter.
-		</para>
+		<note>
+			<title>Why do Phake stubs return Null by default?</title>
+			<para>
+				The reasoning behind this is that generally speaking, each method you test should depend on only what it needs to perform the
+				(hopefully one) responsibility assigned to it. Normally you will have very controlled delegation to other objects. To help with
+				localization of errors in your test it is assumed that you will always want to mock external dependencies to keep them from
+				influencing the results of unit tests dedicated to the behavior of other parts of the system. Another reason for this default
+				behavior is that it provides consistent and predictable behavior regardless of whether you are testing concrete classes, abstract
+				classes, or interfaces. It should be noted that this default behavior for concrete methods in classes is different then the default
+				behavior in PHPUnit. In PHPUnit, you have to explicitly indicate that you are mocking a method, otherwise it will call the actual
+				method code. There are certainly cases where this is useful and this behavior can be achieved in Phake. I will discuss this aspect
+				of Phake in <xref linkend="partial-mocks" />.
+			</para>
+		</note>
 	</section>
 	<section><title>Overwriting Existing Stubs</title>
 		<para>
