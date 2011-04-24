@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<example xmlns="http://docbook.org/ns/docbook" id="method-stubbing.simple-stubbing.ordertest-v3-output">
+	<title>ShoppingCartTest Output</title>
+		<screen><![CDATA[
+$ phpunit ExampleTests/ShoppingCartTest.php
+PHPUnit 3.5.13 by Sebastian Bergmann.
+
+.F
+
+Time: 0 seconds, Memory: 10.25Mb
+
+There was 1 failure:
+
+1) ShoppingCartTest::testGetSubTotalWithPrecision
+Failed asserting that <double:38.6> matches expected <double:38.6>.
+
+/home/mikel/Documents/Projects/Phake/tests/ShoppingCartTest.php:95
+
+FAILURES!
+Tests: 2, Assertions: 2, Failures: 1.
+
+Generating code coverage report, this may take a moment.
+]]></screen>
+</example>

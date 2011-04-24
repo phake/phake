@@ -116,11 +116,45 @@
 			</para>
 		</note>
 	</section>
-	<section><title>Overwriting Existing Stubs</title>
+	<section id="overriding-stubs"><title>Overwriting Existing Stubs</title>
 		<para>
-			Users of Phake will often setup stubs as a part of a common test fixture. (setUp() in PHPUnit.) This helps reduce duplicate code which in turn makes your tests more maintainable. However, it often happens that for all but one test, the stubbing needs to be the same, and then you have a single test that is reponsible for an error condition of some sort. Phake allows you to redefine a previously defined stub. The way that stubbing works internally in Phake is that each stub defined with Phake::when() is kept in what is essentially an array. Then, when a method call is made, this array is iterated through in reverse order and the first stub that matches the current method invocation is used to provide the answer to that call. So, by virtue of redefining a stub using the same parameters, the new stub will always be the first to match. An example of how this works is shown below.
+			My shopping cart application is coming right along. I can add items and the total price seems to be accurate. However,
+			while I was playing around with my new cart I noticed a very strange problem. I was playing around with the idea of
+			allowing discounts to be applied to a cart as just additional items that would have a negative price. So while I am
+			playing around with this idea I notice that the math isn't always adding up. If I start with an item that is $100 and
+			then add a discount that is $81.40 I see that the total price isn't adding up to $18.60. This is definitely problematic
+			After doing some further research, I realize I made a silly mistake. I am just using simple floats to calculate the
+			costs. Floats are by nature inacurrate. Once you start using them in mathematical operations they start to show their
+			inadequacy for precision. In keeping with the test driven method of creating code I need to create a unit test that
+			shows this flaw.
 		</para>
-		<xi:include href="method-stubbing/redefine-stub.xml" />
+		<xi:include href="method-stubbing/overriding-stubs/ordertest-v3.xml" />
+		<para>
+			You can see that I added another test method that uses actual floats for some of the prices as opposed to round numbers.
+			Now when I run my test sweet I can see the fantastic floating point issue.
+		</para>
+		<xi:include href="method-stubbing/overriding-stubs/ordertest-v3-output.xml" />
+		<para>
+			Once you get over the strangeness of 38.6 not equaling 38.6 I want to discuss streamlining test cases with you. You
+			will notice that the code in <function>ShoppingCartTest::testGetSubTotalWithPrecision()</function> contains almost
+			all duplicate code when compared to <function>ShoppingCartTest::setUp()</function>. If I were to continue following
+			this pattern of doing things I would eventually have tests that are difficult to maintain. Phake allows you to very
+			easily override stubs. This is very important in helping you to reduce duplication in your tests and leads to tests
+			that will be easier to maintain. To overwrite a previous stub you simply have to redefine it. I am going to change
+			<function>ShoppingCartTest::testGetSubTotalWithPrecision()</function> to instead just redefine the <function>getPrice()</function>
+			stubs.
+		</para>
+		<xi:include href="method-stubbing/overriding-stubs/ordertest-v4.xml" />
+		<para>
+			If you rerun this test you will get the same results shown in <xref linkend="method-stubbing.simple-stubbing.ordertest-v3-output" />.
+			The test itself is much simpler though there is much less unnecessary duplication. The reason this works is because
+			the stub map I was referring to in <xref linkend="how-phake-when-works" /> isn't really a map at all. It is more of
+			a stack in reality. When a new matcher and answer pair is added to a mock object, it is added to the top of the stack.
+			Then whenever a stub method is called, the stack is checked from the top down to find the first matcher that matches
+			the method that was called. So, when I created the additional stubs for the various <function>Item::getPrice()</function>
+			calls, I was just adding additional matchers to the top of the stack that would always get matched first by virtue
+			of the parameters all being the same.
+		</para>
 	</section>
 	<section><title>Stubbing Multiple Calls</title>
 		<para>
