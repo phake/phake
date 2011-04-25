@@ -1,6 +1,13 @@
 Phake 1.0
 ===========
 
+Phake 1.0.0 (alpha6)
+-------------
+
+* Added #22 - Fixed a bug that caused tests to fail when E_STRICT or E_NOTICE error reporting was one
+
+* Added #23 - Fixed a bug that caused recoverable fatal errors when a test failed on an equality check with a mock that had a default stub for toString
+
 Phake 1.0.0 (alpha5)
 -------------
 
