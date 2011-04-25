@@ -1,0 +1,230 @@
+body {
+	font-family: verdana;
+}
+#header {
+	background-color: #15315c;
+	color: #567ebd;
+}
+
+#footer {
+	background-color: #15315c;
+	color: #567ebd;
+}
+
+#footer a {
+	color: #7993bd;
+}
+
+.leftmenu .colleft {
+	background:#7993bd;	/* left column background colour */
+}
+
+div.navheader {
+	background: #7993bd;
+}
+
+div.navheader a {
+	color: #ffffff;
+}
+
+#col2 a {
+	color: #000000;
+}
+
+#col2 a:hover {
+	color: #092043;
+}
+
+a:link {
+	color: #567ebd;
+}
+
+a:visited {
+	color: #8c6155;
+}
+
+#header h1 {
+	font-size: 3em;
+	margin: 0;
+	padding: .2em;
+}
+
+#footer p {
+	font-size: .8em;
+	margin: 0;
+	padding: 0 10px;
+}
+
+pre.programlisting, pre.screen {
+	background-color: #eeeeee;
+}
+
+#footer a {
+	text-decoration: none;
+}
+
+#col2 a {
+	text-decoration: none;
+}
+
+dl, dd {
+	margin: 0;
+	padding: 0;
+}
+
+dd {
+	margin-left: 30px;
+}
+
+dt span.chapter {
+	display: block;
+	margin-top: 10px;
+}
+
+div.navheader {
+	padding: 5px 10px;
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+}
+
+
+div.navheader a {
+	text-decoration: none;
+	font-weight: bold;
+	font-size: 1.1em;
+}
+
+div.example {
+	margin: 20px;
+}
+
+div.example p {
+	margin: 0;
+}
+
+pre.programlisting, pre.screen {
+	padding: 10px;
+	-moz-border-radius: 20px;
+	border-radius: 20px;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:link:hover {
+	text-decoration: underline;
+}
+
+a:visited:hover {
+	text-decoration: underline;
+}
+
+
+/* The rest is layout */
+
+body {
+	margin:0;
+	padding:0;
+	border:0;			/* This removes the border around the viewport in old versions of IE */
+	width:100%;
+	background:#fff;
+	font-size:90%;
+}
+
+#col2 .content
+{
+	margin: 10px;
+}
+
+#col1 .content
+{
+	margin: 10px 20px;
+}
+
+
+
+
+/* Header styles */
+#header {
+	clear:both;
+	float:left;
+	width:100%;
+	height: 5em;
+}
+
+#header ul {
+	clear:left;
+	float:left;
+	width:100%;
+	list-style:none;
+	margin:10px 0 0 0;
+	padding:0;
+}
+#header ul li {
+	display:inline;
+	list-style:none;
+	margin:0;
+	padding:0;
+}
+#header ul li a {
+	display:block;
+	float:left;
+	margin:0 0 0 1px;
+	padding:3px 10px;
+	text-align:center;
+	text-decoration:none;
+	position:relative;
+	left:15px;
+	line-height:1.3em;
+}
+
+#header ul li a span {
+	display:block;
+}
+
+/* column container */
+.colmask {
+	position:relative;	/* This fixes the IE7 overflow hidden bug */
+	clear:both;
+	float:left;
+	width:100%;			/* width of whole page */
+	overflow:hidden;		/* This chops off any overhanging divs */
+}
+/* common column settings */
+.colright,
+.colmid,
+.colleft {
+	float:left;
+	width:100%;
+	position:relative;
+}
+#col1,
+#col2,
+#col3 {
+	float:left;
+	position:relative;
+	padding:0 0 1em 0;
+	overflow:hidden;
+}
+/* 2 Column (left menu) settings */
+.leftmenu {
+	background:#fff;		/* right column background colour */
+}
+.leftmenu .colleft {
+	right:80%;			/* right column width */
+}
+.leftmenu #col1 {
+	width:80%;			/* right column content width */
+	left:100%;			/* 100% plus left column left padding */
+}
+.leftmenu #col2 {
+	width:20%;			/* left column content width (column width minus left and right padding) */
+	left: 0%;			/* (right column left and right padding) plus (left column left padding) */
+}
+/* Footer styles */
+#footer {
+	clear:both;
+	float:left;
+	width:100%;
+}
