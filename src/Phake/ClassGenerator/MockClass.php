@@ -73,75 +73,14 @@ class Phake_ClassGenerator_MockClass
 		}
 
 		$mockedClass = new ReflectionClass($mockedClassName);
-
-		$classDef = "
-class {$newClassName} {$extends}
-	implements Phake_IMock {$implements}
-{
-	private \$__PHAKE_callRecorder;
-
-	private \$__PHAKE_stubMapper;
-
-	private \$__PHAKE_defaultAnswer;
-
-	private \$__PHAKE_isFrozen = FALSE;
-
-	public function __construct(Phake_CallRecorder_Recorder \$callRecorder, Phake_Stubber_StubMapper \$stubMapper, Phake_Stubber_IAnswer \$defaultAnswer, array \$constructorArgs = null)
-	{
-		\$this->__PHAKE_callRecorder = \$callRecorder;
-		\$this->__PHAKE_stubMapper = \$stubMapper;
-		\$this->__PHAKE_defaultAnswer = \$defaultAnswer;
-		{$this->getConstructorChaining($mockedClass)}
-	}
-
-	public function __PHAKE_getCallRecorder()
-	{
-		return \$this->__PHAKE_callRecorder;
-	}
-
-	public function __PHAKE_addAnswer(Phake_Stubber_AnswerCollection \$answer, Phake_Matchers_MethodMatcher \$matcher)
-	{
-		\$this->__PHAKE_stubMapper->mapStubToMatcher(\$answer, \$matcher);
-	}
-
-	public function __PHAKE_resetMock()
-	{
-		\$this->__PHAKE_stubMapper->removeAllAnswers();
-		\$this->__PHAKE_callRecorder->removeAllCalls();
-		\$this->__PHAKE_isFrozen = FALSE;
-	}
-
-	public function __PHAKE_freezeMock()
-	{
-		\$this->__PHAKE_isFrozen = TRUE;
-	}
-
-	public function __PHAKE_getName()
-	{
-		return '{$mockedClassName}';
-	}
-
-	private function __PHAKE_processAnswer(\$methodName, \$args, \$answer)
-	{
-		if (\$answer instanceof Phake_Stubber_Answers_IDelegator)
-		{
-			\$delegate = \$answer->getAnswer();
-			\$callback = \$delegate->getCallBack(\$this, \$methodName, \$args);
-			\$arguments = \$delegate->getArguments(\$methodName, \$args);
-
-			\$realAnswer = call_user_func_array(\$callback, \$arguments);
-			\$answer->processAnswer(\$realAnswer);
-			return \$realAnswer;
-		}
-		else
-		{
-			return \$answer->getAnswer();
-		}
-	}
-
-	{$this->generateMockedMethods($mockedClass)}
-}
-";
+		
+		$classDef = file_get_contents(dirname(__FILE__) . '/Template/mock_class.tmpl');
+		$classDef = str_replace('{newClassName}', $newClassName, $classDef);
+		$classDef = str_replace('{extends}', $extends, $classDef);
+		$classDef = str_replace('{implements}', $implements, $classDef);
+		$classDef = str_replace('{constructorChain}', $this->getConstructorChaining($mockedClass), $classDef);
+		$classDef = str_replace('{mockedClassName}', $mockedClassName, $classDef);
+		$classDef = str_replace('{mockedMethods}', $this->generateMockedMethods($mockedClass), $classDef);
 
 		eval($classDef);
 	}
