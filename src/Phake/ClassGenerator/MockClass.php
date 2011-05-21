@@ -388,6 +388,9 @@ class {$newClassName} {$extends}
 	 */
 	protected function implementParameter(ReflectionParameter $parameter)
 	{
+		$default = '';
+		$type = '';
+		
 		if ($parameter->isArray())
 		{
 			$type = 'array ';
@@ -396,18 +399,14 @@ class {$newClassName} {$extends}
 		{
 			$type = $parameter->getClass()->getName() . ' ';
 		}
-		else
-		{
-			$type = '';
-		}
 
 		if ($parameter->isDefaultValueAvailable())
 		{
 			$default = ' = ' . var_export($parameter->getDefaultValue(), TRUE);
 		}
-		else
+		elseif ($parameter->isOptional())
 		{
-			$default = '';
+			$default = ' = null';
 		}
 
 		return $type . ($parameter->isPassedByReference() ? '&' : '') . '$parm' . $parameter->getPosition() . $default;
