@@ -1000,6 +1000,13 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals('magicCalled', $mock->magicCall());
 		$this->assertEquals($expected, $mock->unStubbedCall());
 	}
+	
+	public function testMockingSoapClient()
+	{
+		// This test requires that E_STRICT be on
+		// It will fail with it on, otherwise it wont' complain
+		Phake::mock('SoapClient');
+	}
 }
 
 ?>
