@@ -153,39 +153,12 @@ class Phake_ClassGenerator_MockClass
 	protected function implementMethod(ReflectionMethod $method)
 	{
 		$modifiers = implode(' ', Reflection::getModifierNames($method->getModifiers() & ~ReflectionMethod::IS_ABSTRACT));
-
-		$methodDef = "
-	{$modifiers} function {$method->getName()}({$this->generateMethodParameters($method)})
-	{
-		if (\$this->__PHAKE_isFrozen)
-		{
-			throw new Exception('This object has been frozen.');
-		}
-
-		\$methodName = '{$method->getName()}';
-
-		\$args = array();
-		{$this->copyMethodParameters($method)}
-
-		\$argsCopy = func_get_args();
-	
-
-		\$this->__PHAKE_callRecorder->recordCall(new Phake_CallRecorder_Call(\$this, \$methodName, \$argsCopy));
-
-		\$stub = \$this->__PHAKE_stubMapper->getStubByCall(\$methodName, \$args);
-
-		if (\$stub !== NULL)
-		{
-			\$answer = \$stub->getAnswer();
-		}
-		else
-		{
-			\$answer = \$this->__PHAKE_defaultAnswer;
-		}
-
-		return \$this->__PHAKE_processAnswer(\$methodName, \$args, \$answer);
-	}
-";
+		
+		$methodDef = file_get_contents(dirname(__FILE__) . '/Template/mock_method.tmpl');
+		$methodDef = str_replace('{modifiers}', $modifiers, $methodDef);
+		$methodDef = str_replace('{methodName}', $method->getName(), $methodDef);
+		$methodDef = str_replace('{methodParameters}', $this->generateMethodParameters($method), $methodDef);
+		$methodDef = str_replace('{copyMethodParameters}', $this->copyMethodParameters($method), $methodDef);
 
 		return $methodDef;
 	}
@@ -198,43 +171,11 @@ class Phake_ClassGenerator_MockClass
 	{
 		$modifiers = implode(' ', Reflection::getModifierNames($method->getModifiers() & ~ReflectionMethod::IS_ABSTRACT));
 
-		$methodDef = "
-	{$modifiers} function __call({$this->generateMethodParameters($method)})
-	{
-		if (\$this->__PHAKE_isFrozen)
-		{
-			throw new Exception('This object has been frozen.');
-		}
-
-		\$args = array();
-		{$this->copyMethodParameters($method)}
-
-		\$argsCopy = func_get_args();
-
-		\$this->__PHAKE_callRecorder->recordCall(new Phake_CallRecorder_Call(\$this, '__call' , \$argsCopy));
-		\$this->__PHAKE_callRecorder->recordCall(new Phake_CallRecorder_Call(\$this, \$argsCopy[0], \$argsCopy[1]));
-
-
-		\$stub = \$this->__PHAKE_stubMapper->getStubByCall(\$args[0], \$args[1]);
-
-		if (\$stub === NULL)
-		{
-			\$stub = \$this->__PHAKE_stubMapper->getStubByCall('__call', \$args);
-		}
-
-		if (\$stub !== NULL)
-		{
-			\$answer = \$stub->getAnswer();
-		}
-		else
-		{
-			\$answer = \$this->__PHAKE_defaultAnswer;
-		}
-
-		return \$this->__PHAKE_processAnswer('__call', \$args, \$answer);
-	}
-";
-
+		$methodDef = file_get_contents(dirname(__FILE__) . '/Template/mock_call_method.tmpl');
+		$methodDef = str_replace('{modifiers}', $modifiers, $methodDef);
+		$methodDef = str_replace('{methodParameters}', $this->generateMethodParameters($method), $methodDef);
+		$methodDef = str_replace('{copyMethodParameters}', $this->copyMethodParameters($method), $methodDef);
+		
 		return $methodDef;
 	}
 
@@ -251,39 +192,13 @@ class Phake_ClassGenerator_MockClass
 	{
 		$modifiers = implode(' ', Reflection::getModifierNames($method->getModifiers() & ~ReflectionMethod::IS_ABSTRACT));
 
-		$methodDef = "
-	{$modifiers} function {$method->getName()}({$this->generateMethodParameters($method)})
-	{
-		if (\$this->__PHAKE_isFrozen)
-		{
-			throw new Exception('This object has been frozen.');
-		}
-
-		\$methodName = '{$method->getName()}';
-
-		\$args = array();
-		{$this->copyMethodParameters($method)}
-
-		\$argsCopy = func_get_args();
-
-
-		\$this->__PHAKE_callRecorder->recordCall(new Phake_CallRecorder_Call(\$this, \$methodName, \$argsCopy));
-
-		\$stub = \$this->__PHAKE_stubMapper->getStubByCall(\$methodName, \$args);
-
-		if (\$stub !== NULL)
-		{
-			\$answer = \$stub->getAnswer();
-		}
-		else
-		{
-			\$answer = new Phake_Stubber_Answers_StaticAnswer('Mock for {$className}');
-		}
-
-		return \$this->__PHAKE_processAnswer(\$methodName, \$args, \$answer);
-	}
-";
-
+		$methodDef = file_get_contents(dirname(__FILE__) . '/Template/mock_toString_method.tmpl');
+		$methodDef = str_replace('{modifiers}', $modifiers, $methodDef);
+		$methodDef = str_replace('{methodName}', $method->getName(), $methodDef);
+		$methodDef = str_replace('{methodParameters}', $this->generateMethodParameters($method), $methodDef);
+		$methodDef = str_replace('{copyMethodParameters}', $this->copyMethodParameters($method), $methodDef);
+		$methodDef = str_replace('{className}', $className, $methodDef);
+		
 		return $methodDef;
 	}
 
