@@ -1,11 +1,11 @@
-	{modifiers} function {methodName}({methodParameters})
+	{modifiers} function __toString({methodParameters})
 	{
 		if ($this->__PHAKE_isFrozen)
 		{
 			throw new Exception('This object has been frozen.');
 		}
 
-		$methodName = '{methodName}';
+		$methodName = '__toString';
 
 		$args = array();
 		{copyMethodParameters}

@@ -75,12 +75,22 @@ class Phake_ClassGenerator_MockClass
 		$mockedClass = new ReflectionClass($mockedClassName);
 		
 		$classDef = file_get_contents(dirname(__FILE__) . '/Template/mock_class.tmpl');
-		$classDef = str_replace('{newClassName}', $newClassName, $classDef);
-		$classDef = str_replace('{extends}', $extends, $classDef);
-		$classDef = str_replace('{implements}', $implements, $classDef);
-		$classDef = str_replace('{constructorChain}', $this->getConstructorChaining($mockedClass), $classDef);
-		$classDef = str_replace('{mockedClassName}', $mockedClassName, $classDef);
-		$classDef = str_replace('{mockedMethods}', $this->generateMockedMethods($mockedClass), $classDef);
+		$classDef = str_replace(
+				array(
+					'{newClassName}',
+					'{extends}',
+					'{implements}',
+					'{constructorChain}',
+					'{mockedClassName}',
+					'{mockedMethods}'
+				), array(
+					$newClassName,
+					$extends,
+					$implements,
+					$this->getConstructorChaining($mockedClass),
+					$mockedClassName,
+					$this->generateMockedMethods($mockedClass)
+				), $classDef);
 
 		eval($classDef);
 	}
@@ -155,10 +165,18 @@ class Phake_ClassGenerator_MockClass
 		$modifiers = implode(' ', Reflection::getModifierNames($method->getModifiers() & ~ReflectionMethod::IS_ABSTRACT));
 		
 		$methodDef = file_get_contents(dirname(__FILE__) . '/Template/mock_method.tmpl');
-		$methodDef = str_replace('{modifiers}', $modifiers, $methodDef);
-		$methodDef = str_replace('{methodName}', $method->getName(), $methodDef);
-		$methodDef = str_replace('{methodParameters}', $this->generateMethodParameters($method), $methodDef);
-		$methodDef = str_replace('{copyMethodParameters}', $this->copyMethodParameters($method), $methodDef);
+		$methodDef = str_replace(
+				array(
+					'{modifiers}',
+					'{methodName}',
+					'{methodParameters}',
+					'{copyMethodParameters}'
+				), array(
+					$modifiers,
+					$method->getName(),
+					$this->generateMethodParameters($method),
+					$this->copyMethodParameters($method)
+				), $methodDef);
 
 		return $methodDef;
 	}
@@ -172,9 +190,17 @@ class Phake_ClassGenerator_MockClass
 		$modifiers = implode(' ', Reflection::getModifierNames($method->getModifiers() & ~ReflectionMethod::IS_ABSTRACT));
 
 		$methodDef = file_get_contents(dirname(__FILE__) . '/Template/mock_call_method.tmpl');
-		$methodDef = str_replace('{modifiers}', $modifiers, $methodDef);
-		$methodDef = str_replace('{methodParameters}', $this->generateMethodParameters($method), $methodDef);
-		$methodDef = str_replace('{copyMethodParameters}', $this->copyMethodParameters($method), $methodDef);
+		
+		$methodDef = str_replace(
+				array(
+					'{modifiers}',
+					'{methodParameters}',
+					'{copyMethodParameters}'
+				), array(
+					$modifiers,
+					$this->generateMethodParameters($method),
+					$this->copyMethodParameters($method)
+				), $methodDef);
 		
 		return $methodDef;
 	}
@@ -193,11 +219,18 @@ class Phake_ClassGenerator_MockClass
 		$modifiers = implode(' ', Reflection::getModifierNames($method->getModifiers() & ~ReflectionMethod::IS_ABSTRACT));
 
 		$methodDef = file_get_contents(dirname(__FILE__) . '/Template/mock_toString_method.tmpl');
-		$methodDef = str_replace('{modifiers}', $modifiers, $methodDef);
-		$methodDef = str_replace('{methodName}', $method->getName(), $methodDef);
-		$methodDef = str_replace('{methodParameters}', $this->generateMethodParameters($method), $methodDef);
-		$methodDef = str_replace('{copyMethodParameters}', $this->copyMethodParameters($method), $methodDef);
-		$methodDef = str_replace('{className}', $className, $methodDef);
+		$methodDef = str_replace(
+				array(
+					'{modifiers}',
+					'{methodParameters}',
+					'{copyMethodParameters}',
+					'{className}'
+				), array(
+					$modifiers,
+					$this->generateMethodParameters($method),
+					$this->copyMethodParameters($method),
+					$className
+				), $methodDef);
 		
 		return $methodDef;
 	}

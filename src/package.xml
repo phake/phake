@@ -16,8 +16,8 @@
  <date>2011-04-25</date>
  <time>14:36:00</time>
  <version>
-  <release>1.0.0alpha6</release>
-  <api>1.0.0alpha6</api>
+  <release>1.0.0alpha7</release>
+  <api>1.0.0alpha7</api>
  </version>
  <stability>
   <release>alpha</release>
@@ -44,6 +44,10 @@
    <file baseinstalldir="/" name="Phake/CallRecorder/VerifierMode/AtMost.php" role="php" />
    <file baseinstalldir="/" name="Phake/CallRecorder/VerifierMode/Times.php" role="php" />
    <file baseinstalldir="/" name="Phake/ClassGenerator/MockClass.php" role="php" />
+   <file baseinstalldir="/" name="Phake/ClassGenerator/Template/mock_call_method.tmpl" role="php" />
+   <file baseinstalldir="/" name="Phake/ClassGenerator/Template/mock_class.tmpl" role="php" />
+   <file baseinstalldir="/" name="Phake/ClassGenerator/Template/mock_method.tmpl" role="php" />
+   <file baseinstalldir="/" name="Phake/ClassGenerator/Template/mock_toString_method.tmpl" role="php" />
    <file baseinstalldir="/" name="Phake/Matchers/AnyParameters.php" role="php" />
    <file baseinstalldir="/" name="Phake/Matchers/ArgumentCaptor.php" role="php" />
    <file baseinstalldir="/" name="Phake/Matchers/EqualsMatcher.php" role="php" />
