@@ -463,6 +463,14 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * @expectedException InvalidArgumentException
+	 */
+	public function testPartialMockFailsWhenNotAllRequiredConstructorParametersAreGiven()
+	{
+		$pmock = Phake::partialMock('PhakeTest_MockedConstructedClass', 'var1');
+	}
+
+	/**
 	 * Tests that partial mocks with constructors higher in the chain have their constructors called
 	 */
 	public function testPartialMockCallsParentConstructor()
@@ -508,6 +516,16 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 		Phake::when($mock)->foo()->thenReturn('bar');
 
 		$this->assertEquals('bar', $mock->foo());
+	}
+
+	/**
+	 * Tests verifying if user gets a response if mocked class-constructor required parameter
+	 *
+	 * @expectedException InvalidArgumentException
+	 */
+	public function testMockingClassWithRequiredConstructorArgumentsThrowsException()
+	{
+		Phake::mock('PhakeTest_MockedConstructedClass');
 	}
 
 	/**

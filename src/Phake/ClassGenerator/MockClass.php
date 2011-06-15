@@ -198,13 +198,28 @@ class {$newClassName} {$extends}
 	 */
 	protected function getConstructorChaining(ReflectionClass $originalClass)
 	{
-		return $originalClass->hasMethod('__construct') ? "
-
-		if (is_array(\$constructorArgs))
+		if ( $originalClass->hasMethod('__construct') )
 		{
+			$required_constructor_parameter_count = $originalClass->getMethod('__construct')->getNumberOfRequiredParameters();
+			if ($required_constructor_parameter_count > 0)
+			{
+				$constructor_content = "
+		if ( count(\$constructorArgs) < $required_constructor_parameter_count ) 
+		{
+			throw new InvalidArgumentException(sprintf(
+				'constructor of mocked class %s requires %d parameter(s). %d parameters where given.', '{$originalClass->getName()}' , $required_constructor_parameter_count, count(\$constructorArgs)
+			));
+		}";
+			}
+			$constructor_content .= "
+		if ( is_array(\$constructorArgs) ) { 
 			call_user_func_array(array(\$this, 'parent::__construct'), \$constructorArgs);
 		}
-		" : "";
+		";
+			return $constructor_content;
+		}
+
+		return "";
 	}
 
 	/**
