@@ -1,8 +1,9 @@
 <?php
-/* 
+
+/*
  * Phake - Mocking Framework
  * 
- * Copyright (c) 2010-2011, Mike Lively <m@digitalsandwich.com>
+ * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -42,55 +43,23 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once('Phake/CallRecorder/IVerifierMode.php');
-require_once('Phake/CallRecorder/VerifierMode/Times.php');
-
-/**
- * Tests the functionality of the Times class.
- */
-class Phake_CallRecorder_VerifierMode_TimesTest extends PHPUnit_Framework_TestCase
+class Phake_CallRecorder_VerifierMode_Result
 {
-	private $verifierModeTimes;
-
-	public function setUp()
-	{
-		$this->verifierModeTimes = new Phake_CallRecorder_VerifierMode_Times(1);
+	private $verified;
+	
+	private $failureDescription;
+	
+	function __construct($verified, $failureDescription) {
+		$this->verified = $verified;
+		$this->failureDescription = $failureDescription;
+	}
+	
+	public function getVerified() {
+		return $this->verified;
 	}
 
-	/**
-	 * Tests that the Times verifier passes if there are exactly enough items.
-	 */
-	public function testVerifyMatches()
-	{
-		// Will throw an exception if it wasn't working
-		$matchedCalls = array('1item');
-		$this->assertTrue($this->verifierModeTimes->verify($matchedCalls)->getVerified());
-	}
-
-	/**
-	 * Tests that the Times verifier fails if there are more than enough items.
-	 */
-	public function testVerifyFailsOnOver()
-	{
-		$matchedCalls = array('1item', '2items');
-		$result = $this->verifierModeTimes->verify($matchedCalls);
-		$this->assertFalse($result->getVerified());
-		$this->assertEquals('actually called <2> times', $result->getFailureDescription());
-	}
-
-	/**
-	 * Tests that the Times verifier fails if there weren't enough items.
-	 */
-	public function testVerifyFailsOnUnder()
-	{
-		$matchedCalls = array();
-		$result = $this->verifierModeTimes->verify($matchedCalls);
-		$this->assertFalse($result->getVerified());
-		$this->assertEquals('actually called <0> times', $result->getFailureDescription());
-	}
-
-	public function testToString()
-	{
-		$this->assertEquals("exactly <1> times", $this->verifierModeTimes->__toString());
+	public function getFailureDescription() {
+		return $this->failureDescription;
 	}
 }
+?>

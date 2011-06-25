@@ -128,8 +128,8 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
 				->with($this->callArray[1])
 				->will($this->returnValue($return));
 
-		Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(TRUE);
-		$this->assertSame(array($return), $this->verifier->verifyCall($expectation));
+		Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(new Phake_CallRecorder_VerifierMode_Result(TRUE, ''));
+		$this->assertEquals(new Phake_CallRecorder_VerifierResult(TRUE, array($return)), $this->verifier->verifyCall($expectation));
 	}
 
 	/**
@@ -143,9 +143,9 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
 			array(),
 			$this->verifierMode
 		);
-		Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(TRUE);
+		Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(new Phake_CallRecorder_VerifierMode_Result(TRUE, ''));
 
-		$result = $this->verifier->verifyCall($expectation);
+		$result = $this->verifier->verifyCall($expectation)->getMatchedCalls();
 		$this->assertTrue(is_array($result), 'verifyCall did not return an array');
 		$this->assertTrue(empty($result), 'test call was found but should not have been');
 	}
@@ -163,9 +163,9 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
 				new Phake_Matchers_EqualsMatcher('test')),
 			$this->verifierMode
 		);
-		Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(TRUE);
+		Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(new Phake_CallRecorder_VerifierMode_Result(TRUE, ''));
 
-		$result = $this->verifier->verifyCall($expectation);
+		$result = $this->verifier->verifyCall($expectation)->getMatchedCalls();
 		$this->assertTrue(empty($result));
 	}
 
@@ -186,11 +186,11 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
 				->method('getCallInfo')
 				->will($this->returnValue($return));
 
-		Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(TRUE);
+		Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(new Phake_CallRecorder_VerifierMode_Result(TRUE, ''));
 
 		$calls = $this->verifier->verifyCall($expectation);
 
-		$this->assertSame(array($return, $return), $this->verifier->verifyCall($expectation));
+		$this->assertEquals(new Phake_CallRecorder_VerifierResult(TRUE, array($return, $return)), $this->verifier->verifyCall($expectation));
 	}
 
 
@@ -212,9 +212,9 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
 				->with($this->callArray[1])
 				->will($this->returnValue($return));
 
-		Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(TRUE);
+		Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(new Phake_CallRecorder_VerifierMode_Result(TRUE, ''));
 
-		$this->assertSame(array($return), $this->verifier->verifyCall($expectation), 'bar call was not found');
+		$this->assertEquals(new Phake_CallRecorder_VerifierResult(TRUE, array($return)), $this->verifier->verifyCall($expectation), 'bar call was not found');
 	}
 
 	/**
@@ -238,9 +238,9 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
 
 		$verifier = new Phake_CallRecorder_Verifier($recorder, $obj1);
 
-		Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(TRUE);
+		Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(new Phake_CallRecorder_VerifierMode_Result(TRUE, ''));
 
-		$this->assertEquals(1, count($verifier->verifyCall($expectation)));
+		$this->assertEquals(1, count($verifier->verifyCall($expectation)->getMatchedCalls()));
 	}
 
 	public function testVerifierChecksVerificationMode()
@@ -257,14 +257,14 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
 				->method('getCallInfo')
 				->will($this->returnValue($return));
 
-		Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(TRUE);
+		Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(new Phake_CallRecorder_VerifierMode_Result(TRUE, ''));
 
 		$this->verifier->verifyCall($expectation);
 
 		Phake::verify($this->verifierMode)->verify(array($return, $return));
 	}
 
-	public function testVerifierThrowsWhenAnExpectationIsNotMet()
+	public function testVerifierReturnsFalseWhenAnExpectationIsNotMet()
 	{
 		$expectation = new Phake_CallRecorder_CallExpectation(
 			$this->obj,
@@ -284,15 +284,19 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
 				->method('getCallInfo')
 				->will($this->returnValue($return));
 
-		Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenThrow(new Exception("actually called 0 times"));
-
-		$this->setExpectedException('Exception', 'Expected mock->foo() to be called exactly 1 times, actually called 0 times');
-		$this->assertSame(array($return, $return), $this->verifier->verifyCall($expectation));
-
-		Phake::verify($this->verifierMode)->verify(array($return, $return));
+		Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(new Phake_CallRecorder_VerifierMode_Result(FALSE, 'actually called 0 times'));
+		
+		$expectedMessage = 'Expected mock->foo() to be called exactly 1 times, actually called 0 times.
+Other Invocations:
+  mock->foo(<string:bar>, <string:foo>)';
+		
+		$this->assertEquals(
+						new Phake_CallRecorder_VerifierResult(FALSE, array(), $expectedMessage), 
+						$this->verifier->verifyCall($expectation)
+		);
 	}
 
-	public function testVerifierModifiesExceptionIfThereAreNoInteractions()
+	public function testVerifierModifiesFailureDescriptionIfThereAreNoInteractions()
 	{
 		$obj2 = $this->getMock('Phake_IMock');
 		$expectation = new Phake_CallRecorder_CallExpectation(
@@ -313,15 +317,17 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
 				->method('getCallInfo')
 				->will($this->returnValue($return));
 
-		Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenThrow(new Exception("actually called 0 times"));
+		Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(new Phake_CallRecorder_VerifierMode_Result(FALSE, 'actually called 0 times'));
+		
+		$this->assertEquals(
+						new Phake_CallRecorder_VerifierResult(FALSE, array(), 'Expected mock->foo() to be called exactly 1 times, actually called 0 times. In fact, there are no interactions with this mock.'), 
+						$this->verifier->verifyCall($expectation)
+		);
 
-		$this->setExpectedException('Exception', 'Expected mock->foo() to be called exactly 1 times, actually called 0 times. In fact, there are no interactions with this mock.');
-		$this->assertSame(array($return, $return), $this->verifier->verifyCall($expectation));
-
-		Phake::verify($this->verifierMode)->verify(array($return, $return));
+		Phake::verify($this->verifierMode)->verify(array());
 	}
 
-	public function testVerifierModifiesExceptionWithOtherCalls()
+	public function testVerifierModifiesFailureDescriptionWithOtherCalls()
 	{
 		$this->obj->expects($this->any())
 				->method('__PHAKE_getName')
@@ -341,7 +347,7 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
 				->method('getCallInfo')
 				->will($this->returnValue($return));
 
-		Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenThrow(new Exception("actually called 0 times"));
+		Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(new Phake_CallRecorder_VerifierMode_Result(FALSE, 'actually called 0 times'));
 
 		$expected_msg =
 			"Expected mock->foo(equal to <string:test>) to be called exactly 1 times, actually called 0 times.\n"
@@ -349,14 +355,8 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
 					. "  mock->foo()\n"
 					. "  mock->foo(<string:bar>, <string:foo>)\n"
 					. "  mock->foo()";
-		try
-		{
-			$this->verifier->verifyCall($expectation);
-		}
-		catch (Exception $e)
-		{
-			$this->assertEquals($expected_msg, $e->getMessage());
-		}
+
+		$this->assertEquals(new Phake_CallRecorder_VerifierResult(FALSE, array(), $expected_msg), $this->verifier->verifyCall($expectation));
 	}
 }
 

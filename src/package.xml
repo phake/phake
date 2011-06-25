@@ -40,8 +40,10 @@
    <file baseinstalldir="/" name="Phake/CallRecorder/Position.php" role="php" />
    <file baseinstalldir="/" name="Phake/CallRecorder/Recorder.php" role="php" />
    <file baseinstalldir="/" name="Phake/CallRecorder/Verifier.php" role="php" />
+   <file baseinstalldir="/" name="Phake/CallRecorder/VerifierResult.php" role="php" />
    <file baseinstalldir="/" name="Phake/CallRecorder/VerifierMode/AtLeast.php" role="php" />
    <file baseinstalldir="/" name="Phake/CallRecorder/VerifierMode/AtMost.php" role="php" />
+   <file baseinstalldir="/" name="Phake/CallRecorder/VerifierMode/Result.php" role="php" />
    <file baseinstalldir="/" name="Phake/CallRecorder/VerifierMode/Times.php" role="php" />
    <file baseinstalldir="/" name="Phake/ClassGenerator/MockClass.php" role="php" />
    <file baseinstalldir="/" name="Phake/Matchers/AnyParameters.php" role="php" />

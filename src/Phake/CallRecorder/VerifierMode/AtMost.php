@@ -43,6 +43,7 @@
  */
 
 require_once 'Phake/CallRecorder/IVerifierMode.php';
+require_once 'Phake/CallRecorder/VerifierMode/Result.php';
 
 /**
  * Verifier mode that checks that the number of matched items is less than or equal than the set amount.
@@ -73,14 +74,18 @@ class Phake_CallRecorder_VerifierMode_AtMost implements Phake_CallRecorder_IVeri
 	public function verify(array $matchedCalls)
 	{
 		$calledTimes = count($matchedCalls);
-		if ($calledTimes > $this->times)
+		if ($calledTimes <= $this->times)
 		{
-			throw new Exception("at least <$this->times> times, actually called <$calledTimes>");
+			return new Phake_CallRecorder_VerifierMode_Result(TRUE, '');
+		}
+		else
+		{
+			return new Phake_CallRecorder_VerifierMode_Result(FALSE, sprintf('actually called <%s> times', count($matchedCalls)));
 		}
 	}
-
+	
 	public function __toString()
 	{
-		return "at most {$this->times} times";
+		return "at most <{$this->times}> times";
 	}
 }

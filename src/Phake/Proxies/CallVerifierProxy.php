@@ -86,7 +86,16 @@ class Phake_Proxies_CallVerifierProxy
 		
 		$verifier = new Phake_CallRecorder_Verifier($obj->__PHAKE_getCallRecorder(), $obj);
 		$expectation = new Phake_CallRecorder_CallExpectation($obj, '__call', $this->arguments, $verifierMode);
-		return $verifier->verifyCall($expectation);
+		$result = $verifier->verifyCall($expectation);
+		
+		if ($result->getVerified())
+		{
+			return $result->getMatchedCalls();
+		}
+		else
+		{
+			throw new Exception($result->getFailureDescription());
+		}
 	}
 }
 

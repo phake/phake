@@ -64,17 +64,18 @@ class Phake_CallRecorder_VerifierMode_AtMostTest extends PHPUnit_Framework_TestC
 	{
 		// Will throw an exception if it wasn't working
 		$matchedCalls = array('1item');
-		$this->verifier->verify($matchedCalls);
+		$this->assertTrue($this->verifier->verify($matchedCalls)->getVerified());
 	}
 
 	/**
 	 * Tests that the verifier fails if there are more than enough items.
-	 * @expectedException Exception
 	 */
 	public function testVerifyOnOver()
 	{
 		$matchedCalls = array('1item', '2items');
-		$this->verifier->verify($matchedCalls);
+		$result = $this->verifier->verify($matchedCalls);
+		$this->assertFalse($result->getVerified());
+		$this->assertEquals('actually called <2> times', $result->getFailureDescription());
 	}
 
 	/**
@@ -83,11 +84,11 @@ class Phake_CallRecorder_VerifierMode_AtMostTest extends PHPUnit_Framework_TestC
 	public function testVerifyOnUnder()
 	{
 		$matchedCalls = array();
-		$this->verifier->verify($matchedCalls);
+		$this->assertTrue($this->verifier->verify($matchedCalls)->getVerified());
 	}
 
 	public function testToString()
 	{
-		$this->assertEquals("at most 1 times", $this->verifier->__toString());
+		$this->assertEquals("at most <1> times", $this->verifier->__toString());
 	}
 }

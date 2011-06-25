@@ -43,6 +43,7 @@
  */
 
 require_once 'Phake/CallRecorder/IVerifierMode.php';
+require_once 'Phake/CallRecorder/VerifierMode/Result.php';
 
 /**
  * Verifier mode that checks that the number of matched items are exactly equal
@@ -74,14 +75,18 @@ class Phake_CallRecorder_VerifierMode_Times implements Phake_CallRecorder_IVerif
 	public function verify(array $matchedCalls)
 	{
 		$calledTimes = count($matchedCalls);
-		if ($calledTimes != $this->times)
+		if ($calledTimes == $this->times)
 		{
-			throw new Exception("actually called $calledTimes times");
+			return new Phake_CallRecorder_VerifierMode_Result(TRUE, '');
+		}
+		else
+		{
+			return new Phake_CallRecorder_VerifierMode_Result(FALSE, sprintf('actually called <%s> times', count($matchedCalls)));
 		}
 	}
-
+	
 	public function __toString()
 	{
-		return "exactly {$this->times} times";
+		return "exactly <{$this->times}> times";
 	}
 }

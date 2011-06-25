@@ -91,7 +91,17 @@ class Phake_Proxies_VerifierProxy
 	public function __call($method, array $arguments)
 	{
 		$expectation = new Phake_CallRecorder_CallExpectation($this->verifier->getObject(), $method, $this->matcherFactory->createMatcherArray($arguments), $this->mode);
-		return $this->verifier->verifyCall($expectation);
+		
+		$result = $this->verifier->verifyCall($expectation);
+		
+		if ($result->getVerified())
+		{
+			return $result->getMatchedCalls();
+		}
+		else
+		{
+			throw new Exception($result->getFailureDescription());
+		}
 	}
 }
 

@@ -43,6 +43,7 @@
  */
 
 require_once 'Phake/Matchers/MethodMatcher.php';
+require_once 'Phake/CallRecorder/VerifierResult.php';
 
 /**
  * Can verify calls recorded into the given recorder.
@@ -77,7 +78,7 @@ class Phake_CallRecorder_Verifier
 	 *
 	 * @todo Maybe rename this to findMatchedCalls?
 	 * @param Phake_CallRecorder_CallExpectation $expectation
-	 * @return boolean
+	 * @return Phake_CallRecorder_VerifierResult
 	 */
 	public function verifyCall(Phake_CallRecorder_CallExpectation $expectation)
 	{
@@ -104,12 +105,9 @@ class Phake_CallRecorder_Verifier
 				}
 			}
 		}
-
-		try
-		{
-			$expectation->getVerifierMode()->verify($matchedCalls);
-		}
-		catch (Exception $e)
+		
+		$verifierModeResult = $expectation->getVerifierMode()->verify($matchedCalls);
+		if (!$verifierModeResult->getVerified())
 		{
 			$additions = '';
 			if (!$obj_interactions)
@@ -122,10 +120,15 @@ class Phake_CallRecorder_Verifier
 				$additions .= "\nOther Invocations:\n  " . implode("\n  ", $methodNonMatched);
 			}
 			
-			throw new Exception($expectation->__toString() . ', ' . $e->getMessage() . '.' . $additions);
+			return new Phake_CallRecorder_VerifierResult(
+								FALSE, 
+								array(), 
+								$expectation->__toString() . ', ' . $verifierModeResult->getFailureDescription() . '.' . $additions
+			);
 		}
 
-		return $matchedCalls;
+
+		return new Phake_CallRecorder_VerifierResult(TRUE, $matchedCalls);
 	}
 
 	public function getObject()

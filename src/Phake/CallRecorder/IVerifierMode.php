@@ -53,6 +53,7 @@ interface Phake_CallRecorder_IVerifierMode
 	 * Verifies that the number of <code>$matchedCalls</code> matches the number of invocations expected.
 	 *
 	 * @param array $matchedCalls
+	 * @return Phake_CallRecorder_VerifierMode_Result
 	 */
 	public function verify(array $matchedCalls);
 

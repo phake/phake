@@ -955,7 +955,7 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 	{
 		$mock = Phake::mock('PhakeTest_MockedClass');
 
-		$this->setExpectedException('Exception', 'Expected PhakeTest_MockedClass->foo() to be called exactly 1 times, actually called 0 times. In fact, there are no interactions with this mock.');
+		$this->setExpectedException('Exception', 'Expected PhakeTest_MockedClass->foo() to be called exactly <1> times, actually called <0> times. In fact, there are no interactions with this mock.');
 		Phake::verify($mock)->foo();
 	}
 
@@ -965,7 +965,7 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 
 		$mock->foo('test');
 
-		$this->setExpectedException('Exception', 'Expected PhakeTest_MockedClass->foo() to be called exactly 1 times, actually called 0 times.' . "\n"
+		$this->setExpectedException('Exception', 'Expected PhakeTest_MockedClass->foo() to be called exactly <1> times, actually called <0> times.' . "\n"
 		. "Other Invocations:\n" .
 		  "  PhakeTest_MockedClass->foo(<string:test>)");
 
