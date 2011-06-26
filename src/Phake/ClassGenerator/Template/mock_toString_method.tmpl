@@ -1,0 +1,30 @@
+	{modifiers} function __toString({methodParameters})
+	{
+		if ($this->__PHAKE_isFrozen)
+		{
+			throw new Exception('This object has been frozen.');
+		}
+
+		$methodName = '__toString';
+
+		$args = array();
+		{copyMethodParameters}
+
+		$argsCopy = func_get_args();
+
+
+		$this->__PHAKE_callRecorder->recordCall(new Phake_CallRecorder_Call($this, $methodName, $argsCopy));
+
+		$stub = $this->__PHAKE_stubMapper->getStubByCall($methodName, $args);
+
+		if ($stub !== NULL)
+		{
+			$answer = $stub->getAnswer();
+		}
+		else
+		{
+			$answer = new Phake_Stubber_Answers_StaticAnswer('Mock for {className}');
+		}
+
+		return $this->__PHAKE_processAnswer($methodName, $args, $answer);
+	}

@@ -1,0 +1,34 @@
+	{modifiers} function __call({methodParameters})
+	{
+		if ($this->__PHAKE_isFrozen)
+		{
+			throw new Exception('This object has been frozen.');
+		}
+
+		$args = array();
+		{copyMethodParameters}
+
+		$argsCopy = func_get_args();
+
+		$this->__PHAKE_callRecorder->recordCall(new Phake_CallRecorder_Call($this, '__call' , $argsCopy));
+		$this->__PHAKE_callRecorder->recordCall(new Phake_CallRecorder_Call($this, $argsCopy[0], $argsCopy[1]));
+
+
+		$stub = $this->__PHAKE_stubMapper->getStubByCall($args[0], $args[1]);
+
+		if ($stub === NULL)
+		{
+			$stub = $this->__PHAKE_stubMapper->getStubByCall('__call', $args);
+		}
+
+		if ($stub !== NULL)
+		{
+			$answer = $stub->getAnswer();
+		}
+		else
+		{
+			$answer = $this->__PHAKE_defaultAnswer;
+		}
+
+		return $this->__PHAKE_processAnswer('__call', $args, $answer);
+	}
