@@ -1005,7 +1005,65 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 	{
 		// This test requires that E_STRICT be on
 		// It will fail with it on, otherwise it wont' complain
-		Phake::mock('SoapClient');
+		$mock = Phake::mock('SoapClient');
+		
+		$this->addToAssertionCount(1);
+	}
+	
+	public function testDefaultClient()
+	{
+		$original_client = Phake::getClient();
+		
+		Phake::setClient(null);
+		
+		$this->assertInstanceOf('Phake_Client_Default', Phake::getClient());
+		
+		Phake::setClient($original_client);
+	}
+	
+	public function testSettingClient()
+	{
+		$original_client = Phake::getClient();
+		
+		$client = Phake::mock('Phake_Client_IClient');
+		Phake::setClient($client);
+		
+		$this->assertSame($client, Phake::getClient());
+		
+		Phake::setClient($original_client);
+	}
+	
+	public function testSettingDefaultClientByString()
+	{
+		$original_client = Phake::getClient();
+		
+		Phake::setClient(Phake::CLIENT_DEFAULT);
+		
+		$this->assertInstanceOf('Phake_Client_Default', Phake::getClient());
+		
+		Phake::setClient($original_client);
+	}
+	
+	public function testSettingPHPUnitClientByString()
+	{
+		$original_client = Phake::getClient();
+		
+		Phake::setClient(Phake::CLIENT_PHPUNIT);
+		
+		$this->assertInstanceOf('Phake_Client_PHPUnit', Phake::getClient());
+		
+		Phake::setClient($original_client);
+	}
+	
+	public function testVerifyNoFurtherInteractionPassesStrict()
+	{
+		$mock = Phake::mock('stdClass');
+		
+		$assertionCount = self::getCount();
+		Phake::verifyNoFurtherInteraction($mock);
+		$newAssertionCount = self::getCount();
+		
+		$this->assertGreaterThan($assertionCount, $newAssertionCount);
 	}
 }
 

@@ -43,6 +43,7 @@
  */
 
 require_once 'Phake/Proxies/CallVerifierProxy.php';
+require_once 'Phake/Client/Default.php';
 require_once 'Phake/CallRecorder/Verifier.php';
 require_once 'Phake/CallRecorder/CallExpectation.php';
 require_once 'PHPUnit/Framework/Constraint.php';
@@ -63,15 +64,21 @@ class Phake_Proxies_CallVerifierProxyTest extends PHPUnit_Framework_TestCase
 	 * @var Phake_CallRecorder_Recorder
 	 */
 	private $obj;
+	
+	/**
+	 * @var Phake_Client_IClient
+	 */
+	private $client;
 
 	/**
 	 * Sets up test fixture
 	 */
 	public function setUp()
 	{
+		$this->client = new Phake_Client_Default();
 		$this->matcher1 = Phake::mock('Phake_Matchers_IArgumentMatcher');
 		$this->obj = new Phake_CallRecorder_Recorder();
-		$this->proxy = new Phake_Proxies_CallVerifierProxy(array(new Phake_Matchers_EqualsMatcher('foo'), new Phake_Matchers_EqualsMatcher(array())));
+		$this->proxy = new Phake_Proxies_CallVerifierProxy(array(new Phake_Matchers_EqualsMatcher('foo'), new Phake_Matchers_EqualsMatcher(array())), $this->client);
 	}
 
 	/**

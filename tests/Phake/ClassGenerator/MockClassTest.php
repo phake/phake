@@ -513,7 +513,10 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 		$answer = $this->getMock('Phake_Stubber_IAnswer');
 		$mock = $this->classGen->instantiate($newClassName, $callRecorder, $stubMapper, $answer);
 
-		$mock->__PHAKE_freezeMock();
+		$client = Phake::mock('Phake_Client_IClient');
+		$mock->__PHAKE_freezeMock($client);
+		
+		Phake::verify($client)->processObjectFreeze();
 
 		$this->setExpectedException('Exception');
 
@@ -536,7 +539,7 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 		$answer = $this->getMock('Phake_Stubber_IAnswer');
 		$mock = $this->classGen->instantiate($newClassName, $callRecorder, $stubMapper, $answer);
 
-		$mock->__PHAKE_freezeMock();
+		$mock->__PHAKE_freezeMock(Phake::mock('Phake_Client_IClient'));
 		$mock->__PHAKE_resetMock();
 
 		$mock->foo();
@@ -588,6 +591,8 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 		$mockedClass = 'PhakeTest_FinalMethod';
 
 		$this->classGen->generate($newClassName, $mockedClass);
+		
+		$this->addToAssertionCount(1);
 	}
 
 	/**
