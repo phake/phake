@@ -1,26 +1,27 @@
 <?php
+
 /*
  * Phake - Mocking Framework
- *
- * Copyright (c) 2010-2011, Mike Lively <m@digitalsandwich.com>
+ * 
+ * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
  * All rights reserved.
- *
+ * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
- *
+ * 
  *  *  Redistributions of source code must retain the above copyright
  *     notice, this list of conditions and the following disclaimer.
- *
+ * 
  *  *  Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in
  *     the documentation and/or other materials provided with the
  *     distribution.
- *
+ * 
  *  *  Neither the name of Mike Lively nor the names of his
  *     contributors may be used to endorse or promote products derived
  *     from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -33,7 +34,7 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- *
+ * 
  * @category   Testing
  * @package    Phake
  * @author     Mike Lively <m@digitalsandwich.com>
@@ -42,67 +43,22 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/CallRecorder/CallExpectation.php';
-require_once 'Phake/Matchers/PHPUnitConstraintAdapter.php';
-require_once 'Phake/Matchers/HamcrestMatcherAdapter.php';
-require_once 'Phake/Matchers/EqualsMatcher.php';
-
 /**
- * A proxy to handle verifying various calls to the magic __call method
- *
- * The parameters that you would like to verify are passed into the constructor.
- *
- * @author Mike Lively <m@digitalsandwich.com>
+ * Defines the interface for Phake clients.
  */
-class Phake_Proxies_CallVerifierProxy
-{
+interface Phake_Client_IClient
+{	
 	/**
-	 * @var array
+	 * Handles the processing of a verifier result. When the verifier is true it should return the matched calls. 
+	 * The behavior for if the verifier is false is up to the client.
+	 * 
+	 * @param Phake_CallRecorder_VerifierResult $result
 	 */
-	private $arguments;
-	
-	/**
-	 * @var Phake_MockReader
-	 */
-	private $mockReader;
-	
-	/**
-	 * @var Phake_Client_IClient
-	 */
-	private $client;
+	public function processVerifierResult(Phake_CallRecorder_VerifierResult $result);
 
 	/**
-	 * @param array $arguments
-	 * @param Phake_MockReader $mockReader;
-	 * @param Phake_Client_IClient $client
+	 * Used to notify the client that a mock has been frozen.
 	 */
-	public function __construct(array $arguments, Phake_MockReader $mockReader, Phake_Client_IClient $client)
-	{
-		$this->arguments = $arguments;
-		$this->mockReader = $mockReader;
-		$this->client = $client;
-	}
-
-
-	/**
-	 * Verifies that the call to __call was made on the given object with the parameters passed into the constructor
-	 * @param Phake_IMock $obj
-	 * @param Phake_CallRecorder_IVerifierMode $verifierMode
-	 * @return array
-	 */
-	public function isCalledOn(Phake_IMock $obj, Phake_CallRecorder_IVerifierMode $verifierMode = NULL)
-	{
-		if ($verifierMode === NULL)
-		{
-			$verifierMode = new Phake_CallRecorder_VerifierMode_Times(1);
-		}
-		
-		$verifier = new Phake_CallRecorder_Verifier($this->mockReader->getCallRecorder($obj), $obj);
-		$expectation = new Phake_CallRecorder_CallExpectation($obj, '__call', $this->arguments, $verifierMode, $this->mockReader);
-		$result = $verifier->verifyCall($expectation);
-		
-		return $this->client->processVerifierResult($result);
-	}
+	public function processObjectFreeze();
 }
-
 ?>

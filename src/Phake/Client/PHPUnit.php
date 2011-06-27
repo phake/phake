@@ -1,8 +1,9 @@
 <?php
-/* 
+
+/*
  * Phake - Mocking Framework
  * 
- * Copyright (c) 2010-2011, Mike Lively <m@digitalsandwich.com>
+ * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -42,17 +43,27 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-/**
- * Defines the interface for a call recorder container
- * @author mikel
- */
-interface Phake_CallRecorder_ICallRecorderContainer
-{
-	/**
-	 * Returns a call recorder
-	 * @return Phake_CallRecorder_Recorder
-	 */
-	public function __PHAKE_getCallRecorder();
-}
+require_once('Phake/Client/IClient.php');
+require_once('Phake/PHPUnit/VerifierResultConstraint.php');
 
+/**
+ * The client adapter used for PHPUnit.
+ * 
+ * This adapter allows PHPUnit to report failed verify() calls as test failures instead of errors. It also counts 
+ * verify() calls as assertions.
+ */
+class Phake_Client_PHPUnit implements Phake_Client_IClient
+{
+	public function processVerifierResult(Phake_CallRecorder_VerifierResult $result)
+	{
+		PHPUnit_Framework_Assert::assertThat($result, new Phake_PHPUnit_VerifierResultConstraint());
+		
+		return $result->getMatchedCalls();
+	}
+	
+	public function processObjectFreeze()
+	{
+		PHPUnit_Framework_Assert::assertThat(TRUE, PHPUnit_Framework_Assert::isTrue());
+	}
+}
 ?>

@@ -74,18 +74,6 @@ class Phake_Facade
 	}
 
 	/**
-	 * Returns a verifier for the given mock object.
-	 *
-	 * @todo either remove this, or removed the call recorder container stuff, I only need one.
-	 * @param Phake_CallRecorder_ICallRecorderContainer $mockObj
-	 * @return Phake_CallRecorder_Verifier
-	 */
-	public function verify(Phake_CallRecorder_ICallRecorderContainer $mockObj)
-	{
-		return new Phake_CallRecorder_Verifier($mockObj->__PHAKE_getCallRecorder(), $mockObj);
-	}
-
-	/**
 	 * Generates a unique class name based on a given name.
 	 *
 	 * The $base will be used as the prefix for the new class name.

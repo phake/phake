@@ -42,30 +42,13 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/CallRecorder/ICallRecorderContainer.php';
-require_once 'Phake/Stubber/IStubbable.php';
-
 /**
  * The interface for Phake test double objects.
+ * 
+ * Just a marker interface.
  */
-interface Phake_IMock extends Phake_CallRecorder_ICallRecorderContainer, Phake_Stubber_IStubbable
+interface Phake_IMock 
 {
-	/**
-	 * Resets all calls and answers in the mock.
-	 */
-	public function __PHAKE_resetMock();
-
-	/**
-	 * Freezes the mock. If this method is called, any further calls will fall unless the mock is
-	 * reset.
-	 */
-	public function __PHAKE_freezeMock();
-
-	/**
-	 * Returns the name of the mock object for reference purposes.
- 	 * @return string
-	 */
-	public function __PHAKE_getName();
 }
 
 ?>

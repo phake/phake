@@ -60,25 +60,32 @@ class Phake_Proxies_CallStubberProxy
 	 * @var array
 	 */
 	private $arguments;
+	
+	/**
+	 * @var Phake_MockReader
+	 */
+	private $mockReader;
 
 	/**
-	 * @param Phake_Stubber_IStubbable $obj
+	 * @param Phake_IMock $obj
 	 * @param Phake_Matchers_Factory $matcherFactory
+	 * @param Phake_MockReader $mockReader
 	 */
-	public function __construct(array $arguments)
+	public function __construct(array $arguments, Phake_MockReader $mockReader)
 	{
 		$this->arguments = $arguments;
+		$this->mockReader = $mockReader;
 	}
 
 	/**
 	 * Creates an answer binder proxy associated with the matchers from the constructor and the object passed here
-	 * @param Phake_Stubber_IStubbable $obj
+	 * @param Phake_IMock $obj
 	 * @return Phake_Proxies_AnswerBinderProxy
 	 */
-	public function isCalledOn(Phake_Stubber_IStubbable $obj)
+	public function isCalledOn(Phake_IMock $obj)
 	{
 		$matcher = new Phake_Matchers_MethodMatcher('__call', $this->arguments);
-		$binder = new Phake_Stubber_AnswerBinder($obj, $matcher);
+		$binder = new Phake_Stubber_AnswerBinder($obj, $matcher, $this->mockReader);
 		return new Phake_Proxies_AnswerBinderProxy($binder);
 	}
 }

@@ -1,26 +1,27 @@
 <?php
+
 /*
  * Phake - Mocking Framework
- *
- * Copyright (c) 2010-2011, Mike Lively <m@digitalsandwich.com>
+ * 
+ * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
  * All rights reserved.
- *
+ * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
- *
+ * 
  *  *  Redistributions of source code must retain the above copyright
  *     notice, this list of conditions and the following disclaimer.
- *
+ * 
  *  *  Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in
  *     the documentation and/or other materials provided with the
  *     distribution.
- *
+ * 
  *  *  Neither the name of Mike Lively nor the names of his
  *     contributors may be used to endorse or promote products derived
  *     from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -33,7 +34,7 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- *
+ * 
  * @category   Testing
  * @package    Phake
  * @author     Mike Lively <m@digitalsandwich.com>
@@ -42,67 +43,33 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/CallRecorder/CallExpectation.php';
-require_once 'Phake/Matchers/PHPUnitConstraintAdapter.php';
-require_once 'Phake/Matchers/HamcrestMatcherAdapter.php';
-require_once 'Phake/Matchers/EqualsMatcher.php';
-
 /**
- * A proxy to handle verifying various calls to the magic __call method
- *
- * The parameters that you would like to verify are passed into the constructor.
- *
- * @author Mike Lively <m@digitalsandwich.com>
+ * A PHPUnit constraint that wraps a phake verifier to allow assertions on expected calls.
  */
-class Phake_Proxies_CallVerifierProxy
+class Phake_PHPUnit_VerifierResultConstraint extends PHPUnit_Framework_Constraint
 {
-	/**
-	 * @var array
-	 */
-	private $arguments;
-	
-	/**
-	 * @var Phake_MockReader
-	 */
-	private $mockReader;
-	
-	/**
-	 * @var Phake_Client_IClient
-	 */
-	private $client;
-
-	/**
-	 * @param array $arguments
-	 * @param Phake_MockReader $mockReader;
-	 * @param Phake_Client_IClient $client
-	 */
-	public function __construct(array $arguments, Phake_MockReader $mockReader, Phake_Client_IClient $client)
+	public function evaluate($other) 
 	{
-		$this->arguments = $arguments;
-		$this->mockReader = $mockReader;
-		$this->client = $client;
+		if (!$other instanceof Phake_CallRecorder_VerifierResult)
+		{
+			throw new InvalidArgumentException("You must pass an instance of Phake_CallRecorder_VerifierResult");
+		}
+		return $other->getVerified();
 	}
 
-
-	/**
-	 * Verifies that the call to __call was made on the given object with the parameters passed into the constructor
-	 * @param Phake_IMock $obj
-	 * @param Phake_CallRecorder_IVerifierMode $verifierMode
-	 * @return array
-	 */
-	public function isCalledOn(Phake_IMock $obj, Phake_CallRecorder_IVerifierMode $verifierMode = NULL)
+	public function toString() 
 	{
-		if ($verifierMode === NULL)
+		return 'is called';
+	}
+
+	protected function customFailureDescription($other, $description, $not)
+	{
+		if (!$other instanceof Phake_CallRecorder_VerifierResult)
 		{
-			$verifierMode = new Phake_CallRecorder_VerifierMode_Times(1);
+			throw new InvalidArgumentException("You must pass an instance of Phake_CallRecorder_VerifierResult");
 		}
-		
-		$verifier = new Phake_CallRecorder_Verifier($this->mockReader->getCallRecorder($obj), $obj);
-		$expectation = new Phake_CallRecorder_CallExpectation($obj, '__call', $this->arguments, $verifierMode, $this->mockReader);
-		$result = $verifier->verifyCall($expectation);
-		
-		return $this->client->processVerifierResult($result);
+
+		return $other->getFailureDescription();
 	}
 }
-
 ?>

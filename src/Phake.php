@@ -43,7 +43,10 @@
  */
 
 require_once 'Phake/Facade.php';
+require_once 'Phake/MockReader.php';
 require_once 'Phake/ClassGenerator/MockClass.php';
+require_once 'Phake/Client/Default.php';
+require_once 'Phake/Client/PHPUnit.php';
 require_once 'Phake/CallRecorder/Recorder.php';
 require_once 'Phake/CallRecorder/OrderVerifier.php';
 require_once 'Phake/Proxies/VerifierProxy.php';
@@ -61,6 +64,8 @@ require_once 'Phake/Stubber/Answers/StaticAnswer.php';
 require_once 'Phake/CallRecorder/VerifierMode/Times.php';
 require_once 'Phake/CallRecorder/VerifierMode/AtLeast.php';
 require_once 'Phake/CallRecorder/VerifierMode/AtMost.php';
+require_once 'Phake/Mock/Resetter.php';
+require_once 'Phake/Mock/Freezer.php';
 
 /**
  * Phake - PHP Test Doubles Framework
@@ -77,6 +82,17 @@ class Phake
 	 * @var Phake_Facade
 	 */
 	private static $phake;
+	
+	/**
+	 * @var Phake_Client_IClient
+	 */
+	private static $client;
+	
+	/**
+	 * Constants identifying supported clients
+	 */
+	const CLIENT_DEFAULT = 'DEFAULT';
+	const CLIENT_PHPUNIT = 'PHPUNIT';
 
 	/**
 	 * Returns a new mock object based on the given class name.
@@ -133,19 +149,20 @@ class Phake
 
 	/**
 	 * Creates a new verifier for the given mock object.
-	 * @param Phake_CallRecorder_ICallRecorderContainer $mock
+	 * @param Phake_IMock $mock
 	 * @return Phake_CallRecorder_VerifierProxy
 	 */
-	public static function verify(Phake_CallRecorder_ICallRecorderContainer $mock, Phake_CallRecorder_IVerifierMode $mode = null)
+	public static function verify(Phake_IMock $mock, Phake_CallRecorder_IVerifierMode $mode = null)
 	{
 		if (is_null($mode))
 		{
 			$mode = self::times(1);
 		}
 
-		$verifier = self::getPhake()->verify($mock);
+		$reader = new Phake_MockReader();
+		$verifier = new Phake_CallRecorder_Verifier($reader->getCallRecorder($mock), $mock);
 
-		return new Phake_Proxies_VerifierProxy($verifier, new Phake_Matchers_Factory(), $mode);
+		return new Phake_Proxies_VerifierProxy($verifier, new Phake_Matchers_Factory(), $mode, self::getClient(), $reader);
 	}
 
 	/**
@@ -157,7 +174,7 @@ class Phake
 	{
 		$arguments = func_get_args();
 		$factory = new Phake_Matchers_Factory();
-		return new Phake_Proxies_CallVerifierProxy($factory->createMatcherArray($arguments));
+		return new Phake_Proxies_CallVerifierProxy($factory->createMatcherArray($arguments), new Phake_MockReader(), self::getClient());
 	}
 
 	/**
@@ -180,7 +197,10 @@ class Phake
 	 */
 	public static function verifyNoFurtherInteraction(Phake_IMock $mock)
 	{
-		$mock->__PHAKE_freezeMock();
+		$mockReader = new Phake_MockReader();
+		$mockFreezer = new Phake_Mock_Freezer($mockReader);
+		
+		$mockFreezer->freeze($mock, self::getClient());
 	}
 
 	/**
@@ -189,7 +209,8 @@ class Phake
 	 */
 	public static function verifyNoInteraction(Phake_IMock $mock)
 	{
-		$callRecorder = $mock->__PHAKE_getCallRecorder();
+		$reader = new Phake_MockReader();
+		$callRecorder = $reader->getCallRecorder($mock);
 
 		if (count($callRecorder->getAllCalls()))
 		{
@@ -219,12 +240,12 @@ class Phake
 
 	/**
 	 * Returns a new stubber for the given mock object.
-	 * @param Phake_Stubber_IStubbable $mock
+	 * @param Phake_IMock $mock
 	 * @return Phake_Proxies_StubberProxy
 	 */
-	public static function when(Phake_Stubber_IStubbable $mock)
+	public static function when(Phake_IMock $mock)
 	{
-		return new Phake_Proxies_StubberProxy($mock, new Phake_Matchers_Factory());
+		return new Phake_Proxies_StubberProxy($mock, new Phake_Matchers_Factory(), new Phake_MockReader());
 	}
 
 	/**
@@ -235,7 +256,7 @@ class Phake
 	{
 		$arguments = func_get_args();
 		$factory = new Phake_Matchers_Factory();
-		return new Phake_Proxies_CallStubberProxy($factory->createMatcherArray($arguments));
+		return new Phake_Proxies_CallStubberProxy($factory->createMatcherArray($arguments), new Phake_MockReader());
 	}
 
 	/**
@@ -244,7 +265,10 @@ class Phake
 	 */
 	public static function reset(Phake_IMock $mock)
 	{
-		$mock->__PHAKE_resetMock();
+		$mockReader = new Phake_MockReader();
+		$mockResetter = new Phake_Mock_Resetter($mockReader);
+
+		$mockResetter->reset($mock);
 	}
 
 	/**
@@ -367,6 +391,38 @@ class Phake
 	public static function anyParameters()
 	{
 		return new Phake_Matchers_AnyParameters();
+	}
+	
+	/**
+	 * Returns the client currently being used by Phake
+	 * 
+	 * @return Phake_Client_IClient
+	 */
+	public static function getClient()
+	{
+		return self::$client;
+	}
+	
+	/**
+	 * Sets the client currently being used by Phake.
+	 * 
+	 * Accepts either an instance of a Phake_Client_IClient object OR a string identifying such an object.
+	 * @param Phake_Client_IClient|string $client
+	 */
+	public static function setClient($client)
+	{
+		if ($client instanceof Phake_Client_IClient)
+		{
+			self::$client = $client;
+		}
+		elseif ($client == self::CLIENT_PHPUNIT)
+		{
+			self::$client = new Phake_Client_PHPUnit();
+		}
+		else
+		{
+			self::$client = new Phake_Client_Default();
+		}
 	}
 }
 

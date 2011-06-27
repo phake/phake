@@ -30,10 +30,10 @@
    <file baseinstalldir="/" name="Phake.php" role="php" />
    <file baseinstalldir="/" name="Phake/Facade.php" role="php" />
    <file baseinstalldir="/" name="Phake/IMock.php" role="php" />
+   <file baseinstalldir="/" name="Phake/MockReader.php" role="php" />
    <file baseinstalldir="/" name="Phake/CallRecorder/Call.php" role="php" />
    <file baseinstalldir="/" name="Phake/CallRecorder/CallExpectation.php" role="php" />
    <file baseinstalldir="/" name="Phake/CallRecorder/CallInfo.php" role="php" />
-   <file baseinstalldir="/" name="Phake/CallRecorder/ICallRecorderContainer.php" role="php" />
    <file baseinstalldir="/" name="Phake/CallRecorder/IVerificationFailureHandler.php" role="php" />
    <file baseinstalldir="/" name="Phake/CallRecorder/IVerifierMode.php" role="php" />
    <file baseinstalldir="/" name="Phake/CallRecorder/OrderVerifier.php" role="php" />
@@ -46,6 +46,15 @@
    <file baseinstalldir="/" name="Phake/CallRecorder/VerifierMode/Result.php" role="php" />
    <file baseinstalldir="/" name="Phake/CallRecorder/VerifierMode/Times.php" role="php" />
    <file baseinstalldir="/" name="Phake/ClassGenerator/MockClass.php" role="php" />
+   <file baseinstalldir="/" name="Phake/ClassGenerator/InvocationHandler/CallRecorder.php" role="php" />
+   <file baseinstalldir="/" name="Phake/ClassGenerator/InvocationHandler/Composite.php" role="php" />
+   <file baseinstalldir="/" name="Phake/ClassGenerator/InvocationHandler/FrozenObjectCheck.php" role="php" />
+   <file baseinstalldir="/" name="Phake/ClassGenerator/InvocationHandler/IInvocationHandler.php" role="php" />
+   <file baseinstalldir="/" name="Phake/ClassGenerator/InvocationHandler/MagicCallRecorder.php" role="php" />
+   <file baseinstalldir="/" name="Phake/ClassGenerator/InvocationHandler/StubCaller.php" role="php" />
+   <file baseinstalldir="/" name="Phake/Client/Default.php" role="php" />
+   <file baseinstalldir="/" name="Phake/Client/IClient.php" role="php" />
+   <file baseinstalldir="/" name="Phake/Client/PHPUnit.php" role="php" />
    <file baseinstalldir="/" name="Phake/Matchers/AnyParameters.php" role="php" />
    <file baseinstalldir="/" name="Phake/Matchers/ArgumentCaptor.php" role="php" />
    <file baseinstalldir="/" name="Phake/Matchers/EqualsMatcher.php" role="php" />
@@ -55,6 +64,9 @@
    <file baseinstalldir="/" name="Phake/Matchers/MethodMatcher.php" role="php" />
    <file baseinstalldir="/" name="Phake/Matchers/PHPUnitConstraintAdapter.php" role="php" />
    <file baseinstalldir="/" name="Phake/Matchers/ReferenceSetter.php" role="php" />
+   <file baseinstalldir="/" name="Phake/Mock/Freezer.php" role="php" />
+   <file baseinstalldir="/" name="Phake/Mock/Resetter.php" role="php" />
+   <file baseinstalldir="/" name="Phake/PHPUnit/VerifierResultConstraint.php" role="php" />
    <file baseinstalldir="/" name="Phake/Proxies/AnswerBinderProxy.php" role="php" />
    <file baseinstalldir="/" name="Phake/Proxies/AnswerCollectionProxy.php" role="php" />
    <file baseinstalldir="/" name="Phake/Proxies/CallStubberProxy.php" role="php" />
@@ -68,7 +80,6 @@
    <file baseinstalldir="/" name="Phake/Stubber/IAnswerBinder.php" role="php" />
    <file baseinstalldir="/" name="Phake/Stubber/IAnswerContainer.php" role="php" />
    <file baseinstalldir="/" name="Phake/Stubber/IAnswerDelegate.php" role="php" />
-   <file baseinstalldir="/" name="Phake/Stubber/IStubbable.php" role="php" />
    <file baseinstalldir="/" name="Phake/Stubber/SelfBindingAnswerBinder.php" role="php" />
    <file baseinstalldir="/" name="Phake/Stubber/StubMapper.php" role="php" />
    <file baseinstalldir="/" name="Phake/Stubber/Answers/ExceptionAnswer.php" role="php" />

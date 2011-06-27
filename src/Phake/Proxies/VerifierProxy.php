@@ -71,16 +71,32 @@ class Phake_Proxies_VerifierProxy
 	 * @var Phake_CallRecorder_IVerifierMode
 	 */
 	private $mode;
+	
+	/**
+	 *
+	 * @var Phake_Client_IClient 
+	 */
+	private $client;
+	
+	/**
+	 * @var Phake_MockReader
+	 */
+	private $mockReader;
 
 	/**
 	 * @param Phake_CallRecorder_Verifier $verifier
 	 * @param Phake_Matchers_Factory $matcherFactory
+	 * @param Phake_CallRecorder_IVerifierMode $mode
+	 * @param Phake_Client_IClient $client
+	 * @param Phake_MockReader $mockReader
 	 */
-	public function __construct(Phake_CallRecorder_Verifier $verifier, Phake_Matchers_Factory $matcherFactory, Phake_CallRecorder_IVerifierMode $mode)
+	public function __construct(Phake_CallRecorder_Verifier $verifier, Phake_Matchers_Factory $matcherFactory, Phake_CallRecorder_IVerifierMode $mode, Phake_Client_IClient $client, Phake_MockReader $mockReader)
 	{
 		$this->verifier = $verifier;
 		$this->matcherFactory = $matcherFactory;
 		$this->mode = $mode;
+		$this->client = $client;
+		$this->mockReader = $mockReader;
 	}
 
 	/**
@@ -90,18 +106,11 @@ class Phake_Proxies_VerifierProxy
 	 */
 	public function __call($method, array $arguments)
 	{
-		$expectation = new Phake_CallRecorder_CallExpectation($this->verifier->getObject(), $method, $this->matcherFactory->createMatcherArray($arguments), $this->mode);
+		$expectation = new Phake_CallRecorder_CallExpectation($this->verifier->getObject(), $method, $this->matcherFactory->createMatcherArray($arguments), $this->mode, $this->mockReader);
 		
 		$result = $this->verifier->verifyCall($expectation);
 		
-		if ($result->getVerified())
-		{
-			return $result->getMatchedCalls();
-		}
-		else
-		{
-			throw new Exception($result->getFailureDescription());
-		}
+		return $this->client->processVerifierResult($result);
 	}
 }
 

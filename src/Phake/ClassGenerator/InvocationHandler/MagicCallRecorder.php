@@ -1,8 +1,9 @@
 <?php
-/* 
+
+/*
  * Phake - Mocking Framework
  * 
- * Copyright (c) 2010-2011, Mike Lively <m@digitalsandwich.com>
+ * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -42,18 +43,35 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+require_once('Phake/ClassGenerator/InvocationHandler/IInvocationHandler.php');
+require_once('Phake/CallRecorder/Call.php');
+
 /**
- * An interface for stubbable objects
- * @author Mike Lively <m@digitalsandwich.com>
+ * Records calls to a mock object's call recorder for the magic __call method.
+ * 
+ * If the invocation isn't of __call...does nothing.
  */
-interface Phake_Stubber_IStubbable
+class Phake_ClassGenerator_InvocationHandler_MagicCallRecorder implements Phake_ClassGenerator_InvocationHandler_IInvocationHandler
 {
 	/**
-	 * Adds an answer to a stubbable object for the given method name.
-	 * @param Phake_Stubber_AnswerCollection $answer
-	 * @param Phake_Matchers_MethodMatcher $method
+	 * @var Phake_MockReader
 	 */
-	public function __PHAKE_addAnswer(Phake_Stubber_AnswerCollection $answer, Phake_Matchers_MethodMatcher $method);
-}
+	private $mockReader;
+	
+	/**
+	 * @param Phake_MockReader $mockReader 
+	 */
+	public function __construct(Phake_MockReader $mockReader)
+	{
+		$this->mockReader = $mockReader;
+	}
 
+	public function invoke(Phake_IMock $mock, $method, array $arguments, array &$argumentReference)
+	{
+		if ($method == '__call')
+		{
+			$this->mockReader->getCallRecorder($mock)->recordCall(new Phake_CallRecorder_Call($mock, $arguments[0], $arguments[1], $this->mockReader));
+		}
+	}
+}
 ?>

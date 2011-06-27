@@ -44,6 +44,12 @@
 
 require_once 'Phake/CallRecorder/Call.php';
 require_once 'Phake/IMock.php';
+require_once 'Phake/MockReader.php';
+require_once('Phake/ClassGenerator/InvocationHandler/Composite.php');
+require_once('Phake/ClassGenerator/InvocationHandler/FrozenObjectCheck.php');
+require_once('Phake/ClassGenerator/InvocationHandler/CallRecorder.php');
+require_once('Phake/ClassGenerator/InvocationHandler/MagicCallRecorder.php');
+require_once('Phake/ClassGenerator/InvocationHandler/StubCaller.php');
 
 /**
  * Creates and executes the code necessary to create a mock class.
@@ -78,65 +84,38 @@ class Phake_ClassGenerator_MockClass
 class {$newClassName} {$extends}
 	implements Phake_IMock {$implements}
 {
-	private \$__PHAKE_callRecorder;
+	public \$__PHAKE_callRecorder;
 
-	private \$__PHAKE_stubMapper;
+	public \$__PHAKE_stubMapper;
 
-	private \$__PHAKE_defaultAnswer;
+	public \$__PHAKE_defaultAnswer;
 
-	private \$__PHAKE_isFrozen = FALSE;
+	public \$__PHAKE_isFrozen = FALSE;
+	
+	public \$__PHAKE_name;
+	
+	private \$__PHAKE_handlerChain;
 
 	public function __construct(Phake_CallRecorder_Recorder \$callRecorder, Phake_Stubber_StubMapper \$stubMapper, Phake_Stubber_IAnswer \$defaultAnswer, array \$constructorArgs = null)
 	{
 		\$this->__PHAKE_callRecorder = \$callRecorder;
 		\$this->__PHAKE_stubMapper = \$stubMapper;
 		\$this->__PHAKE_defaultAnswer = \$defaultAnswer;
+		\$this->__PHAKE_name = '{$mockedClassName}';
+		\$this->__PHAKE_handlerChain = new Phake_ClassGenerator_InvocationHandler_Composite(array(
+			new Phake_ClassGenerator_InvocationHandler_FrozenObjectCheck(new Phake_MockReader()),
+			new Phake_ClassGenerator_InvocationHandler_CallRecorder(new Phake_MockReader()),
+			new Phake_ClassGenerator_InvocationHandler_MagicCallRecorder(new Phake_MockReader()),
+			new Phake_ClassGenerator_InvocationHandler_StubCaller(new Phake_MockReader()),
+		));
+
+		
+		\$this->__PHAKE_stubMapper->mapStubToMatcher(
+			new Phake_Stubber_AnswerCollection(new Phake_Stubber_Answers_StaticAnswer('Mock for {$mockedClassName}')), 
+			new Phake_Matchers_MethodMatcher('__toString', array())
+		);
+			
 		{$this->getConstructorChaining($mockedClass)}
-	}
-
-	public function __PHAKE_getCallRecorder()
-	{
-		return \$this->__PHAKE_callRecorder;
-	}
-
-	public function __PHAKE_addAnswer(Phake_Stubber_AnswerCollection \$answer, Phake_Matchers_MethodMatcher \$matcher)
-	{
-		\$this->__PHAKE_stubMapper->mapStubToMatcher(\$answer, \$matcher);
-	}
-
-	public function __PHAKE_resetMock()
-	{
-		\$this->__PHAKE_stubMapper->removeAllAnswers();
-		\$this->__PHAKE_callRecorder->removeAllCalls();
-		\$this->__PHAKE_isFrozen = FALSE;
-	}
-
-	public function __PHAKE_freezeMock()
-	{
-		\$this->__PHAKE_isFrozen = TRUE;
-	}
-
-	public function __PHAKE_getName()
-	{
-		return '{$mockedClassName}';
-	}
-
-	private function __PHAKE_processAnswer(\$methodName, \$args, \$answer)
-	{
-		if (\$answer instanceof Phake_Stubber_Answers_IDelegator)
-		{
-			\$delegate = \$answer->getAnswer();
-			\$callback = \$delegate->getCallBack(\$this, \$methodName, \$args);
-			\$arguments = \$delegate->getArguments(\$methodName, \$args);
-
-			\$realAnswer = call_user_func_array(\$callback, \$arguments);
-			\$answer->processAnswer(\$realAnswer);
-			return \$realAnswer;
-		}
-		else
-		{
-			return \$answer->getAnswer();
-		}
 	}
 
 	{$this->generateMockedMethods($mockedClass)}
@@ -174,19 +153,7 @@ class {$newClassName} {$extends}
 		{
 			if (!$method->isConstructor() && !$method->isDestructor() && !$method->isFinal())
 			{
-				if (strtolower($method->getName()) === '__call')
-				{
-					$methodDefs .= $this->implementCallMethod($method);
-				}
-				elseif (strtolower($method->getName()) === '__tostring')
-				{
-					$methodDefs .= $this->implementToStringMethod($method, $mockedClass->getName());
-				}
-				else
-				{
-					$methodDefs .= $this->implementMethod($method);
-				}
-				$methodDefs .= "\n";
+				$methodDefs .= $this->implementMethod($method) . "\n";
 			}
 		}
 
@@ -218,130 +185,25 @@ class {$newClassName} {$extends}
 		$methodDef = "
 	{$modifiers} function {$method->getName()}({$this->generateMethodParameters($method)})
 	{
-		if (\$this->__PHAKE_isFrozen)
-		{
-			throw new Exception('This object has been frozen.');
-		}
-
-		\$methodName = '{$method->getName()}';
-
 		\$args = array();
 		{$this->copyMethodParameters($method)}
-
-		\$argsCopy = func_get_args();
-	
-
-		\$this->__PHAKE_callRecorder->recordCall(new Phake_CallRecorder_Call(\$this, \$methodName, \$argsCopy));
-
-		\$stub = \$this->__PHAKE_stubMapper->getStubByCall(\$methodName, \$args);
-
-		if (\$stub !== NULL)
+		
+		\$answer = \$this->__PHAKE_handlerChain->invoke(\$this, '{$method->getName()}', func_get_args(), \$args);
+		
+		if (\$answer instanceof Phake_Stubber_Answers_IDelegator)
 		{
-			\$answer = \$stub->getAnswer();
+			\$delegate = \$answer->getAnswer();
+			\$callback = \$delegate->getCallBack(\$this, '{$method->getName()}', \$args);
+			\$arguments = \$delegate->getArguments('{$method->getName()}', \$args);
+
+			\$realAnswer = call_user_func_array(\$callback, \$arguments);
+			\$answer->processAnswer(\$realAnswer);
+			return \$realAnswer;
 		}
 		else
 		{
-			\$answer = \$this->__PHAKE_defaultAnswer;
+			return \$answer->getAnswer();
 		}
-
-		return \$this->__PHAKE_processAnswer(\$methodName, \$args, \$answer);
-	}
-";
-
-		return $methodDef;
-	}
-
-	/**
-	 * Creates the implementation of __call if necessary
-	 * @param ReflectionMethod $method
-	 */
-	protected function implementCallMethod(ReflectionMethod $method)
-	{
-		$modifiers = implode(' ', Reflection::getModifierNames($method->getModifiers() & ~ReflectionMethod::IS_ABSTRACT));
-
-		$methodDef = "
-	{$modifiers} function __call({$this->generateMethodParameters($method)})
-	{
-		if (\$this->__PHAKE_isFrozen)
-		{
-			throw new Exception('This object has been frozen.');
-		}
-
-		\$args = array();
-		{$this->copyMethodParameters($method)}
-
-		\$argsCopy = func_get_args();
-
-		\$this->__PHAKE_callRecorder->recordCall(new Phake_CallRecorder_Call(\$this, '__call' , \$argsCopy));
-		\$this->__PHAKE_callRecorder->recordCall(new Phake_CallRecorder_Call(\$this, \$argsCopy[0], \$argsCopy[1]));
-
-
-		\$stub = \$this->__PHAKE_stubMapper->getStubByCall(\$args[0], \$args[1]);
-
-		if (\$stub === NULL)
-		{
-			\$stub = \$this->__PHAKE_stubMapper->getStubByCall('__call', \$args);
-		}
-
-		if (\$stub !== NULL)
-		{
-			\$answer = \$stub->getAnswer();
-		}
-		else
-		{
-			\$answer = \$this->__PHAKE_defaultAnswer;
-		}
-
-		return \$this->__PHAKE_processAnswer('__call', \$args, \$answer);
-	}
-";
-
-		return $methodDef;
-	}
-
-	/**
-	 * Creates a mocked __toString() method if needed.
-	 *
-	 * Mocked objects with __toString() methods will currently ignore default answers, but can be stubbed to return any
-	 * value as normal.
-	 *
-	 * @param ReflectionMethod $method
-	 * @return string definition for the mocked __toString() method
-	 */
-	protected function implementToStringMethod(ReflectionMethod $method, $className)
-	{
-		$modifiers = implode(' ', Reflection::getModifierNames($method->getModifiers() & ~ReflectionMethod::IS_ABSTRACT));
-
-		$methodDef = "
-	{$modifiers} function {$method->getName()}({$this->generateMethodParameters($method)})
-	{
-		if (\$this->__PHAKE_isFrozen)
-		{
-			throw new Exception('This object has been frozen.');
-		}
-
-		\$methodName = '{$method->getName()}';
-
-		\$args = array();
-		{$this->copyMethodParameters($method)}
-
-		\$argsCopy = func_get_args();
-
-
-		\$this->__PHAKE_callRecorder->recordCall(new Phake_CallRecorder_Call(\$this, \$methodName, \$argsCopy));
-
-		\$stub = \$this->__PHAKE_stubMapper->getStubByCall(\$methodName, \$args);
-
-		if (\$stub !== NULL)
-		{
-			\$answer = \$stub->getAnswer();
-		}
-		else
-		{
-			\$answer = new Phake_Stubber_Answers_StaticAnswer('Mock for {$className}');
-		}
-
-		return \$this->__PHAKE_processAnswer(\$methodName, \$args, \$answer);
 	}
 ";
 
