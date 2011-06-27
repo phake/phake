@@ -44,8 +44,8 @@
 
 require_once 'Phake/Stubber/AnswerBinder.php';
 require_once 'Phake/Stubber/AnswerCollection.php';
-require_once 'Phake/Stubber/IStubbable.php';
 require_once 'Phake/Stubber/IAnswer.php';
+require_once 'Phake/Stubber/StubMapper.php';
 require_once 'Phake/Matchers/MethodMatcher.php';
 require_once 'Phake/Proxies/AnswerCollectionProxy.php';
 
@@ -62,7 +62,7 @@ class Phake_Stubber_AnswerBinderTest extends PHPUnit_Framework_TestCase
 	private $binder;
 
 	/**
-	 * @var Phake_Stubber_IStubbable
+	 * @var Phake_IMock
 	 */
 	private $mock;
 
@@ -70,25 +70,38 @@ class Phake_Stubber_AnswerBinderTest extends PHPUnit_Framework_TestCase
 	 * @var Phake_Matchers_MethodMatcher
 	 */
 	private $matcher;
+	
+	/**
+	 * @var Phake_Stubber_StubMapper
+	 */
+	private $stubMapper;
+	
+	/**
+	 * @var Phake_MockReader
+	 */
+	private $mockReader;
 
 	/**
 	 * Sets up the test fixture
 	 */
 	public function setUp()
 	{
-		$this->mock = $this->getMock('Phake_Stubber_IStubbable');
+		$this->mock = $this->getMock('Phake_IMock');
 		$this->matcher = $this->getMock('Phake_Matchers_MethodMatcher', array(), array(), '', FALSE);
-		$this->binder = new Phake_Stubber_AnswerBinder($this->mock, $this->matcher);
+		$this->stubMapper = Phake::mock('Phake_Stubber_StubMapper');
+		$this->mockReader = Phake::mock('Phake_MockReader');
+		
+		Phake::when($this->mockReader)->getStubMapper($this->anything())->thenReturn($this->stubMapper);
+		$this->binder = new Phake_Stubber_AnswerBinder($this->mock, $this->matcher, $this->mockReader);
 	}
 
 	public function testBindAnswer()
 	{
 		$answer = $this->getMock('Phake_Stubber_IAnswer');
-		$this->mock->expects($this->once())
-				->method('__PHAKE_addAnswer')
-				->with($this->equalTo(new Phake_Stubber_AnswerCollection($answer)), $this->equalTo($this->matcher));
 
 		$this->binder->bindAnswer($answer);
+		
+		Phake::verify($this->stubMapper)->mapStubToMatcher(new Phake_Stubber_AnswerCollection($answer), $this->matcher);
 	}
 
 	public function testBindAnswerReturnsAnswerCollectionBinder()

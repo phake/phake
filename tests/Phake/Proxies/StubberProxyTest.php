@@ -58,7 +58,7 @@ class Phake_Proxies_StubberProxyTest extends PHPUnit_Framework_TestCase
 	private $proxy;
 
 	/**
-	 * @var Phake_Stubber_IStubbable
+	 * @var Phake_IMock
 	 */
 	private $stubbable;
 
@@ -67,8 +67,8 @@ class Phake_Proxies_StubberProxyTest extends PHPUnit_Framework_TestCase
 	 */
 	public function setUp()
 	{
-		$this->stubbable = $this->getMock('Phake_Stubber_IStubbable');
-		$this->proxy = new Phake_Proxies_StubberProxy($this->stubbable, new Phake_Matchers_Factory());
+		$this->stubbable = $this->getMock('Phake_IMock');
+		$this->proxy = new Phake_Proxies_StubberProxy($this->stubbable, new Phake_Matchers_Factory(), new Phake_MockReader());
 	}
 
 	/**

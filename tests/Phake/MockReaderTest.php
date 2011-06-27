@@ -1,26 +1,27 @@
 <?php
+
 /*
  * Phake - Mocking Framework
- *
- * Copyright (c) 2010-2011, Mike Lively <m@digitalsandwich.com>
+ * 
+ * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
  * All rights reserved.
- *
+ * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
- *
+ * 
  *  *  Redistributions of source code must retain the above copyright
  *     notice, this list of conditions and the following disclaimer.
- *
+ * 
  *  *  Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in
  *     the documentation and/or other materials provided with the
  *     distribution.
- *
+ * 
  *  *  Neither the name of Mike Lively nor the names of his
  *     contributors may be used to endorse or promote products derived
  *     from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -33,7 +34,7 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- *
+ * 
  * @category   Testing
  * @package    Phake
  * @author     Mike Lively <m@digitalsandwich.com>
@@ -42,67 +43,64 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Proxies/CallVerifierProxy.php';
-require_once 'Phake/MockReader.php';
-require_once 'Phake/Client/Default.php';
-require_once 'Phake/CallRecorder/Verifier.php';
-require_once 'Phake/CallRecorder/CallExpectation.php';
-require_once 'PHPUnit/Framework/Constraint.php';
-require_once 'Phake/Matchers/PHPUnitConstraintAdapter.php';
-if (HAMCREST_LOADED) require_once 'Hamcrest/Matcher.php';
-require_once 'Phake/Matchers/HamcrestMatcherAdapter.php';
-require_once 'Phake/Matchers/EqualsMatcher.php';
-require_once 'Phake/Matchers/Factory.php';
+require_once('Phake/MockReader.php');
+require_once('Phake/CallRecorder/Recorder.php');
+require_once('Phake/Stubber/StubMapper.php');
 
-class Phake_Proxies_CallVerifierProxyTest extends PHPUnit_Framework_TestCase
+class Phake_MockReaderTest extends PHPUnit_Framework_TestCase
 {
-	/**
-	 * @var Phake_Proxies_CallVerifierProxy
-	 */
-	private $proxy;
-
-	/**
-	 * @var Phake_CallRecorder_Recorder
-	 */
-	private $obj;
-	
 	/**
 	 * @var Phake_MockReader
 	 */
-	private $mockReader;
+	private $reader;
 	
 	/**
-	 * @var Phake_Client_IClient
+	 * @var Phake_IMock
 	 */
-	private $client;
-
-	/**
-	 * Sets up test fixture
-	 */
+	private $mock;
+	
 	public function setUp()
 	{
-		$this->client = new Phake_Client_Default();
-		$this->matcher1 = Phake::mock('Phake_Matchers_IArgumentMatcher');
-		$this->obj = new Phake_CallRecorder_Recorder();
-		$this->mockReader = Phake::mock('Phake_MockReader');
-		Phake::when($this->mockReader)->getCallRecorder(Phake::anyParameters())->thenReturn($this->obj);
-		$this->proxy = new Phake_Proxies_CallVerifierProxy(array(new Phake_Matchers_EqualsMatcher('foo'), new Phake_Matchers_EqualsMatcher(array())), $this->mockReader, $this->client);
-		
+		$this->reader = new Phake_MockReader();
+		$this->mock = $this->getMock('Phake_IMock');
 	}
-
-	/**
-	 * Tests setting a stub on a method in the stubbable object
-	 */
-	public function testIsCalledOn()
+	
+	public function testGetCallRecorder()
 	{
-		$mock = $this->getMock('Phake_IMock');
-
-		$this->obj->recordCall(new Phake_CallRecorder_Call($mock, '__call', array('foo', array()), new Phake_MockReader()));
-
-		$verifier = $this->proxy->isCalledOn($mock);
-
-		$this->assertEquals(1, count($verifier));
+		$this->mock->__PHAKE_callRecorder = Phake::mock('Phake_CallRecorder_Recorder');
+		$this->assertSame($this->mock->__PHAKE_callRecorder, $this->reader->getCallRecorder($this->mock));
 	}
-}
+	
+	public function testGetName()
+	{
+		$this->mock->__PHAKE_name = 'PhakeMock';
+		$this->assertSame($this->mock->__PHAKE_name, $this->reader->getName($this->mock));
+	}
+	
+	public function testGetStubMapper()
+	{
+		$this->mock->__PHAKE_stubMapper = Phake::mock('Phake_Stubber_StubMapper');
+		$this->assertSame($this->mock->__PHAKE_stubMapper, $this->reader->getStubMapper($this->mock));
+	}
+	
+	public function testGetDefaultAnswer()
+	{
+		$this->mock->__PHAKE_defaultAnswer = Phake::mock('Phake_Stubber_IAnswer');
+		$this->assertSame($this->mock->__PHAKE_defaultAnswer, $this->reader->getDefaultAnswer($this->mock));
+	}
+	
+	public function testIsObjectFrozen()
+	{
+		$this->mock->__PHAKE_isFrozen = TRUE;
+		$this->assertTrue($this->reader->isObjectFrozen($this->mock));
+	}
 
+	public function testSetIsObjectFrozen()
+	{
+		$this->mock->__PHAKE_isFrozen = TRUE;
+		$this->reader->setIsObjectFrozen($this->mock, FALSE);
+		$this->assertFalse($this->mock->__PHAKE_isFrozen);
+	}
+
+}
 ?>

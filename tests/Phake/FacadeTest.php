@@ -45,7 +45,6 @@
 require_once 'Phake/Facade.php';
 require_once 'Phake/ClassGenerator/MockClass.php';
 require_once 'Phake/CallRecorder/Recorder.php';
-require_once 'Phake/CallRecorder/ICallRecorderContainer.php';
 require_once 'Phake/Stubber/StubMapper.php';
 require_once 'PhakeTest/MockedInterface.php';
 
@@ -128,21 +127,6 @@ class Phake_FacadeTest extends PHPUnit_Framework_TestCase
 
 		$this->facade->mock($mockedClass, $classGenerator, $recorder, $answer);
 	}
-
-	public function testVerifierInstantiatesVerifier()
-	{
-		$mock = $this->getMock('Phake_CallRecorder_ICallRecorderContainer');
-		$mode = $this->getMock('Phake_CallRecorder_IVerifierMode');
-
-		$recorder = $this->getMock('Phake_CallRecorder_Recorder');
-
-		$mock->expects($this->once())
-				->method('__PHAKE_getCallRecorder')
-				->will($this->returnValue($recorder));
-
-		$this->assertInstanceOf('Phake_CallRecorder_Verifier', $this->facade->verify($mock, $mode));
-	}
-
 
 	/**
 	 * Test that autoload doesn't get called on generated classes

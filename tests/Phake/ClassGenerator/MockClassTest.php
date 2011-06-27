@@ -125,7 +125,7 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 		$answer = $this->getMock('Phake_Stubber_IAnswer');
 		$mock = $this->classGen->instantiate($newClassName, $callRecorder, $stubMapper, $answer);
 
-		$this->assertSame($callRecorder, $mock->__PHAKE_getCallRecorder());
+		$this->assertSame($callRecorder, $mock->__PHAKE_callRecorder);
 	}
 
 	/**
@@ -146,7 +146,7 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 		/* @var $callRecorder Phake_CallRecorder_Recorder */
 		$callRecorder->expects($this->once())
 				->method('recordCall')
-				->with($this->equalTo(new Phake_CallRecorder_Call($mock, 'foo', array())));
+				->with($this->equalTo(new Phake_CallRecorder_Call($mock, 'foo', array(), new Phake_MockReader())));
 
 		$mock->foo();
 	}
@@ -169,7 +169,7 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 		/* @var $callRecorder Phake_CallRecorder_Recorder */
 		$callRecorder->expects($this->once())
 				->method('recordCall')
-				->with($this->equalTo(new Phake_CallRecorder_Call($mock, 'fooWithArgument', array('bar'))));
+				->with($this->equalTo(new Phake_CallRecorder_Call($mock, 'fooWithArgument', array('bar'), new Phake_MockReader())));
 
 		$mock->fooWithArgument('bar');
 	}
@@ -272,32 +272,7 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 				->method('mapStubToMatcher')
 				->with($this->equalTo($answerCollection), $this->equalTo($matcher));
 
-		$mock->__PHAKE_addAnswer($answerCollection, $matcher);
-	}
-
-	/**
-	 * Tests that resetting a mock will remove all answers and calls from the stub mapper and call
-	 * recorder
-	 */
-	public function testReset()
-	{
-		$newClassName = __CLASS__ . '_TestClass10';
-		$mockedClass = 'stdClass';
-
-		$this->classGen->generate($newClassName, $mockedClass);
-
-		$callRecorder = $this->getMock('Phake_CallRecorder_Recorder');
-		$stubMapper = $this->getMock('Phake_Stubber_StubMapper');
-		$answer = $this->getMock('Phake_Stubber_IAnswer');
-		$mock = $this->classGen->instantiate($newClassName, $callRecorder, $stubMapper, $answer);
-
-		$callRecorder->expects($this->once())
-				->method('removeAllCalls');
-
-		$stubMapper->expects($this->once())
-				->method('removeAllAnswers');
-
-		$mock->__PHAKE_resetMock();
+		$mock->__PHAKE_stubMapper->mapStubToMatcher($answerCollection, $matcher);
 	}
 
 	/**
@@ -459,8 +434,8 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 
 		$mock->foo('blah');
 
-		Phake::verify($callRecorder)->recordCall(new Phake_CallRecorder_Call($mock, 'foo', array('blah')));
-		Phake::verify($callRecorder)->recordCall(new Phake_CallRecorder_Call($mock, '__call', array('foo', array('blah'))));
+		Phake::verify($callRecorder)->recordCall(new Phake_CallRecorder_Call($mock, 'foo', array('blah'), new Phake_MockReader()));
+		Phake::verify($callRecorder)->recordCall(new Phake_CallRecorder_Call($mock, '__call', array('foo', array('blah')), new Phake_MockReader()));
 	}
 
 	public function testMagicCallChecksFallbackStub()
@@ -498,54 +473,6 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Tests that calling the freeze method on a mocked class will result in further calls throwing
-	 * an exception
-	 */
-	public function testMockFreezing()
-	{
-		$newClassName = __CLASS__ . '_TestClass14';
-		$mockedClass = 'PhakeTest_MockedClass';
-
-		$this->classGen->generate($newClassName, $mockedClass);
-
-		$callRecorder = $this->getMock('Phake_CallRecorder_Recorder');
-		$stubMapper = $this->getMock('Phake_Stubber_StubMapper');
-		$answer = $this->getMock('Phake_Stubber_IAnswer');
-		$mock = $this->classGen->instantiate($newClassName, $callRecorder, $stubMapper, $answer);
-
-		$client = Phake::mock('Phake_Client_IClient');
-		$mock->__PHAKE_freezeMock($client);
-		
-		Phake::verify($client)->processObjectFreeze();
-
-		$this->setExpectedException('Exception');
-
-		$mock->foo();
-	}
-
-	/**
-	 * Tests that calling the freeze method on a mocked class will not throw an error if the mock
-	 * is reset
-	 */
-	public function testMockFreezingResets()
-	{
-		$newClassName = __CLASS__ . '_TestClass15';
-		$mockedClass = 'PhakeTest_MockedClass';
-
-		$this->classGen->generate($newClassName, $mockedClass);
-
-		$callRecorder = $this->getMock('Phake_CallRecorder_Recorder');
-		$stubMapper = $this->getMock('Phake_Stubber_StubMapper');
-		$answer = $this->getMock('Phake_Stubber_IAnswer');
-		$mock = $this->classGen->instantiate($newClassName, $callRecorder, $stubMapper, $answer);
-
-		$mock->__PHAKE_freezeMock(Phake::mock('Phake_Client_IClient'));
-		$mock->__PHAKE_resetMock();
-
-		$mock->foo();
-	}
-
-	/**
 	 * Test retrieving mock name
 	 */
 	public function testMockName()
@@ -560,7 +487,7 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 		$answer = $this->getMock('Phake_Stubber_IAnswer');
 		$mock = $this->classGen->instantiate($newClassName, $callRecorder, $stubMapper, $answer);
 
-		$this->assertEquals('PhakeTest_MockedClass', $mock->__PHAKE_getName());
+		$this->assertEquals('PhakeTest_MockedClass', $mock->__PHAKE_name);
 	}
 
 	/**
@@ -605,7 +532,7 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 		$this->classGen->generate($newClassName, $mockedClass);
 		
 		$recorder = $this->getMock('Phake_CallRecorder_Recorder');
-		$mapper = $this->getMock('Phake_Stubber_StubMapper');
+		$mapper = new Phake_Stubber_StubMapper();
 		$answer = new Phake_Stubber_Answers_ParentDelegate();
 
 		$mock = $this->classGen->instantiate($newClassName, $recorder, $mapper, $answer);

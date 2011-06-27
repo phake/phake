@@ -43,6 +43,7 @@
  */
 
 require_once 'Phake/CallRecorder/CallExpectation.php';
+require_once 'Phake/MockReader.php';
 require_once 'Phake.php';
 
 class Phake_CallRecorder_CallExpectationTest extends PHPUnit_Framework_TestCase
@@ -50,9 +51,6 @@ class Phake_CallRecorder_CallExpectationTest extends PHPUnit_Framework_TestCase
 	public function testToString()
 	{
 		$mock = $this->getMock('Phake_IMock');
-		$mock->expects($this->any())
-				->method('__PHAKE_getName')
-				->will($this->returnValue('Phake_IMock'));
 		
 		$matcher1 = Phake::mock('Phake_Matchers_IArgumentMatcher');
 		Phake::when($matcher1)->__toString()->thenReturn('100');
@@ -60,8 +58,11 @@ class Phake_CallRecorder_CallExpectationTest extends PHPUnit_Framework_TestCase
 		Phake::when($matcher2)->__toString()->thenReturn('200');
 		$verifierMode = Phake::mock('Phake_CallRecorder_IVerifierMode');
 		Phake::when($verifierMode)->__toString()->thenReturn('2 times');
+		
+		$mockReader = Phake::mock('Phake_MockReader');
+		Phake::when($mockReader)->getName($this->anything())->thenReturn('Phake_IMock');
 
-		$expectation = new Phake_CallRecorder_CallExpectation($mock, 'method', array($matcher1, $matcher2), $verifierMode);
+		$expectation = new Phake_CallRecorder_CallExpectation($mock, 'method', array($matcher1, $matcher2), $verifierMode, $mockReader);
 		$this->assertEquals(
 			"Expected Phake_IMock->method(100, 200) to be called 2 times",
 			$expectation->__toString());

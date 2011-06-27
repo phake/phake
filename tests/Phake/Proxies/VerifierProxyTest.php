@@ -43,6 +43,7 @@
  */
 
 require_once 'Phake/Proxies/VerifierProxy.php';
+require_once 'Phake/MockReader.php';
 require_once 'Phake/CallRecorder/Verifier.php';
 require_once 'Phake/CallRecorder/VerifierResult.php';
 require_once 'Phake/CallRecorder/CallExpectation.php';
@@ -90,9 +91,8 @@ class Phake_Proxies_VerifierProxyTest extends PHPUnit_Framework_TestCase
 			Phake::mock('Phake_CallRecorder_CallInfo'),
 		);
 
-		$this->proxy = new Phake_Proxies_VerifierProxy($this->verifier, new Phake_Matchers_Factory(), $this->mode, $this->client);
+		$this->proxy = new Phake_Proxies_VerifierProxy($this->verifier, new Phake_Matchers_Factory(), $this->mode, $this->client, new Phake_MockReader());
 		$obj = $this->getMock('Phake_IMock');
-		$obj->expects($this->any())->method('__PHAKE_getName')->will($this->returnValue('mock'));
 		Phake::when($this->verifier)->getObject()->thenReturn($obj);
 		Phake::when($this->mode)->__toString()->thenReturn('exactly 1 times');
 		Phake::when($this->client)->processVerifierResult($this->anything())->thenReturn($this->matchedCalls);
