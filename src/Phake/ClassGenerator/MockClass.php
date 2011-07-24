@@ -67,14 +67,14 @@ class Phake_ClassGenerator_MockClass
 	 */
 	public function generate($newClassName, $mockedClassName)
 	{
+		$extends = '';
+		$implements = '';
 		if (class_exists($mockedClassName, TRUE))
 		{
 			$extends = "extends {$mockedClassName}";
-			$implements = '';
 		}
-		elseif (interface_exists($mockedClassName, TRUE))
+		elseif (interface_exists($mockedClassName, TRUE) && $mockedClassName != 'Phake_IMock')
 		{
-			$extends = '';
 			$implements = ", {$mockedClassName}";
 		}
 
