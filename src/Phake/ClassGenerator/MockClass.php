@@ -151,7 +151,7 @@ class {$newClassName} {$extends}
 		$filter = ReflectionMethod::IS_ABSTRACT | ReflectionMethod::IS_PROTECTED | ReflectionMethod::IS_PUBLIC | ~ReflectionMethod::IS_FINAL;
 		foreach ($mockedClass->getMethods($filter) as $method)
 		{
-			if (!$method->isConstructor() && !$method->isDestructor() && !$method->isFinal())
+			if (!$method->isConstructor() && !$method->isDestructor() && !$method->isFinal() && !$method->isStatic())
 			{
 				$methodDefs .= $this->implementMethod($method) . "\n";
 			}

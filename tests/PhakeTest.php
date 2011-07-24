@@ -44,6 +44,7 @@
 
 require_once('Phake.php');
 require_once('PhakeTest/AbstractClass.php');
+require_once('PhakeTest/StaticClass.php');
 require_once('PhakeTest/MockedClass.php');
 require_once('PhakeTest/MagicClass.php');
 require_once('PhakeTest/MockedConstructedClass.php');
@@ -1064,6 +1065,17 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 		$newAssertionCount = self::getCount();
 		
 		$this->assertGreaterThan($assertionCount, $newAssertionCount);
+	}
+	
+	public function testMockingStaticClass()
+	{
+		$this->markTestIncomplete('Need to implement mocking for static methods. Currently, neither stubbing or verification works');
+		$mock = Phake::mock('PhakeTest_StaticClass');
+		
+		Phake::when($mock)->staticMethod()->thenReturn('bar');
+		
+		$this->assertEquals('bar', $mock->staticMethod());
+		Phake::verify($mock)->staticMethod();
 	}
 }
 
