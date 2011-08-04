@@ -52,6 +52,13 @@ require_once 'Phake/Stubber/StubMapper.php';
  */
 class Phake_Facade
 {
+	private $cachedClasses;
+	
+	public function __construct()
+	{
+	  $this->cachedClasses = array();
+	}
+	
 	/**
 	 * Creates a new mock class than can be stubbed and verified.
 	 *
@@ -67,10 +74,16 @@ class Phake_Facade
 		{
 			throw new InvalidArgumentException("The class / interface [{$mockedClass} does not exist");
 		}
-
-		$newClassName = $this->generateUniqueClassName($mockedClass);
-		$mockGenerator->generate($newClassName, $mockedClass);
-		return $mockGenerator->instantiate($newClassName, $callRecorder, new Phake_Stubber_StubMapper(), $defaultAnswer, $constructorArgs);
+		
+    if(!isset($this->cachedClasses[$mockedClass]))
+    {
+      $newClassName = $this->generateUniqueClassName($mockedClass);
+      $mockGenerator->generate($newClassName, $mockedClass);
+ 
+      $this->cachedClasses[$mockedClass] = $newClassName;
+    }
+       
+    return $mockGenerator->instantiate($this->cachedClasses[$mockedClass], $callRecorder, new Phake_Stubber_StubMapper(), $defaultAnswer, $constructorArgs);
 	}
 
 	/**
