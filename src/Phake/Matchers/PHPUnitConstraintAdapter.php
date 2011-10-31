@@ -73,7 +73,7 @@ class Phake_Matchers_PHPUnitConstraintAdapter implements Phake_Matchers_IArgumen
 	 */
 	public function matches(&$argument)
 	{
-		return $this->constraint->evaluate($argument);
+		return $this->constraint->evaluate($argument, '', true);
 	}
 
 	public function __toString()
