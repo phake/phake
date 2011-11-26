@@ -2,26 +2,26 @@
 
 /*
  * Phake - Mocking Framework
- * 
+ *
  * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
- * 
+ *
  *  *  Redistributions of source code must retain the above copyright
  *     notice, this list of conditions and the following disclaimer.
- * 
+ *
  *  *  Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in
  *     the documentation and/or other materials provided with the
  *     distribution.
- * 
+ *
  *  *  Neither the name of Mike Lively nor the names of his
  *     contributors may be used to endorse or promote products derived
  *     from this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -34,7 +34,7 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  * @category   Testing
  * @package    Phake
  * @author     Mike Lively <m@digitalsandwich.com>
@@ -43,28 +43,73 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once('Phake/Client/IClient.php');
-require_once('Phake/Exception/VerificationException.php');
+require_once('Phake/PHPUnit/VerifierResultConstraintV3d6.php');
+require_once('Phake/CallRecorder/VerifierResult.php');
 
-/**
- * The default client adapter used by Phake.
- */
-class Phake_Client_Default implements Phake_Client_IClient
+class Phake_PHPUnit_VerifierResultConstraintV3d6Test extends PHPUnit_Framework_TestCase
 {
-	public function processVerifierResult(Phake_CallRecorder_VerifierResult $result)
+	private $constraint;
+
+	public function setUp()
 	{
-		if ($result->getVerified())
+        if (version_compare('3.6.0', PHPUnit_Runner_Version::id()) == 1)
+        {
+            $this->markTestSkipped('The tested class is not compatible with current version of PHPUnit.');
+        }
+		$this->constraint = new Phake_PHPUnit_VerifierResultConstraintV3d6($this->verifier);
+	}
+
+	public function testExtendsPHPUnitConstraint()
+	{
+		$this->assertInstanceOf('PHPUnit_Framework_Constraint', $this->constraint);
+	}
+
+	public function testEvaluateReturnsTrueIfVerifyResultIsTrue()
+	{
+		$result = new Phake_CallRecorder_VerifierResult(TRUE, array());
+		$this->assertTrue($this->constraint->evaluate($result, '', TRUE));
+	}
+
+	public function testEvaluateReturnsFalseWhenVerifierReturnsFalse()
+	{
+		$result = new Phake_CallRecorder_VerifierResult(FALSE, array());
+		$this->assertFalse($this->constraint->evaluate($result, '', TRUE));
+	}
+
+	/**
+	 * @expectedException InvalidArgumentException
+	 */
+	public function testEvaluateThrowsWhenArgumentIsNotAResult()
+	{
+		$this->constraint->evaluate('');
+	}
+
+	public function testToString()
+	{
+		$this->assertEquals('is called', $this->constraint->toString());
+	}
+
+	public function testCustomFailureDescriptionReturnsDescriptionFromResult()
+	{
+		$result = new Phake_CallRecorder_VerifierResult(FALSE, array(), "The call failed!");
+
+		try
 		{
-			return $result->getMatchedCalls();
+			$this->constraint->evaluate($result, '');
+			$this->fail('expected an exception to be thrown');
 		}
-		else
+		catch (PHPUnit_Framework_ExpectationFailedException $e)
 		{
-			throw new Phake_Exception_VerificationException($result->getFailureDescription());
+			$this->assertEquals('Failed asserting that The call failed!.', $e->getMessage());
 		}
 	}
-	
-	public function processObjectFreeze()
+
+	/**
+	 * @expectedException InvalidArgumentException
+	 */
+	public function testFailThrowsWhenArgumentIsNotAResult()
 	{
+		$this->constraint->evaluate('', '');
 	}
 }
 ?>

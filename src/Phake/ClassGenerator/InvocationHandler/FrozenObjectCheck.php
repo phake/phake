@@ -44,6 +44,7 @@
  */
 
 require_once('Phake/ClassGenerator/InvocationHandler/IInvocationHandler.php');
+require_once('Phake/Exception/VerificationException.php');
 
 /**
  * Tests a mock to see if it is frozen.
@@ -67,7 +68,7 @@ class Phake_ClassGenerator_InvocationHandler_FrozenObjectCheck implements Phake_
 	{
 		if ($this->mockReader->isObjectFrozen($mock))
 		{
-			throw new Exception('This object has been frozen.');
+			throw new Phake_Exception_VerificationException('This object has been frozen.');
 		}
 	}
 }

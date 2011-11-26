@@ -44,7 +44,6 @@
  */
 
 require_once('Phake/Client/IClient.php');
-require_once('Phake/PHPUnit/VerifierResultConstraint.php');
 
 /**
  * The client adapter used for PHPUnit.
@@ -56,7 +55,7 @@ class Phake_Client_PHPUnit implements Phake_Client_IClient
 {
 	public function processVerifierResult(Phake_CallRecorder_VerifierResult $result)
 	{
-		PHPUnit_Framework_Assert::assertThat($result, new Phake_PHPUnit_VerifierResultConstraint());
+		PHPUnit_Framework_Assert::assertThat($result, $this->getConstraint());
 		
 		return $result->getMatchedCalls();
 	}
@@ -65,5 +64,19 @@ class Phake_Client_PHPUnit implements Phake_Client_IClient
 	{
 		PHPUnit_Framework_Assert::assertThat(TRUE, PHPUnit_Framework_Assert::isTrue());
 	}
+
+    private function getConstraint()
+    {
+        if (version_compare('3.6.0', PHPUnit_Runner_Version::id()) == 1)
+        {
+            require_once('Phake/PHPUnit/VerifierResultConstraint.php');
+            return new Phake_PHPUnit_VerifierResultConstraint();
+        }
+        else
+        {
+            require_once('Phake/PHPUnit/VerifierResultConstraintV3d6.php');
+            return new Phake_PHPUnit_VerifierResultConstraintV3d6();
+        }
+    }
 }
 ?>

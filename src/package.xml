@@ -55,6 +55,7 @@
    <file baseinstalldir="/" name="Phake/Client/Default.php" role="php" />
    <file baseinstalldir="/" name="Phake/Client/IClient.php" role="php" />
    <file baseinstalldir="/" name="Phake/Client/PHPUnit.php" role="php" />
+   <file baseinstalldir="/" name="Phake/Exception/VerificationException.php" role="php" />
    <file baseinstalldir="/" name="Phake/Matchers/AnyParameters.php" role="php" />
    <file baseinstalldir="/" name="Phake/Matchers/ArgumentCaptor.php" role="php" />
    <file baseinstalldir="/" name="Phake/Matchers/EqualsMatcher.php" role="php" />
@@ -67,6 +68,7 @@
    <file baseinstalldir="/" name="Phake/Mock/Freezer.php" role="php" />
    <file baseinstalldir="/" name="Phake/Mock/Resetter.php" role="php" />
    <file baseinstalldir="/" name="Phake/PHPUnit/VerifierResultConstraint.php" role="php" />
+   <file baseinstalldir="/" name="Phake/PHPUnit/VerifierResultConstraintV3d6.php" role="php" />
    <file baseinstalldir="/" name="Phake/Proxies/AnswerBinderProxy.php" role="php" />
    <file baseinstalldir="/" name="Phake/Proxies/AnswerCollectionProxy.php" role="php" />
    <file baseinstalldir="/" name="Phake/Proxies/CallStubberProxy.php" role="php" />

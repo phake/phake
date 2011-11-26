@@ -45,6 +45,7 @@
 
 require_once('Phake/Client/Default.php');
 require_once('Phake/CallRecorder/VerifierResult.php');
+require_once('Phake/Exception/VerificationException.php');
 
 class Phake_Client_DefaultTest extends PHPUnit_Framework_TestCase
 {
@@ -71,7 +72,7 @@ class Phake_Client_DefaultTest extends PHPUnit_Framework_TestCase
 	{
 		$result = new Phake_CallRecorder_VerifierResult(FALSE, array(), 'failure message');
 		
-		$this->setExpectedException('Exception', 'failure message');
+		$this->setExpectedException('Phake_Exception_VerificationException', 'failure message');
 		$this->client->processVerifierResult($result);
 	}
 }

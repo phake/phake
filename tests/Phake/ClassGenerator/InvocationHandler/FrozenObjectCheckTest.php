@@ -44,6 +44,7 @@
  */
 
 require_once('Phake/ClassGenerator/InvocationHandler/FrozenObjectCheck.php');
+require_once('Phake/Exception/VerificationException.php');
 
 class Phake_ClassGenerator_InvocationHandler_FrozenObjectCheckTest extends PHPUnit_Framework_TestCase
 {
@@ -89,7 +90,7 @@ class Phake_ClassGenerator_InvocationHandler_FrozenObjectCheckTest extends PHPUn
 		$mock = $this->getMock('Phake_IMock');
 		Phake::when($this->mockReader)->isObjectFrozen($this->anything())->thenReturn(TRUE);
 		
-		$this->setExpectedException('Exception', 'This object has been frozen.');
+		$this->setExpectedException('Phake_Exception_VerificationException', 'This object has been frozen.');
 		$ref = array();
 		$this->handler->invoke($mock, 'foo', array(), $ref);
 	}

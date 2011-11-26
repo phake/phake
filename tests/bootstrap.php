@@ -52,5 +52,5 @@ define('HAMCREST_LOADED', @fopen('hamcrest.php', 'r', true));
 if (HAMCREST_LOADED) include_once('hamcrest.php');
 
 include_once('Phake.php');
-Phake::setClient(Phake::CLIENT_PHPUNIT);
+Phake::setClient(Phake::CLIENT_DEFAULT);
 ?>
