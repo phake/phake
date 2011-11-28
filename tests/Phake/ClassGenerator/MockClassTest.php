@@ -56,6 +56,7 @@ require_once 'PhakeTest/MockedConstructedClass.php';
 require_once 'PhakeTest/MockedInterface.php';
 require_once 'PhakeTest/FinalMethod.php';
 require_once 'PhakeTest/ToStringMethod.php';
+require_once 'PhakeTest/DestructorClass.php';
 
 /**
  * Description of MockClass
@@ -541,6 +542,21 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 
 		$this->assertNotNull($string, '__toString() should not return NULL');
 		$this->assertEquals('Mock for PhakeTest_ToStringMethod', $string);
+	}
+	
+	public function testDestructMocked()
+	{
+		$mock = $newClassName = __CLASS__ . '_TestClass' . uniqid();
+		$mockedClass = 'PhakeTest_DestructorClass';
+		$this->classGen->generate($newClassName, $mockedClass);
+		
+		$recorder = $this->getMock('Phake_CallRecorder_Recorder');
+		$mapper = new Phake_Stubber_StubMapper();
+		$answer = new Phake_Stubber_Answers_ParentDelegate();
+		
+		$mock = $this->classGen->instantiate($newClassName, $recorder, $mapper, $answer);
+		
+		unset($mock);
 	}
 }
 
