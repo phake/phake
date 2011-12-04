@@ -66,6 +66,7 @@ require_once 'Phake/CallRecorder/VerifierMode/AtLeast.php';
 require_once 'Phake/CallRecorder/VerifierMode/AtMost.php';
 require_once 'Phake/Mock/Resetter.php';
 require_once 'Phake/Mock/Freezer.php';
+require_once 'Phake/Exception/VerificationException.php';
 
 /**
  * Phake - PHP Test Doubles Framework
@@ -187,7 +188,7 @@ class Phake
 
 		if (!$orderVerifier->verifyCallsInOrder(self::pullPositionsFromCallInfos($calls)))
 		{
-			throw new Exception("Calls not made in order");
+			throw new Phake_Exception_VerificationException("Calls not made in order");
 		}
 	}
 
@@ -214,7 +215,7 @@ class Phake
 
 		if (count($callRecorder->getAllCalls()))
 		{
-			throw new Exception('Calls should not have been made against this mock');
+			throw new Phake_Exception_VerificationException('Calls should not have been made against this mock');
 		}
 	}
 
