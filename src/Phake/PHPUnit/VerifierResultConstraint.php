@@ -48,7 +48,7 @@
  */
 class Phake_PHPUnit_VerifierResultConstraint extends PHPUnit_Framework_Constraint
 {
-	public function evaluate($other) 
+	public function matches($other)
 	{
 		if (!$other instanceof Phake_CallRecorder_VerifierResult)
 		{
@@ -62,14 +62,17 @@ class Phake_PHPUnit_VerifierResultConstraint extends PHPUnit_Framework_Constrain
 		return 'is called';
 	}
 
-	protected function customFailureDescription($other, $description, $not)
+	protected function fail($other, $description, PHPUnit_Framework_ComparisonFailure $comparisonFailure = NULL)
 	{
 		if (!$other instanceof Phake_CallRecorder_VerifierResult)
 		{
 			throw new InvalidArgumentException("You must pass an instance of Phake_CallRecorder_VerifierResult");
 		}
 
-		return $other->getFailureDescription();
+		throw new PHPUnit_Framework_ExpectationFailedException(
+			$other->getFailureDescription(),
+			$comparisonFailure
+		);
 	}
 }
 ?>
