@@ -117,6 +117,8 @@ class {$newClassName} {$extends}
 			
 		{$this->getConstructorChaining($mockedClass)}
 	}
+	
+	public function __destruct() {}
 
 	{$this->generateMockedMethods($mockedClass)}
 }
