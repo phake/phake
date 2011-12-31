@@ -58,7 +58,7 @@ class Phake_CallRecorder_RecorderTest extends PHPUnit_Framework_TestCase
 	{
 		$this->mock = $this->getMock('Phake_IMock');
 	}
-	
+
 	/**
 	 * Tests that the recorder can log a call and then pull that same call back out.
 	 */
@@ -114,6 +114,30 @@ class Phake_CallRecorder_RecorderTest extends PHPUnit_Framework_TestCase
 		$callRecorder = new Phake_CallRecorder_Recorder();
 
 		$this->assertNull($callRecorder->getCallInfo($call));
+	}
+
+	/**
+	 * Tests an internal php nested object issue (#47)
+	 */
+	public function testRetrieveCallInfoUsesStrictChecking()
+	{
+		$objA = new stdClass();
+		$objB = new stdClass();
+		$objA->b = $objB;
+		$objB->a = $objA;
+
+		$objC = new stdClass();
+		$objD = new stdClass();
+		$objC->b = $objD;
+		$objD->a = $objC;
+
+		$call = new Phake_CallRecorder_Call($this->mock, 'someMethod', array($objA), new Phake_MockReader());
+		$callRecorder = new Phake_CallRecorder_Recorder();
+		$callRecorder->recordCall($call);
+
+		$checkCall = new Phake_CallRecorder_Call($this->mock, 'someMethod', array($objC), new Phake_MockReader());
+
+		$this->assertNull($callRecorder->getCallInfo($checkCall));
 	}
 }
 
