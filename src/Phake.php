@@ -211,12 +211,9 @@ class Phake
 	public static function verifyNoInteraction(Phake_IMock $mock)
 	{
 		$reader = new Phake_MockReader();
-		$callRecorder = $reader->getCallRecorder($mock);
+		$verifier = new Phake_CallRecorder_Verifier($reader->getCallRecorder($mock), $mock);
 
-		if (count($callRecorder->getAllCalls()))
-		{
-			throw new Phake_Exception_VerificationException('Calls should not have been made against this mock');
-		}
+		self::getClient()->processVerifierResult($verifier->verifyNoCalls());
 	}
 
 	/**

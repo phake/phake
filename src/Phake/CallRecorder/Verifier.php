@@ -131,6 +131,29 @@ class Phake_CallRecorder_Verifier
 		return new Phake_CallRecorder_VerifierResult(TRUE, $matchedCalls);
 	}
 
+	public function verifyNoCalls()
+	{
+		$result = TRUE;
+
+		$reportedCalls = array();
+		foreach ($this->recorder->getAllCalls() as $call)
+		{
+			$result = FALSE;
+			$reportedCalls[] = $call->__toString();
+		}
+
+		if ($result)
+		{
+			return new Phake_CallRecorder_VerifierResult(TRUE, array());
+		}
+		else
+		{
+			$desc = 'Expected no interaction with mock' . "\n"
+				. 'Invocations:' . "\n  ";
+			return new Phake_CallRecorder_VerifierResult(FALSE, array(), $desc . implode("\n  ", $reportedCalls));
+		}
+	}
+
 	public function getObject()
 	{
 		return $this->obj;

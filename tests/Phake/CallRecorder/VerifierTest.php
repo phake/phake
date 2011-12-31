@@ -100,7 +100,7 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
 		$this->obj = $this->getMock('Phake_IMock');
 		$this->mockReader = Phake::mock('Phake_MockReader');
 		Phake::when($this->mockReader)->getName($this->anything())->thenReturn('mock');
-		$this->recorder = $this->getMock('Phake_CallRecorder_Recorder');
+		$this->recorder = Phake::mock('Phake_CallRecorder_Recorder');
 		$this->verifierMode = Phake::mock('Phake_CallRecorder_IVerifierMode');
 
 		$this->callArray = array(
@@ -112,9 +112,7 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
 			new Phake_CallRecorder_Call($this->obj, 'foo', array(), $this->mockReader),
 		);
 
-		$this->recorder->expects($this->any())
-				->method('getAllCalls')
-				->will($this->returnValue($this->callArray));
+		Phake::when($this->recorder)->getAllCalls()->thenReturn($this->callArray);
 
 		$this->verifier = new Phake_CallRecorder_Verifier($this->recorder, $this->obj);
 	}
@@ -132,10 +130,7 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
 			$this->mockReader
 		);
 		$return = new Phake_CallRecorder_CallInfo($this->callArray[1], new Phake_CallRecorder_Position(0));
-		$this->recorder->expects($this->once())
-				->method('getCallInfo')
-				->with($this->callArray[1])
-				->will($this->returnValue($return));
+		Phake::when($this->recorder)->getCallInfo($this->callArray[1])->thenReturn($return);
 
 		Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(new Phake_CallRecorder_VerifierMode_Result(TRUE, ''));
 		$this->assertEquals(new Phake_CallRecorder_VerifierResult(TRUE, array($return)), $this->verifier->verifyCall($expectation));
@@ -194,9 +189,7 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
 		);
 
 		$return = new Phake_CallRecorder_CallInfo($this->callArray[1], new Phake_CallRecorder_Position(0));
-		$this->recorder->expects($this->any())
-				->method('getCallInfo')
-				->will($this->returnValue($return));
+		Phake::when($this->recorder)->getCallInfo(Phake::anyParameters())->thenReturn($return);
 
 		Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(new Phake_CallRecorder_VerifierMode_Result(TRUE, ''));
 
@@ -220,10 +213,7 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
 		);
 
 		$return = new Phake_CallRecorder_CallInfo($this->callArray[1], new Phake_CallRecorder_Position(0));
-		$this->recorder->expects($this->once())
-				->method('getCallInfo')
-				->with($this->callArray[1])
-				->will($this->returnValue($return));
+		Phake::when($this->recorder)->getCallInfo($this->callArray[1])->thenReturn($return);
 
 		Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(new Phake_CallRecorder_VerifierMode_Result(TRUE, ''));
 
@@ -268,9 +258,7 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
 		);
 
 		$return = new Phake_CallRecorder_CallInfo($this->callArray[1], new Phake_CallRecorder_Position(0));
-		$this->recorder->expects($this->any())
-				->method('getCallInfo')
-				->will($this->returnValue($return));
+		Phake::when($this->recorder)->getCallInfo(Phake::anyParameters())->thenReturn($return);
 
 		Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(new Phake_CallRecorder_VerifierMode_Result(TRUE, ''));
 
@@ -292,9 +280,7 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
 		Phake::when($this->verifierMode)->__toString()->thenReturn('exactly 1 times');
 
 		$return = new Phake_CallRecorder_CallInfo($this->callArray[1], new Phake_CallRecorder_Position(0));
-		$this->recorder->expects($this->any())
-				->method('getCallInfo')
-				->will($this->returnValue($return));
+		Phake::when($this->recorder)->getCallInfo(Phake::anyParameters())->thenReturn($return);
 
 		Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(new Phake_CallRecorder_VerifierMode_Result(FALSE, 'actually called 0 times'));
 		
@@ -322,9 +308,7 @@ Other Invocations:
 		Phake::when($this->verifierMode)->__toString()->thenReturn('exactly 1 times');
 
 		$return = new Phake_CallRecorder_CallInfo($this->callArray[1], new Phake_CallRecorder_Position(0));
-		$this->recorder->expects($this->any())
-				->method('getCallInfo')
-				->will($this->returnValue($return));
+		Phake::when($this->recorder)->getCallInfo(Phake::anyParameters())->thenReturn($return);
 
 		Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(new Phake_CallRecorder_VerifierMode_Result(FALSE, 'actually called 0 times'));
 		
@@ -349,9 +333,7 @@ Other Invocations:
 		Phake::when($this->verifierMode)->__toString()->thenReturn('exactly 1 times');
 
 		$return = new Phake_CallRecorder_CallInfo($this->callArray[1], new Phake_CallRecorder_Position(0));
-		$this->recorder->expects($this->any())
-				->method('getCallInfo')
-				->will($this->returnValue($return));
+		Phake::when($this->recorder)->getCallInfo(Phake::anyParameters())->thenReturn($return);
 
 		Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(new Phake_CallRecorder_VerifierMode_Result(FALSE, 'actually called 0 times'));
 
@@ -363,6 +345,26 @@ Other Invocations:
 					. "  mock->foo()";
 
 		$this->assertEquals(new Phake_CallRecorder_VerifierResult(FALSE, array(), $expected_msg), $this->verifier->verifyCall($expectation));
+	}
+
+	public function testVerifyNoCalls()
+	{
+		Phake::when($this->recorder)->getAllCalls()->thenReturn(array());
+
+		$this->assertEquals(new Phake_CallRecorder_VerifierResult(TRUE, array()), $this->verifier->verifyNoCalls());
+	}
+
+	public function testVerifyNoCallsFailsWithOtherCallsListed()
+	{
+		$expected_msg =
+			"Expected no interaction with mock\n"
+					. "Invocations:\n"
+					. "  mock->foo()\n"
+					. "  mock->bar()\n"
+					. "  mock->foo(<string:bar>, <string:foo>)\n"
+					. "  mock->foo()";
+
+		$this->assertEquals(new Phake_CallRecorder_VerifierResult(FALSE, array(), $expected_msg), $this->verifier->verifyNoCalls());
 	}
 }
 

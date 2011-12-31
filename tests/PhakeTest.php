@@ -1073,7 +1073,19 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 		
 		$this->assertGreaterThan($assertionCount, $newAssertionCount);
 	}
-	
+
+	public function testVerifyNoInteractionPassesStrict()
+	{
+        Phake::setClient(Phake::CLIENT_PHPUNIT);
+		$mock = Phake::mock('stdClass');
+
+		$assertionCount = self::getCount();
+		Phake::verifyNoInteraction($mock);
+		$newAssertionCount = self::getCount();
+
+		$this->assertGreaterThan($assertionCount, $newAssertionCount);
+	}
+
 	public function testMockingStaticClass()
 	{
 		$this->markTestIncomplete('Need to implement mocking for static methods. Currently, neither stubbing or verification works');
