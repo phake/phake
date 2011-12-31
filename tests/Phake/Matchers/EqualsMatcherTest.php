@@ -43,6 +43,8 @@
  */
 
 require_once 'Phake/Matchers/EqualsMatcher.php';
+require_once 'PhakeTest/A.php';
+require_once 'PhakeTest/B.php';
 
 /**
  * Tests the functionality of the equals matcher
@@ -95,6 +97,46 @@ class Phake_Matchers_EqualsMatcherTest extends PHPUnit_Framework_TestCase
 		$this->matcher = new Phake_Matchers_EqualsMatcher(new stdClass);
 
 		$this->assertEquals('equal to <object:stdClass>', $this->matcher->__toString());
+	}
+
+	/**
+	 * Tests that the equals matcher handles nested dependencies
+	 */
+	public function testNestedDependencies()
+	{
+		$a = new stdClass;
+		$a->b = new stdClass;
+		$a->b->a = $a;
+		$this->matcher = new Phake_Matchers_EqualsMatcher($a);
+
+		$c = new stdClass();
+		$c->b = new stdClass();
+		$c->b->a = $c;
+
+		$this->assertTrue($this->matcher->matches($c));
+	}
+
+	public function testDifferentClassObjects()
+	{
+		$this->matcher = new Phake_Matchers_EqualsMatcher(new PhakeTest_A());
+
+		$this->assertFalse($this->matcher->matches(new PhakeTest_B()));
+	}
+
+	public function testArraysWithDifferentCounts()
+	{
+		$this->matcher = new Phake_Matchers_EqualsMatcher(array(1));
+
+		$test = array(1, 2);
+		$this->assertFalse($this->matcher->matches($test));
+	}
+
+	public function testArraysWithDifferentKeys()
+	{
+		$this->matcher = new Phake_Matchers_EqualsMatcher(array('one' => 1));
+
+		$test = array('two' => 1);
+		$this->assertFalse($this->matcher->matches($test));
 	}
 }
 
