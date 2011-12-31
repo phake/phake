@@ -108,7 +108,7 @@ class Phake_CallRecorder_Recorder
 	 */
 	public function getCallInfo(Phake_CallRecorder_Call $call)
 	{
-		if (in_array($call, $this->calls))
+		if (in_array($call, $this->calls, true))
 		{
 			return new Phake_CallRecorder_CallInfo($call, $this->positions[spl_object_hash($call)]);
 		}
