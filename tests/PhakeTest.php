@@ -1096,6 +1096,12 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals('bar', $mock->staticMethod());
 		Phake::verify($mock)->staticMethod();
 	}
+
+	public function testMockingAbstractClass()
+	{
+		$mock = Phake::partialMock('PhakeTest_AbstractClass');
+		$this->assertNull($mock->referenceDefault());
+	}
 }
 
 ?>
