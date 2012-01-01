@@ -404,7 +404,14 @@ class Phake
 	 */
 	public static function getClient()
 	{
-		return self::$client;
+		if (!isset(self::$client))
+		{
+			return new Phake_Client_Default();
+		}
+		else
+		{
+			return self::$client;
+		}
 	}
 	
 	/**

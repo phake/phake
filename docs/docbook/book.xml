@@ -16,5 +16,6 @@
 	<xi:include href="method-stubbing.xml" />
 	<xi:include href="method-verification.xml" />
 	<xi:include href="answers.xml" />
-	<xi:include href="method-parameter-matchers.xml" />
+    <xi:include href="method-parameter-matchers.xml" />
+    <xi:include href="configuration.xml" />
 </book>
