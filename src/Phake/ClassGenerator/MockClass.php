@@ -244,12 +244,14 @@ class {$newClassName} {$extends}
 	 */
 	protected function copyMethodParameters(ReflectionMethod $method)
 	{
-		$copies = "\$numArgs = count(func_get_args());\n";
+		$copies = "\$numArgs = count(func_get_args());\n\t\t";
 		foreach ($method->getParameters() as $parameter)
 		{
 			$pos = $parameter->getPosition();
 			$copies .= "if ({$pos} < \$numArgs) \$args[] =& \$parm{$pos};\n\t\t";
 		}
+
+		$copies .= "for (\$i = " . count($method->getParameters()) . "; \$i < \$numArgs; \$i++) \$args[] = func_get_arg(\$i);\n\t\t";
 
 		return $copies;
 	}

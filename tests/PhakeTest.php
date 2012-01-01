@@ -1102,6 +1102,20 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 		$mock = Phake::partialMock('PhakeTest_AbstractClass');
 		$this->assertNull($mock->referenceDefault());
 	}
+
+	public function testStubbingMemcacheSetMethod()
+	{
+	    if (!extension_loaded('memcache'))
+	    {
+	        $this->markTestSkipped('memcache extension not loaded');
+	    }
+
+	    $memcache = Phake::mock('Memcache');
+
+	    Phake::when($memcache)->set('key', 'value')->thenReturn(TRUE);
+
+	    $this->assertTrue($memcache->set('key', 'value'));
+	}
 }
 
 ?>
