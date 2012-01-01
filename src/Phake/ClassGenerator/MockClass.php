@@ -50,6 +50,7 @@ require_once('Phake/ClassGenerator/InvocationHandler/FrozenObjectCheck.php');
 require_once('Phake/ClassGenerator/InvocationHandler/CallRecorder.php');
 require_once('Phake/ClassGenerator/InvocationHandler/MagicCallRecorder.php');
 require_once('Phake/ClassGenerator/InvocationHandler/StubCaller.php');
+require_once('Phake/Matchers/AbstractMethodMatcher.php');
 
 /**
  * Creates and executes the code necessary to create a mock class.
@@ -113,6 +114,11 @@ class {$newClassName} {$extends}
 		\$this->__PHAKE_stubMapper->mapStubToMatcher(
 			new Phake_Stubber_AnswerCollection(new Phake_Stubber_Answers_StaticAnswer('Mock for {$mockedClassName}')), 
 			new Phake_Matchers_MethodMatcher('__toString', array())
+		);
+
+		\$this->__PHAKE_stubMapper->mapStubToMatcher(
+			new Phake_Stubber_AnswerCollection(new Phake_Stubber_Answers_StaticAnswer(NULL)),
+			new Phake_Matchers_AbstractMethodMatcher(new ReflectionClass('{$mockedClassName}'))
 		);
 			
 		{$this->getConstructorChaining($mockedClass)}

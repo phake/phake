@@ -63,6 +63,7 @@
    <file baseinstalldir="/" name="Phake/Matchers/HamcrestMatcherAdapter.php" role="php" />
    <file baseinstalldir="/" name="Phake/Matchers/IArgumentMatcher.php" role="php" />
    <file baseinstalldir="/" name="Phake/Matchers/MethodMatcher.php" role="php" />
+   <file baseinstalldir="/" name="Phake/Matchers/AbstractMethodMatcher.php" role="php" />
    <file baseinstalldir="/" name="Phake/Matchers/PHPUnitConstraintAdapter.php" role="php" />
    <file baseinstalldir="/" name="Phake/Matchers/ReferenceSetter.php" role="php" />
    <file baseinstalldir="/" name="Phake/Mock/Freezer.php" role="php" />

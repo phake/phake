@@ -1,26 +1,26 @@
 <?php
-/* 
+/*
  * Phake - Mocking Framework
- * 
+ *
  * Copyright (c) 2010-2011, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
- * 
+ *
  *  *  Redistributions of source code must retain the above copyright
  *     notice, this list of conditions and the following disclaimer.
- * 
+ *
  *  *  Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in
  *     the documentation and/or other materials provided with the
  *     distribution.
- * 
+ *
  *  *  Neither the name of Mike Lively nor the names of his
  *     contributors may be used to endorse or promote products derived
  *     from this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -33,7 +33,7 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  * @category   Testing
  * @package    Phake
  * @author     Mike Lively <m@digitalsandwich.com>
@@ -45,31 +45,26 @@
 require_once('Phake/Matchers/IMethodMatcher.php');
 
 /**
- * Determines if a method and argument matchers match a given method call.
+ * Matches any abstract methods.
+ *
+ * This matcher is always registered in each mock's stub mapper to ensure that for partial mocks, abstract methods are
+ * set up to return null;
  *
  * @author Mike Lively <m@digitalsandwich.com>
  */
-class Phake_Matchers_MethodMatcher implements Phake_Matchers_IMethodMatcher
+class Phake_Matchers_AbstractMethodMatcher implements Phake_Matchers_IMethodMatcher
 {
 	/**
-	 * @var string
+	 * @var \ReflectionClass
 	 */
-	private $expectedMethod;
+	private $mockedClass;
 
 	/**
-	 * @var array
+	 * @param ReflectionClass $mockedClass The class that is being mocked
 	 */
-	private $argumentMatchers;
-
-	public function __construct($expectedMethod, array $argumentMatchers)
+	public function __construct(ReflectionClass $mockedClass)
 	{
-		if (!$this->validateArgumentMatchers($argumentMatchers))
-		{
-			throw new InvalidArgumentException('All arguments passed must implement Phake_Matchers_IArgumentMatcher');
-		}
-
-		$this->expectedMethod = $expectedMethod;
-		$this->argumentMatchers = $argumentMatchers;
+		$this->mockedClass = $mockedClass;
 	}
 
 	/**
@@ -82,70 +77,13 @@ class Phake_Matchers_MethodMatcher implements Phake_Matchers_IMethodMatcher
 	 */
 	public function matches($method, array &$args)
 	{
-		if ($this->expectedMethod == $method
-				&& $this->doArgumentsMatch($args))
+		$matches = FALSE;
+		if ($this->mockedClass->hasMethod($method))
 		{
-			return TRUE;
-		}
-		else
-		{
-			return FALSE;
-		}
-	}
-
-	/**
-	 * Determines whether or not given arguments match the argument matchers configured in the object.
-	 *
-	 * @param array $args
-	 * @return boolean
-	 */
-	private function doArgumentsMatch(array &$args)
-	{
-		if (!empty($this->argumentMatchers) && $this->argumentMatchers[0] instanceof Phake_Matchers_AnyParameters)
-		{
-			return TRUE;
+			$reflMethod = $this->mockedClass->getMethod($method);
+			$matches = $reflMethod->isAbstract();
 		}
 
-		if (count($args) != count($this->argumentMatchers))
-		{
-			return FALSE;
-		}
-
-		reset($this->argumentMatchers);
-
-		foreach ($args as &$arg)
-		{
-			$matcher = current($this->argumentMatchers);
-			/* @var $matcher Phake_Matchers_IArgumentMatcher */
-			if (!$matcher->matches($arg))
-			{
-				return FALSE;
-			}
-
-			next($this->argumentMatchers);
-		}
-
-		return TRUE;
-	}
-
-	/**
-	 * Validates the types of all elements in the given array are Phake_Matchers_IArgumentMatchers
-	 *
-	 * @param array $argumentMatchers
-	 * @return boolean
-	 */
-	private function validateArgumentMatchers(array $argumentMatchers)
-	{
-		foreach ($argumentMatchers as $matcher)
-		{
-			if (!$matcher instanceof Phake_Matchers_IArgumentMatcher)
-			{
-				return FALSE;
-			}
-		}
-
-		return TRUE;
+		return $matches;
 	}
 }
-
-?>

@@ -59,7 +59,7 @@ class Phake_Stubber_StubMapper
 	 * @param Phake_Stubber_AnswerCollection $answer
 	 * @param Phake_Matchers_MethodMatcher $matcher
 	 */
-	public function mapStubToMatcher(Phake_Stubber_AnswerCollection $answer, Phake_Matchers_MethodMatcher $matcher)
+	public function mapStubToMatcher(Phake_Stubber_AnswerCollection $answer, Phake_Matchers_IMethodMatcher $matcher)
 	{
 		$this->matcherStubMap[] = array($matcher, $answer);
 	}
