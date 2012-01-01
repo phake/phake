@@ -24,4 +24,20 @@
 		may change. However as an early adopter that uses GitHub, you can have a chance to mold the software
 		as it is built.
 	</para>
+    <section>
+        <title>Support</title>
+        <para>
+            If you think you have found a bug or an issue with Phake, please feel free to open up an issue on the
+            github issue tracker: <link xlink:href="http://github.com/mlively/Phake/issues" />.
+        </para>
+        <para>
+            If you have questions about Phake, you can email the phake google group:
+            <link xlink:href="http://groups.google.com/group/phake-users" />
+        </para>
+        <para>
+            You can also email me directly at m@digitalsandwich.com or get ahold of me on various channels on the
+            freenode irc network (mlively or mlively-work) though I cannot guarantee quick responses through these two
+            methods.
+        </para>
+    </section>
 </chapter>
