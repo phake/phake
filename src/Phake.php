@@ -45,6 +45,7 @@
 require_once 'Phake/Facade.php';
 require_once 'Phake/MockReader.php';
 require_once 'Phake/ClassGenerator/MockClass.php';
+require_once 'Phake/ClassGenerator/EvalLoader.php';
 require_once 'Phake/Client/Default.php';
 require_once 'Phake/Client/PHPUnit.php';
 require_once 'Phake/CallRecorder/Recorder.php';
@@ -88,6 +89,11 @@ class Phake
 	 * @var Phake_Client_IClient
 	 */
 	private static $client;
+
+	/**
+	 * @var Phake_ClassGenerator_ILoader
+	 */
+	private static $loader;
 	
 	/**
 	 * Constants identifying supported clients
@@ -112,7 +118,7 @@ class Phake
 			$answer = $defaultAnswer->getAnswer();
 		}
 
-		return self::getPhake()->mock($className, new Phake_ClassGenerator_MockClass(), new Phake_CallRecorder_Recorder(), $answer);
+		return self::getPhake()->mock($className, new Phake_ClassGenerator_MockClass(self::getMockLoader()), new Phake_CallRecorder_Recorder(), $answer);
 	}
 
 	/**
@@ -130,7 +136,7 @@ class Phake
 		$className = array_shift($args);
 		$answer = new Phake_Stubber_Answers_ParentDelegate();
 
-		return self::getPhake()->mock($className, new Phake_ClassGenerator_MockClass(), new Phake_CallRecorder_Recorder(), $answer, $args);
+		return self::getPhake()->mock($className, new Phake_ClassGenerator_MockClass(self::getMockLoader()), new Phake_CallRecorder_Recorder(), $answer, $args);
 	}
 
 	/**
@@ -421,6 +427,23 @@ class Phake
 		{
 			self::$client = new Phake_Client_Default();
 		}
+	}
+
+	public static function getMockLoader()
+	{
+		if (isset(self::$loader))
+		{
+			return self::$loader;
+		}
+		else
+		{
+			return new Phake_ClassGenerator_EvalLoader();
+		}
+	}
+
+	public static function setMockLoader(Phake_ClassGenerator_ILoader $loader)
+	{
+		self::$loader = $loader;
 	}
 }
 

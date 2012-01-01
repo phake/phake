@@ -46,6 +46,9 @@
    <file baseinstalldir="/" name="Phake/CallRecorder/VerifierMode/Result.php" role="php" />
    <file baseinstalldir="/" name="Phake/CallRecorder/VerifierMode/Times.php" role="php" />
    <file baseinstalldir="/" name="Phake/ClassGenerator/MockClass.php" role="php" />
+   <file baseinstalldir="/" name="Phake/ClassGenerator/ILoader.php" role="php" />
+   <file baseinstalldir="/" name="Phake/ClassGenerator/EvalLoader.php" role="php" />
+   <file baseinstalldir="/" name="Phake/ClassGenerator/FileLoader.php" role="php" />
    <file baseinstalldir="/" name="Phake/ClassGenerator/InvocationHandler/CallRecorder.php" role="php" />
    <file baseinstalldir="/" name="Phake/ClassGenerator/InvocationHandler/Composite.php" role="php" />
    <file baseinstalldir="/" name="Phake/ClassGenerator/InvocationHandler/FrozenObjectCheck.php" role="php" />

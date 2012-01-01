@@ -42,22 +42,15 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-ini_set('error_reporting', E_ALL | E_STRICT);
-$testDir = dirname(__FILE__);
-$codeDir = dirname($testDir) . DIRECTORY_SEPARATOR . 'src';
+require_once('Phake/ClassGenerator/ILoader.php');
 
-set_include_path($testDir . PATH_SEPARATOR . $codeDir . PATH_SEPARATOR . get_include_path());
-
-define('HAMCREST_LOADED', @fopen('hamcrest.php', 'r', true));
-if (HAMCREST_LOADED) include_once('hamcrest.php');
-
-include_once('Phake.php');
-Phake::setClient(Phake::CLIENT_DEFAULT);
-
-$cacheDir = getenv('PHAKE_CACHEDIR');
-if (isset($cacheDir))
+/**
+ * Loads classes into the system via the eval method
+ */
+class Phake_ClassGenerator_EvalLoader implements Phake_ClassGenerator_ILoader
 {
-	require_once('Phake/ClassGenerator/FileLoader.php');
-	Phake::setMockLoader(new Phake_ClassGenerator_FileLoader($cacheDir));
+	public function loadClassByString($className, $classDef)
+	{
+		eval($classDef);
+	}
 }
-?>

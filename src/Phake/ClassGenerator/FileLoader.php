@@ -42,22 +42,24 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-ini_set('error_reporting', E_ALL | E_STRICT);
-$testDir = dirname(__FILE__);
-$codeDir = dirname($testDir) . DIRECTORY_SEPARATOR . 'src';
+require_once('Phake/ClassGenerator/ILoader.php');
 
-set_include_path($testDir . PATH_SEPARATOR . $codeDir . PATH_SEPARATOR . get_include_path());
-
-define('HAMCREST_LOADED', @fopen('hamcrest.php', 'r', true));
-if (HAMCREST_LOADED) include_once('hamcrest.php');
-
-include_once('Phake.php');
-Phake::setClient(Phake::CLIENT_DEFAULT);
-
-$cacheDir = getenv('PHAKE_CACHEDIR');
-if (isset($cacheDir))
+/**
+ * Saves the files into a store directory with a file name the same as the class and then includes that file.
+ */
+class Phake_ClassGenerator_FileLoader implements Phake_ClassGenerator_ILoader
 {
-	require_once('Phake/ClassGenerator/FileLoader.php');
-	Phake::setMockLoader(new Phake_ClassGenerator_FileLoader($cacheDir));
+	private $dir;
+
+	public function __construct($dir)
+	{
+		$this->dir = $dir;
+	}
+
+	public function loadClassByString($className, $classDef)
+	{
+		$file = rtrim($this->dir, '/') . '/' . $className . '.php';
+		file_put_contents($file, "<?php \n" . $classDef);
+		require_once($file);
+	}
 }
-?>
