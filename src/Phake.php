@@ -206,8 +206,11 @@ class Phake
 	{
 		$mockReader = new Phake_MockReader();
 		$mockFreezer = new Phake_Mock_Freezer($mockReader);
-		
-		$mockFreezer->freeze($mock, self::getClient());
+
+		foreach (func_get_args() as $mock)
+		{
+			$mockFreezer->freeze($mock, self::getClient());
+		}
 	}
 
 	/**
@@ -216,10 +219,13 @@ class Phake
 	 */
 	public static function verifyNoInteraction(Phake_IMock $mock)
 	{
-		$reader = new Phake_MockReader();
-		$verifier = new Phake_CallRecorder_Verifier($reader->getCallRecorder($mock), $mock);
+		foreach (func_get_args() as $mock)
+		{
+			$reader = new Phake_MockReader();
+			$verifier = new Phake_CallRecorder_Verifier($reader->getCallRecorder($mock), $mock);
 
-		self::getClient()->processVerifierResult($verifier->verifyNoCalls());
+			self::getClient()->processVerifierResult($verifier->verifyNoCalls());
+		}
 	}
 
 	/**

@@ -61,12 +61,17 @@
 	</section>
 	<section><title>Verifying No Interaction with a Mock so Far</title>
 		<para>
-			Occasionally you may want to ensure that no interactions have occurred with a mock object. This can be done by passing your mock object to Phake::verifyNoInteraction($mock). This will not prevent further interaction with your mock, it will simply tell you whether or not any interaction up to that point has happened.
+			Occasionally you may want to ensure that no interactions have occurred with a mock object. This can be done
+            by passing your mock object to Phake::verifyNoInteraction($mock). This will not prevent further interaction
+            with your mock, it will simply tell you whether or not any interaction up to that point has happened. You
+            can pass multiple arguments to this method to verify no interaction with multiple mock objects.
 		</para>
 	</section>
 	<section><title>Verifying No Further Interaction with a Mock</title>
 		<para>
-			There is a similar method to prevent any future interaction with a mock. This can be done by passing a mock object to Phake::verifyNoFurtherInteraction($mock).
+			There is a similar method to prevent any future interaction with a mock. This can be done by passing a mock
+            object to Phake::verifyNoFurtherInteraction($mock). You can pass multiple arguments to this method to
+            verify no further interaction occurs with multiple mock objects.
 		</para>
 	</section>
 	<section><title>Verifying Magic Methods</title>

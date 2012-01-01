@@ -618,6 +618,24 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Tests freezing mocks
+	 */
+	public function testMockFreezingWithMultipleMocks()
+	{
+		$mock1 = Phake::mock('PhakeTest_MockedClass');
+		$mock2 = Phake::mock('PhakeTest_MockedClass');
+
+		$mock1->foo();
+		$mock2->foo();
+
+		Phake::verifyNoFurtherInteraction($mock1, $mock2);
+
+		$this->setExpectedException('Phake_Exception_VerificationException');
+
+		$mock2->foo();
+	}
+
+	/**
 	 * Tests verifying that no interaction occured
 	 */
 	public function testVerifyingZeroInteraction()
@@ -630,6 +648,22 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 
 		$this->setExpectedException('Phake_Exception_VerificationException');
 		Phake::verifyNoInteraction($mock);
+	}
+
+	/**
+	 * Tests verifying that no interaction occured
+	 */
+	public function testVerifyingZeroInteractionWithMultipleArgs()
+	{
+		$mock1 = Phake::mock('PhakeTest_MockedClass');
+		$mock2 = Phake::mock('PhakeTest_MockedClass');
+
+		Phake::verifyNoInteraction($mock1, $mock2);
+
+		$mock2->foo();
+
+		$this->setExpectedException('Phake_Exception_VerificationException');
+		Phake::verifyNoInteraction($mock1, $mock2);
 	}
 
 	/**
