@@ -112,7 +112,7 @@ class Phake_Matchers_ArgumentCaptor implements Phake_Matchers_IArgumentMatcher
 
 	public function __toString()
 	{
-		return '<captured parameter>';
+		return sprintf('<captured parameter%s>', isset($this->matcher) ? " that is {$this->matcher->__toString()}" : '');
 	}
 }
 

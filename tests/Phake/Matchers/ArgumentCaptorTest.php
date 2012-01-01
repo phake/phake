@@ -128,6 +128,14 @@ class Phake_Matchers_ArgumentCaptorTest extends PHPUnit_Framework_TestCase
 	{
 		$this->assertEquals('<captured parameter>', $this->captor->__toString());
 	}
+
+	public function testToStringWithConditional()
+	{
+		$matcher = Phake::mock('Phake_Matchers_IArgumentMatcher');
+		Phake::when($matcher)->__toString()->thenReturn('an argument');
+		$this->captor->when($matcher);
+		$this->assertEquals('<captured parameter that is an argument>', $this->captor->__toString());
+	}
 }
 
 ?>
