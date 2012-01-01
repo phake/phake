@@ -72,7 +72,7 @@ class Phake_Facade
 	{
 		if (!class_exists($mockedClass, TRUE) && !interface_exists($mockedClass, TRUE))
 		{
-			throw new InvalidArgumentException("The class / interface [{$mockedClass} does not exist");
+			throw new InvalidArgumentException("The class / interface [{$mockedClass}] does not exist. Check the spelling and make sure it is loadable.");
 		}
 		
     if(!isset($this->cachedClasses[$mockedClass]))
