@@ -1,5 +1,6 @@
 Phake
 =======
+[![Build Status](https://secure.travis-ci.org/mlively/Phake.png)](http://travis-ci.org/mlively/Phake)
 
 Phake is a framework for PHP that aims to provide mock objects, test doubles
 and method stubs.
