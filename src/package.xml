@@ -14,10 +14,10 @@
   <active>yes</active>
  </lead>
  <date>2012-01-03</date>
- <time>18:04:00</time>
+ <time>21:39:00</time>
  <version>
-  <release>1.0.1</release>
-  <api>1.0.1</api>
+  <release>1.0.2</release>
+  <api>1.0.2</api>
  </version>
  <stability>
   <release>stable</release>
@@ -65,6 +65,7 @@
    <file baseinstalldir="/" name="Phake/Matchers/Factory.php" role="php" />
    <file baseinstalldir="/" name="Phake/Matchers/HamcrestMatcherAdapter.php" role="php" />
    <file baseinstalldir="/" name="Phake/Matchers/IArgumentMatcher.php" role="php" />
+   <file baseinstalldir="/" name="Phake/Matchers/IMethodMatcher.php" role="php" />
    <file baseinstalldir="/" name="Phake/Matchers/MethodMatcher.php" role="php" />
    <file baseinstalldir="/" name="Phake/Matchers/AbstractMethodMatcher.php" role="php" />
    <file baseinstalldir="/" name="Phake/Matchers/PHPUnitConstraintAdapter.php" role="php" />
