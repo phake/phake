@@ -65,6 +65,15 @@ class Phake_ClassGenerator_MockClass
 	 */
 	private $loader;
 
+	private $reservedWords = array(
+		'abstract',	'and', 'array', 'as', 'break', 'case', 'catch', 'class', 'clone', 'const', 'continue', 'declare',
+		'default', 'do', 'else', 'elseif', 'enddeclare', 'endfor', 'endforeach', 'endif', 'endswitch', 'endwhile',
+		'extends', 'final', 'for', 'foreach', 'function', 'global', 'goto', 'if', 'implements', 'interface',
+		'instanceof', 'namespace', 'new', 'or', 'private', 'protected', 'public', 'static', 'switch', 'throw', 'try',
+		'use', 'var', 'while', 'xor', 'die', 'echo', 'empty', 'exit', 'eval', 'include', 'include_once', 'isset',
+		'list', 'require', 'require_once', 'return', 'print', 'unset', '__halt_compiler'
+	);
+
 	/**
 	 * @param Phake_ClassGenerator_ILoader $loader
 	 */
@@ -177,7 +186,7 @@ class {$newClassName} {$extends}
 		$methodDefs = '';
 		$filter = ReflectionMethod::IS_ABSTRACT | ReflectionMethod::IS_PROTECTED | ReflectionMethod::IS_PUBLIC | ~ReflectionMethod::IS_FINAL;
 
-		$implementedMethods = array();
+		$implementedMethods = $this->reservedWords;
 		foreach ($mockedClass->getMethods($filter) as $method)
 		{
 			if (!$method->isConstructor() && !$method->isDestructor() && !$method->isFinal() && !$method->isStatic() && !in_array($method->getName(), $implementedMethods))
