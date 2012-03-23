@@ -3,6 +3,7 @@
 	<title>Setting the Mock Class Loader</title>
 		<programlisting><![CDATA[<?php
 require_once('Phake.php');
-Phake::setLoader(Phake::CLIENT_PHPUNIT);
+require_once('Phake/ClassGenerator/FileLoader.php');
+Phake::setMockLoader(new Phake_ClassGenerator_FileLoader('/tmp'));
 ?>]]></programlisting>
 </example>

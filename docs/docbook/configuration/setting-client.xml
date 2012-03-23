@@ -3,7 +3,6 @@
 	<title>Setting the Phake Client</title>
 		<programlisting><![CDATA[<?php
 require_once('Phake.php');
-require_once('Phake/ClassGenerator/FileLoader.php');
-Phake::setMockLoader(new Phake_ClassGenerator_FileLoader('/tmp'));
+Phake::setClient(Phake::CLIENT_PHPUNIT);
 ?>]]></programlisting>
 </example>
