@@ -13,10 +13,10 @@
   <email>m@digitalsandwich.com</email>
   <active>yes</active>
  </lead>
- <date>2012-01-01</date>
+ <date>2012-05-25</date>
  <time>14:36:00</time>
  <version>
-  <release>1.0.0</release>
+  <release>1.0.3</release>
   <api>1.0.0</api>
  </version>
  <stability>
@@ -26,7 +26,11 @@
  <license uri="https://github.com/mlively/Phake/raw/master/LICENSE">BSD Style</license>
  <notes>https://github.com/mlively/Phake/blob/master/CHANGELOG.markdown</notes>
  <contents>
-  <dir baseinstalldir="/" name="/">
+  <dir name="/">
+   <file baseinstalldir="/" name="LICENSE" role="doc" />
+   <file baseinstalldir="/" name="README.markdown" role="doc" />
+   <file baseinstalldir="/" name="CHANGELOG.markdown" role="doc" />
+   <file baseinstalldir="/" name="composer.json" role="doc" />
    <file baseinstalldir="/" name="Phake.php" role="php" />
    <file baseinstalldir="/" name="Phake/Facade.php" role="php" />
    <file baseinstalldir="/" name="Phake/IMock.php" role="php" />
@@ -95,6 +99,71 @@
    <file baseinstalldir="/" name="Phake/Stubber/Answers/LambdaAnswer.php" role="php" />
    <file baseinstalldir="/" name="Phake/Stubber/Answers/ParentDelegate.php" role="php" />
    <file baseinstalldir="/" name="Phake/Stubber/Answers/StaticAnswer.php" role="php" />
+  <dir baseinstalldir="/" name="tests" role="test">
+   <file baseinstalldir="/" name="bootstrap.php" role="test" />
+   <file baseinstalldir="/" name="PhakeTest/MagicClass.php" role="test" />
+   <file baseinstalldir="/" name="PhakeTest/A.php" role="test" />
+   <file baseinstalldir="/" name="PhakeTest/B.php" role="test" />
+   <file baseinstalldir="/" name="PhakeTest/MockedInterface.php" role="test" />
+   <file baseinstalldir="/" name="PhakeTest/ToStringMethod.php" role="test" />
+   <file baseinstalldir="/" name="PhakeTest/AbstractClass.php" role="test" />
+   <file baseinstalldir="/" name="PhakeTest/MockedClass.php" role="test" />
+   <file baseinstalldir="/" name="PhakeTest/ExtendedMockedConstructedClass.php" role="test" />
+   <file baseinstalldir="/" name="PhakeTest/MockedConstructedClass.php" role="test" />
+   <file baseinstalldir="/" name="PhakeTest/FinalMethod.php" role="test" />
+   <file baseinstalldir="/" name="PhakeTest/StaticClass.php" role="test" />
+   <file baseinstalldir="/" name="PhakeTest/DestructorClass.php" role="test" />
+   <file baseinstalldir="/" name="PhakeTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/Proxies/StubberProxyTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/Proxies/CallStubberProxyTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/Proxies/AnswerBinderProxyTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/Proxies/CallVerifierProxyTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/Proxies/VerifierProxyTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/Proxies/AnswerCollectionProxyTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/String/ConverterTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/ClassGenerator/InvocationHandler/StubCallerTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/ClassGenerator/InvocationHandler/MagicCallRecorderTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/ClassGenerator/InvocationHandler/CallRecorderTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/ClassGenerator/InvocationHandler/FrozenObjectCheckTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/ClassGenerator/MockClassTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/Client/DefaultTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/Client/PHPUnitTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/PHPUnit/VerifierResultConstraingV3d6Test.php" role="test" />
+   <file baseinstalldir="/" name="Phake/PHPUnit/VerifierResultConstraintTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/FacadeTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/Stubber/StubMapperTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/Stubber/Answers/LambdaAnswerTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/Stubber/Answers/StaticAnswerTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/Stubber/Answers/ParentDelegateTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/Stubber/Answers/ExceptionAnswerTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/Stubber/SelfBindingAnswerBinderTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/Stubber/AnswerBinderTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/Stubber/AnswerCollectionTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/Annotation/MockInitializerTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/Annotation/ReaderTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/Matchers/AbstractMethodMatcherTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/Matchers/MethodMatcherTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/Matchers/ArgumentCaptorTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/Matchers/FactoryTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/Matchers/HamcrestMatcherAdapterTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/Matchers/EqualsMatcherTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/Matchers/ReferenceSetterTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/Matchers/PHPUnitConstraintAdapterTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/Matchers/AnyParametersTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/Mock/ResetterTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/Mock/FreezerTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/MockReaderTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/CallRecorder/RecorderTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/CallRecorder/CallInfoTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/CallRecorder/VerifierTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/CallRecorder/VerifierMode/TimesTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/CallRecorder/VerifierMode/AtLeastTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/CallRecorder/VerifierMode/AtMostTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/CallRecorder/CallExpectationTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/CallRecorder/OrderVerifierTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/CallRecorder/CallTest.php" role="test" />
+   <file baseinstalldir="/" name="Phake/CallRecorder/PositionTest.php" role="test" />
+  </dir>
   </dir>
  </contents>
  <dependencies>
