@@ -15,7 +15,7 @@
         "php": ">=5.2.0"
     },
     "autoload": {
-        "classmap": ["src"]
+        "classmap": ["./"]
     },
-    "include-path": ["src"]
+    "include-path": ["./"]
 }
