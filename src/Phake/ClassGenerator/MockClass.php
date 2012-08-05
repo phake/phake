@@ -227,7 +227,8 @@ class {$newClassName} {$extends}
 		\$args = array();
 		{$this->copyMethodParameters($method)}
 		
-		\$answer = \$this->__PHAKE_handlerChain->invoke(\$this, '{$method->getName()}', func_get_args(), \$args);
+		\$funcArgs = func_get_args();
+		\$answer = \$this->__PHAKE_handlerChain->invoke(\$this, '{$method->getName()}', \$funcArgs, \$args);
 		
 		if (\$answer instanceof Phake_Stubber_Answers_IDelegator)
 		{
