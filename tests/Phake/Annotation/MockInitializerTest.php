@@ -74,6 +74,10 @@ class Phake_Annotation_MockInitializerTest extends PHPUnit_Framework_TestCase
 
 	public function testInitialize()
 	{
+		if (substr(PHP_VERSION, 0, 3) < '5.3') {
+			$this->markTestSkipped('ReflectionProperty::setAccessible() is not available');
+		}
+
 		$this->initializer->initialize($this);
 
 		$this->assertInstanceOf('stdClass', $this->mock1);
