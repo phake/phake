@@ -67,6 +67,11 @@ class PhakeTest extends PHPUnit_Framework_TestCase
         Phake::setClient(Phake::CLIENT_DEFAULT);
     }
 
+	protected function tearDown()
+	{
+		Phake::setClient(Phake::CLIENT_DEFAULT);
+	}
+
 	/**
 	 * General test for Phake::mock() that it returns a class that inherits from the passed class.
 	 */
