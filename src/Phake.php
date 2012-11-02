@@ -195,7 +195,8 @@ class Phake
 
 		if (!$orderVerifier->verifyCallsInOrder(self::pullPositionsFromCallInfos($calls)))
 		{
-			throw new Phake_Exception_VerificationException("Calls not made in order");
+			$result = new Phake_CallRecorder_VerifierResult(false, array(), "Calls not made in order");
+			self::getClient()->processVerifierResult($result);
 		}
 	}
 

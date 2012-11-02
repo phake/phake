@@ -68,7 +68,8 @@ class Phake_ClassGenerator_InvocationHandler_FrozenObjectCheck implements Phake_
 	{
 		if ($this->mockReader->isObjectFrozen($mock))
 		{
-			throw new Phake_Exception_VerificationException('This object has been frozen.');
+			$result = new Phake_CallRecorder_VerifierResult(false, array(), 'This object has been frozen.');
+			Phake::getClient()->processVerifierResult($result);
 		}
 	}
 }
