@@ -106,7 +106,7 @@ class Phake
 	 * Returns a new mock object based on the given class name.
 	 * @param string $className
 	 * @param Phake_Stubber_SelfBindingAnswerBinder $defaultAnswer
-	 * @return Phake_ITestDouble
+	 * @return Phake_IMock
 	 */
 	public static function mock($className, Phake_Stubber_IAnswerContainer $defaultAnswer = NULL)
 	{
@@ -129,7 +129,7 @@ class Phake
 	 *
 	 * @param string $className class name
 	 * @param mixed ... the remaining arguments will be passed as constructor arguments
-	 * @return Phake_ITestDouble
+	 * @return Phake_IMock
 	 */
 	public static function partialMock()
 	{
@@ -146,7 +146,7 @@ class Phake
 	 * @see Phake::partialMock()
 	 * @param string $className class name
 	 * @param mixed ... the remaining arguments will be passed as constructor arguments
-	 * @return Phake_ITestDouble
+	 * @return Phake_IMock
 	 * @deprecated Please use Phake::partialMock() instead
 	 */
 	public static function partMock()
