@@ -80,9 +80,9 @@ class Phake_Matchers_FactoryTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Tests creating a default matcher by name
+	 * Tests creating a matcher by name
 	 */
-	public function testDefaultMatcherByName ()
+	public function testMatcherByName ()
 	{
 		$matcher = $this->factory->createMatcher('Phake_Matchers_AnyParameters');
 

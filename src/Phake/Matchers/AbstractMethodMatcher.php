@@ -86,13 +86,4 @@ class Phake_Matchers_AbstractMethodMatcher implements Phake_Matchers_IMethodMatc
 
 		return $matches;
 	}
-
-	/**
-	 * Determines if this matcher will match any parameters.
-	 * @return boolean
-	 */
-	public function matchesAnyParameters ()
-	{
-		return FALSE;
-	}
 }

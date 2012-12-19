@@ -109,15 +109,6 @@ class PHake_Matchers_MethodMatcherTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Tests that the matches any parameter method works.
-	 */
-	public function testMatchesAnyParametersWorks ()
-	{
-		$any_matcher = new Phake_Matchers_MethodMatcher('foo', array(new Phake_Matchers_AnyParameters));
-		$this->assertTrue($any_matcher->matchesAnyParameters());
-	}
-
-	/**
 	 * Tests that the matcher will return false on mismatched method name.
 	 */
 	public function testNoMatcherOnBadMethod()

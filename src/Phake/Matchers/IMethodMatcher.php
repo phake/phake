@@ -60,10 +60,4 @@ interface Phake_Matchers_IMethodMatcher
 	 * @return boolean
 	 */
 	public function matches($method, array &$args);
-
-	/**
-	 * Determines if this matcher will match any parameters.
-	 * @return boolean
-	 */
-	public function matchesAnyParameters();
 }
