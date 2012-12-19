@@ -80,6 +80,19 @@ class Phake_Matchers_FactoryTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Tests creating a default matcher by name
+	 */
+	public function testDefaultMatcherByName ()
+	{
+		$matcher = $this->factory->createMatcher('Phake_Matchers_AnyParameters');
+
+		$this->assertInstanceOf('Phake_Matchers_AnyParameters', $matcher);
+
+		$value = '';
+		$this->assertTrue($matcher->matches($value));
+	}
+
+	/**
 	 * Tests creating a pass through matcher
 	 */
 	public function testPassThroughMatcher()

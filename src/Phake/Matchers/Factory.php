@@ -69,6 +69,10 @@ class Phake_Matchers_Factory
 		{
 			return $argument;
 		}
+		elseif (is_string($argument) && class_exists($argument) && class_implements($argument, 'Phake_Matchers_IArgumentMatcher'))
+		{
+			return new $argument;
+		}
 		elseif (class_exists('PHPUnit_Framework_Constraint')
 				&& $argument instanceof PHPUnit_Framework_Constraint)
 		{
