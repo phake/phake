@@ -97,15 +97,24 @@ class PHake_Matchers_MethodMatcherTest extends PHPUnit_Framework_TestCase
 	public function testMatchesSuccessfullyMatches()
 	{
 		$this->arguments[0]->expects($this->any())
-				->method('matches')
-				->will($this->returnValue(TRUE));
+			->method('matches')
+			->will($this->returnValue(TRUE));
 
 		$this->arguments[1]->expects($this->any())
-				->method('matches')
-				->will($this->returnValue(TRUE));
+			->method('matches')
+			->will($this->returnValue(TRUE));
 
 		$arguments = array('foo', 'bar');
 		$this->assertTrue($this->matcher->matches('foo', $arguments));
+	}
+
+	/**
+	 * Tests that the matches any parameter method works.
+	 */
+	public function testMatchesAnyParametersWorks ()
+	{
+		$any_matcher = new Phake_Matchers_MethodMatcher('foo', array(new Phake_Matchers_AnyParameters));
+		$this->assertTrue($any_matcher->matchesAnyParameters());
 	}
 
 	/**

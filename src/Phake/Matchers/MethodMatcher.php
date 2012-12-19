@@ -94,6 +94,20 @@ class Phake_Matchers_MethodMatcher implements Phake_Matchers_IMethodMatcher
 	}
 
 	/**
+	 * Determines if this matcher will match any parameters.
+	 * @return boolean
+	 */
+	public function matchesAnyParameters ()
+	{
+		if (!empty($this->argumentMatchers) && $this->argumentMatchers[0] instanceof Phake_Matchers_AnyParameters)
+		{
+			return TRUE;
+		}
+
+		return FALSE;
+	}
+
+	/**
 	 * Determines whether or not given arguments match the argument matchers configured in the object.
 	 *
 	 * @param array $args
@@ -101,7 +115,7 @@ class Phake_Matchers_MethodMatcher implements Phake_Matchers_IMethodMatcher
 	 */
 	private function doArgumentsMatch(array &$args)
 	{
-		if (!empty($this->argumentMatchers) && $this->argumentMatchers[0] instanceof Phake_Matchers_AnyParameters)
+		if ($this->matchesAnyParameters())
 		{
 			return TRUE;
 		}
