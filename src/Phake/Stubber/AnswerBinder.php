@@ -56,17 +56,17 @@ class Phake_Stubber_AnswerBinder implements Phake_Stubber_IAnswerBinder
 	/**
 	 * @var Phake_IMock
 	 */
-	protected $obj;
+	private $obj;
 
 	/**
 	 * @var Phake_Matchers_MethodMatcher
 	 */
-	protected $matcher;
+	private $matcher;
 	
 	/**
 	 * @var Phake_MockReader
 	 */
-	protected $mockReader;
+	private $mockReader;
 
 	/**
 	 * Creates a new Answer Binder

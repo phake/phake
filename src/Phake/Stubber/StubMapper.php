@@ -57,13 +57,11 @@ class Phake_Stubber_StubMapper
 	/**
 	 * Maps a given answer collection to a given $matcher
 	 * @param Phake_Stubber_AnswerCollection $answer
-	 * @param Phake_Matchers_MethodMatcher $matcher
-	 * @param bool $prepend
+	 * @param Phake_Matchers_IMethodMatcher $matcher
 	 */
-	public function mapStubToMatcher(Phake_Stubber_AnswerCollection $answer, Phake_Matchers_IMethodMatcher $matcher, $prepend = false)
+	public function mapStubToMatcher(Phake_Stubber_AnswerCollection $answer, Phake_Matchers_IMethodMatcher $matcher)
 	{
-		$map_function = $prepend ? 'array_unshift' : 'array_push';
-		$map_function($this->matcherStubMap, array($matcher, $answer));
+		$this->matcherStubMap[] = array($matcher, $answer);
 	}
 
 	/**
@@ -96,25 +94,6 @@ class Phake_Stubber_StubMapper
 	public function removeAllAnswers()
 	{
 		$this->matcherStubMap = array();
-	}
-
-	/**
-	 * Removes default answer collection from the stub mapper.
-	 */
-	public function removeDefaultAnswer()
-	{
-		if (empty($this->matcherStubMap))
-		{
-			return;
-		}
-
-		/** @var $matcher Phake_Matchers_MethodMatcher */
-		$matcher = $this->matcherStubMap[0][0];
-
-		if ($matcher->matchesAnyParameters())
-		{
-			array_shift($this->matcherStubMap);
-		}
 	}
 }
 

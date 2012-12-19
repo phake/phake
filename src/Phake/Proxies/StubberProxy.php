@@ -43,7 +43,6 @@
  */
 
 require_once 'Phake/Stubber/AnswerBinder.php';
-require_once 'Phake/Stubber/DefaultAnswerBinder.php';
 require_once 'Phake/Proxies/AnswerBinderProxy.php';
 require_once 'Phake/Matchers/MethodMatcher.php';
 require_once 'Phake/Matchers/PHPUnitConstraintAdapter.php';
@@ -105,7 +104,7 @@ class Phake_Proxies_StubberProxy
 	public function __get($method)
 	{
 		$matcher = new Phake_Matchers_MethodMatcher($method, $this->matcherFactory->createMatcherArray(array('Phake_Matchers_AnyParameters')));
-		$binder = new Phake_Stubber_DefaultAnswerBinder($this->obj, $matcher, $this->mockReader);
+		$binder = new Phake_Stubber_AnswerBinder($this->obj, $matcher, $this->mockReader);
 		return new Phake_Proxies_AnswerBinderProxy($binder);
 	}
 }

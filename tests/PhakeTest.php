@@ -154,15 +154,15 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Tests that a stub method can be defined with shorthand notation later.
 	 */
-	public function testLaterShorthandStub ()
+	public function testFirstShorthandStub ()
 	{
 		$mock = Phake::mock('PhakeTest_MockedClass');
 
-		Phake::when($mock)->foo('param')->thenReturn(51);
 		Phake::when($mock)->foo->thenReturn(42);
+		Phake::when($mock)->foo('param')->thenReturn(51);
 
-		$this->assertEquals(42, $mock->foo());
 		$this->assertEquals(51, $mock->foo('param'));
+		$this->assertEquals(42, $mock->foo());
 	}
 
 	/**
