@@ -72,7 +72,7 @@ class Phake_Proxies_StubberProxyTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Tests setting a stub on a method in the stubbable object
+	 * Tests setting a specific stub on a method in the stubbable object
 	 */
 	public function testCall()
 	{
@@ -81,6 +81,18 @@ class Phake_Proxies_StubberProxyTest extends PHPUnit_Framework_TestCase
 		$this->assertThat($answerBinder, $this->isInstanceOf('Phake_Proxies_AnswerBinderProxy'));
 
 		$this->assertAttributeInstanceOf('Phake_Stubber_AnswerBinder', 'binder', $answerBinder);
+	}
+
+	/**
+	 * Tests setting default stub on a method in the stubbable object
+	 */
+	public function testGet()
+	{
+		$answerBinder = $this->proxy->foo;
+
+		$this->assertThat($answerBinder, $this->isInstanceOf('Phake_Proxies_AnswerBinderProxy'));
+
+		$this->assertAttributeInstanceOf('Phake_Stubber_DefaultAnswerBinder', 'binder', $answerBinder);
 	}
 }
 

@@ -43,70 +43,65 @@
  */
 
 require_once 'Phake/Stubber/AnswerBinder.php';
-require_once 'Phake/Stubber/DefaultAnswerBinder.php';
-require_once 'Phake/Proxies/AnswerBinderProxy.php';
+require_once 'Phake/Stubber/AnswerCollection.php';
+require_once 'Phake/Stubber/IAnswer.php';
+require_once 'Phake/Stubber/StubMapper.php';
 require_once 'Phake/Matchers/MethodMatcher.php';
-require_once 'Phake/Matchers/PHPUnitConstraintAdapter.php';
-require_once 'Phake/Matchers/HamcrestMatcherAdapter.php';
-require_once 'Phake/Matchers/EqualsMatcher.php';
+require_once 'Phake/Proxies/AnswerCollectionProxy.php';
 
 /**
- * A proxy to handle stubbing a method on a mock object.
+ * Tests the Default Answer Binder
  *
- * @author Mike Lively <m@digitalsandwich.com>
+ * @author Rick Wong <rick@webambition.nl>
  */
-class Phake_Proxies_StubberProxy
+class Phake_Stubber_DefaultAnswerBinderTest extends PHPUnit_Framework_TestCase
 {
+	/**
+	 * @var Phake_Stubber_DefaultAnswerBinder
+	 */
+	private $binder;
+
 	/**
 	 * @var Phake_IMock
 	 */
-	private $obj;
+	private $mock;
 
 	/**
-	 * @var Phake_Matchers_Factory
+	 * @var Phake_Matchers_MethodMatcher
 	 */
-	private $matcherFactory;
-	
+	private $matcher;
+
+	/**
+	 * @var Phake_Stubber_StubMapper
+	 */
+	private $stubMapper;
+
 	/**
 	 * @var Phake_MockReader
 	 */
 	private $mockReader;
 
 	/**
-	 * @param Phake_IMock $obj
-	 * @param Phake_Matchers_Factory $matcherFactory
-	 * @param Phake_MockReader $mockReader
+	 * Sets up the test fixture
 	 */
-	public function __construct(Phake_IMock $obj, Phake_Matchers_Factory $matcherFactory, Phake_MockReader $mockReader)
+	public function setUp()
 	{
-		$this->obj = $obj;
-		$this->matcherFactory = $matcherFactory;
-		$this->mockReader = $mockReader;
+		$this->mock = $this->getMock('Phake_IMock');
+		$this->matcher = $this->getMock('Phake_Matchers_MethodMatcher', array(), array(), '', FALSE);
+		$this->stubMapper = Phake::mock('Phake_Stubber_StubMapper');
+		$this->mockReader = Phake::mock('Phake_MockReader');
+
+		Phake::when($this->mockReader)->getStubMapper($this->anything())->thenReturn($this->stubMapper);
+		$this->binder = new Phake_Stubber_DefaultAnswerBinder($this->mock, $this->matcher, $this->mockReader);
 	}
 
-	/**
-	 * A magic call to instantiate an Answer Binder Proxy.
-	 * @param string $method
-	 * @param array $arguments
-	 * @return Phake_Proxies_AnswerBinderProxy
-	 */
-	public function __call($method, array $arguments)
+	public function testBindAnswer()
 	{
-		$matcher = new Phake_Matchers_MethodMatcher($method, $this->matcherFactory->createMatcherArray($arguments));
-		$binder = new Phake_Stubber_AnswerBinder($this->obj, $matcher, $this->mockReader);
-		return new Phake_Proxies_AnswerBinderProxy($binder);
-	}
+		$answer = $this->getMock('Phake_Stubber_IAnswer');
 
-	/**
-	 * A magic call to instantiate an Answer Binder Proxy with Phake_Matchers_AnyParameters
-	 * @param string $method
-	 * @return Phake_Proxies_AnswerBinderProxy
-	 */
-	public function __get($method)
-	{
-		$matcher = new Phake_Matchers_MethodMatcher($method, $this->matcherFactory->createMatcherArray(array('Phake_Matchers_AnyParameters')));
-		$binder = new Phake_Stubber_DefaultAnswerBinder($this->obj, $matcher, $this->mockReader);
-		return new Phake_Proxies_AnswerBinderProxy($binder);
+		$this->binder->bindAnswer($answer);
+
+		Phake::verify($this->stubMapper)->mapStubToMatcher(new Phake_Stubber_AnswerCollection($answer), $this->matcher, true);
 	}
 }
 

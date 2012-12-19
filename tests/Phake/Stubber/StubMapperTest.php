@@ -111,13 +111,36 @@ class Phake_Stubber_StubMapperTest extends PHPUnit_Framework_TestCase
 		$stub = $this->getMock('Phake_Stubber_AnswerCollection', array(), array(), '', FALSE);
 
 		$matcher->expects($this->never())
-				->method('matches');
+			->method('matches');
 
 		$this->mapper->mapStubToMatcher($stub, $matcher);
 
 		$this->mapper->removeAllAnswers();
 
 		$arguments = array('bar', 'test');
+		$this->assertNull($this->mapper->getStubByCall('foo', $arguments));
+	}
+
+	/**
+	 * Tests resetting default stub mapper
+	 */
+	public function testRemoveDefaultAnswer()
+	{
+		$matcher = $this->getMock('Phake_Matchers_MethodMatcher', array(), array(), '', FALSE);
+		$stub = $this->getMock('Phake_Stubber_AnswerCollection', array(), array(), '', FALSE);
+
+		$matcher->expects($this->any())
+			->method('matchesAnyParameters')
+			->will($this->returnValue(TRUE));
+
+		$matcher->expects($this->never())
+			->method('matches');
+
+		$this->mapper->mapStubToMatcher($stub, $matcher);
+
+		$this->mapper->removeDefaultAnswer();
+
+		$arguments = array();
 		$this->assertNull($this->mapper->getStubByCall('foo', $arguments));
 	}
 

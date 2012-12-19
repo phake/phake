@@ -1,26 +1,26 @@
 <?php
-/* 
+/*
  * Phake - Mocking Framework
- * 
+ *
  * Copyright (c) 2010-2012, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
- * 
+ *
  *  *  Redistributions of source code must retain the above copyright
  *     notice, this list of conditions and the following disclaimer.
- * 
+ *
  *  *  Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in
  *     the documentation and/or other materials provided with the
  *     distribution.
- * 
+ *
  *  *  Neither the name of Mike Lively nor the names of his
  *     contributors may be used to endorse or promote products derived
  *     from this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -33,7 +33,7 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  * @category   Testing
  * @package    Phake
  * @author     Mike Lively <m@digitalsandwich.com>
@@ -42,79 +42,31 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+require_once 'Phake/Stubber/IAnswerBinder.php';
+require_once 'Phake/Stubber/AnswerCollection.php';
+require_once 'Phake/Proxies/AnswerCollectionProxy.php';
+
 /**
- * Allows mapping of Answer collections to methods.
+ * Allows binding a default answer to stubbable object's method.
  *
- * @author Mike Lively <m@digitalsandwich.com>
+ * @author Rick Wong <rick@webambition.nl>
  */
-class Phake_Stubber_StubMapper
+class Phake_Stubber_DefaultAnswerBinder extends Phake_Stubber_AnswerBinder
 {
 	/**
-	 * @var array
+	 * Prepends answer to the the classes so it is matched last
+	 * @param Phake_Stubber_IAnswer $answer
+	 * @return Phake_Proxies_AnswerCollectionProxy
 	 */
-	private $matcherStubMap = array();
-
-	/**
-	 * Maps a given answer collection to a given $matcher
-	 * @param Phake_Stubber_AnswerCollection $answer
-	 * @param Phake_Matchers_MethodMatcher $matcher
-	 * @param bool $prepend
-	 */
-	public function mapStubToMatcher(Phake_Stubber_AnswerCollection $answer, Phake_Matchers_IMethodMatcher $matcher, $prepend = false)
+	public function bindAnswer(Phake_Stubber_IAnswer $answer)
 	{
-		$map_function = $prepend ? 'array_unshift' : 'array_push';
-		$map_function($this->matcherStubMap, array($matcher, $answer));
-	}
+		$collection = new Phake_Stubber_AnswerCollection($answer);
+		$stub_mapper = $this->mockReader->getStubMapper($this->obj);
 
-	/**
-	 * Returns the answer collection based on a matcher that matches a given call
-	 * @param string $method
-	 * @param array $args
-	 * @return Phake_Stubber_AnswerCollection or NULL if a matcher is not found
-	 */
-	public function getStubByCall($method, array &$args)
-	{
-		$matcherStubMap = array_reverse($this->matcherStubMap);
-		
-		foreach ($matcherStubMap as $item)
-		{
-			list($matcher, $answer) = $item;
+		$stub_mapper->removeDefaultAnswer();
+		$stub_mapper->mapStubToMatcher($collection, $this->matcher, true);
 
-			/* @var $matcher Phake_Matchers_MethodMatcher */
-			if ($matcher->matches($method, $args))
-			{
-				return $answer;
-			}
-		}
-
-		return NULL;
-	}
-
-	/**
-	 * Removes all answer collections from the stub mapper.
-	 */
-	public function removeAllAnswers()
-	{
-		$this->matcherStubMap = array();
-	}
-
-	/**
-	 * Removes default answer collection from the stub mapper.
-	 */
-	public function removeDefaultAnswer()
-	{
-		if (empty($this->matcherStubMap))
-		{
-			return;
-		}
-
-		/** @var $matcher Phake_Matchers_MethodMatcher */
-		$matcher = $this->matcherStubMap[0][0];
-
-		if ($matcher->matchesAnyParameters())
-		{
-			array_shift($this->matcherStubMap);
-		}
+		return new Phake_Proxies_AnswerCollectionProxy($collection);
 	}
 }
 
