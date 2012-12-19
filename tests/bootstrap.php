@@ -48,8 +48,16 @@ $codeDir = dirname($testDir) . DIRECTORY_SEPARATOR . 'src';
 
 set_include_path($testDir . PATH_SEPARATOR . $codeDir . PATH_SEPARATOR . get_include_path());
 
-define('HAMCREST_LOADED', @fopen('hamcrest.php', 'r', true));
-if (HAMCREST_LOADED) include_once('hamcrest.php');
+/**
+ * Use my_bootstrap.php for local includes
+ */
+include_once($testDir . DIRECTORY_SEPARATOR . 'my_bootstrap.php');
+
+if (!defined('HAMCREST_LOADED'))
+{
+	define('HAMCREST_LOADED', @fopen('hamcrest.php', 'r', true));
+	if (HAMCREST_LOADED) include_once('hamcrest.php');
+}
 
 include_once('Phake.php');
 Phake::setClient(Phake::CLIENT_DEFAULT);

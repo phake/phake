@@ -1,21 +1,16 @@
 {
-    "name": "phake/phake",
-    "type": "library",
-    "description": "The Phake mock testing library",
-    "keywords": ["testing", "mock"],
-    "homepage": "https://github.com/mlively/Phake",
-    "license": "BSD",
+    "name": "rickwong/phake",
+    "require": {
+        "phpunit/phpunit": "3.7.*",
+        "davedevelopment/hamcrest-php": "dev-master"
+    },
+	"config": {
+		"bin-dir": "/usr/local/bin/"
+	},
     "authors": [
         {
-            "name": "Mike Lively",
-            "email": "m@digitalsandwich.com"
+            "name": "Rick Wong",
+            "email": "rick@webambition.nl"
         }
-    ],
-    "require": {
-        "php": ">=5.2.0"
-    },
-    "autoload": {
-        "classmap": ["src"]
-    },
-    "include-path": ["src"]
+    ]
 }
