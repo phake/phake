@@ -72,7 +72,7 @@ class Phake_Proxies_StubberProxyTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Tests setting a specific stub on a method in the stubbable object
+	 * Tests setting a stub on a method in the stubbable object
 	 */
 	public function testCall()
 	{
@@ -84,7 +84,7 @@ class Phake_Proxies_StubberProxyTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Tests setting default stub on a method in the stubbable object
+	 * Tests setting a stub with any parameters on a method in the stubbable object
 	 */
 	public function testGet()
 	{
