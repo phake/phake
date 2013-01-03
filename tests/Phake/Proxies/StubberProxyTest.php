@@ -82,6 +82,18 @@ class Phake_Proxies_StubberProxyTest extends PHPUnit_Framework_TestCase
 
 		$this->assertAttributeInstanceOf('Phake_Stubber_AnswerBinder', 'binder', $answerBinder);
 	}
+
+	/**
+	 * Tests setting a stub with any parameters on a method in the stubbable object
+	 */
+	public function testGet()
+	{
+		$answerBinder = $this->proxy->foo;
+
+		$this->assertThat($answerBinder, $this->isInstanceOf('Phake_Proxies_AnswerBinderProxy'));
+
+		$this->assertAttributeInstanceOf('Phake_Stubber_AnswerBinder', 'binder', $answerBinder);
+	}
 }
 
 ?>
