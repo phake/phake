@@ -69,7 +69,7 @@ class Phake_Matchers_Factory
 		{
 			return $argument;
 		}
-		elseif (is_string($argument) && class_exists($argument) && class_implements($argument, 'Phake_Matchers_IArgumentMatcher'))
+		elseif (is_string($argument) && class_exists($argument) && is_subclass_of($argument, 'Phake_Matchers_IArgumentMatcher'))
 		{
 			return new $argument;
 		}

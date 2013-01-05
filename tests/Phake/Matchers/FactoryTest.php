@@ -93,6 +93,16 @@ class Phake_Matchers_FactoryTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Tests creating a matcher by name fails if the required interface is not implemented
+	 */
+	public function testMatcherByNameMustImplementRequiredInterface ()
+	{
+		$matcher = $this->factory->createMatcher('Phake_Matchers_MethodMatcher');
+
+		$this->assertNotInstanceOf('Phake_Matchers_MethodMatcher', $matcher);
+	}
+
+	/**
 	 * Tests creating a pass through matcher
 	 */
 	public function testPassThroughMatcher()
