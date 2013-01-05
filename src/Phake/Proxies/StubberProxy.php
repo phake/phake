@@ -103,8 +103,6 @@ class Phake_Proxies_StubberProxy
 	 */
 	public function __get($method)
 	{
-		return $this->__call($method, array('Phake_Matchers_AnyParameters'));
+		return $this->__call($method, array(new Phake_Matchers_AnyParameters));
 	}
 }
-
-?>
