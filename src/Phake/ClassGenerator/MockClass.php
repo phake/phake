@@ -221,8 +221,10 @@ class {$newClassName} {$extends}
 	{
 		$modifiers = implode(' ', Reflection::getModifierNames($method->getModifiers() & ~ReflectionMethod::IS_ABSTRACT));
 
+		$reference = $method->returnsReference() ? '&' : '';
+
 		$methodDef = "
-	{$modifiers} function {$method->getName()}({$this->generateMethodParameters($method)})
+	{$modifiers} function {$reference}{$method->getName()}({$this->generateMethodParameters($method)})
 	{
 		\$args = array();
 		{$this->copyMethodParameters($method)}
@@ -242,7 +244,8 @@ class {$newClassName} {$extends}
 		}
 		else
 		{
-			return \$answer->getAnswer();
+			\$returnAnswer = \$answer->getAnswer();
+			return \$returnAnswer;
 		}
 	}
 ";

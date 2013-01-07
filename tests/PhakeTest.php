@@ -50,6 +50,7 @@ require_once('PhakeTest/MagicClass.php');
 require_once('PhakeTest/MockedConstructedClass.php');
 require_once('PhakeTest/ExtendedMockedConstructedClass.php');
 require_once('PhakeTest/MockedInterface.php');
+require_once('PhakeTest/ReturnByReferenceMethodClass.php');
 require_once('Phake/Exception/VerificationException.php');
 
 /**
@@ -1150,6 +1151,17 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 
 	    $this->assertTrue($memcache->set('key', 'value'));
 	}
-}
 
-?>
+	public function testMockingMethodReturnByReference()
+	{
+		$something = array();
+		$referenceMethodClass = Phake::mock('PhakeTest_ReturnByReferenceMethodClass');
+
+		Phake::when($referenceMethodClass)->getSomething()->thenReturn($something);
+
+		$something[] = 'foo';
+		$returnSomething = $referenceMethodClass->getSomething();
+
+		$this->assertNotContains('foo', $returnSomething);
+	}
+}

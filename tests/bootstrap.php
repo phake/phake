@@ -42,7 +42,7 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-ini_set('error_reporting', E_ALL | E_STRICT);
+error_reporting(E_ALL | E_STRICT);
 $testDir = dirname(__FILE__);
 $codeDir = dirname($testDir) . DIRECTORY_SEPARATOR . 'src';
 
