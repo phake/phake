@@ -1204,4 +1204,12 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 
 		$this->assertNotContains('foo', $returnSomething);
 	}
+
+	public function testGetOnMockedClass()
+	{
+		$mock = Phake::mock('PhakeTest_MagicClass');
+		Phake::when($mock)->__get('myId')->thenReturn(500);
+
+		$this->assertEquals(500, $mock->myId);
+	}
 }

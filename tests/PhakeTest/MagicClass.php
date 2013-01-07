@@ -49,4 +49,9 @@ class PhakeTest_MagicClass
 		return '__call';
 	}
 
+	public function __get($name)
+	{
+		return '__get';
+	}
+
 }
