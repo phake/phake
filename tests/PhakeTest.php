@@ -186,11 +186,13 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 	{
 		$mock = Phake::mock('PhakeTest_MagicClass');
 
-		Phake::when($mock)->magicProperty->thenReturn(42);
 		Phake::when($mock)->definedMethod->thenReturn(64);
+		Phake::when($mock)->__get->thenReturn(75);
+		Phake::when($mock)->magicProperty->thenReturn(42);
 
-		$this->assertSame(42, $mock->magicProperty);
 		$this->assertSame(64, $mock->definedMethod());
+		$this->assertSame(75, $mock->otherMagicProperties);
+		$this->assertSame(42, $mock->magicProperty);
 	}
 
 	/**
