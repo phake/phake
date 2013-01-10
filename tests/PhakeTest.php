@@ -180,6 +180,20 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Tests that a stub method can be defined with shorthand notation even with __get().
+	 */
+	public function testMagicClassShorthandStub ()
+	{
+		$mock = Phake::mock('PhakeTest_MagicClass');
+
+		Phake::when($mock)->magicProperty->thenReturn(42);
+		Phake::when($mock)->definedMethod->thenReturn(64);
+
+		$this->assertSame(42, $mock->magicProperty);
+		$this->assertSame(64, $mock->definedMethod());
+	}
+
+	/**
 	 * Tests using multiple stubs.
 	 */
 	public function testMultipleStubs()

@@ -54,4 +54,9 @@ class PhakeTest_MagicClass
 		return '__get';
 	}
 
+	public function definedMethod ()
+	{
+		return 'defined';
+	}
+
 }
