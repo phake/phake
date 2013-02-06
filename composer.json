@@ -14,6 +14,9 @@
     "require": {
         "php": ">=5.2.0"
     },
+    "require-dev": {
+        "ext-soap":"*"
+    },
     "autoload": {
         "classmap": ["src"]
     },
