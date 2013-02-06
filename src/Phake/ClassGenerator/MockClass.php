@@ -119,7 +119,7 @@ class {$newClassName} {$extends}
 
 	public \$__PHAKE_defaultAnswer;
 
-	public \$__PHAKE_isFrozen = FALSE;
+	public \$__PHAKE_isFrozen;
 	
 	public \$__PHAKE_name;
 	
@@ -130,6 +130,7 @@ class {$newClassName} {$extends}
 		\$this->__PHAKE_callRecorder = \$callRecorder;
 		\$this->__PHAKE_stubMapper = \$stubMapper;
 		\$this->__PHAKE_defaultAnswer = \$defaultAnswer;
+		\$this->__PHAKE_isFrozen = FALSE;
 		\$this->__PHAKE_name = '{$mockedClassName}';
 		\$this->__PHAKE_handlerChain = new Phake_ClassGenerator_InvocationHandler_Composite(array(
 			new Phake_ClassGenerator_InvocationHandler_FrozenObjectCheck(new Phake_MockReader()),
