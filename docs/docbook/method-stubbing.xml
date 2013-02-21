@@ -82,7 +82,7 @@
 			it does is looks at the stub map for that mock object. The stub map is a map that associates answers to method matchers.
 			An answer is what a mocked object will return when it is called. By default, a call to a mock object returns a static
 			answer of NULL. We will discuss answers more in <xref linkend="answers" />. A method matcher has two parts. The
-			first is the method name. The second is an array of arugments. The array of arguments will then contain various constraints
+			first is the method name. The second is an array of arguments. The array of arguments will then contain various constraints
 			that are applied to each argument to see if a given argument will match. The most common constraint is an equality constraint
 			that will match loosely along the same lines as the double equals sign in PHP. We will talk about matchers more in
 			<xref linkend="matchers" />.
@@ -124,7 +124,7 @@
 			playing around with this idea I notice that the math isn't always adding up. If I start with an item that is $100 and
 			then add a discount that is $81.40 I see that the total price isn't adding up to $18.60. This is definitely problematic
 			After doing some further research, I realize I made a silly mistake. I am just using simple floats to calculate the
-			costs. Floats are by nature inacurrate. Once you start using them in mathematical operations they start to show their
+			costs. Floats are by nature inaccurate. Once you start using them in mathematical operations they start to show their
 			inadequacy for precision. In keeping with the test driven method of creating code I need to create a unit test that
 			shows this flaw.
 		</para>

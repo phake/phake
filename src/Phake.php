@@ -215,7 +215,7 @@ class Phake
 	}
 
 	/**
-	 * Allows for verifying that no interaction occured with a mock object
+	 * Allows for verifying that no interaction occurred with a mock object
 	 * @param Phake_IMock $mock
 	 */
 	public static function verifyNoInteraction(Phake_IMock $mock)

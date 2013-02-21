@@ -24,7 +24,7 @@
 	</para>
 	<section><title>Using PHPUnit Matchers</title>
 		<para>
-			Phake was developed with PHPUnit in mind. It is not dependent on PHPUnit, however if PHPUnit is your testing framework of choice there is some special integration available. Any constraints made available by the PHPUnit framework will work seemlessly inside of Phake. Here is an example of how the PHPUnit constraints can be used:
+			Phake was developed with PHPUnit in mind. It is not dependent on PHPUnit, however if PHPUnit is your testing framework of choice there is some special integration available. Any constraints made available by the PHPUnit framework will work seamlessly inside of Phake. Here is an example of how the PHPUnit constraints can be used:
 		</para>
 		<xi:include href="method-parameter-matchers/phpunit-matchers.xml" />
 		<para>

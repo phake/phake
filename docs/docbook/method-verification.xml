@@ -9,14 +9,14 @@
 			Mock objects in Phake can almost be viewed as a tape recorder. Any time the code you are testing
 			calls a method on an object you create with <function>Phake::mock()</function> it is going to
 			record the method that you called along with all of the parameters used to call that method. Then
-			<function>Phake::verify()</function> will look at that recording and allow you to assert wether
+			<function>Phake::verify()</function> will look at that recording and allow you to assert whether
 			or not a certain call was made.
 		</para>
 		<para>
 			The Phake::verify() call here, verifies that the method foo() has been called once (and only once) with no parameters on the object $mock. A very important thing to note here that is a departure from most (if not all) other PHP mocking frameworks is that you want to verify the method call AFTER the method call takes place. Other mocking frameworks such as the one built into PHPUnit depend on you setting the expectations of what will get called prior to running the system under test.
 		</para>
 		<para>
-			Phake strives to allow you to follow the four phases of a unit test as layed out in xUnit Test Patterns: setup, exercise, verify, and teardown. The setup phase of a test using Phake for mocking will now include calls to Phake::mock() for each class you want to mock. The exercise portion of your code will remain the same. The verify section of your code will include calls to Phake::verify(). The exercise and teardown phases will remain unchanged.
+			Phake strives to allow you to follow the four phases of a unit test as laid out in xUnit Test Patterns: setup, exercise, verify, and teardown. The setup phase of a test using Phake for mocking will now include calls to Phake::mock() for each class you want to mock. The exercise portion of your code will remain the same. The verify section of your code will include calls to Phake::verify(). The exercise and teardown phases will remain unchanged.
 		</para>
 	</section>
 	<section><title>Verifying Method Parameters</title>
@@ -76,7 +76,7 @@
 	</section>
 	<section><title>Verifying Magic Methods</title>
 		<para>
-			Magic methods are commonly used in PHP and the need to be able to seemlessly utilize them is always necessary. Most magic methods can be verified using the method name just like you would any other method. The one exception to this is the __call() method. This method is overwritten on each mock already to allow for the fluent api that Phake utilizes. If you want to verify a particular invoaction of __call() you can verify the actual method call by mocking the method passed in as the first parameter.
+			Magic methods are commonly used in PHP and the need to be able to seamlessly utilize them is always necessary. Most magic methods can be verified using the method name just like you would any other method. The one exception to this is the __call() method. This method is overwritten on each mock already to allow for the fluent api that Phake utilizes. If you want to verify a particular invocation of __call() you can verify the actual method call by mocking the method passed in as the first parameter.
 		</para>
 		<para>
 			Consider the following class.
@@ -87,7 +87,7 @@
 		</para>
 		<xi:include href="method-verification/magic-method-verify.xml" />
 		<para>
-			If for any reason you need to explicitely verify calls to __call() then you can use Phake::verifyCallMethodWith().
+			If for any reason you need to explicitly verify calls to __call() then you can use Phake::verifyCallMethodWith().
 		</para>
 		<xi:include href="method-verification/magic-method-explicit-verify.xml" />
 		<para>
