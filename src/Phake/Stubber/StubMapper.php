@@ -57,7 +57,7 @@ class Phake_Stubber_StubMapper
 	/**
 	 * Maps a given answer collection to a given $matcher
 	 * @param Phake_Stubber_AnswerCollection $answer
-	 * @param Phake_Matchers_MethodMatcher $matcher
+	 * @param Phake_Matchers_IMethodMatcher $matcher
 	 */
 	public function mapStubToMatcher(Phake_Stubber_AnswerCollection $answer, Phake_Matchers_IMethodMatcher $matcher)
 	{

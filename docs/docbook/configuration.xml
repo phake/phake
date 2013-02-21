@@ -31,7 +31,7 @@
             When generating mock classes, Phake will load them into memory utilizing the PHP eval() function. This can
             make the code inside of mock classes difficult to debug or diagnose when errors occur in this code. Using
             the Phake::setMockLoader() method you can change this behavior to instead dump the generated class to a
-            file and then require that file. This will allow for accurate and easily reaserchable errors when running
+            file and then require that file. This will allow for accurate and easily researchable errors when running
             tests. This shouldn't typically be required for most users of Phake, however if your are having errors or
             working on code for Phake itself it can be incredibly useful.
         </para>
