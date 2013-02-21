@@ -19,7 +19,7 @@ class CardGame
 	public function dealCards()
 	{
 		$this->deck->shuffle();
-		$this->dealerStrategy->deal($deck, $players);
+		$this->dealerStrategy->deal($this->deck, $this->players);
 	}
 }
 
