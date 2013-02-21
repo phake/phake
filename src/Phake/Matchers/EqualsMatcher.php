@@ -68,7 +68,7 @@ class Phake_Matchers_EqualsMatcher implements Phake_Matchers_IArgumentMatcher
 	}
 
 	/**
-	 * Returns wether or not the passed argument matches the matcher.
+	 * Returns whether or not the passed argument matches the matcher.
 	 */
 	public function matches(&$argument)
 	{

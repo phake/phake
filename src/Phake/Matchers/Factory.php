@@ -53,7 +53,7 @@ require_once 'Phake/Matchers/EqualsMatcher.php';
 class Phake_Matchers_Factory
 {
 	/**
-	 * Creates an argment matcher based on the given value.
+	 * Creates an argument matcher based on the given value.
 	 *
 	 * If the given values is already an instance of Phake_Matchers_IArgumentMatcher it is passed
 	 * through. If it is an instance of PHPUnit_Framework_Constraint a PHPUnit adapter is returned.

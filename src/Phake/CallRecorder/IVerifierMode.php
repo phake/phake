@@ -43,7 +43,7 @@
  */
 
 /**
- * Allows verifying that call invocations occured some number of times.
+ * Allows verifying that call invocations occurred some number of times.
  *
  * @author Brian Feaver <brian.feaver@gmail.com>
  */

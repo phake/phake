@@ -15,7 +15,7 @@ class Phake_Stubber_Answers_LambdaAnswer implements Phake_Stubber_Answers_IDeleg
 	private $answerLambda;
 
 	/**
-	 * @param mixed $answer
+	 * @param mixed $answerLambda
 	 */
 	public function __construct($answerLambda)
 	{
