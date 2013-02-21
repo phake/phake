@@ -67,8 +67,7 @@ class Phake_Proxies_CallStubberProxy
 	private $mockReader;
 
 	/**
-	 * @param Phake_IMock $obj
-	 * @param Phake_Matchers_Factory $matcherFactory
+	 * @param array $arguments
 	 * @param Phake_MockReader $mockReader
 	 */
 	public function __construct(array $arguments, Phake_MockReader $mockReader)

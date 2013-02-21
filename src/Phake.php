@@ -105,7 +105,7 @@ class Phake
 	/**
 	 * Returns a new mock object based on the given class name.
 	 * @param string $className
-	 * @param Phake_Stubber_SelfBindingAnswerBinder $defaultAnswer
+	 * @param Phake_Stubber_IAnswerContainer $defaultAnswer
 	 * @return Phake_IMock
 	 */
 	public static function mock($className, Phake_Stubber_IAnswerContainer $defaultAnswer = NULL)
@@ -158,6 +158,7 @@ class Phake
 	/**
 	 * Creates a new verifier for the given mock object.
 	 * @param Phake_IMock $mock
+	 * @param Phake_CallRecorder_IVerifierMode $mode
 	 * @return Phake_CallRecorder_VerifierProxy
 	 */
 	public static function verify(Phake_IMock $mock, Phake_CallRecorder_IVerifierMode $mode = null)

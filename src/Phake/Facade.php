@@ -66,6 +66,7 @@ class Phake_Facade
 	 * @param Phake_ClassGenerator_MockClass $mockGenerator - The generator used to construct mock classes
 	 * @param Phake_CallRecorder_Recorder $callRecorder
 	 * @param Phake_Stubber_IAnswer $defaultAnswer
+	 * @param array $constructorArgs
 	 * @return mixed
 	 */
 	public function mock($mockedClass, Phake_ClassGenerator_MockClass $mockGenerator, Phake_CallRecorder_Recorder $callRecorder, Phake_Stubber_IAnswer $defaultAnswer, array $constructorArgs = null)

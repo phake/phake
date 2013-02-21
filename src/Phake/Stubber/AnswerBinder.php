@@ -71,7 +71,7 @@ class Phake_Stubber_AnswerBinder implements Phake_Stubber_IAnswerBinder
 	/**
 	 * Creates a new Answer Binder
 	 * @param Phake_IMock $obj
-	 * @param Phake_Matchers_MethodMatcher $method
+	 * @param Phake_Matchers_MethodMatcher $matcher
 	 * @param Phake_MockReader $mockReader
 	 */
 	public function __construct(Phake_IMock $obj, Phake_Matchers_MethodMatcher $matcher, Phake_MockReader $mockReader)
