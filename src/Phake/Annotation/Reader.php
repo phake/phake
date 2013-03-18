@@ -54,16 +54,12 @@ class Phake_Annotation_Reader
 	private $clazz;
 
 	/**
-	 * @param string $className
+	 * @param ReflectionClass $clazz
+	 * @throws InvalidArgumentException
 	 */
-	public function __construct($className)
+	public function __construct(ReflectionClass $clazz)
 	{
-		if (!class_exists($className, true))
-		{
-			throw new InvalidArgumentException(sprintf('Could not read annotations for %s, could not load class', $className));
-		}
-
-		$this->clazz = new ReflectionClass($className);
+		$this->clazz = $clazz;
 	}
 
 	/**

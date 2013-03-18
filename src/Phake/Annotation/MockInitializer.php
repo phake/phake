@@ -56,14 +56,20 @@ class Phake_Annotation_MockInitializer
 {
 	public function initialize($object)
 	{
-		$reader = new Phake_Annotation_Reader(get_class($object));
+		$reflectionClass = new ReflectionClass($object);
+		$reader = new Phake_Annotation_Reader($reflectionClass);
+
+		if ($this->useDoctrineParser())
+		{
+			$parser = new \Doctrine\Common\Annotations\PhpParser();
+		}
 
 		$properties = $reader->getPropertiesWithAnnotation('Mock');
 
 		foreach ($properties as $property)
 		{
 			$annotations = $reader->getPropertyAnnotations($property);
-			
+
 			if ($annotations['Mock'] !== true)
 			{
 				$mockedClass = $annotations['Mock'];
@@ -73,11 +79,30 @@ class Phake_Annotation_MockInitializer
 				$mockedClass = $annotations['var'];
 			}
 
+			if (isset($parser))
+			{
+				// Ignore it if the class start with a backslash
+				if (substr($mockedClass, 0, 1) !== '\\')
+				{
+					$useStatements = $parser->parseClass($reflectionClass);
+					$key = strtolower($mockedClass);
+
+					if (array_key_exists($key, $useStatements)) {
+						$mockedClass = $useStatements[$key];
+					}
+				}
+			}
+
 			$reflProp = new ReflectionProperty(get_class($object), $property);
 
 			$reflProp->setAccessible(true);
 			$reflProp->setValue($object, Phake::mock($mockedClass));
 		}
+	}
+
+	protected function useDoctrineParser()
+	{
+		return version_compare(PHP_VERSION, "5.3.3", ">=") && class_exists('Doctrine\Common\Annotations\PhpParser');
 	}
 }
 ?>

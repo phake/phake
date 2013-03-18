@@ -3,3 +3,6 @@
 .settings
 .idea
 nbproject
+vendor
+bin
+composer.lock

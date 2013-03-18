@@ -66,7 +66,15 @@ class Phake_Annotation_ReaderTest extends PHPUnit_Framework_TestCase
 
 	protected function setUp()
 	{
-		$this->reader = new Phake_Annotation_Reader(__CLASS__);
+		$reflectionClass = new ReflectionClass($this);
+		$this->reader = new Phake_Annotation_Reader($reflectionClass);
+	}
+
+	protected function tearDown()
+	{
+		$this->reader = null;
+		$this->emptyVar = null;
+		$this->emptyVar2 = null;
 	}
 
 	public function testReadingAnnotationsFromAProperty()
@@ -90,14 +98,6 @@ class Phake_Annotation_ReaderTest extends PHPUnit_Framework_TestCase
 		);
 		sort($properties);
 		$this->assertEquals($expectedProperties, $properties);
-	}
-
-	/**
-	 * @expectedException InvalidArgumentException
-	 */
-	public function testInvalidClassResultsInInvalidArgument()
-	{
-		new Phake_Annotation_Reader('BadClass');
 	}
 }
 ?>

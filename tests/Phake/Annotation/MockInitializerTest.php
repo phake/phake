@@ -43,7 +43,11 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+use PhakeTest\AnotherNamespacedClass;
+
 require_once('Phake/Annotation/MockInitializer.php');
+require_once('PhakeTest/NamespacedClass.php');
+require_once('PhakeTest/AnotherNamespacedClass.php');
 
 /**
  * @ann1 Test Annotation
@@ -67,9 +71,31 @@ class Phake_Annotation_MockInitializerTest extends PHPUnit_Framework_TestCase
 	 */
 	private $mock2;
 
+	/**
+	 * @Mock
+	 * @var \PhakeTest\NamespacedClass
+	 */
+	private $shortNameMock1;
+
+	/**
+	 * @Mock AnotherNamespacedClass
+	 */
+	private $shortNameMock2;
+
 	protected function setUp()
 	{
+		if (version_compare(PHP_VERSION, '5.3', '<')) {
+			$this->markTestSkipped('ReflectionProperty::setAccessible() is not available');
+		}
+
 		$this->initializer = new Phake_Annotation_MockInitializer();
+	}
+
+	protected function tearDown()
+	{
+		$this->initializer = null;
+		$this->mock1 = $this->mock2 = null;
+		$this->shortNameMock1 = $this->shortNameMock2 = null;
 	}
 
 	public function testInitialize()
@@ -84,6 +110,26 @@ class Phake_Annotation_MockInitializerTest extends PHPUnit_Framework_TestCase
 		$this->assertInstanceOf('stdClass', $this->mock2);
 		$this->assertInstanceOf('Phake_IMock', $this->mock1);
 		$this->assertInstanceOf('Phake_IMock', $this->mock2);
+	}
+
+	/**
+	 * @depends testInitialize
+	 */
+	public function testNamespaceAliasOnVar()
+	{
+		$this->initializer->initialize($this);
+
+		$this->assertInstanceOf('Phake_IMock', $this->shortNameMock1);
+	}
+
+	/**
+	 * @depends testInitialize
+	 */
+	public function testNamespaceAliasOnMock()
+	{
+		$this->initializer->initialize($this);
+
+		$this->assertInstanceOf('Phake_IMock', $this->shortNameMock2);
 	}
 }
 ?>
