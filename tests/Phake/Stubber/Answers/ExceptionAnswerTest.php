@@ -42,8 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Stubber/Answers/ExceptionAnswer.php';
-
 /**
  * @author Brian Feaver <brian.feaver@gmail.com>
  */

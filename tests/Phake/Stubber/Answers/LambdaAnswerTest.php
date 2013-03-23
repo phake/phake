@@ -1,7 +1,5 @@
 <?php
 
-require_once 'Phake/Stubber/Answers/LambdaAnswer.php';
-
 class Phake_Stubber_Answers_LambdaAnswerTest extends PHPUnit_Framework_TestCase
 {
 	private $_answer;

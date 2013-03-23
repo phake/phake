@@ -42,8 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Stubber/IAnswer.php';
-
 /**
  * A type interface to indicate that the given answer should not be used directly but is instead
  * an answer delegate

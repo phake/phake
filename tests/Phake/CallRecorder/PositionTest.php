@@ -42,9 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/CallRecorder/Position.php';
-require_once 'Phake/CallRecorder/Call.php';
-
 /**
  * Tests the call recorder position class.
  */

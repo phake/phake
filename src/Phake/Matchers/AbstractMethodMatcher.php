@@ -42,8 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once('Phake/Matchers/IMethodMatcher.php');
-
 /**
  * Matches any abstract methods.
  *

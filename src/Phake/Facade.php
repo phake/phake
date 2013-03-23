@@ -42,9 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/CallRecorder/Verifier.php';
-require_once 'Phake/Stubber/StubMapper.php';
-
 /**
  * A facade class providing functionality to interact with the Phake framework.
  *

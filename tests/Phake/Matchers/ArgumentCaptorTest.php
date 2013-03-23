@@ -42,8 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Matchers/ArgumentCaptor.php';
-
 /**
  * Tests the argument captor functionality.
  */

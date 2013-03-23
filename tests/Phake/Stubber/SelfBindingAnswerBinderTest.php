@@ -42,8 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Stubber/SelfBindingAnswerBinder.php';
-
 /**
  * Tests the self binding answer binder
  */

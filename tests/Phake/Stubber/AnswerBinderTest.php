@@ -42,13 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Stubber/AnswerBinder.php';
-require_once 'Phake/Stubber/AnswerCollection.php';
-require_once 'Phake/Stubber/IAnswer.php';
-require_once 'Phake/Stubber/StubMapper.php';
-require_once 'Phake/Matchers/MethodMatcher.php';
-require_once 'Phake/Proxies/AnswerCollectionProxy.php';
-
 /**
  * Tests the Answer Factory
  *

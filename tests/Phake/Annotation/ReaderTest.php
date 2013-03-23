@@ -43,8 +43,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once('Phake/Annotation/Reader.php');
-
 /**
  * @ann1 Test Annotation
  * @ann2

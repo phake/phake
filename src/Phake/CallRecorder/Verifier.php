@@ -42,9 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Matchers/MethodMatcher.php';
-require_once 'Phake/CallRecorder/VerifierResult.php';
-
 /**
  * Can verify calls recorded into the given recorder.
  *

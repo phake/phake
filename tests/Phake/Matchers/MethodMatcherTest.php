@@ -42,11 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Matchers/MethodMatcher.php';
-require_once 'Phake/Matchers/AnyParameters.php';
-require_once 'Phake/Matchers/IArgumentMatcher.php';
-require_once 'Phake/Matchers/ReferenceSetter.php';
-
 class PHake_Matchers_MethodMatcherTest extends PHPUnit_Framework_TestCase
 {
 	/**

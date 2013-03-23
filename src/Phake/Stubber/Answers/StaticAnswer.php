@@ -42,8 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Stubber/IAnswer.php';
-
 /**
  * Allows providing a static answer to a stubbed method call.
  *

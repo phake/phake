@@ -43,11 +43,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once('Phake/ClassGenerator/InvocationHandler/CallRecorder.php');
-require_once('Phake/MockReader.php');
-require_once('Phake/CallRecorder/Recorder.php');
-require_once('Phake/CallRecorder/Call.php');
-
 class Phake_ClassGenerator_InvocationHandler_CallRecorderTest extends PHPUnit_Framework_TestCase
 {
 	/**

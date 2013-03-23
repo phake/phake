@@ -43,10 +43,6 @@
  */
 
 
-require_once 'Phake/Proxies/AnswerCollectionProxy.php';
-require_once 'Phake/Stubber/AnswerCollection.php';
-require_once 'Phake.php';
-
 class Phake_Proxies_AnswerCollectionProxyTest extends PHPUnit_Framework_TestCase
 {
 	/**

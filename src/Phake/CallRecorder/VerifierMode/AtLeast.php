@@ -42,9 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/CallRecorder/IVerifierMode.php';
-require_once 'Phake/CallRecorder/VerifierMode/Result.php';
-
 /**
  * Verifier mode that checks that the number of matched items are equal to or greater than the expected amount.
  * @author Brian Feaver <brian.feaver@gmail.com>

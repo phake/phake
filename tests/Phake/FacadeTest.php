@@ -42,12 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Facade.php';
-require_once 'Phake/ClassGenerator/MockClass.php';
-require_once 'Phake/CallRecorder/Recorder.php';
-require_once 'Phake/Stubber/StubMapper.php';
-require_once 'PhakeTest/MockedInterface.php';
-
 /**
  * Tests the facade class for Phake
  *

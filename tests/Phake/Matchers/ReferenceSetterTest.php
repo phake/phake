@@ -42,8 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Matchers/ReferenceSetter.php';
-
 /**
  * Tests the reference setter functionality.
  */

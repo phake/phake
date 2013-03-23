@@ -42,13 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Stubber/AnswerBinder.php';
-require_once 'Phake/Proxies/AnswerBinderProxy.php';
-require_once 'Phake/Matchers/MethodMatcher.php';
-require_once 'Phake/Matchers/PHPUnitConstraintAdapter.php';
-require_once 'Phake/Matchers/HamcrestMatcherAdapter.php';
-require_once 'Phake/Matchers/EqualsMatcher.php';
-
 /**
  * A proxy to handle stubbing a method on a mock object.
  *
