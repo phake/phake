@@ -42,17 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/CallRecorder/Call.php';
-require_once 'Phake/IMock.php';
-require_once 'Phake/MockReader.php';
-require_once('Phake/ClassGenerator/InvocationHandler/Composite.php');
-require_once('Phake/ClassGenerator/InvocationHandler/FrozenObjectCheck.php');
-require_once('Phake/ClassGenerator/InvocationHandler/CallRecorder.php');
-require_once('Phake/ClassGenerator/InvocationHandler/MagicCallRecorder.php');
-require_once('Phake/ClassGenerator/InvocationHandler/StubCaller.php');
-require_once('Phake/ClassGenerator/EvalLoader.php');
-require_once('Phake/Matchers/AbstractMethodMatcher.php');
-
 /**
  * Creates and executes the code necessary to create a mock class.
  *

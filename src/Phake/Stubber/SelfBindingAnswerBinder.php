@@ -42,9 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Stubber/IAnswerBinder.php';
-require_once('Phake/Stubber/IAnswerContainer.php');
-
 /**
  * An answer binder that binds the answer to itself providing access via getAnswer()
  *

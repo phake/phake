@@ -42,8 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Matchers/AbstractMethodMatcher.php';
-
 class PHake_Matchers_AbstractMethodMatcherTest extends PHPUnit_Framework_TestCase
 {
 	/**

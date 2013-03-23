@@ -43,10 +43,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once('Phake/ClassGenerator/InvocationHandler/MagicCallRecorder.php');
-require_once('Phake/CallRecorder/Recorder.php');
-require_once('Phake/CallRecorder/Call.php');
-
 class Phake_ClassGenerator_InvocationHandler_MagicCallRecorderTest extends PHPUnit_Framework_TestCase
 {
 	/**

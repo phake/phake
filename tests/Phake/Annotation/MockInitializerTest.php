@@ -45,10 +45,6 @@
 
 use PhakeTest\AnotherNamespacedClass;
 
-require_once('Phake/Annotation/MockInitializer.php');
-require_once('PhakeTest/NamespacedClass.php');
-require_once('PhakeTest/AnotherNamespacedClass.php');
-
 /**
  * @ann1 Test Annotation
  * @ann2

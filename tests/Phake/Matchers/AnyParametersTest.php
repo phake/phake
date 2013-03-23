@@ -42,8 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Matchers/AnyParameters.php';
-
 class Phake_Matchers_AnyParametersTest extends PHPUnit_Framework_TestCase
 {
 	private $matcher;

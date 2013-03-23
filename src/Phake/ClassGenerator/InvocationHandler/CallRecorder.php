@@ -43,9 +43,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once('Phake/ClassGenerator/InvocationHandler/IInvocationHandler.php');
-require_once('Phake/CallRecorder/Call.php');
-
 /**
  * Records calls to a mock object's call recorder.
  */

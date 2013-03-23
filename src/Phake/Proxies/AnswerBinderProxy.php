@@ -42,11 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Stubber/Answers/StaticAnswer.php';
-require_once 'Phake/Stubber/Answers/ParentDelegate.php';
-require_once 'Phake/Stubber/Answers/ExceptionAnswer.php';
-require_once 'Phake/Stubber/Answers/LambdaAnswer.php';
-
 /**
  * A proxy class to provide a fluent interface into the answer binder.
  *

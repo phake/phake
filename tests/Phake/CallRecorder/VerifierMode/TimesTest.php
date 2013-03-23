@@ -42,9 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once('Phake/CallRecorder/IVerifierMode.php');
-require_once('Phake/CallRecorder/VerifierMode/Times.php');
-
 /**
  * Tests the functionality of the Times class.
  */

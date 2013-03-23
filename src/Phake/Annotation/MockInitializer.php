@@ -43,8 +43,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once('Phake/Annotation/Reader.php');
-
 /**
  * Initializes all properties of a given object that have the @Mock annotation.
  *

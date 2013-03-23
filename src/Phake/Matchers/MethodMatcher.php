@@ -42,8 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once('Phake/Matchers/IMethodMatcher.php');
-
 /**
  * Determines if a method and argument matchers match a given method call.
  *

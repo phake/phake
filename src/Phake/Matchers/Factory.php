@@ -42,10 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Matchers/PHPUnitConstraintAdapter.php';
-require_once 'Phake/Matchers/HamcrestMatcherAdapter.php';
-require_once 'Phake/Matchers/EqualsMatcher.php';
-
 /**
  * Creates (or passes through) instances of Phake_Matchers_IArgumentMatcher using Phake's
  * translation rules

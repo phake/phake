@@ -43,10 +43,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once('Phake/Mock/Freezer.php');
-require_once('Phake/MockReader.php');
-require_once('Phake/Client/IClient.php');
-
 class Phake_Mock_FreezerTest extends PHPUnit_Framework_TestCase
 {
 	/**

@@ -42,9 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Proxies/CallStubberProxy.php';
-require_once 'Phake/Matchers/Factory.php';
-
 class Phake_Proxies_CallStubberProxyTest extends PHPUnit_Framework_TestCase
 {
 	/**

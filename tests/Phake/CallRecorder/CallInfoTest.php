@@ -42,10 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/CallRecorder/CallInfo.php';
-require_once 'Phake/CallRecorder/Call.php';
-require_once 'Phake/CallRecorder/Position.php';
-
 /**
  * Tests the functionality of the call info class
  */

@@ -42,8 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once('Phake/Stubber/IAnswerContainer.php');
-
 /**
  * Allows iteration over a series of answers. Simply calling getAnswer() will result in the appropriate
  * answer being returned. You do not need to manage the iteration manually.

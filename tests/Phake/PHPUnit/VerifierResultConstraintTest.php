@@ -43,8 +43,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once('Phake/CallRecorder/VerifierResult.php');
-
 class Phake_PHPUnit_VerifierResultConstraintTest extends PHPUnit_Framework_TestCase
 {
 	private $constraint;
@@ -55,7 +53,6 @@ class Phake_PHPUnit_VerifierResultConstraintTest extends PHPUnit_Framework_TestC
         {
             $this->markTestSkipped('The tested class is not compatible with current version of PHPUnit.');
         }
-        require_once('Phake/PHPUnit/VerifierResultConstraint.php');
 		$this->constraint = new Phake_PHPUnit_VerifierResultConstraint($this->verifier);
 	}
 	

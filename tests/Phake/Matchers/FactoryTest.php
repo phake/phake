@@ -42,13 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Matchers/Factory.php';
-require_once 'Phake/Matchers/IArgumentMatcher.php';
-require_once 'Phake/Matchers/HamcrestMatcherAdapter.php';
-require_once 'Phake/Matchers/PHPUnitConstraintAdapter.php';
-
-require_once 'PHPUnit/Framework/Constraint.php';
-
 if (HAMCREST_LOADED) require_once 'Hamcrest/Matcher.php';
 
 class Phake_Matchers_FactoryTest extends PHPUnit_Framework_TestCase

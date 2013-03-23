@@ -42,11 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/CallRecorder/CallExpectation.php';
-require_once 'Phake/Matchers/PHPUnitConstraintAdapter.php';
-require_once 'Phake/Matchers/HamcrestMatcherAdapter.php';
-require_once 'Phake/Matchers/EqualsMatcher.php';
-
 /**
  * A proxy to handle verifying various calls to the magic __call method
  *

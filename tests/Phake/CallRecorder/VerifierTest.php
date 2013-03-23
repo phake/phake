@@ -42,14 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once('Phake/CallRecorder/Verifier.php');
-require_once('Phake/MockReader.php');
-require_once('Phake/CallRecorder/Call.php');
-require_once('Phake/CallRecorder/CallExpectation.php');
-require_once('Phake/CallRecorder/Recorder.php');
-require_once('Phake/Matchers/EqualsMatcher.php');
-require_once('Phake/Matchers/AnyParameters.php');
-
 /**
  * Description of VerifierTest
  *

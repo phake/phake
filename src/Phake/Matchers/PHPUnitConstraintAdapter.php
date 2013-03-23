@@ -42,8 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Matchers/IArgumentMatcher.php';
-
 /**
  * An adapter class allowing PHPUnit constraints to be treated as though they were Phake argument
  * matchers.

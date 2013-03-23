@@ -42,17 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once('Phake.php');
-require_once('PhakeTest/AbstractClass.php');
-require_once('PhakeTest/StaticClass.php');
-require_once('PhakeTest/MockedClass.php');
-require_once('PhakeTest/MagicClass.php');
-require_once('PhakeTest/MockedConstructedClass.php');
-require_once('PhakeTest/ExtendedMockedConstructedClass.php');
-require_once('PhakeTest/MockedInterface.php');
-require_once('PhakeTest/ReturnByReferenceMethodClass.php');
-require_once('Phake/Exception/VerificationException.php');
-
 /**
  * Tests the behavior of the Phake class.
  *

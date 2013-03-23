@@ -43,9 +43,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once('Phake/Mock/Resetter.php');
-require_once('Phake/MockReader.php');
-
 class Phake_Mock_ResetterTest extends PHPUnit_Framework_TestCase
 {
 	/**
