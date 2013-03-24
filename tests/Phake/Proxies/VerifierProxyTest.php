@@ -42,8 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-if (HAMCREST_LOADED) require_once 'Hamcrest/Matcher.php';
-
 /**
  * Description of VerifierProxyTest
  *

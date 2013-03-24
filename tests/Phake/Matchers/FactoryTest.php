@@ -42,8 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-if (HAMCREST_LOADED) require_once 'Hamcrest/Matcher.php';
-
 class Phake_Matchers_FactoryTest extends PHPUnit_Framework_TestCase
 {
 	/**
@@ -106,11 +104,6 @@ class Phake_Matchers_FactoryTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testHamcrestMatcher()
 	{
-		if (!HAMCREST_LOADED)
-		{
-			$this->markTestSkipped('Hamcrest is not available');
-		}
-
 		$matcher = $this->getMock('Hamcrest_Matcher');
 		$matcher->expects($this->once())
 				->method('matches')

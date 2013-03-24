@@ -43,21 +43,18 @@
  */
 
 error_reporting(E_ALL | E_STRICT);
-$testDir = dirname(__FILE__);
-$codeDir = dirname($testDir) . DIRECTORY_SEPARATOR . 'src';
-
-define('HAMCREST_LOADED', @fopen('hamcrest.php', 'r', true));
-if (HAMCREST_LOADED) include_once('hamcrest.php');
 
 /** @var $loader \Composer\Autoload\ClassLoader */
 $loader = require dirname(__DIR__).'/vendor/autoload.php';
 $loader->add('PhakeTest', __DIR__);
+
+require dirname(__DIR__).'/vendor/davedevelopment/hamcrest-php/hamcrest/Hamcrest.php';
 
 Phake::setClient(Phake::CLIENT_DEFAULT);
 
 $cacheDir = getenv('PHAKE_CACHEDIR');
 if (!empty($cacheDir))
 {
+	require_once('Phake/ClassGenerator/FileLoader.php');
 	Phake::setMockLoader(new Phake_ClassGenerator_FileLoader($cacheDir));
 }
-?>
