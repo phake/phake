@@ -102,7 +102,7 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 		$mock = Phake::mock('PhakeTest_MockedClass');
 
 		Phake::when($mock)->foo()
-				->thenReturn(42);
+			->thenReturn(42);
 
 		$this->assertEquals(42, $mock->foo());
 	}
@@ -131,6 +131,62 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 		Phake::when($mock)->foo()->thenReturn(42);
 
 		$this->assertEquals(42, $mock->foo());
+	}
+
+	/**
+	 * Tests that a stub method can be defined with shorthand notation.
+	 */
+	public function testShorthandStub ()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+
+		Phake::when($mock)->foo->thenReturn(42);
+
+		$this->assertEquals(42, $mock->foo());
+		$this->assertEquals(42, $mock->foo('param'));
+	}
+
+	/**
+	 * Tests that a stub method can be defined with shorthand notation later.
+	 */
+	public function testFirstShorthandStub ()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+
+		Phake::when($mock)->foo->thenReturn(42);
+		Phake::when($mock)->foo('param')->thenReturn(51);
+
+		$this->assertEquals(51, $mock->foo('param'));
+		$this->assertEquals(42, $mock->foo());
+	}
+
+	/**
+	 * Tests that a stub method can be redefined with shorthand notation.
+	 */
+	public function testRedefinedShorthandStub ()
+	{
+		$mock = Phake::mock('PhakeTest_MockedClass');
+
+		Phake::when($mock)->foo->thenReturn(42);
+		Phake::when($mock)->foo->thenReturn(2);
+
+		$this->assertEquals(2, $mock->foo());
+	}
+
+	/**
+	 * Tests that a stub method can be defined with shorthand notation even with __get().
+	 */
+	public function testMagicClassShorthandStub ()
+	{
+		$mock = Phake::mock('PhakeTest_MagicClass');
+
+		Phake::when($mock)->definedMethod->thenReturn(64);
+		Phake::when($mock)->__get->thenReturn(75);
+		Phake::when($mock)->magicProperty->thenReturn(42);
+
+		$this->assertSame(64, $mock->definedMethod());
+		$this->assertSame(75, $mock->otherMagicProperties);
+		$this->assertSame(42, $mock->magicProperty);
 	}
 
 	/**
