@@ -49,25 +49,25 @@
  */
 class Phake_Stubber_Answers_ExceptionAnswer implements Phake_Stubber_IAnswer
 {
-	/**
-	 * @var mixed
-	 */
-	private $answer;
+    /**
+     * @var mixed
+     */
+    private $answer;
 
-	/**
-	 * @param mixed $answer
-	 */
-	public function __construct(Exception $answer)
-	{
-		$this->answer = $answer;
-	}
+    /**
+     * @param mixed $answer
+     */
+    public function __construct(Exception $answer)
+    {
+        $this->answer = $answer;
+    }
 
     /**
      * @throws Exception|mixed
      * @return mixed
      */
-	public function getAnswer()
-	{
-		throw $this->answer;
-	}
+    public function getAnswer()
+    {
+        throw $this->answer;
+    }
 }

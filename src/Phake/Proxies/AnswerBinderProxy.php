@@ -49,25 +49,27 @@
  */
 class Phake_Proxies_AnswerBinderProxy
 {
-	/**
-	 * @var Phake_Stubber_IAnswerBinder
-	 */
-	private $binder;
+    /**
+     * @var Phake_Stubber_IAnswerBinder
+     */
+    private $binder;
 
-	public function __construct(Phake_Stubber_IAnswerBinder $binder)
-	{
-		$this->binder = $binder;
-	}
+    public function __construct(Phake_Stubber_IAnswerBinder $binder)
+    {
+        $this->binder = $binder;
+    }
 
-	/**
-	 * Binds a static answer to the method and object in the proxied binder.
-	 * @param mixed $value
-	 * @return Phake_Stubber_IAnswerContainer
-	 */
-	public function thenReturn($value)
-	{
-		return $this->binder->bindAnswer(new Phake_Stubber_Answers_StaticAnswer($value));
-	}
+    /**
+     * Binds a static answer to the method and object in the proxied binder.
+     *
+     * @param mixed $value
+     *
+     * @return Phake_Stubber_IAnswerContainer
+     */
+    public function thenReturn($value)
+    {
+        return $this->binder->bindAnswer(new Phake_Stubber_Answers_StaticAnswer($value));
+    }
 
     /**
      * Binds a Lambda answer to the method
@@ -77,41 +79,45 @@ class Phake_Proxies_AnswerBinderProxy
      * @throws InvalidArgumentException
      * @return Phake_Stubber_IAnswerContainer
      */
-	public function thenGetReturnByLambda($value)
-	{
-		if (!is_callable($value))
-			throw new InvalidArgumentException("Given lambda is not callable");
-			
-		return $this->binder->bindAnswer(new Phake_Stubber_Answers_LambdaAnswer($value));
-	}
+    public function thenGetReturnByLambda($value)
+    {
+        if (!is_callable($value)) {
+            throw new InvalidArgumentException("Given lambda is not callable");
+        }
 
-	/**
-	 * Binds a delegated call that will call a given method's parent.
-	 * @return Phake_Stubber_IAnswerContainer
-	 */
-	public function thenCallParent()
-	{
-		return $this->binder->bindAnswer(new Phake_Stubber_Answers_ParentDelegate());
-	}
+        return $this->binder->bindAnswer(new Phake_Stubber_Answers_LambdaAnswer($value));
+    }
 
-	/**
-	 * Binds an exception answer to the method and object in the proxied binder.
-	 *
-	 * @param Exception $value
-	 * @return Phake_Stubber_IAnswerContainer
-	 */
-	public function thenThrow(Exception $value)
-	{
-		return $this->binder->bindAnswer(new Phake_Stubber_Answers_ExceptionAnswer($value));
-	}
+    /**
+     * Binds a delegated call that will call a given method's parent.
+     * @return Phake_Stubber_IAnswerContainer
+     */
+    public function thenCallParent()
+    {
+        return $this->binder->bindAnswer(new Phake_Stubber_Answers_ParentDelegate());
+    }
 
-	/**
-	 * Binds a delegated call that will call a given method's parent while capturing that value to the passed in variable.
-	 * @param mixed $captor
-	 * @return Phake_Stubber_IAnswerContainer
-	 */
-	public function captureReturnTo(&$captor)
-	{
-		return $this->binder->bindAnswer(new Phake_Stubber_Answers_ParentDelegate($captor));
-	}
+    /**
+     * Binds an exception answer to the method and object in the proxied binder.
+     *
+     * @param Exception $value
+     *
+     * @return Phake_Stubber_IAnswerContainer
+     */
+    public function thenThrow(Exception $value)
+    {
+        return $this->binder->bindAnswer(new Phake_Stubber_Answers_ExceptionAnswer($value));
+    }
+
+    /**
+     * Binds a delegated call that will call a given method's parent while capturing that value to the passed in variable.
+     *
+     * @param mixed $captor
+     *
+     * @return Phake_Stubber_IAnswerContainer
+     */
+    public function captureReturnTo(&$captor)
+    {
+        return $this->binder->bindAnswer(new Phake_Stubber_Answers_ParentDelegate($captor));
+    }
 }

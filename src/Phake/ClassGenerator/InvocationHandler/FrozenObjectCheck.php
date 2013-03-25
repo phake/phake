@@ -48,26 +48,25 @@
  */
 class Phake_ClassGenerator_InvocationHandler_FrozenObjectCheck implements Phake_ClassGenerator_InvocationHandler_IInvocationHandler
 {
-	/**
-	 * @var Phake_MockReader
-	 */
-	private $mockReader;
-	
-	/**
-	 * @param Phake_MockReader $mockReader 
-	 */
-	public function __construct(Phake_MockReader $mockReader)
-	{
-		$this->mockReader = $mockReader;
-	}
-	
-	public function invoke(Phake_IMock $mock, $method, array $arguments, array &$argumentReference)
-	{
-		if ($this->mockReader->isObjectFrozen($mock))
-		{
-			$result = new Phake_CallRecorder_VerifierResult(false, array(), 'This object has been frozen.');
-			Phake::getClient()->processVerifierResult($result);
-		}
-	}
+    /**
+     * @var Phake_MockReader
+     */
+    private $mockReader;
+
+    /**
+     * @param Phake_MockReader $mockReader
+     */
+    public function __construct(Phake_MockReader $mockReader)
+    {
+        $this->mockReader = $mockReader;
+    }
+
+    public function invoke(Phake_IMock $mock, $method, array $arguments, array &$argumentReference)
+    {
+        if ($this->mockReader->isObjectFrozen($mock)) {
+            $result = new Phake_CallRecorder_VerifierResult(false, array(), 'This object has been frozen.');
+            Phake::getClient()->processVerifierResult($result);
+        }
+    }
 }
 

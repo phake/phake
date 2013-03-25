@@ -48,28 +48,26 @@
  */
 class Phake_PHPUnit_VerifierResultConstraintV3d6 extends PHPUnit_Framework_Constraint
 {
-	protected function matches($other)
-	{
-		if (!$other instanceof Phake_CallRecorder_VerifierResult)
-		{
-			throw new InvalidArgumentException("You must pass an instance of Phake_CallRecorder_VerifierResult");
-		}
-		return $other->getVerified();
-	}
+    protected function matches($other)
+    {
+        if (!$other instanceof Phake_CallRecorder_VerifierResult) {
+            throw new InvalidArgumentException("You must pass an instance of Phake_CallRecorder_VerifierResult");
+        }
+        return $other->getVerified();
+    }
 
-	public function toString()
-	{
-		return 'is called';
-	}
+    public function toString()
+    {
+        return 'is called';
+    }
 
-	protected function failureDescription($other)
-	{
-		if (!$other instanceof Phake_CallRecorder_VerifierResult)
-		{
-			throw new InvalidArgumentException("You must pass an instance of Phake_CallRecorder_VerifierResult");
-		}
+    protected function failureDescription($other)
+    {
+        if (!$other instanceof Phake_CallRecorder_VerifierResult) {
+            throw new InvalidArgumentException("You must pass an instance of Phake_CallRecorder_VerifierResult");
+        }
 
-		return $other->getFailureDescription();
-	}
+        return $other->getFailureDescription();
+    }
 }
 

@@ -44,67 +44,69 @@
 
 class Phake_Matchers_ReferenceSetter implements Phake_Matchers_IArgumentMatcher
 {
-	/**
-	 * @var mixed
-	 */
-	private $value;
+    /**
+     * @var mixed
+     */
+    private $value;
 
-	/**
-	 * @var Phake_Matchers_IArgumentMatcher
-	 */
-	private $matcher;
+    /**
+     * @var Phake_Matchers_IArgumentMatcher
+     */
+    private $matcher;
 
-	/**
-	 * @param mixed $value The value to set the reference parameter to.
-	 */
-	public function __construct($value)
-	{
-		$this->value = $value;
-	}
+    /**
+     * @param mixed $value The value to set the reference parameter to.
+     */
+    public function __construct($value)
+    {
+        $this->value = $value;
+    }
 
-	/**
-	 * Executes the matcher on a given argument value.
-	 *
-	 * Sets the $argument to the value passed in the constructor
-	 * @param mixed $argument
-	 * @return boolean
-	 */
-	public function matches(&$argument)
-	{
-		if ($this->matcher === NULL || $this->matcher->matches($argument))
-		{
-			$argument = $this->value;
-			return TRUE;
-		}
+    /**
+     * Executes the matcher on a given argument value.
+     *
+     * Sets the $argument to the value passed in the constructor
+     *
+     * @param mixed $argument
+     *
+     * @return boolean
+     */
+    public function matches(&$argument)
+    {
+        if ($this->matcher === null || $this->matcher->matches($argument)) {
+            $argument = $this->value;
+            return true;
+        }
 
-		return FALSE;
-	}
+        return false;
+    }
 
-	/**
-	 * Returns a human readable description of the argument matcher
-	 * @return string
-	 */
-	public function __toString()
-	{
-		return '<reference parameter>';
-	}
+    /**
+     * Returns a human readable description of the argument matcher
+     * @return string
+     */
+    public function __toString()
+    {
+        return '<reference parameter>';
+    }
 
-	/**
-	 * Assigns a matcher to the setter.
-	 *
-	 * This allows an argument to only be set if the original argument meets a specific criteria.
-	 *
-	 * The same matcher factory used by the verifier and stubber is used here.
-	 *
-	 * @param mixed $matcher
-	 * @return Phake_Matchers_ReferenceSetter the current instance
-	 */
-	public function when($matcher)
-	{
-		$factory = new Phake_Matchers_Factory();
+    /**
+     * Assigns a matcher to the setter.
+     *
+     * This allows an argument to only be set if the original argument meets a specific criteria.
+     *
+     * The same matcher factory used by the verifier and stubber is used here.
+     *
+     * @param mixed $matcher
+     *
+     * @return Phake_Matchers_ReferenceSetter the current instance
+     */
+    public function when($matcher)
+    {
+        $factory = new Phake_Matchers_Factory();
 
-		$this->matcher = $factory->createMatcher($matcher);
+        $this->matcher = $factory->createMatcher($matcher);
 
-		return $this;
-	}
+        return $this;
+    }
 }

@@ -47,30 +47,30 @@
  */
 class Phake_CallRecorder_CallExpectation
 {
-	/**
-	 * @var Phake_IMock
-	 */
-	private $object;
+    /**
+     * @var Phake_IMock
+     */
+    private $object;
 
-	/**
-	 * @var string
-	 */
-	private $method;
+    /**
+     * @var string
+     */
+    private $method;
 
-	/**
-	 * @var array
-	 */
-	private $argumentMatchers;
+    /**
+     * @var array
+     */
+    private $argumentMatchers;
 
-	/**
-	 * @var Phake_CallRecorder_IVerifierMode
-	 */
-	private $verifierMode;
-	
-	/**
-	 * @var Phake_MockReader
-	 */
-	private $mockReader;
+    /**
+     * @var Phake_CallRecorder_IVerifierMode
+     */
+    private $verifierMode;
+
+    /**
+     * @var Phake_MockReader
+     */
+    private $mockReader;
 
     /**
      * @param Phake_IMock                      $object
@@ -81,55 +81,62 @@ class Phake_CallRecorder_CallExpectation
      *
      * @return \Phake_CallRecorder_CallExpectation
      */
-	public function __construct(Phake_IMock $object, $method, array $argumentMatchers, Phake_CallRecorder_IVerifierMode $verificationMode, Phake_MockReader $mockReader)
-	{
-		$this->object = $object;
-		$this->method = $method;
-		$this->argumentMatchers = $argumentMatchers;
-		$this->verifierMode = $verificationMode;
-		$this->mockReader = $mockReader;
-	}
+    public function __construct(
+        Phake_IMock $object,
+        $method,
+        array $argumentMatchers,
+        Phake_CallRecorder_IVerifierMode $verificationMode,
+        Phake_MockReader $mockReader
+    ) {
+        $this->object           = $object;
+        $this->method           = $method;
+        $this->argumentMatchers = $argumentMatchers;
+        $this->verifierMode     = $verificationMode;
+        $this->mockReader       = $mockReader;
+    }
 
-	/**
-	 * @return Phake_IMock
-	 */
-	public function getObject()
-	{
-		return $this->object;
-	}
+    /**
+     * @return Phake_IMock
+     */
+    public function getObject()
+    {
+        return $this->object;
+    }
 
-	/**
-	 * @return string
-	 */
-	public function getMethod()
-	{
-		return $this->method;
-	}
+    /**
+     * @return string
+     */
+    public function getMethod()
+    {
+        return $this->method;
+    }
 
-	/**
-	 * @return array
-	 */
-	public function getArgumentMatchers()
-	{
-		return $this->argumentMatchers;
-	}
+    /**
+     * @return array
+     */
+    public function getArgumentMatchers()
+    {
+        return $this->argumentMatchers;
+    }
 
-	/**
-	 * @return Phake_CallRecorder_IVerifierMode
-	 */
-	public function getVerifierMode()
-	{
-		return $this->verifierMode;
-	}
+    /**
+     * @return Phake_CallRecorder_IVerifierMode
+     */
+    public function getVerifierMode()
+    {
+        return $this->verifierMode;
+    }
 
-	public function __toString()
-	{
-		$arguments = array();
-		foreach ($this->argumentMatchers as $argumentMatcher)
-		{
-			$arguments[] = $argumentMatcher->__toString();
-		}
+    public function __toString()
+    {
+        $arguments = array();
+        foreach ($this->argumentMatchers as $argumentMatcher) {
+            $arguments[] = $argumentMatcher->__toString();
+        }
 
-		return "Expected {$this->mockReader->getName($this->getObject())}->{$this->getMethod()}(" . implode(', ', $arguments) . ") to be called {$this->getVerifierMode()->__toString()}";
-	}
+        return "Expected {$this->mockReader->getName($this->getObject())}->{$this->getMethod()}(" . implode(
+            ', ',
+            $arguments
+        ) . ") to be called {$this->getVerifierMode()->__toString()}";
+    }
 }

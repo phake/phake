@@ -49,12 +49,12 @@
  */
 class Phake_Facade
 {
-	private $cachedClasses;
-	
-	public function __construct()
-	{
-	  $this->cachedClasses = array();
-	}
+    private $cachedClasses;
+
+    public function __construct()
+    {
+        $this->cachedClasses = array();
+    }
 
     /**
      * Creates a new mock class than can be stubbed and verified.
@@ -68,44 +68,53 @@ class Phake_Facade
      * @throws InvalidArgumentException
      * @return mixed
      */
-	public function mock($mockedClass, Phake_ClassGenerator_MockClass $mockGenerator, Phake_CallRecorder_Recorder $callRecorder, Phake_Stubber_IAnswer $defaultAnswer, array $constructorArgs = null)
-	{
-		if (!class_exists($mockedClass, true) && !interface_exists($mockedClass, true))
-		{
-			throw new InvalidArgumentException("The class / interface [{$mockedClass}] does not exist. Check the spelling and make sure it is loadable.");
-		}
-		
-    if(!isset($this->cachedClasses[$mockedClass]))
-    {
-      $newClassName = $this->generateUniqueClassName($mockedClass);
-      $mockGenerator->generate($newClassName, $mockedClass);
- 
-      $this->cachedClasses[$mockedClass] = $newClassName;
+    public function mock(
+        $mockedClass,
+        Phake_ClassGenerator_MockClass $mockGenerator,
+        Phake_CallRecorder_Recorder $callRecorder,
+        Phake_Stubber_IAnswer $defaultAnswer,
+        array $constructorArgs = null
+    ) {
+        if (!class_exists($mockedClass, true) && !interface_exists($mockedClass, true)) {
+            throw new InvalidArgumentException("The class / interface [{$mockedClass}] does not exist. Check the spelling and make sure it is loadable.");
+        }
+
+        if (!isset($this->cachedClasses[$mockedClass])) {
+            $newClassName = $this->generateUniqueClassName($mockedClass);
+            $mockGenerator->generate($newClassName, $mockedClass);
+
+            $this->cachedClasses[$mockedClass] = $newClassName;
+        }
+
+        return $mockGenerator->instantiate(
+            $this->cachedClasses[$mockedClass],
+            $callRecorder,
+            new Phake_Stubber_StubMapper(),
+            $defaultAnswer,
+            $constructorArgs
+        );
     }
-       
-    return $mockGenerator->instantiate($this->cachedClasses[$mockedClass], $callRecorder, new Phake_Stubber_StubMapper(), $defaultAnswer, $constructorArgs);
-	}
 
-	/**
-	 * Generates a unique class name based on a given name.
-	 *
-	 * The $base will be used as the prefix for the new class name.
-	 *
-	 * @param string $base
-	 * @return string
-	 */
-	private function generateUniqueClassName($base)
-	{
-		$ns_parts = explode('\\', $base);
-		$base = array_pop($ns_parts);
-		$base_class_name = uniqid($base . '_PHAKE');
-		$i = 1;
+    /**
+     * Generates a unique class name based on a given name.
+     *
+     * The $base will be used as the prefix for the new class name.
+     *
+     * @param string $base
+     *
+     * @return string
+     */
+    private function generateUniqueClassName($base)
+    {
+        $ns_parts        = explode('\\', $base);
+        $base            = array_pop($ns_parts);
+        $base_class_name = uniqid($base . '_PHAKE');
+        $i               = 1;
 
-		while (class_exists($base_class_name . $i, false))
-		{
-			$i++;
-		}
+        while (class_exists($base_class_name . $i, false)) {
+            $i++;
+        }
 
-		return $base_class_name;
-	}
+        return $base_class_name;
+    }
 }

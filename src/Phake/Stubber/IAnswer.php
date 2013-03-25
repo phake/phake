@@ -47,11 +47,11 @@
  */
 interface Phake_Stubber_IAnswer
 {
-	/**
-	 * Returns the answer that should be used when a method stubbed to this answer is called.
-	 * @return mixed
-	 */
-	public function getAnswer();
+    /**
+     * Returns the answer that should be used when a method stubbed to this answer is called.
+     * @return mixed
+     */
+    public function getAnswer();
 
 }
 

@@ -49,49 +49,53 @@
  */
 class Phake_Stubber_Answers_ParentDelegate implements Phake_Stubber_Answers_IDelegator, Phake_Stubber_IAnswerDelegate
 {
-	private $capturedReturn;
+    private $capturedReturn;
 
-	public function __construct(&$captor = null)
-	{
-		$this->capturedReturn =& $captor;
-	}
+    public function __construct(&$captor = null)
+    {
+        $this->capturedReturn =& $captor;
+    }
 
-	/**
-	 * Returns the answer delegate (itself)
-	 * @return Phake_Stubber_Answers_ParentDelegate
-	 */
-	public function getAnswer()
-	{
-		return $this;
-	}
+    /**
+     * Returns the answer delegate (itself)
+     * @return Phake_Stubber_Answers_ParentDelegate
+     */
+    public function getAnswer()
+    {
+        return $this;
+    }
 
-	/**
-	 * Provides the callback to the parent
-	 * @param object $calledObject
-	 * @param string $calledMethod
-	 * @param array $calledParameters
+    /**
+     * Provides the callback to the parent
+     *
+     * @param object $calledObject
+     * @param string $calledMethod
+     * @param array  $calledParameters
+     *
      * @return array
      */
-	public function getCallBack($calledObject, $calledMethod, array $calledParameters)
-	{
-		return array($calledObject, "parent::{$calledMethod}");
-	}
+    public function getCallBack($calledObject, $calledMethod, array $calledParameters)
+    {
+        return array($calledObject, "parent::{$calledMethod}");
+    }
 
-	/**
-	 * Passes through the given arguments.
-	 * @param string $calledMethod
-	 * @param array $calledParameters
+    /**
+     * Passes through the given arguments.
+     *
+     * @param string $calledMethod
+     * @param array  $calledParameters
+     *
      * @return array
      */
-	public function getArguments($calledMethod, array $calledParameters)
-	{
-		return $calledParameters;
-	}
+    public function getArguments($calledMethod, array $calledParameters)
+    {
+        return $calledParameters;
+    }
 
-	public function processAnswer($answer)
-	{
-		$this->capturedReturn = $answer;
-	}
+    public function processAnswer($answer)
+    {
+        $this->capturedReturn = $answer;
+    }
 }
 
 

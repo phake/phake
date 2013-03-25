@@ -48,27 +48,26 @@
  */
 class Phake_ClassGenerator_InvocationHandler_Composite implements Phake_ClassGenerator_InvocationHandler_IInvocationHandler
 {
-	/**
-	 * @var array
-	 */
-	private $handlers;
-	
-	/**
-	 * @param array $handlers 
-	 */
-	public function __construct(array $handlers)
-	{
-		$this->handlers = $handlers;
-	}
-	
-	public function invoke(Phake_IMock $mock, $method, array $arguments, array &$argumentReference)
-	{
-		foreach ($this->handlers as $handler)
-		{
-			$result = $handler->invoke($mock, $method, $arguments, $argumentReference);
-		}
-		
-		return $result;
-	}
+    /**
+     * @var array
+     */
+    private $handlers;
+
+    /**
+     * @param array $handlers
+     */
+    public function __construct(array $handlers)
+    {
+        $this->handlers = $handlers;
+    }
+
+    public function invoke(Phake_IMock $mock, $method, array $arguments, array &$argumentReference)
+    {
+        foreach ($this->handlers as $handler) {
+            $result = $handler->invoke($mock, $method, $arguments, $argumentReference);
+        }
+
+        return $result;
+    }
 }
 

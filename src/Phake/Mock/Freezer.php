@@ -45,33 +45,34 @@
 
 /**
  * Freezes a mock so that no other calls can be made
- * 
+ *
  * @see Phake_ClassGeneration_InvocationHandler_FrozenObjectCheck
  */
 class Phake_Mock_Freezer
 {
-	/**
-	 * @var Phake_MockReader
-	 */
-	private $mockReader;
-	
-	/**
-	 * @param Phake_MockReader $mockReader 
-	 */
-	public function __construct(Phake_MockReader $mockReader)
-	{
-		$this->mockReader = $mockReader;
-	}
-	
-	/**
-	 * Freezes the given $mock and notifies the given $client
-	 * @param Phake_IMock $mock
-	 * @param Phake_Client_IClient $client 
-	 */
-	public function freeze(Phake_IMock $mock, Phake_Client_IClient $client)
-	{
-		$client->processObjectFreeze();
-		$this->mockReader->setIsObjectFrozen($mock, TRUE);
-	}
+    /**
+     * @var Phake_MockReader
+     */
+    private $mockReader;
+
+    /**
+     * @param Phake_MockReader $mockReader
+     */
+    public function __construct(Phake_MockReader $mockReader)
+    {
+        $this->mockReader = $mockReader;
+    }
+
+    /**
+     * Freezes the given $mock and notifies the given $client
+     *
+     * @param Phake_IMock          $mock
+     * @param Phake_Client_IClient $client
+     */
+    public function freeze(Phake_IMock $mock, Phake_Client_IClient $client)
+    {
+        $client->processObjectFreeze();
+        $this->mockReader->setIsObjectFrozen($mock, true);
+    }
 }
 

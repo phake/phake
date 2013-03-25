@@ -48,36 +48,37 @@
  */
 class Phake_Matchers_PHPUnitConstraintAdapter implements Phake_Matchers_IArgumentMatcher
 {
-	/**
-	 * @var PHPUnit_Framework_Constraint
-	 */
-	private $constraint;
+    /**
+     * @var PHPUnit_Framework_Constraint
+     */
+    private $constraint;
 
-	/**
-	 * @param PHPUnit_Framework_Constraint $constraint
-	 */
-	public function __construct(PHPUnit_Framework_Constraint $constraint)
-	{
-		$this->constraint = $constraint;
-	}
+    /**
+     * @param PHPUnit_Framework_Constraint $constraint
+     */
+    public function __construct(PHPUnit_Framework_Constraint $constraint)
+    {
+        $this->constraint = $constraint;
+    }
 
-	/**
-	 * Executes the matcher on a given argument value.
-	 *
-	 * Forwards the call to PHPUnit's evaluate() method.
-	 *
-	 * @param mixed $argument
-	 * @return boolean
-	 */
-	public function matches(&$argument)
-	{
-		return $this->constraint->evaluate($argument, '', true);
-	}
+    /**
+     * Executes the matcher on a given argument value.
+     *
+     * Forwards the call to PHPUnit's evaluate() method.
+     *
+     * @param mixed $argument
+     *
+     * @return boolean
+     */
+    public function matches(&$argument)
+    {
+        return $this->constraint->evaluate($argument, '', true);
+    }
 
-	public function __toString()
-	{
-		return $this->constraint->toString();
-	}
+    public function __toString()
+    {
+        return $this->constraint->toString();
+    }
 }
 
 

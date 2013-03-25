@@ -47,9 +47,9 @@
  */
 interface Phake_Stubber_IAnswerContainer
 {
-	/**
-	 * Returns an answer from the container
-	 * @return Phake_Stubber_IAnswer
-	 */
-	public function getAnswer();
+    /**
+     * Returns an answer from the container
+     * @return Phake_Stubber_IAnswer
+     */
+    public function getAnswer();
 }

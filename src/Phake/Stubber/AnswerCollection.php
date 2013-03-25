@@ -50,49 +50,48 @@
  */
 class Phake_Stubber_AnswerCollection implements Phake_Stubber_IAnswerContainer
 {
-	/**
-	 * @var array
-	 */
-	private $answers;
+    /**
+     * @var array
+     */
+    private $answers;
 
-	/**
-	 * Adds the passed answer to a new answer collection.
-	 * 
-	 * @param Phake_Stubber_IAnswer $answer
-	 */
-	public function __construct(Phake_Stubber_IAnswer $answer)
-	{
-		$this->answers = array($answer);
-	}
+    /**
+     * Adds the passed answer to a new answer collection.
+     *
+     * @param Phake_Stubber_IAnswer $answer
+     */
+    public function __construct(Phake_Stubber_IAnswer $answer)
+    {
+        $this->answers = array($answer);
+    }
 
-	/**
-	 * Adds a new answer to the end of the collection.
-	 * 
-	 * @param Phake_Stubber_IAnswer $answer
-	 */
-	public function addAnswer(Phake_Stubber_IAnswer $answer)
-	{
-		$this->answers[] = $answer;
-	}
+    /**
+     * Adds a new answer to the end of the collection.
+     *
+     * @param Phake_Stubber_IAnswer $answer
+     */
+    public function addAnswer(Phake_Stubber_IAnswer $answer)
+    {
+        $this->answers[] = $answer;
+    }
 
-	/**
-	 * Returns the next answer in the collection.
-	 *
-	 * @return Phake_Stubber_IAnswer
-	 */
-	public function getAnswer()
-	{
-		$answer = current($this->answers);
+    /**
+     * Returns the next answer in the collection.
+     *
+     * @return Phake_Stubber_IAnswer
+     */
+    public function getAnswer()
+    {
+        $answer = current($this->answers);
 
-		if ($answer === FALSE)
-		{
-			$answer = end($this->answers);
-		}
+        if ($answer === false) {
+            $answer = end($this->answers);
+        }
 
-		next($this->answers);
+        next($this->answers);
 
-		return $answer;
-	}
+        return $answer;
+    }
 }
 
 

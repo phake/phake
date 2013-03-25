@@ -50,20 +50,22 @@
  */
 interface Phake_Stubber_IAnswerDelegate
 {
-	/**
-	 * Provides the callback that will give the correct answer.
-	 * @param object $calledObject
-	 * @param string $calledMethod
-	 * @param array $calledParameters
-	 */
-	public function getCallBack($calledObject, $calledMethod, array $calledParameters);
+    /**
+     * Provides the callback that will give the correct answer.
+     *
+     * @param object $calledObject
+     * @param string $calledMethod
+     * @param array  $calledParameters
+     */
+    public function getCallBack($calledObject, $calledMethod, array $calledParameters);
 
-	/**
-	 * Provides the arguments for the callback that will give the correct answer.
-	 * @param string $calledMethod
-	 * @param array $calledParameters
-	 */
-	public function getArguments($calledMethod, array $calledParameters);
+    /**
+     * Provides the arguments for the callback that will give the correct answer.
+     *
+     * @param string $calledMethod
+     * @param array  $calledParameters
+     */
+    public function getArguments($calledMethod, array $calledParameters);
 }
 
 

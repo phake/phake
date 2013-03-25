@@ -52,36 +52,36 @@
  */
 class Phake_Matchers_AbstractMethodMatcher implements Phake_Matchers_IMethodMatcher
 {
-	/**
-	 * @var \ReflectionClass
-	 */
-	private $mockedClass;
+    /**
+     * @var \ReflectionClass
+     */
+    private $mockedClass;
 
-	/**
-	 * @param ReflectionClass $mockedClass The class that is being mocked
-	 */
-	public function __construct(ReflectionClass $mockedClass)
-	{
-		$this->mockedClass = $mockedClass;
-	}
+    /**
+     * @param ReflectionClass $mockedClass The class that is being mocked
+     */
+    public function __construct(ReflectionClass $mockedClass)
+    {
+        $this->mockedClass = $mockedClass;
+    }
 
-	/**
-	 * Determines if the given method and arguments match the configured method and argument matchers
-	 * in this object. Returns true on success, false otherwise.
-	 *
-	 * @param string $method
-	 * @param array $args
-	 * @return boolean
-	 */
-	public function matches($method, array &$args)
-	{
-		$matches = FALSE;
-		if ($this->mockedClass->hasMethod($method))
-		{
-			$reflMethod = $this->mockedClass->getMethod($method);
-			$matches = $reflMethod->isAbstract();
-		}
+    /**
+     * Determines if the given method and arguments match the configured method and argument matchers
+     * in this object. Returns true on success, false otherwise.
+     *
+     * @param string $method
+     * @param array  $args
+     *
+     * @return boolean
+     */
+    public function matches($method, array &$args)
+    {
+        $matches = false;
+        if ($this->mockedClass->hasMethod($method)) {
+            $reflMethod = $this->mockedClass->getMethod($method);
+            $matches    = $reflMethod->isAbstract();
+        }
 
-		return $matches;
-	}
+        return $matches;
+    }
 }

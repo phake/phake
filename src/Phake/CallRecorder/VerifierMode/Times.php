@@ -49,41 +49,44 @@
  */
 class Phake_CallRecorder_VerifierMode_Times implements Phake_CallRecorder_IVerifierMode
 {
-	/**
-	 * @var int
-	 */
-	private $times;
+    /**
+     * @var int
+     */
+    private $times;
 
-	/**
-	 * Constructs a Times verifier with the given <code>$times</code>.
-	 * @param int $times
-	 */
-	public function __construct($times)
-	{
-		$this->times = $times;
-	}
+    /**
+     * Constructs a Times verifier with the given <code>$times</code>.
+     *
+     * @param int $times
+     */
+    public function __construct($times)
+    {
+        $this->times = $times;
+    }
 
-	/**
-	 * Verifies that the number of <code>$matchedCalls</code> is equal to the
-	 * value this object was instantiated with.
-	 * @param array $matchedCalls
-	 * @return boolean
-	 */
-	public function verify(array $matchedCalls)
-	{
-		$calledTimes = count($matchedCalls);
-		if ($calledTimes == $this->times)
-		{
-			return new Phake_CallRecorder_VerifierMode_Result(TRUE, '');
-		}
-		else
-		{
-			return new Phake_CallRecorder_VerifierMode_Result(FALSE, sprintf('actually called <%s> times', count($matchedCalls)));
-		}
-	}
-	
-	public function __toString()
-	{
-		return "exactly <{$this->times}> times";
-	}
+    /**
+     * Verifies that the number of <code>$matchedCalls</code> is equal to the
+     * value this object was instantiated with.
+     *
+     * @param array $matchedCalls
+     *
+     * @return boolean
+     */
+    public function verify(array $matchedCalls)
+    {
+        $calledTimes = count($matchedCalls);
+        if ($calledTimes == $this->times) {
+            return new Phake_CallRecorder_VerifierMode_Result(true, '');
+        } else {
+            return new Phake_CallRecorder_VerifierMode_Result(false, sprintf(
+                'actually called <%s> times',
+                count($matchedCalls)
+            ));
+        }
+    }
+
+    public function __toString()
+    {
+        return "exactly <{$this->times}> times";
+    }
 }

@@ -49,31 +49,33 @@
  */
 class Phake_Stubber_SelfBindingAnswerBinder implements Phake_Stubber_IAnswerBinder, Phake_Stubber_IAnswerContainer
 {
-	/**
-	 * @var Phake_Stubber_IAnswer
-	 */
-	private $answer;
+    /**
+     * @var Phake_Stubber_IAnswer
+     */
+    private $answer;
 
-	/**
-	 * Binds the given answer to the current object.
-	 * @param Phake_Stubber_IAnswer $answer
+    /**
+     * Binds the given answer to the current object.
+     *
+     * @param Phake_Stubber_IAnswer $answer
+     *
      * @return $this|\Phake_Stubber_IAnswerContainer
      */
-	public function bindAnswer(Phake_Stubber_IAnswer $answer)
-	{
-		$this->answer = $answer;
+    public function bindAnswer(Phake_Stubber_IAnswer $answer)
+    {
+        $this->answer = $answer;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Returns the answer bound to this object.
-	 * @return Phake_Stubber_IAnswer
-	 */
-	public function getAnswer()
-	{
-		return $this->answer;
-	}
+    /**
+     * Returns the answer bound to this object.
+     * @return Phake_Stubber_IAnswer
+     */
+    public function getAnswer()
+    {
+        return $this->answer;
+    }
 }
 
 

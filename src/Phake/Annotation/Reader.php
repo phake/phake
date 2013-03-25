@@ -48,73 +48,74 @@
  */
 class Phake_Annotation_Reader
 {
-	/**
-	 * @var ReflectionClass
-	 */
-	private $clazz;
+    /**
+     * @var ReflectionClass
+     */
+    private $clazz;
 
-	/**
-	 * @param ReflectionClass $clazz
-	 * @throws InvalidArgumentException
-	 */
-	public function __construct(ReflectionClass $clazz)
-	{
-		$this->clazz = $clazz;
-	}
+    /**
+     * @param ReflectionClass $clazz
+     *
+     * @throws InvalidArgumentException
+     */
+    public function __construct(ReflectionClass $clazz)
+    {
+        $this->clazz = $clazz;
+    }
 
-	/**
-	 * Returns an associative array containing a property's annotations and their values.
-	 *
-	 * @param string $property
-	 * @return array
-	 */
-	public function getPropertyAnnotations($property)
-	{
-		$property = $this->clazz->getProperty($property);
+    /**
+     * Returns an associative array containing a property's annotations and their values.
+     *
+     * @param string $property
+     *
+     * @return array
+     */
+    public function getPropertyAnnotations($property)
+    {
+        $property = $this->clazz->getProperty($property);
 
-		return $this->readReflectionAnnotation($property);
-	}
+        return $this->readReflectionAnnotation($property);
+    }
 
-	/**
-	 * Returns an array containing the names of all properties containing a particular annotation.
-	 *
-	 * @param string $annotation
-	 * @return array
-	 */
-	public function getPropertiesWithAnnotation($annotation)
-	{
-		$properties = array();
-		foreach ($this->clazz->getProperties() as $property)
-		{
-			$annotations = $this->getPropertyAnnotations($property->getName());
+    /**
+     * Returns an array containing the names of all properties containing a particular annotation.
+     *
+     * @param string $annotation
+     *
+     * @return array
+     */
+    public function getPropertiesWithAnnotation($annotation)
+    {
+        $properties = array();
+        foreach ($this->clazz->getProperties() as $property) {
+            $annotations = $this->getPropertyAnnotations($property->getName());
 
-			if (array_key_exists($annotation, $annotations))
-			{
-				$properties[] = $property->getName();
-			}
-		}
-		return $properties;
-	}
+            if (array_key_exists($annotation, $annotations)) {
+                $properties[] = $property->getName();
+            }
+        }
+        return $properties;
+    }
 
-	/**
-	 * Returns all annotations for the given reflection object.
-	 *
-	 * @internal
-	 * @param mixed $reflVar - must be an object that has the 'getDocComment' method.
-	 * @return array
-	 */
-	private function readReflectionAnnotation($reflVar)
-	{
-		$comment = $reflVar->getDocComment();
+    /**
+     * Returns all annotations for the given reflection object.
+     *
+     * @internal
+     *
+     * @param mixed $reflVar - must be an object that has the 'getDocComment' method.
+     *
+     * @return array
+     */
+    private function readReflectionAnnotation($reflVar)
+    {
+        $comment = $reflVar->getDocComment();
 
-		$annotations = array();
-		foreach (explode("\n", $comment) as $line)
-		{
-			if (preg_match('#^\s+\*\s*@(\w+)(?:\s+(.*))?\s*$#', $line, $matches))
-			{
-				$annotations[$matches[1]] = isset($matches[2]) ? $matches[2] : true;
-			}
-		}
-		return $annotations;
-	}	
+        $annotations = array();
+        foreach (explode("\n", $comment) as $line) {
+            if (preg_match('#^\s+\*\s*@(\w+)(?:\s+(.*))?\s*$#', $line, $matches)) {
+                $annotations[$matches[1]] = isset($matches[2]) ? $matches[2] : true;
+            }
+        }
+        return $annotations;
+    }
 }

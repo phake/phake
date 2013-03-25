@@ -47,13 +47,13 @@
  */
 class Phake_Matchers_AnyParameters implements Phake_Matchers_IArgumentMatcher
 {
-	public function matches(&$argument)
-	{
-		return TRUE;
-	}
+    public function matches(&$argument)
+    {
+        return true;
+    }
 
-	public function __toString()
-	{
-		return '<any parameters>';
-	}
+    public function __toString()
+    {
+        return '<any parameters>';
+    }
 }

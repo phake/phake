@@ -49,35 +49,24 @@
  */
 class Phake_String_Converter
 {
-	public function convertToString($value)
-	{
-		if (is_object($value))
-		{
-			$strValue = '<object:' . get_class($value) . '>';
-		}
-		elseif (is_array($value))
-		{
-			$strValue = '<array>';
-		}
-		elseif (is_null($value))
-		{
-			$strValue = '<null>';
-		}
-		elseif (is_resource($value))
-		{
-			$strValue = '<resource>';
-		}
-		elseif (is_bool($value))
-		{
-			$strValue = '<boolean:' . ($value ? 'true' : 'false') . '>';
-		}
-		else
-		{
-			$strValue = '<' . gettype($value) . ':' . $value . '>';
-		}
+    public function convertToString($value)
+    {
+        if (is_object($value)) {
+            $strValue = '<object:' . get_class($value) . '>';
+        } elseif (is_array($value)) {
+            $strValue = '<array>';
+        } elseif (is_null($value)) {
+            $strValue = '<null>';
+        } elseif (is_resource($value)) {
+            $strValue = '<resource>';
+        } elseif (is_bool($value)) {
+            $strValue = '<boolean:' . ($value ? 'true' : 'false') . '>';
+        } else {
+            $strValue = '<' . gettype($value) . ':' . $value . '>';
+        }
 
-		return $strValue;
-	}
+        return $strValue;
+    }
 }
 
 

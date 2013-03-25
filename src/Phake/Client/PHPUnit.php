@@ -45,32 +45,29 @@
 
 /**
  * The client adapter used for PHPUnit.
- * 
- * This adapter allows PHPUnit to report failed verify() calls as test failures instead of errors. It also counts 
+ *
+ * This adapter allows PHPUnit to report failed verify() calls as test failures instead of errors. It also counts
  * verify() calls as assertions.
  */
 class Phake_Client_PHPUnit implements Phake_Client_IClient
 {
-	public function processVerifierResult(Phake_CallRecorder_VerifierResult $result)
-	{
-		PHPUnit_Framework_Assert::assertThat($result, $this->getConstraint());
-		
-		return $result->getMatchedCalls();
-	}
-	
-	public function processObjectFreeze()
-	{
-		PHPUnit_Framework_Assert::assertThat(TRUE, PHPUnit_Framework_Assert::isTrue());
-	}
+    public function processVerifierResult(Phake_CallRecorder_VerifierResult $result)
+    {
+        PHPUnit_Framework_Assert::assertThat($result, $this->getConstraint());
+
+        return $result->getMatchedCalls();
+    }
+
+    public function processObjectFreeze()
+    {
+        PHPUnit_Framework_Assert::assertThat(true, PHPUnit_Framework_Assert::isTrue());
+    }
 
     private function getConstraint()
     {
-        if (version_compare('3.6.0', PHPUnit_Runner_Version::id()) == 1)
-        {
+        if (version_compare('3.6.0', PHPUnit_Runner_Version::id()) == 1) {
             return new Phake_PHPUnit_VerifierResultConstraint();
-        }
-        else
-        {
+        } else {
             return new Phake_PHPUnit_VerifierResultConstraintV3d6();
         }
     }

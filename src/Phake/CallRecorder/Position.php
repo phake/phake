@@ -47,26 +47,28 @@
  */
 class Phake_CallRecorder_Position
 {
-	/**
-	 * @var int
-	 */
-	private $position;
+    /**
+     * @var int
+     */
+    private $position;
 
-	/**
-	 * @param int $position
-	 */
-	public function __construct($position)
-	{
-		$this->position = $position;
-	}
+    /**
+     * @param int $position
+     */
+    public function __construct($position)
+    {
+        $this->position = $position;
+    }
 
-	/**
-	 * Determines if this call position is after the given position
-	 * @param Phake_CallRecorder_Position $other
-	 * @return boolean
-	 */
-	public function thisIsAfter(Phake_CallRecorder_Position $other)
-	{
-		return ($this->position > $other->position);
-	}
+    /**
+     * Determines if this call position is after the given position
+     *
+     * @param Phake_CallRecorder_Position $other
+     *
+     * @return boolean
+     */
+    public function thisIsAfter(Phake_CallRecorder_Position $other)
+    {
+        return ($this->position > $other->position);
+    }
 }

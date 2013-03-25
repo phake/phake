@@ -48,43 +48,38 @@
  */
 class Phake_ClassGenerator_InvocationHandler_StubCaller implements Phake_ClassGenerator_InvocationHandler_IInvocationHandler
 {
-	/**
-	 * @var Phake_MockReader
-	 */
-	private $mockReader;
-	
-	/**
-	 * @param Phake_MockReader $mockReader 
-	 */
-	public function __construct(Phake_MockReader $mockReader)
-	{
-		$this->mockReader = $mockReader;
-	}
-	
-	public function invoke(Phake_IMock $mock, $method, array $arguments, array &$argumentReference)
-	{
-		$stub = NULL;
-		
-		if ($method == '__call')
-		{
-			$stub = $this->mockReader->getStubMapper($mock)->getStubByCall($arguments[0], $argumentReference[1]);
-		}
-		
-		if ($stub === NULL)
-		{
-			$stub = $this->mockReader->getStubMapper($mock)->getStubByCall($method, $argumentReference);
-		}
-		
-		if ($stub === NULL)
-		{
-			$answer = $this->mockReader->getDefaultAnswer($mock);
-		}
-		else
-		{
-			$answer = $stub->getAnswer();
-		}
-		
-		return $answer;
-	}
+    /**
+     * @var Phake_MockReader
+     */
+    private $mockReader;
+
+    /**
+     * @param Phake_MockReader $mockReader
+     */
+    public function __construct(Phake_MockReader $mockReader)
+    {
+        $this->mockReader = $mockReader;
+    }
+
+    public function invoke(Phake_IMock $mock, $method, array $arguments, array &$argumentReference)
+    {
+        $stub = null;
+
+        if ($method == '__call') {
+            $stub = $this->mockReader->getStubMapper($mock)->getStubByCall($arguments[0], $argumentReference[1]);
+        }
+
+        if ($stub === null) {
+            $stub = $this->mockReader->getStubMapper($mock)->getStubByCall($method, $argumentReference);
+        }
+
+        if ($stub === null) {
+            $answer = $this->mockReader->getDefaultAnswer($mock);
+        } else {
+            $answer = $stub->getAnswer();
+        }
+
+        return $answer;
+    }
 }
 

@@ -47,7 +47,14 @@
  *
  * @see Phake_CallRecorder_Verifier
  */
-interface Phake_CallRecorder_IVerificationFailureHandler 
+interface Phake_CallRecorder_IVerificationFailureHandler
 {
-	public function verificationFailed($object, $method, array $argumentMatchers, $mode, $matches, array $callsToMethod);
+    public function verificationFailed(
+        $object,
+        $method,
+        array $argumentMatchers,
+        $mode,
+        $matches,
+        array $callsToMethod
+    );
 }
