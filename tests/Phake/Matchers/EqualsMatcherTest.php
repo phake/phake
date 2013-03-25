@@ -47,93 +47,93 @@
  */
 class Phake_Matchers_EqualsMatcherTest extends PHPUnit_Framework_TestCase
 {
-	/**
-	 * @var Phake_Matchers_EqualsMatcher
-	 */
-	private $matcher;
+    /**
+     * @var Phake_Matchers_EqualsMatcher
+     */
+    private $matcher;
 
-	/**
-	 * Sets up the test fixture
-	 */
-	public function setUp()
-	{
-		$this->matcher = new Phake_Matchers_EqualsMatcher('foo');
-	}
+    /**
+     * Sets up the test fixture
+     */
+    public function setUp()
+    {
+        $this->matcher = new Phake_Matchers_EqualsMatcher('foo');
+    }
 
-	/**
-	 * Tests that matches return true
-	 */
-	public function testMatches()
-	{
-		$value = 'foo';
-		$this->assertTrue($this->matcher->matches($value));
-	}
+    /**
+     * Tests that matches return true
+     */
+    public function testMatches()
+    {
+        $value = 'foo';
+        $this->assertTrue($this->matcher->matches($value));
+    }
 
-	/**
-	 * Tests that non-matches return false
-	 */
-	public function testBadMatches()
-	{
-		$value = 'test';
-		$this->assertFalse($this->matcher->matches($value));
-	}
+    /**
+     * Tests that non-matches return false
+     */
+    public function testBadMatches()
+    {
+        $value = 'test';
+        $this->assertFalse($this->matcher->matches($value));
+    }
 
-	public function testToString()
-	{
-		$this->assertEquals('equal to <string:foo>', $this->matcher->__toString());
-	}
+    public function testToString()
+    {
+        $this->assertEquals('equal to <string:foo>', $this->matcher->__toString());
+    }
 
-	/**
-	 * Tests that the equals matcher __toString function will work on values that don't implement __toString.
-	 *
-	 * Closes Issue #14
-	 */
-	public function testToStringOnNonStringableObject()
-	{
-		$this->matcher = new Phake_Matchers_EqualsMatcher(new stdClass);
+    /**
+     * Tests that the equals matcher __toString function will work on values that don't implement __toString.
+     *
+     * Closes Issue #14
+     */
+    public function testToStringOnNonStringableObject()
+    {
+        $this->matcher = new Phake_Matchers_EqualsMatcher(new stdClass);
 
-		$this->assertEquals('equal to <object:stdClass>', $this->matcher->__toString());
-	}
+        $this->assertEquals('equal to <object:stdClass>', $this->matcher->__toString());
+    }
 
-	/**
-	 * Tests that the equals matcher handles nested dependencies
-	 */
-	public function testNestedDependencies()
-	{
-		$a = new stdClass;
-		$a->b = new stdClass;
-		$a->b->a = $a;
-		$this->matcher = new Phake_Matchers_EqualsMatcher($a);
+    /**
+     * Tests that the equals matcher handles nested dependencies
+     */
+    public function testNestedDependencies()
+    {
+        $a             = new stdClass;
+        $a->b          = new stdClass;
+        $a->b->a       = $a;
+        $this->matcher = new Phake_Matchers_EqualsMatcher($a);
 
-		$c = new stdClass();
-		$c->b = new stdClass();
-		$c->b->a = $c;
+        $c       = new stdClass();
+        $c->b    = new stdClass();
+        $c->b->a = $c;
 
-		$this->assertTrue($this->matcher->matches($c));
-	}
+        $this->assertTrue($this->matcher->matches($c));
+    }
 
-	public function testDifferentClassObjects()
-	{
-		$this->matcher = new Phake_Matchers_EqualsMatcher(new PhakeTest_A());
+    public function testDifferentClassObjects()
+    {
+        $this->matcher = new Phake_Matchers_EqualsMatcher(new PhakeTest_A());
 
-		$this->assertFalse($this->matcher->matches(new PhakeTest_B()));
-	}
+        $this->assertFalse($this->matcher->matches(new PhakeTest_B()));
+    }
 
-	public function testArraysWithDifferentCounts()
-	{
-		$this->matcher = new Phake_Matchers_EqualsMatcher(array(1));
+    public function testArraysWithDifferentCounts()
+    {
+        $this->matcher = new Phake_Matchers_EqualsMatcher(array(1));
 
-		$test = array(1, 2);
-		$this->assertFalse($this->matcher->matches($test));
-	}
+        $test = array(1, 2);
+        $this->assertFalse($this->matcher->matches($test));
+    }
 
-	public function testArraysWithDifferentKeys()
-	{
-		$this->matcher = new Phake_Matchers_EqualsMatcher(array('one' => 1));
+    public function testArraysWithDifferentKeys()
+    {
+        $this->matcher = new Phake_Matchers_EqualsMatcher(array('one' => 1));
 
-		$test = array('two' => 1);
-		$this->assertFalse($this->matcher->matches($test));
-	}
+        $test = array('two' => 1);
+        $this->assertFalse($this->matcher->matches($test));
+    }
 }
 
 

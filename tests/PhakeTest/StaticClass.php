@@ -45,9 +45,9 @@
 
 class PhakeTest_StaticClass
 {
-	public static function staticMethod()
-	{
-		return 'foo';
-	}
+    public static function staticMethod()
+    {
+        return 'foo';
+    }
 }
 

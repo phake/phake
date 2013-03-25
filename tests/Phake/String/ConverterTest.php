@@ -49,70 +49,67 @@
  */
 class Phake_String_ConverterTest extends PHPUnit_Framework_TestCase
 {
-	/**
-	 * @var Phake_String_Converter
-	 */
-	private $converter;
+    /**
+     * @var Phake_String_Converter
+     */
+    private $converter;
 
-	/**
-	 * Sets up the mock generator
-	 */
-	public function setup()
-	{
-		$this->converter = new Phake_String_Converter();
-	}
+    /**
+     * Sets up the mock generator
+     */
+    public function setup()
+    {
+        $this->converter = new Phake_String_Converter();
+    }
 
-	public function testObjectConversion()
-	{
-		$this->assertEquals('<object:stdClass>', $this->converter->convertToString(new stdClass()));
-	}
+    public function testObjectConversion()
+    {
+        $this->assertEquals('<object:stdClass>', $this->converter->convertToString(new stdClass()));
+    }
 
-	public function testArrayConversion()
-	{
-		$this->assertEquals('<array>', $this->converter->convertToString(array()));
-	}
+    public function testArrayConversion()
+    {
+        $this->assertEquals('<array>', $this->converter->convertToString(array()));
+    }
 
-	public function testNullConversion()
-	{
-		$this->assertEquals('<null>', $this->converter->convertToString(null));
-	}
+    public function testNullConversion()
+    {
+        $this->assertEquals('<null>', $this->converter->convertToString(null));
+    }
 
-	public function testResourceConversion()
-	{
-		$dir = opendir('/tmp');
-		try
-		{
-			$this->assertEquals('<resource>', $this->converter->convertToString($dir));
-		}
-		catch (Exception $e)
-		{
-			closedir($dir);
-			throw $e;
-		}
+    public function testResourceConversion()
+    {
+        $dir = opendir('/tmp');
+        try {
+            $this->assertEquals('<resource>', $this->converter->convertToString($dir));
+        } catch (Exception $e) {
+            closedir($dir);
+            throw $e;
+        }
 
-		closedir($dir);
-	}
+        closedir($dir);
+    }
 
-	public function testBoolConversion()
-	{
-		$this->assertEquals('<boolean:true>', $this->converter->convertToString(true));
-		$this->assertEquals('<boolean:false>', $this->converter->convertToString(false));
-	}
+    public function testBoolConversion()
+    {
+        $this->assertEquals('<boolean:true>', $this->converter->convertToString(true));
+        $this->assertEquals('<boolean:false>', $this->converter->convertToString(false));
+    }
 
-	public function testStringConversion()
-	{
-		$this->assertEquals('<string:foo>', $this->converter->convertToString('foo'));
-	}
+    public function testStringConversion()
+    {
+        $this->assertEquals('<string:foo>', $this->converter->convertToString('foo'));
+    }
 
-	public function testIntConversion()
-	{
-		$this->assertEquals('<integer:42>', $this->converter->convertToString(42));
-	}
+    public function testIntConversion()
+    {
+        $this->assertEquals('<integer:42>', $this->converter->convertToString(42));
+    }
 
-	public function testFloatConversion()
-	{
-		$this->assertEquals('<double:42.01>', $this->converter->convertToString(42.01));
-	}
+    public function testFloatConversion()
+    {
+        $this->assertEquals('<double:42.01>', $this->converter->convertToString(42.01));
+    }
 }
 
 

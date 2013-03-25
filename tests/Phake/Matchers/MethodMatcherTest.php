@@ -44,140 +44,143 @@
 
 class PHake_Matchers_MethodMatcherTest extends PHPUnit_Framework_TestCase
 {
-	/**
-	 * @var Phake_Matchers_MethodMatcher
-	 */
-	private $matcher;
+    /**
+     * @var Phake_Matchers_MethodMatcher
+     */
+    private $matcher;
 
-	/**
-	 * @var array
-	 */
-	private $arguments;
+    /**
+     * @var array
+     */
+    private $arguments;
 
-	public function setUp()
-	{
-		$this->arguments = array($this->getMock('Phake_Matchers_IArgumentMatcher'), $this->getMock('Phake_Matchers_IArgumentMatcher'));
-		$this->matcher = new Phake_Matchers_MethodMatcher('foo', $this->arguments);
-	}
+    public function setUp()
+    {
+        $this->arguments = array(
+            $this->getMock('Phake_Matchers_IArgumentMatcher'),
+            $this->getMock('Phake_Matchers_IArgumentMatcher')
+        );
+        $this->matcher   = new Phake_Matchers_MethodMatcher('foo', $this->arguments);
+    }
 
-	/**
-	 * Tests that passing invalid arguments to the Method Matcher will cause an exception
-	 *
-	 * @expectedException InvalidArgumentException
-	 */
-	public function testInvalidParametersThrow()
-	{
-		new Phake_Matchers_MethodMatcher('foo', array('blah'));
-	}
+    /**
+     * Tests that passing invalid arguments to the Method Matcher will cause an exception
+     *
+     * @expectedException InvalidArgumentException
+     */
+    public function testInvalidParametersThrow()
+    {
+        new Phake_Matchers_MethodMatcher('foo', array('blah'));
+    }
 
-	/**
-	 * Tests that the method matcher will forward arguments on.
-	 */
-	public function testMatchesForwardsParameters()
-	{
-		$arguments = array($this->getMock('Phake_Matchers_IArgumentMatcher'));
-		$matcher = new Phake_Matchers_MethodMatcher('foo', $arguments);
-		$arguments[0]->expects($this->any())
-				->method('matches')
-				->with($this->equalTo('foo'))
-				->will($this->returnValue(TRUE));
+    /**
+     * Tests that the method matcher will forward arguments on.
+     */
+    public function testMatchesForwardsParameters()
+    {
+        $arguments = array($this->getMock('Phake_Matchers_IArgumentMatcher'));
+        $matcher   = new Phake_Matchers_MethodMatcher('foo', $arguments);
+        $arguments[0]->expects($this->any())
+            ->method('matches')
+            ->with($this->equalTo('foo'))
+            ->will($this->returnValue(true));
 
-		$arguments = array('foo');
-		$matcher->matches('foo', $arguments);
-	}
+        $arguments = array('foo');
+        $matcher->matches('foo', $arguments);
+    }
 
-	/**
-	 * Tests that the method matcher will return true when all is well.
-	 */
-	public function testMatchesSuccessfullyMatches()
-	{
-		$this->arguments[0]->expects($this->any())
-			->method('matches')
-			->will($this->returnValue(TRUE));
+    /**
+     * Tests that the method matcher will return true when all is well.
+     */
+    public function testMatchesSuccessfullyMatches()
+    {
+        $this->arguments[0]->expects($this->any())
+            ->method('matches')
+            ->will($this->returnValue(true));
 
-		$this->arguments[1]->expects($this->any())
-			->method('matches')
-			->will($this->returnValue(TRUE));
+        $this->arguments[1]->expects($this->any())
+            ->method('matches')
+            ->will($this->returnValue(true));
 
-		$arguments = array('foo', 'bar');
-		$this->assertTrue($this->matcher->matches('foo', $arguments));
-	}
+        $arguments = array('foo', 'bar');
+        $this->assertTrue($this->matcher->matches('foo', $arguments));
+    }
 
-	/**
-	 * Tests that the matcher will return false on mismatched method name.
-	 */
-	public function testNoMatcherOnBadMethod()
-	{
-		$this->arguments[0]->expects($this->any())
-				->method('matches')
-				->will($this->returnValue(TRUE));
+    /**
+     * Tests that the matcher will return false on mismatched method name.
+     */
+    public function testNoMatcherOnBadMethod()
+    {
+        $this->arguments[0]->expects($this->any())
+            ->method('matches')
+            ->will($this->returnValue(true));
 
-		$this->arguments[1]->expects($this->any())
-				->method('matches')
-				->will($this->returnValue(TRUE));
+        $this->arguments[1]->expects($this->any())
+            ->method('matches')
+            ->will($this->returnValue(true));
 
-		$arguments = array('foo', 'bar');
-		$this->assertFalse($this->matcher->matches('test', $arguments));
-	}
+        $arguments = array('foo', 'bar');
+        $this->assertFalse($this->matcher->matches('test', $arguments));
+    }
 
-	/**
-	 * Tests that the matcher will return false on mismatched argument 1.
-	 */
-	public function testNoMatcherOnBadArg1()
-	{
-		$this->arguments[0]->expects($this->any())
-				->method('matches')
-				->will($this->returnValue(FALSE));
+    /**
+     * Tests that the matcher will return false on mismatched argument 1.
+     */
+    public function testNoMatcherOnBadArg1()
+    {
+        $this->arguments[0]->expects($this->any())
+            ->method('matches')
+            ->will($this->returnValue(false));
 
-		$this->arguments[1]->expects($this->any())
-				->method('matches')
-				->will($this->returnValue(TRUE));
+        $this->arguments[1]->expects($this->any())
+            ->method('matches')
+            ->will($this->returnValue(true));
 
-		$arguments = array('foo', 'bar');
-		$this->assertFalse($this->matcher->matches('foo', $arguments));
-	}
+        $arguments = array('foo', 'bar');
+        $this->assertFalse($this->matcher->matches('foo', $arguments));
+    }
 
-	/**
-	 * Tests that the matcher will return false on mismatched argument 2.
-	 */
-	public function testNoMatcherOnBadArg2()
-	{
-		$this->arguments[0]->expects($this->any())
-				->method('matches')
-				->will($this->returnValue(TRUE));
+    /**
+     * Tests that the matcher will return false on mismatched argument 2.
+     */
+    public function testNoMatcherOnBadArg2()
+    {
+        $this->arguments[0]->expects($this->any())
+            ->method('matches')
+            ->will($this->returnValue(true));
 
-		$this->arguments[1]->expects($this->any())
-				->method('matches')
-				->will($this->returnValue(FALSE));
+        $this->arguments[1]->expects($this->any())
+            ->method('matches')
+            ->will($this->returnValue(false));
 
-		$arguments = array('foo', 'bar');
-		$this->assertFalse($this->matcher->matches('foo', $arguments));
-	}
+        $arguments = array('foo', 'bar');
+        $this->assertFalse($this->matcher->matches('foo', $arguments));
+    }
 
-	public function testAnyParameterMatching()
-	{
-		$matcher = new Phake_Matchers_MethodMatcher('method', array(new Phake_Matchers_AnyParameters()));
+    public function testAnyParameterMatching()
+    {
+        $matcher = new Phake_Matchers_MethodMatcher('method', array(new Phake_Matchers_AnyParameters()));
 
-		$arguments = array(1, 2, 3);
-		$this->assertTrue($matcher->matches('method', $arguments));
-		$arguments = array(2, 3, 4);
-		$this->assertTrue($matcher->matches('method', $arguments));
-		$arguments = array(3, 4, 5);
-		$this->assertTrue($matcher->matches('method', $arguments));
-	}
+        $arguments = array(1, 2, 3);
+        $this->assertTrue($matcher->matches('method', $arguments));
+        $arguments = array(2, 3, 4);
+        $this->assertTrue($matcher->matches('method', $arguments));
+        $arguments = array(3, 4, 5);
+        $this->assertTrue($matcher->matches('method', $arguments));
+    }
 
-	public function testSetterMatcher()
-	{
-		$matcher = new Phake_Matchers_MethodMatcher('method', array(new Phake_Matchers_ReferenceSetter(42)));
+    public function testSetterMatcher()
+    {
+        $matcher = new Phake_Matchers_MethodMatcher('method', array(new Phake_Matchers_ReferenceSetter(42)));
 
-		$value = 'blah';
-		$arguments = array();
-		$arguments[0] =& $value;
+        $value        = 'blah';
+        $arguments    = array();
+        $arguments[0] =& $value;
 
-		$matcher->matches('method', $arguments);
+        $matcher->matches('method', $arguments);
 
-		$this->assertEquals(42, $value);
-	}
+        $this->assertEquals(42, $value);
+    }
 }
 
 

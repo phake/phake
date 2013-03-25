@@ -44,23 +44,23 @@
 
 interface PhakeTest_MockedInterface
 {
-	public function foo();
+    public function foo();
 
-	public function hinted(PhakeTest_MockedInterface $hinted);
+    public function hinted(PhakeTest_MockedInterface $hinted);
 
-	public function hintedNull(PhakeTest_MockedInterface $hinted = NULL);
+    public function hintedNull(PhakeTest_MockedInterface $hinted = null);
 
-	public function hintedArray(array $hinted);
+    public function hintedArray(array $hinted);
 
-	public function hintedArrayNull(array $hinted = NULL);
+    public function hintedArrayNull(array $hinted = null);
 
-	public function hintedArrayDefaulted(array $hinted = array(1, 2, 3));
+    public function hintedArrayDefaulted(array $hinted = array(1, 2, 3));
 
-	public function reference(&$hinted);
+    public function reference(&$hinted);
 
-	public function referenceHinted(PhakeTest_MockedInterface &$hinted);
+    public function referenceHinted(PhakeTest_MockedInterface &$hinted);
 
-	public function referenceDefault(&$hinted = 'blah');
+    public function referenceDefault(&$hinted = 'blah');
 }
 
 

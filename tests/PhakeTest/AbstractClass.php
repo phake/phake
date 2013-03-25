@@ -44,28 +44,28 @@
 
 abstract class PhakeTest_AbstractClass implements PhakeTest_MockedInterface
 {
-	public function foo()
-	{
-	}
+    public function foo()
+    {
+    }
 
-	public function fooWithArgument($arg1)
-	{
-	}
+    public function fooWithArgument($arg1)
+    {
+    }
 
-	public function fooWithReturnValue()
-	{
-		return 'blah';
-	}
+    public function fooWithReturnValue()
+    {
+        return 'blah';
+    }
 
-	public function callInnerFunc()
-	{
-		return $this->innerFunc();
-	}
+    public function callInnerFunc()
+    {
+        return $this->innerFunc();
+    }
 
-	protected function innerFunc()
-	{
-		return 'test';
-	}
+    protected function innerFunc()
+    {
+        return 'test';
+    }
 }
 
 

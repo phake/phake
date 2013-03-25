@@ -49,310 +49,348 @@
  */
 class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
 {
-	/**
-	 * @var Phake_CallRecorder_Recorder
-	 */
-	private $recorder;
+    /**
+     * @var Phake_CallRecorder_Recorder
+     */
+    private $recorder;
 
-	/**
-	 * @var Phake_CallRecorder_Verifier
-	 */
-	private $verifier;
+    /**
+     * @var Phake_CallRecorder_Verifier
+     */
+    private $verifier;
 
-	/**
-	 * @var array
-	 */
-	private $callArray;
+    /**
+     * @var array
+     */
+    private $callArray;
 
-	/**
-	 * @var Phake_CallRecorder_IVerifierMode 
-	 */
-	private $verifierMode;
+    /**
+     * @var Phake_CallRecorder_IVerifierMode
+     */
+    private $verifierMode;
 
-	/**
-	 * @var Phake_IMock
-	 */
-	private $obj;
-	
-	/**
-	 * @var Phake_MockReader
-	 */
-	private $mockReader;
+    /**
+     * @var Phake_IMock
+     */
+    private $obj;
 
-	/**
-	 * Sets up the verifier and its call recorder
-	 */
-	public function setUp()
-	{
-		$this->obj = $this->getMock('Phake_IMock');
-		$this->mockReader = Phake::mock('Phake_MockReader');
-		Phake::when($this->mockReader)->getName($this->anything())->thenReturn('mock');
-		$this->recorder = Phake::mock('Phake_CallRecorder_Recorder');
-		$this->verifierMode = Phake::mock('Phake_CallRecorder_IVerifierMode');
+    /**
+     * @var Phake_MockReader
+     */
+    private $mockReader;
 
-		$this->callArray = array(
-			new Phake_CallRecorder_Call($this->obj, 'foo', array(), $this->mockReader),
-			new Phake_CallRecorder_Call($this->obj, 'bar', array(), $this->mockReader),
-			new Phake_CallRecorder_Call($this->obj, 'foo', array(
-				'bar', 'foo'
-			), $this->mockReader),
-			new Phake_CallRecorder_Call($this->obj, 'foo', array(), $this->mockReader),
-		);
+    /**
+     * Sets up the verifier and its call recorder
+     */
+    public function setUp()
+    {
+        $this->obj        = $this->getMock('Phake_IMock');
+        $this->mockReader = Phake::mock('Phake_MockReader');
+        Phake::when($this->mockReader)->getName($this->anything())->thenReturn('mock');
+        $this->recorder     = Phake::mock('Phake_CallRecorder_Recorder');
+        $this->verifierMode = Phake::mock('Phake_CallRecorder_IVerifierMode');
 
-		Phake::when($this->recorder)->getAllCalls()->thenReturn($this->callArray);
+        $this->callArray = array(
+            new Phake_CallRecorder_Call($this->obj, 'foo', array(), $this->mockReader),
+            new Phake_CallRecorder_Call($this->obj, 'bar', array(), $this->mockReader),
+            new Phake_CallRecorder_Call($this->obj, 'foo', array(
+                'bar',
+                'foo'
+            ), $this->mockReader),
+            new Phake_CallRecorder_Call($this->obj, 'foo', array(), $this->mockReader),
+        );
 
-		$this->verifier = new Phake_CallRecorder_Verifier($this->recorder, $this->obj);
-	}
+        Phake::when($this->recorder)->getAllCalls()->thenReturn($this->callArray);
 
-	/**
-	 * Tests that a verifier can find a call that has been recorded.
-	 */
-	public function testVerifierFindsCall()
-	{
-		$expectation = new Phake_CallRecorder_CallExpectation(
-			$this->obj,
-			'bar',
-			array(),
-			$this->verifierMode,
-			$this->mockReader
-		);
-		$return = new Phake_CallRecorder_CallInfo($this->callArray[1], new Phake_CallRecorder_Position(0));
-		Phake::when($this->recorder)->getCallInfo($this->callArray[1])->thenReturn($return);
+        $this->verifier = new Phake_CallRecorder_Verifier($this->recorder, $this->obj);
+    }
 
-		Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(new Phake_CallRecorder_VerifierMode_Result(TRUE, ''));
-		$this->assertEquals(new Phake_CallRecorder_VerifierResult(TRUE, array($return)), $this->verifier->verifyCall($expectation));
-	}
+    /**
+     * Tests that a verifier can find a call that has been recorded.
+     */
+    public function testVerifierFindsCall()
+    {
+        $expectation = new Phake_CallRecorder_CallExpectation(
+            $this->obj,
+            'bar',
+            array(),
+            $this->verifierMode,
+            $this->mockReader
+        );
+        $return      = new Phake_CallRecorder_CallInfo($this->callArray[1], new Phake_CallRecorder_Position(0));
+        Phake::when($this->recorder)->getCallInfo($this->callArray[1])->thenReturn($return);
 
-	/**
-	 * Tests that a verifier will not find a call that has not been recorded.
-	 */
-	public function testVerifierDoesNotFindCall()
-	{
-		$expectation = new Phake_CallRecorder_CallExpectation(
-			$this->obj,
-			'test',
-			array(),
-			$this->verifierMode,
-			$this->mockReader
-		);
-		Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(new Phake_CallRecorder_VerifierMode_Result(TRUE, ''));
+        Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(
+            new Phake_CallRecorder_VerifierMode_Result(true, '')
+        );
+        $this->assertEquals(
+            new Phake_CallRecorder_VerifierResult(true, array($return)),
+            $this->verifier->verifyCall($expectation)
+        );
+    }
 
-		$result = $this->verifier->verifyCall($expectation)->getMatchedCalls();
-		$this->assertTrue(is_array($result), 'verifyCall did not return an array');
-		$this->assertTrue(empty($result), 'test call was found but should not have been');
-	}
+    /**
+     * Tests that a verifier will not find a call that has not been recorded.
+     */
+    public function testVerifierDoesNotFindCall()
+    {
+        $expectation = new Phake_CallRecorder_CallExpectation(
+            $this->obj,
+            'test',
+            array(),
+            $this->verifierMode,
+            $this->mockReader
+        );
+        Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(
+            new Phake_CallRecorder_VerifierMode_Result(true, '')
+        );
 
-	/**
-	 * Tests that a verifier will not find a call that has been recorded with non matching parameters.
-	 */
-	public function testVerifierDoesNotFindCallWithUnmatchedArguments()
-	{
-		$expectation = new Phake_CallRecorder_CallExpectation(
-			$this->obj,
-			'foo',
-			array(
-				new Phake_Matchers_EqualsMatcher('test'),
-				new Phake_Matchers_EqualsMatcher('test')),
-			$this->verifierMode,
-			$this->mockReader
-		);
-		Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(new Phake_CallRecorder_VerifierMode_Result(TRUE, ''));
+        $result = $this->verifier->verifyCall($expectation)->getMatchedCalls();
+        $this->assertTrue(is_array($result), 'verifyCall did not return an array');
+        $this->assertTrue(empty($result), 'test call was found but should not have been');
+    }
 
-		$result = $this->verifier->verifyCall($expectation)->getMatchedCalls();
-		$this->assertTrue(empty($result));
-	}
+    /**
+     * Tests that a verifier will not find a call that has been recorded with non matching parameters.
+     */
+    public function testVerifierDoesNotFindCallWithUnmatchedArguments()
+    {
+        $expectation = new Phake_CallRecorder_CallExpectation(
+            $this->obj,
+            'foo',
+            array(
+                new Phake_Matchers_EqualsMatcher('test'),
+                new Phake_Matchers_EqualsMatcher('test')
+            ),
+            $this->verifierMode,
+            $this->mockReader
+        );
+        Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(
+            new Phake_CallRecorder_VerifierMode_Result(true, '')
+        );
 
-	/**
-	 * Tests that a verifier returns an array of call info objects when it finds a call that matches
-	 */
-	public function testVerifierReturnsCallInfoForMatchedCalls()
-	{
-		$expectation = new Phake_CallRecorder_CallExpectation(
-			$this->obj,
-			'foo',
-			array(),
-			$this->verifierMode,
-			$this->mockReader
-		);
+        $result = $this->verifier->verifyCall($expectation)->getMatchedCalls();
+        $this->assertTrue(empty($result));
+    }
 
-		$return = new Phake_CallRecorder_CallInfo($this->callArray[1], new Phake_CallRecorder_Position(0));
-		Phake::when($this->recorder)->getCallInfo(Phake::anyParameters())->thenReturn($return);
+    /**
+     * Tests that a verifier returns an array of call info objects when it finds a call that matches
+     */
+    public function testVerifierReturnsCallInfoForMatchedCalls()
+    {
+        $expectation = new Phake_CallRecorder_CallExpectation(
+            $this->obj,
+            'foo',
+            array(),
+            $this->verifierMode,
+            $this->mockReader
+        );
 
-		Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(new Phake_CallRecorder_VerifierMode_Result(TRUE, ''));
+        $return = new Phake_CallRecorder_CallInfo($this->callArray[1], new Phake_CallRecorder_Position(0));
+        Phake::when($this->recorder)->getCallInfo(Phake::anyParameters())->thenReturn($return);
 
-		$this->verifier->verifyCall($expectation);
+        Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(
+            new Phake_CallRecorder_VerifierMode_Result(true, '')
+        );
 
-		$this->assertEquals(new Phake_CallRecorder_VerifierResult(TRUE, array($return, $return)), $this->verifier->verifyCall($expectation));
-	}
+        $this->verifier->verifyCall($expectation);
+
+        $this->assertEquals(
+            new Phake_CallRecorder_VerifierResult(true, array($return, $return)),
+            $this->verifier->verifyCall($expectation)
+        );
+    }
 
 
-	/**
-	 * Tests that a verifier can find a call using AnyParameters matcher
-	 */
-	public function testVerifierFindsCallWithAnyParameters()
-	{
-		$expectation = new Phake_CallRecorder_CallExpectation(
-			$this->obj,
-			'bar',
-			array(new Phake_Matchers_AnyParameters()),
-			$this->verifierMode,
-			$this->mockReader
-		);
+    /**
+     * Tests that a verifier can find a call using AnyParameters matcher
+     */
+    public function testVerifierFindsCallWithAnyParameters()
+    {
+        $expectation = new Phake_CallRecorder_CallExpectation(
+            $this->obj,
+            'bar',
+            array(new Phake_Matchers_AnyParameters()),
+            $this->verifierMode,
+            $this->mockReader
+        );
 
-		$return = new Phake_CallRecorder_CallInfo($this->callArray[1], new Phake_CallRecorder_Position(0));
-		Phake::when($this->recorder)->getCallInfo($this->callArray[1])->thenReturn($return);
+        $return = new Phake_CallRecorder_CallInfo($this->callArray[1], new Phake_CallRecorder_Position(0));
+        Phake::when($this->recorder)->getCallInfo($this->callArray[1])->thenReturn($return);
 
-		Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(new Phake_CallRecorder_VerifierMode_Result(TRUE, ''));
+        Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(
+            new Phake_CallRecorder_VerifierMode_Result(true, '')
+        );
 
-		$this->assertEquals(new Phake_CallRecorder_VerifierResult(TRUE, array($return)), $this->verifier->verifyCall($expectation), 'bar call was not found');
-	}
+        $this->assertEquals(
+            new Phake_CallRecorder_VerifierResult(true, array($return)),
+            $this->verifier->verifyCall($expectation),
+            'bar call was not found'
+        );
+    }
 
-	/**
-	 * Tests that the verifier will only return calls made on the same object
-	 */
-	public function testVerifierBeingCalledWithMixedCallRecorder()
-	{
-		$recorder = new Phake_CallRecorder_Recorder();
-		$obj1 = $this->getMock('Phake_IMock');
-		$obj2 = $this->getMock('Phake_IMock');
+    /**
+     * Tests that the verifier will only return calls made on the same object
+     */
+    public function testVerifierBeingCalledWithMixedCallRecorder()
+    {
+        $recorder = new Phake_CallRecorder_Recorder();
+        $obj1     = $this->getMock('Phake_IMock');
+        $obj2     = $this->getMock('Phake_IMock');
 
-		$expectation = new Phake_CallRecorder_CallExpectation(
-			$obj1,
-			'foo',
-			array(),
-			$this->verifierMode,
-			$this->mockReader
-		);
+        $expectation = new Phake_CallRecorder_CallExpectation(
+            $obj1,
+            'foo',
+            array(),
+            $this->verifierMode,
+            $this->mockReader
+        );
 
-		$recorder->recordCall(new Phake_CallRecorder_Call($obj1, 'foo', array(), new Phake_MockReader()));
-		$recorder->recordCall(new Phake_CallRecorder_Call($obj2, 'foo', array(), new Phake_MockReader()));
+        $recorder->recordCall(new Phake_CallRecorder_Call($obj1, 'foo', array(), new Phake_MockReader()));
+        $recorder->recordCall(new Phake_CallRecorder_Call($obj2, 'foo', array(), new Phake_MockReader()));
 
-		$verifier = new Phake_CallRecorder_Verifier($recorder, $obj1);
+        $verifier = new Phake_CallRecorder_Verifier($recorder, $obj1);
 
-		Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(new Phake_CallRecorder_VerifierMode_Result(TRUE, ''));
+        Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(
+            new Phake_CallRecorder_VerifierMode_Result(true, '')
+        );
 
-		$this->assertEquals(1, count($verifier->verifyCall($expectation)->getMatchedCalls()));
-	}
+        $this->assertEquals(1, count($verifier->verifyCall($expectation)->getMatchedCalls()));
+    }
 
-	public function testVerifierChecksVerificationMode()
-	{
-		$expectation = new Phake_CallRecorder_CallExpectation(
-			$this->obj,
-			'foo',
-			array(),
-			$this->verifierMode,
-			$this->mockReader
-		);
+    public function testVerifierChecksVerificationMode()
+    {
+        $expectation = new Phake_CallRecorder_CallExpectation(
+            $this->obj,
+            'foo',
+            array(),
+            $this->verifierMode,
+            $this->mockReader
+        );
 
-		$return = new Phake_CallRecorder_CallInfo($this->callArray[1], new Phake_CallRecorder_Position(0));
-		Phake::when($this->recorder)->getCallInfo(Phake::anyParameters())->thenReturn($return);
+        $return = new Phake_CallRecorder_CallInfo($this->callArray[1], new Phake_CallRecorder_Position(0));
+        Phake::when($this->recorder)->getCallInfo(Phake::anyParameters())->thenReturn($return);
 
-		Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(new Phake_CallRecorder_VerifierMode_Result(TRUE, ''));
+        Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(
+            new Phake_CallRecorder_VerifierMode_Result(true, '')
+        );
 
-		$this->verifier->verifyCall($expectation);
+        $this->verifier->verifyCall($expectation);
 
-		Phake::verify($this->verifierMode)->verify(array($return, $return));
-	}
+        Phake::verify($this->verifierMode)->verify(array($return, $return));
+    }
 
-	public function testVerifierReturnsFalseWhenAnExpectationIsNotMet()
-	{
-		$expectation = new Phake_CallRecorder_CallExpectation(
-			$this->obj,
-			'foo',
-			array(),
-			$this->verifierMode,
-			$this->mockReader
-		);
+    public function testVerifierReturnsFalseWhenAnExpectationIsNotMet()
+    {
+        $expectation = new Phake_CallRecorder_CallExpectation(
+            $this->obj,
+            'foo',
+            array(),
+            $this->verifierMode,
+            $this->mockReader
+        );
 
-		Phake::when($this->verifierMode)->__toString()->thenReturn('exactly 1 times');
+        Phake::when($this->verifierMode)->__toString()->thenReturn('exactly 1 times');
 
-		$return = new Phake_CallRecorder_CallInfo($this->callArray[1], new Phake_CallRecorder_Position(0));
-		Phake::when($this->recorder)->getCallInfo(Phake::anyParameters())->thenReturn($return);
+        $return = new Phake_CallRecorder_CallInfo($this->callArray[1], new Phake_CallRecorder_Position(0));
+        Phake::when($this->recorder)->getCallInfo(Phake::anyParameters())->thenReturn($return);
 
-		Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(new Phake_CallRecorder_VerifierMode_Result(FALSE, 'actually called 0 times'));
-		
-		$expectedMessage = 'Expected mock->foo() to be called exactly 1 times, actually called 0 times.
+        Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(
+            new Phake_CallRecorder_VerifierMode_Result(false, 'actually called 0 times')
+        );
+
+        $expectedMessage = 'Expected mock->foo() to be called exactly 1 times, actually called 0 times.
 Other Invocations:
   mock->foo(<string:bar>, <string:foo>)';
-		
-		$this->assertEquals(
-						new Phake_CallRecorder_VerifierResult(FALSE, array(), $expectedMessage), 
-						$this->verifier->verifyCall($expectation)
-		);
-	}
 
-	public function testVerifierModifiesFailureDescriptionIfThereAreNoInteractions()
-	{
-		$obj2 = $this->getMock('Phake_IMock');
-		$expectation = new Phake_CallRecorder_CallExpectation(
-			$obj2,
-			'foo',
-			array(),
-			$this->verifierMode,
-			$this->mockReader
-		);
+        $this->assertEquals(
+            new Phake_CallRecorder_VerifierResult(false, array(), $expectedMessage),
+            $this->verifier->verifyCall($expectation)
+        );
+    }
 
-		Phake::when($this->verifierMode)->__toString()->thenReturn('exactly 1 times');
+    public function testVerifierModifiesFailureDescriptionIfThereAreNoInteractions()
+    {
+        $obj2        = $this->getMock('Phake_IMock');
+        $expectation = new Phake_CallRecorder_CallExpectation(
+            $obj2,
+            'foo',
+            array(),
+            $this->verifierMode,
+            $this->mockReader
+        );
 
-		$return = new Phake_CallRecorder_CallInfo($this->callArray[1], new Phake_CallRecorder_Position(0));
-		Phake::when($this->recorder)->getCallInfo(Phake::anyParameters())->thenReturn($return);
+        Phake::when($this->verifierMode)->__toString()->thenReturn('exactly 1 times');
 
-		Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(new Phake_CallRecorder_VerifierMode_Result(FALSE, 'actually called 0 times'));
-		
-		$this->assertEquals(
-						new Phake_CallRecorder_VerifierResult(FALSE, array(), 'Expected mock->foo() to be called exactly 1 times, actually called 0 times. In fact, there are no interactions with this mock.'), 
-						$this->verifier->verifyCall($expectation)
-		);
+        $return = new Phake_CallRecorder_CallInfo($this->callArray[1], new Phake_CallRecorder_Position(0));
+        Phake::when($this->recorder)->getCallInfo(Phake::anyParameters())->thenReturn($return);
 
-		Phake::verify($this->verifierMode)->verify(array());
-	}
+        Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(
+            new Phake_CallRecorder_VerifierMode_Result(false, 'actually called 0 times')
+        );
 
-	public function testVerifierModifiesFailureDescriptionWithOtherCalls()
-	{
-		$expectation = new Phake_CallRecorder_CallExpectation(
-			$this->obj,
-			'foo',
-			array(new Phake_Matchers_EqualsMatcher('test')),
-			$this->verifierMode,
-			$this->mockReader
-		);
+        $this->assertEquals(
+            new Phake_CallRecorder_VerifierResult(false, array(), 'Expected mock->foo() to be called exactly 1 times, actually called 0 times. In fact, there are no interactions with this mock.'),
+            $this->verifier->verifyCall($expectation)
+        );
 
-		Phake::when($this->verifierMode)->__toString()->thenReturn('exactly 1 times');
+        Phake::verify($this->verifierMode)->verify(array());
+    }
 
-		$return = new Phake_CallRecorder_CallInfo($this->callArray[1], new Phake_CallRecorder_Position(0));
-		Phake::when($this->recorder)->getCallInfo(Phake::anyParameters())->thenReturn($return);
+    public function testVerifierModifiesFailureDescriptionWithOtherCalls()
+    {
+        $expectation = new Phake_CallRecorder_CallExpectation(
+            $this->obj,
+            'foo',
+            array(new Phake_Matchers_EqualsMatcher('test')),
+            $this->verifierMode,
+            $this->mockReader
+        );
 
-		Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(new Phake_CallRecorder_VerifierMode_Result(FALSE, 'actually called 0 times'));
+        Phake::when($this->verifierMode)->__toString()->thenReturn('exactly 1 times');
 
-		$expected_msg =
-			"Expected mock->foo(equal to <string:test>) to be called exactly 1 times, actually called 0 times.\n"
-					. "Other Invocations:\n"
-					. "  mock->foo()\n"
-					. "  mock->foo(<string:bar>, <string:foo>)\n"
-					. "  mock->foo()";
+        $return = new Phake_CallRecorder_CallInfo($this->callArray[1], new Phake_CallRecorder_Position(0));
+        Phake::when($this->recorder)->getCallInfo(Phake::anyParameters())->thenReturn($return);
 
-		$this->assertEquals(new Phake_CallRecorder_VerifierResult(FALSE, array(), $expected_msg), $this->verifier->verifyCall($expectation));
-	}
+        Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(
+            new Phake_CallRecorder_VerifierMode_Result(false, 'actually called 0 times')
+        );
 
-	public function testVerifyNoCalls()
-	{
-		Phake::when($this->recorder)->getAllCalls()->thenReturn(array());
+        $expected_msg =
+            "Expected mock->foo(equal to <string:test>) to be called exactly 1 times, actually called 0 times.\n"
+                . "Other Invocations:\n"
+                . "  mock->foo()\n"
+                . "  mock->foo(<string:bar>, <string:foo>)\n"
+                . "  mock->foo()";
 
-		$this->assertEquals(new Phake_CallRecorder_VerifierResult(TRUE, array()), $this->verifier->verifyNoCalls());
-	}
+        $this->assertEquals(
+            new Phake_CallRecorder_VerifierResult(false, array(), $expected_msg),
+            $this->verifier->verifyCall($expectation)
+        );
+    }
 
-	public function testVerifyNoCallsFailsWithOtherCallsListed()
-	{
-		$expected_msg =
-			"Expected no interaction with mock\n"
-					. "Invocations:\n"
-					. "  mock->foo()\n"
-					. "  mock->bar()\n"
-					. "  mock->foo(<string:bar>, <string:foo>)\n"
-					. "  mock->foo()";
+    public function testVerifyNoCalls()
+    {
+        Phake::when($this->recorder)->getAllCalls()->thenReturn(array());
 
-		$this->assertEquals(new Phake_CallRecorder_VerifierResult(FALSE, array(), $expected_msg), $this->verifier->verifyNoCalls());
-	}
+        $this->assertEquals(new Phake_CallRecorder_VerifierResult(true, array()), $this->verifier->verifyNoCalls());
+    }
+
+    public function testVerifyNoCallsFailsWithOtherCallsListed()
+    {
+        $expected_msg =
+            "Expected no interaction with mock\n"
+                . "Invocations:\n"
+                . "  mock->foo()\n"
+                . "  mock->bar()\n"
+                . "  mock->foo(<string:bar>, <string:foo>)\n"
+                . "  mock->foo()";
+
+        $this->assertEquals(
+            new Phake_CallRecorder_VerifierResult(false, array(), $expected_msg),
+            $this->verifier->verifyNoCalls()
+        );
+    }
 }
 
 

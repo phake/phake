@@ -49,93 +49,93 @@
  */
 class Phake_CallRecorder_RecorderTest extends PHPUnit_Framework_TestCase
 {
-	private $mock;
+    private $mock;
 
-	public function setUp()
-	{
-		$this->mock = $this->getMock('Phake_IMock');
-	}
+    public function setUp()
+    {
+        $this->mock = $this->getMock('Phake_IMock');
+    }
 
-	/**
-	 * Tests that the recorder can log a call and then pull that same call back out.
-	 */
-	public function testRecord()
-	{
-		$call = new Phake_CallRecorder_Call($this->mock, 'someMethod', array(), new Phake_MockReader());
-		$call2 = new Phake_CallRecorder_Call($this->mock, 'someMethod2', array(), new Phake_MockReader());
-		$callRecorder = new Phake_CallRecorder_Recorder();
-		$callRecorder->recordCall($call);
-		$callRecorder->recordCall($call2);
+    /**
+     * Tests that the recorder can log a call and then pull that same call back out.
+     */
+    public function testRecord()
+    {
+        $call         = new Phake_CallRecorder_Call($this->mock, 'someMethod', array(), new Phake_MockReader());
+        $call2        = new Phake_CallRecorder_Call($this->mock, 'someMethod2', array(), new Phake_MockReader());
+        $callRecorder = new Phake_CallRecorder_Recorder();
+        $callRecorder->recordCall($call);
+        $callRecorder->recordCall($call2);
 
-		$this->assertSame(array($call, $call2), $callRecorder->getAllCalls());
-	}
+        $this->assertSame(array($call, $call2), $callRecorder->getAllCalls());
+    }
 
-	/**
-	 * Tests that the recorder can be rest to contain no calls.
-	 */
-	public function testRemoveAllCalls()
-	{
-		$call = new Phake_CallRecorder_Call($this->mock, 'someMethod', array(), new Phake_MockReader());
-		$call2 = new Phake_CallRecorder_Call($this->mock, 'someMethod2', array(), new Phake_MockReader());
-		$callRecorder = new Phake_CallRecorder_Recorder();
-		$callRecorder->recordCall($call);
-		$callRecorder->recordCall($call2);
+    /**
+     * Tests that the recorder can be rest to contain no calls.
+     */
+    public function testRemoveAllCalls()
+    {
+        $call         = new Phake_CallRecorder_Call($this->mock, 'someMethod', array(), new Phake_MockReader());
+        $call2        = new Phake_CallRecorder_Call($this->mock, 'someMethod2', array(), new Phake_MockReader());
+        $callRecorder = new Phake_CallRecorder_Recorder();
+        $callRecorder->recordCall($call);
+        $callRecorder->recordCall($call2);
 
-		$callRecorder->removeAllCalls();
+        $callRecorder->removeAllCalls();
 
-		$this->assertSame(array(), $callRecorder->getAllCalls());
-	}
+        $this->assertSame(array(), $callRecorder->getAllCalls());
+    }
 
-	/**
-	 * Tests retrieving call info for a particular call.
-	 */
-	public function testRetrieveCallInfo()
-	{
-		$call = new Phake_CallRecorder_Call($this->mock, 'someMethod', array(), new Phake_MockReader());
-		$callRecorder = new Phake_CallRecorder_Recorder();
-		$callRecorder->recordCall($call);
+    /**
+     * Tests retrieving call info for a particular call.
+     */
+    public function testRetrieveCallInfo()
+    {
+        $call         = new Phake_CallRecorder_Call($this->mock, 'someMethod', array(), new Phake_MockReader());
+        $callRecorder = new Phake_CallRecorder_Recorder();
+        $callRecorder->recordCall($call);
 
-		$callInfo = $callRecorder->getCallInfo($call);
+        $callInfo = $callRecorder->getCallInfo($call);
 
-		$this->assertInstanceOf('Phake_CallRecorder_CallInfo', $callInfo);
-		$this->assertSame($call, $callInfo->getCall());
-		$this->assertInstanceOf('Phake_CallRecorder_Position', $callInfo->getPosition());
-	}
+        $this->assertInstanceOf('Phake_CallRecorder_CallInfo', $callInfo);
+        $this->assertSame($call, $callInfo->getCall());
+        $this->assertInstanceOf('Phake_CallRecorder_Position', $callInfo->getPosition());
+    }
 
-	/**
-	 * Tests that a non existant call returns null
-	 */
-	public function testRetrieveCallInfoReturnsNull()
-	{
-		$call = new Phake_CallRecorder_Call($this->mock, 'someMethod', array(), new Phake_MockReader());
-		$callRecorder = new Phake_CallRecorder_Recorder();
+    /**
+     * Tests that a non existant call returns null
+     */
+    public function testRetrieveCallInfoReturnsNull()
+    {
+        $call         = new Phake_CallRecorder_Call($this->mock, 'someMethod', array(), new Phake_MockReader());
+        $callRecorder = new Phake_CallRecorder_Recorder();
 
-		$this->assertNull($callRecorder->getCallInfo($call));
-	}
+        $this->assertNull($callRecorder->getCallInfo($call));
+    }
 
-	/**
-	 * Tests an internal php nested object issue (#47)
-	 */
-	public function testRetrieveCallInfoUsesStrictChecking()
-	{
-		$objA = new stdClass();
-		$objB = new stdClass();
-		$objA->b = $objB;
-		$objB->a = $objA;
+    /**
+     * Tests an internal php nested object issue (#47)
+     */
+    public function testRetrieveCallInfoUsesStrictChecking()
+    {
+        $objA    = new stdClass();
+        $objB    = new stdClass();
+        $objA->b = $objB;
+        $objB->a = $objA;
 
-		$objC = new stdClass();
-		$objD = new stdClass();
-		$objC->b = $objD;
-		$objD->a = $objC;
+        $objC    = new stdClass();
+        $objD    = new stdClass();
+        $objC->b = $objD;
+        $objD->a = $objC;
 
-		$call = new Phake_CallRecorder_Call($this->mock, 'someMethod', array($objA), new Phake_MockReader());
-		$callRecorder = new Phake_CallRecorder_Recorder();
-		$callRecorder->recordCall($call);
+        $call         = new Phake_CallRecorder_Call($this->mock, 'someMethod', array($objA), new Phake_MockReader());
+        $callRecorder = new Phake_CallRecorder_Recorder();
+        $callRecorder->recordCall($call);
 
-		$checkCall = new Phake_CallRecorder_Call($this->mock, 'someMethod', array($objC), new Phake_MockReader());
+        $checkCall = new Phake_CallRecorder_Call($this->mock, 'someMethod', array($objC), new Phake_MockReader());
 
-		$this->assertNull($callRecorder->getCallInfo($checkCall));
-	}
+        $this->assertNull($callRecorder->getCallInfo($checkCall));
+    }
 }
 
 

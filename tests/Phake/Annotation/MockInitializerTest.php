@@ -51,81 +51,81 @@ use PhakeTest\AnotherNamespacedClass;
  */
 class Phake_Annotation_MockInitializerTest extends PHPUnit_Framework_TestCase
 {
-	/**
-	 * @var Phake_Annotation_MockInitializer
-	 */
-	private $initializer;
+    /**
+     * @var Phake_Annotation_MockInitializer
+     */
+    private $initializer;
 
-	/**
-	 * @Mock stdClass
-	 */
-	private $mock1;
+    /**
+     * @Mock stdClass
+     */
+    private $mock1;
 
-	/**
-	 * @Mock
-	 * @var stdClass
-	 */
-	private $mock2;
+    /**
+     * @Mock
+     * @var stdClass
+     */
+    private $mock2;
 
-	/**
-	 * @Mock
-	 * @var \PhakeTest\NamespacedClass
-	 */
-	private $shortNameMock1;
+    /**
+     * @Mock
+     * @var \PhakeTest\NamespacedClass
+     */
+    private $shortNameMock1;
 
-	/**
-	 * @Mock AnotherNamespacedClass
-	 */
-	private $shortNameMock2;
+    /**
+     * @Mock AnotherNamespacedClass
+     */
+    private $shortNameMock2;
 
-	protected function setUp()
-	{
-		if (version_compare(PHP_VERSION, '5.3', '<')) {
-			$this->markTestSkipped('ReflectionProperty::setAccessible() is not available');
-		}
+    protected function setUp()
+    {
+        if (version_compare(PHP_VERSION, '5.3', '<')) {
+            $this->markTestSkipped('ReflectionProperty::setAccessible() is not available');
+        }
 
-		$this->initializer = new Phake_Annotation_MockInitializer();
-	}
+        $this->initializer = new Phake_Annotation_MockInitializer();
+    }
 
-	protected function tearDown()
-	{
-		$this->initializer = null;
-		$this->mock1 = $this->mock2 = null;
-		$this->shortNameMock1 = $this->shortNameMock2 = null;
-	}
+    protected function tearDown()
+    {
+        $this->initializer    = null;
+        $this->mock1          = $this->mock2 = null;
+        $this->shortNameMock1 = $this->shortNameMock2 = null;
+    }
 
-	public function testInitialize()
-	{
-		if (version_compare(PHP_VERSION, '5.3', '<')) {
-			$this->markTestSkipped('ReflectionProperty::setAccessible() is not available');
-		}
+    public function testInitialize()
+    {
+        if (version_compare(PHP_VERSION, '5.3', '<')) {
+            $this->markTestSkipped('ReflectionProperty::setAccessible() is not available');
+        }
 
-		$this->initializer->initialize($this);
+        $this->initializer->initialize($this);
 
-		$this->assertInstanceOf('stdClass', $this->mock1);
-		$this->assertInstanceOf('stdClass', $this->mock2);
-		$this->assertInstanceOf('Phake_IMock', $this->mock1);
-		$this->assertInstanceOf('Phake_IMock', $this->mock2);
-	}
+        $this->assertInstanceOf('stdClass', $this->mock1);
+        $this->assertInstanceOf('stdClass', $this->mock2);
+        $this->assertInstanceOf('Phake_IMock', $this->mock1);
+        $this->assertInstanceOf('Phake_IMock', $this->mock2);
+    }
 
-	/**
-	 * @depends testInitialize
-	 */
-	public function testNamespaceAliasOnVar()
-	{
-		$this->initializer->initialize($this);
+    /**
+     * @depends testInitialize
+     */
+    public function testNamespaceAliasOnVar()
+    {
+        $this->initializer->initialize($this);
 
-		$this->assertInstanceOf('Phake_IMock', $this->shortNameMock1);
-	}
+        $this->assertInstanceOf('Phake_IMock', $this->shortNameMock1);
+    }
 
-	/**
-	 * @depends testInitialize
-	 */
-	public function testNamespaceAliasOnMock()
-	{
-		$this->initializer->initialize($this);
+    /**
+     * @depends testInitialize
+     */
+    public function testNamespaceAliasOnMock()
+    {
+        $this->initializer->initialize($this);
 
-		$this->assertInstanceOf('Phake_IMock', $this->shortNameMock2);
-	}
+        $this->assertInstanceOf('Phake_IMock', $this->shortNameMock2);
+    }
 }
 

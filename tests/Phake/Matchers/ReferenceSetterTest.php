@@ -47,80 +47,80 @@
  */
 class Phake_Matchers_ReferenceSetterTest extends PHPUnit_Framework_TestCase
 {
-	/**
-	 * @var Phake_Matchers_ReferenceSetter
-	 */
-	private $setter;
+    /**
+     * @var Phake_Matchers_ReferenceSetter
+     */
+    private $setter;
 
-	/**
-	 * Sets up the test fixture
-	 */
-	public function setUp()
-	{
-		$this->setter = new Phake_Matchers_ReferenceSetter(42);
-	}
+    /**
+     * Sets up the test fixture
+     */
+    public function setUp()
+    {
+        $this->setter = new Phake_Matchers_ReferenceSetter(42);
+    }
 
-	/**
-	 * Tests that reference parameter is set
-	 */
-	public function testSettingParameter()
-	{
-		$this->assertTrue($this->setter->matches($value));
+    /**
+     * Tests that reference parameter is set
+     */
+    public function testSettingParameter()
+    {
+        $this->assertTrue($this->setter->matches($value));
 
-		$this->assertEquals(42, $value);
-	}
+        $this->assertEquals(42, $value);
+    }
 
-	/**
-	 * Tests that when a matcher is set on setter it will run the matcher first
-	 */
-	public function testConditionalSetting()
-	{
-		$matcher = $this->getMock('Phake_Matchers_IArgumentMatcher');
-		$matcher->expects($this->once())
-				->method('matches')
-				->with($this->equalTo('blah'))
-				->will($this->returnValue(TRUE));
+    /**
+     * Tests that when a matcher is set on setter it will run the matcher first
+     */
+    public function testConditionalSetting()
+    {
+        $matcher = $this->getMock('Phake_Matchers_IArgumentMatcher');
+        $matcher->expects($this->once())
+            ->method('matches')
+            ->with($this->equalTo('blah'))
+            ->will($this->returnValue(true));
 
-		$this->setter->when($matcher);
+        $this->setter->when($matcher);
 
-		$value = 'blah';
-		$this->assertTrue($this->setter->matches($value));
-		$this->assertEquals(42, $value);
+        $value = 'blah';
+        $this->assertTrue($this->setter->matches($value));
+        $this->assertEquals(42, $value);
 
-		$value = 'blah'; //@TODO placed here to fix an issue with PHPUnit's mocks
-	}
+        $value = 'blah'; //@TODO placed here to fix an issue with PHPUnit's mocks
+    }
 
-	/**
-	 * Tests that when a matcher is set on setter it will run the matcher first
-	 */
-	public function testConditionalSettingWontSet()
-	{
-		$matcher = $this->getMock('Phake_Matchers_IArgumentMatcher');
-		$matcher->expects($this->once())
-				->method('matches')
-				->with($this->equalTo('blah'))
-				->will($this->returnValue(FALSE));
+    /**
+     * Tests that when a matcher is set on setter it will run the matcher first
+     */
+    public function testConditionalSettingWontSet()
+    {
+        $matcher = $this->getMock('Phake_Matchers_IArgumentMatcher');
+        $matcher->expects($this->once())
+            ->method('matches')
+            ->with($this->equalTo('blah'))
+            ->will($this->returnValue(false));
 
-		$this->setter->when($matcher);
+        $this->setter->when($matcher);
 
-		$value = 'blah';
-		$this->assertFalse($this->setter->matches($value));
+        $value = 'blah';
+        $this->assertFalse($this->setter->matches($value));
 
-		$this->assertEquals('blah', $value);
-	}
+        $this->assertEquals('blah', $value);
+    }
 
-	/**
-	 * Tests that when returns an instance of the setter
-	 */
-	public function testWhenReturn()
-	{
-		$this->assertSame($this->setter, $this->setter->when(NULL));
-	}
+    /**
+     * Tests that when returns an instance of the setter
+     */
+    public function testWhenReturn()
+    {
+        $this->assertSame($this->setter, $this->setter->when(null));
+    }
 
-	public function testToString()
-	{
-		$this->assertEquals('<reference parameter>', $this->setter->__toString());
-	}
+    public function testToString()
+    {
+        $this->assertEquals('<reference parameter>', $this->setter->__toString());
+    }
 }
 
 

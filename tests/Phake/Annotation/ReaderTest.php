@@ -49,53 +49,53 @@
  */
 class Phake_Annotation_ReaderTest extends PHPUnit_Framework_TestCase
 {
-	/**
-	 * @ann3 Test Annotation
-	 * @ann4
-	 */
-	private $reader;
+    /**
+     * @ann3 Test Annotation
+     * @ann4
+     */
+    private $reader;
 
-	/**
-	 * @ann4
-	 */
-	private $emptyVar;
+    /**
+     * @ann4
+     */
+    private $emptyVar;
 
-	private $emptyVar2;
+    private $emptyVar2;
 
-	protected function setUp()
-	{
-		$reflectionClass = new ReflectionClass($this);
-		$this->reader = new Phake_Annotation_Reader($reflectionClass);
-	}
+    protected function setUp()
+    {
+        $reflectionClass = new ReflectionClass($this);
+        $this->reader    = new Phake_Annotation_Reader($reflectionClass);
+    }
 
-	protected function tearDown()
-	{
-		$this->reader = null;
-		$this->emptyVar = null;
-		$this->emptyVar2 = null;
-	}
+    protected function tearDown()
+    {
+        $this->reader    = null;
+        $this->emptyVar  = null;
+        $this->emptyVar2 = null;
+    }
 
-	public function testReadingAnnotationsFromAProperty()
-	{
-		$annotations = $this->reader->getPropertyAnnotations('reader');
+    public function testReadingAnnotationsFromAProperty()
+    {
+        $annotations = $this->reader->getPropertyAnnotations('reader');
 
-		$expectedAnnotations = array(
-			'ann3' => 'Test Annotation',
-			'ann4' => true,
-		);
-		$this->assertEquals($expectedAnnotations, $annotations);
-	}
+        $expectedAnnotations = array(
+            'ann3' => 'Test Annotation',
+            'ann4' => true,
+        );
+        $this->assertEquals($expectedAnnotations, $annotations);
+    }
 
-	public function testGettingPropertiesWithAnnotation()
-	{
-		$properties = $this->reader->getPropertiesWithAnnotation('ann4');
+    public function testGettingPropertiesWithAnnotation()
+    {
+        $properties = $this->reader->getPropertiesWithAnnotation('ann4');
 
-		$expectedProperties = array(
-			'emptyVar',
-			'reader',
-		);
-		sort($properties);
-		$this->assertEquals($expectedProperties, $properties);
-	}
+        $expectedProperties = array(
+            'emptyVar',
+            'reader',
+        );
+        sort($properties);
+        $this->assertEquals($expectedProperties, $properties);
+    }
 }
 

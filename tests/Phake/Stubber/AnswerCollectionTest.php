@@ -54,54 +54,54 @@ class Phake_Stubber_AnswerCollectionTest extends PHPUnit_Framework_TestCase
      */
     private $answer;
 
-	public function setUp()
-	{
-        $this->answer = Phake::mock('Phake_Stubber_IAnswer');
-		$this->collection = new Phake_Stubber_AnswerCollection($this->answer);
-	}
+    public function setUp()
+    {
+        $this->answer     = Phake::mock('Phake_Stubber_IAnswer');
+        $this->collection = new Phake_Stubber_AnswerCollection($this->answer);
+    }
 
-	public function testConstructionSetsFirstAnswer()
-	{
-		$this->assertSame($this->answer, $this->collection->getAnswer());
-	}
+    public function testConstructionSetsFirstAnswer()
+    {
+        $this->assertSame($this->answer, $this->collection->getAnswer());
+    }
 
-	public function testAdditionalAnswersAreReturned()
-	{
-		$answer2 = Phake::mock('Phake_Stubber_IAnswer');
-		$this->collection->addAnswer($answer2);
-		
-		$this->assertSame($this->answer, $this->collection->getAnswer());
-		$this->assertSame($answer2, $this->collection->getAnswer());
-	}
+    public function testAdditionalAnswersAreReturned()
+    {
+        $answer2 = Phake::mock('Phake_Stubber_IAnswer');
+        $this->collection->addAnswer($answer2);
 
-	public function testSingleAnswerReturnedRepeatedly()
-	{
-		$this->assertSame($this->answer, $this->collection->getAnswer());
-		$this->assertSame($this->answer, $this->collection->getAnswer());
-	}
+        $this->assertSame($this->answer, $this->collection->getAnswer());
+        $this->assertSame($answer2, $this->collection->getAnswer());
+    }
 
-	public function testFinalAnswerReturnedRepeatedly()
-	{
-		$answer2 = Phake::mock('Phake_Stubber_IAnswer');
-		$this->collection->addAnswer($answer2);
+    public function testSingleAnswerReturnedRepeatedly()
+    {
+        $this->assertSame($this->answer, $this->collection->getAnswer());
+        $this->assertSame($this->answer, $this->collection->getAnswer());
+    }
 
-		$this->assertSame($this->answer, $this->collection->getAnswer());
-		$this->assertSame($answer2, $this->collection->getAnswer());
-		$this->assertSame($answer2, $this->collection->getAnswer());
-	}
-	
-	public function testAddAnswersOnTheFly()
-	{
-		$answer2 = Phake::mock('Phake_Stubber_IAnswer');
-		$answer3 = Phake::mock('Phake_Stubber_IAnswer');
-		$this->collection->addAnswer($answer2);
+    public function testFinalAnswerReturnedRepeatedly()
+    {
+        $answer2 = Phake::mock('Phake_Stubber_IAnswer');
+        $this->collection->addAnswer($answer2);
 
-		$this->assertSame($this->answer, $this->collection->getAnswer());
+        $this->assertSame($this->answer, $this->collection->getAnswer());
+        $this->assertSame($answer2, $this->collection->getAnswer());
+        $this->assertSame($answer2, $this->collection->getAnswer());
+    }
 
-		$this->collection->addAnswer($answer3);
+    public function testAddAnswersOnTheFly()
+    {
+        $answer2 = Phake::mock('Phake_Stubber_IAnswer');
+        $answer3 = Phake::mock('Phake_Stubber_IAnswer');
+        $this->collection->addAnswer($answer2);
 
-		$this->assertSame($answer2, $this->collection->getAnswer());
-		$this->assertSame($answer3, $this->collection->getAnswer());
-	}
+        $this->assertSame($this->answer, $this->collection->getAnswer());
+
+        $this->collection->addAnswer($answer3);
+
+        $this->assertSame($answer2, $this->collection->getAnswer());
+        $this->assertSame($answer3, $this->collection->getAnswer());
+    }
 }
 

@@ -47,60 +47,60 @@
  */
 class Phake_Stubber_Answers_ParentDelegateTest extends PHPUnit_Framework_TestCase
 {
-	/**
-	 * @var Phake_Stubber_Answers_ParentDelegate
-	 */
-	private $delegate;
+    /**
+     * @var Phake_Stubber_Answers_ParentDelegate
+     */
+    private $delegate;
 
-	/**
-	 * Sets up the test fixture
-	 */
-	public function setUp()
-	{
-		$this->delegate = new Phake_Stubber_Answers_ParentDelegate();
-	}
+    /**
+     * Sets up the test fixture
+     */
+    public function setUp()
+    {
+        $this->delegate = new Phake_Stubber_Answers_ParentDelegate();
+    }
 
-	/**
-	 * Tests that the delegate returns itself.
-	 */
-	public function testThatDelegateReturnsItself()
-	{
-		$answer = $this->delegate->getAnswer();
-		$this->assertInstanceOf('Phake_Stubber_Answers_IDelegator', $answer);
-		$this->assertSame($this->delegate, $answer);
-	}
+    /**
+     * Tests that the delegate returns itself.
+     */
+    public function testThatDelegateReturnsItself()
+    {
+        $answer = $this->delegate->getAnswer();
+        $this->assertInstanceOf('Phake_Stubber_Answers_IDelegator', $answer);
+        $this->assertSame($this->delegate, $answer);
+    }
 
-	/**
-	 * Tets that the delegate returns a callback to the parent class.
-	 */
-	public function testThatDelegateReturnsCorrectCallback()
-	{
-		$callback = $this->delegate->getCallback($this, 'foo', array('bar'));
+    /**
+     * Tets that the delegate returns a callback to the parent class.
+     */
+    public function testThatDelegateReturnsCorrectCallback()
+    {
+        $callback = $this->delegate->getCallback($this, 'foo', array('bar'));
 
-		$this->assertSame(array($this, 'parent::foo'), $callback);
-	}
+        $this->assertSame(array($this, 'parent::foo'), $callback);
+    }
 
-	/**
-	 * Tests that the delegate passes through the given arguments.
-	 */
-	public function testThatDelegatePassesThroughArgs()
-	{
-		$args = $this->delegate->getArguments('foo', array('bar'));
+    /**
+     * Tests that the delegate passes through the given arguments.
+     */
+    public function testThatDelegatePassesThroughArgs()
+    {
+        $args = $this->delegate->getArguments('foo', array('bar'));
 
-		$this->assertSame(array('bar'), $args);
-	}
+        $this->assertSame(array('bar'), $args);
+    }
 
-	/**
-	 * Tests that processAnswer will set the captured value
-	 */
-	public function testProcessAnswerSetsCapturedValue()
-	{
-		$value = null;
-		$delegate = new Phake_Stubber_Answers_ParentDelegate($value);
-		$delegate->processAnswer("test");
+    /**
+     * Tests that processAnswer will set the captured value
+     */
+    public function testProcessAnswerSetsCapturedValue()
+    {
+        $value    = null;
+        $delegate = new Phake_Stubber_Answers_ParentDelegate($value);
+        $delegate->processAnswer("test");
 
-		$this->assertEquals("test", $value);
-	}
+        $this->assertEquals("test", $value);
+    }
 }
 
 

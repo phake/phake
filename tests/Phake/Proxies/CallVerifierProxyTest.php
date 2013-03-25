@@ -44,53 +44,58 @@
 
 class Phake_Proxies_CallVerifierProxyTest extends PHPUnit_Framework_TestCase
 {
-	/**
-	 * @var Phake_Proxies_CallVerifierProxy
-	 */
-	private $proxy;
+    /**
+     * @var Phake_Proxies_CallVerifierProxy
+     */
+    private $proxy;
 
-	/**
-	 * @var Phake_CallRecorder_Recorder
-	 */
-	private $obj;
-	
-	/**
-	 * @var Phake_MockReader
-	 */
-	private $mockReader;
-	
-	/**
-	 * @var Phake_Client_IClient
-	 */
-	private $client;
+    /**
+     * @var Phake_CallRecorder_Recorder
+     */
+    private $obj;
 
-	/**
-	 * Sets up test fixture
-	 */
-	public function setUp()
-	{
-		$this->client = new Phake_Client_Default();
-		$this->matcher1 = Phake::mock('Phake_Matchers_IArgumentMatcher');
-		$this->obj = new Phake_CallRecorder_Recorder();
-		$this->mockReader = Phake::mock('Phake_MockReader');
-		Phake::when($this->mockReader)->getCallRecorder(Phake::anyParameters())->thenReturn($this->obj);
-		$this->proxy = new Phake_Proxies_CallVerifierProxy(array(new Phake_Matchers_EqualsMatcher('foo'), new Phake_Matchers_EqualsMatcher(array())), $this->mockReader, $this->client);
-		
-	}
+    /**
+     * @var Phake_MockReader
+     */
+    private $mockReader;
 
-	/**
-	 * Tests setting a stub on a method in the stubbable object
-	 */
-	public function testIsCalledOn()
-	{
-		$mock = $this->getMock('Phake_IMock');
+    /**
+     * @var Phake_Client_IClient
+     */
+    private $client;
 
-		$this->obj->recordCall(new Phake_CallRecorder_Call($mock, '__call', array('foo', array()), new Phake_MockReader()));
+    /**
+     * Sets up test fixture
+     */
+    public function setUp()
+    {
+        $this->client     = new Phake_Client_Default();
+        $this->matcher1   = Phake::mock('Phake_Matchers_IArgumentMatcher');
+        $this->obj        = new Phake_CallRecorder_Recorder();
+        $this->mockReader = Phake::mock('Phake_MockReader');
+        Phake::when($this->mockReader)->getCallRecorder(Phake::anyParameters())->thenReturn($this->obj);
+        $this->proxy = new Phake_Proxies_CallVerifierProxy(array(
+            new Phake_Matchers_EqualsMatcher('foo'),
+            new Phake_Matchers_EqualsMatcher(array())
+        ), $this->mockReader, $this->client);
 
-		$verifier = $this->proxy->isCalledOn($mock);
+    }
 
-		$this->assertEquals(1, count($verifier));
-	}
+    /**
+     * Tests setting a stub on a method in the stubbable object
+     */
+    public function testIsCalledOn()
+    {
+        $mock = $this->getMock('Phake_IMock');
+
+        $this->obj->recordCall(
+            new Phake_CallRecorder_Call($mock, '__call', array('foo', array()), new Phake_MockReader())
+        );
+
+        $verifier = $this->proxy->isCalledOn($mock);
+
+        $this->assertEquals(1, count($verifier));
+    }
 }
 
 

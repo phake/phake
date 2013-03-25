@@ -47,46 +47,46 @@
  */
 class Phake_Matchers_PHPUnitConstraintAdapterTest extends PHPUnit_Framework_TestCase
 {
-	/**
-	 * @var Phake_Matchers_PHPUnitConstraintAdapter
-	 */
-	private $adapter;
+    /**
+     * @var Phake_Matchers_PHPUnitConstraintAdapter
+     */
+    private $adapter;
 
-	/**
-	 * @var PHPUnit_Framework_Constraint
-	 */
-	private $constraint;
+    /**
+     * @var PHPUnit_Framework_Constraint
+     */
+    private $constraint;
 
-	/**
-	 * Sets up the test fixture
-	 */
-	public function setUp()
-	{
-		$this->constraint = $this->getMock('PHPUnit_Framework_Constraint');
-		$this->adapter = new Phake_Matchers_PHPUnitConstraintAdapter($this->constraint);
-		$this->constraint->expects($this->any())
-				->method('toString')
-				->will($this->returnValue('phpunit matcher'));
-	}
+    /**
+     * Sets up the test fixture
+     */
+    public function setUp()
+    {
+        $this->constraint = $this->getMock('PHPUnit_Framework_Constraint');
+        $this->adapter    = new Phake_Matchers_PHPUnitConstraintAdapter($this->constraint);
+        $this->constraint->expects($this->any())
+            ->method('toString')
+            ->will($this->returnValue('phpunit matcher'));
+    }
 
-	/**
-	 * Tests that matches() will forward calls to evaluate()
-	 */
-	public function testMatchesCallsForwarded()
-	{
-		$this->constraint->expects($this->once())
-				->method('evaluate')
-				->with($this->equalTo('foo'))
-				->will($this->returnValue(TRUE));
+    /**
+     * Tests that matches() will forward calls to evaluate()
+     */
+    public function testMatchesCallsForwarded()
+    {
+        $this->constraint->expects($this->once())
+            ->method('evaluate')
+            ->with($this->equalTo('foo'))
+            ->will($this->returnValue(true));
 
-		$value = 'foo';
-		$this->assertTrue($this->adapter->matches($value));
-	}
+        $value = 'foo';
+        $this->assertTrue($this->adapter->matches($value));
+    }
 
-	public function testToString()
-	{
-		$this->assertEquals('phpunit matcher', $this->adapter->__toString());
-	}
+    public function testToString()
+    {
+        $this->assertEquals('phpunit matcher', $this->adapter->__toString());
+    }
 }
 
 

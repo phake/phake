@@ -45,53 +45,55 @@
 
 class Phake_ClassGenerator_InvocationHandler_MagicCallRecorderTest extends PHPUnit_Framework_TestCase
 {
-	/**
-	 * @var Phake_ClassGenerator_InvocationHandler_MagicCallRecorder 
-	 */
-	private $handler;
-	
-	/**
-	 * @var Phake_MockReader
-	 */
-	private $mockReader;
-	
-	/**
-	 * @var Phake_CallRecorder_Recorder
-	 */
-	private $callRecorder;
-	
-	public function setUp()
-	{
-		$this->mockReader = Phake::mock('Phake_MockReader');
-		$this->callRecorder = Phake::mock('Phake_CallRecorder_Recorder');
-		Phake::when($this->mockReader)->getCallRecorder($this->anything())->thenReturn($this->callRecorder);
+    /**
+     * @var Phake_ClassGenerator_InvocationHandler_MagicCallRecorder
+     */
+    private $handler;
 
-		$this->handler = new Phake_ClassGenerator_InvocationHandler_MagicCallRecorder($this->mockReader);
-	}
-	
-	public function testImplementIInvocationHandler()
-	{
-		$this->assertInstanceOf('Phake_ClassGenerator_InvocationHandler_IInvocationHandler', $this->handler);
-	}
-	
-	public function testMagicCallIsRecorded()
-	{
-		$mock = $this->getMock('Phake_IMock');
-		
-		$ref = array('foo', array());
-		$this->handler->invoke($mock, '__call', array('foo', array()), $ref);
-		
-		Phake::verify($this->callRecorder)->recordCall(new Phake_CallRecorder_Call($mock, 'foo', array(), $this->mockReader));
-	}
-	
-	public function testNonMagicCallDoesNothing()
-	{
-		$mock = $this->getMock('Phake_IMock');
-		
-		$ref = array();
-		$this->handler->invoke($mock, 'foo', array(), $ref);
-		
-		Phake::verifyNoInteraction($this->callRecorder);
-	}
+    /**
+     * @var Phake_MockReader
+     */
+    private $mockReader;
+
+    /**
+     * @var Phake_CallRecorder_Recorder
+     */
+    private $callRecorder;
+
+    public function setUp()
+    {
+        $this->mockReader = Phake::mock('Phake_MockReader');
+        $this->callRecorder = Phake::mock('Phake_CallRecorder_Recorder');
+        Phake::when($this->mockReader)->getCallRecorder($this->anything())->thenReturn($this->callRecorder);
+
+        $this->handler = new Phake_ClassGenerator_InvocationHandler_MagicCallRecorder($this->mockReader);
+    }
+
+    public function testImplementIInvocationHandler()
+    {
+        $this->assertInstanceOf('Phake_ClassGenerator_InvocationHandler_IInvocationHandler', $this->handler);
+    }
+
+    public function testMagicCallIsRecorded()
+    {
+        $mock = $this->getMock('Phake_IMock');
+
+        $ref = array('foo', array());
+        $this->handler->invoke($mock, '__call', array('foo', array()), $ref);
+
+        Phake::verify($this->callRecorder)->recordCall(
+            new Phake_CallRecorder_Call($mock, 'foo', array(), $this->mockReader)
+        );
+    }
+
+    public function testNonMagicCallDoesNothing()
+    {
+        $mock = $this->getMock('Phake_IMock');
+
+        $ref = array();
+        $this->handler->invoke($mock, 'foo', array(), $ref);
+
+        Phake::verifyNoInteraction($this->callRecorder);
+    }
 }
 

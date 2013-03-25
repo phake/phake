@@ -45,58 +45,58 @@
 
 class Phake_MockReaderTest extends PHPUnit_Framework_TestCase
 {
-	/**
-	 * @var Phake_MockReader
-	 */
-	private $reader;
-	
-	/**
-	 * @var Phake_IMock
-	 */
-	private $mock;
-	
-	public function setUp()
-	{
-		$this->reader = new Phake_MockReader();
-		$this->mock = $this->getMock('Phake_IMock');
-	}
-	
-	public function testGetCallRecorder()
-	{
-		$this->mock->__PHAKE_callRecorder = Phake::mock('Phake_CallRecorder_Recorder');
-		$this->assertSame($this->mock->__PHAKE_callRecorder, $this->reader->getCallRecorder($this->mock));
-	}
-	
-	public function testGetName()
-	{
-		$this->mock->__PHAKE_name = 'PhakeMock';
-		$this->assertSame($this->mock->__PHAKE_name, $this->reader->getName($this->mock));
-	}
-	
-	public function testGetStubMapper()
-	{
-		$this->mock->__PHAKE_stubMapper = Phake::mock('Phake_Stubber_StubMapper');
-		$this->assertSame($this->mock->__PHAKE_stubMapper, $this->reader->getStubMapper($this->mock));
-	}
-	
-	public function testGetDefaultAnswer()
-	{
-		$this->mock->__PHAKE_defaultAnswer = Phake::mock('Phake_Stubber_IAnswer');
-		$this->assertSame($this->mock->__PHAKE_defaultAnswer, $this->reader->getDefaultAnswer($this->mock));
-	}
-	
-	public function testIsObjectFrozen()
-	{
-		$this->mock->__PHAKE_isFrozen = TRUE;
-		$this->assertTrue($this->reader->isObjectFrozen($this->mock));
-	}
+    /**
+     * @var Phake_MockReader
+     */
+    private $reader;
 
-	public function testSetIsObjectFrozen()
-	{
-		$this->mock->__PHAKE_isFrozen = TRUE;
-		$this->reader->setIsObjectFrozen($this->mock, FALSE);
-		$this->assertFalse($this->mock->__PHAKE_isFrozen);
-	}
+    /**
+     * @var Phake_IMock
+     */
+    private $mock;
+
+    public function setUp()
+    {
+        $this->reader = new Phake_MockReader();
+        $this->mock   = $this->getMock('Phake_IMock');
+    }
+
+    public function testGetCallRecorder()
+    {
+        $this->mock->__PHAKE_callRecorder = Phake::mock('Phake_CallRecorder_Recorder');
+        $this->assertSame($this->mock->__PHAKE_callRecorder, $this->reader->getCallRecorder($this->mock));
+    }
+
+    public function testGetName()
+    {
+        $this->mock->__PHAKE_name = 'PhakeMock';
+        $this->assertSame($this->mock->__PHAKE_name, $this->reader->getName($this->mock));
+    }
+
+    public function testGetStubMapper()
+    {
+        $this->mock->__PHAKE_stubMapper = Phake::mock('Phake_Stubber_StubMapper');
+        $this->assertSame($this->mock->__PHAKE_stubMapper, $this->reader->getStubMapper($this->mock));
+    }
+
+    public function testGetDefaultAnswer()
+    {
+        $this->mock->__PHAKE_defaultAnswer = Phake::mock('Phake_Stubber_IAnswer');
+        $this->assertSame($this->mock->__PHAKE_defaultAnswer, $this->reader->getDefaultAnswer($this->mock));
+    }
+
+    public function testIsObjectFrozen()
+    {
+        $this->mock->__PHAKE_isFrozen = true;
+        $this->assertTrue($this->reader->isObjectFrozen($this->mock));
+    }
+
+    public function testSetIsObjectFrozen()
+    {
+        $this->mock->__PHAKE_isFrozen = true;
+        $this->reader->setIsObjectFrozen($this->mock, false);
+        $this->assertFalse($this->mock->__PHAKE_isFrozen);
+    }
 
 }
 

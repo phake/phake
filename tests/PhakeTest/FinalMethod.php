@@ -45,8 +45,8 @@
 
 class PhakeTest_FinalMethod
 {
-	final public function finalFunc()
-	{
+    final public function finalFunc()
+    {
 
-	}
+    }
 }

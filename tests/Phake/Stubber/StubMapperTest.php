@@ -49,116 +49,116 @@
  */
 class Phake_Stubber_StubMapperTest extends PHPUnit_Framework_TestCase
 {
-	/**
-	 * @var Phake_Stubber_StubMapper
-	 */
-	private $mapper;
+    /**
+     * @var Phake_Stubber_StubMapper
+     */
+    private $mapper;
 
-	/**
-	 * Sets up the test fixture
-	 */
-	public function setUp()
-	{
-		$this->mapper = new Phake_Stubber_StubMapper();
-	}
+    /**
+     * Sets up the test fixture
+     */
+    public function setUp()
+    {
+        $this->mapper = new Phake_Stubber_StubMapper();
+    }
 
-	/**
-	 * Tests mapping matchers to answers.
-	 */
-	public function testMappingMatchers()
-	{
-		$matcher = $this->getMock('Phake_Matchers_MethodMatcher', array(), array(), '', FALSE);
-		$stub = $this->getMock('Phake_Stubber_AnswerCollection', array(), array(), '', FALSE);
+    /**
+     * Tests mapping matchers to answers.
+     */
+    public function testMappingMatchers()
+    {
+        $matcher = $this->getMock('Phake_Matchers_MethodMatcher', array(), array(), '', false);
+        $stub    = $this->getMock('Phake_Stubber_AnswerCollection', array(), array(), '', false);
 
-		$matcher->expects($this->any())
-				->method('matches')
-				->with('foo', array('bar', 'test'))
-				->will($this->returnValue(TRUE));
+        $matcher->expects($this->any())
+            ->method('matches')
+            ->with('foo', array('bar', 'test'))
+            ->will($this->returnValue(true));
 
-		$this->mapper->mapStubToMatcher($stub, $matcher);
+        $this->mapper->mapStubToMatcher($stub, $matcher);
 
-		$arguments = array('bar', 'test');
-		$this->assertEquals($stub, $this->mapper->getStubByCall('foo', $arguments));
-	}
+        $arguments = array('bar', 'test');
+        $this->assertEquals($stub, $this->mapper->getStubByCall('foo', $arguments));
+    }
 
-	/**
-	 * Tests mapping matchers to answers.
-	 */
-	public function testMappingMatchersFailsOnNonMatch()
-	{
-		$matcher = $this->getMock('Phake_Matchers_MethodMatcher', array(), array(), '', FALSE);
-		$stub = $this->getMock('Phake_Stubber_AnswerCollection', array(), array(), '', FALSE);
+    /**
+     * Tests mapping matchers to answers.
+     */
+    public function testMappingMatchersFailsOnNonMatch()
+    {
+        $matcher = $this->getMock('Phake_Matchers_MethodMatcher', array(), array(), '', false);
+        $stub    = $this->getMock('Phake_Stubber_AnswerCollection', array(), array(), '', false);
 
-		$matcher->expects($this->any())
-				->method('matches')
-				->will($this->returnValue(FALSE));
+        $matcher->expects($this->any())
+            ->method('matches')
+            ->will($this->returnValue(false));
 
-		$this->mapper->mapStubToMatcher($stub, $matcher);
+        $this->mapper->mapStubToMatcher($stub, $matcher);
 
-		$arguments = array('bar', 'test');
-		$this->assertNull($this->mapper->getStubByCall('foo', $arguments));
-	}
+        $arguments = array('bar', 'test');
+        $this->assertNull($this->mapper->getStubByCall('foo', $arguments));
+    }
 
-	/**
-	 * Tests resetting a stub mapper
-	 */
-	public function testRemoveAllAnswers()
-	{
-		$matcher = $this->getMock('Phake_Matchers_MethodMatcher', array(), array(), '', FALSE);
-		$stub = $this->getMock('Phake_Stubber_AnswerCollection', array(), array(), '', FALSE);
+    /**
+     * Tests resetting a stub mapper
+     */
+    public function testRemoveAllAnswers()
+    {
+        $matcher = $this->getMock('Phake_Matchers_MethodMatcher', array(), array(), '', false);
+        $stub    = $this->getMock('Phake_Stubber_AnswerCollection', array(), array(), '', false);
 
-		$matcher->expects($this->never())
-			->method('matches');
+        $matcher->expects($this->never())
+            ->method('matches');
 
-		$this->mapper->mapStubToMatcher($stub, $matcher);
+        $this->mapper->mapStubToMatcher($stub, $matcher);
 
-		$this->mapper->removeAllAnswers();
+        $this->mapper->removeAllAnswers();
 
-		$arguments = array('bar', 'test');
-		$this->assertNull($this->mapper->getStubByCall('foo', $arguments));
-	}
+        $arguments = array('bar', 'test');
+        $this->assertNull($this->mapper->getStubByCall('foo', $arguments));
+    }
 
-	/**
-	 * Tests matches in reverse order.
-	 */
-	public function testMatchesInReverseOrder()
-	{
-		$match_me = $this->getMock('Phake_Matchers_MethodMatcher', array(), array(), '', FALSE);
-		$match_me_stub = $this->getMock('Phake_Stubber_AnswerCollection', array(), array(), '', FALSE);
+    /**
+     * Tests matches in reverse order.
+     */
+    public function testMatchesInReverseOrder()
+    {
+        $match_me      = $this->getMock('Phake_Matchers_MethodMatcher', array(), array(), '', false);
+        $match_me_stub = $this->getMock('Phake_Stubber_AnswerCollection', array(), array(), '', false);
 
-		$also_matches = $this->getMock('Phake_Matchers_MethodMatcher', array(), array(), '', FALSE);
-		$also_matches_stub = $this->getMock('Phake_Stubber_AnswerCollection', array(), array(), '', FALSE);
+        $also_matches      = $this->getMock('Phake_Matchers_MethodMatcher', array(), array(), '', false);
+        $also_matches_stub = $this->getMock('Phake_Stubber_AnswerCollection', array(), array(), '', false);
 
-		$also_matches->expects($this->never())
-			->method('matches');
+        $also_matches->expects($this->never())
+            ->method('matches');
 
-		$match_me->expects($this->any())
-			->method('matches')
-			->with('foo', array('bar', 'test'))
-			->will($this->returnValue(TRUE));
+        $match_me->expects($this->any())
+            ->method('matches')
+            ->with('foo', array('bar', 'test'))
+            ->will($this->returnValue(true));
 
-		$this->mapper->mapStubToMatcher($also_matches_stub, $also_matches);
-		$this->mapper->mapStubToMatcher($match_me_stub, $match_me);
+        $this->mapper->mapStubToMatcher($also_matches_stub, $also_matches);
+        $this->mapper->mapStubToMatcher($match_me_stub, $match_me);
 
-		$arguments = array('bar', 'test');
-		$this->assertEquals($match_me_stub, $this->mapper->getStubByCall('foo', $arguments));
-	}
+        $arguments = array('bar', 'test');
+        $this->assertEquals($match_me_stub, $this->mapper->getStubByCall('foo', $arguments));
+    }
 
-	public function testMappingParameterSetter()
-	{
-		$matcher = new Phake_Matchers_MethodMatcher('method', array(new Phake_Matchers_ReferenceSetter(42)));
-		$stub = $this->getMock('Phake_Stubber_AnswerCollection', array(), array(), '', FALSE);
+    public function testMappingParameterSetter()
+    {
+        $matcher = new Phake_Matchers_MethodMatcher('method', array(new Phake_Matchers_ReferenceSetter(42)));
+        $stub    = $this->getMock('Phake_Stubber_AnswerCollection', array(), array(), '', false);
 
-		$value = 'blah';
-		$arguments = array();
-		$arguments[0] =& $value;
+        $value        = 'blah';
+        $arguments    = array();
+        $arguments[0] =& $value;
 
-		$this->mapper->mapStubToMatcher($stub, $matcher);
+        $this->mapper->mapStubToMatcher($stub, $matcher);
 
-		$this->assertEquals($stub, $this->mapper->getStubByCall('method', $arguments));
+        $this->assertEquals($stub, $this->mapper->getStubByCall('method', $arguments));
 
-		$this->assertEquals(42, $value);
-	}
+        $this->assertEquals(42, $value);
+    }
 }
 
 

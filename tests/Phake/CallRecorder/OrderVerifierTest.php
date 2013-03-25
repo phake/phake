@@ -47,54 +47,54 @@
  */
 class Phake_CallRecorder_OrderVerifierTest extends PHPUnit_Framework_TestCase
 {
-	/**
-	 * @var Phake_CallRecorder_OrderVerifier
-	 */
-	private $verifier;
+    /**
+     * @var Phake_CallRecorder_OrderVerifier
+     */
+    private $verifier;
 
-	/**
-	 * Sets up the test fixture
-	 */
-	public function setUp()
-	{
-		$this->verifier = new Phake_CallRecorder_OrderVerifier();
-	}
+    /**
+     * Sets up the test fixture
+     */
+    public function setUp()
+    {
+        $this->verifier = new Phake_CallRecorder_OrderVerifier();
+    }
 
-	/**
-	 * Tests that in order items validate.
-	 */
-	public function testInOrderValidation()
-	{
-		$position1 = array(new Phake_CallRecorder_Position(1));
-		$position2 = array(new Phake_CallRecorder_Position(2));
-		$position3 = array(new Phake_CallRecorder_Position(3));
+    /**
+     * Tests that in order items validate.
+     */
+    public function testInOrderValidation()
+    {
+        $position1 = array(new Phake_CallRecorder_Position(1));
+        $position2 = array(new Phake_CallRecorder_Position(2));
+        $position3 = array(new Phake_CallRecorder_Position(3));
 
-		$this->assertTrue($this->verifier->verifyCallsInOrder(array($position1, $position2, $position3)));
-	}
+        $this->assertTrue($this->verifier->verifyCallsInOrder(array($position1, $position2, $position3)));
+    }
 
-	/**
-	 * Tests that out of order items don't validate.
-	 */
-	public function testOutOfOrderValidation()
-	{
-		$position1 = array(new Phake_CallRecorder_Position(1));
-		$position2 = array(new Phake_CallRecorder_Position(3));
-		$position3 = array(new Phake_CallRecorder_Position(2));
+    /**
+     * Tests that out of order items don't validate.
+     */
+    public function testOutOfOrderValidation()
+    {
+        $position1 = array(new Phake_CallRecorder_Position(1));
+        $position2 = array(new Phake_CallRecorder_Position(3));
+        $position3 = array(new Phake_CallRecorder_Position(2));
 
-		$this->assertFalse($this->verifier->verifyCallsInOrder(array($position1, $position2, $position3)));
-	}
+        $this->assertFalse($this->verifier->verifyCallsInOrder(array($position1, $position2, $position3)));
+    }
 
-	/**
-	 * Tests that out of order items validate with multiple calls.
-	 */
-	public function testOutOfOrderValidationWithMultipleCalls()
-	{
-		$position1 = array(new Phake_CallRecorder_Position(1));
-		$position2 = array(new Phake_CallRecorder_Position(3));
-		$position3 = array(new Phake_CallRecorder_Position(2), new Phake_CallRecorder_Position(4));
+    /**
+     * Tests that out of order items validate with multiple calls.
+     */
+    public function testOutOfOrderValidationWithMultipleCalls()
+    {
+        $position1 = array(new Phake_CallRecorder_Position(1));
+        $position2 = array(new Phake_CallRecorder_Position(3));
+        $position3 = array(new Phake_CallRecorder_Position(2), new Phake_CallRecorder_Position(4));
 
-		$this->assertTrue($this->verifier->verifyCallsInOrder(array($position1, $position2, $position3)));
-	}
+        $this->assertTrue($this->verifier->verifyCallsInOrder(array($position1, $position2, $position3)));
+    }
 }
 
 

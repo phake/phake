@@ -47,93 +47,93 @@
  */
 class Phake_Matchers_ArgumentCaptorTest extends PHPUnit_Framework_TestCase
 {
-	/**
-	 * @var Phake_Matchers_ArgumentCaptor
-	 */
-	private $captor;
+    /**
+     * @var Phake_Matchers_ArgumentCaptor
+     */
+    private $captor;
 
-	/**
-	 * @var string
-	 */
-	private $refVariable;
+    /**
+     * @var string
+     */
+    private $refVariable;
 
-	/**
-	 * Sets up the test fixture
-	 */
-	public function setUp()
-	{
-		$this->captor = new Phake_Matchers_ArgumentCaptor($this->refVariable);
-	}
+    /**
+     * Sets up the test fixture
+     */
+    public function setUp()
+    {
+        $this->captor = new Phake_Matchers_ArgumentCaptor($this->refVariable);
+    }
 
-	/**
-	 * Tests that arguments are captured when matches() is called
-	 */
-	public function testArgumentCapturing()
-	{
-		$value = 'blah';
-		$this->captor->matches($value);
+    /**
+     * Tests that arguments are captured when matches() is called
+     */
+    public function testArgumentCapturing()
+    {
+        $value = 'blah';
+        $this->captor->matches($value);
 
-		$this->assertEquals('blah', $this->refVariable);
-	}
+        $this->assertEquals('blah', $this->refVariable);
+    }
 
-	/**
-	 * Tests that when a matcher is set on captor it will run the matcher first
-	 */
-	public function testConditionalCapturing()
-	{
-		$matcher = $this->getMock('Phake_Matchers_IArgumentMatcher');
-		$matcher->expects($this->once())
-				->method('matches')
-				->with($this->equalTo('blah'))
-				->will($this->returnValue(TRUE));
+    /**
+     * Tests that when a matcher is set on captor it will run the matcher first
+     */
+    public function testConditionalCapturing()
+    {
+        $matcher = $this->getMock('Phake_Matchers_IArgumentMatcher');
+        $matcher->expects($this->once())
+            ->method('matches')
+            ->with($this->equalTo('blah'))
+            ->will($this->returnValue(true));
 
-		$this->captor->when($matcher);
+        $this->captor->when($matcher);
 
-		$value = 'blah';
-		$this->captor->matches($value);
+        $value = 'blah';
+        $this->captor->matches($value);
 
-		$this->assertEquals('blah', $this->refVariable);
-	}
+        $this->assertEquals('blah', $this->refVariable);
+    }
 
-	/**
-	 * Tests that when a matcher is set on captor it will run the matcher first
-	 */
-	public function testConditionalCapturingWontCapture()
-	{
-		$matcher = $this->getMock('Phake_Matchers_IArgumentMatcher');
-		$matcher->expects($this->once())
-				->method('matches')
-				->with($this->equalTo('blah'))
-				->will($this->returnValue(FALSE));
+    /**
+     * Tests that when a matcher is set on captor it will run the matcher first
+     */
+    public function testConditionalCapturingWontCapture()
+    {
+        $matcher = $this->getMock('Phake_Matchers_IArgumentMatcher');
+        $matcher->expects($this->once())
+            ->method('matches')
+            ->with($this->equalTo('blah'))
+            ->will($this->returnValue(false));
 
-		$this->captor->when($matcher);
+        $this->captor->when($matcher);
 
-		$value = 'blah';
-		$this->captor->matches($value);
+        $value = 'blah';
+        $this->captor->matches($value);
 
-		$this->assertNull($this->refVariable);
-	}
+        $this->assertNull($this->refVariable);
+    }
 
-	/**
-	 * Tests that when returns an instance of the captor
-	 */
-	public function testWhenReturn()
-	{
-		$this->assertSame($this->captor, $this->captor->when(NULL));
-	}
+    /**
+     * Tests that when returns an instance of the captor
+     */
+    public function testWhenReturn()
+    {
+        $this->assertSame($this->captor, $this->captor->when(null));
+    }
 
-	public function testToString()
-	{
-		$this->assertEquals('<captured parameter>', $this->captor->__toString());
-	}
+    public function testToString()
+    {
+        $this->assertEquals('<captured parameter>', $this->captor->__toString());
+    }
 
-	public function testToStringWithConditional()
-	{
-		$matcher = Phake::mock('Phake_Matchers_IArgumentMatcher');
-		Phake::when($matcher)->__toString()->thenReturn('an argument');
-		$this->captor->when($matcher);
-		$this->assertEquals('<captured parameter that is an argument>', $this->captor->__toString());
-	}
+    public function testToStringWithConditional()
+    {
+        $matcher = Phake::mock('Phake_Matchers_IArgumentMatcher');
+        Phake::when($matcher)->__toString()->thenReturn('an argument');
+        $this->captor->when($matcher);
+        $this->assertEquals('<captured parameter that is an argument>', $this->captor->__toString());
+    }
 }
 
 
