@@ -4,7 +4,7 @@
     "description": "The Phake mock testing library",
     "keywords": ["testing", "mock"],
     "homepage": "https://github.com/mlively/Phake",
-    "license": "BSD",
+    "license": "BSD-3-Clause",
     "authors": [
         {
             "name": "Mike Lively",
@@ -17,7 +17,8 @@
     "require-dev": {
         "ext-soap":"*",
         "doctrine/common": "2.3.*",
-        "phpunit/phpunit": "3.7.*"
+        "phpunit/phpunit": "3.7.*",
+        "davedevelopment/hamcrest-php": "dev-master"
     },
     "config": {
         "bin-dir": "bin"
@@ -27,7 +28,8 @@
     },
     "include-path": ["src"],
     "suggest": {
-        "doctrine/common": ">=2.3.0"
+        "doctrine/common": "Allows mock annotations to use import statements for classes.",
+        "davedevelopment/hamcrest-php": "Use Hamcrest matchers."
     },
     "extra": {
         "branch-alias": {

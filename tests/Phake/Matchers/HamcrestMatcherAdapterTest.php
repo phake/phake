@@ -42,8 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-if (HAMCREST_LOADED) require_once 'Hamcrest/Matcher.php';
-
 /**
  * Tests the adapting of Hamcrest matchers to Phake matchers
  */
@@ -64,11 +62,6 @@ class Phake_Matchers_HamcrestMatcherAdapterTest extends PHPUnit_Framework_TestCa
 	 */
 	public function setUp()
 	{
-		if (!HAMCREST_LOADED)
-		{
-			$this->markTestSkipped('Hamcrest is not available');
-		}
-
 		$this->matcher = $this->getMock('Hamcrest_BaseMatcher');
 		$this->matcher->expects($this->any())
 				->method('__toString')

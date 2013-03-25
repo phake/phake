@@ -299,11 +299,6 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testVerifyCallWithHamcrestMatcher()
 	{
-		if (!HAMCREST_LOADED)
-		{
-			$this->markTestSkipped('Hamcrest library not available');
-		}
-
 		$mock = Phake::mock('PhakeTest_MockedClass');
 
 		$mock->fooWithArgument('bar');
@@ -318,11 +313,6 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testVerifyCallWithHamcrestMatcherFails()
 	{
-		if (!HAMCREST_LOADED)
-		{
-			$this->markTestSkipped('Hamcrest library not available');
-		}
-
 		$mock = Phake::mock('PhakeTest_MockedClass');
 
 		$mock->fooWithArgument('test');
@@ -374,11 +364,6 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testStubWithHamcrestConstraint()
 	{
-		if (!HAMCREST_LOADED)
-		{
-			$this->markTestSkipped('Hamcrest library not available');
-		}
-
 		$mock = Phake::mock('PhakeTest_MockedClass');
 
 		Phake::when($mock)->fooWithArgument(equalTo('bar'))->thenReturn(42);
