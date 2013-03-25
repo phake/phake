@@ -24,9 +24,8 @@
         "bin-dir": "bin"
     },
     "autoload": {
-        "classmap": ["src"]
+        "psr-0": { "Phake": "src/" }
     },
-    "include-path": ["src"],
     "suggest": {
         "doctrine/common": "Allows mock annotations to use import statements for classes.",
         "davedevelopment/hamcrest-php": "Use Hamcrest matchers."
