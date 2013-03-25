@@ -47,5 +47,5 @@
  */
 interface Phake_ClassGenerator_ILoader
 {
-	public function loadClassByString($className, $classDef);
+    public function loadClassByString($className, $classDef);
 }

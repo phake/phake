@@ -44,95 +44,95 @@
 
 class Phake_Matchers_FactoryTest extends PHPUnit_Framework_TestCase
 {
-	/**
-	 * @var Phake_Matchers_Factory
-	 */
-	private $factory;
+    /**
+     * @var Phake_Matchers_Factory
+     */
+    private $factory;
 
-	/**
-	 * Sets up the test fixture
-	 */
-	public function setUp()
-	{
-		$this->factory = new Phake_Matchers_Factory();
-	}
+    /**
+     * Sets up the test fixture
+     */
+    public function setUp()
+    {
+        $this->factory = new Phake_Matchers_Factory();
+    }
 
-	/**
-	 * Tests creating a default matcher
-	 */
-	public function testDefaultMatcher()
-	{
-		$matcher = $this->factory->createMatcher('foo');
+    /**
+     * Tests creating a default matcher
+     */
+    public function testDefaultMatcher()
+    {
+        $matcher = $this->factory->createMatcher('foo');
 
-		$this->assertInstanceOf('Phake_Matchers_EqualsMatcher', $matcher);
+        $this->assertInstanceOf('Phake_Matchers_EqualsMatcher', $matcher);
 
-		$value = 'foo';
-		$this->assertTrue($matcher->matches($value));
-	}
+        $value = 'foo';
+        $this->assertTrue($matcher->matches($value));
+    }
 
-	/**
-	 * Tests creating a pass through matcher
-	 */
-	public function testPassThroughMatcher()
-	{
-		$matcher = $this->getMock('Phake_Matchers_IArgumentMatcher');
+    /**
+     * Tests creating a pass through matcher
+     */
+    public function testPassThroughMatcher()
+    {
+        $matcher = $this->getMock('Phake_Matchers_IArgumentMatcher');
 
-		$retMatcher = $this->factory->createMatcher($matcher);
+        $retMatcher = $this->factory->createMatcher($matcher);
 
-		$this->assertSame($matcher, $retMatcher);
-	}
+        $this->assertSame($matcher, $retMatcher);
+    }
 
-	/**
-	 * Tests creating a phpunit adapter matcher
-	 */
-	public function testPHPUnitConstraint()
-	{
-		$matcher = $this->getMock('PHPUnit_Framework_Constraint');
-		$matcher->expects($this->once())
-				->method('evaluate')
-				->with($this->equalTo('foo'))
-				->will($this->returnValue(TRUE));
+    /**
+     * Tests creating a phpunit adapter matcher
+     */
+    public function testPHPUnitConstraint()
+    {
+        $matcher = $this->getMock('PHPUnit_Framework_Constraint');
+        $matcher->expects($this->once())
+            ->method('evaluate')
+            ->with($this->equalTo('foo'))
+            ->will($this->returnValue(true));
 
-		$retMatcher = $this->factory->createMatcher($matcher);
+        $retMatcher = $this->factory->createMatcher($matcher);
 
-		$value = 'foo';
-		$this->assertTrue($retMatcher->matches($value));
-	}
+        $value = 'foo';
+        $this->assertTrue($retMatcher->matches($value));
+    }
 
-	/**
-	 * Tests creating a hamcrest adapter matcher
-	 */
-	public function testHamcrestMatcher()
-	{
-		$matcher = $this->getMock('Hamcrest_Matcher');
-		$matcher->expects($this->once())
-				->method('matches')
-				->with($this->equalTo('foo'))
-				->will($this->returnValue(TRUE));
+    /**
+     * Tests creating a hamcrest adapter matcher
+     */
+    public function testHamcrestMatcher()
+    {
+        $matcher = $this->getMock('Hamcrest_Matcher');
+        $matcher->expects($this->once())
+            ->method('matches')
+            ->with($this->equalTo('foo'))
+            ->will($this->returnValue(true));
 
-		$retMatcher = $this->factory->createMatcher($matcher);
+        $retMatcher = $this->factory->createMatcher($matcher);
 
-		$value = 'foo';
-		$this->assertTrue($retMatcher->matches($value));
-	}
+        $value = 'foo';
+        $this->assertTrue($retMatcher->matches($value));
+    }
 
-	/**
-	 * Tests the factorying of multiple matchers
-	 */
-	public function testCreatingMultipleMatchers()
-	{
-		$arguments = array(
-			'foo',
-			$argMatcher = $this->getMock('Phake_Matchers_IArgumentMatcher'),
-			$this->getMock('PHPUnit_Framework_Constraint'),
-		);
+    /**
+     * Tests the factorying of multiple matchers
+     */
+    public function testCreatingMultipleMatchers()
+    {
+        $arguments = array(
+            'foo',
+            $argMatcher = $this->getMock('Phake_Matchers_IArgumentMatcher'),
+            $this->getMock('PHPUnit_Framework_Constraint'),
+        );
 
-		$matchers = $this->factory->createMatcherArray($arguments);
+        $matchers = $this->factory->createMatcherArray($arguments);
 
-		$this->assertInstanceOf('Phake_Matchers_EqualsMatcher', $matchers[0]);
-		$this->assertSame($argMatcher, $matchers[1]);
-		$this->assertInstanceOf('Phake_Matchers_PHPUnitConstraintAdapter', $matchers[2]);
-	}
+        $this->assertInstanceOf('Phake_Matchers_EqualsMatcher', $matchers[0]);
+        $this->assertSame($argMatcher, $matchers[1]);
+        $this->assertInstanceOf('Phake_Matchers_PHPUnitConstraintAdapter', $matchers[2]);
+    }
 }
 
-?>
+

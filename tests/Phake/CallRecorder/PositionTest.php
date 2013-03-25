@@ -47,47 +47,47 @@
  */
 class Phake_CallRecorder_PositionTest extends PHPUnit_Framework_TestCase
 {
-	/**
-	 * @var Phake_CallRecorder_Position
-	 */
-	private $position;
+    /**
+     * @var Phake_CallRecorder_Position
+     */
+    private $position;
 
-	/**
-	 * Sets up the test fixture
-	 */
-	public function setUp()
-	{
-		$this->position = new Phake_CallRecorder_Position(10);
-	}
+    /**
+     * Sets up the test fixture
+     */
+    public function setUp()
+    {
+        $this->position = new Phake_CallRecorder_Position(10);
+    }
 
-	/**
-	 * Tests that the system can properly detect positions after the current
-	 */
-	public function testIsAfterTrue()
-	{
-		$position = new Phake_CallRecorder_Position(9);
+    /**
+     * Tests that the system can properly detect positions after the current
+     */
+    public function testIsAfterTrue()
+    {
+        $position = new Phake_CallRecorder_Position(9);
 
-		$this->assertTrue($this->position->thisIsAfter($position));
-	}
+        $this->assertTrue($this->position->thisIsAfter($position));
+    }
 
-	/**
-	 * Tests that the system can properly detect positions after the current
-	 */
-	public function testIsAfterFalse()
-	{
-		$position = new Phake_CallRecorder_Position(11);
+    /**
+     * Tests that the system can properly detect positions after the current
+     */
+    public function testIsAfterFalse()
+    {
+        $position = new Phake_CallRecorder_Position(11);
 
-		$this->assertFalse($this->position->thisIsAfter($position));
-	}
+        $this->assertFalse($this->position->thisIsAfter($position));
+    }
 
-	/**
-	 * Creates a call object
-	 * @return Phake_CallRecorder_Call
-	 */
-	private function getCall()
-	{
-		return $this->getMock('Phake_CallRecorder_Call', array(), array(), '', FALSE);
-	}
+    /**
+     * Creates a call object
+     * @return Phake_CallRecorder_Call
+     */
+    private function getCall()
+    {
+        return $this->getMock('Phake_CallRecorder_Call', array(), array(), '', false);
+    }
 }
 
-?>
+

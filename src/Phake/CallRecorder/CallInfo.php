@@ -47,41 +47,39 @@
  */
 class Phake_CallRecorder_CallInfo
 {
-	/**
-	 * @var Phake_CallRecorder_Call
-	 */
-	private $call;
+    /**
+     * @var Phake_CallRecorder_Call
+     */
+    private $call;
 
-	/**
-	 * @var Phake_CallRecorder_Position
-	 */
-	private $position;
+    /**
+     * @var Phake_CallRecorder_Position
+     */
+    private $position;
 
-	/**
-	 * @param Phake_CallRecorder_Call $call
-	 * @param Phake_CallRecorder_Position $position
-	 */
-	public function __construct(Phake_CallRecorder_Call $call, Phake_CallRecorder_Position $position)
-	{
-		$this->call = $call;
-		$this->position = $position;
-	}
+    /**
+     * @param Phake_CallRecorder_Call     $call
+     * @param Phake_CallRecorder_Position $position
+     */
+    public function __construct(Phake_CallRecorder_Call $call, Phake_CallRecorder_Position $position)
+    {
+        $this->call     = $call;
+        $this->position = $position;
+    }
 
-	/**
-	 * @return Phake_CallRecorder_Call
-	 */
-	public function getCall()
-	{
-		return $this->call;
-	}
+    /**
+     * @return Phake_CallRecorder_Call
+     */
+    public function getCall()
+    {
+        return $this->call;
+    }
 
-	/**
-	 * @return Phake_CallRecorder_Position
-	 */
-	public function getPosition()
-	{
-		return $this->position;
-	}
+    /**
+     * @return Phake_CallRecorder_Position
+     */
+    public function getPosition()
+    {
+        return $this->position;
+    }
 }
-
-?>

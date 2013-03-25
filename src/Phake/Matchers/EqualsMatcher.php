@@ -49,98 +49,85 @@
  */
 class Phake_Matchers_EqualsMatcher implements Phake_Matchers_IArgumentMatcher
 {
-	/**
-	 * @var mixed
-	 */
-	private $value;
+    /**
+     * @var mixed
+     */
+    private $value;
 
-	/**
-	 * Pass in the value that the upcoming arguments is expected to equal.
-	 * @param mixed $value
-	 */
-	public function __construct($value)
-	{
-		$this->value = $value;
-	}
+    /**
+     * Pass in the value that the upcoming arguments is expected to equal.
+     *
+     * @param mixed $value
+     */
+    public function __construct($value)
+    {
+        $this->value = $value;
+    }
 
-	/**
-	 * Returns whether or not the passed argument matches the matcher.
-	 */
-	public function matches(&$argument)
-	{
-		return $this->compareValues($this->value, $argument);
-	}
+    /**
+     * Returns whether or not the passed argument matches the matcher.
+     */
+    public function matches(&$argument)
+    {
+        return $this->compareValues($this->value, $argument);
+    }
 
-	private function compareValues($val1, $val2, &$tested = array())
-	{
-		if (is_object($val1) && is_object($val2))
-		{
-			return $this->compareObjects($val1, $val2, $tested);
-		}
-		elseif (is_array($val1) && is_array($val2))
-		{
-			return $this->compareArrays($val1, $val2, $tested);
-		}
-		else
-		{
-			return $val1 == $val2;
-		}
-	}
+    private function compareValues($val1, $val2, &$tested = array())
+    {
+        if (is_object($val1) && is_object($val2)) {
+            return $this->compareObjects($val1, $val2, $tested);
+        } elseif (is_array($val1) && is_array($val2)) {
+            return $this->compareArrays($val1, $val2, $tested);
+        } else {
+            return $val1 == $val2;
+        }
+    }
 
-	private function compareObjects($obj1, $obj2, &$tested = array())
-	{
-		if (get_class($obj1) != get_class($obj2))
-		{
-			return false;
-		}
+    private function compareObjects($obj1, $obj2, &$tested = array())
+    {
+        if (get_class($obj1) != get_class($obj2)) {
+            return false;
+        }
 
-		if ($obj1 === $obj2)
-		{
-			return true;
-		}
+        if ($obj1 === $obj2) {
+            return true;
+        }
 
-		if (in_array(array($obj1, $obj2), $tested, true))
-		{
-			return true;
-		}
+        if (in_array(array($obj1, $obj2), $tested, true)) {
+            return true;
+        }
 
-		$tested[] = array($obj1, $obj2);
-		$tested[] = array($obj2, $obj1);
+        $tested[] = array($obj1, $obj2);
+        $tested[] = array($obj2, $obj1);
 
-		return $this->compareArrays((array)$obj1, (array)$obj2, $tested);
-	}
+        return $this->compareArrays((array)$obj1, (array)$obj2, $tested);
+    }
 
-	private function compareArrays(array $arr1, array $arr2, array &$tested)
-	{
-		if (count($arr1) != count($arr2))
-		{
-			return false;
-		}
+    private function compareArrays(array $arr1, array $arr2, array &$tested)
+    {
+        if (count($arr1) != count($arr2)) {
+            return false;
+        }
 
-		foreach ($arr1 as $key => $value)
-		{
-			if (!array_key_exists($key, $arr2))
-			{
-				return false;
-			}
+        foreach ($arr1 as $key => $value) {
+            if (!array_key_exists($key, $arr2)) {
+                return false;
+            }
 
-			if (!$this->compareValues($value, $arr2[$key], $tested))
-			{
-				return false;
-			}
-		}
+            if (!$this->compareValues($value, $arr2[$key], $tested)) {
+                return false;
+            }
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	/**
-	 * @return string
-	 */
-	public function __toString()
-	{
-		$converter = new Phake_String_Converter();
-		return "equal to {$converter->convertToString($this->value)}";
-	}
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        $converter = new Phake_String_Converter();
+        return "equal to {$converter->convertToString($this->value)}";
+    }
 }
-
-?>

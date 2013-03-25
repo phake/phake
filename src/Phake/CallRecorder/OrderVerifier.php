@@ -47,38 +47,34 @@
  */
 class Phake_CallRecorder_OrderVerifier
 {
-	/**
-	 * @param array $calls
-	 */
-	public function verifyCallsInOrder(array $calls)
-	{
-		$call1 = array_shift($calls);
-		$call2 = array_shift($call1);
+    /**
+     * @param array $calls
+     *
+     * @return bool
+     */
+    public function verifyCallsInOrder(array $calls)
+    {
+        $call1 = array_shift($calls);
+        $call2 = array_shift($call1);
 
-		while (count($calls))
-		{
-			$callList = array_shift($calls);
+        while (count($calls)) {
+            $callList = array_shift($calls);
 
-			$callFound = FALSE;
-			foreach ($callList as $call)
-			{
-				/* @var $call Phake_CallRecorder_Position */
-				if ($call->thisIsAfter($call2))
-				{
-					$callFound = TRUE;
-					$call2 = $call;
-					break;
-				}
-			}
+            $callFound = false;
+            foreach ($callList as $call) {
+                /* @var $call Phake_CallRecorder_Position */
+                if ($call->thisIsAfter($call2)) {
+                    $callFound = true;
+                    $call2     = $call;
+                    break;
+                }
+            }
 
-			if (!$callFound)
-			{
-				return FALSE;
-			}
-		}
+            if (!$callFound) {
+                return false;
+            }
+        }
 
-		return TRUE;
-	}
+        return true;
+    }
 }
-
-?>

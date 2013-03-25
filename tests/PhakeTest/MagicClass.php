@@ -41,22 +41,22 @@
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link       http://www.digitalsandwich.com/
  */
- 
+
 class PhakeTest_MagicClass
 {
-	public function __call($method, $args)
-	{
-		return '__call';
-	}
+    public function __call($method, $args)
+    {
+        return '__call';
+    }
 
-	public function __get($name)
-	{
-		return '__get';
-	}
+    public function __get($name)
+    {
+        return '__get';
+    }
 
-	public function definedMethod ()
-	{
-		return 'defined';
-	}
+    public function definedMethod()
+    {
+        return 'defined';
+    }
 
 }

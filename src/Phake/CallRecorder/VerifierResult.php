@@ -48,43 +48,45 @@
  */
 class Phake_CallRecorder_VerifierResult
 {
-	private $verified;
-	
-	private $matchedCalls;
-	
-	private $failureDescription;
-	
-	/**
-	 * @param boolean $verified
-	 * @param array $matchedCalls
-	 * @param string $failureDescription
-	 */
-	function __construct($verified, array $matchedCalls, $failureDescription = '') {
-		$this->verified = $verified;
-		$this->matchedCalls = $matchedCalls;
-		$this->failureDescription = $failureDescription;
-	}
-	
-	/**
-	 * @return boolean
-	 */
-	public function getVerified() {
-		return $this->verified;
-	}
+    private $verified;
 
-	/**
-	 * @return array
-	 */
-	public function getMatchedCalls() {
-		return $this->matchedCalls;
-	}
-	
-	/**
-	 * @return string
-	 */
-	public function getFailureDescription()
-	{
-		return $this->failureDescription;
-	}
+    private $matchedCalls;
+
+    private $failureDescription;
+
+    /**
+     * @param boolean $verified
+     * @param array   $matchedCalls
+     * @param string  $failureDescription
+     */
+    function __construct($verified, array $matchedCalls, $failureDescription = '')
+    {
+        $this->verified           = $verified;
+        $this->matchedCalls       = $matchedCalls;
+        $this->failureDescription = $failureDescription;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getVerified()
+    {
+        return $this->verified;
+    }
+
+    /**
+     * @return array
+     */
+    public function getMatchedCalls()
+    {
+        return $this->matchedCalls;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFailureDescription()
+    {
+        return $this->failureDescription;
+    }
 }
-?>

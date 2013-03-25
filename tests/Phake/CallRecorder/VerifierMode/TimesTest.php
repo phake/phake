@@ -47,47 +47,47 @@
  */
 class Phake_CallRecorder_VerifierMode_TimesTest extends PHPUnit_Framework_TestCase
 {
-	private $verifierModeTimes;
+    private $verifierModeTimes;
 
-	public function setUp()
-	{
-		$this->verifierModeTimes = new Phake_CallRecorder_VerifierMode_Times(1);
-	}
+    public function setUp()
+    {
+        $this->verifierModeTimes = new Phake_CallRecorder_VerifierMode_Times(1);
+    }
 
-	/**
-	 * Tests that the Times verifier passes if there are exactly enough items.
-	 */
-	public function testVerifyMatches()
-	{
-		// Will throw an exception if it wasn't working
-		$matchedCalls = array('1item');
-		$this->assertTrue($this->verifierModeTimes->verify($matchedCalls)->getVerified());
-	}
+    /**
+     * Tests that the Times verifier passes if there are exactly enough items.
+     */
+    public function testVerifyMatches()
+    {
+        // Will throw an exception if it wasn't working
+        $matchedCalls = array('1item');
+        $this->assertTrue($this->verifierModeTimes->verify($matchedCalls)->getVerified());
+    }
 
-	/**
-	 * Tests that the Times verifier fails if there are more than enough items.
-	 */
-	public function testVerifyFailsOnOver()
-	{
-		$matchedCalls = array('1item', '2items');
-		$result = $this->verifierModeTimes->verify($matchedCalls);
-		$this->assertFalse($result->getVerified());
-		$this->assertEquals('actually called <2> times', $result->getFailureDescription());
-	}
+    /**
+     * Tests that the Times verifier fails if there are more than enough items.
+     */
+    public function testVerifyFailsOnOver()
+    {
+        $matchedCalls = array('1item', '2items');
+        $result       = $this->verifierModeTimes->verify($matchedCalls);
+        $this->assertFalse($result->getVerified());
+        $this->assertEquals('actually called <2> times', $result->getFailureDescription());
+    }
 
-	/**
-	 * Tests that the Times verifier fails if there weren't enough items.
-	 */
-	public function testVerifyFailsOnUnder()
-	{
-		$matchedCalls = array();
-		$result = $this->verifierModeTimes->verify($matchedCalls);
-		$this->assertFalse($result->getVerified());
-		$this->assertEquals('actually called <0> times', $result->getFailureDescription());
-	}
+    /**
+     * Tests that the Times verifier fails if there weren't enough items.
+     */
+    public function testVerifyFailsOnUnder()
+    {
+        $matchedCalls = array();
+        $result       = $this->verifierModeTimes->verify($matchedCalls);
+        $this->assertFalse($result->getVerified());
+        $this->assertEquals('actually called <0> times', $result->getFailureDescription());
+    }
 
-	public function testToString()
-	{
-		$this->assertEquals("exactly <1> times", $this->verifierModeTimes->__toString());
-	}
+    public function testToString()
+    {
+        $this->assertEquals("exactly <1> times", $this->verifierModeTimes->__toString());
+    }
 }

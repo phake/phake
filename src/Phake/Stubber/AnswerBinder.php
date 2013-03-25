@@ -49,46 +49,49 @@
  */
 class Phake_Stubber_AnswerBinder implements Phake_Stubber_IAnswerBinder
 {
-	/**
-	 * @var Phake_IMock
-	 */
-	private $obj;
+    /**
+     * @var Phake_IMock
+     */
+    private $obj;
 
-	/**
-	 * @var Phake_Matchers_MethodMatcher
-	 */
-	private $matcher;
-	
-	/**
-	 * @var Phake_MockReader
-	 */
-	private $mockReader;
+    /**
+     * @var Phake_Matchers_MethodMatcher
+     */
+    private $matcher;
 
-	/**
-	 * Creates a new Answer Binder
-	 * @param Phake_IMock $obj
-	 * @param Phake_Matchers_MethodMatcher $matcher
-	 * @param Phake_MockReader $mockReader
-	 */
-	public function __construct(Phake_IMock $obj, Phake_Matchers_MethodMatcher $matcher, Phake_MockReader $mockReader)
-	{
-		$this->obj = $obj;
-		$this->matcher = $matcher;
-		$this->mockReader = $mockReader;
-	}
+    /**
+     * @var Phake_MockReader
+     */
+    private $mockReader;
 
-	/**
-	 * Binds an answer to the the classes
-	 * @param Phake_Stubber_IAnswer $answer
-	 * @return Phake_Proxies_AnswerCollectionProxy
-	 */
-	public function bindAnswer(Phake_Stubber_IAnswer $answer)
-	{
-		$collection = new Phake_Stubber_AnswerCollection($answer);
-		$this->mockReader->getStubMapper($this->obj)->mapStubToMatcher($collection, $this->matcher);
+    /**
+     * Creates a new Answer Binder
+     *
+     * @param Phake_IMock                  $obj
+     * @param Phake_Matchers_MethodMatcher $matcher
+     * @param Phake_MockReader             $mockReader
+     */
+    public function __construct(Phake_IMock $obj, Phake_Matchers_MethodMatcher $matcher, Phake_MockReader $mockReader)
+    {
+        $this->obj        = $obj;
+        $this->matcher    = $matcher;
+        $this->mockReader = $mockReader;
+    }
 
-		return new Phake_Proxies_AnswerCollectionProxy($collection);
-	}
+    /**
+     * Binds an answer to the the classes
+     *
+     * @param Phake_Stubber_IAnswer $answer
+     *
+     * @return Phake_Proxies_AnswerCollectionProxy
+     */
+    public function bindAnswer(Phake_Stubber_IAnswer $answer)
+    {
+        $collection = new Phake_Stubber_AnswerCollection($answer);
+        $this->mockReader->getStubMapper($this->obj)->mapStubToMatcher($collection, $this->matcher);
+
+        return new Phake_Proxies_AnswerCollectionProxy($collection);
+    }
 }
 
-?>
+

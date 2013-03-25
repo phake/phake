@@ -47,36 +47,37 @@
  */
 class Phake_Matchers_HamcrestMatcherAdapter implements Phake_Matchers_IArgumentMatcher
 {
-	/**
-	 * @var Hamcrest_Matcher
-	 */
-	private $matcher;
+    /**
+     * @var Hamcrest_Matcher
+     */
+    private $matcher;
 
-	/**
-	 * @param Hamcrest_Matcher $matcher
-	 */
-	public function __construct(Hamcrest_Matcher $matcher)
-	{
-		$this->matcher = $matcher;
-	}
+    /**
+     * @param Hamcrest_Matcher $matcher
+     */
+    public function __construct(Hamcrest_Matcher $matcher)
+    {
+        $this->matcher = $matcher;
+    }
 
-	/**
-	 * Executes the matcher on a given argument value.
-	 *
-	 * Forwards the call to Hamcrest's matches() method.
-	 *
-	 * @param mixed $argument
-	 * @return boolean
-	 */
-	public function matches(&$argument)
-	{
-		return $this->matcher->matches($argument);
-	}
+    /**
+     * Executes the matcher on a given argument value.
+     *
+     * Forwards the call to Hamcrest's matches() method.
+     *
+     * @param mixed $argument
+     *
+     * @return boolean
+     */
+    public function matches(&$argument)
+    {
+        return $this->matcher->matches($argument);
+    }
 
-	public function __toString()
-	{
-		return $this->matcher->__toString();
-	}
+    public function __toString()
+    {
+        return $this->matcher->__toString();
+    }
 }
 
-?>
+

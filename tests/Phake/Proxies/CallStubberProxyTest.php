@@ -44,42 +44,42 @@
 
 class Phake_Proxies_CallStubberProxyTest extends PHPUnit_Framework_TestCase
 {
-	/**
-	 * @var Phake_Proxies_CallStubberProxy
-	 */
-	private $proxy;
+    /**
+     * @var Phake_Proxies_CallStubberProxy
+     */
+    private $proxy;
 
-	/**
-	 * @var Phake_Matchers_IArgumentMatcher
-	 */
-	private $matcher1;
+    /**
+     * @var Phake_Matchers_IArgumentMatcher
+     */
+    private $matcher1;
 
-	/**
-	 * @var Phake_IMock
-	 */
-	private $obj;
+    /**
+     * @var Phake_IMock
+     */
+    private $obj;
 
-	/**
-	 * Sets up test fixture
-	 */
-	public function setUp()
-	{
-		$this->matcher1 = Phake::mock('Phake_Matchers_IArgumentMatcher');
-		$this->obj = $this->getMock('Phake_IMock');
-		$this->proxy = new Phake_Proxies_CallStubberProxy(array($this->matcher1), new Phake_MockReader());
-	}
+    /**
+     * Sets up test fixture
+     */
+    public function setUp()
+    {
+        $this->matcher1 = Phake::mock('Phake_Matchers_IArgumentMatcher');
+        $this->obj      = $this->getMock('Phake_IMock');
+        $this->proxy    = new Phake_Proxies_CallStubberProxy(array($this->matcher1), new Phake_MockReader());
+    }
 
-	/**
-	 * Tests setting a stub on a method in the stubbable object
-	 */
-	public function testIsCalledOn()
-	{
-		$answerBinder = $this->proxy->isCalledOn($this->obj);
+    /**
+     * Tests setting a stub on a method in the stubbable object
+     */
+    public function testIsCalledOn()
+    {
+        $answerBinder = $this->proxy->isCalledOn($this->obj);
 
-		$this->assertThat($answerBinder, $this->isInstanceOf('Phake_Proxies_AnswerBinderProxy'));
+        $this->assertThat($answerBinder, $this->isInstanceOf('Phake_Proxies_AnswerBinderProxy'));
 
-		$this->assertAttributeInstanceOf('Phake_Stubber_AnswerBinder', 'binder', $answerBinder);
-	}
+        $this->assertAttributeInstanceOf('Phake_Stubber_AnswerBinder', 'binder', $answerBinder);
+    }
 }
 
-?>
+

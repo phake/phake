@@ -45,11 +45,10 @@
 
 /**
  * An interface for invocation handlers.
- * 
+ *
  * Invocation handlers are used to provide various functionality in reaction to a method invocation on a mock object.
  */
 interface Phake_ClassGenerator_InvocationHandler_IInvocationHandler
 {
-	public function invoke(Phake_IMock $mock, $method, array $arguments, array &$argumentReference);
+    public function invoke(Phake_IMock $mock, $method, array $arguments, array &$argumentReference);
 }
-?>

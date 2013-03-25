@@ -44,8 +44,8 @@
 
 class PhakeTest_DestructorClass
 {
-	public function __destruct()
-	{
-		trigger_error('destruct should not be called');
-	}
+    public function __destruct()
+    {
+        trigger_error('destruct should not be called');
+    }
 }

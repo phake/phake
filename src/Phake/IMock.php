@@ -44,11 +44,9 @@
 
 /**
  * The interface for Phake test double objects.
- * 
+ *
  * Just a marker interface.
  */
-interface Phake_IMock 
+interface Phake_IMock
 {
 }
-
-?>

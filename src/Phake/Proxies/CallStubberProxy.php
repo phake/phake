@@ -49,37 +49,39 @@
  */
 class Phake_Proxies_CallStubberProxy
 {
-	/**
-	 * @var array
-	 */
-	private $arguments;
-	
-	/**
-	 * @var Phake_MockReader
-	 */
-	private $mockReader;
+    /**
+     * @var array
+     */
+    private $arguments;
 
-	/**
-	 * @param array $arguments
-	 * @param Phake_MockReader $mockReader
-	 */
-	public function __construct(array $arguments, Phake_MockReader $mockReader)
-	{
-		$this->arguments = $arguments;
-		$this->mockReader = $mockReader;
-	}
+    /**
+     * @var Phake_MockReader
+     */
+    private $mockReader;
 
-	/**
-	 * Creates an answer binder proxy associated with the matchers from the constructor and the object passed here
-	 * @param Phake_IMock $obj
-	 * @return Phake_Proxies_AnswerBinderProxy
-	 */
-	public function isCalledOn(Phake_IMock $obj)
-	{
-		$matcher = new Phake_Matchers_MethodMatcher('__call', $this->arguments);
-		$binder = new Phake_Stubber_AnswerBinder($obj, $matcher, $this->mockReader);
-		return new Phake_Proxies_AnswerBinderProxy($binder);
-	}
+    /**
+     * @param array            $arguments
+     * @param Phake_MockReader $mockReader
+     */
+    public function __construct(array $arguments, Phake_MockReader $mockReader)
+    {
+        $this->arguments  = $arguments;
+        $this->mockReader = $mockReader;
+    }
+
+    /**
+     * Creates an answer binder proxy associated with the matchers from the constructor and the object passed here
+     *
+     * @param Phake_IMock $obj
+     *
+     * @return Phake_Proxies_AnswerBinderProxy
+     */
+    public function isCalledOn(Phake_IMock $obj)
+    {
+        $matcher = new Phake_Matchers_MethodMatcher('__call', $this->arguments);
+        $binder  = new Phake_Stubber_AnswerBinder($obj, $matcher, $this->mockReader);
+        return new Phake_Proxies_AnswerBinderProxy($binder);
+    }
 }
 
-?>
+

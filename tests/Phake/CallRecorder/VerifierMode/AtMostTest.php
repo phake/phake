@@ -47,45 +47,45 @@
  */
 class Phake_CallRecorder_VerifierMode_AtMostTest extends PHPUnit_Framework_TestCase
 {
-	private $verifier;
+    private $verifier;
 
-	public function setUp()
-	{
-		$this->verifier = new Phake_CallRecorder_VerifierMode_AtMost(1);
-	}
+    public function setUp()
+    {
+        $this->verifier = new Phake_CallRecorder_VerifierMode_AtMost(1);
+    }
 
-	/**
-	 * Tests that the verifier passes if there are exactly enough items.
-	 */
-	public function testVerifyMatches()
-	{
-		// Will throw an exception if it wasn't working
-		$matchedCalls = array('1item');
-		$this->assertTrue($this->verifier->verify($matchedCalls)->getVerified());
-	}
+    /**
+     * Tests that the verifier passes if there are exactly enough items.
+     */
+    public function testVerifyMatches()
+    {
+        // Will throw an exception if it wasn't working
+        $matchedCalls = array('1item');
+        $this->assertTrue($this->verifier->verify($matchedCalls)->getVerified());
+    }
 
-	/**
-	 * Tests that the verifier fails if there are more than enough items.
-	 */
-	public function testVerifyOnOver()
-	{
-		$matchedCalls = array('1item', '2items');
-		$result = $this->verifier->verify($matchedCalls);
-		$this->assertFalse($result->getVerified());
-		$this->assertEquals('actually called <2> times', $result->getFailureDescription());
-	}
+    /**
+     * Tests that the verifier fails if there are more than enough items.
+     */
+    public function testVerifyOnOver()
+    {
+        $matchedCalls = array('1item', '2items');
+        $result       = $this->verifier->verify($matchedCalls);
+        $this->assertFalse($result->getVerified());
+        $this->assertEquals('actually called <2> times', $result->getFailureDescription());
+    }
 
-	/**
-	 * Tests that the verifier passes if there weren't enough items.
-	 */
-	public function testVerifyOnUnder()
-	{
-		$matchedCalls = array();
-		$this->assertTrue($this->verifier->verify($matchedCalls)->getVerified());
-	}
+    /**
+     * Tests that the verifier passes if there weren't enough items.
+     */
+    public function testVerifyOnUnder()
+    {
+        $matchedCalls = array();
+        $this->assertTrue($this->verifier->verify($matchedCalls)->getVerified());
+    }
 
-	public function testToString()
-	{
-		$this->assertEquals("at most <1> times", $this->verifier->__toString());
-	}
+    public function testToString()
+    {
+        $this->assertEquals("at most <1> times", $this->verifier->__toString());
+    }
 }

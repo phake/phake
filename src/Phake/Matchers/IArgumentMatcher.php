@@ -47,18 +47,18 @@
  */
 interface Phake_Matchers_IArgumentMatcher
 {
-	/**
-	 * Executes the matcher on a given argument value. Returns TRUE on a match, FALSE otherwise.
-	 * @param mixed $argument
-	 * @return boolean
-	 */
-	public function matches(&$argument);
+    /**
+     * Executes the matcher on a given argument value. Returns TRUE on a match, FALSE otherwise.
+     *
+     * @param mixed $argument
+     *
+     * @return boolean
+     */
+    public function matches(&$argument);
 
-	/**
-	 * Returns a human readable description of the argument matcher
-	 * @return string
-	 */
-	public function __toString();
+    /**
+     * Returns a human readable description of the argument matcher
+     * @return string
+     */
+    public function __toString();
 }
-
-?>

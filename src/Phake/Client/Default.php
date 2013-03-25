@@ -48,20 +48,16 @@
  */
 class Phake_Client_Default implements Phake_Client_IClient
 {
-	public function processVerifierResult(Phake_CallRecorder_VerifierResult $result)
-	{
-		if ($result->getVerified())
-		{
-			return $result->getMatchedCalls();
-		}
-		else
-		{
-			throw new Phake_Exception_VerificationException($result->getFailureDescription());
-		}
-	}
-	
-	public function processObjectFreeze()
-	{
-	}
+    public function processVerifierResult(Phake_CallRecorder_VerifierResult $result)
+    {
+        if ($result->getVerified()) {
+            return $result->getMatchedCalls();
+        } else {
+            throw new Phake_Exception_VerificationException($result->getFailureDescription());
+        }
+    }
+
+    public function processObjectFreeze()
+    {
+    }
 }
-?>

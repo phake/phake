@@ -44,46 +44,46 @@
 
 class PHake_Matchers_AbstractMethodMatcherTest extends PHPUnit_Framework_TestCase
 {
-	/**
-	 * @var Phake_Matchers_AbstractMethodMatcher
-	 */
-	private $matcher;
+    /**
+     * @var Phake_Matchers_AbstractMethodMatcher
+     */
+    private $matcher;
 
-	/**
-	 * @var ReflectionMethod
-	 */
-	private $mockMethod;
+    /**
+     * @var ReflectionMethod
+     */
+    private $mockMethod;
 
-	public function setUp()
-	{
-		$this->mockMethod = Phake::mock('ReflectionMethod');
-		Phake::when($this->mockMethod)->isAbstract()->thenReturn(TRUE);
+    public function setUp()
+    {
+        $this->mockMethod = Phake::mock('ReflectionMethod');
+        Phake::when($this->mockMethod)->isAbstract()->thenReturn(true);
 
-		$mock = Phake::mock('ReflectionClass');
-		Phake::when($mock)->getMethod(Phake::anyParameters())->thenReturn($this->mockMethod);
-		Phake::when($mock)->hasMethod(Phake::anyParameters())->thenReturn(TRUE);
+        $mock = Phake::mock('ReflectionClass');
+        Phake::when($mock)->getMethod(Phake::anyParameters())->thenReturn($this->mockMethod);
+        Phake::when($mock)->hasMethod(Phake::anyParameters())->thenReturn(true);
 
-		$this->matcher = new Phake_Matchers_AbstractMethodMatcher($mock);
-	}
+        $this->matcher = new Phake_Matchers_AbstractMethodMatcher($mock);
+    }
 
-	/**
-	 * Tests that the method matcher will return true when all is well.
-	 */
-	public function testMatchesSuccessfullyMatches()
-	{
-		$args = array();
-		$this->assertTrue($this->matcher->matches('foo', $args));
-	}
+    /**
+     * Tests that the method matcher will return true when all is well.
+     */
+    public function testMatchesSuccessfullyMatches()
+    {
+        $args = array();
+        $this->assertTrue($this->matcher->matches('foo', $args));
+    }
 
-	/**
-	 * Tests that the method matcher will return false on non abstract methods.
-	 */
-	public function testMatchesDoesntMatch()
-	{
-		$args = array();
-		Phake::when($this->mockMethod)->isAbstract()->thenReturn(FALSE);
-		$this->assertFalse($this->matcher->matches('foo', $args));
-	}
+    /**
+     * Tests that the method matcher will return false on non abstract methods.
+     */
+    public function testMatchesDoesntMatch()
+    {
+        $args = array();
+        Phake::when($this->mockMethod)->isAbstract()->thenReturn(false);
+        $this->assertFalse($this->matcher->matches('foo', $args));
+    }
 }
 
-?>
+

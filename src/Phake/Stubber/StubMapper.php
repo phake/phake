@@ -49,52 +49,51 @@
  */
 class Phake_Stubber_StubMapper
 {
-	/**
-	 * @var array
-	 */
-	private $matcherStubMap = array();
+    /**
+     * @var array
+     */
+    private $matcherStubMap = array();
 
-	/**
-	 * Maps a given answer collection to a given $matcher
-	 * @param Phake_Stubber_AnswerCollection $answer
-	 * @param Phake_Matchers_IMethodMatcher $matcher
-	 */
-	public function mapStubToMatcher(Phake_Stubber_AnswerCollection $answer, Phake_Matchers_IMethodMatcher $matcher)
-	{
-		$this->matcherStubMap[] = array($matcher, $answer);
-	}
+    /**
+     * Maps a given answer collection to a given $matcher
+     *
+     * @param Phake_Stubber_AnswerCollection $answer
+     * @param Phake_Matchers_IMethodMatcher  $matcher
+     */
+    public function mapStubToMatcher(Phake_Stubber_AnswerCollection $answer, Phake_Matchers_IMethodMatcher $matcher)
+    {
+        $this->matcherStubMap[] = array($matcher, $answer);
+    }
 
-	/**
-	 * Returns the answer collection based on a matcher that matches a given call
-	 * @param string $method
-	 * @param array $args
-	 * @return Phake_Stubber_AnswerCollection or NULL if a matcher is not found
-	 */
-	public function getStubByCall($method, array &$args)
-	{
-		$matcherStubMap = array_reverse($this->matcherStubMap);
-		
-		foreach ($matcherStubMap as $item)
-		{
-			list($matcher, $answer) = $item;
+    /**
+     * Returns the answer collection based on a matcher that matches a given call
+     *
+     * @param string $method
+     * @param array  $args
+     *
+     * @return Phake_Stubber_AnswerCollection or NULL if a matcher is not found
+     */
+    public function getStubByCall($method, array &$args)
+    {
+        $matcherStubMap = array_reverse($this->matcherStubMap);
 
-			/* @var $matcher Phake_Matchers_MethodMatcher */
-			if ($matcher->matches($method, $args))
-			{
-				return $answer;
-			}
-		}
+        foreach ($matcherStubMap as $item) {
+            list($matcher, $answer) = $item;
 
-		return NULL;
-	}
+            /* @var $matcher Phake_Matchers_MethodMatcher */
+            if ($matcher->matches($method, $args)) {
+                return $answer;
+            }
+        }
 
-	/**
-	 * Removes all answer collections from the stub mapper.
-	 */
-	public function removeAllAnswers()
-	{
-		$this->matcherStubMap = array();
-	}
+        return null;
+    }
+
+    /**
+     * Removes all answer collections from the stub mapper.
+     */
+    public function removeAllAnswers()
+    {
+        $this->matcherStubMap = array();
+    }
 }
-
-?>

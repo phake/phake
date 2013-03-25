@@ -49,56 +49,109 @@
  */
 class Phake_ClassGenerator_MockClass
 {
-	/**
-	 * @var \Phake_ClassGenerator_ILoader
-	 */
-	private $loader;
+    /**
+     * @var \Phake_ClassGenerator_ILoader
+     */
+    private $loader;
 
-	private $reservedWords = array(
-		'abstract',	'and', 'array', 'as', 'break', 'case', 'catch', 'class', 'clone', 'const', 'continue', 'declare',
-		'default', 'do', 'else', 'elseif', 'enddeclare', 'endfor', 'endforeach', 'endif', 'endswitch', 'endwhile',
-		'extends', 'final', 'for', 'foreach', 'function', 'global', 'goto', 'if', 'implements', 'interface',
-		'instanceof', 'namespace', 'new', 'or', 'private', 'protected', 'public', 'static', 'switch', 'throw', 'try',
-		'use', 'var', 'while', 'xor', 'die', 'echo', 'empty', 'exit', 'eval', 'include', 'include_once', 'isset',
-		'list', 'require', 'require_once', 'return', 'print', 'unset', '__halt_compiler'
-	);
+    private $reservedWords = array(
+        'abstract',
+        'and',
+        'array',
+        'as',
+        'break',
+        'case',
+        'catch',
+        'class',
+        'clone',
+        'const',
+        'continue',
+        'declare',
+        'default',
+        'do',
+        'else',
+        'elseif',
+        'enddeclare',
+        'endfor',
+        'endforeach',
+        'endif',
+        'endswitch',
+        'endwhile',
+        'extends',
+        'final',
+        'for',
+        'foreach',
+        'function',
+        'global',
+        'goto',
+        'if',
+        'implements',
+        'interface',
+        'instanceof',
+        'namespace',
+        'new',
+        'or',
+        'private',
+        'protected',
+        'public',
+        'static',
+        'switch',
+        'throw',
+        'try',
+        'use',
+        'var',
+        'while',
+        'xor',
+        'die',
+        'echo',
+        'empty',
+        'exit',
+        'eval',
+        'include',
+        'include_once',
+        'isset',
+        'list',
+        'require',
+        'require_once',
+        'return',
+        'print',
+        'unset',
+        '__halt_compiler'
+    );
 
-	/**
-	 * @param Phake_ClassGenerator_ILoader $loader
-	 */
-	public function __construct(Phake_ClassGenerator_ILoader $loader = null)
-	{
-		if (empty($loader))
-		{
-			$loader = new Phake_ClassGenerator_EvalLoader();
-		}
+    /**
+     * @param Phake_ClassGenerator_ILoader $loader
+     */
+    public function __construct(Phake_ClassGenerator_ILoader $loader = null)
+    {
+        if (empty($loader)) {
+            $loader = new Phake_ClassGenerator_EvalLoader();
+        }
 
-		$this->loader = $loader;
-	}
+        $this->loader = $loader;
+    }
 
-	/**
-	 * Generates a new class with the given class name
-	 *
-	 * @param string $newClassName - The name of the new class
-	 * @param string $mockedClassName - The name of the class being mocked
-	 * @return NULL
-	 */
-	public function generate($newClassName, $mockedClassName)
-	{
-		$extends = '';
-		$implements = '';
-		if (class_exists($mockedClassName, TRUE))
-		{
-			$extends = "extends {$mockedClassName}";
-		}
-		elseif (interface_exists($mockedClassName, TRUE) && $mockedClassName != 'Phake_IMock')
-		{
-			$implements = ", {$mockedClassName}";
-		}
+    /**
+     * Generates a new class with the given class name
+     *
+     * @param string $newClassName    - The name of the new class
+     * @param string $mockedClassName - The name of the class being mocked
+     *
+     * @return NULL
+     */
+    public function generate($newClassName, $mockedClassName)
+    {
+        $extends    = '';
+        $implements = '';
+        if (class_exists($mockedClassName, true)) {
+            $extends = "extends {$mockedClassName}";
+        } elseif (interface_exists($mockedClassName, true) && $mockedClassName != 'Phake_IMock') {
+            $implements = ", {$mockedClassName}";
+        }
 
-		$mockedClass = new ReflectionClass($mockedClassName);
+        $mockedClass = new ReflectionClass($mockedClassName);
 
-		$classDef = "
+        $classDef = "
 class {$newClassName} {$extends}
 	implements Phake_IMock {$implements}
 {
@@ -148,72 +201,86 @@ class {$newClassName} {$extends}
 }
 ";
 
-		$this->loader->loadClassByString($newClassName, $classDef);
-	}
+        $this->loader->loadClassByString($newClassName, $classDef);
+    }
 
-	/**
-	 * Instantiates a new instance of the given mocked class.
-	 *
-	 * @param string $newClassName
-	 * @param Phake_CallRecorder_Recorder $recorder
-	 * @param Phake_Stubber_StubMapper $mapper
-	 * @param Phake_Stubber_IAnswer $defaultAnswer
-	 * @param array $constructorArgs
-	 * @return Phake_IMock of type $newClassName
-	 */
-	public function instantiate($newClassName, Phake_CallRecorder_Recorder $recorder, Phake_Stubber_StubMapper $mapper, Phake_Stubber_IAnswer $defaultAnswer, array $constructorArgs = null)
-	{
-		return new $newClassName($recorder, $mapper, $defaultAnswer, $constructorArgs);
-	}
+    /**
+     * Instantiates a new instance of the given mocked class.
+     *
+     * @param string                      $newClassName
+     * @param Phake_CallRecorder_Recorder $recorder
+     * @param Phake_Stubber_StubMapper    $mapper
+     * @param Phake_Stubber_IAnswer       $defaultAnswer
+     * @param array                       $constructorArgs
+     *
+     * @return Phake_IMock of type $newClassName
+     */
+    public function instantiate(
+        $newClassName,
+        Phake_CallRecorder_Recorder $recorder,
+        Phake_Stubber_StubMapper $mapper,
+        Phake_Stubber_IAnswer $defaultAnswer,
+        array $constructorArgs = null
+    ) {
+        return new $newClassName($recorder, $mapper, $defaultAnswer, $constructorArgs);
+    }
 
-	/**
-	 * Generate mock implementations of all public and protected methods in the mocked class.
-	 * @param ReflectionClass $mockedClass
-	 * @return string
-	 */
-	protected function generateMockedMethods(ReflectionClass $mockedClass)
-	{
-		$methodDefs = '';
-		$filter = ReflectionMethod::IS_ABSTRACT | ReflectionMethod::IS_PROTECTED | ReflectionMethod::IS_PUBLIC | ~ReflectionMethod::IS_FINAL;
+    /**
+     * Generate mock implementations of all public and protected methods in the mocked class.
+     *
+     * @param ReflectionClass $mockedClass
+     *
+     * @return string
+     */
+    protected function generateMockedMethods(ReflectionClass $mockedClass)
+    {
+        $methodDefs = '';
+        $filter     = ReflectionMethod::IS_ABSTRACT | ReflectionMethod::IS_PROTECTED | ReflectionMethod::IS_PUBLIC | ~ReflectionMethod::IS_FINAL;
 
-		$implementedMethods = $this->reservedWords;
-		foreach ($mockedClass->getMethods($filter) as $method)
-		{
-			if (!$method->isConstructor() && !$method->isDestructor() && !$method->isFinal() && !$method->isStatic() && !in_array($method->getName(), $implementedMethods))
-			{
-				$implementedMethods[] = $method->getName();
-				$methodDefs .= $this->implementMethod($method) . "\n";
-			}
-		}
+        $implementedMethods = $this->reservedWords;
+        foreach ($mockedClass->getMethods($filter) as $method) {
+            if (!$method->isConstructor() && !$method->isDestructor() && !$method->isFinal() && !$method->isStatic(
+            ) && !in_array($method->getName(), $implementedMethods)
+            ) {
+                $implementedMethods[] = $method->getName();
+                $methodDefs .= $this->implementMethod($method) . "\n";
+            }
+        }
 
-		return $methodDefs;
-	}
+        return $methodDefs;
+    }
 
-	/**
-	 * Creates the constructor implementation
-	 */
-	protected function getConstructorChaining(ReflectionClass $originalClass)
-	{
-		return $originalClass->hasMethod('__construct') ? "
+    /**
+     * Creates the constructor implementation
+     */
+    protected function getConstructorChaining(ReflectionClass $originalClass)
+    {
+        return $originalClass->hasMethod('__construct') ? "
 
 		if (is_array(\$constructorArgs))
 		{
 			call_user_func_array(array(\$this, 'parent::__construct'), \$constructorArgs);
 		}
 		" : "";
-	}
+    }
 
-	/**
-	 * Creates the implementation of a single method
-	 * @param ReflectionMethod $method
-	 */
-	protected function implementMethod(ReflectionMethod $method)
-	{
-		$modifiers = implode(' ', Reflection::getModifierNames($method->getModifiers() & ~ReflectionMethod::IS_ABSTRACT));
+    /**
+     * Creates the implementation of a single method
+     *
+     * @param ReflectionMethod $method
+     *
+     * @return string
+     */
+    protected function implementMethod(ReflectionMethod $method)
+    {
+        $modifiers = implode(
+            ' ',
+            Reflection::getModifierNames($method->getModifiers() & ~ReflectionMethod::IS_ABSTRACT)
+        );
 
-		$reference = $method->returnsReference() ? '&' : '';
+        $reference = $method->returnsReference() ? '&' : '';
 
-		$methodDef = "
+        $methodDef = "
 	{$modifiers} function {$reference}{$method->getName()}({$this->generateMethodParameters($method)})
 	{
 		\$args = array();
@@ -240,74 +307,72 @@ class {$newClassName} {$extends}
 	}
 ";
 
-		return $methodDef;
-	}
+        return $methodDef;
+    }
 
-	/**
-	 * Generates the code for all the parameters of a given method.
-	 * @param ReflectionMethod $method
-	 * @return string
-	 */
-	protected function generateMethodParameters(ReflectionMethod $method)
-	{
-		$parameters = array();
-		foreach ($method->getParameters() as $parameter)
-		{
-			$parameters[] = $this->implementParameter($parameter);
-		}
+    /**
+     * Generates the code for all the parameters of a given method.
+     *
+     * @param ReflectionMethod $method
+     *
+     * @return string
+     */
+    protected function generateMethodParameters(ReflectionMethod $method)
+    {
+        $parameters = array();
+        foreach ($method->getParameters() as $parameter) {
+            $parameters[] = $this->implementParameter($parameter);
+        }
 
-		return implode(', ', $parameters);
-	}
+        return implode(', ', $parameters);
+    }
 
-	/**
-	 * Generates the code for all the parameters of a given method.
-	 * @param ReflectionMethod $method
-	 * @return string
-	 */
-	protected function copyMethodParameters(ReflectionMethod $method)
-	{
-		$copies = "\$numArgs = count(func_get_args());\n\t\t";
-		foreach ($method->getParameters() as $parameter)
-		{
-			$pos = $parameter->getPosition();
-			$copies .= "if ({$pos} < \$numArgs) \$args[] =& \$parm{$pos};\n\t\t";
-		}
+    /**
+     * Generates the code for all the parameters of a given method.
+     *
+     * @param ReflectionMethod $method
+     *
+     * @return string
+     */
+    protected function copyMethodParameters(ReflectionMethod $method)
+    {
+        $copies = "\$numArgs = count(func_get_args());\n\t\t";
+        foreach ($method->getParameters() as $parameter) {
+            $pos = $parameter->getPosition();
+            $copies .= "if ({$pos} < \$numArgs) \$args[] =& \$parm{$pos};\n\t\t";
+        }
 
-		$copies .= "for (\$i = " . count($method->getParameters()) . "; \$i < \$numArgs; \$i++) \$args[] = func_get_arg(\$i);\n\t\t";
+        $copies .= "for (\$i = " . count(
+            $method->getParameters()
+        ) . "; \$i < \$numArgs; \$i++) \$args[] = func_get_arg(\$i);\n\t\t";
 
-		return $copies;
-	}
+        return $copies;
+    }
 
-	/**
-	 * Generates the code for an individual method parameter.
-	 * @param ReflectionParameter $parameter
-	 * @return string
-	 */
-	protected function implementParameter(ReflectionParameter $parameter)
-	{
-		$default = '';
-		$type = '';
-		
-		if ($parameter->isArray())
-		{
-			$type = 'array ';
-		}
-		elseif ($parameter->getClass() !== NULL)
-		{
-			$type = $parameter->getClass()->getName() . ' ';
-		}
+    /**
+     * Generates the code for an individual method parameter.
+     *
+     * @param ReflectionParameter $parameter
+     *
+     * @return string
+     */
+    protected function implementParameter(ReflectionParameter $parameter)
+    {
+        $default = '';
+        $type    = '';
 
-		if ($parameter->isDefaultValueAvailable())
-		{
-			$default = ' = ' . var_export($parameter->getDefaultValue(), TRUE);
-		}
-		elseif ($parameter->isOptional())
-		{
-			$default = ' = null';
-		}
+        if ($parameter->isArray()) {
+            $type = 'array ';
+        } elseif ($parameter->getClass() !== null) {
+            $type = $parameter->getClass()->getName() . ' ';
+        }
 
-		return $type . ($parameter->isPassedByReference() ? '&' : '') . '$parm' . $parameter->getPosition() . $default;
-	}
+        if ($parameter->isDefaultValueAvailable()) {
+            $default = ' = ' . var_export($parameter->getDefaultValue(), true);
+        } elseif ($parameter->isOptional()) {
+            $default = ' = null';
+        }
+
+        return $type . ($parameter->isPassedByReference() ? '&' : '') . '$parm' . $parameter->getPosition() . $default;
+    }
 }
-
-?>

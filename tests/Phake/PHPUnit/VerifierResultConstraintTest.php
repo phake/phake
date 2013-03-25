@@ -45,68 +45,64 @@
 
 class Phake_PHPUnit_VerifierResultConstraintTest extends PHPUnit_Framework_TestCase
 {
-	private $constraint;
-	
-	public function setUp()
-	{
-        if (version_compare('3.6.0', PHPUnit_Runner_Version::id()) != 1)
-        {
+    private $constraint;
+
+    public function setUp()
+    {
+        if (version_compare('3.6.0', PHPUnit_Runner_Version::id()) != 1) {
             $this->markTestSkipped('The tested class is not compatible with current version of PHPUnit.');
         }
-		$this->constraint = new Phake_PHPUnit_VerifierResultConstraint($this->verifier);
-	}
-	
-	public function testExtendsPHPUnitConstraint()
-	{
-		$this->assertInstanceOf('PHPUnit_Framework_Constraint', $this->constraint);
-	}
-	
-	public function testEvaluateReturnsTrueIfVerifyResultIsTrue()
-	{
-		$result = new Phake_CallRecorder_VerifierResult(TRUE, array());
-		$this->assertTrue($this->constraint->evaluate($result));
-	}
-	
-	public function testEvaluateReturnsFalseWhenVerifierReturnsFalse()
-	{
-		$result = new Phake_CallRecorder_VerifierResult(FALSE, array());
-		$this->assertFalse($this->constraint->evaluate($result));
-	}
-	
-	/**
-	 * @expectedException InvalidArgumentException
-	 */
-	public function testEvaluateThrowsWhenArgumentIsNotAResult()
-	{
-		$this->constraint->evaluate('');
-	}
-	
-	public function testToString()
-	{
-		$this->assertEquals('is called', $this->constraint->toString());
-	}
-	
-	public function testCustomFailureDescriptionReturnsDescriptionFromResult()
-	{
-		$result = new Phake_CallRecorder_VerifierResult(FALSE, array(), "The call failed!");
-		
-		try
-		{
-			$this->constraint->fail($result, '');
-			$this->fail('expected an exception to be thrown');
-		}
-		catch (PHPUnit_Framework_ExpectationFailedException $e)
-		{
-			$this->assertEquals('The call failed!', $e->getDescription());
-		}
-	}
-	
-	/**
-	 * @expectedException InvalidArgumentException
-	 */
-	public function testFailThrowsWhenArgumentIsNotAResult()
-	{
-		$this->constraint->fail('', '');
-	}
+        $this->constraint = new Phake_PHPUnit_VerifierResultConstraint($this->verifier);
+    }
+
+    public function testExtendsPHPUnitConstraint()
+    {
+        $this->assertInstanceOf('PHPUnit_Framework_Constraint', $this->constraint);
+    }
+
+    public function testEvaluateReturnsTrueIfVerifyResultIsTrue()
+    {
+        $result = new Phake_CallRecorder_VerifierResult(true, array());
+        $this->assertTrue($this->constraint->evaluate($result));
+    }
+
+    public function testEvaluateReturnsFalseWhenVerifierReturnsFalse()
+    {
+        $result = new Phake_CallRecorder_VerifierResult(false, array());
+        $this->assertFalse($this->constraint->evaluate($result));
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testEvaluateThrowsWhenArgumentIsNotAResult()
+    {
+        $this->constraint->evaluate('');
+    }
+
+    public function testToString()
+    {
+        $this->assertEquals('is called', $this->constraint->toString());
+    }
+
+    public function testCustomFailureDescriptionReturnsDescriptionFromResult()
+    {
+        $result = new Phake_CallRecorder_VerifierResult(false, array(), "The call failed!");
+
+        try {
+            $this->constraint->fail($result, '');
+            $this->fail('expected an exception to be thrown');
+        } catch (PHPUnit_Framework_ExpectationFailedException $e) {
+            $this->assertEquals('The call failed!', $e->getDescription());
+        }
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testFailThrowsWhenArgumentIsNotAResult()
+    {
+        $this->constraint->fail('', '');
+    }
 }
-?>
+

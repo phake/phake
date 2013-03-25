@@ -49,23 +49,23 @@
  */
 class Phake_Stubber_Answers_StaticAnswerTest extends PHPUnit_Framework_TestCase
 {
-	/**
-	 * @var Phake_Stubber_StaticAnswer
-	 */
-	private $answer;
+    /**
+     * @var Phake_Stubber_Answers_StaticAnswer
+     */
+    private $answer;
 
-	/**
-	 * Sets up the answer fixture
-	 */
-	public function setUp()
-	{
-		$this->answer = new Phake_Stubber_Answers_StaticAnswer(42);
-	}
+    /**
+     * Sets up the answer fixture
+     */
+    public function setUp()
+    {
+        $this->answer = new Phake_Stubber_Answers_StaticAnswer(42);
+    }
 
-	public function testAnswer()
-	{
-		$this->assertEquals(42, $this->answer->getAnswer());
-	}
+    public function testAnswer()
+    {
+        $this->assertEquals(42, $this->answer->getAnswer());
+    }
 }
 
-?>
+

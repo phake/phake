@@ -45,31 +45,31 @@
 
 class Phake_Client_DefaultTest extends PHPUnit_Framework_TestCase
 {
-	private $client;
-	
-	public function setUp()
-	{
-		$this->client = new Phake_Client_Default();
-	}
-	
-	public function testImplementsIClient()
-	{
-		$this->assertInstanceOf('Phake_Client_IClient', $this->client);
-	}
-	
-	public function testProcessVerifierResultReturnsCallsOnTrue()
-	{
-		$result = new Phake_CallRecorder_VerifierResult(TRUE, array('call1'));
-		
-		$this->assertEquals(array('call1'), $this->client->processVerifierResult($result));
-	}
-	
-	public function testProcessVerifierThrowsExceptionOnFalse()
-	{
-		$result = new Phake_CallRecorder_VerifierResult(FALSE, array(), 'failure message');
-		
-		$this->setExpectedException('Phake_Exception_VerificationException', 'failure message');
-		$this->client->processVerifierResult($result);
-	}
+    private $client;
+
+    public function setUp()
+    {
+        $this->client = new Phake_Client_Default();
+    }
+
+    public function testImplementsIClient()
+    {
+        $this->assertInstanceOf('Phake_Client_IClient', $this->client);
+    }
+
+    public function testProcessVerifierResultReturnsCallsOnTrue()
+    {
+        $result = new Phake_CallRecorder_VerifierResult(true, array('call1'));
+
+        $this->assertEquals(array('call1'), $this->client->processVerifierResult($result));
+    }
+
+    public function testProcessVerifierThrowsExceptionOnFalse()
+    {
+        $result = new Phake_CallRecorder_VerifierResult(false, array(), 'failure message');
+
+        $this->setExpectedException('Phake_Exception_VerificationException', 'failure message');
+        $this->client->processVerifierResult($result);
+    }
 }
-?>
+

@@ -48,53 +48,48 @@
  */
 class Phake_Matchers_Factory
 {
-	/**
-	 * Creates an argument matcher based on the given value.
-	 *
-	 * If the given values is already an instance of Phake_Matchers_IArgumentMatcher it is passed
-	 * through. If it is an instance of PHPUnit_Framework_Constraint a PHPUnit adapter is returned.
-	 * If it is an instance of Hamcrest_Matcher a Hamcrest adapter is returned. For everything else
-	 * a EqualsMatcher is returned set to the passed in value.
-	 *
-	 * @param mixed $argument
-	 * @return Phake_Matchers_IArgumentMatcher
-	 */
-	public function createMatcher($argument)
-	{
-		if ($argument instanceof Phake_Matchers_IArgumentMatcher)
-		{
-			return $argument;
-		}
-		elseif (class_exists('PHPUnit_Framework_Constraint')
-				&& $argument instanceof PHPUnit_Framework_Constraint)
-		{
-			return new Phake_Matchers_PHPUnitConstraintAdapter($argument);
-		}
-		elseif (interface_exists('Hamcrest_Matcher')
-				&& $argument instanceof Hamcrest_Matcher)
-		{
-			return new Phake_Matchers_HamcrestMatcherAdapter($argument);
-		}
-		else
-		{
-			return new Phake_Matchers_EqualsMatcher($argument);
-		}
-	}
+    /**
+     * Creates an argument matcher based on the given value.
+     *
+     * If the given values is already an instance of Phake_Matchers_IArgumentMatcher it is passed
+     * through. If it is an instance of PHPUnit_Framework_Constraint a PHPUnit adapter is returned.
+     * If it is an instance of Hamcrest_Matcher a Hamcrest adapter is returned. For everything else
+     * a EqualsMatcher is returned set to the passed in value.
+     *
+     * @param mixed $argument
+     *
+     * @return Phake_Matchers_IArgumentMatcher
+     */
+    public function createMatcher($argument)
+    {
+        if ($argument instanceof Phake_Matchers_IArgumentMatcher) {
+            return $argument;
+        } elseif (class_exists('PHPUnit_Framework_Constraint')
+            && $argument instanceof PHPUnit_Framework_Constraint
+        ) {
+            return new Phake_Matchers_PHPUnitConstraintAdapter($argument);
+        } elseif (interface_exists('Hamcrest_Matcher')
+            && $argument instanceof Hamcrest_Matcher
+        ) {
+            return new Phake_Matchers_HamcrestMatcherAdapter($argument);
+        } else {
+            return new Phake_Matchers_EqualsMatcher($argument);
+        }
+    }
 
-	/**
-	 * Converts an argument array into a matcher array
-	 * @param array $arguments
-	 * @return array of Phake_Matchers_IArgumentMatcher objects
-	 */
-	public function createMatcherArray(array $arguments)
-	{
-		$matchers = array();
-		foreach ($arguments as $arg)
-		{
-			$matchers[] = $this->createMatcher($arg);
-		}
-		return $matchers;
-	}
+    /**
+     * Converts an argument array into a matcher array
+     *
+     * @param array $arguments
+     *
+     * @return array of Phake_Matchers_IArgumentMatcher objects
+     */
+    public function createMatcherArray(array $arguments)
+    {
+        $matchers = array();
+        foreach ($arguments as $arg) {
+            $matchers[] = $this->createMatcher($arg);
+        }
+        return $matchers;
+    }
 }
-
-?>

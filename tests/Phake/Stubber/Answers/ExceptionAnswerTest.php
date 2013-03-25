@@ -47,45 +47,42 @@
  */
 class Phake_Stubber_Answers_ExceptionAnswerTest extends PHPUnit_Framework_TestCase
 {
-	/**
-	 * @var Phake_Stubber_ExcpetionAnswer
-	 */
-	private $answer;
+    /**
+     * @var Phake_Stubber_Answers_ExceptionAnswer
+     */
+    private $answer;
 
-	/**
-	 * @var RuntimeException
-	 */
-	private $exception;
+    /**
+     * @var RuntimeException
+     */
+    private $exception;
 
-	/**
-	 * Sets up the answer fixture
-	 */
-	public function setUp()
-	{
-		$this->exception = new RuntimeException();
-		$this->answer = new Phake_Stubber_Answers_ExceptionAnswer($this->exception);
-	}
+    /**
+     * Sets up the answer fixture
+     */
+    public function setUp()
+    {
+        $this->exception = new RuntimeException();
+        $this->answer    = new Phake_Stubber_Answers_ExceptionAnswer($this->exception);
+    }
 
-	/**
-	 * @expectedException RuntimeException
-	 */
-	public function testAnswer()
-	{
-		$this->answer->getAnswer();
-	}
+    /**
+     * @expectedException RuntimeException
+     */
+    public function testAnswer()
+    {
+        $this->answer->getAnswer();
+    }
 
-	/**
-	 * Tests that we throw the same exception istantiated in the answer.
-	 */
-	public function testSameException()
-	{
-		try
-		{
-			$this->answer->getAnswer();
-		}
-		catch (Exception $e)
-		{
-			$this->assertSame($this->exception, $e);
-		}
-	}
+    /**
+     * Tests that we throw the same exception istantiated in the answer.
+     */
+    public function testSameException()
+    {
+        try {
+            $this->answer->getAnswer();
+        } catch (Exception $e) {
+            $this->assertSame($this->exception, $e);
+        }
+    }
 }
