@@ -57,5 +57,3 @@ interface Phake_Stubber_IAnswerBinder
 	 */
 	public function bindAnswer(Phake_Stubber_IAnswer $answer);
 }
-
-?>

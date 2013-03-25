@@ -83,5 +83,3 @@ class Phake_CallRecorder_CallInfo
 		return $this->position;
 	}
 }
-
-?>

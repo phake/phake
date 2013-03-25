@@ -50,5 +50,3 @@
 interface Phake_IMock 
 {
 }
-
-?>

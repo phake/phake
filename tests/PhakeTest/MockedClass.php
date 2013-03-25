@@ -92,4 +92,4 @@ class PhakeTest_MockedClass
 	}
 }
 
-?>
+

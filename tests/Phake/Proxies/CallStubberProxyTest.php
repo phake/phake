@@ -82,4 +82,4 @@ class Phake_Proxies_CallStubberProxyTest extends PHPUnit_Framework_TestCase
 	}
 }
 
-?>
+

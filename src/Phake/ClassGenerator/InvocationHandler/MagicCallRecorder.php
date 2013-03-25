@@ -71,4 +71,4 @@ class Phake_ClassGenerator_InvocationHandler_MagicCallRecorder implements Phake_
 		}
 	}
 }
-?>
+

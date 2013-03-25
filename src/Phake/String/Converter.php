@@ -81,4 +81,4 @@ class Phake_String_Converter
 	}
 }
 
-?>
+

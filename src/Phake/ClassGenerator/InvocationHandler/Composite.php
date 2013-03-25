@@ -71,4 +71,4 @@ class Phake_ClassGenerator_InvocationHandler_Composite implements Phake_ClassGen
 		return $result;
 	}
 }
-?>
+

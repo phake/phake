@@ -108,5 +108,3 @@ class Phake_Proxies_VerifierProxy
 		return $this->client->processVerifierResult($result);
 	}
 }
-
-?>

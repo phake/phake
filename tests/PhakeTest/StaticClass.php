@@ -50,4 +50,4 @@ class PhakeTest_StaticClass
 		return 'foo';
 	}
 }
-?>
+

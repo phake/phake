@@ -60,5 +60,3 @@ interface Phake_Matchers_IArgumentMatcher
 	 */
 	public function __toString();
 }
-
-?>

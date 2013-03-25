@@ -109,4 +109,4 @@ class Phake_PHPUnit_VerifierResultConstraintTest extends PHPUnit_Framework_TestC
 		$this->constraint->fail('', '');
 	}
 }
-?>
+

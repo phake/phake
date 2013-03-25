@@ -309,5 +309,3 @@ class {$newClassName} {$extends}
 		return $type . ($parameter->isPassedByReference() ? '&' : '') . '$parm' . $parameter->getPosition() . $default;
 	}
 }
-
-?>

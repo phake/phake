@@ -103,4 +103,4 @@ class Phake_Stubber_Answers_ParentDelegateTest extends PHPUnit_Framework_TestCas
 	}
 }
 
-?>
+

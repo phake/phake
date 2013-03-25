@@ -122,5 +122,3 @@ class Phake_CallRecorder_Call
 		return "{$this->mockReader->getName($this->object)}->{$this->method}(" . implode(', ', $arguments) . ")";
 	}
 }
-
-?>

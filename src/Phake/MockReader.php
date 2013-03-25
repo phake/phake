@@ -105,4 +105,3 @@ class Phake_MockReader
 		$mock->__PHAKE_isFrozen = $frozen;
 	}
 }
-?>

@@ -64,4 +64,3 @@ class Phake_Client_Default implements Phake_Client_IClient
 	{
 	}
 }
-?>

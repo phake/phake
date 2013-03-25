@@ -135,4 +135,4 @@ class Phake_Matchers_FactoryTest extends PHPUnit_Framework_TestCase
 	}
 }
 
-?>
+

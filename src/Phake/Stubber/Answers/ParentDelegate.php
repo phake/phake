@@ -92,4 +92,4 @@ class Phake_Stubber_Answers_ParentDelegate implements Phake_Stubber_Answers_IDel
 	}
 }
 
-?>
+

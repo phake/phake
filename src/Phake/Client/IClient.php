@@ -61,4 +61,3 @@ interface Phake_Client_IClient
 	 */
 	public function processObjectFreeze();
 }
-?>

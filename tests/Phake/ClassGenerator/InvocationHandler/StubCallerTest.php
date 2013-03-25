@@ -146,4 +146,4 @@ class Phake_ClassGenerator_InvocationHandler_StubCallerTest extends PHPUnit_Fram
 		Phake::verify($this->stubMapper, Phake::times(0))->getStubByCall('__call', array('foo', array('bar')));
 	}
 }
-?>
+

@@ -145,5 +145,3 @@ class Phake_Matchers_MethodMatcher implements Phake_Matchers_IMethodMatcher
 		return TRUE;
 	}
 }
-
-?>

@@ -155,4 +155,4 @@ class Phake_Proxies_AnswerBinderProxyTest extends PHPUnit_Framework_TestCase
 	}
 }
 
-?>
+

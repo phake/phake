@@ -62,4 +62,3 @@ class Phake_CallRecorder_VerifierMode_Result
 		return $this->failureDescription;
 	}
 }
-?>

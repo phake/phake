@@ -75,4 +75,4 @@ class Phake_Client_PHPUnit implements Phake_Client_IClient
         }
     }
 }
-?>
+

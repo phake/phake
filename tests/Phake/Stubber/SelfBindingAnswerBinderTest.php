@@ -72,4 +72,4 @@ class Phake_Stubber_SelfBindingAnswerBinderTest extends PHPUnit_Framework_TestCa
 	}
 }
 
-?>
+

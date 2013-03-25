@@ -98,4 +98,4 @@ class Phake_Stubber_AnswerCollectionTest extends PHPUnit_Framework_TestCase
 		$this->assertSame($answer3, $this->collection->getAnswer());
 	}
 }
-?>
+

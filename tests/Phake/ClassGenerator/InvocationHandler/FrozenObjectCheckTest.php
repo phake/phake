@@ -109,4 +109,4 @@ class Phake_ClassGenerator_InvocationHandler_FrozenObjectCheckTest extends PHPUn
 		$this->handler->invoke($mock, 'foo', array(), $ref);
 	}
 }
-?>
+

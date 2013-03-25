@@ -72,4 +72,4 @@ class Phake_Client_DefaultTest extends PHPUnit_Framework_TestCase
 		$this->client->processVerifierResult($result);
 	}
 }
-?>
+

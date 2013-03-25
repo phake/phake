@@ -123,4 +123,4 @@ class Phake_Matchers_ReferenceSetterTest extends PHPUnit_Framework_TestCase
 	}
 }
 
-?>
+

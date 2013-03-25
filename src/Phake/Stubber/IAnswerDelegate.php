@@ -66,4 +66,4 @@ interface Phake_Stubber_IAnswerDelegate
 	public function getArguments($calledMethod, array $calledParameters);
 }
 
-?>
+

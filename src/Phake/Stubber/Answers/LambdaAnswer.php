@@ -72,4 +72,4 @@ class Phake_Stubber_Answers_LambdaAnswer implements Phake_Stubber_Answers_IDeleg
 	}
 }
 
-?>
+

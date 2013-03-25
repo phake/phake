@@ -115,5 +115,3 @@ class Phake_CallRecorder_Recorder
 		}
 	}
 }
-
-?>

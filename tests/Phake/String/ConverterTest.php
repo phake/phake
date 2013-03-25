@@ -115,4 +115,4 @@ class Phake_String_ConverterTest extends PHPUnit_Framework_TestCase
 	}
 }
 
-?>
+

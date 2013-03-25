@@ -80,4 +80,4 @@ class Phake_Matchers_PHPUnitConstraintAdapter implements Phake_Matchers_IArgumen
 	}
 }
 
-?>
+

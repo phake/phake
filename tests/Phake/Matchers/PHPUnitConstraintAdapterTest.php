@@ -89,4 +89,4 @@ class Phake_Matchers_PHPUnitConstraintAdapterTest extends PHPUnit_Framework_Test
 	}
 }
 
-?>
+

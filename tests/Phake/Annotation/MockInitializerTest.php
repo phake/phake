@@ -128,4 +128,4 @@ class Phake_Annotation_MockInitializerTest extends PHPUnit_Framework_TestCase
 		$this->assertInstanceOf('Phake_IMock', $this->shortNameMock2);
 	}
 }
-?>
+

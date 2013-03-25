@@ -71,4 +71,4 @@ class Phake_Stubber_Answers_StaticAnswer implements Phake_Stubber_IAnswer
 	}
 }
 
-?>
+

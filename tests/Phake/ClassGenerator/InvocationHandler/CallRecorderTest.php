@@ -78,4 +78,4 @@ class Phake_ClassGenerator_InvocationHandler_CallRecorderTest extends PHPUnit_Fr
 		Phake::verify($callRecorder)->recordCall(new Phake_CallRecorder_Call($mock, 'foo', array(), $this->mockReader));
 	}
 }
-?>
+

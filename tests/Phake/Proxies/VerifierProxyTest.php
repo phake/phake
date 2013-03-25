@@ -147,4 +147,4 @@ class Phake_Proxies_VerifierProxyTest extends PHPUnit_Framework_TestCase
 	}
 }
 
-?>
+

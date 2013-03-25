@@ -55,5 +55,3 @@ interface Phake_Stubber_Answers_IDelegator extends Phake_Stubber_IAnswer
 	 */
 	public function processAnswer($answer);
 }
-
-?>

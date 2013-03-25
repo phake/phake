@@ -86,4 +86,4 @@ class PHake_Matchers_AbstractMethodMatcherTest extends PHPUnit_Framework_TestCas
 	}
 }
 
-?>
+

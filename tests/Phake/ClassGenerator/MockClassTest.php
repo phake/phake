@@ -544,4 +544,4 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 	}
 }
 
-?>
+

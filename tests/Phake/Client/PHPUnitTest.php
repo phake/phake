@@ -95,4 +95,4 @@ class Phake_Client_PHPUnitTest extends PHPUnit_Framework_TestCase
 		$this->assertGreaterThan($assertionCount, $newAssertionCount);
 	}
 }
-?>
+

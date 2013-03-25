@@ -107,5 +107,3 @@ class Phake_Facade
 		return $base_class_name;
 	}
 }
-
-?>

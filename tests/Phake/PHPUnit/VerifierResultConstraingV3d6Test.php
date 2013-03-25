@@ -109,4 +109,4 @@ class Phake_PHPUnit_VerifierResultConstraintV3d6Test extends PHPUnit_Framework_T
 		$this->constraint->evaluate('', '');
 	}
 }
-?>
+

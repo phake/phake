@@ -118,4 +118,3 @@ class Phake_Annotation_Reader
 		return $annotations;
 	}	
 }
-?>

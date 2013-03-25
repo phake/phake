@@ -72,4 +72,4 @@ class Phake_Mock_FreezerTest extends PHPUnit_Framework_TestCase
 	}
 }
 
-?>
+

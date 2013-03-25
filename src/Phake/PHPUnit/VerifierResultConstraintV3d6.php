@@ -72,4 +72,4 @@ class Phake_PHPUnit_VerifierResultConstraintV3d6 extends PHPUnit_Framework_Const
 		return $other->getFailureDescription();
 	}
 }
-?>
+

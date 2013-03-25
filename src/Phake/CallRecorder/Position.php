@@ -70,5 +70,3 @@ class Phake_CallRecorder_Position
 		return ($this->position > $other->position);
 	}
 }
-
-?>

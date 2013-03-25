@@ -440,5 +440,3 @@ class Phake
 		$initializer->initialize($obj);
 	}
 }
-
-?>

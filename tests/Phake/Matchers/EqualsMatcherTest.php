@@ -136,4 +136,4 @@ class Phake_Matchers_EqualsMatcherTest extends PHPUnit_Framework_TestCase
 	}
 }
 
-?>
+

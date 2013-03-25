@@ -53,4 +53,3 @@ interface Phake_Stubber_IAnswerContainer
 	 */
 	public function getAnswer();
 }
-?>

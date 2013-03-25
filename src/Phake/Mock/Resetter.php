@@ -72,4 +72,4 @@ class Phake_Mock_Resetter
 		$this->mockReader->getCallRecorder($mock)->removeAllCalls();
 	}
 }
-?>
+

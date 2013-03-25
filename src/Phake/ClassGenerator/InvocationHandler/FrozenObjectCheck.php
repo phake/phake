@@ -70,4 +70,4 @@ class Phake_ClassGenerator_InvocationHandler_FrozenObjectCheck implements Phake_
 		}
 	}
 }
-?>
+

@@ -74,4 +74,4 @@ class Phake_Mock_Freezer
 		$this->mockReader->setIsObjectFrozen($mock, TRUE);
 	}
 }
-?>
+

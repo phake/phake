@@ -108,5 +108,3 @@ class Phake_Matchers_ReferenceSetter implements Phake_Matchers_IArgumentMatcher
 		return $this;
 	}
 }
-
-?>

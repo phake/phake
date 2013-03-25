@@ -88,4 +88,4 @@ class Phake_Mock_ResetterTest extends PHPUnit_Framework_TestCase
 	}
 }
 
-?>
+

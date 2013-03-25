@@ -94,4 +94,4 @@ class Phake_ClassGenerator_InvocationHandler_MagicCallRecorderTest extends PHPUn
 		Phake::verifyNoInteraction($this->callRecorder);
 	}
 }
-?>
+

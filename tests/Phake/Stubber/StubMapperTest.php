@@ -161,4 +161,4 @@ class Phake_Stubber_StubMapperTest extends PHPUnit_Framework_TestCase
 	}
 }
 
-?>
+

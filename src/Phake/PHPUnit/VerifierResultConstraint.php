@@ -72,4 +72,4 @@ class Phake_PHPUnit_VerifierResultConstraint extends PHPUnit_Framework_Constrain
 		return $other->getFailureDescription();
 	}
 }
-?>
+

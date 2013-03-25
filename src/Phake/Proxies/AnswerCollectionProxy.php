@@ -130,4 +130,3 @@ class Phake_Proxies_AnswerCollectionProxy implements Phake_Stubber_IAnswerContai
 		return $this->collection->getAnswer();
 	}
 }
-?>

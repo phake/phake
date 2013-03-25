@@ -156,5 +156,3 @@ class Phake_CallRecorder_Verifier
 		return $this->obj;
 	}
 }
-
-?>

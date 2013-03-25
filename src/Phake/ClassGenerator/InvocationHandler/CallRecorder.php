@@ -66,4 +66,4 @@ class Phake_ClassGenerator_InvocationHandler_CallRecorder implements Phake_Class
 		$this->mockReader->getCallRecorder($mock)->recordCall(new Phake_CallRecorder_Call($mock, $method, $arguments, $this->mockReader));
 	}
 }
-?>
+

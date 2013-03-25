@@ -55,4 +55,3 @@ interface Phake_Stubber_IAnswer
 
 }
 
-?>

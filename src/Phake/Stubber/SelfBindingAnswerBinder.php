@@ -75,4 +75,4 @@ class Phake_Stubber_SelfBindingAnswerBinder implements Phake_Stubber_IAnswerBind
 	}
 }
 
-?>
+

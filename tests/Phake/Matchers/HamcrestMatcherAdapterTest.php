@@ -90,4 +90,4 @@ class Phake_Matchers_HamcrestMatcherAdapterTest extends PHPUnit_Framework_TestCa
 	}
 }
 
-?>
+

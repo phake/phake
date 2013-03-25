@@ -98,4 +98,4 @@ class Phake_Annotation_ReaderTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals($expectedProperties, $properties);
 	}
 }
-?>
+

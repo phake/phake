@@ -87,4 +87,4 @@ class Phake_ClassGenerator_InvocationHandler_StubCaller implements Phake_ClassGe
 		return $answer;
 	}
 }
-?>
+

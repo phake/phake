@@ -142,5 +142,3 @@ class Phake_Matchers_EqualsMatcher implements Phake_Matchers_IArgumentMatcher
 		return "equal to {$converter->convertToString($this->value)}";
 	}
 }
-
-?>

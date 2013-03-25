@@ -68,4 +68,4 @@ class Phake_Stubber_Answers_StaticAnswerTest extends PHPUnit_Framework_TestCase
 	}
 }
 
-?>
+

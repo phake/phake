@@ -180,4 +180,4 @@ class PHake_Matchers_MethodMatcherTest extends PHPUnit_Framework_TestCase
 	}
 }
 
-?>
+

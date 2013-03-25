@@ -99,4 +99,4 @@ class Phake_MockReaderTest extends PHPUnit_Framework_TestCase
 	}
 
 }
-?>
+

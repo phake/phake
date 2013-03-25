@@ -96,5 +96,3 @@ class Phake_Stubber_StubMapper
 		$this->matcherStubMap = array();
 	}
 }
-
-?>

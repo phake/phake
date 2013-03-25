@@ -135,4 +135,4 @@ class Phake_Proxies_AnswerCollectionProxyTest extends PHPUnit_Framework_TestCase
 			$this->attributeEqualTo('answer', $exception)));
 	}
 }
-?>
+

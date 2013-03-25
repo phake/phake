@@ -99,5 +99,3 @@ class Phake_Proxies_CallVerifierProxy
 		return $this->client->processVerifierResult($result);
 	}
 }
-
-?>

@@ -93,4 +93,4 @@ class Phake_Proxies_CallVerifierProxyTest extends PHPUnit_Framework_TestCase
 	}
 }
 
-?>
+

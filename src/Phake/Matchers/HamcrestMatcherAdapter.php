@@ -79,4 +79,4 @@ class Phake_Matchers_HamcrestMatcherAdapter implements Phake_Matchers_IArgumentM
 	}
 }
 
-?>
+

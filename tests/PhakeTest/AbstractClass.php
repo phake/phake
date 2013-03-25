@@ -68,4 +68,4 @@ abstract class PhakeTest_AbstractClass implements PhakeTest_MockedInterface
 	}
 }
 
-?>
+

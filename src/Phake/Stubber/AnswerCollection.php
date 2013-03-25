@@ -95,4 +95,4 @@ class Phake_Stubber_AnswerCollection implements Phake_Stubber_IAnswerContainer
 	}
 }
 
-?>
+

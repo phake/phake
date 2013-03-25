@@ -82,4 +82,4 @@ class Phake_Proxies_CallStubberProxy
 	}
 }
 
-?>
+
