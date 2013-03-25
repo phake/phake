@@ -80,6 +80,7 @@ class Phake_Stubber_AnswerBinder implements Phake_Stubber_IAnswerBinder
 	/**
 	 * Binds an answer to the the classes
 	 * @param Phake_Stubber_IAnswer $answer
+	 * @return Phake_Proxies_AnswerCollectionProxy
 	 */
 	public function bindAnswer(Phake_Stubber_IAnswer $answer)
 	{

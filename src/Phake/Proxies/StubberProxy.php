@@ -88,6 +88,20 @@ class Phake_Proxies_StubberProxy
 		$binder = new Phake_Stubber_AnswerBinder($this->obj, $matcher, $this->mockReader);
 		return new Phake_Proxies_AnswerBinderProxy($binder);
 	}
-}
 
-?>
+	/**
+	 * A magic call to instantiate an Answer Binder Proxy that matches any parameters.
+	 *
+	 * @param string $method
+	 * @return Phake_Proxies_AnswerBinderProxy
+	 */
+	public function __get($method)
+	{
+		if (method_exists($this->obj, '__get') && !method_exists($this->obj, $method))
+		{
+			return $this->__call('__get', array($method));
+		}
+
+		return $this->__call($method, array(new Phake_Matchers_AnyParameters));
+	}
+}
