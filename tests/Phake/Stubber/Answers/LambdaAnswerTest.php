@@ -2,8 +2,6 @@
 
 class Phake_Stubber_Answers_LambdaAnswerTest extends PHPUnit_Framework_TestCase
 {
-	private $_answer;
-	
 	public function testLambdaAnswerAcceptsOldschoolLambda()
 	{			
 		$func   = create_function('$arg1', 'return $arg1;');

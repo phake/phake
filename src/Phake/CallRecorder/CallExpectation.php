@@ -72,14 +72,15 @@ class Phake_CallRecorder_CallExpectation
 	 */
 	private $mockReader;
 
-	/**
-	 * @param Phake_IMock $object
-	 * @param string $method
-	 * @param array $argumentMatchers
-	 * @param Phake_CallRecorder_IVerifierMode $verificationMode
-	 * @param Phake_MockReader $mockReader
-	 * @return void
-	 */
+    /**
+     * @param Phake_IMock                      $object
+     * @param string                           $method
+     * @param array                            $argumentMatchers
+     * @param Phake_CallRecorder_IVerifierMode $verificationMode
+     * @param Phake_MockReader                 $mockReader
+     *
+     * @return \Phake_CallRecorder_CallExpectation
+     */
 	public function __construct(Phake_IMock $object, $method, array $argumentMatchers, Phake_CallRecorder_IVerifierMode $verificationMode, Phake_MockReader $mockReader)
 	{
 		$this->object = $object;

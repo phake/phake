@@ -158,11 +158,13 @@ class Phake_FacadeTest extends PHPUnit_Framework_TestCase
 				->with($this->matchesRegularExpression('#^[A-Za-z0-9_]+$#'), $this->equalTo($mockedClass));
 	}
 
-	/**
-	 * Sets expectations for how the mock class should be created from the class generator
-	 * @param Phake_ClassGenerator_MockClass $mockGenerator
-	 * @param Phake_CallRecorder_Recorder $recorder
-	 */
+    /**
+     * Sets expectations for how the mock class should be created from the class generator
+     *
+     * @param Phake_ClassGenerator_MockClass $mockGenerator
+     * @param Phake_CallRecorder_Recorder    $recorder
+     * @param Phake_Stubber_IAnswer          $answer
+     */
 	private function setMockInstantiatorExpectations(Phake_ClassGenerator_MockClass $mockGenerator, Phake_CallRecorder_Recorder $recorder, Phake_Stubber_IAnswer $answer)
 	{
 		$mockGenerator->expects($this->once())

@@ -46,7 +46,8 @@ class Phake_CallRecorder_CallExpectationTest extends PHPUnit_Framework_TestCase
 {
 	public function testToString()
 	{
-		$mock = $this->getMock('Phake_IMock');
+        /** @var $mock Phake_IMock */
+        $mock = $this->getMock('Phake_IMock');
 		
 		$matcher1 = Phake::mock('Phake_Matchers_IArgumentMatcher');
 		Phake::when($matcher1)->__toString()->thenReturn('100');

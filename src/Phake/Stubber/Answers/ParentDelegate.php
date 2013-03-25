@@ -70,7 +70,8 @@ class Phake_Stubber_Answers_ParentDelegate implements Phake_Stubber_Answers_IDel
 	 * @param object $calledObject
 	 * @param string $calledMethod
 	 * @param array $calledParameters
-	 */
+     * @return array
+     */
 	public function getCallBack($calledObject, $calledMethod, array $calledParameters)
 	{
 		return array($calledObject, "parent::{$calledMethod}");
@@ -80,7 +81,8 @@ class Phake_Stubber_Answers_ParentDelegate implements Phake_Stubber_Answers_IDel
 	 * Passes through the given arguments.
 	 * @param string $calledMethod
 	 * @param array $calledParameters
-	 */
+     * @return array
+     */
 	public function getArguments($calledMethod, array $calledParameters)
 	{
 		return $calledParameters;

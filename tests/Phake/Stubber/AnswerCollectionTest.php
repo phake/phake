@@ -44,13 +44,19 @@
 
 class Phake_Stubber_AnswerCollectionTest extends PHPUnit_Framework_TestCase
 {
-	private $collection;
+    /**
+     * @var Phake_Stubber_AnswerCollection
+     */
+    private $collection;
 
-	private $answer;
+    /**
+     * @var Phake_Stubber_IAnswer
+     */
+    private $answer;
 
 	public function setUp()
 	{
-		$this->answer = Phake::mock('Phake_Stubber_IAnswer');
+        $this->answer = Phake::mock('Phake_Stubber_IAnswer');
 		$this->collection = new Phake_Stubber_AnswerCollection($this->answer);
 	}
 

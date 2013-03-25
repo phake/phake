@@ -78,13 +78,13 @@ class Phake
 	 * Returns a new mock object based on the given class name.
 	 * @param string $className
 	 * @param Phake_Stubber_IAnswerContainer $defaultAnswer
-	 * @return Phake_IMock
+	 * @return mixed
 	 */
-	public static function mock($className, Phake_Stubber_IAnswerContainer $defaultAnswer = NULL)
+	public static function mock($className, Phake_Stubber_IAnswerContainer $defaultAnswer = null)
 	{
-		if ($defaultAnswer === NULL)
+		if ($defaultAnswer === null)
 		{
-			$answer = new Phake_Stubber_Answers_StaticAnswer(NULL);
+			$answer = new Phake_Stubber_Answers_StaticAnswer(null);
 		}
 		else
 		{
@@ -94,15 +94,15 @@ class Phake
 		return self::getPhake()->mock($className, new Phake_ClassGenerator_MockClass(self::getMockLoader()), new Phake_CallRecorder_Recorder(), $answer);
 	}
 
-	/**
-	 * Returns a partial mock that is constructed with the given parameters
-	 *
-	 * Calls to this class will be recorded however they will still call the original functionality by default.
-	 *
-	 * @param string $className class name
-	 * @param mixed ... the remaining arguments will be passed as constructor arguments
-	 * @return Phake_IMock
-	 */
+    /**
+     * Returns a partial mock that is constructed with the given parameters
+     *
+     * Calls to this class will be recorded however they will still call the original functionality by default.
+     *
+     * @internal param string $className class name
+     * @internal param $mixed ... the remaining arguments will be passed as constructor arguments
+     * @return Phake_IMock
+     */
 	public static function partialMock()
 	{
 		$args = func_get_args();
@@ -112,15 +112,15 @@ class Phake
 		return self::getPhake()->mock($className, new Phake_ClassGenerator_MockClass(self::getMockLoader()), new Phake_CallRecorder_Recorder(), $answer, $args);
 	}
 
-	/**
-	 * For backwards compatibility
-	 *
-	 * @see Phake::partialMock()
-	 * @param string $className class name
-	 * @param mixed ... the remaining arguments will be passed as constructor arguments
-	 * @return Phake_IMock
-	 * @deprecated Please use Phake::partialMock() instead
-	 */
+    /**
+     * For backwards compatibility
+     *
+     * @see        Phake::partialMock()
+     * @internal   param string $className class name
+     * @internal   param $mixed ... the remaining arguments will be passed as constructor arguments
+     * @return Phake_IMock
+     * @deprecated Please use Phake::partialMock() instead
+     */
 	public static function partMock()
 	{
 		$args = func_get_args();
@@ -131,7 +131,7 @@ class Phake
 	 * Creates a new verifier for the given mock object.
 	 * @param Phake_IMock $mock
 	 * @param Phake_CallRecorder_IVerifierMode $mode
-	 * @return Phake_CallRecorder_VerifierProxy
+	 * @return Phake_Proxies_VerifierProxy
 	 */
 	public static function verify(Phake_IMock $mock, Phake_CallRecorder_IVerifierMode $mode = null)
 	{
@@ -236,7 +236,8 @@ class Phake
 	/**
 	 * Returns a new stubber specifically for the __call() method
 	 * @param mixed ... A vararg containing the expected arguments for this call
-	 */
+     * @return \Phake_Proxies_CallStubberProxy
+     */
 	public static function whenCallMethodWith()
 	{
 		$arguments = func_get_args();

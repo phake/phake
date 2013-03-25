@@ -206,7 +206,8 @@ class {$newClassName} {$extends}
 	/**
 	 * Creates the implementation of a single method
 	 * @param ReflectionMethod $method
-	 */
+     * @return string
+     */
 	protected function implementMethod(ReflectionMethod $method)
 	{
 		$modifiers = implode(' ', Reflection::getModifierNames($method->getModifiers() & ~ReflectionMethod::IS_ABSTRACT));

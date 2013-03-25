@@ -49,7 +49,8 @@ class Phake_CallRecorder_OrderVerifier
 {
 	/**
 	 * @param array $calls
-	 */
+     * @return bool
+     */
 	public function verifyCallsInOrder(array $calls)
 	{
 		$call1 = array_shift($calls);

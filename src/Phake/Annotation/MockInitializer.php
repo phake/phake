@@ -46,7 +46,7 @@
 /**
  * Initializes all properties of a given object that have the @Mock annotation.
  *
- * The class can be passed to the Mock annotation or it can also read the standard @var annotation.
+ * The class can be passed to the Mock annotation or it can also read the standard @var -annotation.
  *
  * In either case the fully qualified class name should be used. The use statements are not observed.
  */

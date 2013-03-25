@@ -63,12 +63,13 @@ class Phake_Mock_FreezerTest extends PHPUnit_Framework_TestCase
 	
 	public function testFreeze()
 	{
-		$mock = $this->getMock('Phake_IMock');
+        /** @var $mock Phake_IMock */
+        $mock = $this->getMock('Phake_IMock');
 		$client = Phake::mock('Phake_Client_IClient');
 		$this->freezer->freeze($mock, $client);
 		
 		Phake::verify($client)->processObjectFreeze();
-		Phake::verify($this->mockReader)->setIsObjectFrozen($mock, TRUE);
+		Phake::verify($this->mockReader)->setIsObjectFrozen($mock, true);
 	}
 }
 

@@ -55,11 +55,6 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
 	private $recorder;
 
 	/**
-	 * @var Phake_CallRecorder_CallExpectation
-	 */
-	private $expectation;
-
-	/**
 	 * @var Phake_CallRecorder_Verifier
 	 */
 	private $verifier;
@@ -185,7 +180,7 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
 
 		Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(new Phake_CallRecorder_VerifierMode_Result(TRUE, ''));
 
-		$calls = $this->verifier->verifyCall($expectation);
+		$this->verifier->verifyCall($expectation);
 
 		$this->assertEquals(new Phake_CallRecorder_VerifierResult(TRUE, array($return, $return)), $this->verifier->verifyCall($expectation));
 	}

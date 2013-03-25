@@ -57,7 +57,8 @@ class Phake_Stubber_SelfBindingAnswerBinder implements Phake_Stubber_IAnswerBind
 	/**
 	 * Binds the given answer to the current object.
 	 * @param Phake_Stubber_IAnswer $answer
-	 */
+     * @return $this|\Phake_Stubber_IAnswerContainer
+     */
 	public function bindAnswer(Phake_Stubber_IAnswer $answer)
 	{
 		$this->answer = $answer;

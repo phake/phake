@@ -56,7 +56,7 @@ class Phake_CallRecorder_Verifier
 	protected $recorder;
 
 	/**
-	 * @var object
+	 * @var Phake_IMock
 	 */
 	protected $obj;
 

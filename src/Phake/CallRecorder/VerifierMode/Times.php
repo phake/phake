@@ -56,7 +56,7 @@ class Phake_CallRecorder_VerifierMode_Times implements Phake_CallRecorder_IVerif
 
 	/**
 	 * Constructs a Times verifier with the given <code>$times</code>.
-	 * @param unknown_type $times
+	 * @param int $times
 	 */
 	public function __construct($times)
 	{

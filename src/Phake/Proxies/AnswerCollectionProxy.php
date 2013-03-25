@@ -73,11 +73,14 @@ class Phake_Proxies_AnswerCollectionProxy implements Phake_Stubber_IAnswerContai
 		return $this;
 	}
 
-	/**
-	 * Binds a Lambda answer to the method
-	 * @param callback $value
-	 * @return Phake_Proxies_AnswerCollectionProxy
-	 */
+    /**
+     * Binds a Lambda answer to the method
+     *
+     * @param callback $value
+     *
+     * @throws InvalidArgumentException
+     * @return Phake_Proxies_AnswerCollectionProxy
+     */
 	public function thenGetReturnByLambda($value)
 	{
 		if (!is_callable($value))

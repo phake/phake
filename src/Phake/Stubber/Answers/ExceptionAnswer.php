@@ -62,9 +62,10 @@ class Phake_Stubber_Answers_ExceptionAnswer implements Phake_Stubber_IAnswer
 		$this->answer = $answer;
 	}
 
-	/**
-	 * @return mixed
-	 */
+    /**
+     * @throws Exception|mixed
+     * @return mixed
+     */
 	public function getAnswer()
 	{
 		throw $this->answer;

@@ -48,7 +48,7 @@
 class Phake_Stubber_Answers_ExceptionAnswerTest extends PHPUnit_Framework_TestCase
 {
 	/**
-	 * @var Phake_Stubber_ExcpetionAnswer
+	 * @var Phake_Stubber_Answers_ExceptionAnswer
 	 */
 	private $answer;
 

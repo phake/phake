@@ -68,12 +68,15 @@ class Phake_Proxies_AnswerBinderProxy
 	{
 		return $this->binder->bindAnswer(new Phake_Stubber_Answers_StaticAnswer($value));
 	}
-	
-	/**
-	 * Binds a Lambda answer to the method
-	 * @param callback $value
-	 * @return Phake_Stubber_IAnswerContainer
-	 */
+
+    /**
+     * Binds a Lambda answer to the method
+     *
+     * @param callback $value
+     *
+     * @throws InvalidArgumentException
+     * @return Phake_Stubber_IAnswerContainer
+     */
 	public function thenGetReturnByLambda($value)
 	{
 		if (!is_callable($value))

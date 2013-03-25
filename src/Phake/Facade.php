@@ -55,20 +55,22 @@ class Phake_Facade
 	{
 	  $this->cachedClasses = array();
 	}
-	
-	/**
-	 * Creates a new mock class than can be stubbed and verified.
-	 *
-	 * @param string $mockedClass - The name of the class to mock
-	 * @param Phake_ClassGenerator_MockClass $mockGenerator - The generator used to construct mock classes
-	 * @param Phake_CallRecorder_Recorder $callRecorder
-	 * @param Phake_Stubber_IAnswer $defaultAnswer
-	 * @param array $constructorArgs
-	 * @return mixed
-	 */
+
+    /**
+     * Creates a new mock class than can be stubbed and verified.
+     *
+     * @param string                         $mockedClass   - The name of the class to mock
+     * @param Phake_ClassGenerator_MockClass $mockGenerator - The generator used to construct mock classes
+     * @param Phake_CallRecorder_Recorder    $callRecorder
+     * @param Phake_Stubber_IAnswer          $defaultAnswer
+     * @param array                          $constructorArgs
+     *
+     * @throws InvalidArgumentException
+     * @return mixed
+     */
 	public function mock($mockedClass, Phake_ClassGenerator_MockClass $mockGenerator, Phake_CallRecorder_Recorder $callRecorder, Phake_Stubber_IAnswer $defaultAnswer, array $constructorArgs = null)
 	{
-		if (!class_exists($mockedClass, TRUE) && !interface_exists($mockedClass, TRUE))
+		if (!class_exists($mockedClass, true) && !interface_exists($mockedClass, true))
 		{
 			throw new InvalidArgumentException("The class / interface [{$mockedClass}] does not exist. Check the spelling and make sure it is loadable.");
 		}
@@ -99,7 +101,7 @@ class Phake_Facade
 		$base_class_name = uniqid($base . '_PHAKE');
 		$i = 1;
 
-		while (class_exists($base_class_name . $i, FALSE))
+		while (class_exists($base_class_name . $i, false))
 		{
 			$i++;
 		}

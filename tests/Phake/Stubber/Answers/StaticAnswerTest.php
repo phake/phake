@@ -50,7 +50,7 @@
 class Phake_Stubber_Answers_StaticAnswerTest extends PHPUnit_Framework_TestCase
 {
 	/**
-	 * @var Phake_Stubber_StaticAnswer
+	 * @var Phake_Stubber_Answers_StaticAnswer
 	 */
 	private $answer;
 

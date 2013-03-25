@@ -69,12 +69,12 @@ class Phake_CallRecorder_Call
 	 */
 	private $mockReader;
 
-	/**
-	 * @param object $object - The object the method was called on
-	 * @param string $method - The method that was made
-	 * @param array $arguments
-	 * @param Phake_MockReader $mockReader
-	 */
+    /**
+     * @param object|\Phake_IMock $object $object - The object the method was called on
+     * @param string              $method - The method that was made
+     * @param array               $arguments
+     * @param Phake_MockReader    $mockReader
+     */
 	public function __construct(Phake_IMock $object, $method, array $arguments, Phake_MockReader $mockReader)
 	{
 		$this->object = $object;

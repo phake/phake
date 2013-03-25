@@ -56,7 +56,8 @@ class Phake_Stubber_Answers_LambdaAnswer implements Phake_Stubber_Answers_IDeleg
 	 * Passes through the given arguments.
 	 * @param string $calledMethod
 	 * @param array $calledParameters
-	 */
+     * @return array
+     */
 	public function getArguments($calledMethod, array $calledParameters)
 	{
 		return $calledParameters;

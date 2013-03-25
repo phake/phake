@@ -51,7 +51,6 @@ class Phake_String_Converter
 {
 	public function convertToString($value)
 	{
-		$strValue = '';
 		if (is_object($value))
 		{
 			$strValue = '<object:' . get_class($value) . '>';
