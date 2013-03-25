@@ -56,6 +56,11 @@ class PhakeTest extends PHPUnit_Framework_TestCase
         Phake::setClient(Phake::CLIENT_DEFAULT);
     }
 
+	protected function tearDown()
+	{
+		Phake::setClient(Phake::CLIENT_DEFAULT);
+	}
+
 	/**
 	 * General test for Phake::mock() that it returns a class that inherits from the passed class.
 	 */
@@ -1160,5 +1165,24 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 		Phake::when($mock)->__get('myId')->thenReturn(500);
 
 		$this->assertEquals(500, $mock->myId);
+	}
+
+	public function testCallOrderInObjectFailsWithPHPUnit()
+	{
+		Phake::setClient(Phake::CLIENT_PHPUNIT);
+		
+		$mock = Phake::mock('PhakeTest_MockedClass');
+		
+		$mock->foo();
+		$mock->callInnerFunc();
+		$mock->fooWithReturnValue();
+		
+		$this->setExpectedException('PHPUnit_Framework_ExpectationFailedException');
+		
+		Phake::inOrder(
+			Phake::verify($mock)->foo(),
+			Phake::verify($mock)->fooWithReturnValue(),
+			Phake::verify($mock)->callInnerFunc()
+		);
 	}
 }

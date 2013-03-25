@@ -61,6 +61,11 @@ class Phake_ClassGenerator_InvocationHandler_FrozenObjectCheckTest extends PHPUn
 		$this->handler = new Phake_ClassGenerator_InvocationHandler_FrozenObjectCheck($this->mockReader);
 	}
 	
+	protected function tearDown()
+	{
+		Phake::setClient(Phake::CLIENT_DEFAULT);
+	}
+	
 	public function testImplementIInvocationHandler()
 	{
 		$this->assertInstanceOf('Phake_ClassGenerator_InvocationHandler_IInvocationHandler', $this->handler);
@@ -88,6 +93,18 @@ class Phake_ClassGenerator_InvocationHandler_FrozenObjectCheckTest extends PHPUn
 		Phake::when($this->mockReader)->isObjectFrozen($this->anything())->thenReturn(TRUE);
 		
 		$this->setExpectedException('Phake_Exception_VerificationException', 'This object has been frozen.');
+		$ref = array();
+		$this->handler->invoke($mock, 'foo', array(), $ref);
+	}
+	
+	public function testThrowsWhenObjectIsFrozenWithPHPUnit()
+	{
+		Phake::setClient(Phake::CLIENT_PHPUNIT);
+		
+		$mock = $this->getMock('Phake_IMock');
+		Phake::when($this->mockReader)->isObjectFrozen($this->anything())->thenReturn(TRUE);
+		
+		$this->setExpectedException('PHPUnit_Framework_ExpectationFailedException', 'This object has been frozen.');
 		$ref = array();
 		$this->handler->invoke($mock, 'foo', array(), $ref);
 	}
