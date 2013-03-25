@@ -42,8 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Stubber/IAnswer.php';
-
 /**
  * Allows providing an exception to throw to a stubbed method call.
  *

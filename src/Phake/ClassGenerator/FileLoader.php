@@ -42,8 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once('Phake/ClassGenerator/ILoader.php');
-
 /**
  * Saves the files into a store directory with a file name the same as the class and then includes that file.
  */

@@ -42,9 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Stubber/Answers/IDelegator.php';
-require_once 'Phake/Stubber/IAnswerDelegate.php';
-
 /**
  * An answer delegate that allows mocked methods to call their parent methods.
  *

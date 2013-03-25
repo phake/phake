@@ -43,11 +43,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once('Phake/ClassGenerator/InvocationHandler/StubCaller.php');
-require_once('Phake/Stubber/StubMapper.php');
-require_once('Phake/Stubber/AnswerCollection.php');
-require_once('Phake/Stubber/IAnswer.php');
-
 class Phake_ClassGenerator_InvocationHandler_StubCallerTest extends PHPUnit_Framework_TestCase
 {
 	/**

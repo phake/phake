@@ -42,8 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Matchers/HamcrestMatcherAdapter.php';
-
 if (HAMCREST_LOADED) require_once 'Hamcrest/Matcher.php';
 
 /**

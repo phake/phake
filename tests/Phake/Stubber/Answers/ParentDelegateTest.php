@@ -42,8 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Stubber/Answers/ParentDelegate.php';
-
 /**
  * Tests the functionality of the parent delegate
  */

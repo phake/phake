@@ -42,8 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/String/Converter.php';
-
 /**
  * Tests the facade class for Phake
  *

@@ -42,9 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Matchers/IArgumentMatcher.php';
-require_once 'Phake/Matchers/Factory.php';
-
 /**
  * A matcher that will return true for any invocation of a particular method
  */

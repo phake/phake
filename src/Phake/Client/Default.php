@@ -43,9 +43,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once('Phake/Client/IClient.php');
-require_once('Phake/Exception/VerificationException.php');
-
 /**
  * The default client adapter used by Phake.
  */

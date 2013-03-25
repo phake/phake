@@ -42,9 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Stubber/StubMapper.php';
-require_once 'Phake/Matchers/MethodMatcher.php';
-
 /**
  * Tests the function of the StubMapper
  *

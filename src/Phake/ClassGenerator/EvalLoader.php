@@ -42,8 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once('Phake/ClassGenerator/ILoader.php');
-
 /**
  * Loads classes into the system via the eval method
  */

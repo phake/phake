@@ -42,8 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once('Phake/Matchers/IArgumentMatcher.php');
-
 class Phake_Matchers_ReferenceSetter implements Phake_Matchers_IArgumentMatcher
 {
 	/**

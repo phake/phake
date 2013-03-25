@@ -42,10 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Stubber/IAnswerBinder.php';
-require_once 'Phake/Stubber/AnswerCollection.php';
-require_once 'Phake/Proxies/AnswerCollectionProxy.php';
-
 /**
  * Allows binding an answer to stubbable object's method.
  *

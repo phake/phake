@@ -43,10 +43,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once('Phake/Client/Default.php');
-require_once('Phake/CallRecorder/VerifierResult.php');
-require_once('Phake/Exception/VerificationException.php');
-
 class Phake_Client_DefaultTest extends PHPUnit_Framework_TestCase
 {
 	private $client;

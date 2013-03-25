@@ -42,8 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'PhakeTest/MockedInterface.php';
-
 class PhakeTest_DestructorClass
 {
 	public function __destruct()

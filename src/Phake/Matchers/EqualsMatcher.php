@@ -42,10 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Matchers/IArgumentMatcher.php';
-require_once 'Phake/String/Converter.php';
-
-
 /**
  * A matcher to validate that an argument equals a particular value.
  *

@@ -42,8 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Matchers/IArgumentMatcher.php';
-
 /**
  * An adapter class allowing hamcrest matchers to be used as Phake matchers
  */

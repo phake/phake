@@ -42,10 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Matchers/EqualsMatcher.php';
-require_once 'PhakeTest/A.php';
-require_once 'PhakeTest/B.php';
-
 /**
  * Tests the functionality of the equals matcher
  */

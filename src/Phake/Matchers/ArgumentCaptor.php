@@ -42,9 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Matchers/IArgumentMatcher.php';
-require_once 'Phake/Matchers/Factory.php';
-
 /**
  * Used to capture the value passed as a parameter to a verified method for further assertions.
  *

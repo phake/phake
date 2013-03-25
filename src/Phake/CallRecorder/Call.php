@@ -42,8 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/String/Converter.php';
-
 /**
  * Represents a call. For use in storing with a call recorder.
  *

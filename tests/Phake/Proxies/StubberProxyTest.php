@@ -42,9 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Proxies/StubberProxy.php';
-require_once 'Phake/Matchers/Factory.php';
-
 /**
  * Description of StubberProxyTest
  *

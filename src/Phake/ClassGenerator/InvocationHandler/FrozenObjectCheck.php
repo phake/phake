@@ -43,9 +43,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once('Phake/ClassGenerator/InvocationHandler/IInvocationHandler.php');
-require_once('Phake/Exception/VerificationException.php');
-
 /**
  * Tests a mock to see if it is frozen.
  */

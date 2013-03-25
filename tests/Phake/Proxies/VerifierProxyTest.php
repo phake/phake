@@ -42,17 +42,7 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Proxies/VerifierProxy.php';
-require_once 'Phake/MockReader.php';
-require_once 'Phake/CallRecorder/Verifier.php';
-require_once 'Phake/CallRecorder/VerifierResult.php';
-require_once 'Phake/CallRecorder/CallExpectation.php';
-require_once 'PHPUnit/Framework/Constraint.php';
-require_once 'Phake/Matchers/PHPUnitConstraintAdapter.php';
 if (HAMCREST_LOADED) require_once 'Hamcrest/Matcher.php';
-require_once 'Phake/Matchers/HamcrestMatcherAdapter.php';
-require_once 'Phake/Matchers/EqualsMatcher.php';
-require_once 'Phake/Matchers/Factory.php';
 
 /**
  * Description of VerifierProxyTest

@@ -42,9 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/CallRecorder/Recorder.php';
-require_once 'Phake/CallRecorder/Call.php';
-
 /**
  * Test the Phake Call Recorder
  *

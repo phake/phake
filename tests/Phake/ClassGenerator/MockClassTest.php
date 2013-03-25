@@ -42,22 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/ClassGenerator/MockClass.php';
-require_once 'Phake/CallRecorder/Recorder.php';
-require_once 'Phake/Stubber/StubMapper.php';
-require_once 'Phake/Stubber/IAnswer.php';
-require_once 'Phake/Stubber/AnswerCollection.php';
-require_once 'Phake/Stubber/Answers/ParentDelegate.php';
-require_once 'Phake/Stubber/IAnswerDelegate.php';
-
-require_once 'PhakeTest/MockedClass.php';
-require_once 'PhakeTest/MagicClass.php';
-require_once 'PhakeTest/MockedConstructedClass.php';
-require_once 'PhakeTest/MockedInterface.php';
-require_once 'PhakeTest/FinalMethod.php';
-require_once 'PhakeTest/ToStringMethod.php';
-require_once 'PhakeTest/DestructorClass.php';
-
 /**
  * Description of MockClass
  *

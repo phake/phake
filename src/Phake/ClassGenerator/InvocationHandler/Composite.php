@@ -43,8 +43,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once('Phake/ClassGenerator/InvocationHandler/IInvocationHandler.php');
-
 /**
  * A composite invocation handler
  */

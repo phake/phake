@@ -42,9 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Matchers/PHPUnitConstraintAdapter.php';
-require_once 'PHPUnit/Framework/Constraint.php';
-
 /**
  * Tests the adapting of phpunit constraints into Phake matchers
  */

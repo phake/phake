@@ -42,8 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'PhakeTest/MockedInterface.php';
-
 abstract class PhakeTest_AbstractClass implements PhakeTest_MockedInterface
 {
 	public function foo()

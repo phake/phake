@@ -42,9 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once('Phake.php');
-require_once('Phake/Stubber/AnswerCollection.php');
-
 class Phake_Stubber_AnswerCollectionTest extends PHPUnit_Framework_TestCase
 {
 	private $collection;

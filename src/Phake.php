@@ -42,34 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/Facade.php';
-require_once 'Phake/MockReader.php';
-require_once 'Phake/ClassGenerator/MockClass.php';
-require_once 'Phake/ClassGenerator/EvalLoader.php';
-require_once 'Phake/Client/Default.php';
-require_once 'Phake/Client/PHPUnit.php';
-require_once 'Phake/CallRecorder/Recorder.php';
-require_once 'Phake/CallRecorder/OrderVerifier.php';
-require_once 'Phake/Proxies/VerifierProxy.php';
-require_once 'Phake/Proxies/StubberProxy.php';
-require_once 'Phake/Proxies/CallVerifierProxy.php';
-require_once 'Phake/Proxies/CallStubberProxy.php';
-require_once 'Phake/Proxies/AnswerBinderProxy.php';
-require_once 'Phake/Matchers/EqualsMatcher.php';
-require_once 'Phake/Matchers/ArgumentCaptor.php';
-require_once 'Phake/Matchers/ReferenceSetter.php';
-require_once 'Phake/Matchers/Factory.php';
-require_once 'Phake/Matchers/AnyParameters.php';
-require_once 'Phake/Stubber/SelfBindingAnswerBinder.php';
-require_once 'Phake/Stubber/Answers/StaticAnswer.php';
-require_once 'Phake/CallRecorder/VerifierMode/Times.php';
-require_once 'Phake/CallRecorder/VerifierMode/AtLeast.php';
-require_once 'Phake/CallRecorder/VerifierMode/AtMost.php';
-require_once 'Phake/Mock/Resetter.php';
-require_once 'Phake/Mock/Freezer.php';
-require_once 'Phake/Exception/VerificationException.php';
-require_once 'Phake/Annotation/MockInitializer.php';
-
 /**
  * Phake - PHP Test Doubles Framework
  *

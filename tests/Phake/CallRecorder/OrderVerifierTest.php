@@ -42,9 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-require_once 'Phake/CallRecorder/OrderVerifier.php';
-require_once 'Phake/CallRecorder/Position.php';
-
 /**
  * Tests the call order verifier
  */
