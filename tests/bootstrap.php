@@ -55,6 +55,5 @@ Phake::setClient(Phake::CLIENT_DEFAULT);
 $cacheDir = getenv('PHAKE_CACHEDIR');
 if (!empty($cacheDir))
 {
-	require_once('Phake/ClassGenerator/FileLoader.php');
 	Phake::setMockLoader(new Phake_ClassGenerator_FileLoader($cacheDir));
 }
