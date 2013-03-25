@@ -51,53 +51,52 @@
  */
 class Phake_Proxies_CallVerifierProxy
 {
-	/**
-	 * @var array
-	 */
-	private $arguments;
-	
-	/**
-	 * @var Phake_MockReader
-	 */
-	private $mockReader;
-	
-	/**
-	 * @var Phake_Client_IClient
-	 */
-	private $client;
+    /**
+     * @var array
+     */
+    private $arguments;
 
-	/**
-	 * @param array $arguments
-	 * @param Phake_MockReader $mockReader;
-	 * @param Phake_Client_IClient $client
-	 */
-	public function __construct(array $arguments, Phake_MockReader $mockReader, Phake_Client_IClient $client)
-	{
-		$this->arguments = $arguments;
-		$this->mockReader = $mockReader;
-		$this->client = $client;
-	}
+    /**
+     * @var Phake_MockReader
+     */
+    private $mockReader;
+
+    /**
+     * @var Phake_Client_IClient
+     */
+    private $client;
+
+    /**
+     * @param array                $arguments
+     * @param Phake_MockReader     $mockReader;
+     * @param Phake_Client_IClient $client
+     */
+    public function __construct(array $arguments, Phake_MockReader $mockReader, Phake_Client_IClient $client)
+    {
+        $this->arguments  = $arguments;
+        $this->mockReader = $mockReader;
+        $this->client     = $client;
+    }
 
 
-	/**
-	 * Verifies that the call to __call was made on the given object with the parameters passed into the constructor
-	 * @param Phake_IMock $obj
-	 * @param Phake_CallRecorder_IVerifierMode $verifierMode
-	 * @return array
-	 */
-	public function isCalledOn(Phake_IMock $obj, Phake_CallRecorder_IVerifierMode $verifierMode = NULL)
-	{
-		if ($verifierMode === NULL)
-		{
-			$verifierMode = new Phake_CallRecorder_VerifierMode_Times(1);
-		}
-		
-		$verifier = new Phake_CallRecorder_Verifier($this->mockReader->getCallRecorder($obj), $obj);
-		$expectation = new Phake_CallRecorder_CallExpectation($obj, '__call', $this->arguments, $verifierMode, $this->mockReader);
-		$result = $verifier->verifyCall($expectation);
-		
-		return $this->client->processVerifierResult($result);
-	}
+    /**
+     * Verifies that the call to __call was made on the given object with the parameters passed into the constructor
+     *
+     * @param Phake_IMock                      $obj
+     * @param Phake_CallRecorder_IVerifierMode $verifierMode
+     *
+     * @return array
+     */
+    public function isCalledOn(Phake_IMock $obj, Phake_CallRecorder_IVerifierMode $verifierMode = null)
+    {
+        if ($verifierMode === null) {
+            $verifierMode = new Phake_CallRecorder_VerifierMode_Times(1);
+        }
+
+        $verifier    = new Phake_CallRecorder_Verifier($this->mockReader->getCallRecorder($obj), $obj);
+        $expectation = new Phake_CallRecorder_CallExpectation($obj, '__call', $this->arguments, $verifierMode, $this->mockReader);
+        $result      = $verifier->verifyCall($expectation);
+
+        return $this->client->processVerifierResult($result);
+    }
 }
-
-?>

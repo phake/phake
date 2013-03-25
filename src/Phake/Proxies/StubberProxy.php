@@ -49,59 +49,61 @@
  */
 class Phake_Proxies_StubberProxy
 {
-	/**
-	 * @var Phake_IMock
-	 */
-	private $obj;
+    /**
+     * @var Phake_IMock
+     */
+    private $obj;
 
-	/**
-	 * @var Phake_Matchers_Factory
-	 */
-	private $matcherFactory;
-	
-	/**
-	 * @var Phake_MockReader
-	 */
-	private $mockReader;
+    /**
+     * @var Phake_Matchers_Factory
+     */
+    private $matcherFactory;
 
-	/**
-	 * @param Phake_IMock $obj
-	 * @param Phake_Matchers_Factory $matcherFactory
-	 * @param Phake_MockReader $mockReader
-	 */
-	public function __construct(Phake_IMock $obj, Phake_Matchers_Factory $matcherFactory, Phake_MockReader $mockReader)
-	{
-		$this->obj = $obj;
-		$this->matcherFactory = $matcherFactory;
-		$this->mockReader = $mockReader;
-	}
+    /**
+     * @var Phake_MockReader
+     */
+    private $mockReader;
 
-	/**
-	 * A magic call to instantiate an Answer Binder Proxy.
-	 * @param string $method
-	 * @param array $arguments
-	 * @return Phake_Proxies_AnswerBinderProxy
-	 */
-	public function __call($method, array $arguments)
-	{
-		$matcher = new Phake_Matchers_MethodMatcher($method, $this->matcherFactory->createMatcherArray($arguments));
-		$binder = new Phake_Stubber_AnswerBinder($this->obj, $matcher, $this->mockReader);
-		return new Phake_Proxies_AnswerBinderProxy($binder);
-	}
+    /**
+     * @param Phake_IMock            $obj
+     * @param Phake_Matchers_Factory $matcherFactory
+     * @param Phake_MockReader       $mockReader
+     */
+    public function __construct(Phake_IMock $obj, Phake_Matchers_Factory $matcherFactory, Phake_MockReader $mockReader)
+    {
+        $this->obj            = $obj;
+        $this->matcherFactory = $matcherFactory;
+        $this->mockReader     = $mockReader;
+    }
 
-	/**
-	 * A magic call to instantiate an Answer Binder Proxy that matches any parameters.
-	 *
-	 * @param string $method
-	 * @return Phake_Proxies_AnswerBinderProxy
-	 */
-	public function __get($method)
-	{
-		if (method_exists($this->obj, '__get') && !method_exists($this->obj, $method))
-		{
-			return $this->__call('__get', array($method));
-		}
+    /**
+     * A magic call to instantiate an Answer Binder Proxy.
+     *
+     * @param string $method
+     * @param array  $arguments
+     *
+     * @return Phake_Proxies_AnswerBinderProxy
+     */
+    public function __call($method, array $arguments)
+    {
+        $matcher = new Phake_Matchers_MethodMatcher($method, $this->matcherFactory->createMatcherArray($arguments));
+        $binder  = new Phake_Stubber_AnswerBinder($this->obj, $matcher, $this->mockReader);
+        return new Phake_Proxies_AnswerBinderProxy($binder);
+    }
 
-		return $this->__call($method, array(new Phake_Matchers_AnyParameters));
-	}
+    /**
+     * A magic call to instantiate an Answer Binder Proxy that matches any parameters.
+     *
+     * @param string $method
+     *
+     * @return Phake_Proxies_AnswerBinderProxy
+     */
+    public function __get($method)
+    {
+        if (method_exists($this->obj, '__get') && !method_exists($this->obj, $method)) {
+            return $this->__call('__get', array($method));
+        }
+
+        return $this->__call($method, array(new Phake_Matchers_AnyParameters));
+    }
 }

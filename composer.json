@@ -15,7 +15,7 @@
         "php": ">=5.3.3"
     },
     "require-dev": {
-        "ext-soap":"*",
+        "ext-soap": "*",
         "doctrine/common": "2.3.*",
         "phpunit/phpunit": "3.7.*",
         "davedevelopment/hamcrest-php": "dev-master"
@@ -24,7 +24,9 @@
         "bin-dir": "bin"
     },
     "autoload": {
-        "psr-0": { "Phake": "src/" }
+        "psr-0": {
+            "Phake": "src/"
+        }
     },
     "suggest": {
         "doctrine/common": "Allows mock annotations to use import statements for classes.",

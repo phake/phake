@@ -48,28 +48,29 @@
  */
 class Phake_Mock_Resetter
 {
-	/**
-	 * @var Phake_MockReader
-	 */
-	private $mockReader;
-	
-	/**
-	 * @param Phake_MockReader $mockReader 
-	 */
-	public function __construct(Phake_MockReader $mockReader)
-	{
-		$this->mockReader = $mockReader;
-	}
-	
-	/**
-	 * Resets the given $mock
-	 * @param Phake_IMock $mock
-	 */
-	public function reset(Phake_IMock $mock)
-	{
-		$this->mockReader->setIsObjectFrozen($mock, FALSE);
-		$this->mockReader->getStubMapper($mock)->removeAllAnswers();
-		$this->mockReader->getCallRecorder($mock)->removeAllCalls();
-	}
+    /**
+     * @var Phake_MockReader
+     */
+    private $mockReader;
+
+    /**
+     * @param Phake_MockReader $mockReader
+     */
+    public function __construct(Phake_MockReader $mockReader)
+    {
+        $this->mockReader = $mockReader;
+    }
+
+    /**
+     * Resets the given $mock
+     *
+     * @param Phake_IMock $mock
+     */
+    public function reset(Phake_IMock $mock)
+    {
+        $this->mockReader->setIsObjectFrozen($mock, false);
+        $this->mockReader->getStubMapper($mock)->removeAllAnswers();
+        $this->mockReader->getCallRecorder($mock)->removeAllCalls();
+    }
 }
-?>
+

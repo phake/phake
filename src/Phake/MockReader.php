@@ -45,64 +45,69 @@
 
 /**
  * Allows reading data off of the mock object.
- * 
+ *
  * (More of a standard than an enforcement)
  */
 class Phake_MockReader
 {
-	/**
-	 * @param Phake_IMock $mock 
-	 * @return Phake_CallRecorder_Recorder
-	 */
-	public function getCallRecorder(Phake_IMock $mock)
-	{
-		return $mock->__PHAKE_callRecorder;
-	}
-	
-	/**
-	 * @param Phake_IMock $mock 
-	 * @return string
-	 */
-	public function getName(Phake_IMock $mock)
-	{
-		return $mock->__PHAKE_name;
-	}
+    /**
+     * @param Phake_IMock $mock
+     *
+     * @return Phake_CallRecorder_Recorder
+     */
+    public function getCallRecorder(Phake_IMock $mock)
+    {
+        return $mock->__PHAKE_callRecorder;
+    }
 
-	/**
-	 * @param Phake_IMock $mock 
-	 * @return Phake_Stubber_StubMapper
-	 */
-	public function getStubMapper(Phake_IMock $mock)
-	{
-		return $mock->__PHAKE_stubMapper;
-	}
+    /**
+     * @param Phake_IMock $mock
+     *
+     * @return string
+     */
+    public function getName(Phake_IMock $mock)
+    {
+        return $mock->__PHAKE_name;
+    }
 
-	/**
-	 * @param Phake_IMock $mock 
-	 * @return Phake_Stubber_IAnswer
-	 */
-	public function getDefaultAnswer(Phake_IMock $mock)
-	{
-		return $mock->__PHAKE_defaultAnswer;
-	}
+    /**
+     * @param Phake_IMock $mock
+     *
+     * @return Phake_Stubber_StubMapper
+     */
+    public function getStubMapper(Phake_IMock $mock)
+    {
+        return $mock->__PHAKE_stubMapper;
+    }
 
-	/**
-	 * @param Phake_IMock $mock 
-	 * @return boolean
-	 */
-	public function isObjectFrozen(Phake_IMock $mock)
-	{
-		return $mock->__PHAKE_isFrozen;
-	}
+    /**
+     * @param Phake_IMock $mock
+     *
+     * @return Phake_Stubber_IAnswer
+     */
+    public function getDefaultAnswer(Phake_IMock $mock)
+    {
+        return $mock->__PHAKE_defaultAnswer;
+    }
 
-	/**
-	 * @param Phake_IMock $mock 
-	 * @param boolean $frozen
-	 * @return null
-	 */
-	public function setIsObjectFrozen(Phake_IMock $mock, $frozen)
-	{
-		$mock->__PHAKE_isFrozen = $frozen;
-	}
+    /**
+     * @param Phake_IMock $mock
+     *
+     * @return boolean
+     */
+    public function isObjectFrozen(Phake_IMock $mock)
+    {
+        return $mock->__PHAKE_isFrozen;
+    }
+
+    /**
+     * @param Phake_IMock $mock
+     * @param boolean     $frozen
+     *
+     * @return null
+     */
+    public function setIsObjectFrozen(Phake_IMock $mock, $frozen)
+    {
+        $mock->__PHAKE_isFrozen = $frozen;
+    }
 }
-?>

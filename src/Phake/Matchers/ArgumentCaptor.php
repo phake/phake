@@ -49,68 +49,69 @@
  */
 class Phake_Matchers_ArgumentCaptor implements Phake_Matchers_IArgumentMatcher
 {
-	/**
-	 * @var mixed
-	 */
-	private $boundVariable;
+    /**
+     * @var mixed
+     */
+    private $boundVariable;
 
-	/**
-	 * @var Phake_Matchers_IArgumentMatcher
-	 */
-	private $matcher;
+    /**
+     * @var Phake_Matchers_IArgumentMatcher
+     */
+    private $matcher;
 
-	/**
-	 * @param mixed $boundVariable - reference parameter
-	 */
-	public function __construct(&$boundVariable)
-	{
-		$this->boundVariable =& $boundVariable;
-	}
+    /**
+     * @param mixed $boundVariable - reference parameter
+     */
+    public function __construct(&$boundVariable)
+    {
+        $this->boundVariable =& $boundVariable;
+    }
 
-	/**
-	 * Executes the matcher on a given argument value. Returns TRUE on a match, FALSE otherwise.
-	 *
-	 * Will bind the argument to the variable passed to the constructor.
-	 * @param mixed $argument
-	 * @return boolean
-	 */
-	public function matches(&$argument)
-	{
-		if ($this->matcher === NULL || $this->matcher->matches($argument))
-		{
-			$this->boundVariable = $argument;
-			return TRUE;
-		}
-		else
-		{
-			return FALSE;
-		}
-	}
+    /**
+     * Executes the matcher on a given argument value. Returns TRUE on a match, FALSE otherwise.
+     *
+     * Will bind the argument to the variable passed to the constructor.
+     *
+     * @param mixed $argument
+     *
+     * @return boolean
+     */
+    public function matches(&$argument)
+    {
+        if ($this->matcher === null || $this->matcher->matches($argument)) {
+            $this->boundVariable = $argument;
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-	/**
-	 * Assigns a matcher to the captor.
-	 *
-	 * This allows an argument to only be captured if the argument meets a specific criteria. This
-	 * is useful if one method is called multiple times.
-	 *
-	 * The same matcher factory used by the verifier and stubber is used here.
-	 *
-	 * @param mixed $matcher
-	 * @return Phake_Matchers_ArgumentCaptor the current instance
-	 */
-	public function when($matcher)
-	{
-		$factory = new Phake_Matchers_Factory();
+    /**
+     * Assigns a matcher to the captor.
+     *
+     * This allows an argument to only be captured if the argument meets a specific criteria. This
+     * is useful if one method is called multiple times.
+     *
+     * The same matcher factory used by the verifier and stubber is used here.
+     *
+     * @param mixed $matcher
+     *
+     * @return Phake_Matchers_ArgumentCaptor the current instance
+     */
+    public function when($matcher)
+    {
+        $factory = new Phake_Matchers_Factory();
 
-		$this->matcher = $factory->createMatcher($matcher);
+        $this->matcher = $factory->createMatcher($matcher);
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function __toString()
-	{
-		return sprintf('<captured parameter%s>', isset($this->matcher) ? " that is {$this->matcher->__toString()}" : '');
-	}
+    public function __toString()
+    {
+        return sprintf(
+            '<captured parameter%s>',
+            isset($this->matcher) ? " that is {$this->matcher->__toString()}" : ''
+        );
+    }
 }
-
-?>

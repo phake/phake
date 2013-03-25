@@ -48,22 +48,24 @@
  */
 class Phake_ClassGenerator_InvocationHandler_CallRecorder implements Phake_ClassGenerator_InvocationHandler_IInvocationHandler
 {
-	/**
-	 * @var Phake_MockReader
-	 */
-	private $mockReader;
-	
-	/**
-	 * @param Phake_MockReader $mockReader 
-	 */
-	public function __construct(Phake_MockReader $mockReader)
-	{
-		$this->mockReader = $mockReader;
-	}
-	
-	public function invoke(Phake_IMock $mock, $method, array $arguments, array &$argumentReference)
-	{
-		$this->mockReader->getCallRecorder($mock)->recordCall(new Phake_CallRecorder_Call($mock, $method, $arguments, $this->mockReader));
-	}
+    /**
+     * @var Phake_MockReader
+     */
+    private $mockReader;
+
+    /**
+     * @param Phake_MockReader $mockReader
+     */
+    public function __construct(Phake_MockReader $mockReader)
+    {
+        $this->mockReader = $mockReader;
+    }
+
+    public function invoke(Phake_IMock $mock, $method, array $arguments, array &$argumentReference)
+    {
+        $this->mockReader->getCallRecorder($mock)->recordCall(
+            new Phake_CallRecorder_Call($mock, $method, $arguments, $this->mockReader)
+        );
+    }
 }
-?>
+

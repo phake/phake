@@ -44,21 +44,21 @@
 
 class Phake_Matchers_AnyParametersTest extends PHPUnit_Framework_TestCase
 {
-	private $matcher;
+    private $matcher;
 
-	public function setUp()
-	{
-		$this->matcher = new Phake_Matchers_AnyParameters();
-	}
+    public function setUp()
+    {
+        $this->matcher = new Phake_Matchers_AnyParameters();
+    }
 
-	public function testMatchesAlwaysReturnsTrue()
-	{
-		$value = 'blah';
-		$this->assertTrue($this->matcher->matches($value));
-	}
+    public function testMatchesAlwaysReturnsTrue()
+    {
+        $value = 'blah';
+        $this->assertTrue($this->matcher->matches($value));
+    }
 
-	public function testToString()
-	{
-		$this->assertEquals('<any parameters>', $this->matcher->__toString());
-	}
+    public function testToString()
+    {
+        $this->assertEquals('<any parameters>', $this->matcher->__toString());
+    }
 }

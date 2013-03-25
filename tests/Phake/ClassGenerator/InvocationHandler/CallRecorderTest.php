@@ -45,37 +45,37 @@
 
 class Phake_ClassGenerator_InvocationHandler_CallRecorderTest extends PHPUnit_Framework_TestCase
 {
-	/**
-	 * @var Phake_ClassGenerator_InvocationHandler_CallRecorder 
-	 */
-	private $handler;
-	
-	/**
-	 * @var Phake_MockReader
-	 */
-	private $mockReader;
-	
-	public function setUp()
-	{
-		$this->mockReader = Phake::mock('Phake_MockReader');
-		$this->handler = new Phake_ClassGenerator_InvocationHandler_CallRecorder($this->mockReader);
-	}
-	
-	public function testImplementIInvocationHandler()
-	{
-		$this->assertInstanceOf('Phake_ClassGenerator_InvocationHandler_IInvocationHandler', $this->handler);
-	}
-	
-	public function testCallIsRecorded()
-	{
-		$mock = $this->getMock('Phake_IMock');
-		$callRecorder = Phake::mock('Phake_CallRecorder_Recorder');
-		Phake::when($this->mockReader)->getCallRecorder($this->anything())->thenReturn($callRecorder);
-		
-		$ref = array();
-		$this->handler->invoke($mock, 'foo', array(), $ref);
-		
-		Phake::verify($callRecorder)->recordCall(new Phake_CallRecorder_Call($mock, 'foo', array(), $this->mockReader));
-	}
+    /**
+     * @var Phake_ClassGenerator_InvocationHandler_CallRecorder
+     */
+    private $handler;
+
+    /**
+     * @var Phake_MockReader
+     */
+    private $mockReader;
+
+    public function setUp()
+    {
+        $this->mockReader = Phake::mock('Phake_MockReader');
+        $this->handler    = new Phake_ClassGenerator_InvocationHandler_CallRecorder($this->mockReader);
+    }
+
+    public function testImplementIInvocationHandler()
+    {
+        $this->assertInstanceOf('Phake_ClassGenerator_InvocationHandler_IInvocationHandler', $this->handler);
+    }
+
+    public function testCallIsRecorded()
+    {
+        $mock         = $this->getMock('Phake_IMock');
+        $callRecorder = Phake::mock('Phake_CallRecorder_Recorder');
+        Phake::when($this->mockReader)->getCallRecorder($this->anything())->thenReturn($callRecorder);
+
+        $ref = array();
+        $this->handler->invoke($mock, 'foo', array(), $ref);
+
+        Phake::verify($callRecorder)->recordCall(new Phake_CallRecorder_Call($mock, 'foo', array(), $this->mockReader));
+    }
 }
-?>
+

@@ -53,67 +53,65 @@
  */
 class Phake_CallRecorder_Recorder
 {
-	/**
-	 * @var array
-	 */
-	private $calls = array();
+    /**
+     * @var array
+     */
+    private $calls = array();
 
-	/**
-	 * @var array
-	 */
-	private $positions = array();
+    /**
+     * @var array
+     */
+    private $positions = array();
 
-	/**
-	 * @var int
-	 */
-	private static $lastPosition = 0;
+    /**
+     * @var int
+     */
+    private static $lastPosition = 0;
 
-	/**
-	 * Records that a given
-	 * @param Phake_CallRecorder_Call $call
-	 */
-	public function recordCall(Phake_CallRecorder_Call $call)
-	{
-		$this->calls[] = $call;
-		$this->positions[spl_object_hash($call)] = new Phake_CallRecorder_Position(self::$lastPosition++);
-	}
+    /**
+     * Records that a given
+     *
+     * @param Phake_CallRecorder_Call $call
+     */
+    public function recordCall(Phake_CallRecorder_Call $call)
+    {
+        $this->calls[]                           = $call;
+        $this->positions[spl_object_hash($call)] = new Phake_CallRecorder_Position(self::$lastPosition++);
+    }
 
-	/**
-	 * Returns all calls recorded in the order they were recorded.
-	 * @return array
-	 */
-	public function getAllCalls()
-	{
-		return $this->calls;
-	}
+    /**
+     * Returns all calls recorded in the order they were recorded.
+     * @return array
+     */
+    public function getAllCalls()
+    {
+        return $this->calls;
+    }
 
-	/**
-	 * Removes all calls from the call recorder.
-	 *
-	 * Also removes all positions
-	 */
-	public function removeAllCalls()
-	{
-		$this->calls = array();
-		$this->positions = array();
-	}
+    /**
+     * Removes all calls from the call recorder.
+     *
+     * Also removes all positions
+     */
+    public function removeAllCalls()
+    {
+        $this->calls     = array();
+        $this->positions = array();
+    }
 
-	/**
-	 * Retrieves call info for a particular call
-	 * @param Phake_CallRecorder_Call $call
-	 * @return Phake_CallRecorder_CallInfo
-	 */
-	public function getCallInfo(Phake_CallRecorder_Call $call)
-	{
-		if (in_array($call, $this->calls, true))
-		{
-			return new Phake_CallRecorder_CallInfo($call, $this->positions[spl_object_hash($call)]);
-		}
-		else
-		{
-			return NULL;
-		}
-	}
+    /**
+     * Retrieves call info for a particular call
+     *
+     * @param Phake_CallRecorder_Call $call
+     *
+     * @return Phake_CallRecorder_CallInfo
+     */
+    public function getCallInfo(Phake_CallRecorder_Call $call)
+    {
+        if (in_array($call, $this->calls, true)) {
+            return new Phake_CallRecorder_CallInfo($call, $this->positions[spl_object_hash($call)]);
+        } else {
+            return null;
+        }
+    }
 }
-
-?>

@@ -51,13 +51,14 @@
  */
 interface Phake_Matchers_IMethodMatcher
 {
-	/**
-	 * Determines if the given method and arguments match the configured method and argument matchers
-	 * in this object. Returns true on success, false otherwise.
-	 *
-	 * @param string $method
-	 * @param array $args
-	 * @return boolean
-	 */
-	public function matches($method, array &$args);
+    /**
+     * Determines if the given method and arguments match the configured method and argument matchers
+     * in this object. Returns true on success, false otherwise.
+     *
+     * @param string $method
+     * @param array  $args
+     *
+     * @return boolean
+     */
+    public function matches($method, array &$args);
 }

@@ -47,47 +47,47 @@
  */
 class Phake_Matchers_HamcrestMatcherAdapterTest extends PHPUnit_Framework_TestCase
 {
-	/**
-	 * @var Phake_Matchers_HamcrestMatcherAdapter
-	 */
-	private $adapter;
+    /**
+     * @var Phake_Matchers_HamcrestMatcherAdapter
+     */
+    private $adapter;
 
-	/**
-	 * @var Hamcrest_Matcher
-	 */
-	private $matcher;
+    /**
+     * @var Hamcrest_Matcher
+     */
+    private $matcher;
 
-	/**
-	 * Sets up the test fixture
-	 */
-	public function setUp()
-	{
-		$this->matcher = $this->getMock('Hamcrest_BaseMatcher');
-		$this->matcher->expects($this->any())
-				->method('__toString')
-				->will($this->returnValue('hamcrest matcher'));
-		
-		$this->adapter = new Phake_Matchers_HamcrestMatcherAdapter($this->matcher);
-	}
+    /**
+     * Sets up the test fixture
+     */
+    public function setUp()
+    {
+        $this->matcher = $this->getMock('Hamcrest_BaseMatcher');
+        $this->matcher->expects($this->any())
+            ->method('__toString')
+            ->will($this->returnValue('hamcrest matcher'));
 
-	/**
-	 * Tests that calls to matches are forwarded to hamcrest's matcher method
-	 */
-	public function testMatchesCallsForwarded()
-	{
-		$this->matcher->expects($this->once())
-				->method('matches')
-				->with($this->equalTo('foo'))
-				->will($this->returnValue(TRUE));
+        $this->adapter = new Phake_Matchers_HamcrestMatcherAdapter($this->matcher);
+    }
 
-		$value = 'foo';
-		$this->assertTrue($this->adapter->matches($value));
-	}
+    /**
+     * Tests that calls to matches are forwarded to hamcrest's matcher method
+     */
+    public function testMatchesCallsForwarded()
+    {
+        $this->matcher->expects($this->once())
+            ->method('matches')
+            ->with($this->equalTo('foo'))
+            ->will($this->returnValue(true));
 
-	public function testToString()
-	{
-		$this->assertEquals('hamcrest matcher', $this->adapter->__toString());
-	}
+        $value = 'foo';
+        $this->assertTrue($this->adapter->matches($value));
+    }
+
+    public function testToString()
+    {
+        $this->assertEquals('hamcrest matcher', $this->adapter->__toString());
+    }
 }
 
-?>
+

@@ -47,15 +47,14 @@
  */
 interface Phake_Stubber_IAnswerBinder
 {
-	/**
-	 * Binds the given answer to an object.
-	 *
-	 * Returns an answer container that will contain the given answer.
-	 *
-	 * @param Phake_Stubber_IAnswer $answer
-	 * @return Phake_Stubber_IAnswerContainer
-	 */
-	public function bindAnswer(Phake_Stubber_IAnswer $answer);
+    /**
+     * Binds the given answer to an object.
+     *
+     * Returns an answer container that will contain the given answer.
+     *
+     * @param Phake_Stubber_IAnswer $answer
+     *
+     * @return Phake_Stubber_IAnswerContainer
+     */
+    public function bindAnswer(Phake_Stubber_IAnswer $answer);
 }
-
-?>

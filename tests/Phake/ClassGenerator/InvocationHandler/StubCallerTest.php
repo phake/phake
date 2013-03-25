@@ -45,105 +45,105 @@
 
 class Phake_ClassGenerator_InvocationHandler_StubCallerTest extends PHPUnit_Framework_TestCase
 {
-	/**
-	 * @var Phake_ClassGenerator_InvocationHandler_StubCaller 
-	 */
-	private $handler;
-	
-	/**
-	 * @var Phake_IMock 
-	 */
-	private $mock;
-	
-	/**
-	 * @var Phake_Stubber_AnswerCollection
-	 */
-	private $answerCollection;
-	
-	/**
-	 * @var Phake_MockReader
-	 */
-	private $mockReader;
-	
-	/**
-	 * @var Phake_Stubber_StubMapper
-	 */
-	private $stubMapper;
-	
-	/**
-	 * @var Phake_Stubber_IAnswer
-	 */
-	private $defaultAnswer;
-	
-	public function setUp()
-	{
-		$this->mock = $this->getMock('Phake_IMock');
-		$this->stubMapper = Phake::mock('Phake_Stubber_StubMapper');
-		$this->defaultAnswer = Phake::mock('Phake_Stubber_IAnswer');
-		Phake::when($this->defaultAnswer)->getAnswer()->thenReturn('24');
+    /**
+     * @var Phake_ClassGenerator_InvocationHandler_StubCaller
+     */
+    private $handler;
 
-		$this->answerCollection = Phake::mock('Phake_Stubber_AnswerCollection');
-		$answer = Phake::mock('Phake_Stubber_IAnswer');
-		Phake::when($this->answerCollection)->getAnswer()->thenReturn($answer);
-		Phake::when($answer)->getAnswer()->thenReturn('42');
-		Phake::when($this->stubMapper)->getStubByCall(Phake::anyParameters())->thenReturn($this->answerCollection);
-		
-		$this->mockReader = Phake::mock('Phake_MockReader');
-		Phake::when($this->mockReader)->getStubMapper($this->anything())->thenReturn($this->stubMapper);
-		Phake::when($this->mockReader)->getDefaultAnswer($this->anything())->thenReturn($this->defaultAnswer);
+    /**
+     * @var Phake_IMock
+     */
+    private $mock;
 
-		$this->handler = new Phake_ClassGenerator_InvocationHandler_StubCaller($this->mockReader);
-	}
-	
-	public function testImplementIInvocationHandler()
-	{
-		$this->assertInstanceOf('Phake_ClassGenerator_InvocationHandler_IInvocationHandler', $this->handler);
-	}
-	
-	public function testStubIsPulled()
-	{
-		$ref = array('bar');
-		$this->handler->invoke($this->mock, 'foo', $ref, $ref);
-		
-		Phake::verify($this->stubMapper)->getStubByCall('foo', array('bar'));
-	}
-	
-	public function testNonDelegatedAnswerReturned()
-	{
-		$ref = array('bar');
-		
-		$this->assertEquals('42', $this->handler->invoke($this->mock, 'foo', $ref, $ref)->getAnswer());
-	}
+    /**
+     * @var Phake_Stubber_AnswerCollection
+     */
+    private $answerCollection;
 
-	public function testNonDelegatedDefaultAnswerReturned()
-	{
-		$ref = array('bar');
-		Phake::when($this->stubMapper)->getStubByCall(Phake::anyParameters())->thenReturn(NULL);
-		
-		$this->assertEquals($this->defaultAnswer, $this->handler->invoke($this->mock, 'foo', $ref, $ref));
-		Phake::verify($this->stubMapper, Phake::times(1))->getStubByCall(Phake::anyParameters());
-	}
-	
-	public function testMagicCallMethodChecksForImplicitStubFirst()
-	{
-		$ref = array('foo', array('bar'));
-		Phake::when($this->stubMapper)->getStubByCall(Phake::anyParameters())->thenReturn(NULL);
-		
-		$this->handler->invoke($this->mock, '__call', $ref, $ref);
-		
-		Phake::inOrder(
-			Phake::verify($this->stubMapper)->getStubByCall('foo', array('bar')),
-			Phake::verify($this->stubMapper)->getStubByCall('__call', array('foo', array('bar')))
-		);
-	}
-	
-	public function testMagicCallMethodBypassesExplicitStub()
-	{
-		$ref = array('foo', array('bar'));
-		
-		$this->handler->invoke($this->mock, '__call', $ref, $ref);
-		
-		Phake::verify($this->stubMapper, Phake::times(0))->getStubByCall('__call', array('foo', array('bar')));
-	}
+    /**
+     * @var Phake_MockReader
+     */
+    private $mockReader;
+
+    /**
+     * @var Phake_Stubber_StubMapper
+     */
+    private $stubMapper;
+
+    /**
+     * @var Phake_Stubber_IAnswer
+     */
+    private $defaultAnswer;
+
+    public function setUp()
+    {
+        $this->mock          = $this->getMock('Phake_IMock');
+        $this->stubMapper    = Phake::mock('Phake_Stubber_StubMapper');
+        $this->defaultAnswer = Phake::mock('Phake_Stubber_IAnswer');
+        Phake::when($this->defaultAnswer)->getAnswer()->thenReturn('24');
+
+        $this->answerCollection = Phake::mock('Phake_Stubber_AnswerCollection');
+        $answer                 = Phake::mock('Phake_Stubber_IAnswer');
+        Phake::when($this->answerCollection)->getAnswer()->thenReturn($answer);
+        Phake::when($answer)->getAnswer()->thenReturn('42');
+        Phake::when($this->stubMapper)->getStubByCall(Phake::anyParameters())->thenReturn($this->answerCollection);
+
+        $this->mockReader = Phake::mock('Phake_MockReader');
+        Phake::when($this->mockReader)->getStubMapper($this->anything())->thenReturn($this->stubMapper);
+        Phake::when($this->mockReader)->getDefaultAnswer($this->anything())->thenReturn($this->defaultAnswer);
+
+        $this->handler = new Phake_ClassGenerator_InvocationHandler_StubCaller($this->mockReader);
+    }
+
+    public function testImplementIInvocationHandler()
+    {
+        $this->assertInstanceOf('Phake_ClassGenerator_InvocationHandler_IInvocationHandler', $this->handler);
+    }
+
+    public function testStubIsPulled()
+    {
+        $ref = array('bar');
+        $this->handler->invoke($this->mock, 'foo', $ref, $ref);
+
+        Phake::verify($this->stubMapper)->getStubByCall('foo', array('bar'));
+    }
+
+    public function testNonDelegatedAnswerReturned()
+    {
+        $ref = array('bar');
+
+        $this->assertEquals('42', $this->handler->invoke($this->mock, 'foo', $ref, $ref)->getAnswer());
+    }
+
+    public function testNonDelegatedDefaultAnswerReturned()
+    {
+        $ref = array('bar');
+        Phake::when($this->stubMapper)->getStubByCall(Phake::anyParameters())->thenReturn(null);
+
+        $this->assertEquals($this->defaultAnswer, $this->handler->invoke($this->mock, 'foo', $ref, $ref));
+        Phake::verify($this->stubMapper, Phake::times(1))->getStubByCall(Phake::anyParameters());
+    }
+
+    public function testMagicCallMethodChecksForImplicitStubFirst()
+    {
+        $ref = array('foo', array('bar'));
+        Phake::when($this->stubMapper)->getStubByCall(Phake::anyParameters())->thenReturn(null);
+
+        $this->handler->invoke($this->mock, '__call', $ref, $ref);
+
+        Phake::inOrder(
+            Phake::verify($this->stubMapper)->getStubByCall('foo', array('bar')),
+            Phake::verify($this->stubMapper)->getStubByCall('__call', array('foo', array('bar')))
+        );
+    }
+
+    public function testMagicCallMethodBypassesExplicitStub()
+    {
+        $ref = array('foo', array('bar'));
+
+        $this->handler->invoke($this->mock, '__call', $ref, $ref);
+
+        Phake::verify($this->stubMapper, Phake::times(0))->getStubByCall('__call', array('foo', array('bar')));
+    }
 }
-?>
+

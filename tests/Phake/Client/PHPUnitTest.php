@@ -45,54 +45,54 @@
 
 class Phake_Client_PHPUnitTest extends PHPUnit_Framework_TestCase
 {
-	private $client;
-	
-	public function setUp()
-	{
-		$this->client = new Phake_Client_PHPUnit();
-	}
-	
-	public function testImplementsIClient()
-	{
-		$this->assertInstanceOf('Phake_Client_IClient', $this->client);
-	}
-	
-	public function testProcessVerifierResultReturnsCallsOnTrue()
-	{
-		$result = new Phake_CallRecorder_VerifierResult(TRUE, array('call1'));
-		
-		$this->assertEquals(array('call1'), $this->client->processVerifierResult($result));
-	}
-	
-	public function testProcessVerifierThrowsExceptionOnFalse()
-	{
-		$result = new Phake_CallRecorder_VerifierResult(FALSE, array(), 'failure message');
-		
-		$this->setExpectedException('PHPUnit_Framework_ExpectationFailedException', 'failure message');
-		$this->client->processVerifierResult($result);
-	}
-	
-	public function testProcessVerifierIncrementsAssertionCount()
-	{
-		$result = new Phake_CallRecorder_VerifierResult(TRUE, array('call1'));
-		
-		$assertionCount = PHPUnit_Framework_Assert::getCount();
-		$this->client->processVerifierResult($result);
-		$newAssertionCount = PHPUnit_Framework_Assert::getCount();
-		
-		$this->assertGreaterThan($assertionCount, $newAssertionCount);
-	}
-	
-	/**
-	 * Utilizes a dummy constraint to indicate that an assertion has happened.
-	 */
-	public function testProcessObjectFreeze()
-	{
-		$assertionCount = PHPUnit_Framework_Assert::getCount();
-		$this->client->processObjectFreeze();
-		$newAssertionCount = PHPUnit_Framework_Assert::getCount();
-		
-		$this->assertGreaterThan($assertionCount, $newAssertionCount);
-	}
+    private $client;
+
+    public function setUp()
+    {
+        $this->client = new Phake_Client_PHPUnit();
+    }
+
+    public function testImplementsIClient()
+    {
+        $this->assertInstanceOf('Phake_Client_IClient', $this->client);
+    }
+
+    public function testProcessVerifierResultReturnsCallsOnTrue()
+    {
+        $result = new Phake_CallRecorder_VerifierResult(true, array('call1'));
+
+        $this->assertEquals(array('call1'), $this->client->processVerifierResult($result));
+    }
+
+    public function testProcessVerifierThrowsExceptionOnFalse()
+    {
+        $result = new Phake_CallRecorder_VerifierResult(false, array(), 'failure message');
+
+        $this->setExpectedException('PHPUnit_Framework_ExpectationFailedException', 'failure message');
+        $this->client->processVerifierResult($result);
+    }
+
+    public function testProcessVerifierIncrementsAssertionCount()
+    {
+        $result = new Phake_CallRecorder_VerifierResult(true, array('call1'));
+
+        $assertionCount = PHPUnit_Framework_Assert::getCount();
+        $this->client->processVerifierResult($result);
+        $newAssertionCount = PHPUnit_Framework_Assert::getCount();
+
+        $this->assertGreaterThan($assertionCount, $newAssertionCount);
+    }
+
+    /**
+     * Utilizes a dummy constraint to indicate that an assertion has happened.
+     */
+    public function testProcessObjectFreeze()
+    {
+        $assertionCount = PHPUnit_Framework_Assert::getCount();
+        $this->client->processObjectFreeze();
+        $newAssertionCount = PHPUnit_Framework_Assert::getCount();
+
+        $this->assertGreaterThan($assertionCount, $newAssertionCount);
+    }
 }
-?>
+

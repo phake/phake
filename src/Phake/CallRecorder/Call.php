@@ -49,78 +49,75 @@
  */
 class Phake_CallRecorder_Call
 {
-	/**
-	 * @var object
-	 */
-	private $object;
+    /**
+     * @var object
+     */
+    private $object;
 
-	/**
-	 * @var string
-	 */
-	private $method;
+    /**
+     * @var string
+     */
+    private $method;
 
-	/**
-	 * @var array
-	 */
-	private $arguments;
-	
-	/**
-	 * @var Phake_MockReader
-	 */
-	private $mockReader;
+    /**
+     * @var array
+     */
+    private $arguments;
 
-	/**
-	 * @param object $object - The object the method was called on
-	 * @param string $method - The method that was made
-	 * @param array $arguments
-	 * @param Phake_MockReader $mockReader
-	 */
-	public function __construct(Phake_IMock $object, $method, array $arguments, Phake_MockReader $mockReader)
-	{
-		$this->object = $object;
-		$this->method = $method;
-		$this->arguments = $arguments;
-		$this->mockReader = $mockReader;
-	}
+    /**
+     * @var Phake_MockReader
+     */
+    private $mockReader;
 
-	/**
-	 * @return object
-	 */
-	public function getObject()
-	{
-		return $this->object;
-	}
+    /**
+     * @param object|\Phake_IMock $object $object - The object the method was called on
+     * @param string              $method - The method that was made
+     * @param array               $arguments
+     * @param Phake_MockReader    $mockReader
+     */
+    public function __construct(Phake_IMock $object, $method, array $arguments, Phake_MockReader $mockReader)
+    {
+        $this->object     = $object;
+        $this->method     = $method;
+        $this->arguments  = $arguments;
+        $this->mockReader = $mockReader;
+    }
 
-	/**
-	 * @return string
-	 */
-	public function getMethod()
-	{
-		return $this->method;
-	}
+    /**
+     * @return object
+     */
+    public function getObject()
+    {
+        return $this->object;
+    }
 
-	/**
-	 * @return array
-	 */
-	public function getArguments()
-	{
-		return $this->arguments;
-	}
+    /**
+     * @return string
+     */
+    public function getMethod()
+    {
+        return $this->method;
+    }
 
-	/**
-	 * @return string
-	 */
-	public function __toString()
-	{
-		$converter = new Phake_String_Converter();
-		$arguments = array();
-		foreach ($this->arguments as $argument)
-		{
-			$arguments[] = $converter->convertToString($argument);
-		}
-		
-		return "{$this->mockReader->getName($this->object)}->{$this->method}(" . implode(', ', $arguments) . ")";
-	}
+    /**
+     * @return array
+     */
+    public function getArguments()
+    {
+        return $this->arguments;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        $converter = new Phake_String_Converter();
+        $arguments = array();
+        foreach ($this->arguments as $argument) {
+            $arguments[] = $converter->convertToString($argument);
+        }
+
+        return "{$this->mockReader->getName($this->object)}->{$this->method}(" . implode(', ', $arguments) . ")";
+    }
 }
-
-?>

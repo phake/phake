@@ -49,48 +49,48 @@
  */
 class Phake_Proxies_StubberProxyTest extends PHPUnit_Framework_TestCase
 {
-	/**
-	 * @var Phake_Proxies_StubberProxy
-	 */
-	private $proxy;
+    /**
+     * @var Phake_Proxies_StubberProxy
+     */
+    private $proxy;
 
-	/**
-	 * @var Phake_IMock
-	 */
-	private $stubbable;
+    /**
+     * @var Phake_IMock
+     */
+    private $stubbable;
 
-	/**
-	 * Sets up test fixture
-	 */
-	public function setUp()
-	{
-		$this->stubbable = $this->getMock('Phake_IMock');
-		$this->proxy = new Phake_Proxies_StubberProxy($this->stubbable, new Phake_Matchers_Factory(), new Phake_MockReader());
-	}
+    /**
+     * Sets up test fixture
+     */
+    public function setUp()
+    {
+        $this->stubbable = $this->getMock('Phake_IMock');
+        $this->proxy     = new Phake_Proxies_StubberProxy($this->stubbable, new Phake_Matchers_Factory(), new Phake_MockReader());
+    }
 
-	/**
-	 * Tests setting a stub on a method in the stubbable object
-	 */
-	public function testCall()
-	{
-		$answerBinder = $this->proxy->foo();
+    /**
+     * Tests setting a stub on a method in the stubbable object
+     */
+    public function testCall()
+    {
+        $answerBinder = $this->proxy->foo();
 
-		$this->assertThat($answerBinder, $this->isInstanceOf('Phake_Proxies_AnswerBinderProxy'));
+        $this->assertThat($answerBinder, $this->isInstanceOf('Phake_Proxies_AnswerBinderProxy'));
 
-		$this->assertAttributeInstanceOf('Phake_Stubber_AnswerBinder', 'binder', $answerBinder);
-	}
+        $this->assertAttributeInstanceOf('Phake_Stubber_AnswerBinder', 'binder', $answerBinder);
+    }
 
-	/**
-	 * Tests setting a stub with any parameters on a method in the stubbable object
-	 */
-	public function testGet()
-	{
-		$answerBinder = $this->proxy->foo;
+    /**
+     * Tests setting a stub with any parameters on a method in the stubbable object
+     */
+    public function testGet()
+    {
+        $answerBinder = $this->proxy->foo;
 
-		$this->assertThat($answerBinder, $this->isInstanceOf('Phake_Proxies_AnswerBinderProxy'));
+        $this->assertThat($answerBinder, $this->isInstanceOf('Phake_Proxies_AnswerBinderProxy'));
 
-		$this->assertAttributeInstanceOf('Phake_Stubber_AnswerBinder', 'binder', $answerBinder);
-	}
+        $this->assertAttributeInstanceOf('Phake_Stubber_AnswerBinder', 'binder', $answerBinder);
+    }
 }
 
-?>
+

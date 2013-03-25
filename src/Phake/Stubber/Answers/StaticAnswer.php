@@ -49,26 +49,26 @@
  */
 class Phake_Stubber_Answers_StaticAnswer implements Phake_Stubber_IAnswer
 {
-	/**
-	 * @var mixed
-	 */
-	private $answer;
+    /**
+     * @var mixed
+     */
+    private $answer;
 
-	/**
-	 * @param mixed $answer
-	 */
-	public function __construct($answer)
-	{
-		$this->answer = $answer;
-	}
+    /**
+     * @param mixed $answer
+     */
+    public function __construct($answer)
+    {
+        $this->answer = $answer;
+    }
 
-	/**
-	 * @return mixed
-	 */
-	public function getAnswer()
-	{
-		return $this->answer;
-	}
+    /**
+     * @return mixed
+     */
+    public function getAnswer()
+    {
+        return $this->answer;
+    }
 }
 
-?>
+

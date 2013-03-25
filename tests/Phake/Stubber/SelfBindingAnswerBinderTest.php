@@ -47,29 +47,29 @@
  */
 class Phake_Stubber_SelfBindingAnswerBinderTest extends PHPUnit_Framework_TestCase
 {
-	/**
-	 * @var Phake_Stubber_SelfBindingAnswerBinder
-	 */
-	private $binder;
+    /**
+     * @var Phake_Stubber_SelfBindingAnswerBinder
+     */
+    private $binder;
 
-	/**
-	 * Sets up the test fixture
-	 */
-	public function setUp()
-	{
-		$this->binder = new Phake_Stubber_SelfBindingAnswerBinder();
-	}
+    /**
+     * Sets up the test fixture
+     */
+    public function setUp()
+    {
+        $this->binder = new Phake_Stubber_SelfBindingAnswerBinder();
+    }
 
-	/**
-	 * Tests that the given answer is exposed.
-	 */
-	public function testGetAnswer()
-	{
-		$answer = $this->getMock('Phake_Stubber_IAnswer');
-		$this->assertSame($this->binder, $this->binder->bindAnswer($answer));
+    /**
+     * Tests that the given answer is exposed.
+     */
+    public function testGetAnswer()
+    {
+        $answer = $this->getMock('Phake_Stubber_IAnswer');
+        $this->assertSame($this->binder, $this->binder->bindAnswer($answer));
 
-		$this->assertSame($answer, $this->binder->getAnswer());
-	}
+        $this->assertSame($answer, $this->binder->getAnswer());
+    }
 }
 
-?>
+

@@ -45,30 +45,31 @@
 
 /**
  * Records calls to a mock object's call recorder for the magic __call method.
- * 
+ *
  * If the invocation isn't of __call...does nothing.
  */
 class Phake_ClassGenerator_InvocationHandler_MagicCallRecorder implements Phake_ClassGenerator_InvocationHandler_IInvocationHandler
 {
-	/**
-	 * @var Phake_MockReader
-	 */
-	private $mockReader;
-	
-	/**
-	 * @param Phake_MockReader $mockReader 
-	 */
-	public function __construct(Phake_MockReader $mockReader)
-	{
-		$this->mockReader = $mockReader;
-	}
+    /**
+     * @var Phake_MockReader
+     */
+    private $mockReader;
 
-	public function invoke(Phake_IMock $mock, $method, array $arguments, array &$argumentReference)
-	{
-		if ($method == '__call')
-		{
-			$this->mockReader->getCallRecorder($mock)->recordCall(new Phake_CallRecorder_Call($mock, $arguments[0], $arguments[1], $this->mockReader));
-		}
-	}
+    /**
+     * @param Phake_MockReader $mockReader
+     */
+    public function __construct(Phake_MockReader $mockReader)
+    {
+        $this->mockReader = $mockReader;
+    }
+
+    public function invoke(Phake_IMock $mock, $method, array $arguments, array &$argumentReference)
+    {
+        if ($method == '__call') {
+            $this->mockReader->getCallRecorder($mock)->recordCall(
+                new Phake_CallRecorder_Call($mock, $arguments[0], $arguments[1], $this->mockReader)
+            );
+        }
+    }
 }
-?>
+

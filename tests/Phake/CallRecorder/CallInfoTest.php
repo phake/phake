@@ -47,41 +47,41 @@
  */
 class Phake_CallRecorder_CallInfoTest extends PHPUnit_Framework_TestCase
 {
-	/**
-	 * @var Phake_CallRecorder_CallInfo
-	 */
-	private $callInfo;
+    /**
+     * @var Phake_CallRecorder_CallInfo
+     */
+    private $callInfo;
 
-	/**
-	 * @var Phake_CallRecorder_Call
-	 */
-	private $call;
+    /**
+     * @var Phake_CallRecorder_Call
+     */
+    private $call;
 
-	/**
-	 * @var Phake_CallRecorder_Position
-	 */
-	private $position;
+    /**
+     * @var Phake_CallRecorder_Position
+     */
+    private $position;
 
 
-	/**
-	 * Sets up the test fixture
-	 */
-	public function setUp()
-	{
-		$this->call = $this->getMock('Phake_CallRecorder_Call', array(), array(), '', FALSE);
-		$this->position = $this->getMock('Phake_CallRecorder_Position', array(), array(), '', FALSE);
+    /**
+     * Sets up the test fixture
+     */
+    public function setUp()
+    {
+        $this->call     = $this->getMock('Phake_CallRecorder_Call', array(), array(), '', false);
+        $this->position = $this->getMock('Phake_CallRecorder_Position', array(), array(), '', false);
 
-		$this->callInfo = new Phake_CallRecorder_CallInfo($this->call, $this->position);
-	}
+        $this->callInfo = new Phake_CallRecorder_CallInfo($this->call, $this->position);
+    }
 
-	/**
-	 * ... :P
-	 */
-	public function testGetters()
-	{
-		$this->assertSame($this->call, $this->callInfo->getCall());
-		$this->assertSame($this->position, $this->callInfo->getPosition());
-	}
+    /**
+     * ... :P
+     */
+    public function testGetters()
+    {
+        $this->assertSame($this->call, $this->callInfo->getCall());
+        $this->assertSame($this->position, $this->callInfo->getPosition());
+    }
 }
 
-?>
+

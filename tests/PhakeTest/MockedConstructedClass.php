@@ -44,29 +44,29 @@
 
 class PhakeTest_MockedConstructedClass
 {
-	private $prop1;
-	private $prop2;
-	private $prop3;
+    private $prop1;
+    private $prop2;
+    private $prop3;
 
-	public function __construct($prop1, $prop2, $prop3)
-	{
-		$this->prop1 = $prop1;
-		$this->prop2 = $prop2;
-		$this->prop3 = $prop3;
-	}
+    public function __construct($prop1, $prop2, $prop3)
+    {
+        $this->prop1 = $prop1;
+        $this->prop2 = $prop2;
+        $this->prop3 = $prop3;
+    }
 
-	public function getProp1()
-	{
-		return $this->prop1;
-	}
+    public function getProp1()
+    {
+        return $this->prop1;
+    }
 
-	public function getProp2()
-	{
-		return $this->prop2;
-	}
+    public function getProp2()
+    {
+        return $this->prop2;
+    }
 
-	public function getProp3()
-	{
-		return $this->prop3;
-	}
+    public function getProp3()
+    {
+        return $this->prop3;
+    }
 }

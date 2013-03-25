@@ -49,101 +49,93 @@
  */
 class Phake_Matchers_MethodMatcher implements Phake_Matchers_IMethodMatcher
 {
-	/**
-	 * @var string
-	 */
-	private $expectedMethod;
+    /**
+     * @var string
+     */
+    private $expectedMethod;
 
-	/**
-	 * @var array
-	 */
-	private $argumentMatchers;
+    /**
+     * @var array
+     */
+    private $argumentMatchers;
 
-	public function __construct($expectedMethod, array $argumentMatchers)
-	{
-		if (!$this->validateArgumentMatchers($argumentMatchers))
-		{
-			throw new InvalidArgumentException('All arguments passed must implement Phake_Matchers_IArgumentMatcher');
-		}
+    public function __construct($expectedMethod, array $argumentMatchers)
+    {
+        if (!$this->validateArgumentMatchers($argumentMatchers)) {
+            throw new InvalidArgumentException('All arguments passed must implement Phake_Matchers_IArgumentMatcher');
+        }
 
-		$this->expectedMethod = $expectedMethod;
-		$this->argumentMatchers = $argumentMatchers;
-	}
+        $this->expectedMethod   = $expectedMethod;
+        $this->argumentMatchers = $argumentMatchers;
+    }
 
-	/**
-	 * Determines if the given method and arguments match the configured method and argument matchers
-	 * in this object. Returns true on success, false otherwise.
-	 *
-	 * @param string $method
-	 * @param array $args
-	 * @return boolean
-	 */
-	public function matches($method, array &$args)
-	{
-		if ($this->expectedMethod == $method
-				&& $this->doArgumentsMatch($args))
-		{
-			return TRUE;
-		}
-		else
-		{
-			return FALSE;
-		}
-	}
+    /**
+     * Determines if the given method and arguments match the configured method and argument matchers
+     * in this object. Returns true on success, false otherwise.
+     *
+     * @param string $method
+     * @param array  $args
+     *
+     * @return boolean
+     */
+    public function matches($method, array &$args)
+    {
+        if ($this->expectedMethod == $method
+            && $this->doArgumentsMatch($args)
+        ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-	/**
-	 * Determines whether or not given arguments match the argument matchers configured in the object.
-	 *
-	 * @param array $args
-	 * @return boolean
-	 */
-	private function doArgumentsMatch(array &$args)
-	{
-		if (!empty($this->argumentMatchers) && $this->argumentMatchers[0] instanceof Phake_Matchers_AnyParameters)
-		{
-			return TRUE;
-		}
+    /**
+     * Determines whether or not given arguments match the argument matchers configured in the object.
+     *
+     * @param array $args
+     *
+     * @return boolean
+     */
+    private function doArgumentsMatch(array &$args)
+    {
+        if (!empty($this->argumentMatchers) && $this->argumentMatchers[0] instanceof Phake_Matchers_AnyParameters) {
+            return true;
+        }
 
-		if (count($args) != count($this->argumentMatchers))
-		{
-			return FALSE;
-		}
+        if (count($args) != count($this->argumentMatchers)) {
+            return false;
+        }
 
-		reset($this->argumentMatchers);
+        reset($this->argumentMatchers);
 
-		foreach ($args as &$arg)
-		{
-			$matcher = current($this->argumentMatchers);
-			/* @var $matcher Phake_Matchers_IArgumentMatcher */
-			if (!$matcher->matches($arg))
-			{
-				return FALSE;
-			}
+        foreach ($args as &$arg) {
+            $matcher = current($this->argumentMatchers);
+            /* @var $matcher Phake_Matchers_IArgumentMatcher */
+            if (!$matcher->matches($arg)) {
+                return false;
+            }
 
-			next($this->argumentMatchers);
-		}
+            next($this->argumentMatchers);
+        }
 
-		return TRUE;
-	}
+        return true;
+    }
 
-	/**
-	 * Validates the types of all elements in the given array are Phake_Matchers_IArgumentMatchers
-	 *
-	 * @param array $argumentMatchers
-	 * @return boolean
-	 */
-	private function validateArgumentMatchers(array $argumentMatchers)
-	{
-		foreach ($argumentMatchers as $matcher)
-		{
-			if (!$matcher instanceof Phake_Matchers_IArgumentMatcher)
-			{
-				return FALSE;
-			}
-		}
+    /**
+     * Validates the types of all elements in the given array are Phake_Matchers_IArgumentMatchers
+     *
+     * @param array $argumentMatchers
+     *
+     * @return boolean
+     */
+    private function validateArgumentMatchers(array $argumentMatchers)
+    {
+        foreach ($argumentMatchers as $matcher) {
+            if (!$matcher instanceof Phake_Matchers_IArgumentMatcher) {
+                return false;
+            }
+        }
 
-		return TRUE;
-	}
+        return true;
+    }
 }
-
-?>

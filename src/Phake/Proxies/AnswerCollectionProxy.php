@@ -49,85 +49,93 @@
  */
 class Phake_Proxies_AnswerCollectionProxy implements Phake_Stubber_IAnswerContainer
 {
-	/**
-	 * @var Phake_Stubber_AnswerCollection
-	 */
-	private $collection;
+    /**
+     * @var Phake_Stubber_AnswerCollection
+     */
+    private $collection;
 
-	/**
-	 * @param Phake_Stubber_AnswerCollection $collection
-	 */
-	public function __construct(Phake_Stubber_AnswerCollection $collection)
-	{
-		$this->collection = $collection;
-	}
-	
-	/**
-	 * Binds a static answer to the method and object in the proxied binder.
-	 * @param mixed $value
-	 * @return Phake_Proxies_AnswerCollectionProxy
-	 */
-	public function thenReturn($value)
-	{
-		$this->collection->addAnswer(new Phake_Stubber_Answers_StaticAnswer($value));
-		return $this;
-	}
+    /**
+     * @param Phake_Stubber_AnswerCollection $collection
+     */
+    public function __construct(Phake_Stubber_AnswerCollection $collection)
+    {
+        $this->collection = $collection;
+    }
 
-	/**
-	 * Binds a Lambda answer to the method
-	 * @param callback $value
-	 * @return Phake_Proxies_AnswerCollectionProxy
-	 */
-	public function thenGetReturnByLambda($value)
-	{
-		if (!is_callable($value))
-			throw new InvalidArgumentException("Given lambda is not callable");
+    /**
+     * Binds a static answer to the method and object in the proxied binder.
+     *
+     * @param mixed $value
+     *
+     * @return Phake_Proxies_AnswerCollectionProxy
+     */
+    public function thenReturn($value)
+    {
+        $this->collection->addAnswer(new Phake_Stubber_Answers_StaticAnswer($value));
+        return $this;
+    }
 
-		$this->collection->addAnswer(new Phake_Stubber_Answers_LambdaAnswer($value));
+    /**
+     * Binds a Lambda answer to the method
+     *
+     * @param callback $value
+     *
+     * @throws InvalidArgumentException
+     * @return Phake_Proxies_AnswerCollectionProxy
+     */
+    public function thenGetReturnByLambda($value)
+    {
+        if (!is_callable($value)) {
+            throw new InvalidArgumentException("Given lambda is not callable");
+        }
 
-		return $this;
-	}
+        $this->collection->addAnswer(new Phake_Stubber_Answers_LambdaAnswer($value));
 
-	/**
-	 * Binds a delegated call that will call a given method's parent.
-	 * @return Phake_Proxies_AnswerCollectionProxy
-	 */
-	public function thenCallParent()
-	{
-		$this->collection->addAnswer(new Phake_Stubber_Answers_ParentDelegate());
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Binds an exception answer to the method and object in the proxied binder.
-	 *
-	 * @param Exception $value
-	 * @return Phake_Proxies_AnswerCollectionProxy
-	 */
-	public function thenThrow(Exception $value)
-	{
-		$this->collection->addAnswer(new Phake_Stubber_Answers_ExceptionAnswer($value));
-		return $this;
-	}
+    /**
+     * Binds a delegated call that will call a given method's parent.
+     * @return Phake_Proxies_AnswerCollectionProxy
+     */
+    public function thenCallParent()
+    {
+        $this->collection->addAnswer(new Phake_Stubber_Answers_ParentDelegate());
+        return $this;
+    }
 
-	/**
-	 * Binds a delegated call that will call a given method's parent while capturing that value to the passed in variable.
-	 * @param mixed $captor
-	 * @return Phake_Proxies_AnswerCollectionProxy
-	 */
-	public function captureReturnTo(&$captor)
-	{
-		$this->collection->addAnswer(new Phake_Stubber_Answers_ParentDelegate($captor));
-		return $this;
-	}
+    /**
+     * Binds an exception answer to the method and object in the proxied binder.
+     *
+     * @param Exception $value
+     *
+     * @return Phake_Proxies_AnswerCollectionProxy
+     */
+    public function thenThrow(Exception $value)
+    {
+        $this->collection->addAnswer(new Phake_Stubber_Answers_ExceptionAnswer($value));
+        return $this;
+    }
 
-	/**
-	 * Returns an answer from the container
-	 * @return Phake_Stubber_IAnswer
-	 */
-	public function getAnswer()
-	{
-		return $this->collection->getAnswer();
-	}
+    /**
+     * Binds a delegated call that will call a given method's parent while capturing that value to the passed in variable.
+     *
+     * @param mixed $captor
+     *
+     * @return Phake_Proxies_AnswerCollectionProxy
+     */
+    public function captureReturnTo(&$captor)
+    {
+        $this->collection->addAnswer(new Phake_Stubber_Answers_ParentDelegate($captor));
+        return $this;
+    }
+
+    /**
+     * Returns an answer from the container
+     * @return Phake_Stubber_IAnswer
+     */
+    public function getAnswer()
+    {
+        return $this->collection->getAnswer();
+    }
 }
-?>

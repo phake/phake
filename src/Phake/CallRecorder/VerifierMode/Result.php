@@ -45,21 +45,23 @@
 
 class Phake_CallRecorder_VerifierMode_Result
 {
-	private $verified;
-	
-	private $failureDescription;
-	
-	function __construct($verified, $failureDescription) {
-		$this->verified = $verified;
-		$this->failureDescription = $failureDescription;
-	}
-	
-	public function getVerified() {
-		return $this->verified;
-	}
+    private $verified;
 
-	public function getFailureDescription() {
-		return $this->failureDescription;
-	}
+    private $failureDescription;
+
+    function __construct($verified, $failureDescription)
+    {
+        $this->verified           = $verified;
+        $this->failureDescription = $failureDescription;
+    }
+
+    public function getVerified()
+    {
+        return $this->verified;
+    }
+
+    public function getFailureDescription()
+    {
+        return $this->failureDescription;
+    }
 }
-?>

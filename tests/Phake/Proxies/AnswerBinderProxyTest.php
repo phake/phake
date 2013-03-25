@@ -49,110 +49,125 @@
  */
 class Phake_Proxies_AnswerBinderProxyTest extends PHPUnit_Framework_TestCase
 {
-	/**
-	 * @var Phake_Proxies_AnswerBinderProxy
-	 */
-	private $proxy;
+    /**
+     * @var Phake_Proxies_AnswerBinderProxy
+     */
+    private $proxy;
 
-	/**
-	 * @var Phake_Stubber_AnswerBinder
-	 */
-	private $binder;
+    /**
+     * @var Phake_Stubber_AnswerBinder
+     */
+    private $binder;
 
-	/**
-	 * Sets up the test fixture
-	 */
-	public function setUp()
-	{
-		$this->binder = $this->getMock('Phake_Stubber_AnswerBinder', array(), array(), '', FALSE);
-		$this->proxy = new Phake_Proxies_AnswerBinderProxy($this->binder);
-	}
+    /**
+     * Sets up the test fixture
+     */
+    public function setUp()
+    {
+        $this->binder = $this->getMock('Phake_Stubber_AnswerBinder', array(), array(), '', false);
+        $this->proxy  = new Phake_Proxies_AnswerBinderProxy($this->binder);
+    }
 
-	/**
-	 * Tests the thenReturn functionality of the proxy.
-	 *
-	 * It should result in the binder being called with a static answer.
-	 *
-	 * @todo we need argument capturing so I can make sure the answer matches.
-	 */
-	public function testThenReturn()
-	{
-		$this->binder->expects($this->once())
-				->method('bindAnswer')
-				->with($this->logicalAnd($this->isInstanceOf('Phake_Stubber_Answers_StaticAnswer'), $this->attributeEqualTo('answer', 42)))
-				->will($this->returnValue($this->binder));
+    /**
+     * Tests the thenReturn functionality of the proxy.
+     *
+     * It should result in the binder being called with a static answer.
+     *
+     * @todo we need argument capturing so I can make sure the answer matches.
+     */
+    public function testThenReturn()
+    {
+        $this->binder->expects($this->once())
+            ->method('bindAnswer')
+            ->with(
+                $this->logicalAnd(
+                    $this->isInstanceOf('Phake_Stubber_Answers_StaticAnswer'),
+                    $this->attributeEqualTo('answer', 42)
+                )
+            )
+            ->will($this->returnValue($this->binder));
 
-		$this->assertSame($this->binder, $this->proxy->thenReturn(42));
-	}
-	
-	/**
-	 * Tests the thenGetReturnByLambda functionality of the proxy
-	 *
-	 * It should result in the binder being called with a lambda answer
-	 */
-	public function testThenGetReturnByLambda()
-	{
-		$func = create_function('$arg1', 'return $arg1;');
-		
-		$this->binder->expects($this->once())
-				->method('bindAnswer')
-				->with($this->logicalAnd($this->isInstanceOf('Phake_Stubber_Answers_LambdaAnswer'), $this->attributeEqualTo('answerLambda', $func)))
-				->will($this->returnValue($this->binder));
+        $this->assertSame($this->binder, $this->proxy->thenReturn(42));
+    }
 
-		$this->assertSame($this->binder, $this->proxy->thenGetReturnByLambda($func));	
-	}
-	
-	/**
-	 * Tests that thenGetReturnByLambda throws an exception if the given lambda is not callable
-	 */
-	public function testThenGetReturnByLambdaThrowsExceptionForUncallableLambda()
-	{
-		$this->setExpectedException('InvalidArgumentException');
-        
-		$func = 'some_unknown_function';
-		$this->proxy->thenGetReturnByLambda($func);
-	}
-	/**
-	 * Tests the thenCallParent functionality of the proxy
-	 */
-	public function testThenCallParent()
-	{
-		$this->binder->expects($this->once())
-				->method('bindAnswer')
-				->with($this->isInstanceOf('Phake_Stubber_Answers_ParentDelegate'))
-				->will($this->returnValue($this->binder));
+    /**
+     * Tests the thenGetReturnByLambda functionality of the proxy
+     *
+     * It should result in the binder being called with a lambda answer
+     */
+    public function testThenGetReturnByLambda()
+    {
+        $func = create_function('$arg1', 'return $arg1;');
 
-		$this->assertSame($this->binder, $this->proxy->thenCallParent());
-	}
+        $this->binder->expects($this->once())
+            ->method('bindAnswer')
+            ->with(
+                $this->logicalAnd(
+                    $this->isInstanceOf('Phake_Stubber_Answers_LambdaAnswer'),
+                    $this->attributeEqualTo('answerLambda', $func)
+                )
+            )
+            ->will($this->returnValue($this->binder));
 
-	/**
-	 * Tests that captureReturnTo does it's thing
-	 */
-	public function testCaptureReturnTo()
-	{
-		$this->binder->expects($this->once())
-				->method('bindAnswer')
-				->with($this->isInstanceOf('Phake_Stubber_Answers_ParentDelegate'))
-				->will($this->returnValue($this->binder));
+        $this->assertSame($this->binder, $this->proxy->thenGetReturnByLambda($func));
+    }
 
-		$this->assertSame($this->binder, $this->proxy->captureReturnTo($var));
-	}
+    /**
+     * Tests that thenGetReturnByLambda throws an exception if the given lambda is not callable
+     */
+    public function testThenGetReturnByLambdaThrowsExceptionForUncallableLambda()
+    {
+        $this->setExpectedException('InvalidArgumentException');
 
-	/**
-	 * Tests the thenThrow functionality of the proxy.
-	 */
-	public function testThenThrow()
-	{
-		$exception = new RuntimeException();
+        $func = 'some_unknown_function';
+        $this->proxy->thenGetReturnByLambda($func);
+    }
 
-		$this->binder->expects($this->once())
-				->method('bindAnswer')
-				->with($this->logicalAnd($this->isInstanceOf('Phake_Stubber_Answers_ExceptionAnswer'),
-			$this->attributeEqualTo('answer', $exception)))
-				->will($this->returnValue($this->binder));
+    /**
+     * Tests the thenCallParent functionality of the proxy
+     */
+    public function testThenCallParent()
+    {
+        $this->binder->expects($this->once())
+            ->method('bindAnswer')
+            ->with($this->isInstanceOf('Phake_Stubber_Answers_ParentDelegate'))
+            ->will($this->returnValue($this->binder));
 
-		$this->assertSame($this->binder, $this->proxy->thenThrow($exception));
-	}
+        $this->assertSame($this->binder, $this->proxy->thenCallParent());
+    }
+
+    /**
+     * Tests that captureReturnTo does it's thing
+     */
+    public function testCaptureReturnTo()
+    {
+        $this->binder->expects($this->once())
+            ->method('bindAnswer')
+            ->with($this->isInstanceOf('Phake_Stubber_Answers_ParentDelegate'))
+            ->will($this->returnValue($this->binder));
+
+        $this->assertSame($this->binder, $this->proxy->captureReturnTo($var));
+    }
+
+    /**
+     * Tests the thenThrow functionality of the proxy.
+     */
+    public function testThenThrow()
+    {
+        $exception = new RuntimeException();
+
+        $this->binder->expects($this->once())
+            ->method('bindAnswer')
+            ->with(
+                $this->logicalAnd(
+                    $this->isInstanceOf('Phake_Stubber_Answers_ExceptionAnswer'),
+                    $this->attributeEqualTo('answer', $exception)
+                )
+            )
+            ->will($this->returnValue($this->binder));
+
+        $this->assertSame($this->binder, $this->proxy->thenThrow($exception));
+    }
 }
 
-?>
+
