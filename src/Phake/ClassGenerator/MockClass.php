@@ -143,20 +143,24 @@ class Phake_ClassGenerator_MockClass
     {
         $extends    = '';
         $implements = '';
-        $mockedInterfaces = array();
-
-        if (class_exists($mockedClassName, true)) {
-            $extends = "extends {$mockedClassName}";
-        } elseif (interface_exists($mockedClassName, true) && $mockedClassName != 'Phake_IMock') {
-            $implements = ", {$mockedClassName}";
-
-            if (preg_match('/^\\\\?Traversable$/i', $mockedClassName)) {
-                $implements = ", IteratorAggregate";
-                $mockedInterfaces = array(new ReflectionClass('IteratorAggregate'));
-            }
-        }
+        $interfaces = array();
 
         $mockedClass = new ReflectionClass($mockedClassName);
+
+        if (!$mockedClass->isInterface()) {
+            $extends = "extends {$mockedClassName}";
+        }
+        elseif ($mockedClassName != 'Phake_IMock') {
+            $implements = ", $mockedClassName";
+
+            if ($mockedClass->implementsInterface('Traversable') &&
+                !$mockedClass->implementsInterface('Iterator') &&
+                !$mockedClass->implementsInterface('IteratorAggregate')
+            ) {
+                $implements = ', IteratorAggregate';
+                $interfaces = array('IteratorAggregate');
+            }
+        }
 
         $classDef = "
 class {$newClassName} {$extends}
@@ -204,7 +208,7 @@ class {$newClassName} {$extends}
 	
 	public function __destruct() {}
 
-	{$this->generateMockedMethods($mockedClass, $mockedInterfaces)}
+	{$this->generateMockedMethods($mockedClass, $interfaces)}
 }
 ";
 
@@ -256,7 +260,7 @@ class {$newClassName} {$extends}
         }
 
         foreach ($mockedInterfaces as $interface) {
-            $methodDefs .= $this->generateMockedMethods($interface);
+            $methodDefs .= $this->generateMockedMethods(new ReflectionClass($interface));
         }
 
         return $methodDefs;

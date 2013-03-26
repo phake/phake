@@ -577,6 +577,8 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
         $mockedInterface = 'Traversable';
 
         $this->classGen->generate($newClassName, $mockedInterface);
+
+        $this->assertInstanceOf('Traversable', Phake::mock($newClassName));
     }
 }
 
