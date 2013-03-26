@@ -104,6 +104,8 @@ class Phake_Proxies_VerifierProxy
      *
      * @param string $method
      * @param array  $arguments
+     *
+     * @return Phake_CallRecorder_VerifierResult
      */
     public function __call($method, array $arguments)
     {
@@ -113,5 +115,23 @@ class Phake_Proxies_VerifierProxy
         $result = $this->verifier->verifyCall($expectation);
 
         return $this->client->processVerifierResult($result);
+    }
+
+    /**
+     * A magic call to instantiate a Verifier Result that matches any parameters.
+     *
+     * @param string $method
+     *
+     * @return Phake_CallRecorder_VerifierResult
+     */
+    public function __get($method)
+    {
+        $obj = $this->verifier->getObject();
+
+        if (method_exists($obj, '__get') && !method_exists($obj, $method)) {
+            return $this->__call('__get', array($method));
+        }
+
+        return $this->__call($method, array(new Phake_Matchers_AnyParameters));
     }
 }

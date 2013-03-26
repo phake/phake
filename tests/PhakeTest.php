@@ -136,6 +136,18 @@ class PhakeTest extends PHPUnit_Framework_TestCase
     /**
      * Tests that a stub method can be defined with shorthand notation.
      */
+    public function testShorthandVerify()
+    {
+        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock->foo();
+        $mock->foo('bar');
+
+        Phake::verify($mock, Phake::times(2))->foo;
+    }
+
+    /**
+     * Tests that a stub method can be defined with shorthand notation.
+     */
     public function testShorthandStub()
     {
         $mock = Phake::mock('PhakeTest_MockedClass');
@@ -1210,9 +1222,12 @@ class PhakeTest extends PHPUnit_Framework_TestCase
     public function testGetOnMockedClass()
     {
         $mock = Phake::mock('PhakeTest_MagicClass');
-        Phake::when($mock)->__get('myId')->thenReturn(500);
+        Phake::when($mock)->__get('myId')->thenReturn(500)->thenReturn(501);
 
         $this->assertEquals(500, $mock->myId);
+        $this->assertEquals(501, $mock->myId);
+
+        Phake::verify($mock, Phake::times(2))->__get('myId');
     }
 
     public function testCallOrderInObjectFailsWithPHPUnit()
