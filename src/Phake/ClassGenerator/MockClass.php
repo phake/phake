@@ -149,8 +149,7 @@ class Phake_ClassGenerator_MockClass
 
         if (!$mockedClass->isInterface()) {
             $extends = "extends {$mockedClassName}";
-        }
-        elseif ($mockedClassName != 'Phake_IMock') {
+        } elseif ($mockedClassName != 'Phake_IMock') {
             $implements = ", $mockedClassName";
 
             if ($mockedClass->implementsInterface('Traversable') &&
@@ -164,51 +163,60 @@ class Phake_ClassGenerator_MockClass
 
         $classDef = "
 class {$newClassName} {$extends}
-	implements Phake_IMock {$implements}
+    implements Phake_IMock {$implements}
 {
-	public \$__PHAKE_callRecorder;
+    public \$__PHAKE_callRecorder;
 
-	public \$__PHAKE_stubMapper;
+    public \$__PHAKE_stubMapper;
 
-	public \$__PHAKE_defaultAnswer;
+    public \$__PHAKE_defaultAnswer;
 
-	public \$__PHAKE_isFrozen;
-	
-	public \$__PHAKE_name;
-	
-	private \$__PHAKE_handlerChain;
+    public \$__PHAKE_isFrozen;
 
-	public function __construct(Phake_CallRecorder_Recorder \$callRecorder, Phake_Stubber_StubMapper \$stubMapper, Phake_Stubber_IAnswer \$defaultAnswer, array \$constructorArgs = null)
-	{
-		\$this->__PHAKE_callRecorder = \$callRecorder;
-		\$this->__PHAKE_stubMapper = \$stubMapper;
-		\$this->__PHAKE_defaultAnswer = \$defaultAnswer;
-		\$this->__PHAKE_isFrozen = FALSE;
-		\$this->__PHAKE_name = '{$mockedClassName}';
-		\$this->__PHAKE_handlerChain = new Phake_ClassGenerator_InvocationHandler_Composite(array(
-			new Phake_ClassGenerator_InvocationHandler_FrozenObjectCheck(new Phake_MockReader()),
-			new Phake_ClassGenerator_InvocationHandler_CallRecorder(new Phake_MockReader()),
-			new Phake_ClassGenerator_InvocationHandler_MagicCallRecorder(new Phake_MockReader()),
-			new Phake_ClassGenerator_InvocationHandler_StubCaller(new Phake_MockReader()),
-		));
+    public \$__PHAKE_name;
 
-		
-		\$this->__PHAKE_stubMapper->mapStubToMatcher(
-			new Phake_Stubber_AnswerCollection(new Phake_Stubber_Answers_StaticAnswer('Mock for {$mockedClassName}')), 
-			new Phake_Matchers_MethodMatcher('__toString', array())
-		);
+    private \$__PHAKE_handlerChain;
 
-		\$this->__PHAKE_stubMapper->mapStubToMatcher(
-			new Phake_Stubber_AnswerCollection(new Phake_Stubber_Answers_StaticAnswer(NULL)),
-			new Phake_Matchers_AbstractMethodMatcher(new ReflectionClass('{$mockedClassName}'))
-		);
-			
-		{$this->getConstructorChaining($mockedClass)}
-	}
-	
-	public function __destruct() {}
+    public function __construct(/* Phake_CallRecorder_Recorder \$callRecorder, Phake_Stubber_StubMapper \$stubMapper,
+        Phake_Stubber_IAnswer \$defaultAnswer, array \$constructorArgs = null */)
+    {
+        if ((\$callRecorder  = func_get_arg(0) and \$callRecorder instanceof Phake_CallRecorder_Recorder) &&
+            (\$stubMapper    = func_get_arg(1) and \$stubMapper instanceof Phake_Stubber_StubMapper) &&
+            (\$defaultAnswer = func_get_arg(2) and \$defaultAnswer instanceof Phake_Stubber_IAnswer)
+        ) {
+            \$constructorArgs = func_get_arg(3) ?: null;
 
-	{$this->generateMockedMethods($mockedClass, $interfaces)}
+            \$this->__PHAKE_callRecorder  = \$callRecorder;
+            \$this->__PHAKE_stubMapper    = \$stubMapper;
+            \$this->__PHAKE_defaultAnswer = \$defaultAnswer;
+            \$this->__PHAKE_isFrozen      = FALSE;
+            \$this->__PHAKE_name          = '{$mockedClassName}';
+            \$this->__PHAKE_handlerChain  = new Phake_ClassGenerator_InvocationHandler_Composite(array(
+                 new Phake_ClassGenerator_InvocationHandler_FrozenObjectCheck(new Phake_MockReader()),
+                 new Phake_ClassGenerator_InvocationHandler_CallRecorder(new Phake_MockReader()),
+                 new Phake_ClassGenerator_InvocationHandler_MagicCallRecorder(new Phake_MockReader()),
+                 new Phake_ClassGenerator_InvocationHandler_StubCaller(new Phake_MockReader()),
+            ));
+
+            \$this->__PHAKE_stubMapper->mapStubToMatcher(
+                new Phake_Stubber_AnswerCollection(new Phake_Stubber_Answers_StaticAnswer('Mock for {$mockedClassName}')),
+                new Phake_Matchers_MethodMatcher('__toString', array())
+            );
+
+            \$this->__PHAKE_stubMapper->mapStubToMatcher(
+                new Phake_Stubber_AnswerCollection(new Phake_Stubber_Answers_StaticAnswer(NULL)),
+                new Phake_Matchers_AbstractMethodMatcher(new ReflectionClass('{$mockedClassName}'))
+            );
+        } else {
+            \$constructorArgs = func_get_args();
+        }
+
+        {$this->getConstructorChaining($mockedClass)}
+    }
+
+    public function __destruct() {}
+
+    {$this->generateMockedMethods($mockedClass, $interfaces)}
 }
 ";
 
@@ -276,11 +284,11 @@ class {$newClassName} {$extends}
     {
         return $originalClass->hasMethod('__construct') ? "
 
-		if (is_array(\$constructorArgs))
-		{
-			call_user_func_array(array(\$this, 'parent::__construct'), \$constructorArgs);
-		}
-		" : "";
+        if (is_array(\$constructorArgs))
+        {
+            call_user_func_array(array(\$this, 'parent::__construct'), \$constructorArgs);
+        }
+        " : "";
     }
 
     /**
@@ -300,30 +308,35 @@ class {$newClassName} {$extends}
         $reference = $method->returnsReference() ? '&' : '';
 
         $methodDef = "
-	{$modifiers} function {$reference}{$method->getName()}({$this->generateMethodParameters($method)})
-	{
-		\$args = array();
-		{$this->copyMethodParameters($method)}
-		
-		\$funcArgs = func_get_args();
-		\$answer = \$this->__PHAKE_handlerChain->invoke(\$this, '{$method->getName()}', \$funcArgs, \$args);
-		
-		if (\$answer instanceof Phake_Stubber_Answers_IDelegator)
-		{
-			\$delegate = \$answer->getAnswer();
-			\$callback = \$delegate->getCallBack(\$this, '{$method->getName()}', \$args);
-			\$arguments = \$delegate->getArguments('{$method->getName()}', \$args);
+    {$modifiers} function {$reference}{$method->getName()}({$this->generateMethodParameters($method)})
+    {
+        if (!\$this->__PHAKE_handlerChain) {
+            \$returnAnswer = call_user_func_array('parent::{$method->getName()}', func_get_args());
+            return \$returnAnswer;
+        }
 
-			\$realAnswer = call_user_func_array(\$callback, \$arguments);
-			\$answer->processAnswer(\$realAnswer);
-			return \$realAnswer;
-		}
-		else
-		{
-			\$returnAnswer = \$answer->getAnswer();
-			return \$returnAnswer;
-		}
-	}
+        \$args = array();
+        {$this->copyMethodParameters($method)}
+        
+        \$funcArgs = func_get_args();
+        \$answer = \$this->__PHAKE_handlerChain->invoke(\$this, '{$method->getName()}', \$funcArgs, \$args);
+        
+        if (\$answer instanceof Phake_Stubber_Answers_IDelegator)
+        {
+            \$delegate = \$answer->getAnswer();
+            \$callback = \$delegate->getCallBack(\$this, '{$method->getName()}', \$args);
+            \$arguments = \$delegate->getArguments('{$method->getName()}', \$args);
+
+            \$realAnswer = call_user_func_array(\$callback, \$arguments);
+            \$answer->processAnswer(\$realAnswer);
+            return \$realAnswer;
+        }
+        else
+        {
+            \$returnAnswer = \$answer->getAnswer();
+            return \$returnAnswer;
+        }
+    }
 ";
 
         return $methodDef;
