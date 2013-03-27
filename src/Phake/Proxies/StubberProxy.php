@@ -96,11 +96,19 @@ class Phake_Proxies_StubberProxy
      *
      * @param string $method
      *
+     * @throws InvalidArgumentException if $method is not a valid parameter/method name
      * @return Phake_Proxies_AnswerBinderProxy
      */
     public function __get($method)
     {
-        if (method_exists($this->obj, '__get') && (is_object($method) || !method_exists($this->obj, $method))) {
+        if (is_string($method) && preg_match('/^\d/', $method)) {
+            throw new InvalidArgumentException('String parameter to __get() cannot start with an integer');
+        } elseif (!is_string($method) && !is_object($method)) { // assume an object is a matcher
+            $message = sprintf('Parameter to __get() must be a string, %s given', gettype($method));
+            throw new InvalidArgumentException($message);
+        }
+
+        if (method_exists($this->obj, '__get') && !(is_string($method) && method_exists($this->obj, $method))) {
             return $this->__call('__get', array($method));
         }
 

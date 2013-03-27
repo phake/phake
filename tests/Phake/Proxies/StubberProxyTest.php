@@ -100,4 +100,24 @@ class Phake_Proxies_StubberProxyTest extends PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('Phake_Proxies_AnswerBinderProxy', $answerBinder);
     }
+
+    /**
+     * @expectedException InvalidArgumentException
+     * @dataProvider magicGetInvalidData
+     */
+    public function testMagicGetWithInvalidData($invalidData)
+    {
+        $mock = Phake::mock('PhakeTest_MagicClass');
+        $proxy = new Phake_Proxies_StubberProxy($mock, new Phake_Matchers_Factory(), new Phake_MockReader());
+
+        $proxy->__get($invalidData);
+    }
+
+    public function magicGetInvalidData()
+    {
+        return array(
+            'integer' => array(1),
+            'invalid method/argument name' => array('1foo'),
+        );
+    }
 }
