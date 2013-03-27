@@ -100,7 +100,7 @@ class Phake_Proxies_StubberProxy
      */
     public function __get($method)
     {
-        if (method_exists($this->obj, '__get') && !method_exists($this->obj, $method)) {
+        if (method_exists($this->obj, '__get') && (is_object($method) || !method_exists($this->obj, $method))) {
             return $this->__call('__get', array($method));
         }
 

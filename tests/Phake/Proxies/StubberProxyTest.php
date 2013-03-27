@@ -87,10 +87,17 @@ class Phake_Proxies_StubberProxyTest extends PHPUnit_Framework_TestCase
     {
         $answerBinder = $this->proxy->foo;
 
-        $this->assertThat($answerBinder, $this->isInstanceOf('Phake_Proxies_AnswerBinderProxy'));
-
+        $this->assertInstanceOf('Phake_Proxies_AnswerBinderProxy', $answerBinder);
         $this->assertAttributeInstanceOf('Phake_Stubber_AnswerBinder', 'binder', $answerBinder);
     }
+
+    public function testGetWithMatcher()
+    {
+        $mock = Phake::mock('PhakeTest_MagicClass');
+        $proxy = new Phake_Proxies_StubberProxy($mock, new Phake_Matchers_Factory(), new Phake_MockReader());
+
+        $answerBinder = $proxy->__get($this->anything());
+
+        $this->assertInstanceOf('Phake_Proxies_AnswerBinderProxy', $answerBinder);
+    }
 }
-
-
