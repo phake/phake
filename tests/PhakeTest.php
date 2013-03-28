@@ -1248,4 +1248,13 @@ class PhakeTest extends PHPUnit_Framework_TestCase
             Phake::verify($mock)->callInnerFunc()
         );
     }
+
+    public function testGetMockedClassAnythingMatcher()
+    {
+        $mock = Phake::mock('PhakeTest_MagicClass');
+
+        Phake::when($mock)->__get($this->anything())->thenReturn(500);
+
+        $this->assertEquals(500, $mock->myId);
+    }
 }
