@@ -153,6 +153,23 @@ class Phake_Proxies_VerifierProxyTest extends PHPUnit_Framework_TestCase
 
         Phake::verify($this->client)->processVerifierResult($result);
     }
+
+    /**
+     * @dataProvider magicGetInvalidData
+     */
+    public function testMagicGetWithInvalidData($invalidData, $exceptionContains)
+    {
+        $this->setExpectedException('InvalidArgumentException', $exceptionContains);
+        $this->proxy->__get($invalidData);
+    }
+
+    public function magicGetInvalidData()
+    {
+        return array(
+            array('1foo', 'cannot start with an integer'),
+            array(1,      'must be a string'),
+        );
+    }
 }
 
 

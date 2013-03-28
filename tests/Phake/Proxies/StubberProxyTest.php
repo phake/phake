@@ -102,22 +102,19 @@ class Phake_Proxies_StubberProxyTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
      * @dataProvider magicGetInvalidData
      */
-    public function testMagicGetWithInvalidData($invalidData)
+    public function testMagicGetWithInvalidData($invalidData, $exceptionContains)
     {
-        $mock = Phake::mock('PhakeTest_MagicClass');
-        $proxy = new Phake_Proxies_StubberProxy($mock, new Phake_Matchers_Factory(), new Phake_MockReader());
-
-        $proxy->__get($invalidData);
+        $this->setExpectedException('InvalidArgumentException', $exceptionContains);
+        $this->proxy->__get($invalidData);
     }
 
     public function magicGetInvalidData()
     {
         return array(
-            'integer' => array(1),
-            'invalid method/argument name' => array('1foo'),
+            array('1foo', 'cannot start with an integer'),
+            array(1,      'must be a string'),
         );
     }
 }
