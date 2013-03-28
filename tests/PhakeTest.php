@@ -1256,5 +1256,7 @@ class PhakeTest extends PHPUnit_Framework_TestCase
         Phake::when($mock)->__get($this->anything())->thenReturn(500);
 
         $this->assertEquals(500, $mock->myId);
+
+        Phake::verify($mock)->__get($this->anything());
     }
 }

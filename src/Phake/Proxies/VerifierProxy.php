@@ -118,9 +118,11 @@ class Phake_Proxies_VerifierProxy
     }
 
     /**
-     * A magic call to instantiate a Verifier Result that matches any parameters.
+     * A magic call to verify a call with any parameters.
      *
      * @param string $method
+     *
+     * @throws InvalidArgumentException if $method is not a valid parameter/method name
      *
      * @return Phake_CallRecorder_VerifierResult
      */
@@ -128,7 +130,16 @@ class Phake_Proxies_VerifierProxy
     {
         $obj = $this->verifier->getObject();
 
-        if (method_exists($obj, '__get') && !method_exists($obj, $method)) {
+        if (is_string($method) && ctype_digit($method[0])) {
+            throw new InvalidArgumentException('String parameter to __get() cannot start with an integer');
+        }
+
+        if (!is_string($method) && !is_object($method)) {
+            $message = sprintf('Parameter to __get() must be a string, %s given', gettype($method));
+            throw new InvalidArgumentException($message);
+        }
+
+        if (method_exists($obj, '__get') && !(is_string($method) && method_exists($obj, $method))) {
             return $this->__call('__get', array($method));
         }
 
