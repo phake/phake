@@ -143,13 +143,24 @@ class Phake_ClassGenerator_MockClass
     {
         $extends    = '';
         $implements = '';
-        if (class_exists($mockedClassName, true)) {
-            $extends = "extends {$mockedClassName}";
-        } elseif (interface_exists($mockedClassName, true) && $mockedClassName != 'Phake_IMock') {
-            $implements = ", {$mockedClassName}";
-        }
+        $interfaces = array();
 
         $mockedClass = new ReflectionClass($mockedClassName);
+
+        if (!$mockedClass->isInterface()) {
+            $extends = "extends {$mockedClassName}";
+        }
+        elseif ($mockedClassName != 'Phake_IMock') {
+            $implements = ", $mockedClassName";
+
+            if ($mockedClass->implementsInterface('Traversable') &&
+                !$mockedClass->implementsInterface('Iterator') &&
+                !$mockedClass->implementsInterface('IteratorAggregate')
+            ) {
+                $implements = ', IteratorAggregate';
+                $interfaces = array('IteratorAggregate');
+            }
+        }
 
         $classDef = "
 class {$newClassName} {$extends}
@@ -197,7 +208,7 @@ class {$newClassName} {$extends}
 	
 	public function __destruct() {}
 
-	{$this->generateMockedMethods($mockedClass)}
+	{$this->generateMockedMethods($mockedClass, $interfaces)}
 }
 ";
 
@@ -228,11 +239,12 @@ class {$newClassName} {$extends}
     /**
      * Generate mock implementations of all public and protected methods in the mocked class.
      *
-     * @param ReflectionClass $mockedClass
+     * @param ReflectionClass   $mockedClass
+     * @param ReflectionClass[] $mockedInterfaces
      *
      * @return string
      */
-    protected function generateMockedMethods(ReflectionClass $mockedClass)
+    protected function generateMockedMethods(ReflectionClass $mockedClass, array $mockedInterfaces = array())
     {
         $methodDefs = '';
         $filter     = ReflectionMethod::IS_ABSTRACT | ReflectionMethod::IS_PROTECTED | ReflectionMethod::IS_PUBLIC | ~ReflectionMethod::IS_FINAL;
@@ -247,11 +259,18 @@ class {$newClassName} {$extends}
             }
         }
 
+        foreach ($mockedInterfaces as $interface) {
+            $methodDefs .= $this->generateMockedMethods(new ReflectionClass($interface));
+        }
+
         return $methodDefs;
     }
 
     /**
      * Creates the constructor implementation
+     *
+     * @param ReflectionClass $originalClass
+     * @return string
      */
     protected function getConstructorChaining(ReflectionClass $originalClass)
     {
