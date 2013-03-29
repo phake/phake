@@ -149,16 +149,19 @@ class Phake_ClassGenerator_MockClass
 
         if (!$mockedClass->isInterface()) {
             $extends = "extends {$mockedClassName}";
-        }
-        elseif ($mockedClassName != 'Phake_IMock') {
+        } elseif ($mockedClassName != 'Phake_IMock') {
             $implements = ", $mockedClassName";
 
             if ($mockedClass->implementsInterface('Traversable') &&
                 !$mockedClass->implementsInterface('Iterator') &&
                 !$mockedClass->implementsInterface('IteratorAggregate')
             ) {
-                $implements = ', IteratorAggregate';
-                $interfaces = array('IteratorAggregate');
+                if ($mockedClass->getName() == 'Traversable') {
+                    $implements = ', Iterator';
+                } else {
+                    $implements = ', Iterator'.$implements;
+                }
+                $interfaces = array('Iterator');
             }
         }
 
