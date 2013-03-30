@@ -169,6 +169,16 @@ class PHake_Matchers_MethodMatcherTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($matcher->matches('method', $arguments));
     }
 
+    public function testAnyParameterMatchingTrailingArgumentsOnly()
+    {
+        $matcher = new Phake_Matchers_MethodMatcher('method', array(new Phake_Matchers_EqualsMatcher(1), new Phake_Matchers_AnyParameters()));
+
+        $arguments = array(1, 2, 3);
+        $this->assertTrue($matcher->matches('method', $arguments));
+        $arguments = array(2, 3, 4);
+        $this->assertFalse($matcher->matches('method', $arguments));
+    }
+
     public function testSetterMatcher()
     {
         $matcher = new Phake_Matchers_MethodMatcher('method', array(new Phake_Matchers_ReferenceSetter(42)));
