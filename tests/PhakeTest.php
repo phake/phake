@@ -243,6 +243,24 @@ class PhakeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests passing no matcher to the verify method will correctly verify a call with same-as-default values.
+     */
+    public function testVerifyCallWithEqualsMatcherAndPassingDefaultValues()
+    {
+        $mock = Phake::mock('PhakeTest_MockedClass');
+
+        $mock->fooWithDefault(null);
+        $mock->fooWithTwoDefaults(null, null);
+        $mock->fooWithTwoDefaults('non-default', null);
+        $mock->fooWithSecondDefault('required', null);
+
+        Phake::verify($mock)->fooWithDefault();
+        Phake::verify($mock)->fooWithTwoDefaults();
+        Phake::verify($mock)->fooWithTwoDefaults('non-default');
+        Phake::verify($mock)->fooWithSecondDefault('required');
+    }
+
+    /**
      * Tests that we can implicitely indicate an equalTo matcher when we pass in a non-matcher value.
      */
     public function testVerifyCallWithDefaultMatcher()
@@ -331,6 +349,34 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(42, $mock->fooWithArgument('bar'));
         $this->assertNull($mock->fooWithArgument('test'));
+    }
+
+    /**
+     * Tests using an anyParameters argument matcher with a method stub
+     */
+    public function testStubWithAnyParametersMatcher()
+    {
+        $mock = Phake::mock('PhakeTest_MockedClass');
+
+        Phake::when($mock)->fooWithArgument(Phake::anyParameters(), Phake::equalTo('ignored'))->thenReturn(42);
+
+        $this->assertEquals(42, $mock->fooWithArgument('bar'));
+        $this->assertEquals(42, $mock->fooWithArgument('test'));
+    }
+
+    /**
+     * Tests using an anyParameters argument matcher after an equalTo matcher with a method stub
+     */
+    public function testStubWithAnyParametersMatcherTrailingArgumentsOnly()
+    {
+        $mock = Phake::mock('PhakeTest_MockedClass');
+
+        Phake::when($mock)->fooWithArgument(Phake::equalTo('bar'), Phake::anyParameters())->thenReturn(42);
+
+        $this->assertEquals(42, $mock->fooWithArgument('bar'));
+        $this->assertEquals(42, $mock->fooWithArgument('bar', 'anything'));
+        $this->assertNull($mock->fooWithArgument('not-bar'));
+        $this->assertNull($mock->fooWithArgument('not-bar', 'anything'));
     }
 
     /**
@@ -1000,7 +1046,6 @@ class PhakeTest extends PHPUnit_Framework_TestCase
     /**
      * Tests that Phake::anyParameters() really matches any invocation
      */
-
     public function testAnyParametersMatchesEverything()
     {
         $mock = Phake::mock('PhakeTest_MockedClass');
@@ -1013,6 +1058,20 @@ class PhakeTest extends PHPUnit_Framework_TestCase
         $mock->fooWithLotsOfParameters(3, 2, 1);
 
         Phake::verify($mock, Phake::times(6))->fooWithLotsOfParameters(Phake::anyParameters());
+    }
+
+    /**
+     * Tests that Phake::anyParameters() matches trailing arguments only
+     */
+    public function testAnyParametersMatchesTrailingArgumentsOnly()
+    {
+        $mock = Phake::mock('PhakeTest_MockedClass');
+
+        $mock->fooWithLotsOfParameters(1, 2, 3);
+        $mock->fooWithLotsOfParameters(1, 3, 2);
+        $mock->fooWithLotsOfParameters(2, 3, 1);
+
+        Phake::verify($mock, Phake::times(2))->fooWithLotsOfParameters(1, Phake::anyParameters());
     }
 
     /**
