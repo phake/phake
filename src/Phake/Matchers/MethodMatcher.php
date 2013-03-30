@@ -55,18 +55,32 @@ class Phake_Matchers_MethodMatcher implements Phake_Matchers_IMethodMatcher
     private $expectedMethod;
 
     /**
-     * @var array
+     * @var Phake_Matchers_IArgumentMatcher[]
      */
-    private $argumentMatchers;
+    private $argumentMatchers = array();
 
+    /**
+     * @var bool
+     */
+    private $hasAnyParametersMatcher = false;
+
+    /**
+     * @param string $expectedMethod
+     * @param array  $argumentMatchers
+     *
+     * @throws InvalidArgumentException
+     */
     public function __construct($expectedMethod, array $argumentMatchers)
     {
         if (!$this->validateArgumentMatchers($argumentMatchers)) {
             throw new InvalidArgumentException('All arguments passed must implement Phake_Matchers_IArgumentMatcher');
         }
 
-        $this->expectedMethod   = $expectedMethod;
-        $this->argumentMatchers = $argumentMatchers;
+        $this->expectedMethod = $expectedMethod;
+
+        foreach ($argumentMatchers as $argumentMatcher) {
+            $this->addMatcher($argumentMatcher);
+        }
     }
 
     /**
@@ -90,6 +104,10 @@ class Phake_Matchers_MethodMatcher implements Phake_Matchers_IMethodMatcher
      */
     public function addMatcher(Phake_Matchers_IArgumentMatcher $argumentMatcher)
     {
+        if ($argumentMatcher instanceof Phake_Matchers_AnyParameters) {
+            $this->hasAnyParametersMatcher = true;
+        }
+
         $this->argumentMatchers[] = $argumentMatcher;
     }
 
@@ -122,24 +140,20 @@ class Phake_Matchers_MethodMatcher implements Phake_Matchers_IMethodMatcher
      */
     private function doArgumentsMatch(array &$args)
     {
-        if (!empty($this->argumentMatchers) && $this->argumentMatchers[0] instanceof Phake_Matchers_AnyParameters) {
-            return true;
-        }
-
-        if (count($args) != count($this->argumentMatchers)) {
+        if (count($args) != count($this->argumentMatchers) && !$this->hasAnyParametersMatcher) {
             return false;
         }
 
-        reset($this->argumentMatchers);
+        foreach ($args as $index => &$arg) {
+            $matcher = $this->argumentMatchers[$index];
 
-        foreach ($args as &$arg) {
-            $matcher = current($this->argumentMatchers);
-            /* @var $matcher Phake_Matchers_IArgumentMatcher */
+            if ($matcher instanceof Phake_Matchers_AnyParameters) {
+                return true;
+            }
+
             if (!$matcher->matches($arg)) {
                 return false;
             }
-
-            next($this->argumentMatchers);
         }
 
         return true;
