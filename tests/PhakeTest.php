@@ -362,6 +362,21 @@ class PhakeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests using an anyParameters argument matcher between two equalTo matchers with a method stub
+     */
+    public function testStubWithAnyParametersMatcherInBetweenArguments()
+    {
+        $mock = Phake::mock('PhakeTest_MockedClass');
+
+        Phake::when($mock)->fooWithArgument(Phake::equalTo('bar'), Phake::anyParameters(), Phake::equalTo('cake'))->thenReturn(42);
+
+        $this->assertEquals(42, $mock->fooWithArgument('bar', 'cake'));
+        $this->assertEquals(42, $mock->fooWithArgument('bar', 'anything', 'cake'));
+        $this->assertNull($mock->fooWithArgument('bar'));
+        $this->assertNull($mock->fooWithArgument('cake'));
+    }
+
+    /**
      * Tests using an anyParameters argument matcher before an equalTo matcher with a method stub
      */
     public function testStubWithAnyParametersMatcherLeadingArgumentsOnly()
@@ -376,7 +391,7 @@ class PhakeTest extends PHPUnit_Framework_TestCase
         $this->assertNull($mock->fooWithArgument('anything', 'not-bar'));
     }
 
-    /**
+     /**
      * Tests using an implicit equalTo argument matcher with a method stub
      */
     public function testStubWithDefaultMatcher()
@@ -1077,7 +1092,7 @@ class PhakeTest extends PHPUnit_Framework_TestCase
     /**
      * Tests that Phake::anyParameters() matches in-between arguments only
      */
-    public function testAnyParametersMatchesInBetweenArgumentsOnly()
+    public function testAnyParametersMatchesInBetweenArguments()
     {
         $mock = Phake::mock('PhakeTest_MockedClass');
 

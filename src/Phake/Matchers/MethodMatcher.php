@@ -134,10 +134,6 @@ class Phake_Matchers_MethodMatcher implements Phake_Matchers_IMethodMatcher
         foreach ($args as $i => &$arg) {
             $matcher = $this->argumentMatchers[$i];
 
-            if (!$matcher->matches($arg)) {
-                return false;
-            }
-
             /**
              * AnyParameters matcher found, so match arguments in reverse order
              */
@@ -158,6 +154,10 @@ class Phake_Matchers_MethodMatcher implements Phake_Matchers_IMethodMatcher
                 }
 
                 return true;
+            }
+
+            if (!$matcher->matches($arg)) {
+                return false;
             }
         }
 
