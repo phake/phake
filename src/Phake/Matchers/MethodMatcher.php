@@ -124,19 +124,40 @@ class Phake_Matchers_MethodMatcher implements Phake_Matchers_IMethodMatcher
      */
     private function doArgumentsMatch(array &$args)
     {
-        if (count($args) != count($this->argumentMatchers) && !$this->hasAnyParametersMatcher) {
+        $num_args     = count($args);
+        $num_matchers = count($this->argumentMatchers);
+
+        if ($num_args !== $num_matchers && !$this->hasAnyParametersMatcher) {
             return false;
         }
 
-        foreach ($args as $index => &$arg) {
-            $matcher = $this->argumentMatchers[$index];
-
-            if ($matcher instanceof Phake_Matchers_AnyParameters) {
-                return true;
-            }
+        foreach ($args as $i => &$arg) {
+            $matcher = $this->argumentMatchers[$i];
 
             if (!$matcher->matches($arg)) {
                 return false;
+            }
+
+            /**
+             * AnyParameters matcher found, so match arguments in reverse order
+             */
+            if ($matcher instanceof Phake_Matchers_AnyParameters) {
+                $reversed_args  = array_reverse($args, true);
+                $num_difference = $num_args - $num_matchers;
+
+                foreach ($reversed_args as $j => &$arg) {
+                    $matcher = $this->argumentMatchers[$j - $num_difference];
+
+                    if ($matcher instanceof Phake_Matchers_AnyParameters) {
+                        return true;
+                    }
+
+                    if (!$matcher->matches($arg)) {
+                        return false;
+                    }
+                }
+
+                return true;
             }
         }
 

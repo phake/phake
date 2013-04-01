@@ -340,7 +340,7 @@ class PhakeTest extends PHPUnit_Framework_TestCase
     {
         $mock = Phake::mock('PhakeTest_MockedClass');
 
-        Phake::when($mock)->fooWithArgument(Phake::anyParameters(), Phake::equalTo('ignored'))->thenReturn(42);
+        Phake::when($mock)->fooWithArgument(Phake::anyParameters())->thenReturn(42);
 
         $this->assertEquals(42, $mock->fooWithArgument('bar'));
         $this->assertEquals(42, $mock->fooWithArgument('test'));
@@ -359,6 +359,21 @@ class PhakeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(42, $mock->fooWithArgument('bar', 'anything'));
         $this->assertNull($mock->fooWithArgument('not-bar'));
         $this->assertNull($mock->fooWithArgument('not-bar', 'anything'));
+    }
+
+    /**
+     * Tests using an anyParameters argument matcher before an equalTo matcher with a method stub
+     */
+    public function testStubWithAnyParametersMatcherLeadingArgumentsOnly()
+    {
+        $mock = Phake::mock('PhakeTest_MockedClass');
+
+        Phake::when($mock)->fooWithArgument(Phake::anyParameters(), Phake::equalTo('bar'))->thenReturn(42);
+
+        $this->assertEquals(42, $mock->fooWithArgument('bar'));
+        $this->assertEquals(42, $mock->fooWithArgument('anything', 'bar'));
+        $this->assertNull($mock->fooWithArgument('not-bar'));
+        $this->assertNull($mock->fooWithArgument('anything', 'not-bar'));
     }
 
     /**
@@ -1049,11 +1064,50 @@ class PhakeTest extends PHPUnit_Framework_TestCase
     {
         $mock = Phake::mock('PhakeTest_MockedClass');
 
+        // Do match:
         $mock->fooWithLotsOfParameters(1, 2, 3);
         $mock->fooWithLotsOfParameters(1, 3, 2);
+
+        // Do not match
         $mock->fooWithLotsOfParameters(2, 3, 1);
 
         Phake::verify($mock, Phake::times(2))->fooWithLotsOfParameters(1, Phake::anyParameters());
+    }
+
+    /**
+     * Tests that Phake::anyParameters() matches in-between arguments only
+     */
+    public function testAnyParametersMatchesInBetweenArgumentsOnly()
+    {
+        $mock = Phake::mock('PhakeTest_MockedClass');
+
+        // Do match:
+        $mock->fooWithArgument(1, 1, 3);
+        $mock->fooWithArgument(1, 3, 3);
+        $mock->fooWithArgument(1, 3);
+
+        // Do not match:
+        $mock->fooWithArgument(1, 3, 2);
+        $mock->fooWithArgument(2, 1, 3);
+
+        Phake::verify($mock, Phake::times(3))->fooWithArgument(1, Phake::anyParameters(), 3);
+    }
+
+    /**
+     * Tests that Phake::anyParameters() matches leading arguments only
+     */
+    public function testAnyParametersMatchesLeadingArgumentsOnly()
+    {
+        $mock = Phake::mock('PhakeTest_MockedClass');
+
+        // Do match:
+        $mock->fooWithLotsOfParameters(2, 3, 1);
+        $mock->fooWithLotsOfParameters(3, 2, 1);
+
+        // Do not match:
+        $mock->fooWithLotsOfParameters(1, 2, 3);
+
+        Phake::verify($mock, Phake::times(2))->fooWithLotsOfParameters(Phake::anyParameters(), 1);
     }
 
     /**
