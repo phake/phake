@@ -50,7 +50,7 @@
 class Phake_Stubber_StubMapper
 {
     /**
-     * @var array
+     * @var array[]
      */
     private $matcherStubMap = array();
 
@@ -87,6 +87,16 @@ class Phake_Stubber_StubMapper
         }
 
         return null;
+    }
+
+    /**
+     * Returns the stub map.
+     *
+     * @return array[]
+     */
+    public function getStubMap()
+    {
+        return $this->matcherStubMap;
     }
 
     /**

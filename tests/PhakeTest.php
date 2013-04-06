@@ -54,11 +54,12 @@ class PhakeTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         Phake::setClient(Phake::CLIENT_DEFAULT);
+        Phake::setPhake(new Phake_Facade);
     }
 
     protected function tearDown()
     {
-        Phake::setClient(Phake::CLIENT_DEFAULT);
+        Phake::reportUnusedStubs();
     }
 
     /**
@@ -974,6 +975,27 @@ class PhakeTest extends PHPUnit_Framework_TestCase
         $mock->foo();
         $mock->foo();
         Phake::verify($mock, Phake::atMost(1))->foo();
+    }
+
+    /**
+     * Tests verify any stubs at least once
+     */
+    public function testReportUnusedStubs()
+    {
+        $mock = Phake::mock('PhakeTest_MockedClass');
+        Phake::when($mock)->foo->thenReturn(true);
+
+        try
+        {
+            Phake::reportUnusedStubs();
+        }
+        catch (Phake_Exception_VerificationException $e)
+        {
+            $this->assertContains('Expected PhakeTest_MockedClass->foo(<any parameters>) to be called at least <1> times, actually called <0> times.', $e->getMessage());
+        }
+
+        $mock->foo();
+        // No exception now
     }
 
     /**
