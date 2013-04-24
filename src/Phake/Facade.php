@@ -49,12 +49,15 @@
  */
 class Phake_Facade
 {
-    private $cachedClasses;
+    /**
+     * @var array|string[]
+     */
+    private $cachedClasses = array();
 
-    public function __construct()
-    {
-        $this->cachedClasses = array();
-    }
+    /**
+     * @var array|Phake_IMock[]
+     */
+    private $generatedMocks = array();
 
     /**
      * Creates a new mock class than can be stubbed and verified.
@@ -86,7 +89,7 @@ class Phake_Facade
             $this->cachedClasses[$mockedClass] = $newClassName;
         }
 
-        return $mockGenerator->instantiate(
+        return $this->generatedMocks[] = $mockGenerator->instantiate(
             $this->cachedClasses[$mockedClass],
             $callRecorder,
             new Phake_Stubber_StubMapper(),
@@ -116,5 +119,13 @@ class Phake_Facade
         }
 
         return $base_class_name;
+    }
+
+    /**
+     * @return array|Phake_IMock[]
+     */
+    public function getGeneratedMocks()
+    {
+        return $this->generatedMocks;
     }
 }

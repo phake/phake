@@ -459,4 +459,37 @@ class Phake
         $initializer = new Phake_Annotation_MockInitializer();
         $initializer->initialize($obj);
     }
+
+    public static function reportUnusedStubs()
+    {
+        foreach (self::getPhake()->getGeneratedMocks() as $mock) {
+            foreach ($mock->__PHAKE_stubMapper->getStubMap() as $mapping) {
+                /** @var $matcher Phake_Matchers_MethodMatcher */
+                /** @var $answers Phake_Stubber_AnswerCollection */
+                list($matcher, $answers) = $mapping;
+
+                if (!$matcher instanceof Phake_Matchers_MethodMatcher ||
+                    !$answers instanceof Phake_Stubber_AnswerCollection) {
+                    continue;
+                }
+
+                $answer = $answers->getAnswer();
+
+                // Do not verify stubs that throw exceptions
+                if ($answer instanceof Phake_Stubber_Answers_ExceptionAnswer) {
+                    continue;
+                }
+
+                $method = $matcher->getMethodName();
+                $stub   = $answer->getAnswer();
+
+                // Do not verify the default __toString stub
+                if ($method === '__toString' && is_string($stub) && stripos($stub, 'Mock for') !== false) {
+                    continue;
+                }
+
+                Phake::verify($mock, Phake::atLeast(1))->__call($method, array(Phake::anyParameters()));
+            }
+        }
+    }
 }
