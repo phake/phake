@@ -385,6 +385,8 @@ class {$newClassName} {$extends}
 
         if ($parameter->isArray()) {
             $type = 'array ';
+        } elseif (method_exists($parameter, 'isCallable') && $parameter->isCallable()) {
+            $type = 'callable ';
         } elseif ($parameter->getClass() !== null) {
             $type = $parameter->getClass()->getName() . ' ';
         }
