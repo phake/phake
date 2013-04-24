@@ -298,6 +298,10 @@ class {$newClassName} {$extends}
 		{
 			$type = 'array ';
 		}
+		elseif (method_exists($parameter, 'isCallable') && $parameter->isCallable())
+		{
+			$type = 'callable ';
+		}
 		elseif ($parameter->getClass() !== NULL)
 		{
 			$type = $parameter->getClass()->getName() . ' ';

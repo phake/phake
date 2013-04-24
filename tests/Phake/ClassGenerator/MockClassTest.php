@@ -543,21 +543,35 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 		$this->assertNotNull($string, '__toString() should not return NULL');
 		$this->assertEquals('Mock for PhakeTest_ToStringMethod', $string);
 	}
-	
+
 	public function testDestructMocked()
 	{
-		$mock = $newClassName = __CLASS__ . '_TestClass' . uniqid();
+		$newClassName = __CLASS__ . '_TestClass' . uniqid();
 		$mockedClass = 'PhakeTest_DestructorClass';
 		$this->classGen->generate($newClassName, $mockedClass);
-		
+
+		/** @var $recorder Phake_CallRecorder_Recorder */
 		$recorder = $this->getMock('Phake_CallRecorder_Recorder');
 		$mapper = new Phake_Stubber_StubMapper();
 		$answer = new Phake_Stubber_Answers_ParentDelegate();
-		
+
 		$mock = $this->classGen->instantiate($newClassName, $recorder, $mapper, $answer);
-		
+
 		unset($mock);
 	}
+    
+    /**
+     * Ensure that 'callable' type hints in method parameters are supported.
+     */
+    public function testCallableTypeHint ()
+    {
+        if (!version_compare(PHP_VERSION, '5.4', '>='))
+        {
+            $this->markTestSkipped('callable typehint require PHP 5.4');
+        }
+
+        $this->assertInstanceOf('PhakeTest_CallableTypehint', Phake::mock('PhakeTest_CallableTypehint'));
+    }
 }
 
 ?>
