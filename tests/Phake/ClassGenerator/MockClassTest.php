@@ -580,6 +580,19 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf('PhakeTest_TraversableInterface', Phake::mock('PhakeTest_TraversableInterface'));
     }
+
+    /**
+     * Ensure that 'callable' type hints in method parameters are supported.
+     */
+    public function testCallableTypeHint ()
+    {
+        if (!version_compare(PHP_VERSION, '5.4', '>='))
+        {
+            $this->markTestSkipped('callable typehint require PHP 5.4');
+        }
+
+        $this->assertInstanceOf('PhakeTest_CallableTypehint', Phake::mock('PhakeTest_CallableTypehint'));
+    }
 }
 
 
