@@ -76,6 +76,20 @@ class Phake_Stubber_AnswerBinder implements Phake_Stubber_IAnswerBinder
         $this->obj        = $obj;
         $this->matcher    = $matcher;
         $this->mockReader = $mockReader;
+
+        if (method_exists($this->obj, $this->matcher->getMethod())) {
+            $method = new ReflectionMethod($this->obj, $this->matcher->getMethod());
+
+            if ($method->getNumberOfParameters() !== $method->getNumberOfRequiredParameters()) {
+                $argumentMatchers = $this->matcher->getMatchers();
+
+                foreach ($method->getParameters() as $i => $param) {
+                    if (!isset($argumentMatchers[$i]) && $param->isOptional()) {
+                        $this->matcher->addMatcher(new Phake_Matchers_EqualsMatcher($param->getDefaultValue()));
+                    }
+                }
+            }
+        }
     }
 
     /**
