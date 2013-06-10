@@ -593,6 +593,15 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('PhakeTest_CallableTypehint', Phake::mock('PhakeTest_CallableTypehint'));
     }
+
+    public function testMockVariableNumberOfArguments()
+    {
+        $mockedClass = Phake::mock('PhakeTest_MockedClass');
+        list($arg1, $arg2, $arg3) = array(1, 2, 3);
+        $mockedClass->fooWithVariableNumberOfArguments($arg1, $arg2, $arg3);
+
+        Phake::verify($mockedClass)->fooWithVariableNumberOfArguments(1, 2, 3);
+    }
 }
 
 

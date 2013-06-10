@@ -98,6 +98,11 @@ class PhakeTest_MockedClass
     public function fooWithRefParm($parm1, &$parm2 = null)
     {
 
+	}
+
+    public function fooWithVariableNumberOfArguments($x = null)
+    {
+        return func_get_args();
     }
 }
 
