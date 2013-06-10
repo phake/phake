@@ -93,18 +93,6 @@ class Phake_CallRecorder_CallExpectation
         $this->argumentMatchers = $argumentMatchers;
         $this->verifierMode     = $verificationMode;
         $this->mockReader       = $mockReader;
-
-        if (method_exists($this->object, $this->method)) {
-            $method = new ReflectionMethod($this->object, $this->method);
-
-            if ($method->getNumberOfParameters() !== $method->getNumberOfRequiredParameters()) {
-                foreach ($method->getParameters() as $i => $param) {
-                    if (!isset($this->argumentMatchers[$i]) && $param->isOptional()) {
-                        $this->argumentMatchers[$i] = new Phake_Matchers_EqualsMatcher($param->getDefaultValue());
-                    }
-                }
-            }
-        }
     }
 
     /**

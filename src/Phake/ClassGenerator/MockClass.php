@@ -305,18 +305,10 @@ class {$newClassName} {$extends}
         $methodDef = "
 	{$modifiers} function {$reference}{$method->getName()}({$this->generateMethodParameters($method)})
 	{
-		\$funcArgs = get_defined_vars();
-		unset(\$funcArgs['this']);
-
-        if (count(\$funcArgs)) {
-		    \$funcArgs = array_values(\$funcArgs);
-        } else {
-            \$funcArgs = func_get_args();
-        }
-
 		\$args = array();
 		{$this->copyMethodParameters($method)}
-
+		
+		\$funcArgs = func_get_args();
 		\$answer = \$this->__PHAKE_handlerChain->invoke(\$this, '{$method->getName()}', \$funcArgs, \$args);
 		
 		if (\$answer instanceof Phake_Stubber_Answers_IDelegator)
@@ -366,7 +358,7 @@ class {$newClassName} {$extends}
      */
     protected function copyMethodParameters(ReflectionMethod $method)
     {
-        $copies = "\$numArgs = count(\$funcArgs);\n\t\t";
+        $copies = "\$numArgs = count(func_get_args());\n\t\t";
         foreach ($method->getParameters() as $parameter) {
             $pos = $parameter->getPosition();
             $copies .= "if ({$pos} < \$numArgs) \$args[] =& \$parm{$pos};\n\t\t";
@@ -374,7 +366,7 @@ class {$newClassName} {$extends}
 
         $copies .= "for (\$i = " . count(
             $method->getParameters()
-        ) . "; \$i < \$numArgs; \$i++) \$args[] = \$funcArgs[\$i];\n\t\t";
+        ) . "; \$i < \$numArgs; \$i++) \$args[] = func_get_arg(\$i);\n\t\t";
 
         return $copies;
     }

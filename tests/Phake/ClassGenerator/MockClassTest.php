@@ -215,7 +215,7 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
     /**
      * Tests that default parameters work correctly with stubbing
      */
-    public function testStubbedMethodPassesDefaultParameters()
+    public function testStubbedMethodDoesNotCheckUnpassedDefaultParameters()
     {
         $newClassName = __CLASS__ . '_TestClass23';
         $mockedClass  = 'PhakeTest_MockedClass';
@@ -234,7 +234,7 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 
         $stubMapper->expects($this->once())
             ->method('getStubByCall')
-            ->with($this->equalTo('fooWithDefault'), array(null))
+            ->with($this->equalTo('fooWithDefault'), array())
             ->will($this->returnValue(new Phake_Stubber_AnswerCollection($answer)));
 
         $mock->fooWithDefault();
