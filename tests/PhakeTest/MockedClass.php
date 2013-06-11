@@ -57,15 +57,6 @@ class PhakeTest_MockedClass
     {
     }
 
-    public function fooWithTwoDefaults($default1 = null, $default2 = null)
-    {
-    }
-
-    public function fooWithSecondDefault($arg1, $default = null)
-    {
-    }
-
-
     public function fooWithArgument($arg1)
     {
     }
@@ -98,6 +89,11 @@ class PhakeTest_MockedClass
     public function fooWithRefParm($parm1, &$parm2 = null)
     {
 
+	}
+
+    public function fooWithVariableNumberOfArguments($x = null)
+    {
+        return func_get_args();
     }
 }
 

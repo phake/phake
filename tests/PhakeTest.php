@@ -255,24 +255,6 @@ class PhakeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests passing no matcher to the verify method will correctly verify a call with same-as-default values.
-     */
-    public function testVerifyCallWithEqualsMatcherAndPassingDefaultValues()
-    {
-        $mock = Phake::mock('PhakeTest_MockedClass');
-
-        $mock->fooWithDefault(null);
-        $mock->fooWithTwoDefaults(null, null);
-        $mock->fooWithTwoDefaults('non-default', null);
-        $mock->fooWithSecondDefault('required', null);
-
-        Phake::verify($mock)->fooWithDefault();
-        Phake::verify($mock)->fooWithTwoDefaults();
-        Phake::verify($mock)->fooWithTwoDefaults('non-default');
-        Phake::verify($mock)->fooWithSecondDefault('required');
-    }
-
-    /**
      * Tests that we can implicitely indicate an equalTo matcher when we pass in a non-matcher value.
      */
     public function testVerifyCallWithDefaultMatcher()

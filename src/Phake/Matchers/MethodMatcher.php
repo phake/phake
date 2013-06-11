@@ -70,30 +70,6 @@ class Phake_Matchers_MethodMatcher implements Phake_Matchers_IMethodMatcher
     }
 
     /**
-     * @return string
-     */
-    public function getMethod()
-    {
-        return $this->expectedMethod;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMatchers()
-    {
-        return $this->argumentMatchers;
-    }
-
-    /**
-     * @param Phake_Matchers_IArgumentMatcher $argumentMatcher
-     */
-    public function addMatcher(Phake_Matchers_IArgumentMatcher $argumentMatcher)
-    {
-        $this->argumentMatchers[] = $argumentMatcher;
-    }
-
-    /**
      * Determines if the given method and arguments match the configured method and argument matchers
      * in this object. Returns true on success, false otherwise.
      *
