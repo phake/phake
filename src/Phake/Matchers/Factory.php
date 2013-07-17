@@ -64,13 +64,9 @@ class Phake_Matchers_Factory
     {
         if ($argument instanceof Phake_Matchers_IArgumentMatcher) {
             return $argument;
-        } elseif (class_exists('PHPUnit_Framework_Constraint')
-            && $argument instanceof PHPUnit_Framework_Constraint
-        ) {
+        } elseif ($argument instanceof PHPUnit_Framework_Constraint) {
             return new Phake_Matchers_PHPUnitConstraintAdapter($argument);
-        } elseif (interface_exists('Hamcrest_Matcher')
-            && $argument instanceof Hamcrest_Matcher
-        ) {
+        } elseif ($argument instanceof Hamcrest_Matcher) {
             return new Phake_Matchers_HamcrestMatcherAdapter($argument);
         } else {
             return new Phake_Matchers_EqualsMatcher($argument);
