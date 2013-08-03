@@ -1259,4 +1259,10 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 
         Phake::verify($mock)->__get($this->anything());
     }
+
+    public function testConstructorInterfaceCanBeMocked()
+    {
+        // Generated a fatal error before fixed
+        $this->assertInstanceOf('Phake_IMock', Phake::mock('PhakeTest_ConstructorInterface'));
+    }
 }
