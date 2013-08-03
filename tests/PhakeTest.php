@@ -50,6 +50,7 @@ require_once('PhakeTest/MagicClass.php');
 require_once('PhakeTest/MockedConstructedClass.php');
 require_once('PhakeTest/ExtendedMockedConstructedClass.php');
 require_once('PhakeTest/MockedInterface.php');
+require_once('PhakeTest/ConstructorInterface.php');
 require_once('Phake/Exception/VerificationException.php');
 
 /**
@@ -1150,6 +1151,12 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 
 	    $this->assertTrue($memcache->set('key', 'value'));
 	}
+
+    public function testConstructorInterfaceCanBeMocked()
+    {
+        // Generated a fatal error before fixed
+        $this->assertInstanceOf('Phake_IMock', Phake::mock('PhakeTest_ConstructorInterface'));
+    }
 }
 
 ?>

@@ -123,36 +123,14 @@ class {$newClassName} {$extends}
 	
 	public \$__PHAKE_name;
 	
-	private \$__PHAKE_handlerChain;
-
-	public function __construct(Phake_CallRecorder_Recorder \$callRecorder, Phake_Stubber_StubMapper \$stubMapper, Phake_Stubber_IAnswer \$defaultAnswer, array \$constructorArgs = null)
-	{
-		\$this->__PHAKE_callRecorder = \$callRecorder;
-		\$this->__PHAKE_stubMapper = \$stubMapper;
-		\$this->__PHAKE_defaultAnswer = \$defaultAnswer;
-		\$this->__PHAKE_name = '{$mockedClassName}';
-		\$this->__PHAKE_handlerChain = new Phake_ClassGenerator_InvocationHandler_Composite(array(
-			new Phake_ClassGenerator_InvocationHandler_FrozenObjectCheck(new Phake_MockReader()),
-			new Phake_ClassGenerator_InvocationHandler_CallRecorder(new Phake_MockReader()),
-			new Phake_ClassGenerator_InvocationHandler_MagicCallRecorder(new Phake_MockReader()),
-			new Phake_ClassGenerator_InvocationHandler_StubCaller(new Phake_MockReader()),
-		));
-
-		
-		\$this->__PHAKE_stubMapper->mapStubToMatcher(
-			new Phake_Stubber_AnswerCollection(new Phake_Stubber_Answers_StaticAnswer('Mock for {$mockedClassName}')), 
-			new Phake_Matchers_MethodMatcher('__toString', array())
-		);
-
-		\$this->__PHAKE_stubMapper->mapStubToMatcher(
-			new Phake_Stubber_AnswerCollection(new Phake_Stubber_Answers_StaticAnswer(NULL)),
-			new Phake_Matchers_AbstractMethodMatcher(new ReflectionClass('{$mockedClassName}'))
-		);
-			
-		{$this->getConstructorChaining($mockedClass)}
-	}
+	public \$__PHAKE_handlerChain;
 	
 	public function __destruct() {}
+
+	public function __PHAKE_getMockedClassName()
+	{
+	    return '{$mockedClassName}';
+ 	}
 
 	{$this->generateMockedMethods($mockedClass)}
 }
@@ -173,7 +151,37 @@ class {$newClassName} {$extends}
 	 */
 	public function instantiate($newClassName, Phake_CallRecorder_Recorder $recorder, Phake_Stubber_StubMapper $mapper, Phake_Stubber_IAnswer $defaultAnswer, array $constructorArgs = null)
 	{
-		return new $newClassName($recorder, $mapper, $defaultAnswer, $constructorArgs);
+        $mockObject = unserialize(sprintf('O:%d:"%s":0:{}', strlen($newClassName), $newClassName));
+
+        $mockObject->__PHAKE_callRecorder = $recorder;
+        $mockObject->__PHAKE_stubMapper = $mapper;
+        $mockObject->__PHAKE_defaultAnswer = $defaultAnswer;
+        $mockObject->__PHAKE_isFrozen = false;
+        $mockObject->__PHAKE_name = $mockObject->__PHAKE_getMockedClassName();
+
+        $mockObject->__PHAKE_handlerChain = new Phake_ClassGenerator_InvocationHandler_Composite(array(
+            new Phake_ClassGenerator_InvocationHandler_FrozenObjectCheck(new Phake_MockReader()),
+            new Phake_ClassGenerator_InvocationHandler_CallRecorder(new Phake_MockReader()),
+            new Phake_ClassGenerator_InvocationHandler_MagicCallRecorder(new Phake_MockReader()),
+            new Phake_ClassGenerator_InvocationHandler_StubCaller(new Phake_MockReader()),
+        ));
+
+        $mockObject->__PHAKE_stubMapper->mapStubToMatcher(
+            new Phake_Stubber_AnswerCollection(new Phake_Stubber_Answers_StaticAnswer('Mock for ' . $mockObject->__PHAKE_getMockedClassName())),
+            new Phake_Matchers_MethodMatcher('__toString', array())
+        );
+
+        $mockObject->__PHAKE_stubMapper->mapStubToMatcher(
+            new Phake_Stubber_AnswerCollection(new Phake_Stubber_Answers_StaticAnswer(NULL)),
+            new Phake_Matchers_AbstractMethodMatcher(new ReflectionClass($mockObject->__PHAKE_getMockedClassName()))
+        );
+
+        $mockReflClass = new ReflectionClass($mockObject);
+        if (null !== $constructorArgs && $mockReflClass->hasMethod('__construct')) {
+            call_user_func_array(array($mockObject, '__construct'), $constructorArgs);
+        }
+
+        return $mockObject;
 	}
 
 	/**
@@ -189,7 +197,8 @@ class {$newClassName} {$extends}
 		$implementedMethods = $this->reservedWords;
 		foreach ($mockedClass->getMethods($filter) as $method)
 		{
-			if (!$method->isConstructor() && !$method->isDestructor() && !$method->isFinal() && !$method->isStatic() && !in_array($method->getName(), $implementedMethods))
+			if (!$method->isConstructor() && !$method->isDestructor() && !$method->isFinal() && !$method->isStatic()
+                && !in_array($method->getName(), $implementedMethods))
 			{
 				$implementedMethods[] = $method->getName();
 				$methodDefs .= $this->implementMethod($method) . "\n";
