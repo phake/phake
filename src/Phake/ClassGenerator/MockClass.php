@@ -314,6 +314,10 @@ class {$newClassName} {$extends}
 	{
 		\$args = array();
 		{$this->copyMethodParameters($method)}
+
+		if (\$this->__PHAKE_handlerChain === null) {
+		    return null;
+		}
 		
 		\$funcArgs = func_get_args();
 		\$answer = \$this->__PHAKE_handlerChain->invoke(\$this, '{$method->getName()}', \$funcArgs, \$args);
