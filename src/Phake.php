@@ -416,7 +416,10 @@ class Phake
     public static function getClient()
     {
         if (!isset(self::$client)) {
-            return new Phake_Client_Default();
+            if (class_exists('PHPUnit_Framework_TestCase')) {
+                return self::$client = new Phake_Client_PHPUnit();
+            }
+            return self::$client = new Phake_Client_Default();
         } else {
             return self::$client;
         }

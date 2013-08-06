@@ -1107,13 +1107,11 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 
     public function testDefaultClient()
     {
-        $original_client = Phake::getClient();
-
-        Phake::setClient(null);
-
+        // This assumes that the test is initialized with the default client
+        // Since we run this in PHPUnit, we have to set the default client or
+        // autodetect will return the PHPUnit client.
+        Phake::setClient(Phake::CLIENT_DEFAULT);
         $this->assertInstanceOf('Phake_Client_Default', Phake::getClient());
-
-        Phake::setClient($original_client);
     }
 
     public function testSettingClient()
