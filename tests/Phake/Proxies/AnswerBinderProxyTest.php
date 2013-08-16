@@ -168,6 +168,22 @@ class Phake_Proxies_AnswerBinderProxyTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame($this->binder, $this->proxy->thenThrow($exception));
     }
+
+    /**
+     * Tests the thenDoNothing functionality of the proxy.
+     *
+     * It should result in the binder being called with no answer.
+     */
+    public function testThenDoNothing()
+    {
+        $this->binder->expects($this->once())
+            ->method('bindAnswer')
+            ->with($this->isInstanceOf('Phake_Stubber_Answers_NoAnswer')
+            )
+            ->will($this->returnValue($this->binder));
+
+        $this->assertSame($this->binder, $this->proxy->thenDoNothing());
+    }
 }
 
 
