@@ -1268,4 +1268,9 @@ class PhakeTest extends PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf('Phake_IMock', Phake::mock('PhakeTest_WakeupClass'));
     }
+
+    public function testMockPDOStatement()
+    {
+        $this->assertInstanceOf('PDOStatement', Phake::mock('PDOStatement'));
+    }
 }
