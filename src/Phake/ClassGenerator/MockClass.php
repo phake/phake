@@ -176,9 +176,9 @@ class {$newClassName} {$extends}
 	public \$__PHAKE_defaultAnswer;
 
 	public \$__PHAKE_isFrozen;
-	
+
 	public \$__PHAKE_name;
-	
+
 	public \$__PHAKE_handlerChain;
 
 	public function __destruct() {}
@@ -213,7 +213,11 @@ class {$newClassName} {$extends}
         Phake_Stubber_IAnswer $defaultAnswer,
         array $constructorArgs = null
     ) {
-        $mockObject = unserialize(sprintf('O:%d:"%s":0:{}', strlen($newClassName), $newClassName));
+        try {
+            $mockObject = unserialize(sprintf('O:%d:"%s":0:{}', strlen($newClassName), $newClassName));
+        } catch (\Exception $e) {
+            $mockObject = new $newClassName();
+        }
 
         $mockObject->__PHAKE_callRecorder = $recorder;
         $mockObject->__PHAKE_stubMapper = $mapper;
@@ -321,7 +325,7 @@ class {$newClassName} {$extends}
 		
 		\$funcArgs = func_get_args();
 		\$answer = \$this->__PHAKE_handlerChain->invoke(\$this, '{$method->getName()}', \$funcArgs, \$args);
-		
+
 		if (\$answer instanceof Phake_Stubber_Answers_IDelegator)
 		{
 			\$delegate = \$answer->getAnswer();
