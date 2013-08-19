@@ -144,11 +144,19 @@ class Phake_ClassGenerator_MockClass
         $extends    = '';
         $implements = '';
         $interfaces = array();
+        $constructor = '';
 
         $mockedClass = new ReflectionClass($mockedClassName);
 
         if (!$mockedClass->isInterface()) {
             $extends = "extends {$mockedClassName}";
+            if ('PDO' == $mockedClassName
+                || 'PDOStatement' == $mockedClassName
+                || $mockedClass->isSubclassOf('PDO')
+                || $mockedClass->isSubclassOf('PDOStatement')
+            ) {
+                $constructor = "public function __construct() {}";
+            }
         } elseif ($mockedClassName != 'Phake_IMock') {
             $implements = ", $mockedClassName";
 
@@ -180,6 +188,8 @@ class {$newClassName} {$extends}
 	public \$__PHAKE_name;
 
 	public \$__PHAKE_handlerChain;
+
+    {$constructor}
 
 	public function __destruct() {}
 
@@ -216,7 +226,7 @@ class {$newClassName} {$extends}
         try {
             $mockObject = unserialize(sprintf('O:%d:"%s":0:{}', strlen($newClassName), $newClassName));
         } catch (\Exception $e) {
-            $mockObject = new $newClassName();
+            $mockObject = new $newClassName;
         }
 
         $mockObject->__PHAKE_callRecorder = $recorder;
@@ -322,7 +332,7 @@ class {$newClassName} {$extends}
 		if (\$this->__PHAKE_handlerChain === null) {
 		    return null;
 		}
-		
+
 		\$funcArgs = func_get_args();
 		\$answer = \$this->__PHAKE_handlerChain->invoke(\$this, '{$method->getName()}', \$funcArgs, \$args);
 
