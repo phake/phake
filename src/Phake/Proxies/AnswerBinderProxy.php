@@ -120,4 +120,9 @@ class Phake_Proxies_AnswerBinderProxy
     {
         return $this->binder->bindAnswer(new Phake_Stubber_Answers_ParentDelegate($captor));
     }
+
+    public function thenDoNothing()
+    {
+        return $this->binder->bindAnswer(new Phake_Stubber_Answers_NoAnswer());
+    }
 }

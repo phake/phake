@@ -506,6 +506,18 @@ class PhakeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests that partial mock can overwrite methods
+     * so that they don't do anything when they get called
+     */
+    public function testPartialMockCanReturnNothing()
+    {
+        $pmock = Phake::partialMock('PhakeTest_MockedClass');
+        Phake::when($pmock)->innerFunc()->thenDoNothing();
+
+        $this->assertNull($pmock->chainedCall());
+    }
+
+    /**
      * Tests that partial mocks listen to the constructor args given
      */
     public function testPartialMockCallsConstructor()
