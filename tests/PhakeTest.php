@@ -1285,4 +1285,12 @@ class PhakeTest extends PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf('PDOStatement', Phake::mock('PDOStatement'));
     }
+
+    public function testMocksNotEqual()
+    {
+        $chocolateCookie = Phake::mock('PhakeTest_A');
+        $berryCookie = Phake::mock('PhakeTest_A');
+
+        $this->assertNotEquals($chocolateCookie, $berryCookie);
+    }
 }

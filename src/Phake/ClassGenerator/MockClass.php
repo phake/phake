@@ -169,6 +169,8 @@ class Phake_ClassGenerator_MockClass
 class {$newClassName} {$extends}
 	implements Phake_IMock {$implements}
 {
+    public \$__PHAKE_uniqid;
+
 	public \$__PHAKE_callRecorder;
 
 	public \$__PHAKE_stubMapper;
@@ -219,6 +221,7 @@ class {$newClassName} {$extends}
             $mockObject = new $newClassName();
         }
 
+        $mockObject->__PHAKE_uniqid = uniqid('', true);
         $mockObject->__PHAKE_callRecorder = $recorder;
         $mockObject->__PHAKE_stubMapper = $mapper;
         $mockObject->__PHAKE_defaultAnswer = $defaultAnswer;
