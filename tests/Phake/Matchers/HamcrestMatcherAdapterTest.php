@@ -53,7 +53,7 @@ class Phake_Matchers_HamcrestMatcherAdapterTest extends PHPUnit_Framework_TestCa
     private $adapter;
 
     /**
-     * @var Hamcrest_Matcher
+     * @var Hamcrest\Matcher
      */
     private $matcher;
 
@@ -62,7 +62,7 @@ class Phake_Matchers_HamcrestMatcherAdapterTest extends PHPUnit_Framework_TestCa
      */
     public function setUp()
     {
-        $this->matcher = $this->getMock('Hamcrest_BaseMatcher');
+        $this->matcher = $this->getMock('Hamcrest\BaseMatcher');
         $this->matcher->expects($this->any())
             ->method('__toString')
             ->will($this->returnValue('hamcrest matcher'));

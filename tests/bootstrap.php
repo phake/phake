@@ -48,7 +48,7 @@ error_reporting(E_ALL | E_STRICT);
 $loader = require dirname(__DIR__) . '/vendor/autoload.php';
 $loader->add('PhakeTest', __DIR__);
 
-require dirname(__DIR__) . '/vendor/davedevelopment/hamcrest-php/hamcrest/Hamcrest.php';
+require dirname(__DIR__) . '/vendor/hamcrest/hamcrest-php/hamcrest/Hamcrest.php';
 
 Phake::setClient(Phake::CLIENT_DEFAULT);
 
