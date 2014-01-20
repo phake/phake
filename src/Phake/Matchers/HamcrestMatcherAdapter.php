@@ -48,14 +48,14 @@
 class Phake_Matchers_HamcrestMatcherAdapter implements Phake_Matchers_IArgumentMatcher
 {
     /**
-     * @var Hamcrest_Matcher
+     * @var Hamcrest\Matcher
      */
     private $matcher;
 
     /**
-     * @param Hamcrest_Matcher $matcher
+     * @param Hamcrest\Matcher $matcher
      */
-    public function __construct(Hamcrest_Matcher $matcher)
+    public function __construct(Hamcrest\Matcher $matcher)
     {
         $this->matcher = $matcher;
     }

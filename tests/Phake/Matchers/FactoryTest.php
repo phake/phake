@@ -104,7 +104,7 @@ class Phake_Matchers_FactoryTest extends PHPUnit_Framework_TestCase
      */
     public function testHamcrestMatcher()
     {
-        $matcher = $this->getMock('Hamcrest_Matcher');
+        $matcher = $this->getMock('Hamcrest\Matcher');
         $matcher->expects($this->once())
             ->method('matches')
             ->with($this->equalTo('foo'))
