@@ -17,4 +17,6 @@ if [ "$TRAVIS_PHP_VERSION" = "hhvm" ]; then
     sudo rm "$PHP_PATH"
     sudo ln -s "$HHVM_PATH" "$PHP_PATH"
 
+    echo
+    php --version
 fi
