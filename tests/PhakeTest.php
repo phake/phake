@@ -1272,6 +1272,10 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 
     public function testConstructorInterfaceCanBeMocked()
     {
+        if (defined('HHVM_VERSION')) {
+            $this->markTestSkipped('This test causes a fatal error under HHVM.');
+        }
+
         // Generated a fatal error before fixed
         $this->assertInstanceOf('Phake_IMock', Phake::mock('PhakeTest_ConstructorInterface'));
     }
