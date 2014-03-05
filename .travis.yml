@@ -1,4 +1,5 @@
 language: php
+
 php:
   - 5.3
   - 5.4
@@ -9,5 +10,6 @@ matrix:
   allow_failures:
     - php: hhvm
 
-before_script:
+install:
+  - ./.travis/install-hhvm-nightly.sh
   - composer install --dev

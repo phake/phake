@@ -217,6 +217,9 @@ class {$newClassName} {$extends}
     ) {
         try {
             $mockObject = unserialize(sprintf('O:%d:"%s":0:{}', strlen($newClassName), $newClassName));
+            if (!$mockObject instanceof $newClassName) {
+                throw new \Exception('Unserialization failure: ' . $newClassName);
+            }
         } catch (\Exception $e) {
             $mockObject = new $newClassName();
         }
@@ -325,7 +328,7 @@ class {$newClassName} {$extends}
 		if (\$this->__PHAKE_handlerChain === null) {
 		    return null;
 		}
-		
+
 		\$funcArgs = func_get_args();
 		\$answer = \$this->__PHAKE_handlerChain->invoke(\$this, '{$method->getName()}', \$funcArgs, \$args);
 
