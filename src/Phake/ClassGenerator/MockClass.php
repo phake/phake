@@ -219,13 +219,13 @@ class {$newClassName} {$extends}
             )));
 
         $info->getStubMapper()->mapStubToMatcher(
-			new Phake_Stubber_AnswerCollection(new Phake_Stubber_Answers_StaticAnswer('Mock for ' . $mockObject->__PHAKE_name)),
+			new Phake_Stubber_AnswerCollection(new Phake_Stubber_Answers_StaticAnswer('Mock for ' . $info->getName())),
 			new Phake_Matchers_MethodMatcher('__toString', array())
 		);
 
         $info->getStubMapper()->mapStubToMatcher(
 			new Phake_Stubber_AnswerCollection(new Phake_Stubber_Answers_StaticAnswer(NULL)),
-			new Phake_Matchers_AbstractMethodMatcher(new ReflectionClass($mockObject->__PHAKE_name))
+			new Phake_Matchers_AbstractMethodMatcher(new ReflectionClass($info->getName()))
 		);
 
         $mockReflClass = new ReflectionClass($mockObject);
