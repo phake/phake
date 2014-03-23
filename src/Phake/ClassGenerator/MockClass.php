@@ -218,12 +218,12 @@ class {$newClassName} {$extends}
                 new Phake_ClassGenerator_InvocationHandler_StubCaller($info->getStubMapper(), $info->getDefaultAnswer()),
             )));
 
-        $mockObject->__PHAKE_info->getStubMapper()->mapStubToMatcher(
+        $info->getStubMapper()->mapStubToMatcher(
 			new Phake_Stubber_AnswerCollection(new Phake_Stubber_Answers_StaticAnswer('Mock for ' . $mockObject->__PHAKE_name)),
 			new Phake_Matchers_MethodMatcher('__toString', array())
 		);
 
-        $mockObject->__PHAKE_info->getStubMapper()->mapStubToMatcher(
+        $info->getStubMapper()->mapStubToMatcher(
 			new Phake_Stubber_AnswerCollection(new Phake_Stubber_Answers_StaticAnswer(NULL)),
 			new Phake_Matchers_AbstractMethodMatcher(new ReflectionClass($mockObject->__PHAKE_name))
 		);
@@ -305,12 +305,13 @@ class {$newClassName} {$extends}
 		\$args = array();
 		{$this->copyMethodParameters($method)}
 
-		if (\$this->__PHAKE_info === null) {
+        \$info = Phake::getInfo(\$this);
+		if (\$info === null) {
 		    return null;
 		}
 
 		\$funcArgs = func_get_args();
-		\$answer = \$this->__PHAKE_info->getHandlerChain()->invoke(\$this, '{$method->getName()}', \$funcArgs, \$args);
+		\$answer = \$info->getHandlerChain()->invoke(\$this, '{$method->getName()}', \$funcArgs, \$args);
 
 		if (\$answer instanceof Phake_Stubber_Answers_IDelegator)
 		{

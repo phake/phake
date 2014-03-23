@@ -80,7 +80,7 @@ class Phake_Proxies_StubberProxy
     public function __call($method, array $arguments)
     {
         $matcher = new Phake_Matchers_MethodMatcher($method, $this->matcherFactory->createMatcherArray($arguments));
-        $binder  = new Phake_Stubber_AnswerBinder($matcher, $this->obj->__PHAKE_info->getStubMapper());
+        $binder  = new Phake_Stubber_AnswerBinder($matcher, Phake::getInfo($this->obj)->getStubMapper());
         return new Phake_Proxies_AnswerBinderProxy($binder);
     }
 

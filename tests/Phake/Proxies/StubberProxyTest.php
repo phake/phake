@@ -65,8 +65,7 @@ class Phake_Proxies_StubberProxyTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->stubbable = $this->getMock('Phake_IMock');
-        $this->stubbable->__PHAKE_info = Phake::mock('Phake_Mock_Info');
-        Phake::when($this->stubbable->__PHAKE_info)->getStubMapper()->thenReturn(Phake::mock('Phake_Stubber_StubMapper'));
+        PhakeTestUtil::setStubMapper($this->stubbable, Phake::mock('Phake_Stubber_StubMapper'));
         $this->proxy     = new Phake_Proxies_StubberProxy($this->stubbable, new Phake_Matchers_Factory());
     }
 

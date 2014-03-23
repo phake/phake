@@ -152,7 +152,7 @@ class Phake
         }
 
         /* @var $info Phake_Mock_Info */
-        $info = $mock->__PHAKE_info;
+        $info = Phake::getInfo($mock);
         $verifier = new Phake_CallRecorder_Verifier($info->getCallRecorder(), $mock);
 
         return new Phake_Proxies_VerifierProxy($verifier, new Phake_Matchers_Factory(), $mode, self::getClient());

@@ -57,6 +57,11 @@ class PhakeTestUtil
         Phake::when(static::getMockedInfo($mock))->getCallRecorder()->thenReturn($recorder);
     }
 
+    public static function setStubMapper(Phake_IMock $mock, Phake_Stubber_StubMapper $stubMapper)
+    {
+        Phake::when(static::getMockedInfo($mock))->getStubMapper()->thenReturn($stubMapper);
+    }
+
     /**
      * @param Phake_IMock $mock
      * @return Phake_Mock_Info
