@@ -51,14 +51,15 @@ class Phake_ClassGenerator_InvocationHandler_CallRecorderTest extends PHPUnit_Fr
     private $handler;
 
     /**
-     * @var Phake_MockReader
+     * @Mock
+     * @var Phake_CallRecorder_Recorder
      */
-    private $mockReader;
+    private $callRecorder;
 
     public function setUp()
     {
-        $this->mockReader = Phake::mock('Phake_MockReader');
-        $this->handler    = new Phake_ClassGenerator_InvocationHandler_CallRecorder($this->mockReader);
+        Phake::initAnnotations($this);
+        $this->handler    = new Phake_ClassGenerator_InvocationHandler_CallRecorder($this->callRecorder);
     }
 
     public function testImplementIInvocationHandler()
@@ -68,14 +69,12 @@ class Phake_ClassGenerator_InvocationHandler_CallRecorderTest extends PHPUnit_Fr
 
     public function testCallIsRecorded()
     {
-        $mock         = $this->getMock('Phake_IMock');
-        $callRecorder = Phake::mock('Phake_CallRecorder_Recorder');
-        Phake::when($this->mockReader)->getCallRecorder($this->anything())->thenReturn($callRecorder);
+        $mock = $this->getMock('Phake_IMock');
 
         $ref = array();
         $this->handler->invoke($mock, 'foo', array(), $ref);
 
-        Phake::verify($callRecorder)->recordCall(new Phake_CallRecorder_Call($mock, 'foo', array(), $this->mockReader));
+        Phake::verify($this->callRecorder)->recordCall(new Phake_CallRecorder_Call($mock, 'foo', array()));
     }
 }
 

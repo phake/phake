@@ -51,14 +51,15 @@ class Phake_ClassGenerator_InvocationHandler_FrozenObjectCheckTest extends PHPUn
     private $handler;
 
     /**
-     * @var Phake_MockReader
+     * @Mock
+     * @var Phake_Mock_Info
      */
-    private $mockReader;
+    private $mockInfo;
 
     public function setUp()
     {
-        $this->mockReader = Phake::mock('Phake_MockReader');
-        $this->handler    = new Phake_ClassGenerator_InvocationHandler_FrozenObjectCheck($this->mockReader);
+        Phake::initAnnotations($this);
+        $this->handler    = new Phake_ClassGenerator_InvocationHandler_FrozenObjectCheck($this->mockInfo);
     }
 
     protected function tearDown()
@@ -74,7 +75,7 @@ class Phake_ClassGenerator_InvocationHandler_FrozenObjectCheckTest extends PHPUn
     public function testReturnsWithNoIssuesIfObjectIsNotFrozen()
     {
         $mock = $this->getMock('Phake_IMock');
-        Phake::when($this->mockReader)->isObjectFrozen($this->anything())->thenReturn(false);
+        Phake::when($this->mockInfo)->isObjectFrozen()->thenReturn(false);
 
         try {
             $ref = array();
@@ -87,7 +88,7 @@ class Phake_ClassGenerator_InvocationHandler_FrozenObjectCheckTest extends PHPUn
     public function testThrowsWhenObjectIsFrozen()
     {
         $mock = $this->getMock('Phake_IMock');
-        Phake::when($this->mockReader)->isObjectFrozen($this->anything())->thenReturn(true);
+        Phake::when($this->mockInfo)->isObjectFrozen()->thenReturn(true);
 
         $this->setExpectedException('Phake_Exception_VerificationException', 'This object has been frozen.');
         $ref = array();
@@ -99,7 +100,7 @@ class Phake_ClassGenerator_InvocationHandler_FrozenObjectCheckTest extends PHPUn
         Phake::setClient(Phake::CLIENT_PHPUNIT);
 
         $mock = $this->getMock('Phake_IMock');
-        Phake::when($this->mockReader)->isObjectFrozen($this->anything())->thenReturn(true);
+        Phake::when($this->mockInfo)->isObjectFrozen()->thenReturn(true);
 
         $this->setExpectedException('PHPUnit_Framework_ExpectationFailedException', 'This object has been frozen.');
         $ref = array();

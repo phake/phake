@@ -151,11 +151,11 @@ class Phake
             $mode = self::times(1);
         }
 
-        $reader   = new Phake_MockReader();
-        $verifier = new Phake_CallRecorder_Verifier($reader->getCallRecorder($mock), $mock);
+        /* @var $info Phake_Mock_Info */
+        $info = $mock->__PHAKE_info;
+        $verifier = new Phake_CallRecorder_Verifier($info->getCallRecorder(), $mock);
 
-        return new Phake_Proxies_VerifierProxy($verifier, new Phake_Matchers_Factory(), $mode, self::getClient(
-        ), $reader);
+        return new Phake_Proxies_VerifierProxy($verifier, new Phake_Matchers_Factory(), $mode, self::getClient());
     }
 
     /**
@@ -171,7 +171,7 @@ class Phake
         $factory   = new Phake_Matchers_Factory();
         return new Phake_Proxies_CallVerifierProxy($factory->createMatcherArray(
             $arguments
-        ), new Phake_MockReader(), self::getClient());
+        ), self::getClient());
     }
 
     /**
@@ -195,11 +195,10 @@ class Phake
      */
     public static function verifyNoFurtherInteraction(Phake_IMock $mock)
     {
-        $mockReader  = new Phake_MockReader();
-        $mockFreezer = new Phake_Mock_Freezer($mockReader);
+        $mockFreezer = new Phake_Mock_Freezer();
 
         foreach (func_get_args() as $mock) {
-            $mockFreezer->freeze($mock, self::getClient());
+            $mockFreezer->freeze(Phake::getInfo($mock), self::getClient());
         }
     }
 
@@ -211,8 +210,8 @@ class Phake
     public static function verifyNoInteraction(Phake_IMock $mock)
     {
         foreach (func_get_args() as $mock) {
-            $reader   = new Phake_MockReader();
-            $verifier = new Phake_CallRecorder_Verifier($reader->getCallRecorder($mock), $mock);
+            $callRecorder = Phake::getInfo($mock)->getCallRecorder();
+            $verifier = new Phake_CallRecorder_Verifier($callRecorder, $mock);
 
             self::getClient()->processVerifierResult($verifier->verifyNoCalls());
         }
@@ -247,7 +246,7 @@ class Phake
      */
     public static function when(Phake_IMock $mock)
     {
-        return new Phake_Proxies_StubberProxy($mock, new Phake_Matchers_Factory(), new Phake_MockReader());
+        return new Phake_Proxies_StubberProxy($mock, new Phake_Matchers_Factory());
     }
 
     /**
@@ -261,7 +260,7 @@ class Phake
     {
         $arguments = func_get_args();
         $factory   = new Phake_Matchers_Factory();
-        return new Phake_Proxies_CallStubberProxy($factory->createMatcherArray($arguments), new Phake_MockReader());
+        return new Phake_Proxies_CallStubberProxy($factory->createMatcherArray($arguments));
     }
 
     /**
@@ -271,10 +270,8 @@ class Phake
      */
     public static function reset(Phake_IMock $mock)
     {
-        $mockReader   = new Phake_MockReader();
-        $mockResetter = new Phake_Mock_Resetter($mockReader);
-
-        $mockResetter->reset($mock);
+        $mockResetter = new Phake_Mock_Resetter();
+        $mockResetter->reset(self::getInfo($mock));
     }
 
     /**
@@ -461,5 +458,29 @@ class Phake
     {
         $initializer = new Phake_Annotation_MockInitializer();
         $initializer->initialize($obj);
+    }
+
+    /**
+     * Used internally to standardize pulling mock names.
+     *
+     * @internal
+     * @param Phake_IMock $mock
+     * @return string
+     */
+    public static function getName(Phake_IMock $mock)
+    {
+        return isset($mock->__PHAKE_name) ? $mock->__PHAKE_name : '<undefined>';
+    }
+
+    /**
+     * Used internally to standardize pulling mock names.
+     *
+     * @internal
+     * @param Phake_IMock $mock
+     * @return Phake_Mock_Info
+     */
+    public static function getInfo(Phake_IMock $mock)
+    {
+        return isset($mock->__PHAKE_info) ? $mock->__PHAKE_info : null;
     }
 }

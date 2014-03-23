@@ -68,16 +68,10 @@ class Phake_CallRecorder_CallExpectation
     private $verifierMode;
 
     /**
-     * @var Phake_MockReader
-     */
-    private $mockReader;
-
-    /**
      * @param Phake_IMock                      $object
      * @param string                           $method
      * @param array                            $argumentMatchers
      * @param Phake_CallRecorder_IVerifierMode $verificationMode
-     * @param Phake_MockReader                 $mockReader
      *
      * @return \Phake_CallRecorder_CallExpectation
      */
@@ -85,14 +79,12 @@ class Phake_CallRecorder_CallExpectation
         Phake_IMock $object,
         $method,
         array $argumentMatchers,
-        Phake_CallRecorder_IVerifierMode $verificationMode,
-        Phake_MockReader $mockReader
+        Phake_CallRecorder_IVerifierMode $verificationMode
     ) {
         $this->object           = $object;
         $this->method           = $method;
         $this->argumentMatchers = $argumentMatchers;
         $this->verifierMode     = $verificationMode;
-        $this->mockReader       = $mockReader;
     }
 
     /**
@@ -134,7 +126,9 @@ class Phake_CallRecorder_CallExpectation
             $arguments[] = $argumentMatcher->__toString();
         }
 
-        return "Expected {$this->mockReader->getName($this->getObject())}->{$this->getMethod()}(" . implode(
+        $name = Phake::getName($this->getObject());
+
+        return "Expected {$name}->{$this->getMethod()}(" . implode(
             ', ',
             $arguments
         ) . ") to be called {$this->getVerifierMode()->__toString()}";

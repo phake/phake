@@ -65,22 +65,15 @@ class Phake_CallRecorder_Call
     private $arguments;
 
     /**
-     * @var Phake_MockReader
-     */
-    private $mockReader;
-
-    /**
      * @param object|\Phake_IMock $object $object - The object the method was called on
      * @param string              $method - The method that was made
      * @param array               $arguments
-     * @param Phake_MockReader    $mockReader
      */
-    public function __construct(Phake_IMock $object, $method, array $arguments, Phake_MockReader $mockReader)
+    public function __construct(Phake_IMock $object, $method, array $arguments)
     {
         $this->object     = $object;
         $this->method     = $method;
         $this->arguments  = $arguments;
-        $this->mockReader = $mockReader;
     }
 
     /**
@@ -118,6 +111,7 @@ class Phake_CallRecorder_Call
             $arguments[] = $converter->convertToString($argument);
         }
 
-        return "{$this->mockReader->getName($this->object)}->{$this->method}(" . implode(', ', $arguments) . ")";
+        $name = Phake::getName($this->object);
+        return "{$name}->{$this->method}(" . implode(', ', $arguments) . ")";
     }
 }

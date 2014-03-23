@@ -81,7 +81,7 @@ class Phake_Mock_InfoTest extends PHPUnit_Framework_TestCase {
 
     private function getSUT()
     {
-        return new Phake_Mock_Info($this->recorder, $this->mapper, $this->answer);
+        return new Phake_Mock_Info('name', $this->recorder, $this->mapper, $this->answer);
     }
 
     /**
@@ -124,6 +124,11 @@ class Phake_Mock_InfoTest extends PHPUnit_Framework_TestCase {
     {
         $this->info->setHandlerChain($this->handlerChain);
         $this->assertSame($this->handlerChain, $this->info->getHandlerChain());
+    }
+
+    public function testName()
+    {
+        $this->assertEquals('name', $this->info->getName());
     }
 }
  

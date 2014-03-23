@@ -1,27 +1,26 @@
 <?php
-
 /*
  * Phake - Mocking Framework
- * 
- * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
+ *
+ * Copyright (c) 2010-2012, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
- * 
+ *
  *  *  Redistributions of source code must retain the above copyright
  *     notice, this list of conditions and the following disclaimer.
- * 
+ *
  *  *  Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in
  *     the documentation and/or other materials provided with the
  *     distribution.
- * 
+ *
  *  *  Neither the name of Mike Lively nor the names of his
  *     contributors may be used to endorse or promote products derived
  *     from this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -34,7 +33,7 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  * @category   Testing
  * @package    Phake
  * @author     Mike Lively <m@digitalsandwich.com>
@@ -44,86 +43,31 @@
  */
 
 /**
- * Allows reading data off of the mock object.
- *
- * (More of a standard than an enforcement)
+ * Provides some commonly used functionality for tests
  */
-class Phake_MockReader
+class PhakeTestUtil
 {
-    /**
-     * @param Phake_IMock $mock
-     *
-     * @return Phake_CallRecorder_Recorder
-     */
-    public function getCallRecorder(Phake_IMock $mock)
+    public static function setMockName(Phake_IMock $mock, $name)
     {
-        return $this->getInfo($mock)->getCallRecorder();
+        $mock->__PHAKE_name = $name;
     }
 
-    /**
-     * @param Phake_IMock $mock
-     *
-     * @return string
-     */
-    public function getName(Phake_IMock $mock)
+    public static function setCallRecorder(Phake_IMock $mock, Phake_CallRecorder_Recorder $recorder)
     {
-        return $mock->__PHAKE_name;
-    }
-
-    /**
-     * @param Phake_IMock $mock
-     *
-     * @return Phake_Stubber_StubMapper
-     */
-    public function getStubMapper(Phake_IMock $mock)
-    {
-        return $this->getInfo($mock)->getStubMapper();
-    }
-
-    /**
-     * @param Phake_IMock $mock
-     *
-     * @return Phake_Stubber_IAnswer
-     */
-    public function getDefaultAnswer(Phake_IMock $mock)
-    {
-        return $this->getInfo($mock)->getDefaultAnswer();
-    }
-
-    /**
-     * @param Phake_IMock $mock
-     *
-     * @return boolean
-     */
-    public function isObjectFrozen(Phake_IMock $mock)
-    {
-        return $this->getInfo($mock)->isObjectFrozen();
-    }
-
-    /**
-     * @param Phake_IMock $mock
-     * @param boolean     $frozen
-     *
-     * @return null
-     */
-    public function setIsObjectFrozen(Phake_IMock $mock, $frozen)
-    {
-        if ($frozen)
-        {
-            $this->getInfo($mock)->freezeObject();
-        }
-        else
-        {
-            $this->getInfo($mock)->thawObject();
-        }
+        Phake::when(static::getMockedInfo($mock))->getCallRecorder()->thenReturn($recorder);
     }
 
     /**
      * @param Phake_IMock $mock
      * @return Phake_Mock_Info
      */
-    private function getInfo(Phake_IMock $mock)
+    public static function getMockedInfo(Phake_IMock $mock)
     {
+        if (empty($mock->__PHAKE_info))
+        {
+            $mock->__PHAKE_info = Phake::mock('Phake_Mock_Info');
+        }
+
         return $mock->__PHAKE_info;
     }
-}
+} 

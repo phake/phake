@@ -56,18 +56,12 @@ class Phake_CallRecorder_CallTest extends PHPUnit_Framework_TestCase
 
     private $mock;
 
-    /**
-     * @var Phake_MockReader
-     */
-    private $mockReader;
-
     public function setUp()
     {
         $this->mock = $this->getMock('Phake_IMock');
-        $this->mockReader = Phake::mock('Phake_MockReader');
+        PhakeTestUtil::setMockName($this->mock, 'Phake_IMock');
 
-        Phake::when($this->mockReader)->getName($this->mock)->thenReturn('Phake_IMock');
-        $this->call = new Phake_CallRecorder_Call($this->mock, 'someMethod', array('foo', 'bar'), $this->mockReader);
+        $this->call = new Phake_CallRecorder_Call($this->mock, 'someMethod', array('foo', 'bar'));
     }
 
     /**
@@ -106,7 +100,7 @@ class Phake_CallRecorder_CallTest extends PHPUnit_Framework_TestCase
             'foo',
             42,
             true
-        ), $this->mockReader);
+        ));
         $this->assertEquals(
             'Phake_IMock->someMethod(<object:stdClass>, <array>, <null>, <resource>, <string:foo>, <integer:42>, <boolean:true>)',
             $call->__toString()

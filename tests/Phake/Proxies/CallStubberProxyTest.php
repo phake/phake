@@ -66,7 +66,9 @@ class Phake_Proxies_CallStubberProxyTest extends PHPUnit_Framework_TestCase
     {
         $this->matcher1 = Phake::mock('Phake_Matchers_IArgumentMatcher');
         $this->obj      = $this->getMock('Phake_IMock');
-        $this->proxy    = new Phake_Proxies_CallStubberProxy(array($this->matcher1), new Phake_MockReader());
+        $this->obj->__PHAKE_info = Phake::mock('Phake_Mock_Info');
+        Phake::when($this->obj->__PHAKE_info)->getStubMapper()->thenReturn(Phake::mock('Phake_Stubber_StubMapper'));
+        $this->proxy    = new Phake_Proxies_CallStubberProxy(array($this->matcher1));
     }
 
     /**

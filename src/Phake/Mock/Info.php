@@ -59,18 +59,21 @@ class Phake_Mock_Info {
 
     private $frozen;
 
+    private $name;
+
     /**
      * @var Phake_ClassGenerator_InvocationHandler_IInvocationHandler
      */
     private $handlerChain;
 
-    public function __construct(Phake_CallRecorder_Recorder $recorder, Phake_Stubber_StubMapper $mapper, Phake_Stubber_IAnswer $defaultAnswer)
+    public function __construct($name, Phake_CallRecorder_Recorder $recorder, Phake_Stubber_StubMapper $mapper, Phake_Stubber_IAnswer $defaultAnswer)
     {
         $this->uniqId = uniqid('', true);
         $this->recorder = $recorder;
         $this->mapper = $mapper;
         $this->answer = $defaultAnswer;
         $this->frozen = false;
+        $this->name = $name;
     }
 
     public function getCallRecorder()
@@ -111,5 +114,10 @@ class Phake_Mock_Info {
     public function setHandlerChain(Phake_ClassGenerator_InvocationHandler_IInvocationHandler $handlerChain)
     {
         $this->handlerChain = $handlerChain;
+    }
+
+    public function getName()
+    {
+        return $this->name;
     }
 }

@@ -50,32 +50,25 @@
 class Phake_Stubber_AnswerBinder implements Phake_Stubber_IAnswerBinder
 {
     /**
-     * @var Phake_IMock
-     */
-    private $obj;
-
-    /**
      * @var Phake_Matchers_MethodMatcher
      */
     private $matcher;
 
     /**
-     * @var Phake_MockReader
+     * @var Phake_Stubber_StubMapper
      */
-    private $mockReader;
+    private $stubMapper;
 
     /**
      * Creates a new Answer Binder
      *
-     * @param Phake_IMock                  $obj
      * @param Phake_Matchers_MethodMatcher $matcher
-     * @param Phake_MockReader             $mockReader
+     * @param Phake_Stubber_StubMapper     $stubMapper
      */
-    public function __construct(Phake_IMock $obj, Phake_Matchers_MethodMatcher $matcher, Phake_MockReader $mockReader)
+    public function __construct(Phake_Matchers_MethodMatcher $matcher, Phake_Stubber_StubMapper $stubMapper)
     {
-        $this->obj        = $obj;
         $this->matcher    = $matcher;
-        $this->mockReader = $mockReader;
+        $this->stubMapper = $stubMapper;
     }
 
     /**
@@ -88,7 +81,7 @@ class Phake_Stubber_AnswerBinder implements Phake_Stubber_IAnswerBinder
     public function bindAnswer(Phake_Stubber_IAnswer $answer)
     {
         $collection = new Phake_Stubber_AnswerCollection($answer);
-        $this->mockReader->getStubMapper($this->obj)->mapStubToMatcher($collection, $this->matcher);
+        $this->stubMapper->mapStubToMatcher($collection, $this->matcher);
 
         return new Phake_Proxies_AnswerCollectionProxy($collection);
     }

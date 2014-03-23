@@ -75,29 +75,24 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
     private $obj;
 
     /**
-     * @var Phake_MockReader
-     */
-    private $mockReader;
-
-    /**
      * Sets up the verifier and its call recorder
      */
     public function setUp()
     {
         $this->obj        = $this->getMock('Phake_IMock');
-        $this->mockReader = Phake::mock('Phake_MockReader');
-        Phake::when($this->mockReader)->getName($this->anything())->thenReturn('mock');
+        PhakeTestUtil::setMockName($this->obj, 'mock');
+
         $this->recorder     = Phake::mock('Phake_CallRecorder_Recorder');
         $this->verifierMode = Phake::mock('Phake_CallRecorder_IVerifierMode');
 
         $this->callArray = array(
-            new Phake_CallRecorder_Call($this->obj, 'foo', array(), $this->mockReader),
-            new Phake_CallRecorder_Call($this->obj, 'bar', array(), $this->mockReader),
+            new Phake_CallRecorder_Call($this->obj, 'foo', array()),
+            new Phake_CallRecorder_Call($this->obj, 'bar', array()),
             new Phake_CallRecorder_Call($this->obj, 'foo', array(
                 'bar',
                 'foo'
-            ), $this->mockReader),
-            new Phake_CallRecorder_Call($this->obj, 'foo', array(), $this->mockReader),
+            )),
+            new Phake_CallRecorder_Call($this->obj, 'foo', array()),
         );
 
         Phake::when($this->recorder)->getAllCalls()->thenReturn($this->callArray);
@@ -114,8 +109,7 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
             $this->obj,
             'bar',
             array(),
-            $this->verifierMode,
-            $this->mockReader
+            $this->verifierMode
         );
         $return      = new Phake_CallRecorder_CallInfo($this->callArray[1], new Phake_CallRecorder_Position(0));
         Phake::when($this->recorder)->getCallInfo($this->callArray[1])->thenReturn($return);
@@ -138,8 +132,7 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
             $this->obj,
             'test',
             array(),
-            $this->verifierMode,
-            $this->mockReader
+            $this->verifierMode
         );
         Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(
             new Phake_CallRecorder_VerifierMode_Result(true, '')
@@ -162,8 +155,7 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
                 new Phake_Matchers_EqualsMatcher('test'),
                 new Phake_Matchers_EqualsMatcher('test')
             ),
-            $this->verifierMode,
-            $this->mockReader
+            $this->verifierMode
         );
         Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(
             new Phake_CallRecorder_VerifierMode_Result(true, '')
@@ -182,8 +174,7 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
             $this->obj,
             'foo',
             array(),
-            $this->verifierMode,
-            $this->mockReader
+            $this->verifierMode
         );
 
         $return = new Phake_CallRecorder_CallInfo($this->callArray[1], new Phake_CallRecorder_Position(0));
@@ -211,8 +202,7 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
             $this->obj,
             'bar',
             array(new Phake_Matchers_AnyParameters()),
-            $this->verifierMode,
-            $this->mockReader
+            $this->verifierMode
         );
 
         $return = new Phake_CallRecorder_CallInfo($this->callArray[1], new Phake_CallRecorder_Position(0));
@@ -242,12 +232,11 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
             $obj1,
             'foo',
             array(),
-            $this->verifierMode,
-            $this->mockReader
+            $this->verifierMode
         );
 
-        $recorder->recordCall(new Phake_CallRecorder_Call($obj1, 'foo', array(), new Phake_MockReader()));
-        $recorder->recordCall(new Phake_CallRecorder_Call($obj2, 'foo', array(), new Phake_MockReader()));
+        $recorder->recordCall(new Phake_CallRecorder_Call($obj1, 'foo', array()));
+        $recorder->recordCall(new Phake_CallRecorder_Call($obj2, 'foo', array()));
 
         $verifier = new Phake_CallRecorder_Verifier($recorder, $obj1);
 
@@ -264,8 +253,7 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
             $this->obj,
             'foo',
             array(),
-            $this->verifierMode,
-            $this->mockReader
+            $this->verifierMode
         );
 
         $return = new Phake_CallRecorder_CallInfo($this->callArray[1], new Phake_CallRecorder_Position(0));
@@ -286,8 +274,7 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
             $this->obj,
             'foo',
             array(),
-            $this->verifierMode,
-            $this->mockReader
+            $this->verifierMode
         );
 
         Phake::when($this->verifierMode)->__toString()->thenReturn('exactly 1 times');
@@ -312,12 +299,13 @@ Other Invocations:
     public function testVerifierModifiesFailureDescriptionIfThereAreNoInteractions()
     {
         $obj2        = $this->getMock('Phake_IMock');
+        PhakeTestUtil::setMockName($obj2, 'mock');
+
         $expectation = new Phake_CallRecorder_CallExpectation(
             $obj2,
             'foo',
             array(),
-            $this->verifierMode,
-            $this->mockReader
+            $this->verifierMode
         );
 
         Phake::when($this->verifierMode)->__toString()->thenReturn('exactly 1 times');
@@ -343,8 +331,7 @@ Other Invocations:
             $this->obj,
             'foo',
             array(new Phake_Matchers_EqualsMatcher('test')),
-            $this->verifierMode,
-            $this->mockReader
+            $this->verifierMode
         );
 
         Phake::when($this->verifierMode)->__toString()->thenReturn('exactly 1 times');

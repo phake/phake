@@ -65,7 +65,9 @@ class Phake_Proxies_StubberProxyTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->stubbable = $this->getMock('Phake_IMock');
-        $this->proxy     = new Phake_Proxies_StubberProxy($this->stubbable, new Phake_Matchers_Factory(), new Phake_MockReader());
+        $this->stubbable->__PHAKE_info = Phake::mock('Phake_Mock_Info');
+        Phake::when($this->stubbable->__PHAKE_info)->getStubMapper()->thenReturn(Phake::mock('Phake_Stubber_StubMapper'));
+        $this->proxy     = new Phake_Proxies_StubberProxy($this->stubbable, new Phake_Matchers_Factory());
     }
 
     /**
@@ -94,7 +96,7 @@ class Phake_Proxies_StubberProxyTest extends PHPUnit_Framework_TestCase
     public function testGetWithMatcher()
     {
         $mock = Phake::mock('PhakeTest_MagicClass');
-        $proxy = new Phake_Proxies_StubberProxy($mock, new Phake_Matchers_Factory(), new Phake_MockReader());
+        $proxy = new Phake_Proxies_StubberProxy($mock, new Phake_Matchers_Factory());
 
         $answerBinder = $proxy->__get($this->anything());
 

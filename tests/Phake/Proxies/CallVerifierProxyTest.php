@@ -55,11 +55,6 @@ class Phake_Proxies_CallVerifierProxyTest extends PHPUnit_Framework_TestCase
     private $obj;
 
     /**
-     * @var Phake_MockReader
-     */
-    private $mockReader;
-
-    /**
      * @var Phake_Client_IClient
      */
     private $client;
@@ -72,12 +67,10 @@ class Phake_Proxies_CallVerifierProxyTest extends PHPUnit_Framework_TestCase
         $this->client     = new Phake_Client_Default();
         $this->matcher1   = Phake::mock('Phake_Matchers_IArgumentMatcher');
         $this->obj        = new Phake_CallRecorder_Recorder();
-        $this->mockReader = Phake::mock('Phake_MockReader');
-        Phake::when($this->mockReader)->getCallRecorder(Phake::anyParameters())->thenReturn($this->obj);
         $this->proxy = new Phake_Proxies_CallVerifierProxy(array(
             new Phake_Matchers_EqualsMatcher('foo'),
             new Phake_Matchers_EqualsMatcher(array())
-        ), $this->mockReader, $this->client);
+        ), $this->client);
 
     }
 
@@ -87,9 +80,10 @@ class Phake_Proxies_CallVerifierProxyTest extends PHPUnit_Framework_TestCase
     public function testIsCalledOn()
     {
         $mock = $this->getMock('Phake_IMock');
+        PhakeTestUtil::setCallRecorder($mock, $this->obj);
 
         $this->obj->recordCall(
-            new Phake_CallRecorder_Call($mock, '__call', array('foo', array()), new Phake_MockReader())
+            new Phake_CallRecorder_Call($mock, '__call', array('foo', array()))
         );
 
         $verifier = $this->proxy->isCalledOn($mock);

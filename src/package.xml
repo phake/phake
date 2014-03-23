@@ -30,7 +30,6 @@
    <file baseinstalldir="/" name="Phake.php" role="php" />
    <file baseinstalldir="/" name="Phake/Facade.php" role="php" />
    <file baseinstalldir="/" name="Phake/IMock.php" role="php" />
-   <file baseinstalldir="/" name="Phake/MockReader.php" role="php" />
    <file baseinstalldir="/" name="Phake/Annotation/MockInitializer.php" role="php" />
    <file baseinstalldir="/" name="Phake/Annotation/Reader.php" role="php" />
    <file baseinstalldir="/" name="Phake/CallRecorder/Call.php" role="php" />

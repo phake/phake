@@ -209,13 +209,13 @@ class {$newClassName} {$extends}
             $mockObject = new $newClassName();
         }
 
-        $mockObject->__PHAKE_info = new Phake_Mock_Info($recorder, $mapper, $defaultAnswer);
+        $mockObject->__PHAKE_info = $info = new Phake_Mock_Info($mockObject->__PHAKE_name, $recorder, $mapper, $defaultAnswer);
 
-        $mockObject->__PHAKE_info->setHandlerChain(new Phake_ClassGenerator_InvocationHandler_Composite(array(
-                new Phake_ClassGenerator_InvocationHandler_FrozenObjectCheck(new Phake_MockReader()),
-                new Phake_ClassGenerator_InvocationHandler_CallRecorder(new Phake_MockReader()),
-                new Phake_ClassGenerator_InvocationHandler_MagicCallRecorder(new Phake_MockReader()),
-                new Phake_ClassGenerator_InvocationHandler_StubCaller(new Phake_MockReader()),
+        $info->setHandlerChain(new Phake_ClassGenerator_InvocationHandler_Composite(array(
+                new Phake_ClassGenerator_InvocationHandler_FrozenObjectCheck($info),
+                new Phake_ClassGenerator_InvocationHandler_CallRecorder($info->getCallRecorder()),
+                new Phake_ClassGenerator_InvocationHandler_MagicCallRecorder($info->getCallRecorder()),
+                new Phake_ClassGenerator_InvocationHandler_StubCaller($info->getStubMapper(), $info->getDefaultAnswer()),
             )));
 
         $mockObject->__PHAKE_info->getStubMapper()->mapStubToMatcher(
