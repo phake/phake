@@ -113,7 +113,7 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
         $answer       = $this->getMock('Phake_Stubber_IAnswer');
         $mock         = $this->classGen->instantiate($newClassName, $callRecorder, $stubMapper, $answer);
 
-        $this->assertSame($callRecorder, $mock->__PHAKE_callRecorder);
+        $this->assertSame($callRecorder, $mock->__PHAKE_info->getCallRecorder());
     }
 
     /**
@@ -266,7 +266,7 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
             ->method('mapStubToMatcher')
             ->with($this->equalTo($answerCollection), $this->equalTo($matcher));
 
-        $mock->__PHAKE_stubMapper->mapStubToMatcher($answerCollection, $matcher);
+        $mock->__PHAKE_info->getStubMapper()->mapStubToMatcher($answerCollection, $matcher);
     }
 
     /**

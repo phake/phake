@@ -2,26 +2,26 @@
 
 /*
  * Phake - Mocking Framework
- * 
+ *
  * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
- * 
+ *
  *  *  Redistributions of source code must retain the above copyright
  *     notice, this list of conditions and the following disclaimer.
- * 
+ *
  *  *  Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in
  *     the documentation and/or other materials provided with the
  *     distribution.
- * 
+ *
  *  *  Neither the name of Mike Lively nor the names of his
  *     contributors may be used to endorse or promote products derived
  *     from this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -34,7 +34,7 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  * @category   Testing
  * @package    Phake
  * @author     Mike Lively <m@digitalsandwich.com>
@@ -43,80 +43,73 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-class Phake_MockReaderTest extends PHPUnit_Framework_TestCase
-{
-    /**
-     * @var Phake_MockReader
-     */
-    private $reader;
+/**
+ * Stores data about the mock object.
+ *
+ * @author Mike Lively <m@digitalsandwich.com>
+ */
+class Phake_Mock_Info {
+    private $uniqId;
+
+    private $recorder;
+
+    private $mapper;
+
+    private $answer;
+
+    private $frozen;
 
     /**
-     * @var Phake_IMock
+     * @var Phake_ClassGenerator_InvocationHandler_IInvocationHandler
      */
-    private $mock;
+    private $handlerChain;
 
-    /**
-     * @Mock
-     * @var Phake_Mock_Info
-     */
-    private $info;
-
-    public function setUp()
+    public function __construct(Phake_CallRecorder_Recorder $recorder, Phake_Stubber_StubMapper $mapper, Phake_Stubber_IAnswer $defaultAnswer)
     {
-        Phake::initAnnotations($this);
-        $this->reader = new Phake_MockReader();
-        $this->mock   = $this->getMock('Phake_IMock');
-        $this->mock->__PHAKE_info = $this->info;
+        $this->uniqId = uniqid('', true);
+        $this->recorder = $recorder;
+        $this->mapper = $mapper;
+        $this->answer = $defaultAnswer;
+        $this->frozen = false;
     }
 
-    public function testGetCallRecorder()
+    public function getCallRecorder()
     {
-
-        $recorder = Phake::mock('Phake_CallRecorder_Recorder');
-        Phake::when($this->info)->getCallRecorder()->thenReturn($recorder);
-
-        $this->assertSame($recorder, $this->reader->getCallRecorder($this->mock));
+        return $this->recorder;
     }
 
-    public function testGetName()
+    public function getStubMapper()
     {
-        $this->mock->__PHAKE_name = 'PhakeMock';
-        $this->assertSame($this->mock->__PHAKE_name, $this->reader->getName($this->mock));
+        return $this->mapper;
     }
 
-    public function testGetStubMapper()
+    public function getDefaultAnswer()
     {
-        $mapper = Phake::mock('Phake_Stubber_StubMapper');
-        Phake::when($this->info)->getStubMapper()->thenReturn($mapper);
-
-        $this->assertSame($mapper, $this->reader->getStubMapper($this->mock));
+        return $this->answer;
     }
 
-    public function testGetDefaultAnswer()
+    public function isObjectFrozen()
     {
-        $answer = Phake::mock('Phake_Stubber_IAnswer');
-        Phake::when($this->info)->getDefaultAnswer()->thenReturn($answer);
-
-        $this->assertSame($answer, $this->reader->getDefaultAnswer($this->mock));
+        return $this->frozen;
     }
 
-    public function testIsObjectFrozen()
+    public function freezeObject()
     {
-        Phake::when($this->info)->isObjectFrozen()->thenReturn(true);
-        $this->assertTrue($this->reader->isObjectFrozen($this->mock));
+        $this->frozen = true;
     }
 
-    public function testSetIsObjectFrozen()
+    public function thawObject()
     {
-        $this->reader->setIsObjectFrozen($this->mock, true);
-        Phake::verify($this->info)->freezeObject();
+        $this->frozen = false;
     }
 
-    public function testSetObjectThawed()
+    public function getHandlerChain()
     {
-        $this->reader->setIsObjectFrozen($this->mock, false);
-        Phake::verify($this->info)->thawObject();
+        return $this->handlerChain;
     }
 
+    public function setHandlerChain(Phake_ClassGenerator_InvocationHandler_IInvocationHandler $handlerChain)
+    {
+        $this->handlerChain = $handlerChain;
+    }
 }
-

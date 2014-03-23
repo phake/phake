@@ -57,7 +57,7 @@ class Phake_MockReader
      */
     public function getCallRecorder(Phake_IMock $mock)
     {
-        return $mock->__PHAKE_callRecorder;
+        return $this->getInfo($mock)->getCallRecorder();
     }
 
     /**
@@ -77,7 +77,7 @@ class Phake_MockReader
      */
     public function getStubMapper(Phake_IMock $mock)
     {
-        return $mock->__PHAKE_stubMapper;
+        return $this->getInfo($mock)->getStubMapper();
     }
 
     /**
@@ -87,7 +87,7 @@ class Phake_MockReader
      */
     public function getDefaultAnswer(Phake_IMock $mock)
     {
-        return $mock->__PHAKE_defaultAnswer;
+        return $this->getInfo($mock)->getDefaultAnswer();
     }
 
     /**
@@ -97,7 +97,7 @@ class Phake_MockReader
      */
     public function isObjectFrozen(Phake_IMock $mock)
     {
-        return $mock->__PHAKE_isFrozen;
+        return $this->getInfo($mock)->isObjectFrozen();
     }
 
     /**
@@ -108,6 +108,22 @@ class Phake_MockReader
      */
     public function setIsObjectFrozen(Phake_IMock $mock, $frozen)
     {
-        $mock->__PHAKE_isFrozen = $frozen;
+        if ($frozen)
+        {
+            $this->getInfo($mock)->freezeObject();
+        }
+        else
+        {
+            $this->getInfo($mock)->thawObject();
+        }
+    }
+
+    /**
+     * @param Phake_IMock $mock
+     * @return Phake_Mock_Info
+     */
+    private function getInfo(Phake_IMock $mock)
+    {
+        return $mock->__PHAKE_info;
     }
 }

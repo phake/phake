@@ -169,26 +169,11 @@ class Phake_ClassGenerator_MockClass
 class {$newClassName} {$extends}
 	implements Phake_IMock {$implements}
 {
-    public \$__PHAKE_uniqid;
+    public \$__PHAKE_info;
 
-	public \$__PHAKE_callRecorder;
-
-	public \$__PHAKE_stubMapper;
-
-	public \$__PHAKE_defaultAnswer;
-
-	public \$__PHAKE_isFrozen;
-
-	public \$__PHAKE_name;
-
-	public \$__PHAKE_handlerChain;
+	public \$__PHAKE_name = '{$mockedClassName}';
 
 	public function __destruct() {}
-
-	public function __PHAKE_getMockedClassName()
-	{
-	    return '{$mockedClassName}';
-	}
 
 	{$this->generateMockedMethods($mockedClass, $interfaces)}
 }
@@ -224,28 +209,23 @@ class {$newClassName} {$extends}
             $mockObject = new $newClassName();
         }
 
-        $mockObject->__PHAKE_uniqid = uniqid('', true);
-        $mockObject->__PHAKE_callRecorder = $recorder;
-        $mockObject->__PHAKE_stubMapper = $mapper;
-        $mockObject->__PHAKE_defaultAnswer = $defaultAnswer;
-        $mockObject->__PHAKE_isFrozen = false;
-        $mockObject->__PHAKE_name = $mockObject->__PHAKE_getMockedClassName();
+        $mockObject->__PHAKE_info = new Phake_Mock_Info($recorder, $mapper, $defaultAnswer);
 
-        $mockObject->__PHAKE_handlerChain = new Phake_ClassGenerator_InvocationHandler_Composite(array(
-			new Phake_ClassGenerator_InvocationHandler_FrozenObjectCheck(new Phake_MockReader()),
-			new Phake_ClassGenerator_InvocationHandler_CallRecorder(new Phake_MockReader()),
-			new Phake_ClassGenerator_InvocationHandler_MagicCallRecorder(new Phake_MockReader()),
-			new Phake_ClassGenerator_InvocationHandler_StubCaller(new Phake_MockReader()),
-		));
+        $mockObject->__PHAKE_info->setHandlerChain(new Phake_ClassGenerator_InvocationHandler_Composite(array(
+                new Phake_ClassGenerator_InvocationHandler_FrozenObjectCheck(new Phake_MockReader()),
+                new Phake_ClassGenerator_InvocationHandler_CallRecorder(new Phake_MockReader()),
+                new Phake_ClassGenerator_InvocationHandler_MagicCallRecorder(new Phake_MockReader()),
+                new Phake_ClassGenerator_InvocationHandler_StubCaller(new Phake_MockReader()),
+            )));
 
-        $mockObject->__PHAKE_stubMapper->mapStubToMatcher(
-			new Phake_Stubber_AnswerCollection(new Phake_Stubber_Answers_StaticAnswer('Mock for ' . $mockObject->__PHAKE_getMockedClassName())),
+        $mockObject->__PHAKE_info->getStubMapper()->mapStubToMatcher(
+			new Phake_Stubber_AnswerCollection(new Phake_Stubber_Answers_StaticAnswer('Mock for ' . $mockObject->__PHAKE_name)),
 			new Phake_Matchers_MethodMatcher('__toString', array())
 		);
 
-        $mockObject->__PHAKE_stubMapper->mapStubToMatcher(
+        $mockObject->__PHAKE_info->getStubMapper()->mapStubToMatcher(
 			new Phake_Stubber_AnswerCollection(new Phake_Stubber_Answers_StaticAnswer(NULL)),
-			new Phake_Matchers_AbstractMethodMatcher(new ReflectionClass($mockObject->__PHAKE_getMockedClassName()))
+			new Phake_Matchers_AbstractMethodMatcher(new ReflectionClass($mockObject->__PHAKE_name))
 		);
 
         $mockReflClass = new ReflectionClass($mockObject);
@@ -325,12 +305,12 @@ class {$newClassName} {$extends}
 		\$args = array();
 		{$this->copyMethodParameters($method)}
 
-		if (\$this->__PHAKE_handlerChain === null) {
+		if (\$this->__PHAKE_info === null) {
 		    return null;
 		}
 
 		\$funcArgs = func_get_args();
-		\$answer = \$this->__PHAKE_handlerChain->invoke(\$this, '{$method->getName()}', \$funcArgs, \$args);
+		\$answer = \$this->__PHAKE_info->getHandlerChain()->invoke(\$this, '{$method->getName()}', \$funcArgs, \$args);
 
 		if (\$answer instanceof Phake_Stubber_Answers_IDelegator)
 		{
