@@ -47,11 +47,6 @@
  */
 class PhakeTestUtil
 {
-    public static function setMockName(Phake_IMock $mock, $name)
-    {
-        $mock->__PHAKE_name = $name;
-    }
-
     public static function setCallRecorder(Phake_IMock $mock, Phake_CallRecorder_Recorder $recorder)
     {
         Phake::when(static::getMockedInfo($mock))->getCallRecorder()->thenReturn($recorder);

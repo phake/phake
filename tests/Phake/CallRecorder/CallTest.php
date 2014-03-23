@@ -58,8 +58,7 @@ class Phake_CallRecorder_CallTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->mock = $this->getMock('Phake_IMock');
-        PhakeTestUtil::setMockName($this->mock, 'Phake_IMock');
+        $this->mock = Phake::mock('Phake_IMock');
 
         $this->call = new Phake_CallRecorder_Call($this->mock, 'someMethod', array('foo', 'bar'));
     }

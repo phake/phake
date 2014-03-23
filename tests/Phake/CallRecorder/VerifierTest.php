@@ -79,8 +79,7 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->obj        = $this->getMock('Phake_IMock');
-        PhakeTestUtil::setMockName($this->obj, 'mock');
+        $this->obj        = Phake::mock('Phake_IMock');
 
         $this->recorder     = Phake::mock('Phake_CallRecorder_Recorder');
         $this->verifierMode = Phake::mock('Phake_CallRecorder_IVerifierMode');
@@ -286,9 +285,9 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
             new Phake_CallRecorder_VerifierMode_Result(false, 'actually called 0 times')
         );
 
-        $expectedMessage = 'Expected mock->foo() to be called exactly 1 times, actually called 0 times.
+        $expectedMessage = 'Expected Phake_IMock->foo() to be called exactly 1 times, actually called 0 times.
 Other Invocations:
-  mock->foo(<string:bar>, <string:foo>)';
+  Phake_IMock->foo(<string:bar>, <string:foo>)';
 
         $this->assertEquals(
             new Phake_CallRecorder_VerifierResult(false, array(), $expectedMessage),
@@ -298,8 +297,7 @@ Other Invocations:
 
     public function testVerifierModifiesFailureDescriptionIfThereAreNoInteractions()
     {
-        $obj2        = $this->getMock('Phake_IMock');
-        PhakeTestUtil::setMockName($obj2, 'mock');
+        $obj2        = Phake::mock('Phake_IMock');
 
         $expectation = new Phake_CallRecorder_CallExpectation(
             $obj2,
@@ -318,7 +316,7 @@ Other Invocations:
         );
 
         $this->assertEquals(
-            new Phake_CallRecorder_VerifierResult(false, array(), 'Expected mock->foo() to be called exactly 1 times, actually called 0 times. In fact, there are no interactions with this mock.'),
+            new Phake_CallRecorder_VerifierResult(false, array(), 'Expected Phake_IMock->foo() to be called exactly 1 times, actually called 0 times. In fact, there are no interactions with this mock.'),
             $this->verifier->verifyCall($expectation)
         );
 
@@ -344,11 +342,11 @@ Other Invocations:
         );
 
         $expected_msg =
-            "Expected mock->foo(equal to <string:test>) to be called exactly 1 times, actually called 0 times.\n"
+            "Expected Phake_IMock->foo(equal to <string:test>) to be called exactly 1 times, actually called 0 times.\n"
                 . "Other Invocations:\n"
-                . "  mock->foo()\n"
-                . "  mock->foo(<string:bar>, <string:foo>)\n"
-                . "  mock->foo()";
+                . "  Phake_IMock->foo()\n"
+                . "  Phake_IMock->foo(<string:bar>, <string:foo>)\n"
+                . "  Phake_IMock->foo()";
 
         $this->assertEquals(
             new Phake_CallRecorder_VerifierResult(false, array(), $expected_msg),
@@ -368,10 +366,10 @@ Other Invocations:
         $expected_msg =
             "Expected no interaction with mock\n"
                 . "Invocations:\n"
-                . "  mock->foo()\n"
-                . "  mock->bar()\n"
-                . "  mock->foo(<string:bar>, <string:foo>)\n"
-                . "  mock->foo()";
+                . "  Phake_IMock->foo()\n"
+                . "  Phake_IMock->bar()\n"
+                . "  Phake_IMock->foo(<string:bar>, <string:foo>)\n"
+                . "  Phake_IMock->foo()";
 
         $this->assertEquals(
             new Phake_CallRecorder_VerifierResult(false, array(), $expected_msg),

@@ -490,7 +490,7 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
         $answer       = $this->getMock('Phake_Stubber_IAnswer');
         $mock         = $this->classGen->instantiate($newClassName, $callRecorder, $stubMapper, $answer);
 
-        $this->assertEquals('PhakeTest_MockedClass', $mock->__PHAKE_name);
+        $this->assertEquals('PhakeTest_MockedClass', $mock::__PHAKE_name);
         $this->assertEquals('PhakeTest_MockedClass', Phake::getInfo($mock)->getName());
     }
 

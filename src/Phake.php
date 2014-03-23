@@ -469,7 +469,7 @@ class Phake
      */
     public static function getName(Phake_IMock $mock)
     {
-        return isset($mock->__PHAKE_name) ? $mock->__PHAKE_name : '<undefined>';
+        return $mock::__PHAKE_name;
     }
 
     /**

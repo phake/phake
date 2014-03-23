@@ -171,7 +171,7 @@ class {$newClassName} {$extends}
 {
     public \$__PHAKE_info;
 
-	public \$__PHAKE_name = '{$mockedClassName}';
+	const __PHAKE_name = '{$mockedClassName}';
 
 	public function __destruct() {}
 
@@ -209,7 +209,7 @@ class {$newClassName} {$extends}
             $mockObject = new $newClassName();
         }
 
-        $mockObject->__PHAKE_info = $info = new Phake_Mock_Info($mockObject->__PHAKE_name, $recorder, $mapper, $defaultAnswer);
+        $mockObject->__PHAKE_info = $info = new Phake_Mock_Info($newClassName::__PHAKE_name, $recorder, $mapper, $defaultAnswer);
 
         $info->setHandlerChain(new Phake_ClassGenerator_InvocationHandler_Composite(array(
                 new Phake_ClassGenerator_InvocationHandler_FrozenObjectCheck($info),
