@@ -74,29 +74,21 @@ class Phake_Proxies_VerifierProxy
     private $client;
 
     /**
-     * @var Phake_MockReader
-     */
-    private $mockReader;
-
-    /**
      * @param Phake_CallRecorder_Verifier      $verifier
      * @param Phake_Matchers_Factory           $matcherFactory
      * @param Phake_CallRecorder_IVerifierMode $mode
      * @param Phake_Client_IClient             $client
-     * @param Phake_MockReader                 $mockReader
      */
     public function __construct(
         Phake_CallRecorder_Verifier $verifier,
         Phake_Matchers_Factory $matcherFactory,
         Phake_CallRecorder_IVerifierMode $mode,
-        Phake_Client_IClient $client,
-        Phake_MockReader $mockReader
+        Phake_Client_IClient $client
     ) {
         $this->verifier       = $verifier;
         $this->matcherFactory = $matcherFactory;
         $this->mode           = $mode;
         $this->client         = $client;
-        $this->mockReader     = $mockReader;
     }
 
     /**
@@ -110,7 +102,7 @@ class Phake_Proxies_VerifierProxy
     public function __call($method, array $arguments)
     {
         $expectation = new Phake_CallRecorder_CallExpectation($this->verifier->getObject(
-        ), $method, $this->matcherFactory->createMatcherArray($arguments), $this->mode, $this->mockReader);
+        ), $method, $this->matcherFactory->createMatcherArray($arguments), $this->mode);
 
         $result = $this->verifier->verifyCall($expectation);
 

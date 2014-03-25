@@ -113,7 +113,7 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
         $answer       = $this->getMock('Phake_Stubber_IAnswer');
         $mock         = $this->classGen->instantiate($newClassName, $callRecorder, $stubMapper, $answer);
 
-        $this->assertSame($callRecorder, $mock->__PHAKE_callRecorder);
+        $this->assertSame($callRecorder, Phake::getInfo($mock)->getCallRecorder());
     }
 
     /**
@@ -134,7 +134,7 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
         /* @var $callRecorder Phake_CallRecorder_Recorder */
         $callRecorder->expects($this->once())
             ->method('recordCall')
-            ->with($this->equalTo(new Phake_CallRecorder_Call($mock, 'foo', array(), new Phake_MockReader())));
+            ->with($this->equalTo(new Phake_CallRecorder_Call($mock, 'foo', array())));
 
         $mock->foo();
     }
@@ -159,7 +159,7 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
             ->method('recordCall')
             ->with(
                 $this->equalTo(
-                    new Phake_CallRecorder_Call($mock, 'fooWithArgument', array('bar'), new Phake_MockReader())
+                    new Phake_CallRecorder_Call($mock, 'fooWithArgument', array('bar'))
                 )
             );
 
@@ -266,7 +266,7 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
             ->method('mapStubToMatcher')
             ->with($this->equalTo($answerCollection), $this->equalTo($matcher));
 
-        $mock->__PHAKE_stubMapper->mapStubToMatcher($answerCollection, $matcher);
+        Phake::getInfo($mock)->getStubMapper()->mapStubToMatcher($answerCollection, $matcher);
     }
 
     /**
@@ -433,10 +433,10 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
         $mock->foo('blah');
 
         Phake::verify($callRecorder)->recordCall(
-            new Phake_CallRecorder_Call($mock, 'foo', array('blah'), new Phake_MockReader())
+            new Phake_CallRecorder_Call($mock, 'foo', array('blah'))
         );
         Phake::verify($callRecorder)->recordCall(
-            new Phake_CallRecorder_Call($mock, '__call', array('foo', array('blah')), new Phake_MockReader())
+            new Phake_CallRecorder_Call($mock, '__call', array('foo', array('blah')))
         );
     }
 
@@ -491,6 +491,7 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
         $mock         = $this->classGen->instantiate($newClassName, $callRecorder, $stubMapper, $answer);
 
         $this->assertEquals('PhakeTest_MockedClass', $mock->__PHAKE_name);
+        $this->assertEquals('PhakeTest_MockedClass', Phake::getInfo($mock)->getName());
     }
 
     /**

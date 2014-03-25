@@ -60,20 +60,13 @@ class Phake_Proxies_StubberProxy
     private $matcherFactory;
 
     /**
-     * @var Phake_MockReader
-     */
-    private $mockReader;
-
-    /**
      * @param Phake_IMock            $obj
      * @param Phake_Matchers_Factory $matcherFactory
-     * @param Phake_MockReader       $mockReader
      */
-    public function __construct(Phake_IMock $obj, Phake_Matchers_Factory $matcherFactory, Phake_MockReader $mockReader)
+    public function __construct(Phake_IMock $obj, Phake_Matchers_Factory $matcherFactory)
     {
         $this->obj            = $obj;
         $this->matcherFactory = $matcherFactory;
-        $this->mockReader     = $mockReader;
     }
 
     /**
@@ -87,7 +80,7 @@ class Phake_Proxies_StubberProxy
     public function __call($method, array $arguments)
     {
         $matcher = new Phake_Matchers_MethodMatcher($method, $this->matcherFactory->createMatcherArray($arguments));
-        $binder  = new Phake_Stubber_AnswerBinder($this->obj, $matcher, $this->mockReader);
+        $binder  = new Phake_Stubber_AnswerBinder($matcher, Phake::getInfo($this->obj)->getStubMapper());
         return new Phake_Proxies_AnswerBinderProxy($binder);
     }
 

@@ -51,22 +51,14 @@ class Phake_ClassGenerator_InvocationHandler_MagicCallRecorderTest extends PHPUn
     private $handler;
 
     /**
-     * @var Phake_MockReader
-     */
-    private $mockReader;
-
-    /**
      * @var Phake_CallRecorder_Recorder
      */
     private $callRecorder;
 
     public function setUp()
     {
-        $this->mockReader = Phake::mock('Phake_MockReader');
         $this->callRecorder = Phake::mock('Phake_CallRecorder_Recorder');
-        Phake::when($this->mockReader)->getCallRecorder($this->anything())->thenReturn($this->callRecorder);
-
-        $this->handler = new Phake_ClassGenerator_InvocationHandler_MagicCallRecorder($this->mockReader);
+        $this->handler = new Phake_ClassGenerator_InvocationHandler_MagicCallRecorder($this->callRecorder);
     }
 
     public function testImplementIInvocationHandler()
@@ -82,7 +74,7 @@ class Phake_ClassGenerator_InvocationHandler_MagicCallRecorderTest extends PHPUn
         $this->handler->invoke($mock, '__call', array('foo', array()), $ref);
 
         Phake::verify($this->callRecorder)->recordCall(
-            new Phake_CallRecorder_Call($mock, 'foo', array(), $this->mockReader)
+            new Phake_CallRecorder_Call($mock, 'foo', array())
         );
     }
 

@@ -55,18 +55,11 @@ class Phake_Proxies_CallStubberProxy
     private $arguments;
 
     /**
-     * @var Phake_MockReader
-     */
-    private $mockReader;
-
-    /**
      * @param array            $arguments
-     * @param Phake_MockReader $mockReader
      */
-    public function __construct(array $arguments, Phake_MockReader $mockReader)
+    public function __construct(array $arguments)
     {
         $this->arguments  = $arguments;
-        $this->mockReader = $mockReader;
     }
 
     /**
@@ -79,7 +72,7 @@ class Phake_Proxies_CallStubberProxy
     public function isCalledOn(Phake_IMock $obj)
     {
         $matcher = new Phake_Matchers_MethodMatcher('__call', $this->arguments);
-        $binder  = new Phake_Stubber_AnswerBinder($obj, $matcher, $this->mockReader);
+        $binder  = new Phake_Stubber_AnswerBinder($matcher, Phake::getInfo($obj)->getStubMapper());
         return new Phake_Proxies_AnswerBinderProxy($binder);
     }
 }

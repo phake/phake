@@ -51,11 +51,6 @@ class Phake_Mock_ResetterTest extends PHPUnit_Framework_TestCase
     private $resetter;
 
     /**
-     * @var Phake_MockReader
-     */
-    private $mockReader;
-
-    /**
      * @var Phake_Stubber_StubMapper
      */
     private $stubMapper;
@@ -65,24 +60,29 @@ class Phake_Mock_ResetterTest extends PHPUnit_Framework_TestCase
      */
     private $callRecorder;
 
+    /**
+     * @Mock
+     * @var Phake_Mock_Info
+     */
+    private $mockInfo;
+
     public function setUp()
     {
-        $this->mockReader   = Phake::mock('Phake_MockReader');
+        Phake::initAnnotations($this);
         $this->stubMapper   = Phake::mock('Phake_Stubber_StubMapper');
         $this->callRecorder = Phake::mock('Phake_CallRecorder_Recorder');
 
-        $this->resetter = new Phake_Mock_Resetter($this->mockReader);
+        $this->resetter = new Phake_Mock_Resetter();
     }
 
     public function testReset()
     {
-        $mock = $this->getMock('Phake_IMock');
-        Phake::when($this->mockReader)->getStubMapper($mock)->thenReturn($this->stubMapper);
-        Phake::when($this->mockReader)->getCallRecorder($mock)->thenReturn($this->callRecorder);
+        Phake::when($this->mockInfo)->getStubMapper()->thenReturn($this->stubMapper);
+        Phake::when($this->mockInfo)->getCallRecorder()->thenReturn($this->callRecorder);
 
-        $this->resetter->reset($mock);
+        $this->resetter->reset($this->mockInfo);
 
-        Phake::verify($this->mockReader)->setIsObjectFrozen($mock, false);
+        Phake::verify($this->mockInfo)->thawObject();
         Phake::verify($this->stubMapper)->removeAllAnswers();
         Phake::verify($this->callRecorder)->removeAllCalls();
     }

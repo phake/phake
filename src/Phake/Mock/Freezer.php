@@ -51,28 +51,15 @@
 class Phake_Mock_Freezer
 {
     /**
-     * @var Phake_MockReader
-     */
-    private $mockReader;
-
-    /**
-     * @param Phake_MockReader $mockReader
-     */
-    public function __construct(Phake_MockReader $mockReader)
-    {
-        $this->mockReader = $mockReader;
-    }
-
-    /**
      * Freezes the given $mock and notifies the given $client
      *
-     * @param Phake_IMock          $mock
+     * @param Phake_Mock_Info $mockInfo
      * @param Phake_Client_IClient $client
      */
-    public function freeze(Phake_IMock $mock, Phake_Client_IClient $client)
+    public function freeze(Phake_Mock_Info $mockInfo, Phake_Client_IClient $client)
     {
         $client->processObjectFreeze();
-        $this->mockReader->setIsObjectFrozen($mock, true);
+        $mockInfo->freezeObject();
     }
 }
 

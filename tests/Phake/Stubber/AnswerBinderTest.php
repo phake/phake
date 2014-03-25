@@ -55,11 +55,6 @@ class Phake_Stubber_AnswerBinderTest extends PHPUnit_Framework_TestCase
     private $binder;
 
     /**
-     * @var Phake_IMock
-     */
-    private $mock;
-
-    /**
      * @var Phake_Matchers_MethodMatcher
      */
     private $matcher;
@@ -70,22 +65,15 @@ class Phake_Stubber_AnswerBinderTest extends PHPUnit_Framework_TestCase
     private $stubMapper;
 
     /**
-     * @var Phake_MockReader
-     */
-    private $mockReader;
-
-    /**
      * Sets up the test fixture
      */
     public function setUp()
     {
-        $this->mock       = $this->getMock('Phake_IMock');
+        Phake::initAnnotations($this);
         $this->matcher    = $this->getMock('Phake_Matchers_MethodMatcher', array(), array(), '', false);
         $this->stubMapper = Phake::mock('Phake_Stubber_StubMapper');
-        $this->mockReader = Phake::mock('Phake_MockReader');
 
-        Phake::when($this->mockReader)->getStubMapper($this->anything())->thenReturn($this->stubMapper);
-        $this->binder = new Phake_Stubber_AnswerBinder($this->mock, $this->matcher, $this->mockReader);
+        $this->binder = new Phake_Stubber_AnswerBinder($this->matcher, $this->stubMapper);
     }
 
     public function testBindAnswer()

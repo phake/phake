@@ -61,11 +61,6 @@ class Phake_ClassGenerator_InvocationHandler_StubCallerTest extends PHPUnit_Fram
     private $answerCollection;
 
     /**
-     * @var Phake_MockReader
-     */
-    private $mockReader;
-
-    /**
      * @var Phake_Stubber_StubMapper
      */
     private $stubMapper;
@@ -77,6 +72,7 @@ class Phake_ClassGenerator_InvocationHandler_StubCallerTest extends PHPUnit_Fram
 
     public function setUp()
     {
+        Phake::initAnnotations($this);
         $this->mock          = $this->getMock('Phake_IMock');
         $this->stubMapper    = Phake::mock('Phake_Stubber_StubMapper');
         $this->defaultAnswer = Phake::mock('Phake_Stubber_IAnswer');
@@ -88,11 +84,7 @@ class Phake_ClassGenerator_InvocationHandler_StubCallerTest extends PHPUnit_Fram
         Phake::when($answer)->getAnswer()->thenReturn('42');
         Phake::when($this->stubMapper)->getStubByCall(Phake::anyParameters())->thenReturn($this->answerCollection);
 
-        $this->mockReader = Phake::mock('Phake_MockReader');
-        Phake::when($this->mockReader)->getStubMapper($this->anything())->thenReturn($this->stubMapper);
-        Phake::when($this->mockReader)->getDefaultAnswer($this->anything())->thenReturn($this->defaultAnswer);
-
-        $this->handler = new Phake_ClassGenerator_InvocationHandler_StubCaller($this->mockReader);
+        $this->handler = new Phake_ClassGenerator_InvocationHandler_StubCaller($this->stubMapper, $this->defaultAnswer);
     }
 
     public function testImplementIInvocationHandler()
