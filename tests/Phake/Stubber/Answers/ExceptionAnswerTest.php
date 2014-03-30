@@ -71,16 +71,16 @@ class Phake_Stubber_Answers_ExceptionAnswerTest extends PHPUnit_Framework_TestCa
      */
     public function testAnswer()
     {
-        $this->answer->getAnswer();
+        call_user_func($this->answer->getAnswerCallback('testMethod'));
     }
 
     /**
-     * Tests that we throw the same exception istantiated in the answer.
+     * Tests that we throw the same exception instantiated in the answer.
      */
     public function testSameException()
     {
         try {
-            $this->answer->getAnswer();
+            call_user_func($this->answer->getAnswerCallback('testMethod'));
         } catch (Exception $e) {
             $this->assertSame($this->exception, $e);
         }

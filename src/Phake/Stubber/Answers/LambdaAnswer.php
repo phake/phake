@@ -5,7 +5,7 @@
  *
  * @author Mathieu Kooiman <mathieuk@gmail.com>
  */
-class Phake_Stubber_Answers_LambdaAnswer implements Phake_Stubber_Answers_IDelegator, Phake_Stubber_IAnswerDelegate
+class Phake_Stubber_Answers_LambdaAnswer implements Phake_Stubber_IAnswer
 {
     /**
      * @var mixed
@@ -21,52 +21,6 @@ class Phake_Stubber_Answers_LambdaAnswer implements Phake_Stubber_Answers_IDeleg
     }
 
     /**
-     * @return mixed
-     */
-    public function getAnswer()
-    {
-        return $this;
-    }
-
-    /**
-     * Actually calls the given lambda to produce the answer
-     * @return mixed
-     */
-    public function getActualAnswer()
-    {
-        $lambda = $this->answerLambda;
-        $args   = func_get_args();
-        return call_user_func_array($lambda, $args);
-    }
-
-    /**
-     * Return callback to produce actual answer
-     *
-     * @param object $calledObject
-     * @param string $calledMethod
-     * @param array  $calledParameters
-     *
-     * @return array callback
-     */
-    public function getCallBack($calledObject, $calledMethod, array $calledParameters)
-    {
-        return array($this, 'getActualAnswer');
-    }
-
-    /**
-     * Passes through the given arguments.
-     *
-     * @param string $calledMethod
-     * @param array  $calledParameters
-     *
-     * @return array
-     */
-    public function getArguments($calledMethod, array $calledParameters)
-    {
-        return $calledParameters;
-    }
-
-    /**
      * Nothing to process
      *
      * @param mixed $answer
@@ -75,6 +29,16 @@ class Phake_Stubber_Answers_LambdaAnswer implements Phake_Stubber_Answers_IDeleg
      */
     public function processAnswer($answer)
     {
+    }
+
+    /**
+     * Returns the answer that should be used when a method stubbed to this answer is called.
+     * @param string $method
+     * @return mixed
+     */
+    public function getAnswerCallback($method)
+    {
+        return $this->answerLambda;
     }
 }
 

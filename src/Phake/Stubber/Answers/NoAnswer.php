@@ -47,14 +47,11 @@
  *
  * @author Mike Lively <m@digitalsandwich.com>
  */
-class Phake_Stubber_Answers_NoAnswer implements Phake_Stubber_IAnswer
+class Phake_Stubber_Answers_NoAnswer extends Phake_Stubber_Answers_StaticAnswer
 {
-    /**
-     * @return mixed
-     */
-    public function getAnswer()
+    public function __construct()
     {
-        return null;
+        parent::__construct(null);
     }
 }
 
