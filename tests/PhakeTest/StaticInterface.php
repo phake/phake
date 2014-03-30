@@ -2,7 +2,7 @@
 /*
  * Phake - Mocking Framework
  *
- * Copyright (c) 2010-2012, Mike Lively <m@digitalsandwich.com>
+ * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -42,49 +42,6 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-class Phake_CallRecorder_CallExpectationTest extends PHPUnit_Framework_TestCase
-{
-    public function testToString()
-    {
-        /** @var $mock Phake_IMock */
-        $mock = Phake::mock('Phake_IMock');
-
-        $matcher1 = Phake::mock('Phake_Matchers_IArgumentMatcher');
-        Phake::when($matcher1)->__toString()->thenReturn('100');
-        $matcher2 = Phake::mock('Phake_Matchers_IArgumentMatcher');
-        Phake::when($matcher2)->__toString()->thenReturn('200');
-        $verifierMode = Phake::mock('Phake_CallRecorder_IVerifierMode');
-        Phake::when($verifierMode)->__toString()->thenReturn('2 times');
-
-        $expectation = new Phake_CallRecorder_CallExpectation($mock, 'method', array(
-            $matcher1,
-            $matcher2
-        ), $verifierMode);
-        $this->assertEquals(
-            "Expected Phake_IMock->method(100, 200) to be called 2 times",
-            $expectation->__toString()
-        );
-    }
-
-    public function testStaticToString()
-    {
-        /** @var $mock Phake_IMock */
-        $mock = Phake::mock('Phake_IMock');
-
-        $matcher1 = Phake::mock('Phake_Matchers_IArgumentMatcher');
-        Phake::when($matcher1)->__toString()->thenReturn('100');
-        $matcher2 = Phake::mock('Phake_Matchers_IArgumentMatcher');
-        Phake::when($matcher2)->__toString()->thenReturn('200');
-        $verifierMode = Phake::mock('Phake_CallRecorder_IVerifierMode');
-        Phake::when($verifierMode)->__toString()->thenReturn('2 times');
-
-        $expectation = new Phake_CallRecorder_CallExpectation(get_class($mock), 'method', array(
-            $matcher1,
-            $matcher2
-        ), $verifierMode);
-        $this->assertEquals(
-            "Expected Phake_IMock::method(100, 200) to be called 2 times",
-            $expectation->__toString()
-        );
-    }
-}
+interface PhakeTest_StaticInterface {
+    public static function staticMethod();
+} 

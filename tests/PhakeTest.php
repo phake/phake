@@ -1197,6 +1197,29 @@ class PhakeTest extends PHPUnit_Framework_TestCase
         Phake::verify($mock)->staticMethod();
     }
 
+    public function testMockingStaticInterface()
+    {
+        $mock = Phake::mock('PhakeTest_StaticInterface');
+
+        $this->assertInstanceOf('Phake_IMock', $mock);
+    }
+
+    public function testCallingMockStaticMethod()
+    {
+        $mock = Phake::mock('PhakeTest_StaticInterface');
+
+        $this->assertNull($mock::staticMethod());
+    }
+
+    public function testVerifyingMockStaticMethod()
+    {
+        $mock = Phake::mock('PhakeTest_StaticInterface');
+
+        $mock::staticMethod();
+
+        Phake::verifyStatic($mock)->staticMethod();
+    }
+
     public function testMockingAbstractClass()
     {
         $mock = Phake::partialMock('PhakeTest_AbstractClass');

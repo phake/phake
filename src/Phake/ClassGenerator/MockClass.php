@@ -237,11 +237,11 @@ class {$newClassName} {$extends}
 
         $implementedMethods = $this->reservedWords;
         foreach ($mockedClass->getMethods($filter) as $method) {
-            if (!$method->isConstructor() && !$method->isDestructor() && !$method->isFinal() && !$method->isStatic()
+            if (!$method->isConstructor() && !$method->isDestructor() && !$method->isFinal()
                 && !in_array($method->getName(), $implementedMethods)
             ) {
                 $implementedMethods[] = $method->getName();
-                $methodDefs .= $this->implementMethod($method) . "\n";
+                $methodDefs .= $this->implementMethod($method, $method->isStatic()) . "\n";
             }
         }
 
@@ -276,7 +276,7 @@ class {$newClassName} {$extends}
      *
      * @return string
      */
-    protected function implementMethod(ReflectionMethod $method)
+    protected function implementMethod(ReflectionMethod $method, $static = false)
     {
         $modifiers = implode(
             ' ',
@@ -285,19 +285,28 @@ class {$newClassName} {$extends}
 
         $reference = $method->returnsReference() ? '&' : '';
 
+        if ($static)
+        {
+            $context = '__CLASS__';
+        }
+        else
+        {
+            $context = '$this';
+        }
+
         $methodDef = "
 	{$modifiers} function {$reference}{$method->getName()}({$this->generateMethodParameters($method)})
 	{
 		\$args = array();
 		{$this->copyMethodParameters($method)}
 
-        \$info = Phake::getInfo(\$this);
+        \$info = Phake::getInfo({$context});
 		if (\$info === null) {
 		    return null;
 		}
 
 		\$funcArgs = func_get_args();
-		\$answer = \$info->getHandlerChain()->invoke(\$this, '{$method->getName()}', \$funcArgs, \$args);
+		\$answer = \$info->getHandlerChain()->invoke({$context}, '{$method->getName()}', \$funcArgs, \$args);
 
 	    \$callback = \$answer->getAnswerCallback('{$method->getName()}');
 	    \$result = call_user_func_array(\$callback, \$args);

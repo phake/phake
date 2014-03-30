@@ -159,6 +159,28 @@ class Phake
     }
 
     /**
+     * Creates a new verifier for the given mock object.
+     *
+     * @param Phake_IMock                      $mock
+     * @param Phake_CallRecorder_IVerifierMode $mode
+     *
+     * @return Phake_Proxies_VerifierProxy
+     */
+    public static function verifyStatic(Phake_IMock $mock, Phake_CallRecorder_IVerifierMode $mode = null)
+    {
+        if (is_null($mode)) {
+            $mode = self::times(1);
+        }
+
+        /* @var $info Phake_Mock_Info */
+        $info = Phake::getInfo(get_class($mock));
+        $verifier = new Phake_CallRecorder_Verifier($info->getCallRecorder(), get_class($mock));
+
+        return new Phake_Proxies_VerifierProxy($verifier, new Phake_Matchers_Factory(), $mode, self::getClient());
+    }
+
+
+    /**
      * Creates a new verifier for verifying the magic __call method
      *
      * @param mixed ... A vararg containing the expected arguments for this call
