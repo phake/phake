@@ -251,8 +251,11 @@ class Phake
         foreach (func_get_args() as $mock) {
             $callRecorder = Phake::getInfo($mock)->getCallRecorder();
             $verifier = new Phake_CallRecorder_Verifier($callRecorder, $mock);
-
             self::getClient()->processVerifierResult($verifier->verifyNoCalls());
+
+            $sCallRecorder = Phake::getInfo(get_class($mock))->getCallRecorder();
+            $sVerifier = new Phake_CallRecorder_Verifier($sCallRecorder, get_class($mock));
+            self::getClient()->processVerifierResult($sVerifier->verifyNoCalls());
         }
     }
 

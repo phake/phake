@@ -756,6 +756,21 @@ class PhakeTest extends PHPUnit_Framework_TestCase
     /**
      * Tests verifying that no interaction occured
      */
+    public function testVerifyingZeroInteractionIncludesStatic()
+    {
+        $mock = Phake::mock('PhakeTest_StaticInterface');
+
+        Phake::verifyNoInteraction($mock);
+
+        $mock::staticMethod();
+
+        $this->setExpectedException('Phake_Exception_VerificationException');
+        Phake::verifyNoInteraction($mock);
+    }
+
+    /**
+     * Tests verifying that no interaction occured
+     */
     public function testVerifyingZeroInteractionWithMultipleArgs()
     {
         $mock1 = Phake::mock('PhakeTest_MockedClass');
