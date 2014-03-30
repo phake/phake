@@ -47,7 +47,7 @@
  *
  * This class is both the delegator and the delegate.
  */
-class Phake_Stubber_Answers_ParentDelegate implements Phake_Stubber_Answers_IDelegator, Phake_Stubber_IAnswerDelegate
+class Phake_Stubber_Answers_ParentDelegate implements Phake_Stubber_IAnswer
 {
     private $capturedReturn;
 
@@ -56,45 +56,19 @@ class Phake_Stubber_Answers_ParentDelegate implements Phake_Stubber_Answers_IDel
         $this->capturedReturn =& $captor;
     }
 
-    /**
-     * Returns the answer delegate (itself)
-     * @return Phake_Stubber_Answers_ParentDelegate
-     */
-    public function getAnswer()
-    {
-        return $this;
-    }
-
-    /**
-     * Provides the callback to the parent
-     *
-     * @param object $calledObject
-     * @param string $calledMethod
-     * @param array  $calledParameters
-     *
-     * @return array
-     */
-    public function getCallBack($calledObject, $calledMethod, array $calledParameters)
-    {
-        return array($calledObject, "parent::{$calledMethod}");
-    }
-
-    /**
-     * Passes through the given arguments.
-     *
-     * @param string $calledMethod
-     * @param array  $calledParameters
-     *
-     * @return array
-     */
-    public function getArguments($calledMethod, array $calledParameters)
-    {
-        return $calledParameters;
-    }
-
     public function processAnswer($answer)
     {
         $this->capturedReturn = $answer;
+    }
+
+    /**
+     * Returns the answer that should be used when a method stubbed to this answer is called.
+     * @param string $method
+     * @return mixed
+     */
+    public function getAnswerCallback($method)
+    {
+        return array('parent', $method);
     }
 }
 

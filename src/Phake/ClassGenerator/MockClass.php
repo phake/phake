@@ -313,21 +313,10 @@ class {$newClassName} {$extends}
 		\$funcArgs = func_get_args();
 		\$answer = \$info->getHandlerChain()->invoke(\$this, '{$method->getName()}', \$funcArgs, \$args);
 
-		if (\$answer instanceof Phake_Stubber_Answers_IDelegator)
-		{
-			\$delegate = \$answer->getAnswer();
-			\$callback = \$delegate->getCallBack(\$this, '{$method->getName()}', \$args);
-			\$arguments = \$delegate->getArguments('{$method->getName()}', \$args);
-
-			\$realAnswer = call_user_func_array(\$callback, \$arguments);
-			\$answer->processAnswer(\$realAnswer);
-			return \$realAnswer;
-		}
-		else
-		{
-			\$returnAnswer = \$answer->getAnswer();
-			return \$returnAnswer;
-		}
+	    \$callback = \$answer->getAnswerCallback('{$method->getName()}');
+	    \$result = call_user_func_array(\$callback, \$args);
+	    \$answer->processAnswer(\$result);
+	    return \$result;
 	}
 ";
 

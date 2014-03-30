@@ -49,9 +49,16 @@ interface Phake_Stubber_IAnswer
 {
     /**
      * Returns the answer that should be used when a method stubbed to this answer is called.
+     * @param string $method
+     * @return callable
+     */
+    public function getAnswerCallback($method);
+
+    /**
+     * Allows for post processing an answer if necessary
+     * @param mixed $answer
      * @return mixed
      */
-    public function getAnswer();
-
+    public function processAnswer($answer);
 }
 
