@@ -476,11 +476,22 @@ class Phake
      * Used internally to standardize pulling mock names.
      *
      * @internal
-     * @param Phake_IMock $mock
+     * @param Phake_IMock|string $mock
      * @return Phake_Mock_Info
      */
-    public static function getInfo(Phake_IMock $mock)
+    public static function getInfo($mock)
     {
-        return isset($mock->__PHAKE_info) ? $mock->__PHAKE_info : null;
+        if ($mock instanceof Phake_IMock)
+        {
+            return isset($mock->__PHAKE_info) ? $mock->__PHAKE_info : null;
+        }
+        elseif (is_a($mock, 'Phake_IMock', true))
+        {
+            return $mock::$__PHAKE_staticInfo;
+        }
+        else
+        {
+            throw new InvalidArgumentException("Received '" . (is_object($mock) ? get_class($mock) : $mock) . "' Expected an instance of Phake_IMock or the name of a class that implements Phake_IMock");
+        }
     }
 }

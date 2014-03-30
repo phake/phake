@@ -493,6 +493,23 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 
         Phake::verify($mockedClass)->fooWithVariableNumberOfArguments(1, 2, 3);
     }
+
+    public function testGeneratedMockClassHasStaticInfo()
+    {
+        $newClassName = __CLASS__ . '_TestClass' . uniqid();
+        $mockedClass  = 'stdClass';
+        $this->classGen->generate($newClassName, $mockedClass);
+
+        /* @var $info Phake_Mock_Info */
+        $info = $newClassName::$__PHAKE_staticInfo;
+        $this->assertInstanceOf('Phake_Mock_Info', $info);
+
+        $this->assertInstanceOf('Phake_Stubber_IAnswer', $info->getDefaultAnswer());
+        $this->assertEquals($mockedClass, $info->getName());
+        $this->assertInstanceOf('Phake_CallRecorder_Recorder', $info->getCallRecorder());
+        $this->assertInstanceOf('Phake_Stubber_StubMapper', $info->getStubMapper());
+        $this->assertInstanceOf('Phake_ClassGenerator_InvocationHandler_IInvocationHandler', $info->getHandlerChain());
+    }
 }
 
 
