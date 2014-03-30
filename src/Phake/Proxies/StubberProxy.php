@@ -60,11 +60,12 @@ class Phake_Proxies_StubberProxy
     private $matcherFactory;
 
     /**
-     * @param Phake_IMock            $obj
+     * @param Phake_IMock|string     $obj
      * @param Phake_Matchers_Factory $matcherFactory
      */
-    public function __construct(Phake_IMock $obj, Phake_Matchers_Factory $matcherFactory)
+    public function __construct($obj, Phake_Matchers_Factory $matcherFactory)
     {
+        Phake::assertValidMock($obj);
         $this->obj            = $obj;
         $this->matcherFactory = $matcherFactory;
     }

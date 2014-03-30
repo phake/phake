@@ -108,6 +108,15 @@ class PhakeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(42, $mock->foo());
     }
 
+    public function testStaticStub()
+    {
+        $mock = Phake::mock('PhakeTest_StaticInterface');
+
+        Phake::whenStatic($mock)->staticMethod()->thenReturn(42);
+
+        $this->assertEquals(42, $mock::staticMethod());
+    }
+
     /**
      * Tests default parameters
      */

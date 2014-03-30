@@ -292,6 +292,18 @@ class Phake
     }
 
     /**
+     * Returns a new static stubber for the given mock object.
+     *
+     * @param Phake_IMock $mock
+     *
+     * @return Phake_Proxies_StubberProxy
+     */
+    public static function whenStatic(Phake_IMock $mock)
+    {
+        return new Phake_Proxies_StubberProxy(get_class($mock), new Phake_Matchers_Factory());
+    }
+
+    /**
      * Returns a new stubber specifically for the __call() method
      *
      * @param mixed ... A vararg containing the expected arguments for this call

@@ -64,8 +64,7 @@ class Phake_Proxies_StubberProxyTest extends PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->stubbable = $this->getMock('Phake_IMock');
-        PhakeTestUtil::setStubMapper($this->stubbable, Phake::mock('Phake_Stubber_StubMapper'));
+        $this->stubbable = Phake::mock('Phake_IMock');
         $this->proxy     = new Phake_Proxies_StubberProxy($this->stubbable, new Phake_Matchers_Factory());
     }
 
@@ -74,6 +73,19 @@ class Phake_Proxies_StubberProxyTest extends PHPUnit_Framework_TestCase
      */
     public function testCall()
     {
+        $answerBinder = $this->proxy->foo();
+
+        $this->assertThat($answerBinder, $this->isInstanceOf('Phake_Proxies_AnswerBinderProxy'));
+
+        $this->assertAttributeInstanceOf('Phake_Stubber_AnswerBinder', 'binder', $answerBinder);
+    }
+
+    /**
+     * Tests setting a stub on a static method in the stubbable object
+     */
+    public function testStaticCall()
+    {
+        $this->proxy     = new Phake_Proxies_StubberProxy(get_class($this->stubbable), new Phake_Matchers_Factory());
         $answerBinder = $this->proxy->foo();
 
         $this->assertThat($answerBinder, $this->isInstanceOf('Phake_Proxies_AnswerBinderProxy'));
@@ -92,6 +104,17 @@ class Phake_Proxies_StubberProxyTest extends PHPUnit_Framework_TestCase
         $this->assertAttributeInstanceOf('Phake_Stubber_AnswerBinder', 'binder', $answerBinder);
     }
 
+    /**
+     * Tests setting a stub with any parameters on a method in the stubbable object
+     */
+    public function testStaticGet()
+    {
+        $answerBinder = $this->proxy->foo;
+
+        $this->assertInstanceOf('Phake_Proxies_AnswerBinderProxy', $answerBinder);
+        $this->assertAttributeInstanceOf('Phake_Stubber_AnswerBinder', 'binder', $answerBinder);
+    }
+
     public function testGetWithMatcher()
     {
         $mock = Phake::mock('PhakeTest_MagicClass');
@@ -101,6 +124,7 @@ class Phake_Proxies_StubberProxyTest extends PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('Phake_Proxies_AnswerBinderProxy', $answerBinder);
     }
+
 
     /**
      * @dataProvider magicGetInvalidData
