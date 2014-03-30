@@ -63,9 +63,9 @@ class Phake_ClassGenerator_InvocationHandler_MagicCallRecorder implements Phake_
         $this->callRecorder = $callRecorder;
     }
 
-    public function invoke(Phake_IMock $mock, $method, array $arguments, array &$argumentReference)
+    public function invoke($mock, $method, array $arguments, array &$argumentReference)
     {
-        if ($method == '__call') {
+        if ($method == '__call' || $method == '__callStatic') {
             $this->callRecorder->recordCall(
                 new Phake_CallRecorder_Call($mock, $arguments[0], $arguments[1])
             );

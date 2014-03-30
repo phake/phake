@@ -78,6 +78,19 @@ class Phake_ClassGenerator_InvocationHandler_MagicCallRecorderTest extends PHPUn
         );
     }
 
+    public function testStaticMagicCallIsRecorded()
+    {
+        $mock = $this->getMock('Phake_IMock');
+        $mockClass = get_class($mock);
+
+        $ref = array('foo', array());
+        $this->handler->invoke($mockClass, '__callStatic', array('foo', array()), $ref);
+
+        Phake::verify($this->callRecorder)->recordCall(
+            new Phake_CallRecorder_Call($mockClass, 'foo', array())
+        );
+    }
+
     public function testNonMagicCallDoesNothing()
     {
         $mock = $this->getMock('Phake_IMock');

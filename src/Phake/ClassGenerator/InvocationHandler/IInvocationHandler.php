@@ -50,5 +50,12 @@
  */
 interface Phake_ClassGenerator_InvocationHandler_IInvocationHandler
 {
-    public function invoke(Phake_IMock $mock, $method, array $arguments, array &$argumentReference);
+    /**
+     * @param Phake_IMock|string $mock
+     * @param $method
+     * @param array $arguments
+     * @param array $argumentReference
+     * @return mixed
+     */
+    public function invoke($mock, $method, array $arguments, array &$argumentReference);
 }

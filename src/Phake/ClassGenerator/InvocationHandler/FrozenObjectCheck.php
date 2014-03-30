@@ -61,7 +61,7 @@ class Phake_ClassGenerator_InvocationHandler_FrozenObjectCheck implements Phake_
         $this->mockInfo = $mockInfo;
     }
 
-    public function invoke(Phake_IMock $mock, $method, array $arguments, array &$argumentReference)
+    public function invoke($mock, $method, array $arguments, array &$argumentReference)
     {
         if ($this->mockInfo->isObjectFrozen()) {
             $result = new Phake_CallRecorder_VerifierResult(false, array(), 'This object has been frozen.');

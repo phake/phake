@@ -61,7 +61,7 @@ class Phake_ClassGenerator_InvocationHandler_Composite implements Phake_ClassGen
         $this->handlers = $handlers;
     }
 
-    public function invoke(Phake_IMock $mock, $method, array $arguments, array &$argumentReference)
+    public function invoke($mock, $method, array $arguments, array &$argumentReference)
     {
         foreach ($this->handlers as $handler) {
             $result = $handler->invoke($mock, $method, $arguments, $argumentReference);

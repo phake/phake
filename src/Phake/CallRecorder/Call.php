@@ -65,13 +65,13 @@ class Phake_CallRecorder_Call
     private $arguments;
 
     /**
-     * @param object|\Phake_IMock $object $object - The object the method was called on
+     * @param string|\Phake_IMock $context - The object the method was called on
      * @param string              $method - The method that was made
      * @param array               $arguments
      */
-    public function __construct(Phake_IMock $object, $method, array $arguments)
+    public function __construct($context, $method, array $arguments)
     {
-        $this->object     = $object;
+        $this->object     = $context;
         $this->method     = $method;
         $this->arguments  = $arguments;
     }
@@ -112,6 +112,7 @@ class Phake_CallRecorder_Call
         }
 
         $name = Phake::getName($this->object);
-        return "{$name}->{$this->method}(" . implode(', ', $arguments) . ")";
+        $access = is_string($this->object) ? '::' : '->';
+        return "{$name}{$access}{$this->method}(" . implode(', ', $arguments) . ")";
     }
 }
