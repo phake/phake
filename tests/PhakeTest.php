@@ -58,6 +58,7 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 
     protected function tearDown()
     {
+        Phake::resetStaticInfo();
         Phake::setClient(Phake::CLIENT_DEFAULT);
     }
 
@@ -1319,5 +1320,22 @@ class PhakeTest extends PHPUnit_Framework_TestCase
         $berryCookie = Phake::mock('PhakeTest_A');
 
         $this->assertNotEquals($chocolateCookie, $berryCookie);
+    }
+
+    /**
+     * @group tmp
+     */
+    public function testStaticClassesReset()
+    {
+        $mock1 = Phake::mock('PhakeTest_StaticInterface');
+        $mock1::staticMethod();
+        Phake::verifyStatic($mock1)->staticMethod();
+
+        Phake::resetStaticInfo();
+
+        $mock2 = Phake::mock('PhakeTest_StaticInterface');
+        $mock2::staticMethod();
+        Phake::verifyStatic($mock2)->staticMethod();
+
     }
 }

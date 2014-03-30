@@ -130,5 +130,15 @@ class Phake_Mock_InfoTest extends PHPUnit_Framework_TestCase {
     {
         $this->assertEquals('name', $this->info->getName());
     }
+
+    public function testReset()
+    {
+        $this->info->freezeObject();
+        $this->info->resetInfo();
+
+        $this->assertFalse($this->info->isObjectFrozen());
+        Phake::verify($this->mapper)->removeAllAnswers();
+        Phake::verify($this->recorder)->removeAllCalls();
+    }
 }
  

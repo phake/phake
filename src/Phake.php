@@ -292,8 +292,17 @@ class Phake
      */
     public static function reset(Phake_IMock $mock)
     {
-        $mockResetter = new Phake_Mock_Resetter();
-        $mockResetter->reset(self::getInfo($mock));
+        self::getInfo($mock)->resetInfo();
+    }
+
+    /**
+     * Resets all calls and stubs on the given mock object
+     *
+     * @param Phake_IMock $mock
+     */
+    public static function resetStaticInfo()
+    {
+        self::getPhake()->resetStaticInfo();
     }
 
     /**
@@ -332,7 +341,7 @@ class Phake
      */
     public static function createPhake()
     {
-        return new Phake_Facade();
+        return new Phake_Facade(new Phake_Mock_InfoRegistry());
     }
 
     /**

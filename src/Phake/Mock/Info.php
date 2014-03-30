@@ -120,4 +120,11 @@ class Phake_Mock_Info {
     {
         return $this->name;
     }
+
+    public function resetInfo()
+    {
+        $this->thawObject();
+        $this->mapper->removeAllAnswers();
+        $this->recorder->removeAllCalls();
+    }
 }

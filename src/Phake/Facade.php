@@ -51,9 +51,18 @@ class Phake_Facade
 {
     private $cachedClasses;
 
-    public function __construct()
+    /**
+     * @var Phake_Mock_InfoRegistry
+     */
+    private $infoRegistry;
+
+    /**
+     * @param Phake_Mock_InfoRegistry $infoRegistry
+     */
+    public function __construct(Phake_Mock_InfoRegistry $infoRegistry)
     {
         $this->cachedClasses = array();
+        $this->infoRegistry = $infoRegistry;
     }
 
     /**
@@ -81,7 +90,7 @@ class Phake_Facade
 
         if (!isset($this->cachedClasses[$mockedClass])) {
             $newClassName = $this->generateUniqueClassName($mockedClass);
-            $mockGenerator->generate($newClassName, $mockedClass);
+            $mockGenerator->generate($newClassName, $mockedClass, $this->infoRegistry);
 
             $this->cachedClasses[$mockedClass] = $newClassName;
         }
@@ -93,6 +102,11 @@ class Phake_Facade
             $defaultAnswer,
             $constructorArgs
         );
+    }
+
+    public function resetStaticInfo()
+    {
+        $this->infoRegistry->resetAll();
     }
 
     /**

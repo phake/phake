@@ -134,12 +134,13 @@ class Phake_ClassGenerator_MockClass
     /**
      * Generates a new class with the given class name
      *
-     * @param string $newClassName    - The name of the new class
+     * @param string $newClassName - The name of the new class
      * @param string $mockedClassName - The name of the class being mocked
-     *
+     * @param Phake_Mock_InfoRegistry $infoRegistry
+
      * @return NULL
      */
-    public function generate($newClassName, $mockedClassName)
+    public function generate($newClassName, $mockedClassName, Phake_Mock_InfoRegistry $infoRegistry)
     {
         $extends    = '';
         $implements = '';
@@ -183,6 +184,7 @@ class {$newClassName} {$extends}
 
         $this->loader->loadClassByString($newClassName, $classDef);
         $newClassName::$__PHAKE_staticInfo = $this->createMockInfo($mockedClassName, new Phake_CallRecorder_Recorder(), new Phake_Stubber_StubMapper(), new Phake_Stubber_Answers_NoAnswer());
+        $infoRegistry->addInfo($newClassName::$__PHAKE_staticInfo);
     }
 
     /**

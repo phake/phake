@@ -60,12 +60,19 @@ class Phake_FacadeTest extends PHPUnit_Framework_TestCase
     private $mockGenerator;
 
     /**
+     * @Mock
+     * @var Phake_Mock_InfoRegistry
+     */
+    private $infoRegistry;
+
+    /**
      * Sets up the mock generator
      */
     public function setup()
     {
+        Phake::initAnnotations($this);
         $this->mockGenerator = $this->getMock('Phake_ClassGenerator_MockClass');
-        $this->facade        = new Phake_Facade($this->mockGenerator);
+        $this->facade        = new Phake_Facade($this->infoRegistry);
     }
 
     /**
@@ -143,17 +150,24 @@ class Phake_FacadeTest extends PHPUnit_Framework_TestCase
     public function testAutoLoadNotCalledOnMock()
     {
         spl_autoload_register(array(__CLASS__, 'autoload'));
-        $mockedClass   = 'stdClass';
-        $mockGenerator = $this->getMock('Phake_ClassGenerator_MockClass');
+        try {
+            $mockedClass   = 'stdClass';
+            $mockGenerator = $this->getMock('Phake_ClassGenerator_MockClass');
 
-        //This test will fail if the autoload below is called
-        $this->facade->mock(
-            $mockedClass,
-            $mockGenerator,
-            $this->getMock('Phake_CallRecorder_Recorder'),
-            $this->getMock('Phake_Stubber_IAnswer')
-        );
-        spl_autoload_unregister(array(__CLASS__, 'autoload'));
+            //This test will fail if the autoload below is called
+            $this->facade->mock(
+                $mockedClass,
+                $mockGenerator,
+                $this->getMock('Phake_CallRecorder_Recorder'),
+                $this->getMock('Phake_Stubber_IAnswer')
+            );
+            spl_autoload_unregister(array(__CLASS__, 'autoload'));
+        }
+        catch (Exception $e)
+        {
+            spl_autoload_unregister(array(__CLASS__, 'autoload'));
+            throw $e;
+        }
     }
 
     /**
@@ -163,6 +177,13 @@ class Phake_FacadeTest extends PHPUnit_Framework_TestCase
     {
         $e = new Exception;
         self::fail("The autoloader should not be called: \n{$e->getTraceAsString()}");
+    }
+
+    public function testReset()
+    {
+        $this->facade->resetStaticInfo();
+
+        Phake::verify($this->infoRegistry)->resetAll();
     }
 
     /**
@@ -175,7 +196,7 @@ class Phake_FacadeTest extends PHPUnit_Framework_TestCase
     {
         $mockGenerator->expects($this->once())
             ->method('generate')
-            ->with($this->matchesRegularExpression('#^[A-Za-z0-9_]+$#'), $this->equalTo($mockedClass));
+            ->with($this->matchesRegularExpression('#^[A-Za-z0-9_]+$#'), $this->equalTo($mockedClass), $this->equalTo($this->infoRegistry));
     }
 
     /**
