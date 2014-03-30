@@ -193,7 +193,23 @@ class Phake
         $factory   = new Phake_Matchers_Factory();
         return new Phake_Proxies_CallVerifierProxy($factory->createMatcherArray(
             $arguments
-        ), self::getClient());
+        ), self::getClient(), false);
+    }
+
+    /**
+     * Creates a new verifier for verifying the magic __call method
+     *
+     * @param mixed ... A vararg containing the expected arguments for this call
+     *
+     * @return Phake_Proxies_CallVerifierProxy
+     */
+    public static function verifyStaticCallMethodWith()
+    {
+        $arguments = func_get_args();
+        $factory   = new Phake_Matchers_Factory();
+        return new Phake_Proxies_CallVerifierProxy($factory->createMatcherArray(
+            $arguments
+        ), self::getClient(), true);
     }
 
     /**
@@ -492,18 +508,31 @@ class Phake
     }
 
     /**
-     * Used internally to standardize pulling mock names.
+     * Used internally to validate mocks.
      *
      * @internal
      * @param Phake_IMock|string $mock
-     * @return string
+     * @throws InvalidArgumentException
      */
-    public static function getName($mock)
+    public static function assertValidMock($mock)
     {
         if (!$mock instanceof Phake_IMock && !is_a($mock, 'Phake_IMock', true))
         {
             throw new InvalidArgumentException("Received '" . (is_object($mock) ? get_class($mock) : $mock) . "' Expected an instance of Phake_IMock or the name of a class that implements Phake_IMock");
         }
+    }
+
+    /**
+     * Used internally to standardize pulling mock names.
+     *
+     * @internal
+     * @param Phake_IMock|string $mock
+     * @throws InvalidArgumentException
+     * @return string
+     */
+    public static function getName($mock)
+    {
+        static::assertValidMock($mock);
         return $mock::__PHAKE_name;
     }
 
@@ -517,17 +546,14 @@ class Phake
      */
     public static function getInfo($mock)
     {
+        static::assertValidMock($mock);
         if ($mock instanceof Phake_IMock)
         {
             return isset($mock->__PHAKE_info) ? $mock->__PHAKE_info : null;
         }
-        elseif (is_a($mock, 'Phake_IMock', true))
-        {
-            return $mock::$__PHAKE_staticInfo;
-        }
         else
         {
-            throw new InvalidArgumentException("Received '" . (is_object($mock) ? get_class($mock) : $mock) . "' Expected an instance of Phake_IMock or the name of a class that implements Phake_IMock");
+            return $mock::$__PHAKE_staticInfo;
         }
     }
 }

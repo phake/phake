@@ -70,7 +70,7 @@ class Phake_Proxies_CallVerifierProxyTest extends PHPUnit_Framework_TestCase
         $this->proxy = new Phake_Proxies_CallVerifierProxy(array(
             new Phake_Matchers_EqualsMatcher('foo'),
             new Phake_Matchers_EqualsMatcher(array())
-        ), $this->client);
+        ), $this->client, false);
 
     }
 
@@ -79,12 +79,23 @@ class Phake_Proxies_CallVerifierProxyTest extends PHPUnit_Framework_TestCase
      */
     public function testIsCalledOn()
     {
-        $mock = $this->getMock('Phake_IMock');
-        PhakeTestUtil::setCallRecorder($mock, $this->obj);
+        $mock = Phake::mock('PhakeTest_MagicClass');
+        $mock->foo();
 
-        $this->obj->recordCall(
-            new Phake_CallRecorder_Call($mock, '__call', array('foo', array()))
-        );
+        $verifier = $this->proxy->isCalledOn($mock);
+
+        $this->assertEquals(1, count($verifier));
+    }
+
+    public function testStaticIsCalledOn()
+    {
+        $this->proxy = new Phake_Proxies_CallVerifierProxy(array(
+            new Phake_Matchers_EqualsMatcher('foo'),
+            new Phake_Matchers_EqualsMatcher(array())
+        ), $this->client, true);
+
+        $mock = Phake::mock('PhakeTest_MagicClass');
+        $mock::foo();
 
         $verifier = $this->proxy->isCalledOn($mock);
 

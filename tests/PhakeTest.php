@@ -454,6 +454,18 @@ class PhakeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests validating calls to __callStatic
+     */
+    public function testVerificationOfStaticCall()
+    {
+        $mock = Phake::mock('PhakeTest_MagicClass');
+
+        $mock::foo();
+
+        Phake::verifyStaticCallMethodWith(Phake::anyParameters())->isCalledOn($mock);
+    }
+
+    /**
      * Tests stubbing a mocked method to call its parent.
      */
     public function testStubbingMethodToCallParent()
@@ -1322,9 +1334,6 @@ class PhakeTest extends PHPUnit_Framework_TestCase
         $this->assertNotEquals($chocolateCookie, $berryCookie);
     }
 
-    /**
-     * @group tmp
-     */
     public function testStaticClassesReset()
     {
         $mock1 = Phake::mock('PhakeTest_StaticInterface');
