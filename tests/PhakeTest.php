@@ -674,6 +674,23 @@ class PhakeTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    public function testCallOrderWithStatics()
+    {
+        $mock1 = Phake::mock('PhakeTest_MockedClass');
+        $mock2 = Phake::mock('PhakeTest_StaticInterface');
+
+        $mock1->foo();
+        $mock2::staticMethod();
+        $mock1->fooWithReturnValue();
+        $mock1->callInnerFunc();
+
+        Phake::inOrder(
+            Phake::verify($mock1)->foo(),
+            Phake::verifyStatic($mock2)->staticMethod(),
+            Phake::verify($mock1)->callInnerFunc()
+        );
+    }
+
     /**
      * Tests freezing mocks
      */
