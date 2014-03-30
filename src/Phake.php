@@ -237,6 +237,7 @@ class Phake
 
         foreach (func_get_args() as $mock) {
             $mockFreezer->freeze(Phake::getInfo($mock), self::getClient());
+            $mockFreezer->freeze(Phake::getInfo(get_class($mock)), self::getClient());
         }
     }
 
