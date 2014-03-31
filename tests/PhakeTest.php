@@ -1300,15 +1300,12 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 
     public function testMockingStaticClass()
     {
-        $this->markTestIncomplete(
-            'Need to implement mocking for static methods. Currently, neither stubbing or verification works'
-        );
         $mock = Phake::mock('PhakeTest_StaticClass');
 
-        Phake::when($mock)->staticMethod()->thenReturn('bar');
+        Phake::whenStatic($mock)->staticMethod()->thenReturn('bar');
 
         $this->assertEquals('bar', $mock->staticMethod());
-        Phake::verify($mock)->staticMethod();
+        Phake::verifyStatic($mock)->staticMethod();
     }
 
     public function testMockingStaticInterface()
