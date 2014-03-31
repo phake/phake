@@ -314,7 +314,21 @@ class Phake
     {
         $arguments = func_get_args();
         $factory   = new Phake_Matchers_Factory();
-        return new Phake_Proxies_CallStubberProxy($factory->createMatcherArray($arguments));
+        return new Phake_Proxies_CallStubberProxy($factory->createMatcherArray($arguments), false);
+    }
+
+    /**
+     * Returns a new stubber specifically for the __call() method
+     *
+     * @param mixed ... A vararg containing the expected arguments for this call
+     *
+     * @return \Phake_Proxies_CallStubberProxy
+     */
+    public static function whenStaticCallMethodWith()
+    {
+        $arguments = func_get_args();
+        $factory   = new Phake_Matchers_Factory();
+        return new Phake_Proxies_CallStubberProxy($factory->createMatcherArray($arguments), true);
     }
 
     /**

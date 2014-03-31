@@ -451,6 +451,18 @@ class PhakeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests setting a default answer for only the __call magic method
+     */
+    public function testDefaultAnswerForStaticStubsOfCall()
+    {
+        $mock = Phake::mock('PhakeTest_MagicClass');
+
+        Phake::whenStaticCallMethodWith(Phake::anyParameters())->isCalledOn($mock)->thenReturn(42);
+
+        $this->assertEquals(42, $mock::foo());
+    }
+
+    /**
      * Tests validating calls to __call
      */
     public function testVerificationOfCall()
