@@ -429,6 +429,41 @@ class PhakeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests that resetting a mock clears the call recorder
+     */
+    public function testResettingStaticCallRecorder()
+    {
+        $mock = Phake::mock('PhakeTest_StaticInterface');
+
+        $mock::staticMethod();
+
+        Phake::verifyStatic($mock)->staticMethod();
+
+        Phake::resetStatic($mock);
+
+        $this->setExpectedException('Phake_Exception_VerificationException');
+
+        Phake::verifyStatic($mock)->staticMethod();
+    }
+
+
+    /**
+     * Tests that resetting a mock clears the stubber
+     */
+    public function testResettingStaticStubMapper()
+    {
+        $mock = Phake::mock('PhakeTest_StaticInterface');
+
+        Phake::whenStatic($mock)->staticMethod()->thenReturn(42);
+
+        $this->assertEquals(42, $mock::staticMethod());
+
+        Phake::resetStatic($mock);
+
+        $this->assertNull($mock::staticMethod());
+    }
+
+    /**
      * Tests setting a default answer for stubs
      */
     public function testDefaultAnswerForStubs()

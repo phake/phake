@@ -346,6 +346,14 @@ class Phake
      *
      * @param Phake_IMock $mock
      */
+    public static function resetStatic(Phake_IMock $mock)
+    {
+        self::getInfo(get_class($mock))->resetInfo();
+    }
+
+    /**
+     * Resets all static calls, should be ran on tear downs
+     */
     public static function resetStaticInfo()
     {
         self::getPhake()->resetStaticInfo();
