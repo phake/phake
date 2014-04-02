@@ -17,10 +17,25 @@ not expected methods were called. This is very different from the
 aforementioned products for php which use an expectation strategy where you
 lay out your expectations prior to any calls being made.
 
-Installation
-------------
+Installation - Composer
+-----------------------
 
-Phake should be installed using PEAR via the Digital Sandwich PEAR channel
+Phake can be installed using [Composer](https://github.com/composer/composer).
+
+1. Add Phake as a dependency.
+
+``` json
+"require": {
+	"phake/phake": "dev-master"
+}
+```
+
+2. Run Composer: `php composer.phar install` or `php composer.phar update`
+
+Installation - PEAR
+-------------------
+
+Phake can be installed using PEAR via the Digital Sandwich PEAR channel
 
 This pear channel can be added to PEAR with the following command:
 
@@ -28,19 +43,22 @@ This pear channel can be added to PEAR with the following command:
 
 You should only need to do that once. After this you can install Phake with the following command
 
-    pear install channel://pear.digitalsandwich.com/Phake-1.0.0alpha3
+    pear install digitalsandwich/Phake
 
 After the installation you can find the Phake source files inside your local PEAR directory
+
+Installation - Source
+---------------------
 
 You can also of course install it from source by downloading it from our github repository: https://github.com/mlively/Phake
 
 Links
 -------------
 
-There are a few links that have information on how you can utilize Phake. I am in the process of
-creating more official documentation.
+There are a few links that have information on how you can utilize Phake.
 
-* [Phake Wiki](https://github.com/mlively/Phake/wiki)
+* [Phake Documentation](http://phake.digitalsandwich.com/docs/html/)
+* [Phake Google Group](http://groups.google.com/group/phake-users)
 * [Initial Phake Announcement](http://digitalsandwich.com/archives/84-introducing-phake-mocking-framework.html)
 
 If you have an article or tutorial that you would like to share, feel free to open an [issue](https://github.com/mlively/Phake/issues) on github and I will add it to this list

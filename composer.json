@@ -1,0 +1,21 @@
+{
+    "name": "phake/phake",
+    "type": "library",
+    "description": "The Phake mock testing library",
+    "keywords": ["testing", "mock"],
+    "homepage": "https://github.com/mlively/Phake",
+    "license": "BSD",
+    "authors": [
+        {
+            "name": "Mike Lively",
+            "email": "m@digitalsandwich.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.2.0"
+    },
+    "autoload": {
+        "classmap": ["src"]
+    },
+    "include-path": ["src"]
+}

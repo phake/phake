@@ -68,6 +68,7 @@ require_once 'Phake/CallRecorder/VerifierMode/AtMost.php';
 require_once 'Phake/Mock/Resetter.php';
 require_once 'Phake/Mock/Freezer.php';
 require_once 'Phake/Exception/VerificationException.php';
+require_once 'Phake/Annotation/MockInitializer.php';
 
 /**
  * Phake - PHP Test Doubles Framework
@@ -457,6 +458,12 @@ class Phake
 	public static function setMockLoader(Phake_ClassGenerator_ILoader $loader)
 	{
 		self::$loader = $loader;
+	}
+
+	public static function initAnnotations($obj)
+	{
+		$initializer = new Phake_Annotation_MockInitializer();
+		$initializer->initialize($obj);
 	}
 }
 
