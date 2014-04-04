@@ -64,7 +64,7 @@ class Phake_Stubber_Answers_StaticAnswerTest extends PHPUnit_Framework_TestCase
 
     public function testAnswer()
     {
-        $this->assertEquals(42, $this->answer->getAnswer());
+        $this->assertEquals(42, call_user_func($this->answer->getAnswerCallback('testMethod')));
     }
 }
 

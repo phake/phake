@@ -76,5 +76,16 @@ class Phake_ClassGenerator_InvocationHandler_CallRecorderTest extends PHPUnit_Fr
 
         Phake::verify($this->callRecorder)->recordCall(new Phake_CallRecorder_Call($mock, 'foo', array()));
     }
+
+    public function testStaticCallIsRecorded()
+    {
+        $mock = $this->getMock('Phake_IMock');
+        $mockClass = get_class($mock);
+
+        $ref = array();
+        $this->handler->invoke($mockClass, 'foo', array(), $ref);
+
+        Phake::verify($this->callRecorder)->recordCall(new Phake_CallRecorder_Call($mockClass, 'foo', array()));
+    }
 }
 

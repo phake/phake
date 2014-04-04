@@ -61,33 +61,13 @@ class Phake_Stubber_Answers_ParentDelegateTest extends PHPUnit_Framework_TestCas
     }
 
     /**
-     * Tests that the delegate returns itself.
-     */
-    public function testThatDelegateReturnsItself()
-    {
-        $answer = $this->delegate->getAnswer();
-        $this->assertInstanceOf('Phake_Stubber_Answers_IDelegator', $answer);
-        $this->assertSame($this->delegate, $answer);
-    }
-
-    /**
      * Tets that the delegate returns a callback to the parent class.
      */
     public function testThatDelegateReturnsCorrectCallback()
     {
-        $callback = $this->delegate->getCallback($this, 'foo', array('bar'));
+        $callback = $this->delegate->getAnswerCallback('testMethod');
 
-        $this->assertSame(array($this, 'parent::foo'), $callback);
-    }
-
-    /**
-     * Tests that the delegate passes through the given arguments.
-     */
-    public function testThatDelegatePassesThroughArgs()
-    {
-        $args = $this->delegate->getArguments('foo', array('bar'));
-
-        $this->assertSame(array('bar'), $args);
+        $this->assertSame(array('parent', 'testMethod'), $callback);
     }
 
     /**

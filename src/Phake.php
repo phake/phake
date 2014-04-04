@@ -159,6 +159,28 @@ class Phake
     }
 
     /**
+     * Creates a new verifier for the given mock object.
+     *
+     * @param Phake_IMock                      $mock
+     * @param Phake_CallRecorder_IVerifierMode $mode
+     *
+     * @return Phake_Proxies_VerifierProxy
+     */
+    public static function verifyStatic(Phake_IMock $mock, Phake_CallRecorder_IVerifierMode $mode = null)
+    {
+        if (is_null($mode)) {
+            $mode = self::times(1);
+        }
+
+        /* @var $info Phake_Mock_Info */
+        $info = Phake::getInfo(get_class($mock));
+        $verifier = new Phake_CallRecorder_Verifier($info->getCallRecorder(), get_class($mock));
+
+        return new Phake_Proxies_VerifierProxy($verifier, new Phake_Matchers_Factory(), $mode, self::getClient());
+    }
+
+
+    /**
      * Creates a new verifier for verifying the magic __call method
      *
      * @param mixed ... A vararg containing the expected arguments for this call
@@ -171,7 +193,23 @@ class Phake
         $factory   = new Phake_Matchers_Factory();
         return new Phake_Proxies_CallVerifierProxy($factory->createMatcherArray(
             $arguments
-        ), self::getClient());
+        ), self::getClient(), false);
+    }
+
+    /**
+     * Creates a new verifier for verifying the magic __call method
+     *
+     * @param mixed ... A vararg containing the expected arguments for this call
+     *
+     * @return Phake_Proxies_CallVerifierProxy
+     */
+    public static function verifyStaticCallMethodWith()
+    {
+        $arguments = func_get_args();
+        $factory   = new Phake_Matchers_Factory();
+        return new Phake_Proxies_CallVerifierProxy($factory->createMatcherArray(
+            $arguments
+        ), self::getClient(), true);
     }
 
     /**
@@ -199,6 +237,7 @@ class Phake
 
         foreach (func_get_args() as $mock) {
             $mockFreezer->freeze(Phake::getInfo($mock), self::getClient());
+            $mockFreezer->freeze(Phake::getInfo(get_class($mock)), self::getClient());
         }
     }
 
@@ -212,8 +251,11 @@ class Phake
         foreach (func_get_args() as $mock) {
             $callRecorder = Phake::getInfo($mock)->getCallRecorder();
             $verifier = new Phake_CallRecorder_Verifier($callRecorder, $mock);
-
             self::getClient()->processVerifierResult($verifier->verifyNoCalls());
+
+            $sCallRecorder = Phake::getInfo(get_class($mock))->getCallRecorder();
+            $sVerifier = new Phake_CallRecorder_Verifier($sCallRecorder, get_class($mock));
+            self::getClient()->processVerifierResult($sVerifier->verifyNoCalls());
         }
     }
 
@@ -250,6 +292,18 @@ class Phake
     }
 
     /**
+     * Returns a new static stubber for the given mock object.
+     *
+     * @param Phake_IMock $mock
+     *
+     * @return Phake_Proxies_StubberProxy
+     */
+    public static function whenStatic(Phake_IMock $mock)
+    {
+        return new Phake_Proxies_StubberProxy(get_class($mock), new Phake_Matchers_Factory());
+    }
+
+    /**
      * Returns a new stubber specifically for the __call() method
      *
      * @param mixed ... A vararg containing the expected arguments for this call
@@ -260,7 +314,21 @@ class Phake
     {
         $arguments = func_get_args();
         $factory   = new Phake_Matchers_Factory();
-        return new Phake_Proxies_CallStubberProxy($factory->createMatcherArray($arguments));
+        return new Phake_Proxies_CallStubberProxy($factory->createMatcherArray($arguments), false);
+    }
+
+    /**
+     * Returns a new stubber specifically for the __call() method
+     *
+     * @param mixed ... A vararg containing the expected arguments for this call
+     *
+     * @return \Phake_Proxies_CallStubberProxy
+     */
+    public static function whenStaticCallMethodWith()
+    {
+        $arguments = func_get_args();
+        $factory   = new Phake_Matchers_Factory();
+        return new Phake_Proxies_CallStubberProxy($factory->createMatcherArray($arguments), true);
     }
 
     /**
@@ -270,8 +338,25 @@ class Phake
      */
     public static function reset(Phake_IMock $mock)
     {
-        $mockResetter = new Phake_Mock_Resetter();
-        $mockResetter->reset(self::getInfo($mock));
+        self::getInfo($mock)->resetInfo();
+    }
+
+    /**
+     * Resets all calls and stubs on the given mock object
+     *
+     * @param Phake_IMock $mock
+     */
+    public static function resetStatic(Phake_IMock $mock)
+    {
+        self::getInfo(get_class($mock))->resetInfo();
+    }
+
+    /**
+     * Resets all static calls, should be ran on tear downs
+     */
+    public static function resetStaticInfo()
+    {
+        self::getPhake()->resetStaticInfo();
     }
 
     /**
@@ -310,7 +395,7 @@ class Phake
      */
     public static function createPhake()
     {
-        return new Phake_Facade();
+        return new Phake_Facade(new Phake_Mock_InfoRegistry());
     }
 
     /**
@@ -461,26 +546,52 @@ class Phake
     }
 
     /**
-     * Used internally to standardize pulling mock names.
+     * Used internally to validate mocks.
      *
      * @internal
-     * @param Phake_IMock $mock
-     * @return string
+     * @param Phake_IMock|string $mock
+     * @throws InvalidArgumentException
      */
-    public static function getName(Phake_IMock $mock)
+    public static function assertValidMock($mock)
     {
-        return isset($mock->__PHAKE_name) ? $mock->__PHAKE_name : '<undefined>';
+        if (!$mock instanceof Phake_IMock && !is_a($mock, 'Phake_IMock', true))
+        {
+            throw new InvalidArgumentException("Received '" . (is_object($mock) ? get_class($mock) : $mock) . "' Expected an instance of Phake_IMock or the name of a class that implements Phake_IMock");
+        }
     }
 
     /**
      * Used internally to standardize pulling mock names.
      *
      * @internal
-     * @param Phake_IMock $mock
+     * @param Phake_IMock|string $mock
+     * @throws InvalidArgumentException
+     * @return string
+     */
+    public static function getName($mock)
+    {
+        static::assertValidMock($mock);
+        return $mock::__PHAKE_name;
+    }
+
+    /**
+     * Used internally to standardize pulling mock names.
+     *
+     * @internal
+     * @param Phake_IMock|string $mock
+     * @throws InvalidArgumentException
      * @return Phake_Mock_Info
      */
-    public static function getInfo(Phake_IMock $mock)
+    public static function getInfo($mock)
     {
-        return isset($mock->__PHAKE_info) ? $mock->__PHAKE_info : null;
+        static::assertValidMock($mock);
+        if ($mock instanceof Phake_IMock)
+        {
+            return isset($mock->__PHAKE_info) ? $mock->__PHAKE_info : null;
+        }
+        else
+        {
+            return $mock::$__PHAKE_staticInfo;
+        }
     }
 }

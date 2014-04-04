@@ -49,6 +49,11 @@ class PhakeTest_MagicClass
         return '__call';
     }
 
+    public static function __callStatic($method, $args)
+    {
+        return '__callStatic';
+    }
+
     public function __get($name)
     {
         return '__get';

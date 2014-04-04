@@ -68,7 +68,7 @@ class Phake_CallRecorder_CallExpectation
     private $verifierMode;
 
     /**
-     * @param Phake_IMock                      $object
+     * @param Phake_IMock|mixed                $object
      * @param string                           $method
      * @param array                            $argumentMatchers
      * @param Phake_CallRecorder_IVerifierMode $verificationMode
@@ -76,7 +76,7 @@ class Phake_CallRecorder_CallExpectation
      * @return \Phake_CallRecorder_CallExpectation
      */
     public function __construct(
-        Phake_IMock $object,
+        $object,
         $method,
         array $argumentMatchers,
         Phake_CallRecorder_IVerifierMode $verificationMode
@@ -127,8 +127,9 @@ class Phake_CallRecorder_CallExpectation
         }
 
         $name = Phake::getName($this->getObject());
+        $access = is_string($this->object) ? '::' : '->';
 
-        return "Expected {$name}->{$this->getMethod()}(" . implode(
+        return "Expected {$name}{$access}{$this->getMethod()}(" . implode(
             ', ',
             $arguments
         ) . ") to be called {$this->getVerifierMode()->__toString()}";

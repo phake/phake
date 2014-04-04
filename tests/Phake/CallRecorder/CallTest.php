@@ -54,14 +54,19 @@ class Phake_CallRecorder_CallTest extends PHPUnit_Framework_TestCase
      */
     private $call;
 
+    /**
+     * @var Phake_CallRecorder_Call
+     */
+    private $staticCall;
+
     private $mock;
 
     public function setUp()
     {
-        $this->mock = $this->getMock('Phake_IMock');
-        PhakeTestUtil::setMockName($this->mock, 'Phake_IMock');
+        $this->mock = Phake::mock('Phake_IMock');
 
         $this->call = new Phake_CallRecorder_Call($this->mock, 'someMethod', array('foo', 'bar'));
+        $this->staticCall = new Phake_CallRecorder_Call(get_class($this->mock), 'someMethod', array('foo', 'bar'));
     }
 
     /**
@@ -70,6 +75,7 @@ class Phake_CallRecorder_CallTest extends PHPUnit_Framework_TestCase
     public function testGetObject()
     {
         $this->assertSame($this->mock, $this->call->getObject());
+        $this->assertSame(get_class($this->mock), $this->staticCall->getObject());
     }
 
     /**
@@ -78,16 +84,19 @@ class Phake_CallRecorder_CallTest extends PHPUnit_Framework_TestCase
     public function testGetMethod()
     {
         $this->assertEquals('someMethod', $this->call->getMethod());
+        $this->assertEquals('someMethod', $this->staticCall->getMethod());
     }
 
     public function testGetArguments()
     {
         $this->assertEquals(array('foo', 'bar'), $this->call->getArguments());
+        $this->assertEquals(array('foo', 'bar'), $this->staticCall->getArguments());
     }
 
     public function testToString()
     {
         $this->assertEquals('Phake_IMock->someMethod(<string:foo>, <string:bar>)', $this->call->__toString());
+        $this->assertEquals('Phake_IMock::someMethod(<string:foo>, <string:bar>)', $this->staticCall->__toString());
     }
 
     public function testToStringOnAllArgumentTypes()

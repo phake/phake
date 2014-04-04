@@ -134,12 +134,13 @@ class Phake_ClassGenerator_MockClass
     /**
      * Generates a new class with the given class name
      *
-     * @param string $newClassName    - The name of the new class
+     * @param string $newClassName - The name of the new class
      * @param string $mockedClassName - The name of the class being mocked
-     *
+     * @param Phake_Mock_InfoRegistry $infoRegistry
+
      * @return NULL
      */
-    public function generate($newClassName, $mockedClassName)
+    public function generate($newClassName, $mockedClassName, Phake_Mock_InfoRegistry $infoRegistry)
     {
         $extends    = '';
         $implements = '';
@@ -171,7 +172,9 @@ class {$newClassName} {$extends}
 {
     public \$__PHAKE_info;
 
-	public \$__PHAKE_name = '{$mockedClassName}';
+    public static \$__PHAKE_staticInfo;
+
+	const __PHAKE_name = '{$mockedClassName}';
 
 	public function __destruct() {}
 
@@ -180,6 +183,8 @@ class {$newClassName} {$extends}
 ";
 
         $this->loader->loadClassByString($newClassName, $classDef);
+        $newClassName::$__PHAKE_staticInfo = $this->createMockInfo($mockedClassName, new Phake_CallRecorder_Recorder(), new Phake_Stubber_StubMapper(), new Phake_Stubber_Answers_NoAnswer());
+        $infoRegistry->addInfo($newClassName::$__PHAKE_staticInfo);
     }
 
     /**
@@ -209,24 +214,7 @@ class {$newClassName} {$extends}
             $mockObject = new $newClassName();
         }
 
-        $mockObject->__PHAKE_info = $info = new Phake_Mock_Info($mockObject->__PHAKE_name, $recorder, $mapper, $defaultAnswer);
-
-        $info->setHandlerChain(new Phake_ClassGenerator_InvocationHandler_Composite(array(
-                new Phake_ClassGenerator_InvocationHandler_FrozenObjectCheck($info),
-                new Phake_ClassGenerator_InvocationHandler_CallRecorder($info->getCallRecorder()),
-                new Phake_ClassGenerator_InvocationHandler_MagicCallRecorder($info->getCallRecorder()),
-                new Phake_ClassGenerator_InvocationHandler_StubCaller($info->getStubMapper(), $info->getDefaultAnswer()),
-            )));
-
-        $info->getStubMapper()->mapStubToMatcher(
-			new Phake_Stubber_AnswerCollection(new Phake_Stubber_Answers_StaticAnswer('Mock for ' . $info->getName())),
-			new Phake_Matchers_MethodMatcher('__toString', array())
-		);
-
-        $info->getStubMapper()->mapStubToMatcher(
-			new Phake_Stubber_AnswerCollection(new Phake_Stubber_Answers_StaticAnswer(NULL)),
-			new Phake_Matchers_AbstractMethodMatcher(new ReflectionClass($info->getName()))
-		);
+        $mockObject->__PHAKE_info = $this->createMockInfo($newClassName::__PHAKE_name, $recorder, $mapper, $defaultAnswer);
 
         $mockReflClass = new ReflectionClass($mockObject);
         if (null !== $constructorArgs && $mockReflClass->hasMethod('__construct')) {
@@ -251,11 +239,11 @@ class {$newClassName} {$extends}
 
         $implementedMethods = $this->reservedWords;
         foreach ($mockedClass->getMethods($filter) as $method) {
-            if (!$method->isConstructor() && !$method->isDestructor() && !$method->isFinal() && !$method->isStatic()
+            if (!$method->isConstructor() && !$method->isDestructor() && !$method->isFinal()
                 && !in_array($method->getName(), $implementedMethods)
             ) {
                 $implementedMethods[] = $method->getName();
-                $methodDefs .= $this->implementMethod($method) . "\n";
+                $methodDefs .= $this->implementMethod($method, $method->isStatic()) . "\n";
             }
         }
 
@@ -290,7 +278,7 @@ class {$newClassName} {$extends}
      *
      * @return string
      */
-    protected function implementMethod(ReflectionMethod $method)
+    protected function implementMethod(ReflectionMethod $method, $static = false)
     {
         $modifiers = implode(
             ' ',
@@ -299,35 +287,33 @@ class {$newClassName} {$extends}
 
         $reference = $method->returnsReference() ? '&' : '';
 
+        if ($static)
+        {
+            $context = '__CLASS__';
+        }
+        else
+        {
+            $context = '$this';
+        }
+
         $methodDef = "
 	{$modifiers} function {$reference}{$method->getName()}({$this->generateMethodParameters($method)})
 	{
 		\$args = array();
 		{$this->copyMethodParameters($method)}
 
-        \$info = Phake::getInfo(\$this);
+        \$info = Phake::getInfo({$context});
 		if (\$info === null) {
 		    return null;
 		}
 
 		\$funcArgs = func_get_args();
-		\$answer = \$info->getHandlerChain()->invoke(\$this, '{$method->getName()}', \$funcArgs, \$args);
+		\$answer = \$info->getHandlerChain()->invoke({$context}, '{$method->getName()}', \$funcArgs, \$args);
 
-		if (\$answer instanceof Phake_Stubber_Answers_IDelegator)
-		{
-			\$delegate = \$answer->getAnswer();
-			\$callback = \$delegate->getCallBack(\$this, '{$method->getName()}', \$args);
-			\$arguments = \$delegate->getArguments('{$method->getName()}', \$args);
-
-			\$realAnswer = call_user_func_array(\$callback, \$arguments);
-			\$answer->processAnswer(\$realAnswer);
-			return \$realAnswer;
-		}
-		else
-		{
-			\$returnAnswer = \$answer->getAnswer();
-			return \$returnAnswer;
-		}
+	    \$callback = \$answer->getAnswerCallback('{$method->getName()}');
+	    \$result = call_user_func_array(\$callback, \$args);
+	    \$answer->processAnswer(\$result);
+	    return \$result;
 	}
 ";
 
@@ -400,5 +386,42 @@ class {$newClassName} {$extends}
         }
 
         return $type . ($parameter->isPassedByReference() ? '&' : '') . '$parm' . $parameter->getPosition() . $default;
+    }
+
+    /**
+     * @param $newClassName
+     * @param Phake_CallRecorder_Recorder $recorder
+     * @param Phake_Stubber_StubMapper $mapper
+     * @param Phake_Stubber_IAnswer $defaultAnswer
+     * @return Phake_Mock_Info
+     */
+    private function createMockInfo(
+        $className,
+        Phake_CallRecorder_Recorder $recorder,
+        Phake_Stubber_StubMapper $mapper,
+        Phake_Stubber_IAnswer $defaultAnswer
+    ) {
+        $info = new Phake_Mock_Info($className, $recorder, $mapper, $defaultAnswer);
+
+        $info->setHandlerChain(
+            new Phake_ClassGenerator_InvocationHandler_Composite(array(
+                new Phake_ClassGenerator_InvocationHandler_FrozenObjectCheck($info),
+                new Phake_ClassGenerator_InvocationHandler_CallRecorder($info->getCallRecorder()),
+                new Phake_ClassGenerator_InvocationHandler_MagicCallRecorder($info->getCallRecorder()),
+                new Phake_ClassGenerator_InvocationHandler_StubCaller($info->getStubMapper(), $info->getDefaultAnswer(
+                )),
+            ))
+        );
+
+        $info->getStubMapper()->mapStubToMatcher(
+            new Phake_Stubber_AnswerCollection(new Phake_Stubber_Answers_StaticAnswer('Mock for ' . $info->getName())),
+            new Phake_Matchers_MethodMatcher('__toString', array())
+        );
+
+        $info->getStubMapper()->mapStubToMatcher(
+            new Phake_Stubber_AnswerCollection(new Phake_Stubber_Answers_StaticAnswer(null)),
+            new Phake_Matchers_AbstractMethodMatcher(new ReflectionClass($info->getName()))
+        );
+        return $info;
     }
 }

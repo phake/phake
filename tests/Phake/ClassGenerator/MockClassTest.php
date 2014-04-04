@@ -54,8 +54,15 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
      */
     private $classGen;
 
+    /**
+     * @Mock
+     * @var Phake_Mock_InfoRegistry
+     */
+    private $infoRegistry;
+
     public function setUp()
     {
+        Phake::initAnnotations($this);
         $this->classGen = new Phake_ClassGenerator_MockClass();
     }
 
@@ -72,7 +79,7 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
             'The class being tested for already exists. May have created a test reusing this class name.'
         );
 
-        $this->classGen->generate($newClassName, $mockedClass);
+        $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
         $this->assertTrue(
             class_exists($newClassName, false),
@@ -88,7 +95,7 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
         $newClassName = __CLASS__ . '_TestClass2';
         $mockedClass  = 'stdClass';
 
-        $this->classGen->generate($newClassName, $mockedClass);
+        $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
         $rflClass = new ReflectionClass($newClassName);
 
@@ -106,7 +113,7 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
         $newClassName = __CLASS__ . '_TestClass3';
         $mockedClass  = 'stdClass';
 
-        $this->classGen->generate($newClassName, $mockedClass);
+        $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
         $callRecorder = $this->getMock('Phake_CallRecorder_Recorder');
         $stubMapper   = $this->getMock('Phake_Stubber_StubMapper');
@@ -124,11 +131,11 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
         $newClassName = __CLASS__ . '_TestClass4';
         $mockedClass  = 'PhakeTest_MockedClass';
 
-        $this->classGen->generate($newClassName, $mockedClass);
+        $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
         $callRecorder = $this->getMock('Phake_CallRecorder_Recorder');
         $stubMapper   = $this->getMock('Phake_Stubber_StubMapper');
-        $answer       = $this->getMock('Phake_Stubber_IAnswer');
+        $answer       = Phake::mock('Phake_Stubber_Answers_NoAnswer', Phake::ifUnstubbed()->thenCallParent());
         $mock         = $this->classGen->instantiate($newClassName, $callRecorder, $stubMapper, $answer);
 
         /* @var $callRecorder Phake_CallRecorder_Recorder */
@@ -147,11 +154,11 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
         $newClassName = __CLASS__ . '_TestClass9';
         $mockedClass  = 'PhakeTest_MockedClass';
 
-        $this->classGen->generate($newClassName, $mockedClass);
+        $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
         $callRecorder = $this->getMock('Phake_CallRecorder_Recorder');
         $stubMapper   = $this->getMock('Phake_Stubber_StubMapper');
-        $answer       = $this->getMock('Phake_Stubber_IAnswer');
+        $answer       = new Phake_Stubber_Answers_NoAnswer();
         $mock         = $this->classGen->instantiate($newClassName, $callRecorder, $stubMapper, $answer);
 
         /* @var $callRecorder Phake_CallRecorder_Recorder */
@@ -174,11 +181,11 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
         $newClassName = __CLASS__ . '_TestClass5';
         $mockedClass  = 'PhakeTest_MockedClass';
 
-        $this->classGen->generate($newClassName, $mockedClass);
+        $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
         $callRecorder = $this->getMock('Phake_CallRecorder_Recorder');
         $stubMapper   = $this->getMock('Phake_Stubber_StubMapper');
-        $answer       = $this->getMock('Phake_Stubber_IAnswer');
+        $answer       = Phake::mock('Phake_Stubber_Answers_NoAnswer', Phake::ifUnstubbed()->thenCallParent());
         $mock         = $this->classGen->instantiate($newClassName, $callRecorder, $stubMapper, $answer);
 
         $this->assertInstanceOf($newClassName, $mock);
@@ -192,17 +199,14 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
         $newClassName = __CLASS__ . '_TestClass7';
         $mockedClass  = 'PhakeTest_MockedClass';
 
-        $this->classGen->generate($newClassName, $mockedClass);
+        $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
         $callRecorder = $this->getMock('Phake_CallRecorder_Recorder');
         $stubMapper   = $this->getMock('Phake_Stubber_StubMapper');
-        $answer       = $this->getMock('Phake_Stubber_IAnswer');
+        $answer       = Phake::mock('Phake_Stubber_Answers_NoAnswer', Phake::ifUnstubbed()->thenCallParent());
         $mock         = $this->classGen->instantiate($newClassName, $callRecorder, $stubMapper, $answer);
 
-        $answer = $this->getMock('Phake_Stubber_IAnswer');
-
-        $answer->expects($this->once())
-            ->method('getAnswer');
+        $answer       = Phake::mock('Phake_Stubber_Answers_NoAnswer', Phake::ifUnstubbed()->thenCallParent());
 
         $stubMapper->expects($this->once())
             ->method('getStubByCall')
@@ -210,6 +214,8 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue(new Phake_Stubber_AnswerCollection($answer)));
 
         $mock->fooWithArgument('bar');
+
+        Phake::verify($answer)->getAnswerCallback('fooWithArgument');
     }
 
     /**
@@ -220,24 +226,22 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
         $newClassName = __CLASS__ . '_TestClass23';
         $mockedClass  = 'PhakeTest_MockedClass';
 
-        $this->classGen->generate($newClassName, $mockedClass);
+        $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
         $callRecorder = $this->getMock('Phake_CallRecorder_Recorder');
         $stubMapper   = $this->getMock('Phake_Stubber_StubMapper');
-        $answer       = $this->getMock('Phake_Stubber_IAnswer');
+        $answer       = Phake::mock('Phake_Stubber_Answers_NoAnswer', Phake::ifUnstubbed()->thenCallParent());
         $mock         = $this->classGen->instantiate($newClassName, $callRecorder, $stubMapper, $answer);
 
-        $answer = $this->getMock('Phake_Stubber_IAnswer');
-
-        $answer->expects($this->once())
-            ->method('getAnswer');
-
+        $answer       = Phake::mock('Phake_Stubber_Answers_NoAnswer', Phake::ifUnstubbed()->thenCallParent());
         $stubMapper->expects($this->once())
             ->method('getStubByCall')
             ->with($this->equalTo('fooWithDefault'), array())
             ->will($this->returnValue(new Phake_Stubber_AnswerCollection($answer)));
 
         $mock->fooWithDefault();
+
+        Phake::verify($answer)->getAnswerCallback('fooWithDefault');
     }
 
     /**
@@ -249,7 +253,7 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
         $newClassName = __CLASS__ . '_TestClass8';
         $mockedClass  = 'stdClass';
 
-        $this->classGen->generate($newClassName, $mockedClass);
+        $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
         /** @var $callRecorder Phake_CallRecorder_Recorder */
         $callRecorder = $this->getMock('Phake_CallRecorder_Recorder');
@@ -277,18 +281,17 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
         $newClassName = __CLASS__ . '_TestClass11';
         $mockedClass  = 'PhakeTest_MockedClass';
 
-        $this->classGen->generate($newClassName, $mockedClass);
+        $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
         $callRecorder = $this->getMock('Phake_CallRecorder_Recorder');
         $stubMapper   = $this->getMock('Phake_Stubber_StubMapper');
-        $answer       = $this->getMock('Phake_Stubber_IAnswer');
+        $answer       = Phake::mock('Phake_Stubber_Answers_NoAnswer', Phake::ifUnstubbed()->thenCallParent());
 
         $mock = $this->classGen->instantiate($newClassName, $callRecorder, $stubMapper, $answer);
 
-        $answer->expects($this->once())
-            ->method('getAnswer');
-
         $mock->fooWithArgument('bar');
+
+        Phake::verify($answer)->getAnswerCallback('fooWithArgument');
     }
 
     /**
@@ -299,123 +302,17 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
         $newClassName = __CLASS__ . '_TestClass19';
         $mockedClass  = 'PhakeTest_MagicClass';
 
-        $this->classGen->generate($newClassName, $mockedClass);
+        $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
         $callRecorder = $this->getMock('Phake_CallRecorder_Recorder');
         $stubMapper   = $this->getMock('Phake_Stubber_StubMapper');
-        $answer       = $this->getMock('Phake_Stubber_IAnswer');
+        $answer       = Phake::mock('Phake_Stubber_Answers_NoAnswer', Phake::ifUnstubbed()->thenCallParent());
 
         $mock = $this->classGen->instantiate($newClassName, $callRecorder, $stubMapper, $answer);
 
-        $answer->expects($this->once())
-            ->method('getAnswer');
-
         $mock->fooWithArgument('bar');
-    }
 
-
-    /**
-     * Tests that calling a stubbed method will result in the stubbed answer being returned.
-     */
-    public function testStubbedMethodsCallDelegatedAnswer()
-    {
-        $newClassName = __CLASS__ . '_TestClass12';
-        $mockedClass  = 'PhakeTest_MockedClass';
-
-        $this->classGen->generate($newClassName, $mockedClass);
-
-        $callRecorder = $this->getMock('Phake_CallRecorder_Recorder');
-        $stubMapper   = $this->getMock('Phake_Stubber_StubMapper');
-        $answer       = $this->getMock('Phake_Stubber_IAnswer');
-        $mock         = $this->classGen->instantiate($newClassName, $callRecorder, $stubMapper, $answer);
-
-        $answer   = $this->getMock('Phake_Stubber_Answers_IDelegator');
-        $delegate = $this->getMock('Phake_Stubber_IAnswerDelegate');
-
-        $answer->expects($this->once())
-            ->method('getAnswer')
-            ->will($this->returnValue($delegate));
-
-        $answer->expects($this->once())
-            ->method('processAnswer')
-            ->with(null);
-
-        $realAnswer = $this->getMock('PhakeTest_MockedClass');
-
-        $realAnswer->expects($this->once())
-            ->method('fooWithArgument')
-            ->with($this->equalTo('bar'));
-
-        $delegate->expects($this->any())
-            ->method('getCallBack')
-            ->with($this->equalTo($mock), $this->equalTo('fooWithArgument'), $this->equalTo(array('bar')))
-            ->will($this->returnValue(array($realAnswer, 'fooWithArgument')));
-
-        $delegate->expects($this->any())
-            ->method('getArguments')
-            ->with($this->equalTo('fooWithArgument'), $this->equalTo(array('bar')))
-            ->will($this->returnValue(array('bar')));
-
-        $stubMapper->expects($this->once())
-            ->method('getStubByCall')
-            ->with($this->equalTo('fooWithArgument'), array('bar'))
-            ->will($this->returnValue(new Phake_Stubber_AnswerCollection($answer)));
-
-        $mock->fooWithArgument('bar');
-    }
-
-    /**
-     * Tests that calling a stubbed method will result in the stubbed answer being returned.
-     */
-    public function testStubbedCallMethodsCallDelegatedAnswer()
-    {
-        $newClassName = __CLASS__ . '_TestClass20';
-        $mockedClass  = 'PhakeTest_MagicClass';
-
-        $this->classGen->generate($newClassName, $mockedClass);
-
-        $callRecorder = $this->getMock('Phake_CallRecorder_Recorder');
-        $stubMapper   = $this->getMock('Phake_Stubber_StubMapper');
-        $answer       = $this->getMock('Phake_Stubber_IAnswer');
-        $mock         = $this->classGen->instantiate($newClassName, $callRecorder, $stubMapper, $answer);
-
-        $answer   = $this->getMock('Phake_Stubber_Answers_IDelegator');
-        $delegate = $this->getMock('Phake_Stubber_IAnswerDelegate');
-
-        $answer->expects($this->once())
-            ->method('getAnswer')
-            ->will($this->returnValue($delegate));
-
-        $answer->expects($this->once())
-            ->method('processAnswer')
-            ->with(null);
-
-        $realAnswer = $this->getMock('PhakeTest_MockedClass');
-
-        $realAnswer->expects($this->once())
-            ->method('fooWithArgument')
-            ->with($this->equalTo('bar'));
-
-        $delegate->expects($this->any())
-            ->method('getCallBack')
-            ->with(
-                $this->equalTo($mock),
-                $this->equalTo('__call'),
-                $this->equalTo(array('fooWithArgument', array('bar')))
-            )
-            ->will($this->returnValue(array($realAnswer, 'fooWithArgument')));
-
-        $delegate->expects($this->any())
-            ->method('getArguments')
-            ->with($this->equalTo('__call'), $this->equalTo(array('fooWithArgument', array('bar'))))
-            ->will($this->returnValue(array('bar')));
-
-        $stubMapper->expects($this->once())
-            ->method('getStubByCall')
-            ->with($this->equalTo('fooWithArgument'), array('bar'))
-            ->will($this->returnValue(new Phake_Stubber_AnswerCollection($answer)));
-
-        $mock->fooWithArgument('bar');
+        Phake::verify($answer)->getAnswerCallback('__call');
     }
 
     public function testMagicCallMethodsRecordTwice()
@@ -423,11 +320,11 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
         $newClassName = __CLASS__ . '_TestClass21';
         $mockedClass  = 'PhakeTest_MagicClass';
 
-        $this->classGen->generate($newClassName, $mockedClass);
+        $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
         $callRecorder = Phake::mock('Phake_CallRecorder_Recorder');
         $stubMapper   = $this->getMock('Phake_Stubber_StubMapper');
-        $answer       = $this->getMock('Phake_Stubber_IAnswer');
+        $answer       = Phake::mock('Phake_Stubber_Answers_NoAnswer', Phake::ifUnstubbed()->thenCallParent());
         $mock         = $this->classGen->instantiate($newClassName, $callRecorder, $stubMapper, $answer);
 
         $mock->foo('blah');
@@ -445,11 +342,11 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
         $newClassName = __CLASS__ . '_TestClass22';
         $mockedClass  = 'PhakeTest_MagicClass';
 
-        $this->classGen->generate($newClassName, $mockedClass);
+        $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
         $callRecorder = Phake::mock('Phake_CallRecorder_Recorder');
         $stubMapper   = Phake::mock('Phake_Stubber_StubMapper');
-        $answer       = $this->getMock('Phake_Stubber_IAnswer');
+        $answer       = Phake::mock('Phake_Stubber_Answers_NoAnswer', Phake::ifUnstubbed()->thenCallParent());
         $mock         = $this->classGen->instantiate($newClassName, $callRecorder, $stubMapper, $answer);
 
 
@@ -467,7 +364,7 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
         $newClassName = __CLASS__ . '_TestClass13';
         $mockedClass  = 'PhakeTest_MockedInterface';
 
-        $this->classGen->generate($newClassName, $mockedClass);
+        $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
         $this->assertTrue(
             class_exists($newClassName, false),
@@ -483,14 +380,14 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
         $newClassName = __CLASS__ . '_TestClass18';
         $mockedClass  = 'PhakeTest_MockedClass';
 
-        $this->classGen->generate($newClassName, $mockedClass);
+        $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
         $callRecorder = $this->getMock('Phake_CallRecorder_Recorder');
         $stubMapper   = $this->getMock('Phake_Stubber_StubMapper');
         $answer       = $this->getMock('Phake_Stubber_IAnswer');
         $mock         = $this->classGen->instantiate($newClassName, $callRecorder, $stubMapper, $answer);
 
-        $this->assertEquals('PhakeTest_MockedClass', $mock->__PHAKE_name);
+        $this->assertEquals('PhakeTest_MockedClass', $mock::__PHAKE_name);
         $this->assertEquals('PhakeTest_MockedClass', Phake::getInfo($mock)->getName());
     }
 
@@ -501,7 +398,7 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
     {
         $newClassName = __CLASS__ . '_TestClass16';
         $mockedClass  = 'PhakeTest_MockedConstructedClass';
-        $this->classGen->generate($newClassName, $mockedClass);
+        $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
         /** @var $callRecorder Phake_CallRecorder_Recorder */
         $callRecorder = $this->getMock('Phake_CallRecorder_Recorder');
@@ -529,7 +426,7 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
         $newClassName = __CLASS__ . '_TestClass17';
         $mockedClass  = 'PhakeTest_FinalMethod';
 
-        $this->classGen->generate($newClassName, $mockedClass);
+        $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
         $this->addToAssertionCount(1);
     }
@@ -541,7 +438,7 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
     {
         $newClassName = __CLASS__ . '_TestClass24';
         $mockedClass  = 'PhakeTest_ToStringMethod';
-        $this->classGen->generate($newClassName, $mockedClass);
+        $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
         /** @var $recorder Phake_CallRecorder_Recorder */
         $recorder = $this->getMock('Phake_CallRecorder_Recorder');
@@ -560,7 +457,7 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
     {
         $newClassName = __CLASS__ . '_TestClass' . uniqid();
         $mockedClass  = 'PhakeTest_DestructorClass';
-        $this->classGen->generate($newClassName, $mockedClass);
+        $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
         /** @var $recorder Phake_CallRecorder_Recorder */
         $recorder = $this->getMock('Phake_CallRecorder_Recorder');
@@ -603,6 +500,31 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 
         Phake::verify($mockedClass)->fooWithVariableNumberOfArguments(1, 2, 3);
     }
-}
+
+    public function testGeneratedMockClassHasStaticInfo()
+    {
+        $newClassName = __CLASS__ . '_TestClass' . uniqid();
+        $mockedClass  = 'stdClass';
+        $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
+
+        /* @var $info Phake_Mock_Info */
+        $info = $newClassName::$__PHAKE_staticInfo;
+        $this->assertInstanceOf('Phake_Mock_Info', $info);
+
+        $this->assertInstanceOf('Phake_Stubber_IAnswer', $info->getDefaultAnswer());
+        $this->assertEquals($mockedClass, $info->getName());
+        $this->assertInstanceOf('Phake_CallRecorder_Recorder', $info->getCallRecorder());
+        $this->assertInstanceOf('Phake_Stubber_StubMapper', $info->getStubMapper());
+        $this->assertInstanceOf('Phake_ClassGenerator_InvocationHandler_IInvocationHandler', $info->getHandlerChain());
+    }
+
+    public function testGeneratedMockAddsSelfToRegistry()
+    {
+        $newClassName = __CLASS__ . '_TestClass' . uniqid();
+        $mockedClass  = 'stdClass';
+        $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
+
+        Phake::verify($this->infoRegistry)->addInfo($newClassName::$__PHAKE_staticInfo);
+    }}
 
 

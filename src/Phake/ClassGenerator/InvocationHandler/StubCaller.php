@@ -68,7 +68,7 @@ class Phake_ClassGenerator_InvocationHandler_StubCaller implements Phake_ClassGe
         $this->defaultAnswer = $defaultAnswer;
     }
 
-    public function invoke(Phake_IMock $mock, $method, array $arguments, array &$argumentReference)
+    public function invoke($mock, $method, array $arguments, array &$argumentReference)
     {
         $stub = null;
 

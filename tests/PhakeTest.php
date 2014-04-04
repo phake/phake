@@ -58,6 +58,7 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 
     protected function tearDown()
     {
+        Phake::resetStaticInfo();
         Phake::setClient(Phake::CLIENT_DEFAULT);
     }
 
@@ -105,6 +106,15 @@ class PhakeTest extends PHPUnit_Framework_TestCase
             ->thenReturn(42);
 
         $this->assertEquals(42, $mock->foo());
+    }
+
+    public function testStaticStub()
+    {
+        $mock = Phake::mock('PhakeTest_StaticInterface');
+
+        Phake::whenStatic($mock)->staticMethod()->thenReturn(42);
+
+        $this->assertEquals(42, $mock::staticMethod());
     }
 
     /**
@@ -419,6 +429,41 @@ class PhakeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests that resetting a mock clears the call recorder
+     */
+    public function testResettingStaticCallRecorder()
+    {
+        $mock = Phake::mock('PhakeTest_StaticInterface');
+
+        $mock::staticMethod();
+
+        Phake::verifyStatic($mock)->staticMethod();
+
+        Phake::resetStatic($mock);
+
+        $this->setExpectedException('Phake_Exception_VerificationException');
+
+        Phake::verifyStatic($mock)->staticMethod();
+    }
+
+
+    /**
+     * Tests that resetting a mock clears the stubber
+     */
+    public function testResettingStaticStubMapper()
+    {
+        $mock = Phake::mock('PhakeTest_StaticInterface');
+
+        Phake::whenStatic($mock)->staticMethod()->thenReturn(42);
+
+        $this->assertEquals(42, $mock::staticMethod());
+
+        Phake::resetStatic($mock);
+
+        $this->assertNull($mock::staticMethod());
+    }
+
+    /**
      * Tests setting a default answer for stubs
      */
     public function testDefaultAnswerForStubs()
@@ -441,6 +486,18 @@ class PhakeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests setting a default answer for only the __call magic method
+     */
+    public function testDefaultAnswerForStaticStubsOfCall()
+    {
+        $mock = Phake::mock('PhakeTest_MagicClass');
+
+        Phake::whenStaticCallMethodWith(Phake::anyParameters())->isCalledOn($mock)->thenReturn(42);
+
+        $this->assertEquals(42, $mock::foo());
+    }
+
+    /**
      * Tests validating calls to __call
      */
     public function testVerificationOfCall()
@@ -450,6 +507,18 @@ class PhakeTest extends PHPUnit_Framework_TestCase
         $mock->foo();
 
         Phake::verifyCallMethodWith(Phake::anyParameters())->isCalledOn($mock);
+    }
+
+    /**
+     * Tests validating calls to __callStatic
+     */
+    public function testVerificationOfStaticCall()
+    {
+        $mock = Phake::mock('PhakeTest_MagicClass');
+
+        $mock::foo();
+
+        Phake::verifyStaticCallMethodWith(Phake::anyParameters())->isCalledOn($mock);
     }
 
     /**
@@ -661,6 +730,23 @@ class PhakeTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    public function testCallOrderWithStatics()
+    {
+        $mock1 = Phake::mock('PhakeTest_MockedClass');
+        $mock2 = Phake::mock('PhakeTest_StaticInterface');
+
+        $mock1->foo();
+        $mock2::staticMethod();
+        $mock1->fooWithReturnValue();
+        $mock1->callInnerFunc();
+
+        Phake::inOrder(
+            Phake::verify($mock1)->foo(),
+            Phake::verifyStatic($mock2)->staticMethod(),
+            Phake::verify($mock1)->callInnerFunc()
+        );
+    }
+
     /**
      * Tests freezing mocks
      */
@@ -675,6 +761,19 @@ class PhakeTest extends PHPUnit_Framework_TestCase
         $this->setExpectedException('Phake_Exception_VerificationException');
 
         $mock->foo();
+    }
+
+    public function testStaticMockFreezing()
+    {
+        $mock = Phake::mock('PhakeTest_StaticInterface');
+
+        $mock::staticMethod();
+
+        Phake::verifyNoFurtherInteraction($mock);
+
+        $this->setExpectedException('Phake_Exception_VerificationException');
+
+        $mock::staticMethod();
     }
 
     /**
@@ -705,6 +804,21 @@ class PhakeTest extends PHPUnit_Framework_TestCase
         Phake::verifyNoInteraction($mock);
 
         $mock->foo();
+
+        $this->setExpectedException('Phake_Exception_VerificationException');
+        Phake::verifyNoInteraction($mock);
+    }
+
+    /**
+     * Tests verifying that no interaction occured
+     */
+    public function testVerifyingZeroInteractionIncludesStatic()
+    {
+        $mock = Phake::mock('PhakeTest_StaticInterface');
+
+        Phake::verifyNoInteraction($mock);
+
+        $mock::staticMethod();
 
         $this->setExpectedException('Phake_Exception_VerificationException');
         Phake::verifyNoInteraction($mock);
@@ -1186,15 +1300,35 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 
     public function testMockingStaticClass()
     {
-        $this->markTestIncomplete(
-            'Need to implement mocking for static methods. Currently, neither stubbing or verification works'
-        );
         $mock = Phake::mock('PhakeTest_StaticClass');
 
-        Phake::when($mock)->staticMethod()->thenReturn('bar');
+        Phake::whenStatic($mock)->staticMethod()->thenReturn('bar');
 
         $this->assertEquals('bar', $mock->staticMethod());
-        Phake::verify($mock)->staticMethod();
+        Phake::verifyStatic($mock)->staticMethod();
+    }
+
+    public function testMockingStaticInterface()
+    {
+        $mock = Phake::mock('PhakeTest_StaticInterface');
+
+        $this->assertInstanceOf('Phake_IMock', $mock);
+    }
+
+    public function testCallingMockStaticMethod()
+    {
+        $mock = Phake::mock('PhakeTest_StaticInterface');
+
+        $this->assertNull($mock::staticMethod());
+    }
+
+    public function testVerifyingMockStaticMethod()
+    {
+        $mock = Phake::mock('PhakeTest_StaticInterface');
+
+        $mock::staticMethod();
+
+        Phake::verifyStatic($mock)->staticMethod();
     }
 
     public function testMockingAbstractClass()
@@ -1296,5 +1430,19 @@ class PhakeTest extends PHPUnit_Framework_TestCase
         $berryCookie = Phake::mock('PhakeTest_A');
 
         $this->assertNotEquals($chocolateCookie, $berryCookie);
+    }
+
+    public function testStaticClassesReset()
+    {
+        $mock1 = Phake::mock('PhakeTest_StaticInterface');
+        $mock1::staticMethod();
+        Phake::verifyStatic($mock1)->staticMethod();
+
+        Phake::resetStaticInfo();
+
+        $mock2 = Phake::mock('PhakeTest_StaticInterface');
+        $mock2::staticMethod();
+        Phake::verifyStatic($mock2)->staticMethod();
+
     }
 }

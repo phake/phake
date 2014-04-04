@@ -76,12 +76,12 @@ class Phake_ClassGenerator_InvocationHandler_StubCallerTest extends PHPUnit_Fram
         $this->mock          = $this->getMock('Phake_IMock');
         $this->stubMapper    = Phake::mock('Phake_Stubber_StubMapper');
         $this->defaultAnswer = Phake::mock('Phake_Stubber_IAnswer');
-        Phake::when($this->defaultAnswer)->getAnswer()->thenReturn('24');
+        Phake::when($this->defaultAnswer)->getAnswerCallback('foo')->thenReturn(function () { return '24'; });
 
         $this->answerCollection = Phake::mock('Phake_Stubber_AnswerCollection');
         $answer                 = Phake::mock('Phake_Stubber_IAnswer');
         Phake::when($this->answerCollection)->getAnswer()->thenReturn($answer);
-        Phake::when($answer)->getAnswer()->thenReturn('42');
+        Phake::when($answer)->getAnswerCallback('foo')->thenReturn(function () { return '42'; });
         Phake::when($this->stubMapper)->getStubByCall(Phake::anyParameters())->thenReturn($this->answerCollection);
 
         $this->handler = new Phake_ClassGenerator_InvocationHandler_StubCaller($this->stubMapper, $this->defaultAnswer);
@@ -100,20 +100,11 @@ class Phake_ClassGenerator_InvocationHandler_StubCallerTest extends PHPUnit_Fram
         Phake::verify($this->stubMapper)->getStubByCall('foo', array('bar'));
     }
 
-    public function testNonDelegatedAnswerReturned()
+    public function testAnswerReturned()
     {
         $ref = array('bar');
 
-        $this->assertEquals('42', $this->handler->invoke($this->mock, 'foo', $ref, $ref)->getAnswer());
-    }
-
-    public function testNonDelegatedDefaultAnswerReturned()
-    {
-        $ref = array('bar');
-        Phake::when($this->stubMapper)->getStubByCall(Phake::anyParameters())->thenReturn(null);
-
-        $this->assertEquals($this->defaultAnswer, $this->handler->invoke($this->mock, 'foo', $ref, $ref));
-        Phake::verify($this->stubMapper, Phake::times(1))->getStubByCall(Phake::anyParameters());
+        $this->assertEquals('42', call_user_func($this->handler->invoke($this->mock, 'foo', $ref, $ref)->getAnswerCallback('foo'), 'bar'));
     }
 
     public function testMagicCallMethodChecksForImplicitStubFirst()
