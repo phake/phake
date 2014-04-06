@@ -145,11 +145,19 @@ class Phake_ClassGenerator_MockClass
         $extends    = '';
         $implements = '';
         $interfaces = array();
+        $constructor = '';
 
         $mockedClass = new ReflectionClass($mockedClassName);
 
         if (!$mockedClass->isInterface()) {
             $extends = "extends {$mockedClassName}";
+            if ('PDO' == $mockedClassName
+                || 'PDOStatement' == $mockedClassName
+                || $mockedClass->isSubclassOf('PDO')
+                || $mockedClass->isSubclassOf('PDOStatement')
+            ) {
+                $constructor = "public function __construct() {}";
+            }
         } elseif ($mockedClassName != 'Phake_IMock') {
             $implements = ", $mockedClassName";
 
@@ -175,6 +183,8 @@ class {$newClassName} {$extends}
     public static \$__PHAKE_staticInfo;
 
 	const __PHAKE_name = '{$mockedClassName}';
+	
+	{$constructor}
 
 	public function __destruct() {}
 

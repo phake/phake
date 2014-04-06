@@ -1445,4 +1445,25 @@ class PhakeTest extends PHPUnit_Framework_TestCase
         Phake::verifyStatic($mock2)->staticMethod();
 
     }
+
+    public function testMockPDO()
+    {
+        $this->assertInstanceOf('PDO', Phake::mock('PDO'));
+    }
+
+    public function testMockPDOExtendingStatementClass()
+    {
+        $this->assertInstanceOf(
+            'PhakeTest_PDOStatementExtendingClass',
+            Phake::mock('PhakeTest_PDOStatementExtendingClass')
+        );
+    }
+
+    public function testMockPDOExtendingClass()
+    {
+        $this->assertInstanceOf(
+            'PhakeTest_PDOExtendingClass',
+            Phake::mock('PhakeTest_PDOExtendingClass')
+        );
+    }
 }
