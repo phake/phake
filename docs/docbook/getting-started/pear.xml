@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<example xmlns="http://docbook.org/ns/docbook" id="getting-started.pear">
-	<title>Installing Phake Via Pear</title>
-		<programlisting><![CDATA[pear channel-discover pear.digitalsandwich.com
-pear install digitalsandwich/Phake
-]]></programlisting>
-</example>

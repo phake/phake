@@ -6,16 +6,6 @@
 		any version of PHPUnit so long as the PHP version is 5.2.4 or greater.
 	</para>
 	<para>
-		Phake can be installed via the digitalsandwich pear channel. This channel is located at
-		<link xlink:href="http://pear.digitalsandwich.com">pear.digitalsandwich.com</link>.
-	</para>
-	<xi:include href="getting-started/pear.xml" />
-	<para>
-		Once Phake is installed, so long as the pear directory (usually something like /usr/share/php) is 
-		in your include_path, you can simply include “Phake.php” in your code and you will be able to utilize
-		the functionality of Phake.
-	</para>
-	<para>
 		For those that you like to live more on the edge, you can also clone a copy of Phake from the Phake 
 		GitHub repository at <link xlink:href="http://github.com/mlively/Phake">git://github.com/mlively/Phake.git</link>.
 		Every attempt is made to keep the master branch stable and this should be usable for those that

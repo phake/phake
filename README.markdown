@@ -35,21 +35,6 @@ in the require-dev section.
 
 2. Run Composer: `php composer.phar install --dev` or `php composer.phar update phake/phake`
 
-Installation - PEAR
--------------------
-
-Phake can be installed using PEAR via the Digital Sandwich PEAR channel
-
-This pear channel can be added to PEAR with the following command:
-
-    pear channel-discover pear.digitalsandwich.com
-
-You should only need to do that once. After this you can install Phake with the following command
-
-    pear install digitalsandwich/Phake
-
-After the installation you can find the Phake source files inside your local PEAR directory
-
 Installation - Source
 ---------------------
 
