@@ -171,11 +171,6 @@ class {$newClassName} {$extends}
             new Phake_Matchers_MethodMatcher('__toString', array())
         );
 
-        $mockObject->__PHAKE_stubMapper->mapStubToMatcher(
-            new Phake_Stubber_AnswerCollection(new Phake_Stubber_Answers_StaticAnswer(NULL)),
-            new Phake_Matchers_AbstractMethodMatcher(new ReflectionClass($mockObject->__PHAKE_getMockedClassName()))
-        );
-
         $mockReflClass = new ReflectionClass($mockObject);
         if (null !== $constructorArgs && $mockReflClass->hasMethod('__construct')) {
             call_user_func_array(array($mockObject, '__construct'), $constructorArgs);

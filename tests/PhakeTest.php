@@ -371,17 +371,27 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 		$this->assertNull($mock->foo());
 	}
 
-	/**
-	 * Tests setting a default answer for stubs
-	 */
-	public function testDefaultAnswerForStubs()
-	{
-		$mock = Phake::mock('PhakeTest_MockedClass', Phake::ifUnstubbed()->thenReturn(42));
+    /**
+     * Tests setting a default answer for stubs
+     */
+    public function testDefaultAnswerForStubs()
+    {
+        $mock = Phake::mock('PhakeTest_MockedClass', Phake::ifUnstubbed()->thenReturn(42));
 
-		$this->assertEquals(42, $mock->foo());
-	}
+        $this->assertEquals(42, $mock->foo());
+    }
 
-	/**
+    /**
+     * Tests setting a default answer for stubs
+     */
+    public function testDefaultAnswerForInterfaces()
+    {
+        $mock = Phake::mock('PhakeTest_MockedInterface', Phake::ifUnstubbed()->thenReturn(42));
+
+        $this->assertEquals(42, $mock->foo());
+    }
+
+    /**
 	 * Tests setting a default answer for only the __call magic method
 	 */
 	public function testDefaultAnswerForStubsOfCall()

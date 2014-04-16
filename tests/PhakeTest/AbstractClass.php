@@ -50,7 +50,9 @@ abstract class PhakeTest_AbstractClass implements PhakeTest_MockedInterface
 	{
 	}
 
-	public function fooWithArgument($arg1)
+    abstract function bar();
+
+    public function fooWithArgument($arg1)
 	{
 	}
 

@@ -48,6 +48,8 @@ require_once 'Phake/Stubber/IAnswerDelegate.php';
 /**
  * An answer delegate that allows mocked methods to call their parent methods.
  *
+ * If a mocked method does not have a parent, then null is returned.
+ *
  * This class is both the delegator and the delegate.
  */
 class Phake_Stubber_Answers_ParentDelegate implements Phake_Stubber_Answers_IDelegator, Phake_Stubber_IAnswerDelegate
@@ -76,7 +78,28 @@ class Phake_Stubber_Answers_ParentDelegate implements Phake_Stubber_Answers_IDel
 	 */
 	public function getCallBack($calledObject, $calledMethod, array $calledParameters)
 	{
-		return array($calledObject, "parent::{$calledMethod}");
+        $fallback =  array($this, "getFallback");
+        try
+        {
+            $reflClass = new ReflectionClass($calledObject);
+            $parent = $reflClass->getParentClass();
+
+            if (!is_object($parent))
+            {
+                return $fallback;
+            }
+
+            $method = $parent->getMethod($calledMethod);
+
+            if (!$method->isAbstract())
+            {
+                return array($calledObject, "parent::{$calledMethod}");
+            }
+        }
+        catch (ReflectionException $e)
+        {
+        }
+        return $fallback;
 	}
 
 	/**
@@ -93,6 +116,11 @@ class Phake_Stubber_Answers_ParentDelegate implements Phake_Stubber_Answers_IDel
 	{
 		$this->capturedReturn = $answer;
 	}
+
+    public function getFallback()
+    {
+        return null;
+    }
 }
 
 ?>
