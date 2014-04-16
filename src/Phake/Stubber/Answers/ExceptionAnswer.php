@@ -62,7 +62,7 @@ class Phake_Stubber_Answers_ExceptionAnswer implements Phake_Stubber_IAnswer
         $this->answer = $answer;
     }
 
-    public function getAnswerCallback($method)
+    public function getAnswerCallback($context, $method)
     {
         $answer = $this->answer;
         return function () use ($answer) {

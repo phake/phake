@@ -215,7 +215,7 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 
         $mock->fooWithArgument('bar');
 
-        Phake::verify($answer)->getAnswerCallback('fooWithArgument');
+        Phake::verify($answer)->getAnswerCallback($mock, 'fooWithArgument');
     }
 
     /**
@@ -241,7 +241,7 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 
         $mock->fooWithDefault();
 
-        Phake::verify($answer)->getAnswerCallback('fooWithDefault');
+        Phake::verify($answer)->getAnswerCallback($mock, 'fooWithDefault');
     }
 
     /**
@@ -291,7 +291,7 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 
         $mock->fooWithArgument('bar');
 
-        Phake::verify($answer)->getAnswerCallback('fooWithArgument');
+        Phake::verify($answer)->getAnswerCallback($mock, 'fooWithArgument');
     }
 
     /**
@@ -312,7 +312,7 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 
         $mock->fooWithArgument('bar');
 
-        Phake::verify($answer)->getAnswerCallback('__call');
+        Phake::verify($answer)->getAnswerCallback($mock, '__call');
     }
 
     public function testMagicCallMethodsRecordTwice()

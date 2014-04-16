@@ -67,12 +67,7 @@ class Phake_Stubber_Answers_StaticAnswer implements Phake_Stubber_IAnswer
 
     }
 
-    /**
-     * Returns the answer that should be used when a method stubbed to this answer is called.
-     * @param string $method
-     * @return mixed
-     */
-    public function getAnswerCallback($method)
+    public function getAnswerCallback($context, $method)
     {
         $answer = $this->answer;
         return function () use ($answer) {

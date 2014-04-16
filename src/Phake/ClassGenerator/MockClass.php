@@ -320,7 +320,7 @@ class {$newClassName} {$extends}
 		\$funcArgs = func_get_args();
 		\$answer = \$info->getHandlerChain()->invoke({$context}, '{$method->getName()}', \$funcArgs, \$args);
 
-	    \$callback = \$answer->getAnswerCallback('{$method->getName()}');
+	    \$callback = \$answer->getAnswerCallback({$context}, '{$method->getName()}');
 	    \$result = call_user_func_array(\$callback, \$args);
 	    \$answer->processAnswer(\$result);
 	    return \$result;
@@ -428,10 +428,6 @@ class {$newClassName} {$extends}
             new Phake_Matchers_MethodMatcher('__toString', array())
         );
 
-        $info->getStubMapper()->mapStubToMatcher(
-            new Phake_Stubber_AnswerCollection(new Phake_Stubber_Answers_StaticAnswer(null)),
-            new Phake_Matchers_AbstractMethodMatcher(new ReflectionClass($info->getName()))
-        );
         return $info;
     }
 }

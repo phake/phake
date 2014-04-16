@@ -81,7 +81,7 @@ class Phake_ClassGenerator_InvocationHandler_StubCallerTest extends PHPUnit_Fram
         $this->answerCollection = Phake::mock('Phake_Stubber_AnswerCollection');
         $answer                 = Phake::mock('Phake_Stubber_IAnswer');
         Phake::when($this->answerCollection)->getAnswer()->thenReturn($answer);
-        Phake::when($answer)->getAnswerCallback('foo')->thenReturn(function () { return '42'; });
+        Phake::when($answer)->getAnswerCallback($this->anything(), 'foo')->thenReturn(function () { return '42'; });
         Phake::when($this->stubMapper)->getStubByCall(Phake::anyParameters())->thenReturn($this->answerCollection);
 
         $this->handler = new Phake_ClassGenerator_InvocationHandler_StubCaller($this->stubMapper, $this->defaultAnswer);
@@ -104,7 +104,7 @@ class Phake_ClassGenerator_InvocationHandler_StubCallerTest extends PHPUnit_Fram
     {
         $ref = array('bar');
 
-        $this->assertEquals('42', call_user_func($this->handler->invoke($this->mock, 'foo', $ref, $ref)->getAnswerCallback('foo'), 'bar'));
+        $this->assertEquals('42', call_user_func($this->handler->invoke($this->mock, 'foo', $ref, $ref)->getAnswerCallback($this->mock, 'foo'), 'bar'));
     }
 
     public function testMagicCallMethodChecksForImplicitStubFirst()

@@ -65,9 +65,10 @@ class Phake_Stubber_Answers_ParentDelegateTest extends PHPUnit_Framework_TestCas
      */
     public function testThatDelegateReturnsCorrectCallback()
     {
-        $callback = $this->delegate->getAnswerCallback('testMethod');
+        $m = Phake::mock('PhakeTest_MockedClass');
+        $callback = $this->delegate->getAnswerCallback($m, 'foo');
 
-        $this->assertSame(array('parent', 'testMethod'), $callback);
+        $this->assertSame(array('parent', 'foo'), $callback);
     }
 
     /**
@@ -80,6 +81,40 @@ class Phake_Stubber_Answers_ParentDelegateTest extends PHPUnit_Framework_TestCas
         $delegate->processAnswer("test");
 
         $this->assertEquals("test", $value);
+    }
+
+    public function testFallbackReturnNull()
+    {
+        $this->assertNull($this->delegate->getFallback());
+    }
+
+    public function testGetAnswerCallbackReturnsFallbackOnMethodsWithNoParents()
+    {
+        $abstractMock = Phake::mock('PhakeTest_AbstractClass');
+        $callback = $this->delegate->getAnswerCallback($abstractMock, 'bar');
+
+        $this->assertEquals(array($this->delegate, 'getFallback'), $callback);
+    }
+
+    public function testGetCallbackReturnsFallbackOnClassesWithNoParents()
+    {
+        $callback = $this->delegate->getAnswerCallback('PhakeTest_MockedClass', 'foo');
+
+        $this->assertEquals(array($this->delegate, 'getFallback'), $callback);
+    }
+
+    public function testGetCallbackReturnsFallbackOnClassesWithNoMethod()
+    {
+        $callback = $this->delegate->getAnswerCallback('PhakeTest_ExtendedMockedConstructedClass', 'methodThatDoesntExist');
+
+        $this->assertEquals(array($this->delegate, 'getFallback'), $callback);
+    }
+
+    public function testGetCallbackReturnsFallbackClassThatDoesntExist()
+    {
+        $callback = $this->delegate->getAnswerCallback('ClassThatDoesntExist', 'methodThatDoesntExist');
+
+        $this->assertEquals(array($this->delegate, 'getFallback'), $callback);
     }
 }
 

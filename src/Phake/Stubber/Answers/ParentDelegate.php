@@ -45,6 +45,9 @@
 /**
  * An answer delegate that allows mocked methods to call their parent methods.
  *
+ * If a particular method does not have a parent (ie abstract methods) then a static null answer (effectively) is used
+ * instead.
+ *
  * This class is both the delegator and the delegate.
  */
 class Phake_Stubber_Answers_ParentDelegate implements Phake_Stubber_IAnswer
@@ -61,14 +64,35 @@ class Phake_Stubber_Answers_ParentDelegate implements Phake_Stubber_IAnswer
         $this->capturedReturn = $answer;
     }
 
-    /**
-     * Returns the answer that should be used when a method stubbed to this answer is called.
-     * @param string $method
-     * @return mixed
-     */
-    public function getAnswerCallback($method)
+    public function getAnswerCallback($context, $method)
     {
-        return array('parent', $method);
+        $fallback =  array($this, "getFallback");
+        try
+        {
+            $reflClass = new ReflectionClass($context);
+            $reflParent = $reflClass->getParentClass();
+
+            if (!is_object($reflParent))
+            {
+                return $fallback;
+            }
+
+            $reflMethod = $reflParent->getMethod($method);
+
+            if (!$reflMethod->isAbstract())
+            {
+                return array('parent', $method);
+            }
+        }
+        catch (ReflectionException $e)
+        {
+        }
+        return $fallback;
+    }
+
+    public function getFallback()
+    {
+        return null;
     }
 }
 
