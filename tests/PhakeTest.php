@@ -1162,7 +1162,7 @@ class PhakeTest extends PHPUnit_Framework_TestCase
         Phake::verify($mock, Phake::times(6))->fooWithLotsOfParameters(Phake::anyParameters());
     }
 
-    public function testAnyParametersThrowsAnErrorWithOtherParameters()
+    public function testAnyParametersThrowsAnErrorWithTrailingParameters()
     {
         $mock = Phake::mock('PhakeTest_MockedClass');
 
@@ -1182,6 +1182,30 @@ class PhakeTest extends PHPUnit_Framework_TestCase
         $this->setExpectedException('InvalidArgumentException', 'Other matchers cannot be passed with any '
             . 'parameters. It will not work the way you think it works');
         Phake::verify($mock)->fooWithLotsOfParameters(3, Phake::anyParameters());
+    }
+
+    public function testIgnoreRemainingMatchesEverything()
+    {
+        $mock = Phake::mock('PhakeTest_MockedClass');
+
+        $mock->fooWithLotsOfParameters(1, 2, 3);
+        $mock->fooWithLotsOfParameters(1, 3, 2);
+        $mock->fooWithLotsOfParameters(1, 1, 3);
+        $mock->fooWithLotsOfParameters(1, 3, 1);
+        $mock->fooWithLotsOfParameters(1, 1, 2);
+        $mock->fooWithLotsOfParameters(1, 2, 1);
+
+        Phake::verify($mock, Phake::times(6))->fooWithLotsOfParameters(1, Phake::ignoreRemaining());
+    }
+
+    public function testIgnoreRemainingThrowsAnErrorWithTrailingParameters()
+    {
+        $mock = Phake::mock('PhakeTest_MockedClass');
+
+        $mock->fooWithLotsOfParameters(3, 2, 1);
+
+        $this->setExpectedException('InvalidArgumentException', 'Other matchers cannot be checked after you ignore remaining parameters.');
+        Phake::verify($mock)->fooWithLotsOfParameters(Phake::ignoreRemaining(), 1);
     }
 
     /**

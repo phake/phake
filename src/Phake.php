@@ -491,6 +491,16 @@ class Phake
     }
 
     /**
+     * Returns an any parameters matcher to allow matching all invocations of a particular method.
+     *
+     * @return Phake_Matchers_AnyParameters
+     */
+    public static function ignoreRemaining()
+    {
+        return new Phake_Matchers_IgnoreRemainingMatcher();
+    }
+
+    /**
      * Returns the client currently being used by Phake
      *
      * @return Phake_Client_IClient
