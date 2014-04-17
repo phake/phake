@@ -425,7 +425,7 @@ class {$newClassName} {$extends}
 
         $info->getStubMapper()->mapStubToMatcher(
             new Phake_Stubber_AnswerCollection(new Phake_Stubber_Answers_StaticAnswer('Mock for ' . $info->getName())),
-            new Phake_Matchers_MethodMatcher('__toString', array())
+            new Phake_Matchers_MethodMatcher('__toString', null)
         );
 
         return $info;

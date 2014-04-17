@@ -65,9 +65,10 @@ class Phake_Matchers_ReferenceSetterTest extends PHPUnit_Framework_TestCase
      */
     public function testSettingParameter()
     {
-        $this->assertTrue($this->setter->matches($value));
+        $value = array('');
+        $this->assertTrue($this->setter->doArgumentsMatch($value));
 
-        $this->assertEquals(42, $value);
+        $this->assertEquals(42, $value[0]);
     }
 
     /**
@@ -75,19 +76,19 @@ class Phake_Matchers_ReferenceSetterTest extends PHPUnit_Framework_TestCase
      */
     public function testConditionalSetting()
     {
-        $matcher = $this->getMock('Phake_Matchers_IArgumentMatcher');
-        $matcher->expects($this->once())
-            ->method('matches')
-            ->with($this->equalTo('blah'))
-            ->will($this->returnValue(true));
+        $matcher = Phake::mock('Phake_Matchers_IChainableArgumentMatcher');
+        $check = '';
+        Phake::when($matcher)->doArgumentsMatch->thenGetReturnByLambda(function ($arg) use (&$check) {
+                $check = $arg[0];
+                return true;
+            });
 
         $this->setter->when($matcher);
 
-        $value = 'blah';
-        $this->assertTrue($this->setter->matches($value));
-        $this->assertEquals(42, $value);
-
-        $value = 'blah'; //@TODO placed here to fix an issue with PHPUnit's mocks
+        $value = array('blah');
+        $this->assertTrue($this->setter->doArgumentsMatch($value));
+        $this->assertEquals('blah', $check);
+        $this->assertEquals(42, $value[0]);
     }
 
     /**
@@ -95,18 +96,16 @@ class Phake_Matchers_ReferenceSetterTest extends PHPUnit_Framework_TestCase
      */
     public function testConditionalSettingWontSet()
     {
-        $matcher = $this->getMock('Phake_Matchers_IArgumentMatcher');
-        $matcher->expects($this->once())
-            ->method('matches')
-            ->with($this->equalTo('blah'))
-            ->will($this->returnValue(false));
+        $matcher = Phake::mock('Phake_Matchers_IChainableArgumentMatcher');
+        $check = '';
+        Phake::when($matcher)->doArgumentsMatch->thenReturn(false);
 
         $this->setter->when($matcher);
 
-        $value = 'blah';
-        $this->assertFalse($this->setter->matches($value));
+        $value = array('blah');
+        $this->assertFalse($this->setter->doArgumentsMatch($value));
 
-        $this->assertEquals('blah', $value);
+        $this->assertEquals('blah', $value[0]);
     }
 
     /**

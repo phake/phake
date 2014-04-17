@@ -52,9 +52,9 @@
 class Phake_Proxies_CallVerifierProxy
 {
     /**
-     * @var array
+     * @var Phake_Matchers_IChainableArgumentMatcher
      */
-    private $arguments;
+    private $argumentMatcher;
 
     /**
      * @var Phake_Client_IClient
@@ -67,13 +67,13 @@ class Phake_Proxies_CallVerifierProxy
     private $static;
 
     /**
-     * @param array $arguments
+     * @param Phake_Matchers_IChainableArgumentMatcher $argumentMatcher
      * @param Phake_Client_IClient $client
      * @param bool $static
      */
-    public function __construct(array $arguments, Phake_Client_IClient $client, $static)
+    public function __construct(Phake_Matchers_IChainableArgumentMatcher $argumentMatcher = null, Phake_Client_IClient $client, $static)
     {
-        $this->arguments  = $arguments;
+        $this->argumentMatcher  = $argumentMatcher;
         $this->client     = $client;
         $this->static = $static;
     }
@@ -97,7 +97,7 @@ class Phake_Proxies_CallVerifierProxy
         $call = $this->static ? '__callStatic' : '__call';
 
         $verifier    = new Phake_CallRecorder_Verifier(Phake::getInfo($context)->getCallRecorder(), $obj);
-        $expectation = new Phake_CallRecorder_CallExpectation($context, $call, $this->arguments, $verifierMode);
+        $expectation = new Phake_CallRecorder_CallExpectation($context, $call, $this->argumentMatcher, $verifierMode);
         $result      = $verifier->verifyCall($expectation);
 
         return $this->client->processVerifierResult($result);

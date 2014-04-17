@@ -51,41 +51,58 @@ class Phake_Matchers_Factory
     /**
      * Creates an argument matcher based on the given value.
      *
-     * If the given values is already an instance of Phake_Matchers_IArgumentMatcher it is passed
+     * If the given values is already an instance of Phake_Matchers_IChainableArgumentMatcher it is passed
      * through. If it is an instance of PHPUnit_Framework_Constraint a PHPUnit adapter is returned.
      * If it is an instance of Hamcrest_Matcher a Hamcrest adapter is returned. For everything else
      * a EqualsMatcher is returned set to the passed in value.
      *
      * @param mixed $argument
      *
-     * @return Phake_Matchers_IArgumentMatcher
+     * @return Phake_Matchers_IChainableArgumentMatcher
      */
-    public function createMatcher($argument)
+    public function createMatcher($argument, Phake_Matchers_IChainableArgumentMatcher $nextMatcher = null)
     {
-        if ($argument instanceof Phake_Matchers_IArgumentMatcher) {
-            return $argument;
+        $return = null;
+        if ($argument instanceof Phake_Matchers_IChainableArgumentMatcher) {
+            $return = $argument;
         } elseif ($argument instanceof PHPUnit_Framework_Constraint) {
-            return new Phake_Matchers_PHPUnitConstraintAdapter($argument);
+            $return = new Phake_Matchers_PHPUnitConstraintAdapter($argument);
         } elseif ($argument instanceof Hamcrest\Matcher) {
-            return new Phake_Matchers_HamcrestMatcherAdapter($argument);
+            $return = new Phake_Matchers_HamcrestMatcherAdapter($argument);
+        } elseif ($argument instanceof Phake_Matchers_IArgumentMatcher) {
+            $return = new Phake_Matchers_ChainedArgumentMatcher($argument);
         } else {
-            return new Phake_Matchers_EqualsMatcher($argument);
+            $return = new Phake_Matchers_EqualsMatcher($argument);
         }
+
+        if ($nextMatcher !== null)
+        {
+            $return->setNextMatcher($nextMatcher);
+        }
+
+        return $return;
     }
 
     /**
-     * Converts an argument array into a matcher array
+     * Converts an argument array into a matcher chain
      *
      * @param array $arguments
      *
-     * @return array of Phake_Matchers_IArgumentMatcher objects
+     * @return Phake_Matchers_IChainableArgumentMatcher or null if the arg list was empty
      */
-    public function createMatcherArray(array $arguments)
+    public function createMatcherChain(array $arguments)
     {
-        $matchers = array();
-        foreach ($arguments as $arg) {
-            $matchers[] = $this->createMatcher($arg);
+        if (!count($arguments))
+        {
+            return null;
         }
-        return $matchers;
+
+        $lastMatcher = null;
+        foreach (array_reverse($arguments) as $arg) {
+            $matcher = $this->createMatcher($arg, $lastMatcher);
+
+            $lastMatcher = $matcher;
+        }
+        return $lastMatcher;
     }
 }

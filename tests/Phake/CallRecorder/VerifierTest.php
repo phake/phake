@@ -107,7 +107,7 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
         $expectation = new Phake_CallRecorder_CallExpectation(
             $this->obj,
             'bar',
-            array(),
+            null,
             $this->verifierMode
         );
         $return      = new Phake_CallRecorder_CallInfo($this->callArray[1], new Phake_CallRecorder_Position(0));
@@ -130,7 +130,7 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
         $expectation = new Phake_CallRecorder_CallExpectation(
             $this->obj,
             'test',
-            array(),
+            null,
             $this->verifierMode
         );
         Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(
@@ -147,13 +147,13 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
      */
     public function testVerifierDoesNotFindCallWithUnmatchedArguments()
     {
+        $matcher1 = new Phake_Matchers_EqualsMatcher('test');
+        $matcher2 = new Phake_Matchers_EqualsMatcher('test');
+        $matcher1->setNextMatcher($matcher2);
         $expectation = new Phake_CallRecorder_CallExpectation(
             $this->obj,
             'foo',
-            array(
-                new Phake_Matchers_EqualsMatcher('test'),
-                new Phake_Matchers_EqualsMatcher('test')
-            ),
+            $matcher1,
             $this->verifierMode
         );
         Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(
@@ -172,7 +172,7 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
         $expectation = new Phake_CallRecorder_CallExpectation(
             $this->obj,
             'foo',
-            array(),
+            null,
             $this->verifierMode
         );
 
@@ -200,7 +200,7 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
         $expectation = new Phake_CallRecorder_CallExpectation(
             $this->obj,
             'bar',
-            array(new Phake_Matchers_AnyParameters()),
+            new Phake_Matchers_AnyParameters(),
             $this->verifierMode
         );
 
@@ -230,7 +230,7 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
         $expectation = new Phake_CallRecorder_CallExpectation(
             $obj1,
             'foo',
-            array(),
+            null,
             $this->verifierMode
         );
 
@@ -251,7 +251,7 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
         $expectation = new Phake_CallRecorder_CallExpectation(
             $this->obj,
             'foo',
-            array(),
+            null,
             $this->verifierMode
         );
 
@@ -272,7 +272,7 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
         $expectation = new Phake_CallRecorder_CallExpectation(
             $this->obj,
             'foo',
-            array(),
+            null,
             $this->verifierMode
         );
 
@@ -302,7 +302,7 @@ Other Invocations:
         $expectation = new Phake_CallRecorder_CallExpectation(
             $obj2,
             'foo',
-            array(),
+            null,
             $this->verifierMode
         );
 
@@ -328,7 +328,7 @@ Other Invocations:
         $expectation = new Phake_CallRecorder_CallExpectation(
             $this->obj,
             'foo',
-            array(new Phake_Matchers_EqualsMatcher('test')),
+            new Phake_Matchers_EqualsMatcher('test'),
             $this->verifierMode
         );
 

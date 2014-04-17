@@ -65,8 +65,8 @@ class Phake_Matchers_EqualsMatcherTest extends PHPUnit_Framework_TestCase
      */
     public function testMatches()
     {
-        $value = 'foo';
-        $this->assertTrue($this->matcher->matches($value));
+        $value = array('foo');
+        $this->assertTrue($this->matcher->doArgumentsMatch($value));
     }
 
     /**
@@ -74,8 +74,8 @@ class Phake_Matchers_EqualsMatcherTest extends PHPUnit_Framework_TestCase
      */
     public function testBadMatches()
     {
-        $value = 'test';
-        $this->assertFalse($this->matcher->matches($value));
+        $value = array('test');
+        $this->assertFalse($this->matcher->doArgumentsMatch($value));
     }
 
     public function testToString()
@@ -109,30 +109,33 @@ class Phake_Matchers_EqualsMatcherTest extends PHPUnit_Framework_TestCase
         $c->b    = new stdClass();
         $c->b->a = $c;
 
-        $this->assertTrue($this->matcher->matches($c));
+        $c = array($c);
+
+        $this->assertTrue($this->matcher->doArgumentsMatch($c));
     }
 
     public function testDifferentClassObjects()
     {
         $this->matcher = new Phake_Matchers_EqualsMatcher(new PhakeTest_A());
 
-        $this->assertFalse($this->matcher->matches(new PhakeTest_B()));
+        $value = array(new PhakeTest_B());
+        $this->assertFalse($this->matcher->doArgumentsMatch($value));
     }
 
     public function testArraysWithDifferentCounts()
     {
         $this->matcher = new Phake_Matchers_EqualsMatcher(array(1));
 
-        $test = array(1, 2);
-        $this->assertFalse($this->matcher->matches($test));
+        $test = array(array(1, 2));
+        $this->assertFalse($this->matcher->doArgumentsMatch($test));
     }
 
     public function testArraysWithDifferentKeys()
     {
         $this->matcher = new Phake_Matchers_EqualsMatcher(array('one' => 1));
 
-        $test = array('two' => 1);
-        $this->assertFalse($this->matcher->matches($test));
+        $test = array(array('two' => 1));
+        $this->assertFalse($this->matcher->doArgumentsMatch($test));
     }
 }
 

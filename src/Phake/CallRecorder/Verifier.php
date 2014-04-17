@@ -81,7 +81,7 @@ class Phake_CallRecorder_Verifier
      */
     public function verifyCall(Phake_CallRecorder_CallExpectation $expectation)
     {
-        $matcher = new Phake_Matchers_MethodMatcher($expectation->getMethod(), $expectation->getArgumentMatchers());
+        $matcher = new Phake_Matchers_MethodMatcher($expectation->getMethod(), $expectation->getArgumentMatcher());
         $calls   = $this->recorder->getAllCalls();
 
         $matchedCalls     = array();

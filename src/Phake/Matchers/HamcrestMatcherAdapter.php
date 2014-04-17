@@ -45,7 +45,7 @@
 /**
  * An adapter class allowing hamcrest matchers to be used as Phake matchers
  */
-class Phake_Matchers_HamcrestMatcherAdapter implements Phake_Matchers_IArgumentMatcher
+class Phake_Matchers_HamcrestMatcherAdapter extends Phake_Matchers_SingleArgumentMatcher
 {
     /**
      * @var Hamcrest\Matcher
@@ -69,7 +69,7 @@ class Phake_Matchers_HamcrestMatcherAdapter implements Phake_Matchers_IArgumentM
      *
      * @return boolean
      */
-    public function matches(&$argument)
+    protected  function matches(&$argument)
     {
         return $this->matcher->matches($argument);
     }

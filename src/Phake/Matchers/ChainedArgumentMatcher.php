@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Phake - Mocking Framework
  *
@@ -42,49 +43,47 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-class Phake_CallRecorder_CallExpectationTest extends PHPUnit_Framework_TestCase
+/**
+ * Adapts argument matchers into chainable argument matchers.
+ */
+class Phake_Matchers_ChainedArgumentMatcher extends Phake_Matchers_SingleArgumentMatcher
 {
-    public function testToString()
+    /**
+     * @var Phake_Matchers_IArgumentMatcher
+     */
+    private $adaptedMatcher;
+
+    /**
+     * @param Phake_Matchers_IArgumentMatcher $adaptedMatcher
+     */
+    public function __construct(Phake_Matchers_IArgumentMatcher $adaptedMatcher)
     {
-        /** @var $mock Phake_IMock */
-        $mock = Phake::mock('Phake_IMock');
-
-        $matcher1 = Phake::mock('Phake_Matchers_IChainableArgumentMatcher');
-        Phake::when($matcher1)->__toString()->thenReturn('100');
-        $matcher2 = Phake::mock('Phake_Matchers_IChainableArgumentMatcher');
-        Phake::when($matcher2)->__toString()->thenReturn('200');
-
-        Phake::when($matcher1)->getNextMatcher->thenReturn($matcher2);
-
-        $verifierMode = Phake::mock('Phake_CallRecorder_IVerifierMode');
-        Phake::when($verifierMode)->__toString()->thenReturn('2 times');
-
-        $expectation = new Phake_CallRecorder_CallExpectation($mock, 'method', $matcher1, $verifierMode);
-        $this->assertEquals(
-            "Expected Phake_IMock->method(100, 200) to be called 2 times",
-            $expectation->__toString()
-        );
+        $this->adaptedMatcher = $adaptedMatcher;
     }
 
-    public function testStaticToString()
+    /**
+     * Returns a human readable description of the argument matcher
+     * @return string
+     */
+    public function __toString()
     {
-        /** @var $mock Phake_IMock */
-        $mock = Phake::mock('Phake_IMock');
+        return $this->adaptedMatcher->__toString();
+    }
 
-        $matcher1 = Phake::mock('Phake_Matchers_IChainableArgumentMatcher');
-        Phake::when($matcher1)->__toString()->thenReturn('100');
-        $matcher2 = Phake::mock('Phake_Matchers_IChainableArgumentMatcher');
-        Phake::when($matcher2)->__toString()->thenReturn('200');
+    public function getAdaptedMatcher()
+    {
+        return $this->adaptedMatcher;
+    }
 
-        Phake::when($matcher1)->getNextMatcher->thenReturn($matcher2);
-
-        $verifierMode = Phake::mock('Phake_CallRecorder_IVerifierMode');
-        Phake::when($verifierMode)->__toString()->thenReturn('2 times');
-
-        $expectation = new Phake_CallRecorder_CallExpectation(get_class($mock), 'method', $matcher1, $verifierMode);
-        $this->assertEquals(
-            "Expected Phake_IMock::method(100, 200) to be called 2 times",
-            $expectation->__toString()
-        );
+    /**
+     * Executes the matcher on a given argument value. Returns TRUE on a match, FALSE otherwise.
+     *
+     * @param mixed $argument
+     *
+     * @return boolean
+     */
+    protected function matches(&$argument)
+    {
+        return $this->adaptedMatcher->matches($argument);
     }
 }

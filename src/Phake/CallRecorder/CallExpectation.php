@@ -58,9 +58,9 @@ class Phake_CallRecorder_CallExpectation
     private $method;
 
     /**
-     * @var array
+     * @var Phake_Matchers_IChainableArgumentMatcher
      */
-    private $argumentMatchers;
+    private $argumentMatcher;
 
     /**
      * @var Phake_CallRecorder_IVerifierMode
@@ -68,22 +68,20 @@ class Phake_CallRecorder_CallExpectation
     private $verifierMode;
 
     /**
-     * @param Phake_IMock|mixed                $object
-     * @param string                           $method
-     * @param array                            $argumentMatchers
+     * @param Phake_IMock|mixed $object
+     * @param string $method
+     * @param Phake_Matchers_IChainableArgumentMatcher $argumentMatcher
      * @param Phake_CallRecorder_IVerifierMode $verificationMode
-     *
-     * @return \Phake_CallRecorder_CallExpectation
      */
     public function __construct(
         $object,
         $method,
-        array $argumentMatchers,
+        Phake_Matchers_IChainableArgumentMatcher $argumentMatcher = null,
         Phake_CallRecorder_IVerifierMode $verificationMode
     ) {
         $this->object           = $object;
         $this->method           = $method;
-        $this->argumentMatchers = $argumentMatchers;
+        $this->argumentMatcher  = $argumentMatcher;
         $this->verifierMode     = $verificationMode;
     }
 
@@ -104,11 +102,11 @@ class Phake_CallRecorder_CallExpectation
     }
 
     /**
-     * @return array
+     * @return Phake_Matchers_IChainableArgumentMatcher
      */
-    public function getArgumentMatchers()
+    public function getArgumentMatcher()
     {
-        return $this->argumentMatchers;
+        return $this->argumentMatcher;
     }
 
     /**
@@ -122,8 +120,13 @@ class Phake_CallRecorder_CallExpectation
     public function __toString()
     {
         $arguments = array();
-        foreach ($this->argumentMatchers as $argumentMatcher) {
+
+        $argumentMatcher = $this->argumentMatcher;
+
+        while (!empty($argumentMatcher))
+        {
             $arguments[] = $argumentMatcher->__toString();
+            $argumentMatcher = $argumentMatcher->getNextMatcher();
         }
 
         $name = Phake::getName($this->getObject());

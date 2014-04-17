@@ -42,12 +42,18 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-class PHake_Matchers_MethodMatcherTest extends PHPUnit_Framework_TestCase
+class Phake_Matchers_MethodMatcherTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var Phake_Matchers_MethodMatcher
      */
     private $matcher;
+
+    /**
+     * @Mock
+     * @var Phake_Matchers_IChainableArgumentMatcher
+     */
+    private $rootArgumentMatcher;
 
     /**
      * @var array
@@ -56,21 +62,9 @@ class PHake_Matchers_MethodMatcherTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->arguments = array(
-            $this->getMock('Phake_Matchers_IArgumentMatcher'),
-            $this->getMock('Phake_Matchers_IArgumentMatcher')
-        );
-        $this->matcher   = new Phake_Matchers_MethodMatcher('foo', $this->arguments);
-    }
+        Phake::initAnnotations($this);
 
-    /**
-     * Tests that passing invalid arguments to the Method Matcher will cause an exception
-     *
-     * @expectedException InvalidArgumentException
-     */
-    public function testInvalidParametersThrow()
-    {
-        new Phake_Matchers_MethodMatcher('foo', array('blah'));
+        $this->matcher   = new Phake_Matchers_MethodMatcher('foo', $this->rootArgumentMatcher);
     }
 
     /**
@@ -78,15 +72,10 @@ class PHake_Matchers_MethodMatcherTest extends PHPUnit_Framework_TestCase
      */
     public function testMatchesForwardsParameters()
     {
-        $arguments = array($this->getMock('Phake_Matchers_IArgumentMatcher'));
-        $matcher   = new Phake_Matchers_MethodMatcher('foo', $arguments);
-        $arguments[0]->expects($this->any())
-            ->method('matches')
-            ->with($this->equalTo('foo'))
-            ->will($this->returnValue(true));
+        $arguments = array('foo', 'bar');
+        $this->matcher->matches('foo', $arguments);
 
-        $arguments = array('foo');
-        $matcher->matches('foo', $arguments);
+        Phake::verify($this->rootArgumentMatcher)->doArgumentsMatch(array('foo', 'bar'));
     }
 
     /**
@@ -94,13 +83,7 @@ class PHake_Matchers_MethodMatcherTest extends PHPUnit_Framework_TestCase
      */
     public function testMatchesSuccessfullyMatches()
     {
-        $this->arguments[0]->expects($this->any())
-            ->method('matches')
-            ->will($this->returnValue(true));
-
-        $this->arguments[1]->expects($this->any())
-            ->method('matches')
-            ->will($this->returnValue(true));
+        Phake::when($this->rootArgumentMatcher)->doArgumentsMatch->thenReturn(true);
 
         $arguments = array('foo', 'bar');
         $this->assertTrue($this->matcher->matches('foo', $arguments));
@@ -111,13 +94,7 @@ class PHake_Matchers_MethodMatcherTest extends PHPUnit_Framework_TestCase
      */
     public function testNoMatcherOnBadMethod()
     {
-        $this->arguments[0]->expects($this->any())
-            ->method('matches')
-            ->will($this->returnValue(true));
-
-        $this->arguments[1]->expects($this->any())
-            ->method('matches')
-            ->will($this->returnValue(true));
+        Phake::when($this->rootArgumentMatcher)->matches->thenReturn(true);
 
         $arguments = array('foo', 'bar');
         $this->assertFalse($this->matcher->matches('test', $arguments));
@@ -128,30 +105,7 @@ class PHake_Matchers_MethodMatcherTest extends PHPUnit_Framework_TestCase
      */
     public function testNoMatcherOnBadArg1()
     {
-        $this->arguments[0]->expects($this->any())
-            ->method('matches')
-            ->will($this->returnValue(false));
-
-        $this->arguments[1]->expects($this->any())
-            ->method('matches')
-            ->will($this->returnValue(true));
-
-        $arguments = array('foo', 'bar');
-        $this->assertFalse($this->matcher->matches('foo', $arguments));
-    }
-
-    /**
-     * Tests that the matcher will return false on mismatched argument 2.
-     */
-    public function testNoMatcherOnBadArg2()
-    {
-        $this->arguments[0]->expects($this->any())
-            ->method('matches')
-            ->will($this->returnValue(true));
-
-        $this->arguments[1]->expects($this->any())
-            ->method('matches')
-            ->will($this->returnValue(false));
+        Phake::when($this->rootArgumentMatcher)->matches->thenReturn(false);
 
         $arguments = array('foo', 'bar');
         $this->assertFalse($this->matcher->matches('foo', $arguments));
@@ -159,7 +113,7 @@ class PHake_Matchers_MethodMatcherTest extends PHPUnit_Framework_TestCase
 
     public function testAnyParameterMatching()
     {
-        $matcher = new Phake_Matchers_MethodMatcher('method', array(new Phake_Matchers_AnyParameters()));
+        $matcher = new Phake_Matchers_MethodMatcher('method', new Phake_Matchers_AnyParameters());
 
         $arguments = array(1, 2, 3);
         $this->assertTrue($matcher->matches('method', $arguments));
@@ -171,7 +125,7 @@ class PHake_Matchers_MethodMatcherTest extends PHPUnit_Framework_TestCase
 
     public function testSetterMatcher()
     {
-        $matcher = new Phake_Matchers_MethodMatcher('method', array(new Phake_Matchers_ReferenceSetter(42)));
+        $matcher = new Phake_Matchers_MethodMatcher('method', new Phake_Matchers_ReferenceSetter(42));
 
         $value        = 'blah';
         $arguments    = array();
@@ -180,6 +134,22 @@ class PHake_Matchers_MethodMatcherTest extends PHPUnit_Framework_TestCase
         $matcher->matches('method', $arguments);
 
         $this->assertEquals(42, $value);
+    }
+
+    public function testNullMatcherWithNoArguments()
+    {
+        $matcher = new Phake_Matchers_MethodMatcher('method', null);
+
+        $emptyArray = array();
+        $this->assertTrue($matcher->matches('method', $emptyArray));
+    }
+
+    public function testNullMatcherWithArguments()
+    {
+        $matcher = new Phake_Matchers_MethodMatcher('method', null);
+
+        $arguments = array('foo');
+        $this->assertFalse($matcher->matches('method', $arguments));
     }
 }
 

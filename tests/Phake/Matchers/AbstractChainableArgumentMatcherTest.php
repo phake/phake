@@ -42,49 +42,44 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-class Phake_CallRecorder_CallExpectationTest extends PHPUnit_Framework_TestCase
+class Phake_Matchers_AbstractChainableArgumentMatcherTest extends PHPUnit_Framework_TestCase
 {
-    public function testToString()
+    /**
+     * @var Phake_Matchers_AbstractChainableArgumentMatcher
+     */
+    private $matcher;
+
+    /**
+     * @Mock
+     * @var Phake_Matchers_IChainableArgumentMatcher
+     */
+    private $nextMatcher;
+
+    public function setUp()
     {
-        /** @var $mock Phake_IMock */
-        $mock = Phake::mock('Phake_IMock');
+        Phake::initAnnotations($this);
 
-        $matcher1 = Phake::mock('Phake_Matchers_IChainableArgumentMatcher');
-        Phake::when($matcher1)->__toString()->thenReturn('100');
-        $matcher2 = Phake::mock('Phake_Matchers_IChainableArgumentMatcher');
-        Phake::when($matcher2)->__toString()->thenReturn('200');
-
-        Phake::when($matcher1)->getNextMatcher->thenReturn($matcher2);
-
-        $verifierMode = Phake::mock('Phake_CallRecorder_IVerifierMode');
-        Phake::when($verifierMode)->__toString()->thenReturn('2 times');
-
-        $expectation = new Phake_CallRecorder_CallExpectation($mock, 'method', $matcher1, $verifierMode);
-        $this->assertEquals(
-            "Expected Phake_IMock->method(100, 200) to be called 2 times",
-            $expectation->__toString()
-        );
+        $this->matcher = Phake::partialMock('Phake_Matchers_AbstractChainableArgumentMatcher');
     }
 
-    public function testStaticToString()
+    public function testGetNext()
     {
-        /** @var $mock Phake_IMock */
-        $mock = Phake::mock('Phake_IMock');
+        $this->matcher->setNextMatcher($this->nextMatcher);
 
-        $matcher1 = Phake::mock('Phake_Matchers_IChainableArgumentMatcher');
-        Phake::when($matcher1)->__toString()->thenReturn('100');
-        $matcher2 = Phake::mock('Phake_Matchers_IChainableArgumentMatcher');
-        Phake::when($matcher2)->__toString()->thenReturn('200');
+        $this->assertSame($this->nextMatcher, $this->matcher->getNextMatcher());
+    }
 
-        Phake::when($matcher1)->getNextMatcher->thenReturn($matcher2);
+    public function testAssertPreviousMatcher()
+    {
+        $this->assertNull($this->matcher->assertPreviousMatcher($this->nextMatcher));
+    }
 
-        $verifierMode = Phake::mock('Phake_CallRecorder_IVerifierMode');
-        Phake::when($verifierMode)->__toString()->thenReturn('2 times');
+    public function testSetNextMatcherCallsAssertPreviousMatcher()
+    {
+        Phake::when($this->nextMatcher)->assertPreviousMatcher->thenThrow(new InvalidArgumentException());
 
-        $expectation = new Phake_CallRecorder_CallExpectation(get_class($mock), 'method', $matcher1, $verifierMode);
-        $this->assertEquals(
-            "Expected Phake_IMock::method(100, 200) to be called 2 times",
-            $expectation->__toString()
-        );
+        $this->setExpectedException('InvalidArgumentException');
+        $this->matcher->setNextMatcher($this->nextMatcher);
     }
 }
+ 

@@ -44,6 +44,9 @@
 
 class Phake_Matchers_AnyParametersTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * @var Phake_Matchers_AnyParameters
+     */
     private $matcher;
 
     public function setUp()
@@ -51,14 +54,39 @@ class Phake_Matchers_AnyParametersTest extends PHPUnit_Framework_TestCase
         $this->matcher = new Phake_Matchers_AnyParameters();
     }
 
-    public function testMatchesAlwaysReturnsTrue()
+    public static function matchesDataProvider()
     {
-        $value = 'blah';
-        $this->assertTrue($this->matcher->matches($value));
+        return array(
+            array(array()),
+            array(array('foo')),
+            array(array('foo', 'bar')),
+        );
+    }
+
+    /**
+     * @dataProvider matchesDataProvider
+     */
+    public function testMatches($arg)
+    {
+        $this->assertTrue($this->matcher->doArgumentsMatch($arg));
     }
 
     public function testToString()
     {
         $this->assertEquals('<any parameters>', $this->matcher->__toString());
+    }
+
+    public function testSetNextThrowsInvalidException()
+    {
+        $this->setExpectedException('InvalidArgumentException', 'Other matchers cannot be passed with any '
+            . 'parameters. It will not work the way you think it works');
+        $this->matcher->setNextMatcher(Phake::mock('Phake_Matchers_IChainableArgumentMatcher'));
+    }
+
+    public function testAssertPreviousMatcherThrowsInvalidException()
+    {
+        $this->setExpectedException('InvalidArgumentException', 'Other matchers cannot be passed with any '
+            . 'parameters. It will not work the way you think it works');
+        $this->matcher->assertPreviousMatcher(Phake::mock('Phake_Matchers_IChainableArgumentMatcher'));
     }
 }

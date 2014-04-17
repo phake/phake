@@ -47,7 +47,7 @@
  *
  * The constructor takes a parameter by reference that is populated when the matching runs.
  */
-class Phake_Matchers_ArgumentCaptor implements Phake_Matchers_IArgumentMatcher
+class Phake_Matchers_ArgumentCaptor extends Phake_Matchers_SingleArgumentMatcher
 {
     /**
      * @var mixed
@@ -55,7 +55,7 @@ class Phake_Matchers_ArgumentCaptor implements Phake_Matchers_IArgumentMatcher
     private $boundVariable;
 
     /**
-     * @var Phake_Matchers_IArgumentMatcher
+     * @var Phake_Matchers_IChainableArgumentMatcher
      */
     private $matcher;
 
@@ -76,9 +76,11 @@ class Phake_Matchers_ArgumentCaptor implements Phake_Matchers_IArgumentMatcher
      *
      * @return boolean
      */
-    public function matches(&$argument)
+    protected function matches(&$argument)
     {
-        if ($this->matcher === null || $this->matcher->matches($argument)) {
+        $args = array();
+        $args[] =& $argument;
+        if ($this->matcher === null || $this->matcher->doArgumentsMatch($args)) {
             $this->boundVariable = $argument;
             return true;
         } else {

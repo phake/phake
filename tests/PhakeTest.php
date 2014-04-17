@@ -1148,7 +1148,6 @@ class PhakeTest extends PHPUnit_Framework_TestCase
     /**
      * Tests that Phake::anyParameters() really matches any invocation
      */
-
     public function testAnyParametersMatchesEverything()
     {
         $mock = Phake::mock('PhakeTest_MockedClass');
@@ -1161,6 +1160,28 @@ class PhakeTest extends PHPUnit_Framework_TestCase
         $mock->fooWithLotsOfParameters(3, 2, 1);
 
         Phake::verify($mock, Phake::times(6))->fooWithLotsOfParameters(Phake::anyParameters());
+    }
+
+    public function testAnyParametersThrowsAnErrorWithOtherParameters()
+    {
+        $mock = Phake::mock('PhakeTest_MockedClass');
+
+        $mock->fooWithLotsOfParameters(3, 2, 1);
+
+        $this->setExpectedException('InvalidArgumentException', 'Other matchers cannot be passed with any '
+            . 'parameters. It will not work the way you think it works');
+        Phake::verify($mock)->fooWithLotsOfParameters(Phake::anyParameters(), 1);
+    }
+
+    public function testAnyParametersThrowsAnErrorWithPrecedingParameters()
+    {
+        $mock = Phake::mock('PhakeTest_MockedClass');
+
+        $mock->fooWithLotsOfParameters(3, 2, 1);
+
+        $this->setExpectedException('InvalidArgumentException', 'Other matchers cannot be passed with any '
+            . 'parameters. It will not work the way you think it works');
+        Phake::verify($mock)->fooWithLotsOfParameters(3, Phake::anyParameters());
     }
 
     /**
