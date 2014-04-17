@@ -62,13 +62,12 @@ class Phake_Matchers_FactoryTest extends PHPUnit_Framework_TestCase
      */
     public function testDefaultMatcher()
     {
-        $this->markTestIncomplete('Need to repair to work with chainable matchers');
         $matcher = $this->factory->createMatcher('foo');
 
         $this->assertInstanceOf('Phake_Matchers_EqualsMatcher', $matcher);
 
-        $value = 'foo';
-        $this->assertTrue($matcher->matches($value));
+        $value = array('foo');
+        $this->assertTrue($matcher->doArgumentsMatch($value));
     }
 
     /**
@@ -76,7 +75,6 @@ class Phake_Matchers_FactoryTest extends PHPUnit_Framework_TestCase
      */
     public function testPassThroughMatcher()
     {
-        $this->markTestIncomplete('Need to repair to work with chainable matchers');
         $matcher = $this->getMock('Phake_Matchers_IChainableArgumentMatcher');
 
         $retMatcher = $this->factory->createMatcher($matcher);
@@ -89,7 +87,6 @@ class Phake_Matchers_FactoryTest extends PHPUnit_Framework_TestCase
      */
     public function testPHPUnitConstraint()
     {
-        $this->markTestIncomplete('Need to repair to work with chainable matchers');
         $matcher = $this->getMock('PHPUnit_Framework_Constraint');
         $matcher->expects($this->once())
             ->method('evaluate')
@@ -98,8 +95,8 @@ class Phake_Matchers_FactoryTest extends PHPUnit_Framework_TestCase
 
         $retMatcher = $this->factory->createMatcher($matcher);
 
-        $value = 'foo';
-        $this->assertTrue($retMatcher->matches($value));
+        $value = array('foo');
+        $this->assertTrue($retMatcher->doArgumentsMatch($value));
     }
 
     /**
@@ -107,7 +104,6 @@ class Phake_Matchers_FactoryTest extends PHPUnit_Framework_TestCase
      */
     public function testHamcrestMatcher()
     {
-        $this->markTestIncomplete('Need to repair to work with chainable matchers');
         $matcher = $this->getMock('Hamcrest\Matcher');
         $matcher->expects($this->once())
             ->method('matches')
@@ -116,8 +112,8 @@ class Phake_Matchers_FactoryTest extends PHPUnit_Framework_TestCase
 
         $retMatcher = $this->factory->createMatcher($matcher);
 
-        $value = 'foo';
-        $this->assertTrue($retMatcher->matches($value));
+        $value = array('foo');
+        $this->assertTrue($retMatcher->doArgumentsMatch($value));
     }
 
     public function testOldMatcherAdaptsToNewFormat()

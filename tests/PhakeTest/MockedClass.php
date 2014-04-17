@@ -95,6 +95,11 @@ class PhakeTest_MockedClass
     {
         return func_get_args();
     }
+
+    public function fooWithSetDefault($bar = 42)
+    {
+
+    }
 }
 
 
