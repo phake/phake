@@ -124,16 +124,40 @@ Custom Answers
 
 While the answers provided in Phake should be able to cover most of the scenarios you will run into when using mocks in
 your unit tests there may occasionally be times when you need more control over what is returned from your mock
-methods. When this is the case, you can use a custom answer. All answers in Phake implement the
-``Phake_Stubber_IAnswer`` interface. This interface defines a single method called ``getAnswer()`` that can be used to
-return what will be returned from a call to the method being stubbed. If you need to get access to how the method you
-are stubbing was invoked, there is a more complex set of interfaces that can be implemented:
-``Phake_Stubber_Answers_IDelegator`` and ``Phake_Stubber_IAnswerDelegate``.
+methods. When this is the case, you can use a custom answer. The easiest way to create a custom answer is by extending
+``Phake_Matchers_SingleArgumentMatcher``. This class was created to allow for easy extension of matchers that will need
+to match a single argument in a method call.
 
-``Phake_Stubber_Answers_IDelegator`` extends ``Phake_Stubber_IAnswer`` and defines an additional method called
-``processAnswer()`` that is used to perform processing on the results of ``getAnswer()`` prior to passing it on to the
-stub’s caller. ``Phake_Stubber_IAnswerDelegate`` defines an interface that allows you to create a callback that is
-called to generate the answer from the stub. It defines ``getCallBack()`` which allows you to generate a PHP callback
-based on the object, method, and arguments that a stub was called with. It also defines ``getArguments()`` which allows
-you to generate the arguments that will be passed to the callback based on the method name and arguments the stub was
-called with.
+When extending ``Phake_Matchers_SingleArgumentMatcher`` there are two methods that must be implemented:
+ ``__toString()`` will define how your matcher is reported on in failed matches and ``matches(&$argument)`` will be
+ used to determine whether or not your matcher was successful. So, we could create a custom matcher that determined if
+ a value is greater than another using the following class:
+
+ .. code-block:: php
+
+    class IsGreaterThan extends Phake_Matchers_SingleArgumentMatcher
+    {
+        private $value;
+
+        public function __construct($value)
+        {
+            $this->value = $value;
+        }
+
+        public function __toString()
+        {
+            return '<greater than ' . $this->value . '>';
+        }
+
+        protected function matches(&$argument)
+        {
+            return $argument > $this->value;
+        }
+    }
+
+You can then use this custom matcher in your ``Phake::when()`` or ``Phake::verify()`` calls:
+
+.. code-block:: php
+
+    $mock->foo(20);
+    Phake::verify($mock)->foo(new IsGreaterThan(10));
