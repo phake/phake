@@ -66,8 +66,8 @@ class Phake_Matchers_FactoryTest extends PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('Phake_Matchers_EqualsMatcher', $matcher);
 
-        $value = 'foo';
-        $this->assertTrue($matcher->matches($value));
+        $value = array('foo');
+        $this->assertTrue($matcher->doArgumentsMatch($value));
     }
 
     /**
@@ -75,7 +75,7 @@ class Phake_Matchers_FactoryTest extends PHPUnit_Framework_TestCase
      */
     public function testPassThroughMatcher()
     {
-        $matcher = $this->getMock('Phake_Matchers_IArgumentMatcher');
+        $matcher = $this->getMock('Phake_Matchers_IChainableArgumentMatcher');
 
         $retMatcher = $this->factory->createMatcher($matcher);
 
@@ -95,8 +95,8 @@ class Phake_Matchers_FactoryTest extends PHPUnit_Framework_TestCase
 
         $retMatcher = $this->factory->createMatcher($matcher);
 
-        $value = 'foo';
-        $this->assertTrue($retMatcher->matches($value));
+        $value = array('foo');
+        $this->assertTrue($retMatcher->doArgumentsMatch($value));
     }
 
     /**
@@ -112,26 +112,50 @@ class Phake_Matchers_FactoryTest extends PHPUnit_Framework_TestCase
 
         $retMatcher = $this->factory->createMatcher($matcher);
 
-        $value = 'foo';
-        $this->assertTrue($retMatcher->matches($value));
+        $value = array('foo');
+        $this->assertTrue($retMatcher->doArgumentsMatch($value));
     }
 
-    /**
-     * Tests the factorying of multiple matchers
-     */
-    public function testCreatingMultipleMatchers()
+    public function testOldMatcherAdaptsToNewFormat()
     {
-        $arguments = array(
-            'foo',
-            $argMatcher = $this->getMock('Phake_Matchers_IArgumentMatcher'),
-            $this->getMock('PHPUnit_Framework_Constraint'),
-        );
+        $oldMatcher = Phake::mock('Phake_Matchers_IArgumentMatcher');
+        $newMatcher = $this->factory->createMatcher($oldMatcher);
 
-        $matchers = $this->factory->createMatcherArray($arguments);
+        $this->assertNotSame($oldMatcher, $newMatcher);
 
-        $this->assertInstanceOf('Phake_Matchers_EqualsMatcher', $matchers[0]);
-        $this->assertSame($argMatcher, $matchers[1]);
-        $this->assertInstanceOf('Phake_Matchers_PHPUnitConstraintAdapter', $matchers[2]);
+        $this->assertInstanceOf('Phake_Matchers_IChainableArgumentMatcher', $newMatcher);
+    }
+
+    public function testMatcherSetsNextMatcherInChain()
+    {
+        $matcher1 = Phake::mock('Phake_Matchers_IChainableArgumentMatcher');
+        $matcher2 = Phake::mock('Phake_Matchers_IChainableArgumentMatcher');
+        /* @var $newMatcher Phake_Matchers_IChainableArgumentMatcher */
+        $this->factory->createMatcher($matcher2);
+        $this->factory->createMatcher($matcher1, $matcher2);
+
+        $this->assertNull($matcher2->getNextMatcher());
+        Phake::verify($matcher1)->setNextMatcher(Phake::equalTo($matcher2));
+    }
+
+    public function testMatcherChainReturnsAMatcherChain()
+    {
+        $matcher1 = Phake::mock('Phake_Matchers_IChainableArgumentMatcher');
+        $matcher2 = Phake::mock('Phake_Matchers_IChainableArgumentMatcher');
+        $matcher3 = Phake::mock('Phake_Matchers_IChainableArgumentMatcher');
+
+        $matcherChain = $this->factory->createMatcherChain(array($matcher1, $matcher2, $matcher3));
+
+        $this->assertSame($matcher1, $matcherChain);
+
+        Phake::verify($matcher1)->setNextMatcher($this->equalTo($matcher2));
+        Phake::verify($matcher2)->setNextMatcher($this->equalTo($matcher3));
+        Phake::verify($matcher3, Phake::never())->setNextMatcher(Phake::anyParameters());
+    }
+
+    public function testMatcherChainReturnsNullOnNoArguments()
+    {
+        $this->assertNull($this->factory->createMatcherChain(array()));
     }
 }
 

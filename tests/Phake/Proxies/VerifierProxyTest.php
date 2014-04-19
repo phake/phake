@@ -117,7 +117,7 @@ class Phake_Proxies_VerifierProxyTest extends PHPUnit_Framework_TestCase
      */
     public function testVerifierCallsAreForwardedArguments()
     {
-        $argumentMatcher = Phake::mock('Phake_Matchers_IArgumentMatcher');
+        $argumentMatcher = Phake::mock('Phake_Matchers_IChainableArgumentMatcher');
 
         Phake::when($this->verifier)->verifyCall(Phake::anyParameters())->thenReturn(
             new Phake_CallRecorder_VerifierResult(true, array(Phake::mock('Phake_CallRecorder_CallInfo')))
@@ -125,7 +125,7 @@ class Phake_Proxies_VerifierProxyTest extends PHPUnit_Framework_TestCase
         $this->proxy->foo($argumentMatcher);
 
         Phake::verify($this->verifier)->verifyCall(Phake::capture($expectation));
-        $this->assertEquals(array($argumentMatcher), $expectation->getArgumentMatchers());
+        $this->assertEquals($argumentMatcher, $expectation->getArgumentMatcher());
     }
 
     /**
@@ -141,7 +141,7 @@ class Phake_Proxies_VerifierProxyTest extends PHPUnit_Framework_TestCase
         $this->proxy->foo('test');
 
         Phake::verify($this->verifier)->verifyCall(Phake::capture($expectation));
-        $this->assertEquals(array($argumentMatcher), $expectation->getArgumentMatchers());
+        $this->assertEquals($argumentMatcher, $expectation->getArgumentMatcher());
     }
 
     public function testClientResultProcessorIsCalled()

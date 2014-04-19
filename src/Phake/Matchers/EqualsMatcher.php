@@ -47,7 +47,7 @@
  *
  * This matcher utilizes the same functionality as non-strict equality in php, in other words '=='
  */
-class Phake_Matchers_EqualsMatcher implements Phake_Matchers_IArgumentMatcher
+class Phake_Matchers_EqualsMatcher extends Phake_Matchers_SingleArgumentMatcher
 {
     /**
      * @var mixed
@@ -67,7 +67,7 @@ class Phake_Matchers_EqualsMatcher implements Phake_Matchers_IArgumentMatcher
     /**
      * Returns whether or not the passed argument matches the matcher.
      */
-    public function matches(&$argument)
+    protected  function matches(&$argument)
     {
         return $this->compareValues($this->value, $argument);
     }

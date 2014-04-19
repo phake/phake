@@ -191,7 +191,7 @@ class Phake
     {
         $arguments = func_get_args();
         $factory   = new Phake_Matchers_Factory();
-        return new Phake_Proxies_CallVerifierProxy($factory->createMatcherArray(
+        return new Phake_Proxies_CallVerifierProxy($factory->createMatcherChain(
             $arguments
         ), self::getClient(), false);
     }
@@ -207,7 +207,7 @@ class Phake
     {
         $arguments = func_get_args();
         $factory   = new Phake_Matchers_Factory();
-        return new Phake_Proxies_CallVerifierProxy($factory->createMatcherArray(
+        return new Phake_Proxies_CallVerifierProxy($factory->createMatcherChain(
             $arguments
         ), self::getClient(), true);
     }
@@ -314,7 +314,7 @@ class Phake
     {
         $arguments = func_get_args();
         $factory   = new Phake_Matchers_Factory();
-        return new Phake_Proxies_CallStubberProxy($factory->createMatcherArray($arguments), false);
+        return new Phake_Proxies_CallStubberProxy($factory->createMatcherChain($arguments), false);
     }
 
     /**
@@ -328,7 +328,7 @@ class Phake
     {
         $arguments = func_get_args();
         $factory   = new Phake_Matchers_Factory();
-        return new Phake_Proxies_CallStubberProxy($factory->createMatcherArray($arguments), true);
+        return new Phake_Proxies_CallStubberProxy($factory->createMatcherChain($arguments), true);
     }
 
     /**
@@ -488,6 +488,16 @@ class Phake
     public static function anyParameters()
     {
         return new Phake_Matchers_AnyParameters();
+    }
+
+    /**
+     * Returns an any parameters matcher to allow matching all invocations of a particular method.
+     *
+     * @return Phake_Matchers_AnyParameters
+     */
+    public static function ignoreRemaining()
+    {
+        return new Phake_Matchers_IgnoreRemainingMatcher();
     }
 
     /**

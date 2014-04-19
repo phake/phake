@@ -42,7 +42,7 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-class Phake_Matchers_ReferenceSetter implements Phake_Matchers_IArgumentMatcher
+class Phake_Matchers_ReferenceSetter extends Phake_Matchers_SingleArgumentMatcher
 {
     /**
      * @var mixed
@@ -50,7 +50,7 @@ class Phake_Matchers_ReferenceSetter implements Phake_Matchers_IArgumentMatcher
     private $value;
 
     /**
-     * @var Phake_Matchers_IArgumentMatcher
+     * @var Phake_Matchers_IChainableArgumentMatcher
      */
     private $matcher;
 
@@ -71,9 +71,11 @@ class Phake_Matchers_ReferenceSetter implements Phake_Matchers_IArgumentMatcher
      *
      * @return boolean
      */
-    public function matches(&$argument)
+    protected function matches(&$argument)
     {
-        if ($this->matcher === null || $this->matcher->matches($argument)) {
+        $args = array();
+        $args[] =& $argument;
+        if ($this->matcher === null || $this->matcher->doArgumentsMatch($args)) {
             $argument = $this->value;
             return true;
         }

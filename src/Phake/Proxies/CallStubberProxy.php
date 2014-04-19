@@ -50,19 +50,22 @@
 class Phake_Proxies_CallStubberProxy
 {
     /**
-     * @var array
+     * @var Phake_Matchers_IChainableArgumentMatcher
      */
-    private $arguments;
+    private $argumentMatcher;
 
+    /**
+     * @var bool
+     */
     private $static;
 
     /**
-     * @param array $arguments
+     * @param Phake_Matchers_IChainableArgumentMatcher $argumentMatcher
      * @param bool $static
      */
-    public function __construct(array $arguments, $static)
+    public function __construct(Phake_Matchers_IChainableArgumentMatcher $argumentMatcher = null, $static)
     {
-        $this->arguments  = $arguments;
+        $this->argumentMatcher = $argumentMatcher;
         $this->static = $static;
     }
 
@@ -77,7 +80,7 @@ class Phake_Proxies_CallStubberProxy
     {
         $context = $this->static ? get_class($obj) : $obj;
         $call = $this->static ? '__callStatic' : '__call';
-        $matcher = new Phake_Matchers_MethodMatcher($call, $this->arguments);
+        $matcher = new Phake_Matchers_MethodMatcher($call, $this->argumentMatcher);
         $binder  = new Phake_Stubber_AnswerBinder($matcher, Phake::getInfo($context)->getStubMapper());
         return new Phake_Proxies_AnswerBinderProxy($binder);
     }

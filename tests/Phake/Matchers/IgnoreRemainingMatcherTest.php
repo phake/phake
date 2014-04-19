@@ -1,26 +1,26 @@
 <?php
-/* 
+/*
  * Phake - Mocking Framework
- * 
+ *
  * Copyright (c) 2010-2012, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
- * 
+ *
  *  *  Redistributions of source code must retain the above copyright
  *     notice, this list of conditions and the following disclaimer.
- * 
+ *
  *  *  Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in
  *     the documentation and/or other materials provided with the
  *     distribution.
- * 
+ *
  *  *  Neither the name of Mike Lively nor the names of his
  *     contributors may be used to endorse or promote products derived
  *     from this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -33,7 +33,7 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  * @category   Testing
  * @package    Phake
  * @author     Mike Lively <m@digitalsandwich.com>
@@ -42,64 +42,43 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-/**
- * Description of MockedClass
- *
- * @author Mike Lively <m@digitalsandwich.com>
- */
-class PhakeTest_MockedClass
+class Phake_Matchers_IgnoreRemainingMatcherTest extends PHPUnit_Framework_TestCase
 {
-    public function foo()
+    /**
+     * @var Phake_Matchers_AnyParameters
+     */
+    private $matcher;
+
+    public function setUp()
     {
+        $this->matcher = new Phake_Matchers_IgnoreRemainingMatcher();
     }
 
-    public function fooWithDefault($default = null)
+    public static function matchesDataProvider()
     {
+        return array(
+            array(array()),
+            array(array('foo')),
+            array(array('foo', 'bar')),
+        );
     }
 
-    public function fooWithArgument($arg1)
+    /**
+     * @dataProvider matchesDataProvider
+     */
+    public function testMatches($arg)
     {
+        $this->assertTrue($this->matcher->doArgumentsMatch($arg));
     }
 
-    public function fooWithReturnValue()
+    public function testToString()
     {
-        return 'blah';
+        $this->assertEquals('<any parameters>', $this->matcher->__toString());
     }
 
-    public function callInnerFunc()
+    public function testSetNextThrowsInvalidException()
     {
-        return $this->innerFunc();
-    }
-
-    protected function innerFunc()
-    {
-        return 'test';
-    }
-
-    public function chainedCall()
-    {
-        return $this->callInnerFunc();
-    }
-
-    public function fooWithLotsOfParameters($parm1, $parm2, $parm3)
-    {
-
-    }
-
-    public function fooWithRefParm($parm1, &$parm2 = null)
-    {
-
-	}
-
-    public function fooWithVariableNumberOfArguments($x = null)
-    {
-        return func_get_args();
-    }
-
-    public function fooWithSetDefault($bar = 42)
-    {
-
+        $this->setExpectedException('InvalidArgumentException', 'Other matchers cannot be checked after you ignore remaining parameters.');
+        $this->matcher->setNextMatcher(Phake::mock('Phake_Matchers_IChainableArgumentMatcher'));
     }
 }
-
-

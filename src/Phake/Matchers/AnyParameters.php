@@ -45,15 +45,38 @@
 /**
  * A matcher that will return true for any invocation of a particular method
  */
-class Phake_Matchers_AnyParameters implements Phake_Matchers_IArgumentMatcher
+class Phake_Matchers_AnyParameters extends  Phake_Matchers_AbstractChainableArgumentMatcher
 {
-    public function matches(&$argument)
+    /**
+     * Executes the matcher on a given list of argument values. Returns TRUE on a match, FALSE otherwise.
+     *
+     * @param array $arguments
+     *
+     * @return boolean
+     */
+    public function doArgumentsMatch(array &$arguments)
     {
         return true;
     }
 
+    /**
+     * Returns a human readable description of the argument matcher
+     * @return string
+     */
     public function __toString()
     {
         return '<any parameters>';
+    }
+
+    public function setNextMatcher(Phake_Matchers_IChainableArgumentMatcher $nextMatcher)
+    {
+        throw new InvalidArgumentException('Other matchers cannot be passed with any parameters. It will not work the '
+            . 'way you think it works');
+    }
+
+    public function assertPreviousMatcher(Phake_Matchers_IChainableArgumentMatcher $matcher)
+    {
+        throw new InvalidArgumentException('Other matchers cannot be passed with any parameters. It will not work the '
+            . 'way you think it works');
     }
 }

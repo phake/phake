@@ -70,8 +70,8 @@ class Phake_Matchers_ArgumentCaptorTest extends PHPUnit_Framework_TestCase
      */
     public function testArgumentCapturing()
     {
-        $value = 'blah';
-        $this->captor->matches($value);
+        $value = array('blah');
+        $this->captor->doArgumentsMatch($value);
 
         $this->assertEquals('blah', $this->refVariable);
     }
@@ -81,16 +81,15 @@ class Phake_Matchers_ArgumentCaptorTest extends PHPUnit_Framework_TestCase
      */
     public function testConditionalCapturing()
     {
-        $matcher = $this->getMock('Phake_Matchers_IArgumentMatcher');
-        $matcher->expects($this->once())
-            ->method('matches')
-            ->with($this->equalTo('blah'))
-            ->will($this->returnValue(true));
+        $matcher = Phake::mock('Phake_Matchers_IChainableArgumentMatcher');
+        Phake::when($matcher)->doArgumentsMatch->thenReturn(true);
 
         $this->captor->when($matcher);
 
-        $value = 'blah';
-        $this->captor->matches($value);
+        $value = array('blah');
+        $this->captor->doArgumentsMatch($value);
+
+        Phake::verify($matcher)->doArgumentsMatch(array('blah'));
 
         $this->assertEquals('blah', $this->refVariable);
     }
@@ -100,16 +99,15 @@ class Phake_Matchers_ArgumentCaptorTest extends PHPUnit_Framework_TestCase
      */
     public function testConditionalCapturingWontCapture()
     {
-        $matcher = $this->getMock('Phake_Matchers_IArgumentMatcher');
-        $matcher->expects($this->once())
-            ->method('matches')
-            ->with($this->equalTo('blah'))
-            ->will($this->returnValue(false));
+        $matcher = Phake::mock('Phake_Matchers_IChainableArgumentMatcher');
+        Phake::when($matcher)->doArgumentsMatch->thenReturn(false);
 
         $this->captor->when($matcher);
 
-        $value = 'blah';
-        $this->captor->matches($value);
+        $value = array('blah');
+        $this->captor->doArgumentsMatch($value);
+
+        Phake::verify($matcher)->doArgumentsMatch(array('blah'));
 
         $this->assertNull($this->refVariable);
     }
@@ -129,7 +127,7 @@ class Phake_Matchers_ArgumentCaptorTest extends PHPUnit_Framework_TestCase
 
     public function testToStringWithConditional()
     {
-        $matcher = Phake::mock('Phake_Matchers_IArgumentMatcher');
+        $matcher = Phake::mock('Phake_Matchers_IChainableArgumentMatcher');
         Phake::when($matcher)->__toString()->thenReturn('an argument');
         $this->captor->when($matcher);
         $this->assertEquals('<captured parameter that is an argument>', $this->captor->__toString());

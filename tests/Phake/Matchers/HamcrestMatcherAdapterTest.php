@@ -80,8 +80,8 @@ class Phake_Matchers_HamcrestMatcherAdapterTest extends PHPUnit_Framework_TestCa
             ->with($this->equalTo('foo'))
             ->will($this->returnValue(true));
 
-        $value = 'foo';
-        $this->assertTrue($this->adapter->matches($value));
+        $value = array('foo');
+        $this->assertTrue($this->adapter->doArgumentsMatch($value));
     }
 
     public function testToString()

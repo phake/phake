@@ -146,7 +146,7 @@ class Phake_Stubber_StubMapperTest extends PHPUnit_Framework_TestCase
 
     public function testMappingParameterSetter()
     {
-        $matcher = new Phake_Matchers_MethodMatcher('method', array(new Phake_Matchers_ReferenceSetter(42)));
+        $matcher = new Phake_Matchers_MethodMatcher('method', new Phake_Matchers_ReferenceSetter(42));
         $stub    = $this->getMock('Phake_Stubber_AnswerCollection', array(), array(), '', false);
 
         $value        = 'blah';

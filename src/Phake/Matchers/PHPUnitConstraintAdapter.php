@@ -46,7 +46,7 @@
  * An adapter class allowing PHPUnit constraints to be treated as though they were Phake argument
  * matchers.
  */
-class Phake_Matchers_PHPUnitConstraintAdapter implements Phake_Matchers_IArgumentMatcher
+class Phake_Matchers_PHPUnitConstraintAdapter extends Phake_Matchers_SingleArgumentMatcher
 {
     /**
      * @var PHPUnit_Framework_Constraint
@@ -70,7 +70,7 @@ class Phake_Matchers_PHPUnitConstraintAdapter implements Phake_Matchers_IArgumen
      *
      * @return boolean
      */
-    public function matches(&$argument)
+    protected  function matches(&$argument)
     {
         return $this->constraint->evaluate($argument, '', true);
     }
