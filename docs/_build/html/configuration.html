@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Configuration &mdash; Phake - PHP Mocking Framework v1.0.3 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0.3',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Phake - PHP Mocking Framework v1.0.3 documentation" href="index.html" />
+    <link rel="prev" title="Method Parameter Matchers" href="method-parameter-matchers.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="method-parameter-matchers.html" title="Method Parameter Matchers"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Phake - PHP Mocking Framework v1.0.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="configuration">
+<h1>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h1>
+<p>There are some options you can use to configure and customize Phake. None of these options are required and
+Phake can always just be used straight out of the box, however some configuration options are available to
+provide more convenient integration with PHPUnit and ability to debug your mock objects.</p>
+<div class="section" id="setting-the-phake-client">
+<h2>Setting the Phake Client<a class="headerlink" href="#setting-the-phake-client" title="Permalink to this headline">¶</a></h2>
+<p>While Phake does not have a direct dependency on PHPUnit, there is a PHPUnit specific client that improves
+error reporting and allows you to utilize strict mode with PHPUnit. Without using the PHPUnit client, any
+failed verifications will result in an errored test. Generally speaking, with PHPUnit, the error result is
+reserved for bad tests, not failed tests.</p>
+<p>The other issue you would run into when using Phake with PHPUnit without using the PHPUnit Phake client is
+that any test runs utilizing the &#8211;strict flag will fail when an assertion is not recorded. By default Phake
+does not register assertions with PHPUnit. When the PHPUnit client is used however, the assertions are
+recorded and &#8211;strict mode can be safely used with your tests.</p>
+<p>To enable the PHPUnit Phake client, you can register it in your test bootstrap.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">require_once(&#39;Phake.php&#39;);</span>
+<span class="x">Phake::setClient(Phake::CLIENT_PHPUNIT);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="setting-the-mock-class-loader">
+<h2>Setting the Mock Class Loader<a class="headerlink" href="#setting-the-mock-class-loader" title="Permalink to this headline">¶</a></h2>
+<p>When generating mock classes, Phake will load them into memory utilizing the PHP <tt class="docutils literal"><span class="pre">eval()</span></tt> function. This can
+make the code inside of mock classes difficult to debug or diagnose when errors occur in this code. Using
+the <tt class="docutils literal"><span class="pre">Phake::setMockLoader()</span></tt> method you can change this behavior to instead dump the generated class to a
+file and then require that file. This will allow for accurate and easily researchable errors when running
+tests. This shouldn&#8217;t typically be required for most users of Phake, however if your are having errors or
+working on code for Phake itself it can be incredibly useful.</p>
+<p><tt class="docutils literal"><span class="pre">Phake::setMockLoader()</span></tt> accepts a single parameter of type <tt class="docutils literal"><span class="pre">Phake_ClassGenerator_ILoader</span></tt>. The default
+behavior is contained in the <tt class="docutils literal"><span class="pre">Phake_ClassGenerator_EvalLoader</span></tt> class. If you would instead like to dump the
+classes to files you can instead use the <tt class="docutils literal"><span class="pre">Phake_ClassGenerator_FileLoader</span></tt> class. The constructor accepts a
+single parameter containing the directory you would like to dump the classes to. The classes will be stored
+in files with the same name as the generated class.</p>
+<p>Below is an example of the code required to dump mock classes into the /tmp folder.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">require_once(&#39;Phake.php&#39;);</span>
+<span class="x">require_once(&#39;Phake/ClassGenerator/FileLoader.php&#39;);</span>
+<span class="x">Phake::setMockLoader(new Phake_ClassGenerator_FileLoader(&#39;/tmp&#39;));</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="#">Configuration</a><ul>
+<li><a class="reference external" href="#setting-the-phake-client">Setting the Phake Client</a></li>
+<li><a class="reference external" href="#setting-the-mock-class-loader">Setting the Mock Class Loader</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="method-parameter-matchers.html"
+                                  title="previous chapter">Method Parameter Matchers</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/configuration.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="method-parameter-matchers.html" title="Method Parameter Matchers"
+             >previous</a> |</li>
+        <li><a href="index.html">Phake - PHP Mocking Framework v1.0.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2014, Mike Lively &lt;m@digitalsandwich.com&gt;.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.6.
+    </div>
+  </body>
+</html>

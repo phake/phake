@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Getting Started &mdash; Phake - PHP Mocking Framework v1.0.3 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0.3',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Phake - PHP Mocking Framework v1.0.3 documentation" href="index.html" />
+    <link rel="next" title="Method Stubbing" href="method-stubbing.html" />
+    <link rel="prev" title="Introduction to Phake" href="introduction.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="method-stubbing.html" title="Method Stubbing"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="introduction.html" title="Introduction to Phake"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Phake - PHP Mocking Framework v1.0.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="getting-started">
+<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<p>Phake depends on PHP 5.2.4 or greater. It has no dependency on PHPUnit and should be usable with
+any version of PHPUnit so long as the PHP version is 5.2.4 or greater.</p>
+<div class="section" id="composer-install">
+<h2>Composer Install<a class="headerlink" href="#composer-install" title="Permalink to this headline">¶</a></h2>
+<p>Phake can be installed via <a class="reference external" href="https://github.com/composer/composer">Composer</a>. You will typically want to install Phake
+as a development requirement. To do so you can add the following to your <tt class="docutils literal"><span class="pre">composer.json</span></tt> file:</p>
+<div class="highlight-js"><div class="highlight"><pre><span class="p">{</span>
+    <span class="c1">// ..</span>
+    <span class="s2">&quot;require-dev&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;phake/phake&quot;</span><span class="o">:</span> <span class="s2">&quot;@stable&quot;</span>
+    <span class="p">}</span>
+    <span class="c1">// ..</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Once this is added to <tt class="docutils literal"><span class="pre">composer.json</span></tt> you can run <tt class="docutils literal"><span class="pre">composer</span> <span class="pre">update</span> <span class="pre">phake/phake</span></tt></p>
+</div>
+<div class="section" id="install-from-source">
+<h2>Install from Source<a class="headerlink" href="#install-from-source" title="Permalink to this headline">¶</a></h2>
+<p>You can also clone a copy of Phake from the <a class="reference external" href="https://github.com/mlively/Phake">Phake GitHub repository</a>.
+Every attempt is made to keep the master branch stable and this should be usable for those that
+immediately need features before they get released or in the event that you enjoy the bleeding edge.
+Always remember, until something goes into a rc state, there is always a chance that the functionality
+may change. However as an early adopter that uses GitHub, you can have a chance to mold the software
+as it is built.</p>
+</div>
+<div class="section" id="support">
+<h2>Support<a class="headerlink" href="#support" title="Permalink to this headline">¶</a></h2>
+<p>If you think you have found a bug or an issue with Phake, please feel free to open up an issue on the
+<a class="reference external" href="https://github.com/mlively/Phake/issues">Phake Issue Tracker</a></p>
+<p>You can also email me directly at <a class="reference external" href="mailto:m&#37;&#52;&#48;digitalsandwich&#46;com">m<span>&#64;</span>digitalsandwich<span>&#46;</span>com</a> or get ahold of me on various channels on the
+freenode irc network: mikelively.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="#">Getting Started</a><ul>
+<li><a class="reference external" href="#composer-install">Composer Install</a></li>
+<li><a class="reference external" href="#install-from-source">Install from Source</a></li>
+<li><a class="reference external" href="#support">Support</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="introduction.html"
+                                  title="previous chapter">Introduction to Phake</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="method-stubbing.html"
+                                  title="next chapter">Method Stubbing</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/getting-started.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="method-stubbing.html" title="Method Stubbing"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="introduction.html" title="Introduction to Phake"
+             >previous</a> |</li>
+        <li><a href="index.html">Phake - PHP Mocking Framework v1.0.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2014, Mike Lively &lt;m@digitalsandwich.com&gt;.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.6.
+    </div>
+  </body>
+</html>

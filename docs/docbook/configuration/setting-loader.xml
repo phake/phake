@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<example xmlns="http://docbook.org/ns/docbook" id="method-parameter-matchers.argument-capture">
-	<title>Setting the Mock Class Loader</title>
-		<programlisting><![CDATA[<?php
-require_once('Phake.php');
-require_once('Phake/ClassGenerator/FileLoader.php');
-Phake::setMockLoader(new Phake_ClassGenerator_FileLoader('/tmp'));
-?>]]></programlisting>
-</example>

@@ -1,0 +1,322 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Method Verification &mdash; Phake - PHP Mocking Framework v1.0.3 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0.3',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Phake - PHP Mocking Framework v1.0.3 documentation" href="index.html" />
+    <link rel="next" title="Answers" href="answers.html" />
+    <link rel="prev" title="Method Stubbing" href="method-stubbing.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="answers.html" title="Answers"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="method-stubbing.html" title="Method Stubbing"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Phake - PHP Mocking Framework v1.0.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="method-verification">
+<h1>Method Verification<a class="headerlink" href="#method-verification" title="Permalink to this headline">¶</a></h1>
+<p>The <tt class="docutils literal"><span class="pre">Phake::verify()</span></tt> method is used to assert that method calls have been
+made on a mock object that you can create with <tt class="docutils literal"><span class="pre">Phake::mock()</span></tt>.
+<tt class="docutils literal"><span class="pre">Phake::verify()</span></tt> accepts the mock object you want to verify calls against.
+Mock objects in Phake can almost be viewed as a tape recorder. Any time the code you are testing
+calls a method on an object you create with <tt class="docutils literal"><span class="pre">Phake::mock()</span></tt> it is going to
+record the method that you called along with all of the parameters used to call that method. Then
+<tt class="docutils literal"><span class="pre">Phake::verify()</span></tt> will look at that recording and allow you to assert whether
+or not a certain call was made.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">class PhakeTest1 extends PHPUnit_Framework_TestCase</span>
+<span class="x">{</span>
+<span class="x">    public function testBasicVerify()</span>
+<span class="x">    {</span>
+<span class="x">        $mock = Phake::mock(&#39;MyClass&#39;);</span>
+
+<span class="x">        $mock-&gt;foo();</span>
+
+<span class="x">        Phake::verify($mock)-&gt;foo();</span>
+<span class="x">    }</span>
+<span class="x">}</span>
+</pre></div>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">Phake::verify()</span></tt> call here, verifies that the method <tt class="docutils literal"><span class="pre">foo()</span></tt> has been called once (and only once) with no
+parameters on the object <tt class="docutils literal"><span class="pre">$mock</span></tt>. A very important thing to note here that is a departure from most (if not all)
+other PHP mocking frameworks is that you want to verify the method call AFTER the method call takes place. Other
+mocking frameworks such as the one built into PHPUnit depend on you setting the expectations of what will get called
+prior to running the system under test.</p>
+<p>Phake strives to allow you to follow the four phases of a unit test as layed out in xUnit Test Patterns: setup,
+exercise, verify, and teardown. The setup phase of a test using Phake for mocking will now include calls to
+<tt class="docutils literal"><span class="pre">Phake::mock()</span></tt> for each class you want to mock. The exercise portion of your code will remain the same. The verify
+section of your code will include calls to <tt class="docutils literal"><span class="pre">Phake::verify()</span></tt>. The exercise and teardown phases will remain unchanged.</p>
+<div class="section" id="verifying-method-parameters">
+<h2>Verifying Method Parameters<a class="headerlink" href="#verifying-method-parameters" title="Permalink to this headline">¶</a></h2>
+<p>Verifying method parameters using Phake is very simple yet can be very flexible. There are a wealth of options for
+matching parameters that is discussed later on in <a class="reference external" href="method-parameter-matchers.html#method-parameter-matchers-section"><em>Method Parameter Matchers</em></a>.</p>
+</div>
+<div class="section" id="verifying-multiple-invocations">
+<h2>Verifying Multiple Invocations<a class="headerlink" href="#verifying-multiple-invocations" title="Permalink to this headline">¶</a></h2>
+<p>A common need for mock objects is the ability to variable multiple invocations on that object. Phake allows you to use
+<tt class="docutils literal"><span class="pre">Phake::verify()</span></tt> multiple times on the same object. A notable difference between Phake and PHPUnit’s mocking
+framework is the ability to mock multiple invocations of the same method with no regard for call sequences. The PHPUnit
+mocking test below would fail for this reason.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">class MyTest extends PHPUnit_Framework_TestCase</span>
+<span class="x">{</span>
+<span class="x">    public function testPHPUnitMock()</span>
+<span class="x">    {</span>
+<span class="x">        $mock = $this-&gt;getMock(&#39;PhakeTest_MockedClass&#39;);</span>
+
+<span class="x">        $mock-&gt;expects($this-&gt;once())-&gt;method(&#39;fooWithArgument&#39;)</span>
+<span class="x">                -&gt;with(&#39;foo&#39;);</span>
+
+<span class="x">        $mock-&gt;expects($this-&gt;once())-&gt;method(&#39;fooWithArgument&#39;)</span>
+<span class="x">                -&gt;with(&#39;bar&#39;);</span>
+
+<span class="x">        $mock-&gt;fooWithArgument(&#39;foo&#39;);</span>
+<span class="x">        $mock-&gt;fooWithArgument(&#39;bar&#39;);</span>
+<span class="x">    }</span>
+<span class="x">}</span>
+</pre></div>
+</div>
+<p>The reason this test fails is because by default PHPUnit only allows a single expectation per method. The way you can
+fix this is by using the <cite>at()</cite> matcher. This allows you to specify the index of the invocation you want to match
+again. So to make the test above work you would have to change it.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">class MyTest extends PHPUnit_Framework_TestCase</span>
+<span class="x">{</span>
+<span class="x">    public function testPHPUnitMock()</span>
+<span class="x">    {</span>
+<span class="x">        $mock = $this-&gt;getMock(&#39;PhakeTest_MockedClass&#39;);</span>
+
+<span class="x">        //NOTICE this is now at() instead of once()</span>
+<span class="x">        $mock-&gt;expects($this-&gt;at(0))-&gt;method(&#39;fooWithArgument&#39;)</span>
+<span class="x">                -&gt;with(&#39;foo&#39;);</span>
+
+<span class="x">        //NOTICE this is now at() instead of once()</span>
+<span class="x">        $mock-&gt;expects($this-&gt;at(1))-&gt;method(&#39;fooWithArgument&#39;)</span>
+<span class="x">                -&gt;with(&#39;bar&#39;);</span>
+
+<span class="x">        $mock-&gt;fooWithArgument(&#39;foo&#39;);</span>
+<span class="x">        $mock-&gt;fooWithArgument(&#39;bar&#39;);</span>
+<span class="x">    }</span>
+<span class="x">}</span>
+</pre></div>
+</div>
+<p>This test will now run as expected. There is still one small problem however and that is that you are now testing not
+just the invocations but also the order of invocations. Many times the order in which two calls are made really do not
+matter. If swapping the order of two method calls will not break your application then there is no reason to enforce
+that code structure through a unit test. Unfortunately, you cannot have multiple invocations of a method in PHPUnit
+without enforcing call order. In Phake these two notions of call order and multiple invocations are kept completely
+distinct. Here is the same test written using Phake.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">class MyTest extends PHPUnit_Framework_TestCase</span>
+<span class="x">{</span>
+<span class="x">    public function testPHPUnitMock()</span>
+<span class="x">    {</span>
+<span class="x">        $mock = Phake::mock(&#39;PhakeTest_MockedClass&#39;);</span>
+
+<span class="x">        $mock-&gt;fooWithArgument(&#39;foo&#39;);</span>
+<span class="x">        $mock-&gt;fooWithArgument(&#39;bar&#39;);</span>
+
+<span class="x">        Phake::verify($mock)-&gt;fooWithArgument(&#39;foo&#39;);</span>
+<span class="x">        Phake::verify($mock)-&gt;fooWithArgument(&#39;bar&#39;);</span>
+<span class="x">    }</span>
+<span class="x">}</span>
+</pre></div>
+</div>
+<p>You can switch the calls around in this example as much as you like and the test will still pass. You can mock as many
+different invocations of the same method as you need.</p>
+<p>If you would like to verify the exact same parameters are used on a method multiple times (or they all match the same
+constraints multiple times) then you can use the verification mode parameter of <tt class="docutils literal"><span class="pre">Phake::verify()</span></tt>. The second
+parameter to <tt class="docutils literal"><span class="pre">Phake::verify()</span></tt> allows you to specify how many times you expect that method to be called with matching
+parameters. If no value is specified then the default of one is used. The other options are:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">Phake::times($n)</span></tt> – Where <tt class="docutils literal"><span class="pre">$n</span></tt> equals the exact number of times you expect the method to be called.</li>
+<li><tt class="docutils literal"><span class="pre">Phake::atLeast($n)</span></tt> – Where <tt class="docutils literal"><span class="pre">$n</span></tt> is the minimum number of times you expect the method to be called.</li>
+<li><tt class="docutils literal"><span class="pre">Phake::atMost($n)</span></tt> – Where <tt class="docutils literal"><span class="pre">$n</span></tt> is the most number of times you would expect the method to be called.</li>
+</ul>
+<p>Here is an example of this in action.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">class MyTest extends PHPUnit_Framework_TestCase</span>
+<span class="x">{</span>
+<span class="x">    public function testPHPUnitMock()</span>
+<span class="x">    {</span>
+<span class="x">        $mock = Phake::mock(&#39;PhakeTest_MockedClass&#39;);</span>
+
+<span class="x">        $mock-&gt;fooWithArgument(&#39;foo&#39;);</span>
+<span class="x">        $mock-&gt;fooWithArgument(&#39;foo&#39;);</span>
+
+<span class="x">        Phake::verify($mock, Phake::times(2))-&gt;fooWithArgument(&#39;foo&#39;);</span>
+<span class="x">    }</span>
+<span class="x">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="verifying-calls-happen-in-a-particular-order">
+<h2>Verifying Calls Happen in a Particular Order<a class="headerlink" href="#verifying-calls-happen-in-a-particular-order" title="Permalink to this headline">¶</a></h2>
+<p>Sometimes the desired behavior is that you verify calls happen in a particular order. Say there is a functional reason
+for the two variants of <tt class="docutils literal"><span class="pre">fooWithArgument()</span></tt> to be called in the order of the original test. You can utilize
+<tt class="docutils literal"><span class="pre">Phake::inOrder()</span></tt> to ensure the order of your call invocations. <tt class="docutils literal"><span class="pre">Phake::inOrder()</span></tt> takes one or more arguments and
+errors out in the event that one of the verified calls was invoked out of order. The calls don’t have to be in exact
+sequential order, there can be other calls in between, it just ensures the specified calls themselves are called in
+order relative to each other. Below is an example Phake test that behaves similarly to the PHPUnit test that utilized
+<tt class="docutils literal"><span class="pre">at()</span></tt>.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">class MyTest extends PHPUnit_Framework_TestCase</span>
+<span class="x">{</span>
+<span class="x">    public function testPHPUnitMock()</span>
+<span class="x">    {</span>
+<span class="x">        $mock = Phake::mock(&#39;PhakeTest_MockedClass&#39;);</span>
+
+<span class="x">        $mock-&gt;fooWithArgument(&#39;foo&#39;);</span>
+<span class="x">        $mock-&gt;fooWithArgument(&#39;bar&#39;);</span>
+
+<span class="x">        Phake::inOrder(</span>
+<span class="x">            Phake::verify($mock)-&gt;fooWithArgument(&#39;foo&#39;),</span>
+<span class="x">            Phake::verify($mock)-&gt;fooWithArgument(&#39;bar&#39;)</span>
+<span class="x">        );</span>
+<span class="x">    }</span>
+<span class="x">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="verifying-no-interaction-with-a-mock-so-far">
+<h2>Verifying No Interaction with a Mock so Far<a class="headerlink" href="#verifying-no-interaction-with-a-mock-so-far" title="Permalink to this headline">¶</a></h2>
+<p>Occasionally you may want to ensure that no interactions have occurred with a mock object. This can be done
+by passing your mock object to <tt class="docutils literal"><span class="pre">Phake::verifyNoInteraction($mock)</span></tt>. This will not prevent further interaction
+with your mock, it will simply tell you whether or not any interaction up to that point has happened. You
+can pass multiple arguments to this method to verify no interaction with multiple mock objects.</p>
+</div>
+<div class="section" id="verifying-no-further-interaction-with-a-mock">
+<h2>Verifying No Further Interaction with a Mock<a class="headerlink" href="#verifying-no-further-interaction-with-a-mock" title="Permalink to this headline">¶</a></h2>
+<p>There is a similar method to prevent any future interaction with a mock. This can be done by passing a mock
+object to <tt class="docutils literal"><span class="pre">Phake::verifyNoFurtherInteraction($mock)</span></tt>. You can pass multiple arguments to this method to
+verify no further interaction occurs with multiple mock objects.</p>
+</div>
+<div class="section" id="verifying-magic-methods">
+<h2>Verifying Magic Methods<a class="headerlink" href="#verifying-magic-methods" title="Permalink to this headline">¶</a></h2>
+<p>Magic methods are commonly used in PHP and the need to be able to seamlessly utilize them is always necessary. Most
+magic methods can be verified using the method name just like you would any other method. The one exception to this is
+the <tt class="docutils literal"><span class="pre">__call()</span></tt> method. This method is overwritten on each mock already to allow for the fluent api that Phake
+utilizes. If you want to verify a particular invocation of <tt class="docutils literal"><span class="pre">__call()</span></tt> you can verify the actual method call by
+mocking the method passed in as the first parameter.</p>
+<p>Consider the following class.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">class MagicClass</span>
+<span class="x">{</span>
+<span class="x">    public function __call($method, $args)</span>
+<span class="x">    {</span>
+<span class="x">        return &#39;__call&#39;;</span>
+<span class="x">    }</span>
+<span class="x">}</span>
+</pre></div>
+</div>
+<p>You could mock an invocation of the <cite>__call()</cite> method through a userspace call to magicCall() with the following code.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">class MagicClassTest extends PHPUnit_Framework_TestCase</span>
+<span class="x">{</span>
+<span class="x">    public function testMagicCall()</span>
+<span class="x">    {</span>
+<span class="x">        $mock = Phake::mock(&#39;MagicClass&#39;);</span>
+
+<span class="x">        $mock-&gt;magicCall();</span>
+
+<span class="x">        Phake::verify($mock)-&gt;magicCall();</span>
+<span class="x">    }</span>
+<span class="x">}</span>
+</pre></div>
+</div>
+<p>If for any reason you need to explicitly verify calls to <tt class="docutils literal"><span class="pre">__call()</span></tt> then you can use <tt class="docutils literal"><span class="pre">Phake::verifyCallMethodWith()</span></tt>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="#">Method Verification</a><ul>
+<li><a class="reference external" href="#verifying-method-parameters">Verifying Method Parameters</a></li>
+<li><a class="reference external" href="#verifying-multiple-invocations">Verifying Multiple Invocations</a></li>
+<li><a class="reference external" href="#verifying-calls-happen-in-a-particular-order">Verifying Calls Happen in a Particular Order</a></li>
+<li><a class="reference external" href="#verifying-no-interaction-with-a-mock-so-far">Verifying No Interaction with a Mock so Far</a></li>
+<li><a class="reference external" href="#verifying-no-further-interaction-with-a-mock">Verifying No Further Interaction with a Mock</a></li>
+<li><a class="reference external" href="#verifying-magic-methods">Verifying Magic Methods</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="method-stubbing.html"
+                                  title="previous chapter">Method Stubbing</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="answers.html"
+                                  title="next chapter">Answers</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/method-verification.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="answers.html" title="Answers"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="method-stubbing.html" title="Method Stubbing"
+             >previous</a> |</li>
+        <li><a href="index.html">Phake - PHP Mocking Framework v1.0.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2014, Mike Lively &lt;m@digitalsandwich.com&gt;.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.6.
+    </div>
+  </body>
+</html>

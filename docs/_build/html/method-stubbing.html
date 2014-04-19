@@ -1,0 +1,828 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Method Stubbing &mdash; Phake - PHP Mocking Framework v1.0.3 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0.3',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Phake - PHP Mocking Framework v1.0.3 documentation" href="index.html" />
+    <link rel="next" title="Method Verification" href="method-verification.html" />
+    <link rel="prev" title="Getting Started" href="getting-started.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="method-verification.html" title="Method Verification"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="getting-started.html" title="Getting Started"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Phake - PHP Mocking Framework v1.0.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="method-stubbing">
+<h1>Method Stubbing<a class="headerlink" href="#method-stubbing" title="Permalink to this headline">¶</a></h1>
+<p>The <tt class="docutils literal"><span class="pre">Phake::when()</span></tt> method is used to stub methods in Phake. As discussed in the introduction,
+stubbing allows an object method to be forced to return a particular value given a set of parameters. Similarly to
+<tt class="docutils literal"><span class="pre">Phake::verify()</span></tt>, <tt class="docutils literal"><span class="pre">Phake::when()</span></tt> accepts a mock object generated from
+<tt class="docutils literal"><span class="pre">Phake::mock()</span></tt> as its first parameter.</p>
+<p>Imagine I was in the process of building the next great online shopping cart. The first thing any
+good shopping cart allows is to be able to add items. The most important thing I want to know from
+the shopping cart is how much money in merchandise is in there. So, I need to make myself a
+ShoppingCart class. I also am going to need some class to define my items.
+I am more worried about the money right now and because of that I am keenly aware that any item
+in a shopping cart is going to have a price. So I will just create an interface to represent those
+items called Item. Now take a minute to marvel at the creativity of those
+names. Great, now check out the initial definitions for my objects.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">/**</span>
+<span class="x"> * An item that is going to make me rich.</span>
+<span class="x"> */</span>
+<span class="x">interface Item</span>
+<span class="x">{</span>
+<span class="x">    /**</span>
+<span class="x">     * @return money</span>
+<span class="x">     */</span>
+<span class="x">    public function getPrice();</span>
+<span class="x">}</span>
+
+<span class="x">/**</span>
+<span class="x"> * A customer&#39;s cart that will contain items that are going to make me rich.</span>
+<span class="x"> */</span>
+<span class="x">class ShoppingCart</span>
+<span class="x">{</span>
+<span class="x">    private $items = array();</span>
+
+<span class="x">    /**</span>
+<span class="x">     * Adds an item to the customer&#39;s order</span>
+<span class="x">     * @param Item $item</span>
+<span class="x">     */</span>
+<span class="x">    public function addItem(Item $item)</span>
+<span class="x">    {</span>
+<span class="x">        $this-&gt;items[] = $item;</span>
+<span class="x">    }</span>
+
+<span class="x">    /**</span>
+<span class="x">     * Returns the current sub total of the customer&#39;s order</span>
+<span class="x">     * @return money</span>
+<span class="x">     */</span>
+<span class="x">    public function getSubTotal()</span>
+<span class="x">    {</span>
+<span class="x">    }</span>
+<span class="x">}</span>
+</pre></div>
+</div>
+<p>So, I am furiously coding away at this fantastic new <tt class="docutils literal"><span class="pre">ShoppingCart</span></tt> class when I
+realize, I am doing it wrong! You see, a few years ago I went to this conference with a bunch of
+other geeky people to talk about how to make quality software. I am supposed to be writing unit
+tests. Here I am, a solid thirteen lines (not counting comments) of code into my awe inspiring
+new software and I haven&#8217;t written a single test. I tell myself, &#8220;There&#8217;s no better time to change
+than right now!&#8221; So I decide to start testing. After looking at the options I decide PHPUnit with
+this sweet new mock library called Phake is the way to go.</p>
+<p>My first test is going to be for the currently unimplemented <tt class="docutils literal"><span class="pre">ShoppingCart::getSubTotal()</span></tt>
+method. I already have a pretty good idea of what this function is going to need to do. It will
+need to look at all of the items in the cart, retrieve their price, add it all together and return
+the result. So, in my test I know I am going to need a fixture that sets up a shopping cart with
+a few items added. Then I am going to need a test that calls <tt class="docutils literal"><span class="pre">ShoppingCart::getSubTotal()</span></tt>
+and asserts that it returns a value equal to the price of the items I added to the cart. One catch
+though, I don&#8217;t have any concrete instances of an <tt class="docutils literal"><span class="pre">Item</span></tt>. I wasn&#8217;t even planning on doing any of
+that until tomorrow. I really want to just focus on the <tt class="docutils literal"><span class="pre">ShoppingCart</span></tt> class.
+Never fear, this is why I decided to use Phake. I remember reading about how it will allow me to
+quickly create instance of my classes and interfaces that I can set up stubs for so that method
+calls return predictable values. This project is all coming together and I am really excited.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">class ShoppingCartTest extends PHPUnit_Framework_TestCase</span>
+<span class="x">{</span>
+<span class="x">    private $shoppingCart;</span>
+
+<span class="x">    private $item1;</span>
+
+<span class="x">    private $item2;</span>
+
+<span class="x">    private $item3;</span>
+
+<span class="x">    public function setUp()</span>
+<span class="x">    {</span>
+<span class="x">        $this-&gt;item1 = Phake::mock(&#39;Item&#39;);</span>
+<span class="x">        $this-&gt;item2 = Phake::mock(&#39;Item&#39;);</span>
+<span class="x">        $this-&gt;item3 = Phake::mock(&#39;Item&#39;);</span>
+
+<span class="x">        Phake::when($this-&gt;item1)-&gt;getPrice()-&gt;thenReturn(100);</span>
+<span class="x">        Phake::when($this-&gt;item2)-&gt;getPrice()-&gt;thenReturn(200);</span>
+<span class="x">        Phake::when($this-&gt;item3)-&gt;getPrice()-&gt;thenReturn(300);</span>
+
+<span class="x">        $this-&gt;shoppingCart = new ShoppingCart();</span>
+<span class="x">        $this-&gt;shoppingCart-&gt;addItem($this-&gt;item1);</span>
+<span class="x">        $this-&gt;shoppingCart-&gt;addItem($this-&gt;item2);</span>
+<span class="x">        $this-&gt;shoppingCart-&gt;addItem($this-&gt;item3);</span>
+<span class="x">    }</span>
+
+<span class="x">    public function testGetSub()</span>
+<span class="x">    {</span>
+<span class="x">        $this-&gt;assertEquals(600, $this-&gt;shoppingCart-&gt;getSubTotal());</span>
+<span class="x">    }</span>
+<span class="x">}</span>
+</pre></div>
+</div>
+<p>My test here shows a very basic use of Phake for creating method stubs. I am creating three different mock
+implementations of the <tt class="docutils literal"><span class="pre">Item</span></tt> class. Then for each of those item classes, I am creating
+a stub using <tt class="docutils literal"><span class="pre">Phake::when()</span></tt> that will return 100, 200, and 300 respectively. I know my method
+that I am getting ready to implement will need to call those methods in order to calculate the total cost of the
+order.</p>
+<p>My test is written so now it is time to see how it fails. I run it with phpunit and see the output below:</p>
+<div class="highlight-python"><pre>$ phpunit ExampleTests/ShoppingCartTest.php
+PHPUnit 3.5.13 by Sebastian Bergmann.
+
+F
+
+Time: 0 seconds, Memory: 8.50Mb
+
+There was 1 failure:
+
+1) ShoppingCartTest::testGetSub
+Failed asserting that &lt;null&gt; matches expected &lt;integer:600&gt;.
+
+/home/mikel/Documents/Projects/Phake/tests/ShoppingCartTest.php:69
+
+FAILURES!
+Tests: 1, Assertions: 1, Failures: 1.
+
+Generating code coverage report, this may take a moment.</pre>
+</div>
+<p>Now that I have a working (and I by working I mean breaking!) test it is time to look at the code necessary to make
+the test pass.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">class ShoppingCart</span>
+<span class="x">{</span>
+<span class="x">    // I am cutting out the already seen code. If you want to see it again look at the previous examples!</span>
+
+<span class="x">    /**</span>
+<span class="x">     * Returns the current sub total of the customer&#39;s order</span>
+<span class="x">     * @return money</span>
+<span class="x">     */</span>
+<span class="x">    public function getSubTotal()</span>
+<span class="x">    {</span>
+<span class="x">        $total = 0;</span>
+
+<span class="x">        foreach ($this-&gt;items as $item)</span>
+<span class="x">        {</span>
+<span class="x">            $total += $item-&gt;getPrice();</span>
+<span class="x">        }</span>
+
+<span class="x">        return $total;</span>
+<span class="x">    }</span>
+<span class="x">}</span>
+</pre></div>
+</div>
+<p>The code here is pretty simple. I am just iterating over the <tt class="docutils literal"><span class="pre">ShoppingCart::$item</span></tt> property,
+calling the <tt class="docutils literal"><span class="pre">Item::getPrice()</span></tt> method, and adding them all together. Now when I run phpunit, the tests were successful
+and I am getting off to a great start with my shopping cart.</p>
+<div class="highlight-python"><pre>$ phpunit ExampleTests/ShoppingCartTest.php
+PHPUnit 3.5.13 by Sebastian Bergmann.
+
+.
+
+Time: 0 seconds, Memory: 8.25Mb
+
+OK (1 test, 1 assertion)
+
+Generating code coverage report, this may take a moment.</pre>
+</div>
+<p>So, what is Phake doing here? Phake is providing us a predictable implementation of the <tt class="docutils literal"><span class="pre">Item::getPrice()</span></tt>
+method that we can use in our test. It helps me to ensure the when my test breaks I know exactly where it is breaking.
+I will not have to be worried that a bad implementation of <tt class="docutils literal"><span class="pre">Item::getPrice()</span></tt> is breaking my tests.</p>
+<div class="section" id="how-phake-when-works">
+<span id="id1"></span><h2>How Phake::when() Works<a class="headerlink" href="#how-phake-when-works" title="Permalink to this headline">¶</a></h2>
+<p>Internally Phake is doing quite a bit when this test runs. The three calls to <tt class="docutils literal"><span class="pre">Phake::mock()</span></tt> are
+creating three new classes that in this case each implement the <tt class="docutils literal"><span class="pre">Item</span></tt> interface. These new classes
+each define implementations of any method defined in the <tt class="docutils literal"><span class="pre">Item</span></tt> interface. If <tt class="docutils literal"><span class="pre">Item</span></tt>
+extended another interface, implementations of all of that parent&#8217;s defined methods would be created as well. Each
+method being implemented in these new classes does a few different things. The first thing that it does is record
+the fact that the method was called and stores the parameters that were used to call it. The next significant thing
+it does is looks at the stub map for that mock object. The stub map is a map that associates answers to method matchers.
+An answer is what a mocked object will return when it is called. By default, a call to a mock object returns a static
+answer of NULL. We will discuss answers more in <a class="reference external" href="answers.html#answers"><em>Answers</em></a>. A method matcher has two parts. The
+first is the method name. The second is an array of arguments. The array of arguments will then contain various constraints
+that are applied to each argument to see if a given argument will match. The most common constraint is an equality constraint
+that will match loosely along the same lines as the double equals sign in PHP. We will talk about matchers more in
+<a class="reference external" href="method-parameter-matchers.html#method-parameter-matchers-section"><em>Method Parameter Matchers</em></a>.</p>
+<p>When each mock object is initially created, its stub map will be empty. This means that any call to a method on a mock object
+is going to return a default answer of NULL. If you want your mock object&#8217;s methods to return something else you must add answers
+to the stub map. The <tt class="docutils literal"><span class="pre">Phake::when()</span></tt> method allows you to map an answer to a method matcher for a given mock object.
+The mock object you want to add the mapping to is passed as the first parameter to <tt class="docutils literal"><span class="pre">Phake::when()</span></tt>. The
+<tt class="docutils literal"><span class="pre">Phake::when()</span></tt> method will then return a proxy that can be used add answers to your mock object&#8217;s stub
+map. The answers are added by making method calls on the proxy just as you would on the mock object you are proxying. In
+the first example above you saw a call to <tt class="docutils literal"><span class="pre">Phake::when($this-&gt;item1)-&gt;getPrice()</span></tt>.
+The <tt class="docutils literal"><span class="pre">getPrice()</span></tt> call here was telling Phake that I am about to define a new answer that will be returned
+any time <tt class="docutils literal"><span class="pre">$this-&gt;item-&gt;getPrice()</span></tt> is called in my code. The call to <tt class="docutils literal"><span class="pre">$this-&gt;item-&gt;getPrice()</span></tt>
+returns another object that you can set the answer on using Phake&#8217;s fluent api. In the example I called
+<tt class="docutils literal"><span class="pre">Phake::when($this-&gt;item1)-&gt;getPrice()-&gt;thenReturn(100)</span></tt>. The <tt class="docutils literal"><span class="pre">thenReturn()</span></tt> method will
+bind a static answer to a matcher for <tt class="docutils literal"><span class="pre">getPrice()</span></tt> in the stub map for $this-&gt;item1.</p>
+<div class="section" id="why-do-phake-stubs-return-null-by-default">
+<h3>Why do Phake stubs return Null by default?<a class="headerlink" href="#why-do-phake-stubs-return-null-by-default" title="Permalink to this headline">¶</a></h3>
+<p>The reasoning behind this is that generally speaking, each method you test should depend on only what it needs to perform the
+(hopefully one) responsibility assigned to it. Normally you will have very controlled delegation to other objects. To help with
+localization of errors in your test it is assumed that you will always want to mock external dependencies to keep them from
+influencing the results of unit tests dedicated to the behavior of other parts of the system. Another reason for this default
+behavior is that it provides consistent and predictable behavior regardless of whether you are testing concrete classes, abstract
+classes, or interfaces. It should be noted that this default behavior for concrete methods in classes is different then the default
+behavior in PHPUnit. In PHPUnit, you have to explicitly indicate that you are mocking a method, otherwise it will call the actual
+method code. There are certainly cases where this is useful and this behavior can be achieved in Phake. I will discuss this aspect
+of Phake in <a class="reference internal" href="#partial-mocks"><em>Partial Mocks</em></a>.</p>
+</div>
+</div>
+<div class="section" id="overwriting-existing-stubs">
+<h2>Overwriting Existing Stubs<a class="headerlink" href="#overwriting-existing-stubs" title="Permalink to this headline">¶</a></h2>
+<p>My shopping cart application is coming right along. I can add items and the total price seems to be accurate. However,
+while I was playing around with my new cart I noticed a very strange problem. I was playing around with the idea of
+allowing discounts to be applied to a cart as just additional items that would have a negative price. So while I am
+playing around with this idea I notice that the math isn&#8217;t always adding up. If I start with an item that is $100 and
+then add a discount that is $81.40 I see that the total price isn&#8217;t adding up to $18.60. This is definitely problematic
+After doing some further research, I realize I made a silly mistake. I am just using simple floats to calculate the
+costs. Floats are by nature inaccurate. Once you start using them in mathematical operations they start to show their
+inadequacy for precision. In keeping with the test driven method of creating code I need to create a unit test that
+shows this flaw.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">class ShoppingCartTest extends PHPUnit_Framework_TestCase</span>
+<span class="x">{</span>
+<span class="x">    private $shoppingCart;</span>
+
+<span class="x">    private $item1;</span>
+
+<span class="x">    private $item2;</span>
+
+<span class="x">    private $item3;</span>
+
+<span class="x">    public function setUp()</span>
+<span class="x">    {</span>
+<span class="x">        $this-&gt;item1 = Phake::mock(&#39;Item&#39;);</span>
+<span class="x">        $this-&gt;item2 = Phake::mock(&#39;Item&#39;);</span>
+<span class="x">        $this-&gt;item3 = Phake::mock(&#39;Item&#39;);</span>
+
+<span class="x">        Phake::when($this-&gt;item1)-&gt;getPrice()-&gt;thenReturn(100);</span>
+<span class="x">        Phake::when($this-&gt;item2)-&gt;getPrice()-&gt;thenReturn(200);</span>
+<span class="x">        Phake::when($this-&gt;item3)-&gt;getPrice()-&gt;thenReturn(300);</span>
+
+<span class="x">        $this-&gt;shoppingCart = new ShoppingCart();</span>
+<span class="x">        $this-&gt;shoppingCart-&gt;addItem($this-&gt;item1);</span>
+<span class="x">        $this-&gt;shoppingCart-&gt;addItem($this-&gt;item2);</span>
+<span class="x">        $this-&gt;shoppingCart-&gt;addItem($this-&gt;item3);</span>
+<span class="x">    }</span>
+
+<span class="x">    public function testGetSub()</span>
+<span class="x">    {</span>
+<span class="x">        $this-&gt;assertEquals(600, $this-&gt;shoppingCart-&gt;getSubTotal());</span>
+<span class="x">    }</span>
+
+<span class="x">    public function testGetSubTotalWithPrecision()</span>
+<span class="x">    {</span>
+<span class="x">        $this-&gt;item1 = Phake::mock(&#39;Item&#39;);</span>
+<span class="x">        $this-&gt;item2 = Phake::mock(&#39;Item&#39;);</span>
+<span class="x">        $this-&gt;item3 = Phake::mock(&#39;Item&#39;);</span>
+
+<span class="x">        Phake::when($this-&gt;item1)-&gt;getPrice()-&gt;thenReturn(100);</span>
+<span class="x">        Phake::when($this-&gt;item2)-&gt;getPrice()-&gt;thenReturn(-81.4);</span>
+<span class="x">        Phake::when($this-&gt;item3)-&gt;getPrice()-&gt;thenReturn(20);</span>
+
+<span class="x">        $this-&gt;shoppingCart = new ShoppingCart();</span>
+<span class="x">        $this-&gt;shoppingCart-&gt;addItem($this-&gt;item1);</span>
+<span class="x">        $this-&gt;shoppingCart-&gt;addItem($this-&gt;item2);</span>
+<span class="x">        $this-&gt;shoppingCart-&gt;addItem($this-&gt;item3);</span>
+
+<span class="x">        $this-&gt;assertEquals(38.6, $this-&gt;shoppingCart-&gt;getSubTotal());</span>
+<span class="x">    }</span>
+<span class="x">}</span>
+</pre></div>
+</div>
+<p>You can see that I added another test method that uses actual floats for some of the prices as opposed to round numbers.
+Now when I run my test sweet I can see the fantastic floating point issue.</p>
+<div class="highlight-python"><pre>$ phpunit ExampleTests/ShoppingCartTest.php
+PHPUnit 3.5.13 by Sebastian Bergmann.
+
+.F
+
+Time: 0 seconds, Memory: 10.25Mb
+
+There was 1 failure:
+
+1) ShoppingCartTest::testGetSubTotalWithPrecision
+Failed asserting that &lt;double:38.6&gt; matches expected &lt;double:38.6&gt;.
+
+/home/mikel/Documents/Projects/Phake/tests/ShoppingCartTest.php:95
+
+FAILURES!
+Tests: 2, Assertions: 2, Failures: 1.
+
+Generating code coverage report, this may take a moment.</pre>
+</div>
+<p>Once you get over the strangeness of 38.6 not equaling 38.6 I want to discuss streamlining test cases with you. You
+will notice that the code in <tt class="docutils literal"><span class="pre">ShoppingCartTest::testGetSubTotalWithPrecision()</span></tt> contains almost
+all duplicate code when compared to <tt class="docutils literal"><span class="pre">ShoppingCartTest::setUp()</span></tt>. If I were to continue following
+this pattern of doing things I would eventually have tests that are difficult to maintain. Phake allows you to very
+easily override stubs. This is very important in helping you to reduce duplication in your tests and leads to tests
+that will be easier to maintain. To overwrite a previous stub you simply have to redefine it. I am going to change
+<tt class="docutils literal"><span class="pre">ShoppingCartTest::testGetSubTotalWithPrecision()</span></tt> to instead just redefine the <tt class="docutils literal"><span class="pre">getPrice()</span></tt>
+stubs.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">class ShoppingCartTest extends PHPUnit_Framework_TestCase</span>
+<span class="x">{</span>
+<span class="x">    private $shoppingCart;</span>
+
+<span class="x">    private $item1;</span>
+
+<span class="x">    private $item2;</span>
+
+<span class="x">    private $item3;</span>
+
+<span class="x">    public function setUp()</span>
+<span class="x">    {</span>
+<span class="x">        $this-&gt;item1 = Phake::mock(&#39;Item&#39;);</span>
+<span class="x">        $this-&gt;item2 = Phake::mock(&#39;Item&#39;);</span>
+<span class="x">        $this-&gt;item3 = Phake::mock(&#39;Item&#39;);</span>
+
+<span class="x">        Phake::when($this-&gt;item1)-&gt;getPrice()-&gt;thenReturn(100);</span>
+<span class="x">        Phake::when($this-&gt;item2)-&gt;getPrice()-&gt;thenReturn(200);</span>
+<span class="x">        Phake::when($this-&gt;item3)-&gt;getPrice()-&gt;thenReturn(300);</span>
+
+<span class="x">        $this-&gt;shoppingCart = new ShoppingCart();</span>
+<span class="x">        $this-&gt;shoppingCart-&gt;addItem($this-&gt;item1);</span>
+<span class="x">        $this-&gt;shoppingCart-&gt;addItem($this-&gt;item2);</span>
+<span class="x">        $this-&gt;shoppingCart-&gt;addItem($this-&gt;item3);</span>
+<span class="x">    }</span>
+
+<span class="x">    public function testGetSub()</span>
+<span class="x">    {</span>
+<span class="x">        $this-&gt;assertEquals(600, $this-&gt;shoppingCart-&gt;getSubTotal());</span>
+<span class="x">    }</span>
+
+<span class="x">    public function testGetSubTotalWithPrecision()</span>
+<span class="x">    {</span>
+<span class="x">        Phake::when($this-&gt;item1)-&gt;getPrice()-&gt;thenReturn(100);</span>
+<span class="x">        Phake::when($this-&gt;item2)-&gt;getPrice()-&gt;thenReturn(-81.4);</span>
+<span class="x">        Phake::when($this-&gt;item3)-&gt;getPrice()-&gt;thenReturn(20);</span>
+
+<span class="x">        $this-&gt;assertEquals(38.6, $this-&gt;shoppingCart-&gt;getSubTotal());</span>
+<span class="x">    }</span>
+<span class="x">}</span>
+</pre></div>
+</div>
+<p>If you rerun this test you will get the same results shown in before.
+The test itself is much simpler though there is much less unnecessary duplication. The reason this works is because
+the stub map I was referring to in <a class="reference internal" href="#how-phake-when-works"><em>How Phake::when() Works</em></a> isn&#8217;t really a map at all. It is more of
+a stack in reality. When a new matcher and answer pair is added to a mock object, it is added to the top of the stack.
+Then whenever a stub method is called, the stack is checked from the top down to find the first matcher that matches
+the method that was called. So, when I created the additional stubs for the various <tt class="docutils literal"><span class="pre">Item::getPrice()</span></tt>
+calls, I was just adding additional matchers to the top of the stack that would always get matched first by virtue
+of the parameters all being the same.</p>
+</div>
+<div class="section" id="stubbing-multiple-calls">
+<span id="id2"></span><h2>Stubbing Multiple Calls<a class="headerlink" href="#stubbing-multiple-calls" title="Permalink to this headline">¶</a></h2>
+<p>Another benefit of the stub mapping in Phake is that it allows you to very easily stub multiple calls to the same
+method that use different parameters. In my shopping cart I have decided to add some functionality that will allow
+me to easily add multiple products that are a part of a group to the shopping cart. To facilitate this I have decided
+to create a new class called <tt class="docutils literal"><span class="pre">ItemGroup</span></tt>. The <tt class="docutils literal"><span class="pre">ItemGroup</span></tt> object will be
+constructed with an array of <tt class="docutils literal"><span class="pre">Items</span></tt>. It will have a method on the class that will add all of
+the items in the group to the given cart and then the total price of items in the cart will be returned.</p>
+<p>It should be noted that earlier I decided to make a small change to the <tt class="docutils literal"><span class="pre">ShoppingCart::addItem()</span></tt>
+method to have it return the total price of items in the cart. I figured that this would be nice api level functionality
+to make working with the system a little bit easier. I would like to take advantage of that change with this code.
+Here&#8217;s a stub of the functionality I am considering.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">/**</span>
+<span class="x"> * A group of items that can be added to a cart all at the same time</span>
+<span class="x"> */</span>
+<span class="x">class ItemGroup</span>
+<span class="x">{</span>
+<span class="x">    /**</span>
+<span class="x">     * @param array $items an array of Item objects</span>
+<span class="x">     */</span>
+<span class="x">    public function __construct(array $items)</span>
+<span class="x">    {</span>
+<span class="x">    }</span>
+
+<span class="x">    /**</span>
+<span class="x">     * @param ShoppingCart $cart</span>
+<span class="x">     * @return money The new total value of the cart</span>
+<span class="x">     */</span>
+<span class="x">    public function addItemsToCart(ShoppingCart $cart)</span>
+<span class="x">    {</span>
+<span class="x">    }</span>
+<span class="x">}</span>
+</pre></div>
+</div>
+<p>The next test I am going to write now is going to be focusing on this new <tt class="docutils literal"><span class="pre">ItemGroup::addItemsToCart()</span></tt>
+method. In my test&#8217;s <tt class="docutils literal"><span class="pre">setUp()</span></tt> method I&#8217;ll create a new instance of <tt class="docutils literal"><span class="pre">ItemGroup</span></tt>
+which will require one or more <tt class="docutils literal"><span class="pre">Item</span></tt> implementations. I&#8217;ll use mocks for those. Then the actual
+test case I am going to start with will be a test to assert that <tt class="docutils literal"><span class="pre">ItemGroup::addItemsToCart()</span></tt>
+returns the new shopping cart value. I already know that I am going to need to get this value by looking at the
+last return value from calls to <tt class="docutils literal"><span class="pre">ShoppingCart::addItem()</span></tt>. To allow for checking this I will mock
+<tt class="docutils literal"><span class="pre">ShoppingCart</span></tt> and create three stubs for <tt class="docutils literal"><span class="pre">ShoppingCart::addItem()</span></tt>. Each
+stub will be for a call with a different <tt class="docutils literal"><span class="pre">Item</span></tt>.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">class ItemGroupTest extends PHPUnit_Framework_TestCase</span>
+<span class="x">{</span>
+<span class="x">    private $itemGroup;</span>
+
+<span class="x">    private $item1;</span>
+
+<span class="x">    private $item2;</span>
+
+<span class="x">    private $item3;</span>
+
+<span class="x">    public function setUp()</span>
+<span class="x">    {</span>
+<span class="x">        $this-&gt;item1 = Phake::mock(&#39;Item&#39;);</span>
+<span class="x">        $this-&gt;item2 = Phake::mock(&#39;Item&#39;);</span>
+<span class="x">        $this-&gt;item3 = Phake::mock(&#39;Item&#39;);</span>
+
+<span class="x">        $this-&gt;itemGroup = new ItemGroup(array($this-&gt;item1, $this-&gt;item2, $this-&gt;item3));</span>
+<span class="x">    }</span>
+
+<span class="x">    public function testAddItemsToCart()</span>
+<span class="x">    {</span>
+<span class="x">        $cart = Phake::mock(&#39;ShoppingCart&#39;);</span>
+<span class="x">        Phake::when($cart)-&gt;addItem($this-&gt;item1)-&gt;thenReturn(10);</span>
+<span class="x">        Phake::when($cart)-&gt;addItem($this-&gt;item2)-&gt;thenReturn(20);</span>
+<span class="x">        Phake::when($cart)-&gt;addItem($this-&gt;item3)-&gt;thenReturn(30);</span>
+
+<span class="x">        $totalCost = $this-&gt;itemGroup-&gt;addItemsToCart($cart);</span>
+<span class="x">        $this-&gt;assertEquals(30, $totalCost);</span>
+<span class="x">    }</span>
+<span class="x">}</span>
+</pre></div>
+</div>
+<p>In this example the <tt class="docutils literal"><span class="pre">ShoppingCart::addItem()</span></tt> method is being stubbed three times. Each time it
+is being stubbed with a different parameter being passed to <tt class="docutils literal"><span class="pre">addItem()</span></tt>. This a good example of
+how parameters are also checked whenever Phake looks at a mock object&#8217;s stub map for answers. The default behavior
+of argument matching is again a loose equality check. Similar to how you would use the double equals operator in PHP.
+The other options for argument matching are discussed further in <a class="reference external" href="method-parameter-matchers.html#method-parameter-matchers-section"><em>Method Parameter Matchers</em></a>.</p>
+</div>
+<div class="section" id="stubbing-consecutive-calls">
+<h2>Stubbing Consecutive Calls<a class="headerlink" href="#stubbing-consecutive-calls" title="Permalink to this headline">¶</a></h2>
+<p>The previous test was a great example for how you can make multiple stubs for a single method however in reality it
+is not the best way for that particular test to be written. What if the <tt class="docutils literal"><span class="pre">Item</span></tt> objects in an
+<tt class="docutils literal"><span class="pre">ItemGroup</span></tt> aren&#8217;t stored in the order they were passed in? I am needlessly binding my test
+to the order objects are stored. Phake provides the ability to map multiple answers to the same stub. This is done
+simply by chaining the answers together. I could rewrite the test from the previous chapter to utilize this feature
+of Phake.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">class ItemGroupTest extends PHPUnit_Framework_TestCase</span>
+<span class="x">{</span>
+<span class="x">    private $itemGroup;</span>
+
+<span class="x">    private $item1;</span>
+
+<span class="x">    private $item2;</span>
+
+<span class="x">    private $item3;</span>
+
+<span class="x">    public function setUp()</span>
+<span class="x">    {</span>
+<span class="x">        $this-&gt;item1 = Phake::mock(&#39;Item&#39;);</span>
+<span class="x">        $this-&gt;item2 = Phake::mock(&#39;Item&#39;);</span>
+<span class="x">        $this-&gt;item3 = Phake::mock(&#39;Item&#39;);</span>
+
+<span class="x">        $this-&gt;itemGroup = new ItemGroup(array($this-&gt;item1, $this-&gt;item2, $this-&gt;item3));</span>
+<span class="x">    }</span>
+
+<span class="x">    public function testAddItemsToCart()</span>
+<span class="x">    {</span>
+<span class="x">        $cart = Phake::mock(&#39;ShoppingCart&#39;);</span>
+<span class="x">        Phake::when($cart)-&gt;addItem(Phake::anyParameters())-&gt;thenReturn(10)</span>
+<span class="x">            -&gt;thenReturn(20)</span>
+<span class="x">            -&gt;thenReturn(30);</span>
+
+<span class="x">        $totalCost = $this-&gt;itemGroup-&gt;addItemsToCart($cart);</span>
+<span class="x">        $this-&gt;assertEquals(30, $totalCost);</span>
+<span class="x">    }</span>
+<span class="x">}</span>
+</pre></div>
+</div>
+<p>You will notice a few of differences between this example and the example in <a class="reference internal" href="#stubbing-multiple-calls"><em>Stubbing Multiple Calls</em></a>. The first
+difference is that there is only one call to <tt class="docutils literal"><span class="pre">Phake::when()</span></tt>. The second difference is that I have chained together three
+calls to <tt class="docutils literal"><span class="pre">thenReturn()</span></tt>. The third difference is instead of passing one of my mock Item
+objects I have passed the result of the <tt class="docutils literal"><span class="pre">Phake::anyParameters()</span></tt> method. This is a special argument
+matcher in Phake that essentially says match any call to the method regardless of the number of parameters or the
+value of those parameters.</p>
+<p>So, this single call to <tt class="docutils literal"><span class="pre">Phake::when()</span></tt> is saying: &#8220;Whenever a call to <tt class="docutils literal"><span class="pre">$cart-&gt;addItem()</span></tt>
+is made, regardless of the parameters, return 10 for the first call, 20 for the second call, and 30 for the third
+call.&#8221; If you are using consecutive call stubbing and you call the method more times than you have answers set, the
+last answer will continue to be returned. In this example, if <tt class="docutils literal"><span class="pre">$cart-&gt;addItem()</span></tt> were called a fourth
+time, then 30 would be returned again.</p>
+</div>
+<div class="section" id="stubbing-reference-parameters">
+<h2>Stubbing Reference Parameters<a class="headerlink" href="#stubbing-reference-parameters" title="Permalink to this headline">¶</a></h2>
+<p>Occasionally you may run into code that utilizes reference parameters to provide additional output
+from a method. This is not an uncommon thing to run into with legacy code. Phake provides a custom
+parameter matcher (these are discussed further in <a class="reference external" href="method-parameter-matchers.html#method-parameter-matchers-section"><em>Method Parameter Matchers</em></a>)
+that allows you to set reference parameters. It can be accessed using <tt class="docutils literal"><span class="pre">Phake::setReference()</span></tt>.
+The only parameter to this matcher is the value you would like to set the reference parameter
+to provided all other parameters match.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">interface IValidator</span>
+<span class="x">{</span>
+<span class="x">    /**</span>
+<span class="x">     * @parm array $data Data to validate</span>
+<span class="x">     * @parm array &amp;$errors contains all validation errors if the data is not valid</span>
+<span class="x">     * @return boolean True when the data is valid</span>
+<span class="x">     */</span>
+<span class="x">    public function validate(array $data, array &amp;$errors);</span>
+<span class="x">}</span>
+
+<span class="x">class ValidationLogger implements IValidator</span>
+<span class="x">{</span>
+<span class="x">    private $validator;</span>
+<span class="x">    private $log;</span>
+
+<span class="x">    public function __construct(IValidator $validator, Logger $log)</span>
+<span class="x">    {</span>
+<span class="x">        $this-&gt;validator = $validator;</span>
+<span class="x">        $this-&gt;log = $log;</span>
+<span class="x">    }</span>
+
+<span class="x">    public function validate(array $data, array &amp;$errors)</span>
+<span class="x">    {</span>
+<span class="x">        if (!$this-&gt;validator-&gt;validate($data, $errors))</span>
+<span class="x">        {</span>
+<span class="x">            foreach ($errors as $error)</span>
+<span class="x">            {</span>
+<span class="x">                $this-&gt;log-&gt;info(&quot;Validation Error: {$error}&quot;);</span>
+<span class="x">            }</span>
+
+<span class="x">            return FALSE;</span>
+<span class="x">        }</span>
+
+<span class="x">        return TRUE;</span>
+<span class="x">    }</span>
+<span class="x">}</span>
+
+<span class="x">class ValidationLoggerTest extends PHPUnit_Framework_TestCase</span>
+<span class="x">{</span>
+<span class="x">    public function testValidate()</span>
+<span class="x">    {</span>
+<span class="x">        //Mock the dependencies</span>
+<span class="x">        $validator = Phake::mock(&#39;IValidator&#39;);</span>
+<span class="x">        $log = Phake::mock(&#39;Logger&#39;);</span>
+<span class="x">        $data = array(&#39;data1&#39; =&gt; &#39;value&#39;);</span>
+<span class="x">        $expectedErrors = array(&#39;data1 is not valid&#39;);</span>
+
+<span class="x">        //Setup the stubs (Notice the Phake::setReference()</span>
+<span class="x">        Phake::when($validator)-&gt;validate($data, Phake::setReference($expectedErrors))-&gt;thenReturn(FALSE);</span>
+
+<span class="x">        //Instantiate the SUT</span>
+<span class="x">        $validationLogger = new ValidationLogger($validator, $log);</span>
+
+<span class="x">        //verify the validation is false and the message is logged</span>
+<span class="x">        $errors = array();</span>
+<span class="x">        $this-&gt;assertFalse($validationLogger-&gt;validate($data, $errors));</span>
+<span class="x">        Phake::verify($log)-&gt;info(&#39;Validation Error: data1 is not valid&#39;);</span>
+<span class="x">    }</span>
+<span class="x">}</span>
+</pre></div>
+</div>
+<p>In the example above, I am testing a new class I have created called <tt class="docutils literal"><span class="pre">ValidationLogger</span></tt>.
+It is a decorator for other implementations of <tt class="docutils literal"><span class="pre">IValidator</span></tt> that allows adding
+logging to any other validator. The <tt class="docutils literal"><span class="pre">IValidator::validate()</span></tt> method will always
+return an array of errors into the second parameter (a reference parameter) provided to the method.
+These errors are what my logger is responsible for logging. So in order for my test to work properly,
+I will need to be able to set that second parameter as a part of my stubbing call.</p>
+<p>In the call to <tt class="docutils literal"><span class="pre">Phake::when($validator)-&gt;validate()</span></tt> I have passed a call to
+<tt class="docutils literal"><span class="pre">Phake::setReference()</span></tt> as the second parameter. This is causing the mock
+implementation of <tt class="docutils literal"><span class="pre">IValidator</span></tt> to set <tt class="docutils literal"><span class="pre">$errors</span></tt> in
+<tt class="docutils literal"><span class="pre">ValidationLogger::validate()</span></tt> to the array specified by <tt class="docutils literal"><span class="pre">$expectedErrors</span></tt>.
+This allows me to quickly and easily validate that I am actually logging the errors returned back
+in the reference parameter.</p>
+<p>By default <tt class="docutils literal"><span class="pre">Phake::setReference()</span></tt> will always return true regardless of the
+parameter initially passed in. If you would like to only set a reference parameter when that reference
+parameter was passed in as a certain value you can use the <tt class="docutils literal"><span class="pre">when()</span></tt> modifier.
+This takes a single parameter matcher as an argument. Below,
+you will see that the test has been modified to call <tt class="docutils literal"><span class="pre">when()</span></tt> on the result
+of <cite>Phake::setReference()`</cite>. This modification will cause the reference parameter
+to be set only if the $errors parameter passed to <tt class="docutils literal"><span class="pre">IValidator::validate()</span></tt>
+is initially passed as an empty array.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">class ValidationLoggerTest extends PHPUnit_Framework_TestCase</span>
+<span class="x">{</span>
+<span class="x">    public function testValidate()</span>
+<span class="x">    {</span>
+<span class="x">        //Mock the dependencies</span>
+<span class="x">        $validator = Phake::mock(&#39;IValidator&#39;);</span>
+<span class="x">        $log = Phake::mock(&#39;Logger&#39;);</span>
+<span class="x">        $data = array(&#39;data1&#39; =&gt; &#39;value&#39;);</span>
+<span class="x">        $expectedErrors = array(&#39;data1 is not valid&#39;);</span>
+
+<span class="x">        //Setup the stubs (Notice the Phake::setReference()</span>
+<span class="x">        Phake::when($validator)-&gt;validate($data, Phake::setReference($expectedErrors)-&gt;when(array())-&gt;thenReturn(FALSE);</span>
+
+<span class="x">        //Instantiate the SUT</span>
+<span class="x">        $validationLogger = new ValidationLogger($validator, $log);</span>
+
+<span class="x">        //verify the validation is false and the message is logged</span>
+<span class="x">        $errors = array();</span>
+<span class="x">        $this-&gt;assertFalse($validationLogger-&gt;validate($data, $errors));</span>
+<span class="x">        Phake::verify($log)-&gt;info(&#39;Validation Error: data1 is not valid&#39;);</span>
+<span class="x">    }</span>
+<span class="x">}</span>
+</pre></div>
+</div>
+<p>Please note, when you are using <tt class="docutils literal"><span class="pre">Phake::setReference()</span></tt> you still must provide
+an answer for the stub. If you use this function and your reference parameter is never changed,
+that is generally the most common reason.</p>
+</div>
+<div class="section" id="partial-mocks">
+<span id="id3"></span><h2>Partial Mocks<a class="headerlink" href="#partial-mocks" title="Permalink to this headline">¶</a></h2>
+<p>When testing legacy code, if you find that the majority of the methods in the mock are using the <tt class="docutils literal"><span class="pre">thenCallParent()</span></tt>
+answer, you may find it easier to just use a partial mock in Phake. Phake partial mocks also allow you to call the
+actual constructor of the class being mocked. They are created using <tt class="docutils literal"><span class="pre">Phake::partialMock()</span></tt>. Like <tt class="docutils literal"><span class="pre">Phake::mock()</span></tt>,
+the first parameter is the name of the class that you are mocking. However, you can pass additional parameters that
+will then be passed as the respective parameters to that class’ constructor. The other notable feature of a partial
+mock in Phake is that its default answer is to pass the call through to the parent as if you were using
+<tt class="docutils literal"><span class="pre">thenCallParent()</span></tt>.</p>
+<p>Consider the following class that has a method that simply returns the value passed into the constructor.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">class MyClass</span>
+<span class="x">{</span>
+<span class="x">    private $value;</span>
+
+<span class="x">    public __construct($value)</span>
+<span class="x">    {</span>
+<span class="x">        $this-&gt;value = $value;</span>
+<span class="x">    }</span>
+
+<span class="x">    public function foo()</span>
+<span class="x">    {</span>
+<span class="x">        return $this-&gt;value;</span>
+<span class="x">    }</span>
+<span class="x">}</span>
+</pre></div>
+</div>
+<p>Using <tt class="docutils literal"><span class="pre">Phake::partialMock()</span></tt> you can instantiate a mock object that will allow this object to function
+as designed while still allowing verification as well as selective stubbing of certain calls.
+Below is an example that shows the usage of <tt class="docutils literal"><span class="pre">Phake::partialMock()</span></tt>.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">class MyClassTest extends PHPUnit_Framework_TestCase</span>
+<span class="x">{</span>
+<span class="x">    public function testCallingParent()</span>
+<span class="x">    {</span>
+<span class="x">        $mock = Phake::partialMock(&#39;MyClass&#39;, 42);</span>
+
+<span class="x">        $this-&gt;assertEquals(42, $mock-&gt;foo());</span>
+<span class="x">    }</span>
+<span class="x">}</span>
+</pre></div>
+</div>
+<p>Again, partial mocks should not be used when you are testing new code. If you find yourself using them be sure to
+inspect your design to make sure that the class you are creating a partial mock for is not doing too much.</p>
+</div>
+<div class="section" id="setting-default-stubs">
+<h2>Setting Default Stubs<a class="headerlink" href="#setting-default-stubs" title="Permalink to this headline">¶</a></h2>
+<p>You can also change the default stubbing for mocks created with <tt class="docutils literal"><span class="pre">Phake::mock()</span></tt>. This is done by using the second
+parameter to <tt class="docutils literal"><span class="pre">Phake::mock()</span></tt> in conjunction with the <tt class="docutils literal"><span class="pre">Phake::ifUnstubbed()</span></tt> method. The second parameter to
+<tt class="docutils literal"><span class="pre">Phake::mock()</span></tt> is reserved for configuring the behavior of an individual mock. <tt class="docutils literal"><span class="pre">Phake::ifUnstubbed()</span></tt> allows you
+to specify any of the matchers mentioned above as the default answer if any method invocation is not explicitly
+stubbed. If this configuration directive is not provided then the method will return NULL by default. An example of
+this can be seen below.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">class MyClassTest extends PHPUnit_Framework_TestCase</span>
+<span class="x">{</span>
+<span class="x">    public function testDefaultStubs()</span>
+<span class="x">    {</span>
+<span class="x">        $mock = Phake::mock(&#39;MyClass&#39;, Phake::ifUnstubbed()-&gt;thenReturn(42));</span>
+
+<span class="x">        $this-&gt;assertEquals(42, $mock-&gt;foo());</span>
+<span class="x">    }</span>
+<span class="x">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="stubbing-magic-methods">
+<h2>Stubbing Magic Methods<a class="headerlink" href="#stubbing-magic-methods" title="Permalink to this headline">¶</a></h2>
+<p>The verification of <tt class="docutils literal"><span class="pre">__call()</span></tt> was discussed in the previous chapter. Magic methods can also be stubbed in much the same
+way. If you want to verify a particular invocation of <tt class="docutils literal"><span class="pre">__call()</span></tt> you can stub the actual method call by mocking the
+method passed in as the first parameter.</p>
+<p>Consider the following class.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">class MagicClass</span>
+<span class="x">{</span>
+<span class="x">    public function __call($method, $args)</span>
+<span class="x">    {</span>
+<span class="x">        return &#39;__call&#39;;</span>
+<span class="x">    }</span>
+<span class="x">}</span>
+</pre></div>
+</div>
+<p>You could stub an invocation of the <tt class="docutils literal"><span class="pre">__call()</span></tt> method through a userspace call to <tt class="docutils literal"><span class="pre">magicCall()</span></tt> with the following code.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">class MagicClassTest extends PHPUnit_Framework_TestCase</span>
+<span class="x">{</span>
+<span class="x">    public function testMagicCall()</span>
+<span class="x">    {</span>
+<span class="x">        $mock = Phake::mock(&#39;MagicClass&#39;);</span>
+
+<span class="x">        Phake::when($mock)-&gt;magicCall()-&gt;thenReturn(42);</span>
+
+<span class="x">        $this-&gt;assertEquals(42, $mock-&gt;magicCall());</span>
+<span class="x">    }</span>
+<span class="x">}</span>
+</pre></div>
+</div>
+<p>If for any reason you need to explicitly stub calls to <tt class="docutils literal"><span class="pre">__call()</span></tt> then you can use <tt class="docutils literal"><span class="pre">Phake::whenCallMethodWith()</span></tt>.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">class MagicClassTest extends PHPUnit_Framework_TestCase</span>
+<span class="x">{</span>
+<span class="x">    public function testMagicCall()</span>
+<span class="x">    {</span>
+<span class="x">        $mock = Phake::mock(&#39;MagicClass&#39;);</span>
+
+<span class="x">        Phake::whenCallMethodWith(&#39;magicCall&#39;)-&gt;isCalledOn($mock)-&gt;thenReturn(42);</span>
+
+<span class="x">        $this-&gt;assertEquals(42, $mock-&gt;magicCall());</span>
+<span class="x">    }</span>
+<span class="x">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="#">Method Stubbing</a><ul>
+<li><a class="reference external" href="#how-phake-when-works">How Phake::when() Works</a><ul>
+<li><a class="reference external" href="#why-do-phake-stubs-return-null-by-default">Why do Phake stubs return Null by default?</a></li>
+</ul>
+</li>
+<li><a class="reference external" href="#overwriting-existing-stubs">Overwriting Existing Stubs</a></li>
+<li><a class="reference external" href="#stubbing-multiple-calls">Stubbing Multiple Calls</a></li>
+<li><a class="reference external" href="#stubbing-consecutive-calls">Stubbing Consecutive Calls</a></li>
+<li><a class="reference external" href="#stubbing-reference-parameters">Stubbing Reference Parameters</a></li>
+<li><a class="reference external" href="#partial-mocks">Partial Mocks</a></li>
+<li><a class="reference external" href="#setting-default-stubs">Setting Default Stubs</a></li>
+<li><a class="reference external" href="#stubbing-magic-methods">Stubbing Magic Methods</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="getting-started.html"
+                                  title="previous chapter">Getting Started</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="method-verification.html"
+                                  title="next chapter">Method Verification</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/method-stubbing.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="method-verification.html" title="Method Verification"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="getting-started.html" title="Getting Started"
+             >previous</a> |</li>
+        <li><a href="index.html">Phake - PHP Mocking Framework v1.0.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2014, Mike Lively &lt;m@digitalsandwich.com&gt;.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.6.
+    </div>
+  </body>
+</html>

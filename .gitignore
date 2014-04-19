@@ -6,3 +6,4 @@ nbproject
 phpunit
 composer.lock
 vendor
+rtd-docs/_build
