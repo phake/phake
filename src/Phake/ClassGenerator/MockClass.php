@@ -309,21 +309,21 @@ class {$newClassName} {$extends}
         $methodDef = "
 	{$modifiers} function {$reference}{$method->getName()}({$this->generateMethodParameters($method)})
 	{
-		\$args = array();
+		\$__PHAKE_args = array();
 		{$this->copyMethodParameters($method)}
 
-        \$info = Phake::getInfo({$context});
-		if (\$info === null) {
+        \$__PHAKE_info = Phake::getInfo({$context});
+		if (\$__PHAKE_info === null) {
 		    return null;
 		}
 
-		\$funcArgs = func_get_args();
-		\$answer = \$info->getHandlerChain()->invoke({$context}, '{$method->getName()}', \$funcArgs, \$args);
+		\$__PHAKE_funcArgs = func_get_args();
+		\$__PHAKE_answer = \$__PHAKE_info->getHandlerChain()->invoke({$context}, '{$method->getName()}', \$__PHAKE_funcArgs, \$__PHAKE_args);
 
-	    \$callback = \$answer->getAnswerCallback({$context}, '{$method->getName()}');
-	    \$result = call_user_func_array(\$callback, \$args);
-	    \$answer->processAnswer(\$result);
-	    return \$result;
+	    \$__PHAKE_callback = \$__PHAKE_answer->getAnswerCallback({$context}, '{$method->getName()}');
+	    \$__PHAKE_result = call_user_func_array(\$__PHAKE_callback, \$__PHAKE_args);
+	    \$__PHAKE_answer->processAnswer(\$__PHAKE_result);
+	    return \$__PHAKE_result;
 	}
 ";
 
@@ -356,15 +356,15 @@ class {$newClassName} {$extends}
      */
     protected function copyMethodParameters(ReflectionMethod $method)
     {
-        $copies = "\$numArgs = count(func_get_args());\n\t\t";
+        $copies = "\$__PHAKE_numArgs = count(func_get_args());\n\t\t";
         foreach ($method->getParameters() as $parameter) {
             $pos = $parameter->getPosition();
-            $copies .= "if ({$pos} < \$numArgs) \$args[] =& \$parm{$pos};\n\t\t";
+            $copies .= "if ({$pos} < \$__PHAKE_numArgs) \$__PHAKE_args[] =& \${$parameter->getName()};\n\t\t";
         }
 
-        $copies .= "for (\$i = " . count(
+        $copies .= "for (\$__PHAKE_i = " . count(
             $method->getParameters()
-        ) . "; \$i < \$numArgs; \$i++) \$args[] = func_get_arg(\$i);\n\t\t";
+        ) . "; \$__PHAKE_i < \$__PHAKE_numArgs; \$__PHAKE_i++) \$__PHAKE_args[] = func_get_arg(\$__PHAKE_i);\n\t\t";
 
         return $copies;
     }
@@ -395,7 +395,7 @@ class {$newClassName} {$extends}
             $default = ' = null';
         }
 
-        return $type . ($parameter->isPassedByReference() ? '&' : '') . '$parm' . $parameter->getPosition() . $default;
+        return $type . ($parameter->isPassedByReference() ? '&' : '') . '$' . $parameter->getName() . $default;
     }
 
     /**
