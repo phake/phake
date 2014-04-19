@@ -135,21 +135,7 @@ class Phake_Matchers_FactoryTest extends PHPUnit_Framework_TestCase
         $this->factory->createMatcher($matcher1, $matcher2);
 
         $this->assertNull($matcher2->getNextMatcher());
-        Phake::verify($matcher1)->setNextMatcher(Phake::capture($checkNextMatcher));
-        $this->assertEquals($matcher2, $checkNextMatcher);
-    }
-
-    public function testMatcherSetsNextMatcherInChain2()
-    {
-        $this->markTestIncomplete('This fails...but shouldn\'t');
-        $matcher1 = Phake::mock('Phake_Matchers_IChainableArgumentMatcher');
-        $matcher2 = Phake::mock('Phake_Matchers_IChainableArgumentMatcher');
-        /* @var $newMatcher Phake_Matchers_IChainableArgumentMatcher */
-        $this->factory->createMatcher($matcher2);
-        $this->factory->createMatcher($matcher1, $matcher2);
-
-        $this->assertNull($matcher2->getNextMatcher());
-        Phake::verify($matcher1)->setNextMatcher($matcher2);
+        Phake::verify($matcher1)->setNextMatcher(Phake::equalTo($matcher2));
     }
 
     public function testMatcherChainReturnsAMatcherChain()
