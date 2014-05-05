@@ -564,10 +564,21 @@ class Phake
      */
     public static function assertValidMock($mock)
     {
-        if (!$mock instanceof Phake_IMock && !is_a($mock, 'Phake_IMock', true))
+        if ($mock instanceof Phake_IMock)
         {
-            throw new InvalidArgumentException("Received '" . (is_object($mock) ? get_class($mock) : $mock) . "' Expected an instance of Phake_IMock or the name of a class that implements Phake_IMock");
+            return;
         }
+
+        if (is_string($mock) && class_exists($mock, false))
+        {
+            $reflClass = new ReflectionClass($mock);
+            if ($reflClass->implementsInterface('Phake_IMock'))
+            {
+                return;
+            }
+        }
+
+        throw new InvalidArgumentException("Received '" . (is_object($mock) ? get_class($mock) : $mock) . "' Expected an instance of Phake_IMock or the name of a class that implements Phake_IMock");
     }
 
     /**
