@@ -228,3 +228,57 @@ You could mock an invocation of the `__call()` method through a userspace call t
     }
 
 If for any reason you need to explicitly verify calls to ``__call()`` then you can use ``Phake::verifyCallMethodWith()``.
+
+Verifying Static Methods
+========================
+Using Phake you can verify polymorphic calls to static methods using ``Phake::verifyStatic()``. It is important to note
+that you cannot verify ALL calls. In order for Phake to understand that a method has been called, it needs to be able to
+intercept the call so that it can record it. Consider the following class
+
+.. code-block:: php
+
+    class StaticCaller
+    {
+        public function callStaticMethod()
+        {
+            Foo::staticMethod();
+        }
+    }
+
+You will not be able to verify the call to Foo::staticMethod() because the call was made directly on the class. This
+prevents Phake from seeing that the call was made. However, say you have an abstract class that has an abstract static
+method.
+
+.. code-block:: php
+
+    abstract class StaticFactory
+    {
+        abstract protected static function factory();
+
+        public static function getInstance()
+        {
+            return static::factory();
+        }
+    }
+
+In this case, because the ``static::`` keyword will cause the called class to be determined at runtime, you will be able
+to test that the factory call was made.
+
+.. code-block:: php
+
+    class StaticFactoryTest extend PHPUnit_Framework_TestCase
+    {
+        public function testGetInstance()
+        {
+            $factory = Phake::mock('StaticFactory');
+
+            $factory::getInstance();
+
+            Phake::verifyStatic($factory)->factory();
+        }
+    }
+
+It is important to note that if self::factory() was called the above test would not work, because again the class is
+determined at compile time with the self:: keyword. The key thing to remember with testing statics using Phake is that
+you can only test statics that leverage Late Static Binding:
+http://www.php.net/manual/en/language.oop5.late-static-bindings.php
