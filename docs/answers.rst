@@ -53,7 +53,7 @@ In order to test this we must mock ``foo()`` so that it throws an exception when
             $data = Phake::mock('MyData');
             $processor = Phake::mock('MyDataProcessor');
 
-            Phake::when($processor)->process($data)->thenThrow(new Exception('My error message!');
+            Phake::when($processor)->process($data)->thenThrow(new Exception('My error message!'));
 
             $sut = new MyClass($logger);
             $sut->processSomeData($processor, $data);
