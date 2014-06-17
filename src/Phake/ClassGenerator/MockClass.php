@@ -216,7 +216,10 @@ class {$newClassName} {$extends}
         array $constructorArgs = null
     ) {
         try {
-            $mockObject = unserialize(sprintf('O:%d:"%s":0:{}', strlen($newClassName), $newClassName));
+            $mockObject = @unserialize(sprintf('O:%d:"%s":0:{}', strlen($newClassName), $newClassName));
+            if ($mockObject === false) {
+                $mockObject = @unserialize(sprintf('C:%d:"%s":0:{}', strlen($newClassName), $newClassName));
+            }
             if (!$mockObject instanceof $newClassName) {
                 throw new \Exception('Unserialization failure: ' . $newClassName);
             }
