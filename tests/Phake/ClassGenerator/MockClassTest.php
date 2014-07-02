@@ -469,6 +469,25 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
         unset($mock);
     }
 
+    public function testSerializableMock()
+    {
+        $newClassName = __CLASS__ . '_TestClass' . uniqid();
+        $mockedClass  = 'PhakeTest_SerializableClass';
+        $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
+
+        /** @var $recorder Phake_CallRecorder_Recorder */
+        $recorder = $this->getMock('Phake_CallRecorder_Recorder');
+        $mapper   = new Phake_Stubber_StubMapper();
+        $answer   = new Phake_Stubber_Answers_ParentDelegate();
+
+        try {
+            $mock = $this->classGen->instantiate($newClassName, $recorder, $mapper, $answer);
+            $this->assertInstanceOf('PhakeTest_SerializableClass', $mock);
+        } catch(\Exception $e) {
+            $this->fail("Can't instantiate Serializable Object");
+        }
+    }
+
     public function testMocksTraversable()
     {
         $this->assertInstanceOf('Traversable', Phake::mock('Traversable'));
