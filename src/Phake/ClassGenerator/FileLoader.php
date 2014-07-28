@@ -49,11 +49,20 @@ class Phake_ClassGenerator_FileLoader implements Phake_ClassGenerator_ILoader
 {
     private $dir;
 
+    /**
+     * @param string $dir
+     */
     public function __construct($dir)
     {
         $this->dir = $dir;
     }
 
+    /**
+     * @param string $className
+     * @param string $classDef
+     *
+     * @return void
+     */
     public function loadClassByString($className, $classDef)
     {
         $file = rtrim($this->dir, '/') . '/' . $className . '.php';

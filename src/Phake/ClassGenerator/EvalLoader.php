@@ -47,6 +47,12 @@
  */
 class Phake_ClassGenerator_EvalLoader implements Phake_ClassGenerator_ILoader
 {
+    /**
+     * @param string $className
+     * @param string $classDef
+     *
+     * @return void
+     */
     public function loadClassByString($className, $classDef)
     {
         eval($classDef);

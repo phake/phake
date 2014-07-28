@@ -100,6 +100,13 @@ class PhakeTest_MockedClass
     {
 
     }
+
+    /**
+     * @return void
+     */
+    public function fooWithComment()
+    {
+    }
 }
 
 

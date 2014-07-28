@@ -544,6 +544,25 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
         Phake::verify($this->infoRegistry)->addInfo($newClassName::$__PHAKE_staticInfo);
-    }}
+	}
 
+    /**
+     * Tests the generate method of the mock class generator.
+     */
+    public function testGenerateMaintainsPhpDoc()
+    {
+        $newClassName = __CLASS__ . '_TestClass25';
+        $mockedClass  = 'PhakeTest_MockedClass';
+
+        $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
+
+        $rflClass = new ReflectionClass($newClassName);
+
+        $this->assertFalse($rflClass->getMethod("foo")->getDocComment());
+		$this->assertEquals(
+			"/**\n     * @return void\n     */",
+			$rflClass->getMethod("fooWithComment")->getDocComment()
+		);
+    }
+}
 
