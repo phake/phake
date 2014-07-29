@@ -547,7 +547,7 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 	}
 
     /**
-     * Tests the generate method of the mock class generator.
+     * Test that the generated mock has the same doc mocked class
      */
     public function testGenerateMaintainsPhpDoc()
     {
