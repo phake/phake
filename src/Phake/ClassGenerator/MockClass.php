@@ -186,6 +186,9 @@ class {$newClassName} {$extends}
 	
 	{$constructor}
 
+	/**
+	 * @return void
+	 */
 	public function __destruct() {}
 
 	{$this->generateMockedMethods($mockedClass, $interfaces)}
@@ -309,7 +312,9 @@ class {$newClassName} {$extends}
             $context = '$this';
         }
 
+        $docComment = $method->getDocComment() ?: '';
         $methodDef = "
+	{$docComment}
 	{$modifiers} function {$reference}{$method->getName()}({$this->generateMethodParameters($method)})
 	{
 		\$__PHAKE_args = array();
