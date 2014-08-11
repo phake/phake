@@ -228,6 +228,6 @@ a customer argument matcher it would look something like this.
 
             $cardGame = new MyPokerGame($dealer, $players);
 
-            Phake::verify($dealer)->deal(new 52CardDeckMatcher(), $players);
+            Phake::verify($dealer)->deal(new FiftyTwoCardDeckMatcher(), $players);
         }
     }
