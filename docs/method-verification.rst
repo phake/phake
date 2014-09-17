@@ -31,7 +31,7 @@ other PHP mocking frameworks is that you want to verify the method call AFTER th
 mocking frameworks such as the one built into PHPUnit depend on you setting the expectations of what will get called
 prior to running the system under test.
 
-Phake strives to allow you to follow the four phases of a unit test as layed out in xUnit Test Patterns: setup,
+Phake strives to allow you to follow the four phases of a unit test as laid out in xUnit Test Patterns: setup,
 exercise, verify, and teardown. The setup phase of a test using Phake for mocking will now include calls to
 ``Phake::mock()`` for each class you want to mock. The exercise portion of your code will remain the same. The verify
 section of your code will include calls to ``Phake::verify()``. The exercise and teardown phases will remain unchanged.
@@ -40,12 +40,12 @@ Verifying Method Parameters
 ===========================
 
 Verifying method parameters using Phake is very simple yet can be very flexible. There are a wealth of options for
-matching parameters that is discussed later on in :ref:`method-parameter-matchers-section`.
+matching parameters that are discussed later on in :ref:`method-parameter-matchers-section`.
 
 Verifying Multiple Invocations
 ==============================
 
-A common need for mock objects is the ability to variable multiple invocations on that object. Phake allows you to use
+A common need for mock objects is the ability to have variable multiple invocations on that object. Phake allows you to use
 ``Phake::verify()`` multiple times on the same object. A notable difference between Phake and PHPUnit’s mocking
 framework is the ability to mock multiple invocations of the same method with no regard for call sequences. The PHPUnit
 mocking test below would fail for this reason.

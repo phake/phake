@@ -59,7 +59,7 @@ Using PHPUnit Matchers
 ======================
 Phake was developed with PHPUnit in mind. It is not dependent on PHPUnit, however if PHPUnit is your testing framework
 of choice there is some special integration available. Any constraints made available by the PHPUnit framework will
-work seemlessly inside of Phake. Here is an example of how the PHPUnit constraints can be used:
+work seamlessly inside of Phake. Here is an example of how the PHPUnit constraints can be used:
 
 .. code-block:: php
 
@@ -131,7 +131,7 @@ full deck of 52 cards when the ``deal()`` call is made. It would be rather cumbe
 ``CardCollection`` implementation that I could be sure would match in an equals scenario. Such a test would look
 something like this.
 
-Please note, I do not generally advocate this type of design. I prefer a dependency injection versus instantiation. So
+Please note, I do not generally advocate this type of design. I prefer dependency injection to instantiation. So
 please remember, this is not an example of clean design, simply an example of what you can do with argument capturing.
 
 .. code-block:: php
@@ -191,8 +191,8 @@ side effect of better localizing your error. Here is the error you would see if 
     <object:PlayerCollection>)
 
 It should be noted that while it is possible to use argument capturing for stubbing with ``Phake::when()`` I would
-discourage it. When stubbing a method you should only be concerned about making sure an expected value is return and
-argument capturing in no way helps with that goal. In the worst case scenario you will have some incredibly difficult
+discourage it. When stubbing a method, you should only be concerned about making sure an expected value is returned, and
+argument capturing in no way helps with that goal. In the worst case scenario, you will have some incredibly difficult
 test failures to diagnose.
 
 Custom Parameter Matchers
