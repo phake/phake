@@ -128,6 +128,7 @@ parameters. If no value is specified then the default of one is used. The other 
 * ``Phake::times($n)`` – Where ``$n`` equals the exact number of times you expect the method to be called.
 * ``Phake::atLeast($n)`` – Where ``$n`` is the minimum number of times you expect the method to be called.
 * ``Phake::atMost($n)`` – Where ``$n`` is the most number of times you would expect the method to be called.
+* ``Phake::never()`` - Same as calling ``Phake::times(0)``.
 
 Here is an example of this in action.
 
