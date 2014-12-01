@@ -61,7 +61,7 @@ this might look something like:
             $player2 = new Player();
             $player3 = new Player();
             $player4 = new Player();
-            $players = new PlayerCollection(array($player1, $player2, $player3, $player4);
+            $players = new PlayerCollection(array($player1, $player2, $player3, $player4));
 
             $cardGame = new CardGame($dealer, $deck, $players);
             $cardGame->dealCards();
