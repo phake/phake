@@ -291,7 +291,7 @@ shows this flaw.
     }
 
 You can see that I added another test method that uses actual floats for some of the prices as opposed to round numbers.
-Now when I run my test sweet I can see the fantastic floating point issue.
+Now when I run my test suite I can see the fantastic floating point issue.
 ::
 
     $ phpunit ExampleTests/ShoppingCartTest.php
@@ -417,7 +417,7 @@ Here's a stub of the functionality I am considering.
 The next test I am going to write now is going to be focusing on this new ``ItemGroup::addItemsToCart()``
 method. In my test's ``setUp()`` method I'll create a new instance of ``ItemGroup``
 which will require one or more ``Item`` implementations. I'll use mocks for those. Then the actual
-test case I am going to start with will be a test to assert that ``ItemGroup::addItemsToCart()``
+test case I am going to start with a test to assert that ``ItemGroup::addItemsToCart()``
 returns the new shopping cart value. I already know that I am going to need to get this value by looking at the
 last return value from calls to ``ShoppingCart::addItem()``. To allow for checking this I will mock
 ``ShoppingCart`` and create three stubs for ``ShoppingCart::addItem()``. Each
@@ -468,7 +468,7 @@ Stubbing Consecutive Calls
 The previous test was a great example for how you can make multiple stubs for a single method however in reality it
 is not the best way for that particular test to be written. What if the ``Item`` objects in an
 ``ItemGroup`` aren't stored in the order they were passed in? I am needlessly binding my test
-to the order objects are stored. Phake provides the ability to map multiple answers to the same stub. This is done
+to the order in which objects are stored. Phake provides the ability to map multiple answers to the same stub. This is done
 simply by chaining the answers together. I could rewrite the test from the previous chapter to utilize this feature
 of Phake.
 
