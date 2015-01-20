@@ -194,9 +194,8 @@ verify no further interaction occurs with multiple mock objects.
 Verifying Magic Methods
 =======================
 
-Magic methods are commonly used in PHP and the need to be able to seamlessly utilize them is always necessary. Most
-magic methods can be verified using the method name just like you would any other method. The one exception to this is
-the ``__call()`` method. This method is overwritten on each mock already to allow for the fluent api that Phake
+Most magic methods can be verified using the method name just like you would any other method. The one exception to this
+is the ``__call()`` method. This method is overwritten on each mock already to allow for the fluent api that Phake
 utilizes. If you want to verify a particular invocation of ``__call()`` you can verify the actual method call by
 mocking the method passed in as the first parameter.
 

@@ -720,9 +720,10 @@ this can be seen below.
 Stubbing Magic Methods
 ----------------------
 
-The verification of ``__call()`` was discussed in the previous chapter. Magic methods can also be stubbed in much the same
-way. If you want to verify a particular invocation of ``__call()`` you can stub the actual method call by mocking the
-method passed in as the first parameter.
+Most magic methods can be stubbed using the method name just like you would any other method. The one exception to this
+is the ``__call()`` method. This method is overwritten on each mock already to allow for the fluent api that Phake
+utilizes. If you want to stub a particular invocation of ``__call()`` you can create a stub for the method you are
+targetting in the first parameter to ``__call()``.
 
 Consider the following class.
 
