@@ -119,45 +119,29 @@ cases several times where legacy code calls protected factory methods and the re
 exposed. This answer gives you a way to access that variable to ensure that the factory was called and is operating
 correctly in the context of your method that is being tested.
 
-Custom Answers
-==============
+Answer Callbacks
+================
 
 While the answers provided in Phake should be able to cover most of the scenarios you will run into when using mocks in
 your unit tests there may occasionally be times when you need more control over what is returned from your mock
-methods. When this is the case, you can use a custom answer. The easiest way to create a custom answer is by extending
-``Phake_Matchers_SingleArgumentMatcher``. This class was created to allow for easy extension of matchers that will need
-to match a single argument in a method call.
+methods. When this is the case, you can use a callback answer. These do generally increase the complexity of tests and
+you really should only use them if you won't know what you need to return until call time.
 
-When extending ``Phake_Matchers_SingleArgumentMatcher`` there are two methods that must be implemented:
- ``__toString()`` will define how your matcher is reported on in failed matches and ``matches(&$argument)`` will be
- used to determine whether or not your matcher was successful. So, we could create a custom matcher that determined if
- a value is greater than another using the following class:
+You can specify a callback answer using the thenGetReturnByLambda method. This argument takes a callback or a closure.
+The callback will be passed the same arguments as were passed to the method being stubbed. This allows you to use them
+to help determine the answer.
 
- .. code-block:: php
-
-    class IsGreaterThan extends Phake_Matchers_SingleArgumentMatcher
-    {
-        private $value;
-
-        public function __construct($value)
-        {
-            $this->value = $value;
-        }
-
-        public function __toString()
-        {
-            return '<greater than ' . $this->value . '>';
-        }
-
-        protected function matches(&$argument)
-        {
-            return $argument > $this->value;
-        }
-    }
-
-You can then use this custom matcher in your ``Phake::when()`` or ``Phake::verify()`` calls:
 
 .. code-block:: php
 
-    $mock->foo(20);
-    Phake::verify($mock)->foo(new IsGreaterThan(10));
+    class MyClassTest extends PHPUnit_Framework_TestCase
+    {
+        public function testCallback()
+        {
+            $mock = Phake::mock('MyClass');
+            Phake::when($mock)->foo()->thenGetReturnByLambda(function ($val) { return $val * 2; });
+
+            $this->assertEquals(42, $mock->foo(21));
+        }
+    }
+
