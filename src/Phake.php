@@ -103,15 +103,14 @@ class Phake
      *
      * Calls to this class will be recorded however they will still call the original functionality by default.
      *
-     * @internal param string $className class name
-     * @internal param $mixed ... the remaining arguments will be passed as constructor arguments
+     * @param string $className class name
+     * @param mixed $args,... the remaining arguments will be passed as constructor arguments
      * @return Phake_IMock
      */
-    public static function partialMock()
+    public static function partialMock($className, $args = null)
     {
-        $args      = func_get_args();
-        $className = array_shift($args);
-        $answer    = new Phake_Stubber_Answers_ParentDelegate();
+        $args = array_slice(func_get_args(), 1);
+        $answer = new Phake_Stubber_Answers_ParentDelegate();
 
         return self::getPhake()->mock(
             $className,
@@ -125,13 +124,13 @@ class Phake
     /**
      * For backwards compatibility
      *
-     * @see        Phake::partialMock()
-     * @internal   param string $className class name
-     * @internal   param $mixed ... the remaining arguments will be passed as constructor arguments
+     * @see Phake::partialMock()
+     * @param string $className class name
+     * @param mixed $args,... the remaining arguments will be passed as constructor arguments
      * @return Phake_IMock
      * @deprecated Please use Phake::partialMock() instead
      */
-    public static function partMock()
+    public static function partMock($className, $args = null)
     {
         $args = func_get_args();
         return call_user_func_array('Phake::partialMock', $args);
