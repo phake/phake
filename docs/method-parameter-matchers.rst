@@ -207,7 +207,7 @@ a customer argument matcher it would look something like this.
 
     class FiftyTwoCardDeckMatcher implements Phake_Matchers_IArgumentMatcher
     {
-        public function matches($argument)
+        public function matches(&$argument)
         {
             return ($argument instanceof CardCollection
                 && $argument->getNumberOfCards() == 52);
