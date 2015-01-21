@@ -48,8 +48,14 @@ $codeDir = dirname($testDir) . DIRECTORY_SEPARATOR . 'src';
 
 set_include_path($testDir . PATH_SEPARATOR . $codeDir . PATH_SEPARATOR . get_include_path());
 
-define('HAMCREST_LOADED', @fopen('hamcrest.php', 'r', true));
-if (HAMCREST_LOADED) include_once('hamcrest.php');
+include_once(__DIR__ . '/../vendor/autoload.php');
+
+define('HAMCREST_LOADED', interface_exists('Hamcrest_Matcher'));
+if (HAMCREST_LOADED)
+{
+	set_include_path(__DIR__ . '/../vendor/hamcrest/hamcrest-php/hamcrest/' . PATH_SEPARATOR . get_include_path());
+	include_once('Hamcrest.php');
+}
 
 include_once('Phake.php');
 Phake::setClient(Phake::CLIENT_DEFAULT);
