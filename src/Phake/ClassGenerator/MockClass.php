@@ -230,8 +230,9 @@ class {$newClassName} {$extends}
 	{
 		\$args = array();
 		{$this->copyMethodParameters($method)}
-		
-		\$answer = \$this->__PHAKE_handlerChain->invoke(\$this, '{$method->getName()}', func_get_args(), \$args);
+
+		\$funcGetArgs = func_get_args();
+		\$answer = \$this->__PHAKE_handlerChain->invoke(\$this, '{$method->getName()}', \$funcGetArgs, \$args);
 		
 		if (\$answer instanceof Phake_Stubber_Answers_IDelegator)
 		{
@@ -276,7 +277,7 @@ class {$newClassName} {$extends}
 	 */
 	protected function copyMethodParameters(ReflectionMethod $method)
 	{
-		$copies = "\$numArgs = count(func_get_args());\n\t\t";
+		$copies = "\$funcGetArgs = func_get_args();\n\t\t\$numArgs = count(\$funcGetArgs);\n\t\t";
 		foreach ($method->getParameters() as $parameter)
 		{
 			$pos = $parameter->getPosition();
