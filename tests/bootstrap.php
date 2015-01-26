@@ -49,9 +49,9 @@ $codeDir = dirname($testDir) . DIRECTORY_SEPARATOR . 'src';
 set_include_path($testDir . PATH_SEPARATOR . $codeDir . PATH_SEPARATOR . get_include_path());
 
 
-if (file_exists(__DIR__ . '/../vendor/autoload.php'))
+if (file_exists($testDir . '/../vendor/autoload.php'))
 {
-	include_once(__DIR__ . '/../vendor/autoload.php');
+	include_once($testDir . '/../vendor/autoload.php');
 	define('HAMCREST_LOADED', interface_exists('Hamcrest_Matcher'));
 }
 else
@@ -61,7 +61,7 @@ else
 
 if (HAMCREST_LOADED)
 {
-	set_include_path(__DIR__ . '/../vendor/hamcrest/hamcrest-php/hamcrest/' . PATH_SEPARATOR . get_include_path());
+	set_include_path($testDir . '/../vendor/hamcrest/hamcrest-php/hamcrest/' . PATH_SEPARATOR . get_include_path());
 	include_once('Hamcrest.php');
 }
 
