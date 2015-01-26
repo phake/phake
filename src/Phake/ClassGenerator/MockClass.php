@@ -267,12 +267,14 @@ class {$newClassName} {$extends}
 			return true;
 		}
 
-		/* @var ReflectionClass $interface */
-		foreach ($reflectionClass->getInterfaces() as $interface) {
-			if ($interface->getConstructor() !== null) {
-				return true;
-			}
-		}
+        /* @var ReflectionClass $interface */
+        foreach ($reflectionClass->getInterfaces() as $interface)
+        {
+            if ($interface->getConstructor() !== null || $interface->hasMethod('__construct'))
+            {
+                return true;
+            }
+        }
 
 		$parent = $reflectionClass->getParentClass();
 		if (!empty($parent)) {
