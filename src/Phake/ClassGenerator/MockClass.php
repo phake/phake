@@ -316,7 +316,7 @@ class {$newClassName} {$extends}
         /* @var ReflectionClass $interface */
         foreach ($reflectionClass->getInterfaces() as $interface)
         {
-            if ($interface->getConstructor() !== null)
+            if ($interface->getConstructor() !== null || $interface->hasMethod('__construct'))
             {
                 return true;
             }
