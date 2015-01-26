@@ -69,6 +69,10 @@ class Phake_Annotation_MockInitializerTest extends PHPUnit_Framework_TestCase
 
 	protected function setUp()
 	{
+		if (!version_compare(PHP_VERSION, '5.3', '>='))
+		{
+			$this->markTestSkipped('annotations typehint require PHP 5.3');
+		}
 		$this->initializer = new Phake_Annotation_MockInitializer();
 	}
 
