@@ -570,6 +570,7 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
             $this->markTestSkipped('callable typehint require PHP 5.4');
         }
 
+		require_once 'PhakeTest/CallableTypehint.php';
         $this->assertInstanceOf('PhakeTest_CallableTypehint', Phake::mock('PhakeTest_CallableTypehint'));
     }
 }
