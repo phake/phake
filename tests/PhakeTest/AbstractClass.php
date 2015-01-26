@@ -52,6 +52,8 @@ abstract class PhakeTest_AbstractClass implements PhakeTest_MockedInterface
     {
     }
 
+    abstract function bar();
+
     public function fooWithReturnValue()
     {
         return 'blah';
