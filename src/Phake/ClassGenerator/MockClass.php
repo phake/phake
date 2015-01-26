@@ -364,7 +364,7 @@ class {$newClassName} {$extends}
      */
     protected function copyMethodParameters(ReflectionMethod $method)
     {
-        $copies = "\$__PHAKE_numArgs = count(func_get_args());\n\t\t";
+        $copies = "\$funcGetArgs = func_get_args();\n\t\t\$__PHAKE_numArgs = count(\$funcGetArgs);\n\t\t";
         foreach ($method->getParameters() as $parameter) {
             $pos = $parameter->getPosition();
             $copies .= "if ({$pos} < \$__PHAKE_numArgs) \$__PHAKE_args[] =& \${$parameter->getName()};\n\t\t";
