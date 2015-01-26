@@ -124,6 +124,8 @@ class {$newClassName} {$extends}
 	public \$__PHAKE_name;
 	
 	public \$__PHAKE_handlerChain;
+
+	public \$__PHAKE_constructorArgs;
 	
 	public function __destruct() {}
 
@@ -131,6 +133,8 @@ class {$newClassName} {$extends}
 	{
 	    return '{$mockedClassName}';
  	}
+
+ 	{$this->generateSafeConstructorOverride($mockedClass)}
 
 	{$this->generateMockedMethods($mockedClass)}
 }
@@ -151,13 +155,39 @@ class {$newClassName} {$extends}
 	 */
 	public function instantiate($newClassName, Phake_CallRecorder_Recorder $recorder, Phake_Stubber_StubMapper $mapper, Phake_Stubber_IAnswer $defaultAnswer, array $constructorArgs = null)
 	{
-        $mockObject = unserialize(sprintf('O:%d:"%s":0:{}', strlen($newClassName), $newClassName));
+		$reflClass = new ReflectionClass($newClassName);
+		$constructor = $reflClass->getConstructor();
+
+		if ($constructor == null || ($constructor->class == $newClassName && $constructor->getNumberOfParameters() == 0))
+		{
+			$mockObject = new $newClassName;
+		}
+		elseif (version_compare(PHP_VERSION, '5.4.0', '>='))
+		{
+			try
+			{
+				$mockObject = $reflClass->newInstanceWithoutConstructor();
+			}
+			catch (ReflectionException $ignore)
+			{
+			}
+
+			if (empty($mockObject))
+			{
+				$mockObject = @unserialize(sprintf('O:%d:"%s":0:{}', strlen($newClassName), $newClassName));
+				if ($mockObject == null)
+				{
+					$mockObject = unserialize(sprintf('C:%d:"%s":0:{}', strlen($newClassName), $newClassName));
+				}
+			}
+		}
 
         $mockObject->__PHAKE_callRecorder = $recorder;
         $mockObject->__PHAKE_stubMapper = $mapper;
         $mockObject->__PHAKE_defaultAnswer = $defaultAnswer;
         $mockObject->__PHAKE_isFrozen = false;
         $mockObject->__PHAKE_name = $mockObject->__PHAKE_getMockedClassName();
+		$mockObject->__PHAKE_constructorArgs = $constructorArgs;
 
         $mockObject->__PHAKE_handlerChain = new Phake_ClassGenerator_InvocationHandler_Composite(array(
             new Phake_ClassGenerator_InvocationHandler_FrozenObjectCheck(new Phake_MockReader()),
@@ -203,6 +233,65 @@ class {$newClassName} {$extends}
 		return $methodDefs;
 	}
 
+	private function generateSafeConstructorOverride(ReflectionClass $mockedClass)
+	{
+		if (!$this->isConstructorDefinedInInterface($mockedClass))
+		{
+			$constructorDef = "
+	public function __construct()
+	{
+	    {$this->getConstructorChaining($mockedClass)}
+	}
+";
+			return $constructorDef;
+		}
+		else
+		{
+			return '';
+		}
+	}
+
+	private function isConstructorDefinedInInterface(ReflectionClass $mockedClass)
+	{
+		$constructor = $mockedClass->getConstructor();
+
+		if (empty($constructor) && $mockedClass->hasMethod('__construct'))
+		{
+			$constructor = $mockedClass->getMethod('__construct');
+		}
+
+		if (empty($constructor))
+		{
+			return false;
+		}
+
+		$reflectionClass = $constructor->getDeclaringClass();
+
+		if ($reflectionClass->isInterface())
+		{
+			return true;
+		}
+
+		/* @var ReflectionClass $interface */
+		foreach ($reflectionClass->getInterfaces() as $interface)
+		{
+			if ($interface->getConstructor() !== null)
+			{
+				return true;
+			}
+		}
+
+		$parent = $reflectionClass->getParentClass();
+		if (!empty($parent))
+		{
+			return $this->isConstructorDefinedInInterface($parent);
+		}
+		else
+		{
+			return false;
+		}
+	}
+
 	/**
 	 * Creates the constructor implementation
 	 */
@@ -210,9 +299,10 @@ class {$newClassName} {$extends}
 	{
 		return $originalClass->hasMethod('__construct') ? "
 
-		if (is_array(\$constructorArgs))
+		if (is_array(\$this->__PHAKE_constructorArgs))
 		{
-			call_user_func_array(array(\$this, 'parent::__construct'), \$constructorArgs);
+			call_user_func_array(array(\$this, 'parent::__construct'), \$this->__PHAKE_constructorArgs);
+			\$this->__PHAKE_constructorArgs = null;
 		}
 		" : "";
 	}

@@ -1167,6 +1167,13 @@ class PhakeTest extends PHPUnit_Framework_TestCase
         // Generated a fatal error before fixed
         $this->assertInstanceOf('Phake_IMock', Phake::mock('PhakeTest_ConstructorInterface'));
     }
+
+	public function testMockingPhar()
+	{
+		$phar = Phake::mock('Phar');
+
+		$this->assertInstanceOf('Phar', $phar);
+	}
 }
 
 ?>
