@@ -1,0 +1,236 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Answers &mdash; Phake - PHP Mocking Framework v1.0.3 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0.3',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Phake - PHP Mocking Framework v1.0.3 documentation" href="index.html" />
+    <link rel="next" title="Method Parameter Matchers" href="method-parameter-matchers.html" />
+    <link rel="prev" title="Method Verification" href="method-verification.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="method-parameter-matchers.html" title="Method Parameter Matchers"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="method-verification.html" title="Method Verification"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Phake - PHP Mocking Framework v1.0.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="answers">
+<span id="id1"></span><h1>Answers<a class="headerlink" href="#answers" title="Permalink to this headline">¶</a></h1>
+<p>In all of the examples so far, the <tt class="docutils literal"><span class="pre">thenReturn()</span></tt> answer is being used. There are other answers that are remarkably
+useful writing your tests.</p>
+<div class="section" id="throwing-exceptions">
+<h2>Throwing Exceptions<a class="headerlink" href="#throwing-exceptions" title="Permalink to this headline">¶</a></h2>
+<p>Exception handling is a common aspect of most object oriented systems that should be tested. The key to being able to
+test your exception handling is to be able to control the throwing of your exceptions. Phake allows this using the
+<tt class="docutils literal"><span class="pre">thenThrow()</span></tt> answer. This answer allows you to throw a specific exception from any mocked method. Below is an
+example of a piece of code that catches an exception from the method foo() and then logs a message with the exception
+message.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">class MyClass</span>
+<span class="x">{</span>
+<span class="x">    private $logger;</span>
+
+<span class="x">    public function __construct(LOGGER $logger)</span>
+<span class="x">    {</span>
+<span class="x">        $this-&gt;logger = $logger;</span>
+<span class="x">    }</span>
+
+<span class="x">    public function processSomeData(MyDataProcessor $processor, MyData $data)</span>
+<span class="x">    {</span>
+<span class="x">        try</span>
+<span class="x">        {</span>
+<span class="x">            $processor-&gt;process($data);</span>
+<span class="x">        }</span>
+<span class="x">        catch (Exception $e)</span>
+<span class="x">        {</span>
+<span class="x">            $this-&gt;logger-&gt;log($e-&gt;getMessage());</span>
+<span class="x">        }</span>
+<span class="x">    }</span>
+<span class="x">}</span>
+</pre></div>
+</div>
+<p>In order to test this we must mock <tt class="docutils literal"><span class="pre">foo()</span></tt> so that it throws an exception when it is called. Then we can verify that
+<tt class="docutils literal"><span class="pre">log()</span></tt> is called with the appropriate message.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">class MyClassTest extends PHPUnit_Framework_TestCase</span>
+<span class="x">{</span>
+<span class="x">    public function testProcessSomeDataLogsExceptions()</span>
+<span class="x">    {</span>
+<span class="x">        $logger = Phake::mock(&#39;LOGGER&#39;);</span>
+<span class="x">        $data = Phake::mock(&#39;MyData&#39;);</span>
+<span class="x">        $processor = Phake::mock(&#39;MyDataProcessor&#39;);</span>
+
+<span class="x">        Phake::when($processor)-&gt;process($data)-&gt;thenThrow(new Exception(&#39;My error message!&#39;);</span>
+
+<span class="x">        $sut = new MyClass($logger);</span>
+<span class="x">        $sut-&gt;processSomeData($processor, $data);</span>
+
+<span class="x">        //This comes from the exception we created above</span>
+<span class="x">        Phake::verify($logger)-&gt;log(&#39;My error message!&#39;);</span>
+<span class="x">    }</span>
+<span class="x">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="calling-the-parent">
+<h2>Calling the Parent<a class="headerlink" href="#calling-the-parent" title="Permalink to this headline">¶</a></h2>
+<p>Phake provides the ability to allow calling the actual method of an object on a method by method
+basis by using the <tt class="docutils literal"><span class="pre">thenCallParent()</span></tt> answer. This will result in the actual method being called.
+Consider the following class.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">class MyClass</span>
+<span class="x">{</span>
+<span class="x">    public function foo()</span>
+<span class="x">    {</span>
+<span class="x">        return &#39;42&#39;;</span>
+<span class="x">    }</span>
+<span class="x">}</span>
+</pre></div>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">thenCallParent()</span></tt> answer can be used here to ensure that the actual method in the class is
+called resulting in the value 42 being returned from calls to that mocked method.</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">class MyClassTest extends PHPUnit_Framework_TestCase</span>
+<span class="x">{</span>
+<span class="x">    public function testCallingParent()</span>
+<span class="x">    {</span>
+<span class="x">        $mock = Phake::mock(&#39;MyClass&#39;);</span>
+<span class="x">        Phake::when($mock)-&gt;foo()-&gt;thenCallParent();</span>
+
+<span class="x">        $this-&gt;assertEquals(42, $mock-&gt;foo());</span>
+<span class="x">    }</span>
+<span class="x">}</span>
+</pre></div>
+</div>
+<p>Please avoid using this answer as much as possible especially when testing newly written code. If you find yourself
+requiring a class to be only partially mocked then that is a code smell for a class that is likely doing too much. An
+example of when this is being done is why you are testing a class that has a singular method that has a lot of side
+effects that you want to mock while you allow the other methods to be called as normal. In this case that method that
+you are desiring to mock should belong to a completely separate class. It is obvious by the very fact that you are able
+to mock it without needing to mock other messages that it performs a different function.</p>
+<p>Even though partial mocking should be avoided with new code, it is often very necessary to allow creating tests while
+refactoring legacy code, tests involving 3rd party code that can’t be changed, or new tests of already written code
+that cannot yet be changed. This is precisely the reason why this answer exists and is also why it is not the default
+answer in Phake.</p>
+</div>
+<div class="section" id="capturing-a-return-value">
+<h2>Capturing a Return Value<a class="headerlink" href="#capturing-a-return-value" title="Permalink to this headline">¶</a></h2>
+<p>Another tool in Phake for testing legacy code is the <tt class="docutils literal"><span class="pre">captureReturnTo()</span></tt> answer. This performs a function similar to
+argument capturing, however it instead captures what the actual method of a mock object returns to the variable passed
+as its parameter. Again, this should never be needed if you are testing newly written code. However I have ran across
+cases several times where legacy code calls protected factory methods and the result of the method call is never
+exposed. This answer gives you a way to access that variable to ensure that the factory was called and is operating
+correctly in the context of your method that is being tested.</p>
+</div>
+<div class="section" id="custom-answers">
+<h2>Custom Answers<a class="headerlink" href="#custom-answers" title="Permalink to this headline">¶</a></h2>
+<p>While the answers provided in Phake should be able to cover most of the scenarios you will run into when using mocks in
+your unit tests there may occasionally be times when you need more control over what is returned from your mock
+methods. When this is the case, you can use a custom answer. All answers in Phake implement the
+<tt class="docutils literal"><span class="pre">Phake_Stubber_IAnswer</span></tt> interface. This interface defines a single method called <tt class="docutils literal"><span class="pre">getAnswer()</span></tt> that can be used to
+return what will be returned from a call to the method being stubbed. If you need to get access to how the method you
+are stubbing was invoked, there is a more complex set of interfaces that can be implemented:
+<tt class="docutils literal"><span class="pre">Phake_Stubber_Answers_IDelegator</span></tt> and <tt class="docutils literal"><span class="pre">Phake_Stubber_IAnswerDelegate</span></tt>.</p>
+<p><tt class="docutils literal"><span class="pre">Phake_Stubber_Answers_IDelegator</span></tt> extends <tt class="docutils literal"><span class="pre">Phake_Stubber_IAnswer</span></tt> and defines an additional method called
+<tt class="docutils literal"><span class="pre">processAnswer()</span></tt> that is used to perform processing on the results of <tt class="docutils literal"><span class="pre">getAnswer()</span></tt> prior to passing it on to the
+stub’s caller. <tt class="docutils literal"><span class="pre">Phake_Stubber_IAnswerDelegate</span></tt> defines an interface that allows you to create a callback that is
+called to generate the answer from the stub. It defines <tt class="docutils literal"><span class="pre">getCallBack()</span></tt> which allows you to generate a PHP callback
+based on the object, method, and arguments that a stub was called with. It also defines <tt class="docutils literal"><span class="pre">getArguments()</span></tt> which allows
+you to generate the arguments that will be passed to the callback based on the method name and arguments the stub was
+called with.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="#">Answers</a><ul>
+<li><a class="reference external" href="#throwing-exceptions">Throwing Exceptions</a></li>
+<li><a class="reference external" href="#calling-the-parent">Calling the Parent</a></li>
+<li><a class="reference external" href="#capturing-a-return-value">Capturing a Return Value</a></li>
+<li><a class="reference external" href="#custom-answers">Custom Answers</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="method-verification.html"
+                                  title="previous chapter">Method Verification</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="method-parameter-matchers.html"
+                                  title="next chapter">Method Parameter Matchers</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/answers.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="method-parameter-matchers.html" title="Method Parameter Matchers"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="method-verification.html" title="Method Verification"
+             >previous</a> |</li>
+        <li><a href="index.html">Phake - PHP Mocking Framework v1.0.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2014, Mike Lively &lt;m@digitalsandwich.com&gt;.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.6.
+    </div>
+  </body>
+</html>

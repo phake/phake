@@ -291,7 +291,7 @@ shows this flaw.
     }
 
 You can see that I added another test method that uses actual floats for some of the prices as opposed to round numbers.
-Now when I run my test suite I can see the fantastic floating point issue.
+Now when I run my test sweet I can see the fantastic floating point issue.
 ::
 
     $ phpunit ExampleTests/ShoppingCartTest.php
@@ -468,9 +468,9 @@ Stubbing Consecutive Calls
 The previous test was a great example for how you can make multiple stubs for a single method however in reality it
 is not the best way for that particular test to be written. What if the ``Item`` objects in an
 ``ItemGroup`` aren't stored in the order they were passed in? I am needlessly binding my test
-to the order in which objects are stored. Phake provides the ability to map multiple answers to the same stub. This is
-done simply by chaining the answers together. I could rewrite the test from the previous chapter to utilize this
-feature of Phake.
+to the order objects are stored. Phake provides the ability to map multiple answers to the same stub. This is done
+simply by chaining the answers together. I could rewrite the test from the previous chapter to utilize this feature
+of Phake.
 
 .. code-block:: php
 
@@ -720,10 +720,9 @@ this can be seen below.
 Stubbing Magic Methods
 ----------------------
 
-Most magic methods can be stubbed using the method name just like you would any other method. The one exception to this
-is the ``__call()`` method. This method is overwritten on each mock already to allow for the fluent api that Phake
-utilizes. If you want to stub a particular invocation of ``__call()`` you can create a stub for the method you are
-targetting in the first parameter to ``__call()``.
+The verification of ``__call()`` was discussed in the previous chapter. Magic methods can also be stubbed in much the same
+way. If you want to verify a particular invocation of ``__call()`` you can stub the actual method call by mocking the
+method passed in as the first parameter.
 
 Consider the following class.
 

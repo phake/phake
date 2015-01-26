@@ -6,10 +6,16 @@
 Welcome to Phake - PHP Mocking Framework's documentation!
 =========================================================
 
-Contents:
-
 .. toctree::
    :maxdepth: 2
+
+   introduction
+   getting-started
+   method-stubbing
+   method-verification
+   answers
+   method-parameter-matchers
+   configuration
 
 Indices and tables
 ==================
