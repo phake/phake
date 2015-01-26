@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-if [ "$TRAVIS_PHP_VERSION" -ne "5.2" ]; then
 
-    # Install the nightly build of HHVM ...
+if [ "$TRAVIS_PHP_VERSION" != '5.2' ]; then
     composer install --dev
 fi
