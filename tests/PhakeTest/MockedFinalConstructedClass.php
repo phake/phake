@@ -42,6 +42,11 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+/**
+ * Class PhakeTest_MockedFinalConstructedClass
+ *
+ * @author Nicolas Thal<nico.th4l@gmail.com>
+ */
 class PhakeTest_MockedFinalConstructedClass
 {
     private $prop1;

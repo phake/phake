@@ -339,6 +339,8 @@ class {$newClassName} {$extends}
         if (!empty($constructor) && $constructor->isFinal()) {
             return true;
         }
+
+        return false;
     }
 
     private function generateSafeConstructorOverride(ReflectionClass $mockedClass)
