@@ -23,6 +23,12 @@
     "config": {
         "bin-dir": "bin"
     },
+    "require-dev": {
+        "ext-soap": "*",
+        "doctrine/common": "2.3.*",
+        "phpunit/phpunit": "3.7.*",
+        "hamcrest/hamcrest-php": "1.1.*"
+    },
     "autoload": {
         "psr-0": {
             "Phake": "src/"
