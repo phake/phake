@@ -162,23 +162,19 @@ class {$newClassName} {$extends}
 		{
 			$mockObject = new $newClassName;
 		}
-		elseif (version_compare(PHP_VERSION, '5.4.0', '>='))
-		{
-			try
-			{
+		elseif (version_compare(PHP_VERSION, '5.4.0', '>=')) {
+			try {
 				$mockObject = $reflClass->newInstanceWithoutConstructor();
+			} catch (ReflectionException $ignore) {
 			}
-			catch (ReflectionException $ignore)
-			{
-			}
+		}
 
-			if (empty($mockObject))
+		if (empty($mockObject))
+		{
+			$mockObject = @unserialize(sprintf('O:%d:"%s":0:{}', strlen($newClassName), $newClassName));
+			if ($mockObject == null)
 			{
-				$mockObject = @unserialize(sprintf('O:%d:"%s":0:{}', strlen($newClassName), $newClassName));
-				if ($mockObject == null)
-				{
-					$mockObject = unserialize(sprintf('C:%d:"%s":0:{}', strlen($newClassName), $newClassName));
-				}
+				$mockObject = unserialize(sprintf('C:%d:"%s":0:{}', strlen($newClassName), $newClassName));
 			}
 		}
 
