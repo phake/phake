@@ -446,6 +446,16 @@ class PhakeTest extends PHPUnit_Framework_TestCase
         Phake::verifyStatic($mock)->staticMethod();
     }
 
+	public function testMockingPhar()
+	{
+		if (!class_exists('Phar'))
+		{
+			$this->markTestSkipped('Phar class does not exist');
+		}
+		$phar = Phake::mock('Phar');
+
+		$this->assertInstanceOf('Phar', $phar);
+	}
 
     /**
      * Tests that resetting a mock clears the stubber

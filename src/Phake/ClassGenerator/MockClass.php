@@ -151,13 +151,6 @@ class Phake_ClassGenerator_MockClass
 
         if (!$mockedClass->isInterface()) {
             $extends = "extends {$mockedClassName}";
-            if ('PDO' == $mockedClassName
-                || 'PDOStatement' == $mockedClassName
-                || $mockedClass->isSubclassOf('PDO')
-                || $mockedClass->isSubclassOf('PDOStatement')
-            ) {
-                $constructor = "public function __construct() {}";
-            }
         } elseif ($mockedClassName != 'Phake_IMock') {
             $implements = ", $mockedClassName";
 
@@ -183,13 +176,17 @@ class {$newClassName} {$extends}
     public static \$__PHAKE_staticInfo;
 
 	const __PHAKE_name = '{$mockedClassName}';
-	
+
+	public \$__PHAKE_constructorArgs;
+
 	{$constructor}
 
 	/**
 	 * @return void
 	 */
 	public function __destruct() {}
+
+ 	{$this->generateSafeConstructorOverride($mockedClass)}
 
 	{$this->generateMockedMethods($mockedClass, $interfaces)}
 }
@@ -218,6 +215,29 @@ class {$newClassName} {$extends}
         Phake_Stubber_IAnswer $defaultAnswer,
         array $constructorArgs = null
     ) {
+        $reflClass = new ReflectionClass($newClassName);
+        $constructor = $reflClass->getConstructor();
+
+        if ($constructor == null || ($constructor->class == $newClassName && $constructor->getNumberOfParameters() == 0))
+        {
+            $mockObject = new $newClassName;
+        }
+        elseif (version_compare(PHP_VERSION, '5.4.0', '>=')) {
+            try {
+                $mockObject = $reflClass->newInstanceWithoutConstructor();
+            } catch (ReflectionException $ignore) {
+            }
+        }
+
+        if (empty($mockObject))
+        {
+            $mockObject = @unserialize(sprintf('O:%d:"%s":0:{}', strlen($newClassName), $newClassName));
+            if ($mockObject == null)
+            {
+                $mockObject = unserialize(sprintf('C:%d:"%s":0:{}', strlen($newClassName), $newClassName));
+            }
+        }
+
         try {
             $mockObject = @unserialize(sprintf('O:%d:"%s":0:{}', strlen($newClassName), $newClassName));
             if ($mockObject === false) {
@@ -231,6 +251,7 @@ class {$newClassName} {$extends}
         }
 
         $mockObject->__PHAKE_info = $this->createMockInfo($newClassName::__PHAKE_name, $recorder, $mapper, $defaultAnswer);
+        $mockObject->__PHAKE_constructorArgs = $constructorArgs;
 
         $mockReflClass = new ReflectionClass($mockObject);
         if (null !== $constructorArgs && $mockReflClass->hasMethod('__construct')) {
@@ -270,6 +291,67 @@ class {$newClassName} {$extends}
         return $methodDefs;
     }
 
+
+    private function isConstructorDefinedInInterface(ReflectionClass $mockedClass)
+    {
+        $constructor = $mockedClass->getConstructor();
+
+        if (empty($constructor) && $mockedClass->hasMethod('__construct'))
+        {
+            $constructor = $mockedClass->getMethod('__construct');
+        }
+
+        if (empty($constructor))
+        {
+            return false;
+        }
+
+        $reflectionClass = $constructor->getDeclaringClass();
+
+        if ($reflectionClass->isInterface())
+        {
+            return true;
+        }
+
+        /* @var ReflectionClass $interface */
+        foreach ($reflectionClass->getInterfaces() as $interface)
+        {
+            if ($interface->getConstructor() !== null)
+            {
+                return true;
+            }
+        }
+
+        $parent = $reflectionClass->getParentClass();
+        if (!empty($parent))
+        {
+            return $this->isConstructorDefinedInInterface($parent);
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private function generateSafeConstructorOverride(ReflectionClass $mockedClass)
+    {
+        if (!$this->isConstructorDefinedInInterface($mockedClass))
+        {
+            $constructorDef = "
+	public function __construct()
+	{
+	    {$this->getConstructorChaining($mockedClass)}
+	}
+";
+            return $constructorDef;
+        }
+        else
+        {
+            return '';
+        }
+    }
+
+
     /**
      * Creates the constructor implementation
      *
@@ -280,9 +362,10 @@ class {$newClassName} {$extends}
     {
         return $originalClass->hasMethod('__construct') ? "
 
-		if (is_array(\$constructorArgs))
+		if (is_array(\$this->__PHAKE_constructorArgs))
 		{
-			call_user_func_array(array(\$this, 'parent::__construct'), \$constructorArgs);
+			call_user_func_array(array(\$this, 'parent::__construct'), \$this->__PHAKE_constructorArgs);
+			\$this->__PHAKE_constructorArgs = null;
 		}
 		" : "";
     }
