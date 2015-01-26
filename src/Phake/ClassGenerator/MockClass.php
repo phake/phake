@@ -333,9 +333,19 @@ class {$newClassName} {$extends}
         }
     }
 
+    private function isConstructorDefinedAndFinal(ReflectionClass $mockedClass)
+    {
+        $constructor = $mockedClass->getConstructor();
+        if (!empty($constructor) && $constructor->isFinal()) {
+            return true;
+        }
+    }
+
     private function generateSafeConstructorOverride(ReflectionClass $mockedClass)
     {
-        if (!$this->isConstructorDefinedInInterface($mockedClass))
+        if (!$this->isConstructorDefinedAndFinal($mockedClass)
+            && !$this->isConstructorDefinedInInterface($mockedClass)
+        )
         {
             $constructorDef = "
 	public function __construct()
