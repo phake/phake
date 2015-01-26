@@ -1288,11 +1288,13 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 
     public function testDefaultClient()
     {
-        // This assumes that the test is initialized with the default client
-        // Since we run this in PHPUnit, we have to set the default client or
-        // autodetect will return the PHPUnit client.
-        Phake::setClient(Phake::CLIENT_DEFAULT);
+        $original_client = Phake::getClient();
+
+        Phake::setClient(null);
+
         $this->assertInstanceOf('Phake_Client_Default', Phake::getClient());
+
+        Phake::setClient($original_client);
     }
 
     public function testSettingClient()
@@ -1394,7 +1396,8 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 
     public function testStubbingMemcacheSetMethod()
     {
-        if (!extension_loaded('memcache')) {
+        if (!extension_loaded('memcache'))
+        {
             $this->markTestSkipped('memcache extension not loaded');
         }
 
