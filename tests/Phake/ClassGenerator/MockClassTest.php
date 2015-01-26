@@ -419,6 +419,33 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests that passing constructor arguments to the derived class will cause the original constructor to be called.
+     */
+    public function testCallingFinalOriginalConstructor()
+    {
+        $newClassName = __CLASS__ . '_TestClass26';
+        $mockedClass  = 'PhakeTest_MockedFinalConstructedClass';
+        $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
+
+        /** @var $callRecorder Phake_CallRecorder_Recorder */
+        $callRecorder = $this->getMock('Phake_CallRecorder_Recorder');
+        /** @var $stubMapper Phake_Stubber_StubMapper */
+        $stubMapper = $this->getMock('Phake_Stubber_StubMapper');
+        $answer     = new Phake_Stubber_Answers_ParentDelegate();
+        $mock       = $this->classGen->instantiate(
+            $newClassName,
+            $callRecorder,
+            $stubMapper,
+            $answer,
+            array('val1', 'val2', 'val3')
+        );
+
+        $this->assertEquals('val1', $mock->getProp1());
+        $this->assertEquals('val2', $mock->getProp2());
+        $this->assertEquals('val3', $mock->getProp3());
+    }
+
+    /**
      * Tests that final methods are not overridden
      */
     public function testFinalMethodsAreNotOverridden()
