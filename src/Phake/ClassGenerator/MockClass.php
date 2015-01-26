@@ -231,7 +231,9 @@ class {$newClassName} {$extends}
 
 	private function generateSafeConstructorOverride(ReflectionClass $mockedClass)
 	{
-		if (!$this->isConstructorDefinedInInterface($mockedClass))
+		if (!$this->isConstructorDefinedAndFinal($mockedClass)
+			&& !$this->isConstructorDefinedInInterface($mockedClass)
+		)
 		{
 			$constructorDef = "
 	public function __construct()
@@ -251,42 +253,43 @@ class {$newClassName} {$extends}
 	{
 		$constructor = $mockedClass->getConstructor();
 
-		if (empty($constructor) && $mockedClass->hasMethod('__construct'))
-		{
+		if (empty($constructor) && $mockedClass->hasMethod('__construct')) {
 			$constructor = $mockedClass->getMethod('__construct');
 		}
 
-		if (empty($constructor))
-		{
+		if (empty($constructor)) {
 			return false;
 		}
 
 		$reflectionClass = $constructor->getDeclaringClass();
 
-		if ($reflectionClass->isInterface())
-		{
+		if ($reflectionClass->isInterface()) {
 			return true;
 		}
 
 		/* @var ReflectionClass $interface */
-		foreach ($reflectionClass->getInterfaces() as $interface)
-		{
-			if ($interface->getConstructor() !== null)
-			{
+		foreach ($reflectionClass->getInterfaces() as $interface) {
+			if ($interface->getConstructor() !== null) {
 				return true;
 			}
 		}
 
 		$parent = $reflectionClass->getParentClass();
-		if (!empty($parent))
-		{
+		if (!empty($parent)) {
 			return $this->isConstructorDefinedInInterface($parent);
-		}
-		else
-		{
+		} else {
 			return false;
 		}
 	}
+
+    private function isConstructorDefinedAndFinal(ReflectionClass $mockedClass)
+    {
+        $constructor = $mockedClass->getConstructor();
+        if (!empty($constructor) && $constructor->isFinal()) {
+            return true;
+        }
+    }
+
 
 	/**
 	 * Creates the constructor implementation
