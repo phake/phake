@@ -45,4 +45,8 @@
 
 abstract class PhakeTest_AbstractImplementConstructorInterface implements PhakeTest_ConstructorInterface
 {
+    public function __construct(PhakeTest_A $a)
+    {
+        // TODO: Implement __construct() method.
+    }
 }

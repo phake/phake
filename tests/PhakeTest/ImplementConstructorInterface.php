@@ -45,9 +45,4 @@
 
 class PhakeTest_ImplementConstructorInterface extends PhakeTest_AbstractImplementConstructorInterface
 {
-    public function __construct(PhakeTest_A $a)
-    {
-        // TODO: Implement __construct() method.
-    }
-
 }
