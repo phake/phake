@@ -445,6 +445,28 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('val3', $mock->getProp3());
     }
 
+
+    /**
+     * Tests the generate method of the mock class generator.
+     */
+    public function testGenerateCreatesClassWithConstructorInInterfaceButNotInAbstractClass()
+    {
+        $newClassName = __CLASS__ . '_TestClass27';
+        $mockedClass = 'PhakeTest_ImplementConstructorInterface';
+
+        $this->assertFalse(
+            class_exists($newClassName, false),
+            'The class being tested for already exists. May have created a test reusing this class name.'
+        );
+
+        $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
+
+        $this->assertTrue(
+            class_exists($newClassName, false),
+            'Phake_ClassGenerator_MockClass::generate() did not create correct class'
+        );
+    }
+
     /**
      * Tests that final methods are not overridden
      */
