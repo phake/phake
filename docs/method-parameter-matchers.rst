@@ -111,12 +111,14 @@ matchers.
 .. _wildcard-parameters:
 Wildcard Parameters
 ===================
-Frequently when stubbing methods, you do not really care matching parameters. Often times matching every parameter for
-stub can result in overly brittle tests. If you find yourself in this situation you can use ``Phake::anyParameters()``
-to instruct Phake that a mock should be stubbed on any invocation. You could also use it to verify a method call
-regardless of parameters. This is not a very common use case but it is possible.
+Frequently when stubbing methods, you do not really care about matching parameters. Often times matching every
+parameter for a stub can result in overly brittle tests. If you find yourself in this situation you can use Phake's
+shorthand stubbing to instruct Phake that a mock should be stubbed on any invocation. You could also use it to verify a
+method call regardless of parameters. This is not a very common use case but it is possible.
 
-The code below will mock any invocation of $obj->foo() regardless of parameters to return bar.
+To specify that a given stub or verification method should match any parameters you call the method your are stubbing
+or mocking as a property of ``Phake::when()`` or ``Phake::verify()``. The code below will mock any invocation of
+$obj->foo() regardless of parameters to return bar.
 
 .. code-block:: php
 
@@ -126,7 +128,7 @@ The code below will mock any invocation of $obj->foo() regardless of parameters 
         {
             $obj = Phake::mock('MyObject');
 
-            Phake::when($obj)->foo(Phake::anyParameters())->thenReturn('bar');
+            Phake::when($obj)->foo->thenReturn('bar');
 
             $this->assertEquals('bar', $obj->foo());
             $this->assertEquals('bar', $obj->foo('a parameter'));
@@ -134,12 +136,18 @@ The code below will mock any invocation of $obj->foo() regardless of parameters 
         }
     }
 
+If you are familiar with ``Phake::anyParameters()`` then you will recognize that the shorthand functionality is really
+just short hand of ``Phake::anyParameters()``. You can still use ``Phake::anyParameters()`` but it will likely be
+deprecated at some point in the future.
+
+Default and Variable Parameters
+-------------------------------
 Wildcards can also come in handy when stubbing or verifying methods with default parameters or variable parameters. In
 addition to ``Phake::anyParameters()``, ``Phake::ignoreRemaining()`` can be used to instruct Phake to not attempt to
 match any further parameters.
 
 A good example of where this could be handy is if you are mocking or verifying a method where the first parameter is
-important to stubbing but maybe the remainings parameters aren't. The code below stubs a factory method where the first
+important to stubbing but maybe the remaining parameters aren't. The code below stubs a factory method where the first
 parameter sets an item's name, but the remaining parameters are all available as defaults.
 
 .. code-block:: php
