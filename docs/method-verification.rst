@@ -229,6 +229,20 @@ You could mock an invocation of the `__call()` method through a userspace call t
 
 If for any reason you need to explicitly verify calls to ``__call()`` then you can use ``Phake::verifyCallMethodWith()``.
 
+.. code-block:: php
+
+    class MagicClassTest extends PHPUnit_Framework_TestCase
+    {
+        public function testMagicCall()
+        {
+            $mock = Phake::mock('MagicClass');
+
+            $mock->magicCall(42);
+
+            Phake::verifyCallMethodWith('magicCall', array(42))->isCalledOn($mock);
+        }
+    }
+
 Verifying Static Methods
 ========================
 Using Phake you can verify polymorphic calls to static methods using ``Phake::verifyStatic()``. It is important to note
