@@ -510,7 +510,7 @@ difference is that there is only one call to ``Phake::when()``. The second diffe
 calls to ``thenReturn()``. The third difference is instead of passing one of my mock Item
 objects I have passed the result of the ``Phake::anyParameters()`` method. This is a special argument
 matcher in Phake that essentially says match any call to the method regardless of the number of parameters or the
-value of those parameters.
+value of those parameters. You can learn more about ``Phake::anyParameters()`` in :ref:`wildcard-parameters`.
 
 So, this single call to ``Phake::when()`` is saying: "Whenever a call to ``$cart->addItem()``
 is made, regardless of the parameters, return 10 for the first call, 20 for the second call, and 30 for the third
