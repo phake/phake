@@ -1534,4 +1534,15 @@ class PhakeTest extends PHPUnit_Framework_TestCase
             Phake::mock('PhakeTest_PDOExtendingClass')
         );
     }
+
+    public function testMockRedis()
+    {
+        if (!extension_loaded('redis'))
+        {
+            $this->markTestSkipped('Cannot run this test without mock redis');
+        }
+
+        $mock = Phake::mock('Redis');
+        $this->assertInstanceOf('Redis', $mock);
+    }
 }
