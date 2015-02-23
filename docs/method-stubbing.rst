@@ -374,6 +374,40 @@ the method that was called. So, when I created the additional stubs for the vari
 calls, I was just adding additional matchers to the top of the stack that would always get matched first by virtue
 of the parameters all being the same.
 
+Resetting A Mock's Stubs
+------------------------
+If overriding a stub does not work for your particular case and you would rather start over with all default stubs then
+you can use ``Phake::reset()`` and ``Phake::staticReset()``. These will remove all stubs from a mock and also empty
+out all recorded calls against a mock. ``Phake::reset()`` will do this for instance methods on the mock and
+``Phake::staticReset()`` will do this for all static methods on the mock.
+
+.. code-block:: php
+    public function testResettingStubMapper()
+    {
+        $mock = Phake::mock('PhakeTest_MockedClass');
+        Phake::when($mock)->foo()->thenReturn(42);
+
+        $this->assertEquals(42, $mock->foo());
+
+        Phake::reset($mock);
+        //$mock->foo() now returns the default stub which in this case is null
+        $this->assertNull($mock->foo());
+    }
+
+    public function testResettingCallRecorder()
+    {
+        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock->foo();
+
+        //Will work as normal
+        Phake::verify($mock)->foo();
+
+        Phake::reset($mock);
+
+        //Will now throw an error that foo was not called
+        Phake::verify($mock)->foo();
+    }
+
 .. _stubbing-multiple-calls:
 
 Stubbing Multiple Calls
