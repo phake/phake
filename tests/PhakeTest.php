@@ -1545,4 +1545,27 @@ class PhakeTest extends PHPUnit_Framework_TestCase
         $mock = Phake::mock('Redis');
         $this->assertInstanceOf('Redis', $mock);
     }
+
+    public function testFinallyBlockFiresVerifications()
+    {
+        if (version_compare(PHP_VERSION, '5.5.0', '<'))
+        {
+            $this->markTestSkipped('The finally keyword only exists in php 5.5 and above');
+        }
+
+
+        eval('
+            $this->setExpectedException("InvalidArgumentException");
+            $mock = Phake::mock("PhakeTest_MockedClass");
+            try
+            {
+                $mock->foo();
+                throw new InvalidArgumentException();
+            }
+            finally
+            {
+                Phake::verify($mock)->foo();
+            }
+        ');
+    }
 }
