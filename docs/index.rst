@@ -13,6 +13,7 @@ Welcome to Phake - PHP Mocking Framework's documentation!
    getting-started
    method-stubbing
    method-verification
+   mocking-statics
    answers
    method-parameter-matchers
    configuration
