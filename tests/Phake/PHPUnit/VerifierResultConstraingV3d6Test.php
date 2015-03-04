@@ -52,7 +52,7 @@ class Phake_PHPUnit_VerifierResultConstraintV3d6Test extends PHPUnit_Framework_T
         if (version_compare('3.6.0', PHPUnit_Runner_Version::id()) == 1) {
             $this->markTestSkipped('The tested class is not compatible with current version of PHPUnit.');
         }
-        $this->constraint = new Phake_PHPUnit_VerifierResultConstraintV3d6($this->verifier);
+        $this->constraint = new Phake_PHPUnit_VerifierResultConstraintV3d6();
     }
 
     public function testExtendsPHPUnitConstraint()

@@ -484,12 +484,23 @@ class {$newClassName} {$extends}
         $default = '';
         $type    = '';
 
-        if ($parameter->isArray()) {
-            $type = 'array ';
-        } elseif (method_exists($parameter, 'isCallable') && $parameter->isCallable()) {
-            $type = 'callable ';
-        } elseif ($parameter->getClass() !== null) {
-            $type = $parameter->getClass()->getName() . ' ';
+        try
+        {
+            if ($parameter->isArray()) {
+                $type = 'array ';
+            } elseif (method_exists($parameter, 'isCallable') && $parameter->isCallable()) {
+                $type = 'callable ';
+            } elseif ($parameter->getClass() !== null) {
+                $type = $parameter->getClass()->getName() . ' ';
+            }
+        }
+        catch (ReflectionException $e)
+        {
+            //HVVM is throwing an exception when pulling class name when said class does not exist
+            if (!defined('HHVM_VERSION'))
+            {
+                throw $e;
+            }
         }
 
         if ($parameter->isDefaultValueAvailable()) {
