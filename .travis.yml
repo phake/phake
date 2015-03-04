@@ -6,10 +6,11 @@ php:
   - 5.5
   - 5.6
   - hhvm
+  - nightly
 
 matrix:
   allow_failures:
-    - php: hhvm
+    - php: nightly
 
 install:
   - ./.travis/install-hhvm-nightly.sh
