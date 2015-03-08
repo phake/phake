@@ -1548,8 +1548,7 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 
     public function testFinallyBlockFiresVerifications()
     {
-        if (version_compare(PHP_VERSION, '5.5.0', '<'))
-        {
+        if (version_compare(PHP_VERSION, '5.5.0', '<')) {
             $this->markTestSkipped('The finally keyword only exists in php 5.5 and above');
         }
 
@@ -1567,5 +1566,27 @@ class PhakeTest extends PHPUnit_Framework_TestCase
                 Phake::verify($mock)->foo();
             }
         ');
+    }
+
+    public function testVerifyNoOtherInteractions()
+    {
+        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock->foo('a');
+        $mock->foo('b');
+
+        Phake::verify($mock)->foo('a');
+        $this->setExpectedException('Phake_Exception_VerificationException');
+        Phake::verifyNoOtherInteractions($mock);
+    }
+
+    public function testVerifyNoOtherInteractionsWorks()
+    {
+        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock->foo('a');
+        $mock->foo('b');
+
+        Phake::verify($mock)->foo('a');
+        Phake::verify($mock)->foo('b');
+        Phake::verifyNoOtherInteractions($mock);
     }
 }

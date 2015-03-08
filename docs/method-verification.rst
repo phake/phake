@@ -191,6 +191,37 @@ There is a similar method to prevent any future interaction with a mock. This ca
 object to ``Phake::verifyNoFurtherInteraction($mock)``. You can pass multiple arguments to this method to
 verify no further interaction occurs with multiple mock objects.
 
+Verifying No Unverified Interaction with a Mock
+============================================
+
+By default any unverified calls to a mock are ignored. That is to say, if a call is made to `$mock->foo()` but
+`Phake::verify($mock)->foo()` is never used, then no failures are thrown. If you want to be stricter and ensure that
+all calls have been verified you can call `Phake::verifyNoOtherInteractions($mock)` at the end of your test. This will
+check and make sure that all calls to your mock have been verified by one or more calls to Phake verify. This method
+should only be used in those cases where you can clearly say that it is important that your test knows about all calls
+on a particular object. One useful case for instance could be in testing a method that returns a filtered array.
+
+.. code-block:: php
+
+    class FilterTest {
+        public function testFilteredList()
+        {
+            $filter = new MyFilter();
+            $list = Phake::Mock('MyList');
+
+            $filter->addEvenToList(array(1, 2, 3, 4, 5), $list);
+
+            Phake::verify($list)->push(2);
+            Phake::verify($list)->push(4);
+
+            Phake::verifyNoOtherInteractions($list);
+        }
+    }
+
+Without `Phake::verifyNoOtherInteractions($list)` you would have to add additional verifications that `$list->push()`
+was not called for the odd values in the list. This method should be used only when necessary. Using it in every test
+is an anti-pattern that will lead to brittle tests.
+
 Verifying Magic Methods
 =======================
 

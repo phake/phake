@@ -136,4 +136,21 @@ class Phake_CallRecorder_RecorderTest extends PHPUnit_Framework_TestCase
 
         $this->assertNull($callRecorder->getCallInfo($checkCall));
     }
+
+    public function testMarkingCallsVerified()
+    {
+        $call1 = new Phake_CallRecorder_Call($this->mock, 'someMethod', array());
+        $call2 = new Phake_CallRecorder_Call($this->mock, 'someMethod', array());
+        $call3 = new Phake_CallRecorder_Call($this->mock, 'someMethod', array());
+
+        $callRecorder = new Phake_CallRecorder_Recorder();
+        $callRecorder->recordCall($call1);
+        $callRecorder->recordCall($call2);
+
+        $callRecorder->markCallVerified($call2);
+
+        $callRecorder->recordCall($call3);
+
+        $this->assertEquals(array($call1, $call3), $callRecorder->getUnverifiedCalls());
+    }
 }

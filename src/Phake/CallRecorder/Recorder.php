@@ -64,6 +64,11 @@ class Phake_CallRecorder_Recorder
     private $positions = array();
 
     /**
+     * @var array
+     */
+    private $unverifiedCalls = array();
+
+    /**
      * @var int
      */
     private static $lastPosition = 0;
@@ -77,6 +82,7 @@ class Phake_CallRecorder_Recorder
     {
         $this->calls[]                           = $call;
         $this->positions[spl_object_hash($call)] = new Phake_CallRecorder_Position(self::$lastPosition++);
+        $this->unverifiedCalls[spl_object_hash($call)] = $call;
     }
 
     /**
@@ -113,5 +119,25 @@ class Phake_CallRecorder_Recorder
         } else {
             return null;
         }
+    }
+
+    /**
+     * Marks an individual call as being verified
+     *
+     * @param Phake_CallRecorder_Call $call
+     */
+    public function markCallVerified(Phake_CallRecorder_Call $call)
+    {
+        unset($this->unverifiedCalls[spl_object_hash($call)]);
+    }
+
+    /**
+     * Returns all unverified calls from the recorder
+     *
+     * @return array
+     */
+    public function getUnverifiedCalls()
+    {
+        return array_values($this->unverifiedCalls);
     }
 }

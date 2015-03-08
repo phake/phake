@@ -376,6 +376,62 @@ Other Invocations:
             $this->verifier->verifyNoCalls()
         );
     }
+
+    public function testVerifyMarksMatchedCallsAsVerified()
+    {
+        $expectation = new Phake_CallRecorder_CallExpectation(
+            $this->obj,
+            'bar',
+            null,
+            $this->verifierMode
+        );
+        $return = new Phake_CallRecorder_CallInfo($this->callArray[1], new Phake_CallRecorder_Position(0));
+        Phake::when($this->recorder)->getCallInfo($this->callArray[1])->thenReturn($return);
+
+        Phake::when($this->verifierMode)->verify(Phake::anyParameters())->thenReturn(
+            new Phake_CallRecorder_VerifierMode_Result(true, '')
+        );
+
+        $this->verifier->verifyCall($expectation);
+        Phake::verify($this->recorder)->markCallVerified($this->callArray[1]);
+        Phake::verify($this->recorder)->markCallVerified(Phake::anyParameters());
+    }
+
+    public function testVerifyNoOtherCallsSucceeds()
+    {
+        Phake::when($this->recorder)->getUnverifiedCalls()->thenReturn($this->callArray);
+        $verifierResult = $this->verifier->verifyNoOtherCalls();
+
+        $this->assertFalse($verifierResult->getVerified());
+        $expected_msg =
+            "Expected no interaction with mock\n"
+            . "Invocations:\n"
+            . "  Phake_IMock->foo()\n"
+            . "  Phake_IMock->bar()\n"
+            . "  Phake_IMock->foo(<string:bar>, <string:foo>)\n"
+            . "  Phake_IMock->foo()";
+
+        $this->assertEquals($expected_msg, $verifierResult->getFailureDescription());
+        $this->assertEmpty($verifierResult->getMatchedCalls());
+    }
+
+    public function testVerifyNoOtherCallsFails()
+    {
+        Phake::when($this->recorder)->getUnverifiedCalls()->thenReturn($this->callArray);
+        $verifierResult = $this->verifier->verifyNoOtherCalls();
+
+        $this->assertFalse($verifierResult->getVerified());
+        $expected_msg =
+            "Expected no interaction with mock\n"
+            . "Invocations:\n"
+            . "  Phake_IMock->foo()\n"
+            . "  Phake_IMock->bar()\n"
+            . "  Phake_IMock->foo(<string:bar>, <string:foo>)\n"
+            . "  Phake_IMock->foo()";
+
+        $this->assertEquals($expected_msg, $verifierResult->getFailureDescription());
+        $this->assertEmpty($verifierResult->getMatchedCalls());
+    }
 }
 
 

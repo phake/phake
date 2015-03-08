@@ -259,6 +259,23 @@ class Phake
     }
 
     /**
+     * Allows for verifying that no other interaction occurred with a mock object outside of what has already been
+     * verified
+     *
+     * @param Phake_IMock $mock
+     */
+    public static function verifyNoOtherInteractions(Phake_IMock $mock)
+    {
+        $callRecorder = Phake::getInfo($mock)->getCallRecorder();
+        $verifier = new Phake_CallRecorder_Verifier($callRecorder, $mock);
+        self::getClient()->processVerifierResult($verifier->verifyNoOtherCalls());
+
+        $sCallRecorder = Phake::getInfo(get_class($mock))->getCallRecorder();
+        $sVerifier = new Phake_CallRecorder_Verifier($sCallRecorder, get_class($mock));
+        self::getClient()->processVerifierResult($sVerifier->verifyNoOtherCalls());
+    }
+
+    /**
      * Converts a bunch of call info objects to position objects.
      *
      * @param array $calls

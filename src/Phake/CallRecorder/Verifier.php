@@ -94,6 +94,7 @@ class Phake_CallRecorder_Verifier
                 $args             = $call->getArguments();
                 if ($matcher->matches($call->getMethod(), $args)) {
                     $matchedCalls[] = $this->recorder->getCallInfo($call);
+                    $this->recorder->markCallVerified($call);
                 } elseif ($call->getMethod() == $expectation->getMethod()) {
                     $methodNonMatched[] = $call->__toString();
                 }
@@ -128,6 +129,31 @@ class Phake_CallRecorder_Verifier
 
         $reportedCalls = array();
         foreach ($this->recorder->getAllCalls() as $call) {
+            $result          = false;
+            $reportedCalls[] = $call->__toString();
+        }
+
+        if ($result) {
+            return new Phake_CallRecorder_VerifierResult(true, array());
+        } else {
+            $desc = 'Expected no interaction with mock' . "\n"
+                . 'Invocations:' . "\n  ";
+            return new Phake_CallRecorder_VerifierResult(false, array(), $desc . implode("\n  ", $reportedCalls));
+        }
+    }
+
+    /**
+     * Ensures all calls for this verifier have actually been verified
+     *
+     * @return Phake_CallRecorder_VerifierResult
+     */
+    public function verifyNoOtherCalls()
+    {
+        $result = true;
+
+        $reportedCalls = array();
+        foreach ($this->recorder->getUnverifiedCalls() as $call)
+        {
             $result          = false;
             $reportedCalls[] = $call->__toString();
         }
