@@ -55,6 +55,11 @@ class Phake_Matchers_ArgumentCaptor extends Phake_Matchers_SingleArgumentMatcher
     private $boundVariable;
 
     /**
+     * @var array
+     */
+    private $allCapturedValues;
+
+    /**
      * @var Phake_Matchers_IChainableArgumentMatcher
      */
     private $matcher;
@@ -65,6 +70,20 @@ class Phake_Matchers_ArgumentCaptor extends Phake_Matchers_SingleArgumentMatcher
     public function __construct(&$boundVariable)
     {
         $this->boundVariable =& $boundVariable;
+        $this->allCapturedValues = array();
+    }
+
+    /**
+     * Binds the passed in variable to the allCapturedValues array
+     *
+     * $values will be set to an array
+     *
+     * @param array $values
+     */
+    public function bindAllCapturedValues(&$values)
+    {
+        $values = $this->allCapturedValues;
+        $this->allCapturedValues = &$values;
     }
 
     /**
@@ -82,6 +101,7 @@ class Phake_Matchers_ArgumentCaptor extends Phake_Matchers_SingleArgumentMatcher
         $args[] =& $argument;
         if ($this->matcher === null || $this->matcher->doArgumentsMatch($args)) {
             $this->boundVariable = $argument;
+            $this->allCapturedValues[] = $argument;
             return true;
         } else {
             return false;

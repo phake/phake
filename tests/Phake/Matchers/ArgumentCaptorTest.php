@@ -132,6 +132,40 @@ class Phake_Matchers_ArgumentCaptorTest extends PHPUnit_Framework_TestCase
         $this->captor->when($matcher);
         $this->assertEquals('<captured parameter that is an argument>', $this->captor->__toString());
     }
+
+    public function testBindAllCapturedValuePreMatch()
+    {
+        $value1 = array(new stdClass());
+        $value2 = array(new stdClass());
+        $value3 = array(new stdClass());
+
+        $this->captor->bindAllCapturedValues($allCaptures);
+
+        $this->captor->doArgumentsMatch($value1);
+        $this->captor->doArgumentsMatch($value2);
+        $this->captor->doArgumentsMatch($value3);
+
+        $this->assertSame($this->refVariable, $value3[0]);
+
+        $this->assertSame(array($value1[0], $value2[0], $value3[0]), $allCaptures);
+    }
+
+    public function testBindAllCapturedValuePostMatch()
+    {
+        $value1 = array(new stdClass());
+        $value2 = array(new stdClass());
+        $value3 = array(new stdClass());
+
+        $this->captor->doArgumentsMatch($value1);
+        $this->captor->doArgumentsMatch($value2);
+        $this->captor->doArgumentsMatch($value3);
+
+        $this->captor->bindAllCapturedValues($allCaptures);
+
+        $this->assertSame($this->refVariable, $value3[0]);
+
+        $this->assertSame(array($value1[0], $value2[0], $value3[0]), $allCaptures);
+    }
 }
 
 

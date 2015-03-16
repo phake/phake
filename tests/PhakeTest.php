@@ -936,6 +936,23 @@ class PhakeTest extends PHPUnit_Framework_TestCase
         $this->assertSame($obj, $toArgument);
     }
 
+    public function testArgumentCapturingAllValls()
+    {
+        $mock = Phake::mock('PhakeTest_MockedClass');
+
+        $obj1 = new stdClass;
+        $obj2 = new stdClass;
+        $obj3 = new stdClass;
+
+        $mock->fooWithArgument($obj1);
+        $mock->fooWithArgument($obj2);
+        $mock->fooWithArgument($obj3);
+
+        Phake::verify($mock, Phake::atLeast(1))->fooWithArgument(Phake::captureAll($toArgument));
+
+        $this->assertSame(array($obj1, $obj2, $obj3), $toArgument);
+    }
+
     /**
      * Make sure stub return value capturing returns the parent value
      */

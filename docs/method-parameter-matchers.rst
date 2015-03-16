@@ -259,6 +259,49 @@ discourage it. When stubbing a method, you should only be concerned about making
 Argument capturing in no way helps with that goal. In the worst case scenario, you will have some incredibly difficult
 test failures to diagnose.
 
+Beginning in Phake 2.1 you can also capture all values for a given parameter for every matching invocation. For
+instance imagine if you have a method ``$foo->process($eventManager)`` that should send a series of events.
+
+.. code-block:: php
+
+    class Foo
+    {
+        // ...
+        public function process(Request $request, EventManager $eventManager)
+        {
+           $eventManager->fire(new PreProcessEvent($request));
+           // ... do stuff
+           $eventManager->fire(new PostProcessEvent($request, $result));
+        }
+    }
+
+If you wanted to verify different aspects of the ``$eventManager->fire()`` calls this would have been very difficult
+and brittle using standard argument captors. There is now a new method ``Phake::captureAll()`` that can be used to
+capture all otherwise matching invocations of method. The variable passed to ``Phake::captureAll()`` will be set to an
+array containing all of the values used for that parameter. So with this function the following test can be written.
+
+.. code-block:: php
+
+    class FooTest
+    {
+        public function testProcess()
+        {
+            $foo = new Foo();
+            $request = Phake::mock('Request');
+            $eventManager = Phake::mock('EventManager');
+
+            $foo->process($request, $eventManager);
+
+            Phake::verify($eventManager, Phake::atLeast(1))->fire(Phake::captureAll($events));
+
+            $this->assertInstanceOf('PreProcessEvent', $events[0]);
+            $this->assertEquals($request, $events[0]->getRequest());
+
+            $this->assertInstanceOf('PostProcessEvent', $events[1]);
+            $this->assertEquals($request, $events[1]->getRequest());
+        }
+    }
+
 Custom Parameter Matchers
 =========================
 

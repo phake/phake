@@ -438,6 +438,25 @@ class Phake
         return new Phake_Matchers_ArgumentCaptor($value);
     }
 
+
+    /**
+     * Returns a capturing matcher that is bound to store ALL of its calls in the variable passed in.
+     *
+     * $value will initially be set to an empty array;
+     *
+     * @param mixed $value - Will be set to the value of the called argument.
+     *
+     * @return Phake_Matchers_ArgumentCaptor
+     */
+    public static function captureAll(&$value)
+    {
+        $ignore = null;
+        $captor = new Phake_Matchers_ArgumentCaptor($ignore);
+        $captor->bindAllCapturedValues($value);
+        return $captor;
+    }
+
+
     /**
      * Returns a setter matcher that will set a reference parameter passed in as an argument to the
      * given value.
