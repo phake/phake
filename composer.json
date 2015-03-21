@@ -32,9 +32,4 @@
         "doctrine/common": "Allows mock annotations to use import statements for classes.",
         "hamcrest/hamcrest-php": "Use Hamcrest matchers."
     },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "2.0-dev"
-        }
-    }
 }
