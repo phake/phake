@@ -31,5 +31,5 @@
     "suggest": {
         "doctrine/common": "Allows mock annotations to use import statements for classes.",
         "hamcrest/hamcrest-php": "Use Hamcrest matchers."
-    },
+    }
 }
