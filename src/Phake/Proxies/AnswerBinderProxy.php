@@ -76,6 +76,7 @@ class Phake_Proxies_AnswerBinderProxy
      *
      * @param callback $value
      *
+     * @deprecated Use thenReturnCallback instead.
      * @throws InvalidArgumentException
      * @return Phake_Stubber_IAnswerContainer
      */
@@ -86,6 +87,19 @@ class Phake_Proxies_AnswerBinderProxy
         }
 
         return $this->binder->bindAnswer(new Phake_Stubber_Answers_LambdaAnswer($value));
+    }
+
+    /**
+     * Binds a callback answer to the method.
+     *
+     * @param callback $value
+     *
+     * @throws InvalidArgumentException
+     * @return Phake_Stubber_IAnswerContainer
+     */
+    public function thenReturnCallback($value)
+    {
+        return $this->thenGetReturnByLambda($value);
     }
 
     /**
