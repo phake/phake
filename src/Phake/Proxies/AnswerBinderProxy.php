@@ -82,11 +82,8 @@ class Phake_Proxies_AnswerBinderProxy
      */
     public function thenGetReturnByLambda($value)
     {
-        if (!is_callable($value)) {
-            throw new InvalidArgumentException("Given lambda is not callable");
-        }
-
-        return $this->binder->bindAnswer(new Phake_Stubber_Answers_LambdaAnswer($value));
+        trigger_error('Use thenReturnCallback instead.', E_USER_DEPRECATED);
+        return $this->thenReturnCallback($value);
     }
 
     /**
@@ -99,7 +96,11 @@ class Phake_Proxies_AnswerBinderProxy
      */
     public function thenReturnCallback($value)
     {
-        return $this->thenGetReturnByLambda($value);
+        if (!is_callable($value)) {
+            throw new InvalidArgumentException("Given lambda is not callable");
+        }
+
+        return $this->binder->bindAnswer(new Phake_Stubber_Answers_LambdaAnswer($value));
     }
 
     /**
