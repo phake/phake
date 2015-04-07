@@ -74,21 +74,18 @@ class Phake_Matchers_SingleArgumentMatcherTest extends PHPUnit_Framework_TestCas
 
         Phake::verify($this->matcher)->matches('test arg1');
         Phake::verify($this->nextMatcher)->doArgumentsMatch(array('test arg2'));
-        $this->assertTrue($result);
+        $this->assertNull($result);
     }
 
     public function testDoesNotMatchWrapped()
     {
         $args = array('test arg1', 'test arg2');
 
-        Phake::when($this->matcher)->matches->thenReturn(false);
+        Phake::when($this->matcher)->matches->thenThrow(new Phake_Exception_MethodMatcherException());
         Phake::when($this->nextMatcher)->doArgumentsMatch->thenReturn(true);
 
-        $result = $this->matcher->doArgumentsMatch($args);
-
-        Phake::verify($this->matcher)->matches('test arg1');
-        Phake::verify($this->nextMatcher, Phake::never())->doArgumentsMatch;
-        $this->assertFalse($result);
+        $this->setExpectedException('Exception');
+        $this->matcher->doArgumentsMatch($args);
     }
 
     public function testDoesNotMatchNext()
@@ -96,13 +93,10 @@ class Phake_Matchers_SingleArgumentMatcherTest extends PHPUnit_Framework_TestCas
         $args = array('test arg1', 'test arg2');
 
         Phake::when($this->matcher)->matches->thenReturn(true);
-        Phake::when($this->nextMatcher)->doArgumentsMatch->thenReturn(false);
+        Phake::when($this->nextMatcher)->doArgumentsMatch->thenThrow(new Phake_Exception_MethodMatcherException());
 
-        $result = $this->matcher->doArgumentsMatch($args);
-
-        Phake::verify($this->matcher)->matches('test arg1');
-        Phake::verify($this->nextMatcher)->doArgumentsMatch(array('test arg2'));
-        $this->assertFalse($result);
+        $this->setExpectedException('Exception');
+        $this->matcher->doArgumentsMatch($args);
     }
 
     public function testMatchWithNoNext()
@@ -115,7 +109,7 @@ class Phake_Matchers_SingleArgumentMatcherTest extends PHPUnit_Framework_TestCas
         $result = $this->matcher->doArgumentsMatch($args);
 
         Phake::verify($this->matcher)->matches('test arg1');
-        $this->assertTrue($result);
+        $this->assertNull($result);
     }
 
     public function testMatchWithNoNextAndExtraParameters()
@@ -125,10 +119,8 @@ class Phake_Matchers_SingleArgumentMatcherTest extends PHPUnit_Framework_TestCas
 
         Phake::when($this->matcher)->matches->thenReturn(true);
 
-        $result = $this->matcher->doArgumentsMatch($args);
-
-        Phake::verify($this->matcher)->matches('test arg1');
-        $this->assertFalse($result);
+        $this->setExpectedException('Exception');
+        $this->matcher->doArgumentsMatch($args);
     }
 
     public function testReferencesPassedThrough()

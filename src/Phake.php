@@ -423,7 +423,7 @@ class Phake
      */
     public static function equalTo($value)
     {
-        return new Phake_Matchers_EqualsMatcher($value);
+        return new Phake_Matchers_EqualsMatcher($value, new \SebastianBergmann\Comparator\Factory());
     }
 
     /**

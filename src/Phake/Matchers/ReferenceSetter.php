@@ -68,19 +68,25 @@ class Phake_Matchers_ReferenceSetter extends Phake_Matchers_SingleArgumentMatche
      * Sets the $argument to the value passed in the constructor
      *
      * @param mixed $argument
-     *
-     * @return boolean
+     * @throws Phake_Exception_MethodMatcherException
      */
     protected function matches(&$argument)
     {
         $args = array();
         $args[] =& $argument;
-        if ($this->matcher === null || $this->matcher->doArgumentsMatch($args)) {
-            $argument = $this->value;
-            return true;
+        if ($this->matcher !== null)
+        {
+            try
+            {
+                $this->matcher->doArgumentsMatch($args);
+            }
+            catch (Phake_Exception_MethodMatcherException $e)
+            {
+                throw new Phake_Exception_MethodMatcherException(trim("Failed in Phake::setReference()->when()\n" . $e->getMessage()), $e);
+            }
+            $this->matcher->doArgumentsMatch($args);
         }
-
-        return false;
+        $argument = $this->value;
     }
 
     /**

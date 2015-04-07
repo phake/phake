@@ -92,20 +92,26 @@ class Phake_Matchers_ArgumentCaptor extends Phake_Matchers_SingleArgumentMatcher
      * Will bind the argument to the variable passed to the constructor.
      *
      * @param mixed $argument
-     *
-     * @return boolean
+     * @throws Phake_Exception_MethodMatcherException
      */
     protected function matches(&$argument)
     {
         $args = array();
         $args[] =& $argument;
-        if ($this->matcher === null || $this->matcher->doArgumentsMatch($args)) {
-            $this->boundVariable = $argument;
-            $this->allCapturedValues[] = $argument;
-            return true;
-        } else {
-            return false;
+
+        if ($this->matcher !== null)
+        {
+            try
+            {
+                $this->matcher->doArgumentsMatch($args);
+            }
+            catch (Phake_Exception_MethodMatcherException $e)
+            {
+                throw new Phake_Exception_MethodMatcherException(trim("Failed in Phake::capture()->when()\n" . $e->getMessage()), $e);
+            }
         }
+        $this->boundVariable = $argument;
+        $this->allCapturedValues[] = $argument;
     }
 
     /**

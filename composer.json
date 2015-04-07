@@ -12,7 +12,8 @@
         }
     ],
     "require": {
-        "php": ">=5.3.3"
+        "php": ">=5.3.3",
+        "sebastian/comparator": "~1.1"
     },
     "require-dev": {
         "ext-soap": "*",

@@ -67,7 +67,7 @@ class Phake_Matchers_FactoryTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Phake_Matchers_EqualsMatcher', $matcher);
 
         $value = array('foo');
-        $this->assertTrue($matcher->doArgumentsMatch($value));
+        $this->assertNull($matcher->doArgumentsMatch($value));
     }
 
     /**
@@ -96,7 +96,7 @@ class Phake_Matchers_FactoryTest extends PHPUnit_Framework_TestCase
         $retMatcher = $this->factory->createMatcher($matcher);
 
         $value = array('foo');
-        $this->assertTrue($retMatcher->doArgumentsMatch($value));
+        $this->assertNull($retMatcher->doArgumentsMatch($value));
     }
 
     /**
@@ -113,7 +113,7 @@ class Phake_Matchers_FactoryTest extends PHPUnit_Framework_TestCase
         $retMatcher = $this->factory->createMatcher($matcher);
 
         $value = array('foo');
-        $this->assertTrue($retMatcher->doArgumentsMatch($value));
+        $this->assertNull($retMatcher->doArgumentsMatch($value));
     }
 
     public function testOldMatcherAdaptsToNewFormat()

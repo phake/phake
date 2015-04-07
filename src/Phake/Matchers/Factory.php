@@ -72,7 +72,7 @@ class Phake_Matchers_Factory
         } elseif ($argument instanceof Phake_Matchers_IArgumentMatcher) {
             $return = new Phake_Matchers_ChainedArgumentMatcher($argument);
         } else {
-            $return = new Phake_Matchers_EqualsMatcher($argument);
+            $return = new Phake_Matchers_EqualsMatcher($argument, new \SebastianBergmann\Comparator\Factory());
         }
 
         if ($nextMatcher !== null)

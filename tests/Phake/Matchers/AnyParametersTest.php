@@ -68,7 +68,7 @@ class Phake_Matchers_AnyParametersTest extends PHPUnit_Framework_TestCase
      */
     public function testMatches($arg)
     {
-        $this->assertTrue($this->matcher->doArgumentsMatch($arg));
+        $this->assertNull($this->matcher->doArgumentsMatch($arg));
     }
 
     public function testToString()

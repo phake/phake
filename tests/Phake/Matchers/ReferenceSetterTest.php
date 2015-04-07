@@ -66,7 +66,7 @@ class Phake_Matchers_ReferenceSetterTest extends PHPUnit_Framework_TestCase
     public function testSettingParameter()
     {
         $value = array('');
-        $this->assertTrue($this->setter->doArgumentsMatch($value));
+        $this->assertNull($this->setter->doArgumentsMatch($value));
 
         $this->assertEquals(42, $value[0]);
     }
@@ -86,7 +86,7 @@ class Phake_Matchers_ReferenceSetterTest extends PHPUnit_Framework_TestCase
         $this->setter->when($matcher);
 
         $value = array('blah');
-        $this->assertTrue($this->setter->doArgumentsMatch($value));
+        $this->assertNull($this->setter->doArgumentsMatch($value));
         $this->assertEquals('blah', $check);
         $this->assertEquals(42, $value[0]);
     }
@@ -98,14 +98,35 @@ class Phake_Matchers_ReferenceSetterTest extends PHPUnit_Framework_TestCase
     {
         $matcher = Phake::mock('Phake_Matchers_IChainableArgumentMatcher');
         $check = '';
-        Phake::when($matcher)->doArgumentsMatch->thenReturn(false);
+        Phake::when($matcher)->doArgumentsMatch->thenThrow(new Phake_Exception_MethodMatcherException());
 
         $this->setter->when($matcher);
 
         $value = array('blah');
-        $this->assertFalse($this->setter->doArgumentsMatch($value));
+        $this->setExpectedException('Exception');
+        $this->setter->doArgumentsMatch($value);
 
         $this->assertEquals('blah', $value[0]);
+    }
+
+    public function testConditionalSettingFailureUpdatesMessage()
+    {
+        $matcher = Phake::mock('Phake_Matchers_IChainableArgumentMatcher');
+        $check = '';
+        Phake::when($matcher)->doArgumentsMatch->thenThrow(new Phake_Exception_MethodMatcherException("test"));
+
+        $this->setter->when($matcher);
+
+        $value = array('blah');
+
+        try
+        {
+            $this->setter->doArgumentsMatch($value);
+        }
+        catch (Phake_Exception_MethodMatcherException $e)
+        {
+            $this->assertStringStartsWith("Failed in Phake::setReference()->when()\n", $e->getMessage(), "The methodmatcherexception is not prepended with capture info");
+        }
     }
 
     /**

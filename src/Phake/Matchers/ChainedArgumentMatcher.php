@@ -84,6 +84,6 @@ class Phake_Matchers_ChainedArgumentMatcher extends Phake_Matchers_SingleArgumen
      */
     protected function matches(&$argument)
     {
-        return $this->adaptedMatcher->matches($argument);
+        $this->adaptedMatcher->matches($argument);
     }
 }

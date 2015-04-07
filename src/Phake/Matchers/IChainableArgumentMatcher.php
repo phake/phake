@@ -48,11 +48,11 @@
 interface Phake_Matchers_IChainableArgumentMatcher
 {
     /**
-     * Executes the matcher on a given list of argument values. Returns TRUE on a match, FALSE otherwise.
+     * Assert the matcher on a given list of argument values. Throws an exception if the matcher doesn't match
      *
      * @param array $arguments
      *
-     * @return boolean
+     * @throw Exception
      */
     public function doArgumentsMatch(array &$arguments);
 

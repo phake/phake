@@ -134,7 +134,7 @@ class Phake_Proxies_VerifierProxyTest extends PHPUnit_Framework_TestCase
      */
     public function testProxyTransformsNonMatchersToEqualsMatcher()
     {
-        $argumentMatcher = new Phake_Matchers_EqualsMatcher('test');
+        $argumentMatcher = new Phake_Matchers_EqualsMatcher('test', new \SebastianBergmann\Comparator\Factory());
         Phake::when($this->verifier)->verifyCall(Phake::anyParameters())->thenReturn(
             new Phake_CallRecorder_VerifierResult(true, array(Phake::mock('Phake_CallRecorder_CallInfo')))
         );

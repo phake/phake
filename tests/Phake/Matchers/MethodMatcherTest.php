@@ -94,7 +94,7 @@ class Phake_Matchers_MethodMatcherTest extends PHPUnit_Framework_TestCase
      */
     public function testNoMatcherOnBadMethod()
     {
-        Phake::when($this->rootArgumentMatcher)->matches->thenReturn(true);
+        Phake::when($this->rootArgumentMatcher)->doArgumentsMatch->thenReturn(true);
 
         $arguments = array('foo', 'bar');
         $this->assertFalse($this->matcher->matches('test', $arguments));
@@ -105,7 +105,7 @@ class Phake_Matchers_MethodMatcherTest extends PHPUnit_Framework_TestCase
      */
     public function testNoMatcherOnBadArg1()
     {
-        Phake::when($this->rootArgumentMatcher)->matches->thenReturn(false);
+        Phake::when($this->rootArgumentMatcher)->doArgumentsMatch->thenThrow(new Phake_Exception_MethodMatcherException);
 
         $arguments = array('foo', 'bar');
         $this->assertFalse($this->matcher->matches('foo', $arguments));

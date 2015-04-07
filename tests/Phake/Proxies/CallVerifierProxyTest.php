@@ -67,8 +67,8 @@ class Phake_Proxies_CallVerifierProxyTest extends PHPUnit_Framework_TestCase
         $this->client     = new Phake_Client_Default();
         $this->obj        = new Phake_CallRecorder_Recorder();
 
-        $matcher1 = new Phake_Matchers_EqualsMatcher('foo');
-        $matcher2 = new Phake_Matchers_EqualsMatcher(array());
+        $matcher1 = new Phake_Matchers_EqualsMatcher('foo', new \SebastianBergmann\Comparator\Factory());
+        $matcher2 = new Phake_Matchers_EqualsMatcher(array(), new \SebastianBergmann\Comparator\Factory());
         $matcher1->setNextMatcher($matcher2);
         $this->proxy = new Phake_Proxies_CallVerifierProxy($matcher1, $this->client, false);
 
@@ -89,8 +89,8 @@ class Phake_Proxies_CallVerifierProxyTest extends PHPUnit_Framework_TestCase
 
     public function testStaticIsCalledOn()
     {
-        $matcher1 = new Phake_Matchers_EqualsMatcher('foo');
-        $matcher2 = new Phake_Matchers_EqualsMatcher(array());
+        $matcher1 = new Phake_Matchers_EqualsMatcher('foo', new \SebastianBergmann\Comparator\Factory());
+        $matcher2 = new Phake_Matchers_EqualsMatcher(array(), new \SebastianBergmann\Comparator\Factory());
         $matcher1->setNextMatcher($matcher2);
         $this->proxy = new Phake_Proxies_CallVerifierProxy($matcher1, $this->client, true);
 

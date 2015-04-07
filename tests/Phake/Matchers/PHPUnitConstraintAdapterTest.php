@@ -80,7 +80,7 @@ class Phake_Matchers_PHPUnitConstraintAdapterTest extends PHPUnit_Framework_Test
             ->will($this->returnValue(true));
 
         $value = array('foo');
-        $this->assertTrue($this->adapter->doArgumentsMatch($value));
+        $this->assertNull($this->adapter->doArgumentsMatch($value));
     }
 
     public function testToString()

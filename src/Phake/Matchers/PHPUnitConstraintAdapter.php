@@ -67,12 +67,27 @@ class Phake_Matchers_PHPUnitConstraintAdapter extends Phake_Matchers_SingleArgum
      * Forwards the call to PHPUnit's evaluate() method.
      *
      * @param mixed $argument
-     *
-     * @return boolean
+     * @throws Phake_Exception_MethodMatcherException
      */
     protected  function matches(&$argument)
     {
-        return $this->constraint->evaluate($argument, '', true);
+        try
+        {
+            $this->constraint->evaluate($argument, '');
+        }
+        catch (PHPUnit_Framework_ExpectationFailedException $e)
+        {
+            $failure = $e->getComparisonFailure();
+            if ($failure instanceof PHPUnit_Framework_ComparisonFailure)
+            {
+                $failure = $failure->getDiff();
+            }
+            else
+            {
+                $failure = '';
+            }
+            throw new Phake_Exception_MethodMatcherException($e->getMessage() . "\n" . $failure, $e);
+        }
     }
 
     public function __toString()

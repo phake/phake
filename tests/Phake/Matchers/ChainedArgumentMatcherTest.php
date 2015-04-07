@@ -80,7 +80,7 @@ class Phake_Matchers_ChainedArgumentMatcherTest extends PHPUnit_Framework_TestCa
 
         Phake::verify($this->adapted)->matches('test arg1');
         Phake::verify($this->nextMatcher)->doArgumentsMatch(array('test arg2'));
-        $this->assertTrue($result);
+        $this->assertNull($result);
     }
 
     public function testToString()

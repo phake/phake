@@ -92,11 +92,22 @@ class Phake_CallRecorder_Verifier
             if ($call->getObject() === $expectation->getObject()) {
                 $obj_interactions = true;
                 $args             = $call->getArguments();
-                if ($matcher->matches($call->getMethod(), $args)) {
+                try
+                {
+                    $matcher->assertMatches($call->getMethod(), $args);
                     $matchedCalls[] = $this->recorder->getCallInfo($call);
                     $this->recorder->markCallVerified($call);
-                } elseif ($call->getMethod() == $expectation->getMethod()) {
-                    $methodNonMatched[] = $call->__toString();
+                }
+                catch (Phake_Exception_MethodMatcherException $e)
+                {
+                    if ($call->getMethod() == $expectation->getMethod()) {
+                        $message = $e->getMessage();
+                        if (strlen($message))
+                        {
+                            $message = "\n{$message}";
+                        }
+                        $methodNonMatched[] = $call->__toString() . $message;
+                    }
                 }
             }
         }
@@ -109,7 +120,7 @@ class Phake_CallRecorder_Verifier
             }
 
             if (count($methodNonMatched)) {
-                $additions .= "\nOther Invocations:\n  " . implode("\n  ", $methodNonMatched);
+                $additions .= "\nOther Invocations:\n===\n  " . implode("\n===\n  ", str_replace("\n", "\n  ", $methodNonMatched)) . "\n===";
             }
 
             return new Phake_CallRecorder_VerifierResult(

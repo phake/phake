@@ -1268,8 +1268,11 @@ class PhakeTest extends PHPUnit_Framework_TestCase
         $this->setExpectedException(
             'Phake_Exception_VerificationException',
             'Expected PhakeTest_MockedClass->foo() to be called exactly <1> times, actually called <0> times.' . "\n"
-                . "Other Invocations:\n" .
-                "  PhakeTest_MockedClass->foo(<string:test>)"
+                . "Other Invocations:\n"
+                . "===\n"
+                . "  PhakeTest_MockedClass->foo(<string:test>)\n"
+                . "  No matchers were given to Phake::when(), but arguments were received by this method.\n"
+                . "==="
         );
 
         Phake::verify($mock)->foo();

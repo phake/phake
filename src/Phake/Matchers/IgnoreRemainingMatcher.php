@@ -48,15 +48,12 @@
 class Phake_Matchers_IgnoreRemainingMatcher extends Phake_Matchers_AbstractChainableArgumentMatcher
 {
     /**
-     * Executes the matcher on a given list of argument values. Returns TRUE on a match, FALSE otherwise.
+     * Do nothing, ignore remaining always matches
      *
      * @param array $arguments
-     *
-     * @return boolean
      */
     public function doArgumentsMatch(array &$arguments)
     {
-        return true;
     }
 
     /**

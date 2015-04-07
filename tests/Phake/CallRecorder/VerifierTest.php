@@ -147,8 +147,8 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
      */
     public function testVerifierDoesNotFindCallWithUnmatchedArguments()
     {
-        $matcher1 = new Phake_Matchers_EqualsMatcher('test');
-        $matcher2 = new Phake_Matchers_EqualsMatcher('test');
+        $matcher1 = new Phake_Matchers_EqualsMatcher('test', new \SebastianBergmann\Comparator\Factory());
+        $matcher2 = new Phake_Matchers_EqualsMatcher('test', new \SebastianBergmann\Comparator\Factory());
         $matcher1->setNextMatcher($matcher2);
         $expectation = new Phake_CallRecorder_CallExpectation(
             $this->obj,
@@ -264,7 +264,8 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
 
         $this->verifier->verifyCall($expectation);
 
-        Phake::verify($this->verifierMode)->verify(array($return, $return));
+        Phake::verify($this->verifierMode)->verify(Phake::capture($verifyCallInfo));
+        $this->assertEquals(array($return, $return), $verifyCallInfo);
     }
 
     public function testVerifierReturnsFalseWhenAnExpectationIsNotMet()
@@ -287,7 +288,10 @@ class Phake_CallRecorder_VerifierTest extends PHPUnit_Framework_TestCase
 
         $expectedMessage = 'Expected Phake_IMock->foo() to be called exactly 1 times, actually called 0 times.
 Other Invocations:
-  Phake_IMock->foo(<string:bar>, <string:foo>)';
+===
+  Phake_IMock->foo(<string:bar>, <string:foo>)
+  No matchers were given to Phake::when(), but arguments were received by this method.
+===';
 
         $this->assertEquals(
             new Phake_CallRecorder_VerifierResult(false, array(), $expectedMessage),
@@ -328,7 +332,7 @@ Other Invocations:
         $expectation = new Phake_CallRecorder_CallExpectation(
             $this->obj,
             'foo',
-            new Phake_Matchers_EqualsMatcher('test'),
+            new Phake_Matchers_EqualsMatcher('test', new \SebastianBergmann\Comparator\Factory()),
             $this->verifierMode
         );
 
@@ -344,9 +348,25 @@ Other Invocations:
         $expected_msg =
             "Expected Phake_IMock->foo(equal to <string:test>) to be called exactly 1 times, actually called 0 times.\n"
                 . "Other Invocations:\n"
+                . "===\n"
                 . "  Phake_IMock->foo()\n"
+                . "  Argument #1 failed test\n"
+                . "  Failed asserting that null matches expected 'test'.\n"
+                . "===\n"
                 . "  Phake_IMock->foo(<string:bar>, <string:foo>)\n"
-                . "  Phake_IMock->foo()";
+                . "  Argument #1 failed test\n"
+                . "  Failed asserting that two strings are equal.\n"
+                . "  \n"
+                . "  --- Expected\n"
+                . "  +++ Actual\n"
+                . "  @@ @@\n"
+                . "  -'test'\n"
+                . "  +'bar'\n"
+                . "===\n"
+                . "  Phake_IMock->foo()\n"
+                . "  Argument #1 failed test\n"
+                . "  Failed asserting that null matches expected 'test'.\n"
+                . "===";
 
         $this->assertEquals(
             new Phake_CallRecorder_VerifierResult(false, array(), $expected_msg),

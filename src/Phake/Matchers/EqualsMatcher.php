@@ -54,14 +54,21 @@ class Phake_Matchers_EqualsMatcher extends Phake_Matchers_SingleArgumentMatcher
      */
     private $value;
 
+    /**\
+     * @var \SebastianBergmann\Comparator\Factory
+     */
+    private $comparatorFactory;
+
     /**
      * Pass in the value that the upcoming arguments is expected to equal.
      *
      * @param mixed $value
+     * @param \SebastianBergmann\Comparator\Factory $comparatorFactory
      */
-    public function __construct($value)
+    public function __construct($value, \SebastianBergmann\Comparator\Factory $comparatorFactory)
     {
         $this->value = $value;
+        $this->comparatorFactory = $comparatorFactory;
     }
 
     /**
@@ -69,57 +76,15 @@ class Phake_Matchers_EqualsMatcher extends Phake_Matchers_SingleArgumentMatcher
      */
     protected  function matches(&$argument)
     {
-        return $this->compareValues($this->value, $argument);
-    }
-
-    private function compareValues($val1, $val2, &$tested = array())
-    {
-        if (is_object($val1) && is_object($val2)) {
-            return $this->compareObjects($val1, $val2, $tested);
-        } elseif (is_array($val1) && is_array($val2)) {
-            return $this->compareArrays($val1, $val2, $tested);
-        } else {
-            return $val1 == $val2;
+        try
+        {
+            $compare = $this->comparatorFactory->getComparatorFor($this->value, $argument);
+            $compare->assertEquals($this->value, $argument);
         }
-    }
-
-    private function compareObjects($obj1, $obj2, &$tested = array())
-    {
-        if (get_class($obj1) != get_class($obj2)) {
-            return false;
+        catch (\SebastianBergmann\Comparator\ComparisonFailure $e)
+        {
+            throw new Phake_Exception_MethodMatcherException(trim($e->getMessage() . "\n" . $e->getDiff()), $e);
         }
-
-        if ($obj1 === $obj2) {
-            return true;
-        }
-
-        if (in_array(array($obj1, $obj2), $tested, true)) {
-            return true;
-        }
-
-        $tested[] = array($obj1, $obj2);
-        $tested[] = array($obj2, $obj1);
-
-        return $this->compareArrays((array)$obj1, (array)$obj2, $tested);
-    }
-
-    private function compareArrays(array $arr1, array $arr2, array &$tested)
-    {
-        if (count($arr1) != count($arr2)) {
-            return false;
-        }
-
-        foreach ($arr1 as $key => $value) {
-            if (!array_key_exists($key, $arr2)) {
-                return false;
-            }
-
-            if (!$this->compareValues($value, $arr2[$key], $tested)) {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     /**

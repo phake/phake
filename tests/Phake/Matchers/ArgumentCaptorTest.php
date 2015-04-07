@@ -100,16 +100,39 @@ class Phake_Matchers_ArgumentCaptorTest extends PHPUnit_Framework_TestCase
     public function testConditionalCapturingWontCapture()
     {
         $matcher = Phake::mock('Phake_Matchers_IChainableArgumentMatcher');
-        Phake::when($matcher)->doArgumentsMatch->thenReturn(false);
+        Phake::when($matcher)->doArgumentsMatch->thenThrow(new Phake_Exception_MethodMatcherException());
 
         $this->captor->when($matcher);
 
         $value = array('blah');
-        $this->captor->doArgumentsMatch($value);
+        try
+        {
+            $this->captor->doArgumentsMatch($value);
+        }
+        //Need to atually catch the exception to validate that the refrence didn't change
+        catch (Phake_Exception_MethodMatcherException $e)
+        {
+            $this->assertNull($this->refVariable);
+        }
+    }
 
-        Phake::verify($matcher)->doArgumentsMatch(array('blah'));
+    public function testConditionalCaptureFailureUpdatesMessage()
+    {
+        $matcher = Phake::mock('Phake_Matchers_IChainableArgumentMatcher');
+        Phake::when($matcher)->doArgumentsMatch->thenThrow(new Phake_Exception_MethodMatcherException("test"));
 
-        $this->assertNull($this->refVariable);
+        $this->captor->when($matcher);
+
+        $value = array('blah');
+        try
+        {
+            $this->captor->doArgumentsMatch($value);
+        }
+            //Need to atually catch the exception to validate that the refrence didn't change
+        catch (Phake_Exception_MethodMatcherException $e)
+        {
+            $this->assertStringStartsWith("Failed in Phake::capture()->when()\n", $e->getMessage(), "The methodmatcherexception is not prepended with capture info");
+        }
     }
 
     /**

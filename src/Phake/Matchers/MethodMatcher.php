@@ -76,29 +76,62 @@ class Phake_Matchers_MethodMatcher implements Phake_Matchers_IMethodMatcher
      */
     public function matches($method, array &$args)
     {
-        if ($this->expectedMethod == $method
-            && $this->doArgumentsMatch($args)
-        ) {
+        try
+        {
+            $this->assertMatches($method, $args);
             return true;
-        } else {
+        }
+        catch (Phake_Exception_MethodMatcherException $e)
+        {
             return false;
         }
     }
 
     /**
+     * Asserts whether or not the given method and arguments match the configured method and argument matchers in this \
+     * object.
+     *
+     * @param string $method
+     * @param array $args
+     * @return bool
+     * @throws Phake_Exception_MethodMatcherException
+     */
+    public function assertMatches($method, array &$args)
+    {
+        if ($this->expectedMethod != $method)
+        {
+            throw new Phake_Exception_MethodMatcherException("Expected method {$this->expectedMethod} but received {$method}");
+        }
+
+        $this->doArgumentsMatch($args);
+    }
+
+    /**
      * Determines whether or not given arguments match the argument matchers configured in the object.
      *
-     * @param array $args
+     * Throws an exception with a description if the arguments do not match.
      *
-     * @return boolean
+     * @param array $args
+     * @return bool
+     * @throws Phake_Exception_MethodMatcherException
      */
     private function doArgumentsMatch(array &$args)
     {
-        if ($this->argumentMatcherChain === null)
+        if ($this->argumentMatcherChain !== null)
         {
-            return count($args) == 0;
+            try
+            {
+                $this->argumentMatcherChain->doArgumentsMatch($args);
+            }
+            catch (Phake_Exception_MethodMatcherException $e)
+            {
+                $position = $e->getArgumentPosition() + 1;
+                throw new Phake_Exception_MethodMatcherException(trim("Argument #{$position} failed test\n" . $e->getMessage()), $e);
+            }
         }
-
-        return $this->argumentMatcherChain->doArgumentsMatch($args);
+        elseif (count($args) != 0)
+        {
+            throw new Phake_Exception_MethodMatcherException("No matchers were given to Phake::when(), but arguments were received by this method.");
+        }
     }
 }

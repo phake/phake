@@ -66,12 +66,20 @@ class Phake_Matchers_HamcrestMatcherAdapter extends Phake_Matchers_SingleArgumen
      * Forwards the call to Hamcrest's matches() method.
      *
      * @param mixed $argument
-     *
-     * @return boolean
+     * @throws Phake_Exception_MethodMatcherException
      */
     protected  function matches(&$argument)
     {
-        return $this->matcher->matches($argument);
+        if (!$this->matcher->matches($argument))
+        {
+            $description = new \Hamcrest\StringDescription();
+            $description->appendText("Expected ")
+                ->appendDescriptionOf($this->matcher)
+                ->appendText(' but ');
+
+            $this->matcher->describeMismatch($argument, $description);
+            throw new Phake_Exception_MethodMatcherException($description);
+        }
     }
 
     public function __toString()
