@@ -20,9 +20,6 @@ env:
   - PHPUNIT_VERSION=4.7.*@dev
   - PHPUNIT_VERSION=4.8.*@dev
 
-before_script:
-  - composer require --dev phpunit/phpunit:${PHPUNIT_VERSION}
-
 script:
   - ./bin/phpunit
 
@@ -32,4 +29,5 @@ matrix:
 
 install:
   - ./.travis/install-hhvm-nightly.sh
+  - composer require --dev phpunit/phpunit:${PHPUNIT_VERSION}
   - composer install --dev
