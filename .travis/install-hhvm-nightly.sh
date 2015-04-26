@@ -8,7 +8,7 @@ if [ "$TRAVIS_PHP_VERSION" = "hhvm" ]; then
     curl http://dl.hhvm.com/conf/hhvm.gpg.key | sudo apt-key add -
     echo deb http://dl.hhvm.com/ubuntu precise main | sudo tee /etc/apt/sources.list.d/hhvm.list
     sudo apt-get update
-    sudo apt-get install hhvm-nightly
+    sudo apt-get -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install hhvm-nightly
     hhvm --version
 
     # Ensure the PHP symlink points to the nightly HHVM build ...
