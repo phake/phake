@@ -1,27 +1,26 @@
 <?php
-
 /*
  * Phake - Mocking Framework
- * 
- * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
+ *
+ * Copyright (c) 2010-2015, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
- * 
+ *
  *  *  Redistributions of source code must retain the above copyright
  *     notice, this list of conditions and the following disclaimer.
- * 
+ *
  *  *  Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in
  *     the documentation and/or other materials provided with the
  *     distribution.
- * 
+ *
  *  *  Neither the name of Mike Lively nor the names of his
  *     contributors may be used to endorse or promote products derived
  *     from this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -34,7 +33,7 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  * @category   Testing
  * @package    Phake
  * @author     Mike Lively <m@digitalsandwich.com>
@@ -44,49 +43,50 @@
  */
 
 /**
- * Records calls to a mock object's call recorder.
+ * Acts as a proxy to any object that allows calling any private or protected method on the wrapper and forward those
+ * calls to the wrapped object.
+ *
+ * I debated alot about putting anything like this in Phake and at some point I may just pull it out into its own
+ * library. It should be used with great caution and should really only need to be used to help ease steps in
+ * refactoring of otherwise hard to reach private and protected methods
+ *
+ * @author Mike Lively <m@digitalsandwich.com>
+ * @internal This class will quite likely change soon, don't use it outside of phake code
  */
-class Phake_ClassGenerator_InvocationHandler_StubCaller implements Phake_ClassGenerator_InvocationHandler_IInvocationHandler
+class Phake_Proxies_StaticVisibilityProxy
 {
-    /**
-     * @var Phake_Stubber_StubMapper
-     */
-    private $stubMapper;
+    private $proxied;
 
-    /**
-     * @var Phake_Stubber_IAnswer
-     */
-    private $defaultAnswer;
-
-    /**
-     * @param Phake_Stubber_StubMapper $stubMapper
-     * @param Phake_Stubber_IAnswer $defaultAnswer
-     */
-    public function __construct(Phake_Stubber_StubMapper $stubMapper, Phake_Stubber_IAnswer $defaultAnswer)
+    public function __construct($proxied)
     {
-        $this->stubMapper = $stubMapper;
-        $this->defaultAnswer = $defaultAnswer;
+        if (!is_object($proxied))
+        {
+            throw new InvalidArgumentException("Phake_Proxies_VisibilityProxy was passed a non-object");
+        }
+        $this->proxied = get_class($proxied);
     }
 
-    public function invoke($mock, $method, array $arguments, array &$argumentReference)
+    /**
+     * @param $method
+     * @param $arguments
+     * @return mixed
+     */
+    public function __call($method, $arguments)
     {
-        $stub = null;
-
-        if ($method == '__call' || $method == '__callStatic') {
-            $stub = $this->stubMapper->getStubByCall($arguments[0], $argumentReference[1]);
+        if (method_exists($this->proxied, $method))
+        {
+            $reflMethod = new ReflectionMethod($this->proxied, $method);
+            $reflMethod->setAccessible(true);
+            return $reflMethod->invokeArgs(null, $arguments);
         }
-
-        if ($stub === null) {
-            $stub = $this->stubMapper->getStubByCall($method, $argumentReference);
+        elseif (method_exists($this->proxied, '__callStatic'))
+        {
+            $reflMethod = new ReflectionMethod($this->proxied, '__callStatic');
+            return $reflMethod->invokeArgs(null, func_get_args());
         }
-
-        if ($stub === null) {
-            $answer = $this->defaultAnswer;
-        } else {
-            $answer = $stub->getAnswer();
+        else
+        {
+            throw new InvalidArgumentException("Method {$method} does not exist on {$this->proxied}");
         }
-
-        return $answer;
     }
 }
-

@@ -63,7 +63,7 @@ In order to test this we must mock ``foo()`` so that it throws an exception when
         }
     }
 
-
+.. _then-call-parent:
 Calling the Parent
 ==================
 

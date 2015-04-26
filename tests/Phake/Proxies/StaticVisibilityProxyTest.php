@@ -1,27 +1,26 @@
 <?php
-
 /*
  * Phake - Mocking Framework
- * 
- * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
+ *
+ * Copyright (c) 2010-2012, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
- * 
+ *
  *  *  Redistributions of source code must retain the above copyright
  *     notice, this list of conditions and the following disclaimer.
- * 
+ *
  *  *  Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in
  *     the documentation and/or other materials provided with the
  *     distribution.
- * 
+ *
  *  *  Neither the name of Mike Lively nor the names of his
  *     contributors may be used to endorse or promote products derived
  *     from this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -34,7 +33,7 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  * @category   Testing
  * @package    Phake
  * @author     Mike Lively <m@digitalsandwich.com>
@@ -44,49 +43,62 @@
  */
 
 /**
- * Records calls to a mock object's call recorder.
+ * @author Mike Lively <m@digitalsandwich.com>
  */
-class Phake_ClassGenerator_InvocationHandler_StubCaller implements Phake_ClassGenerator_InvocationHandler_IInvocationHandler
+class Phake_Proxies_StaticVisibilityProxyTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Phake_Stubber_StubMapper
+     * @expectedException InvalidArgumentException
      */
-    private $stubMapper;
-
-    /**
-     * @var Phake_Stubber_IAnswer
-     */
-    private $defaultAnswer;
-
-    /**
-     * @param Phake_Stubber_StubMapper $stubMapper
-     * @param Phake_Stubber_IAnswer $defaultAnswer
-     */
-    public function __construct(Phake_Stubber_StubMapper $stubMapper, Phake_Stubber_IAnswer $defaultAnswer)
+    public function testCallingOnANonObject()
     {
-        $this->stubMapper = $stubMapper;
-        $this->defaultAnswer = $defaultAnswer;
+        $proxy = new Phake_Proxies_StaticVisibilityProxy(42);
     }
 
-    public function invoke($mock, $method, array $arguments, array &$argumentReference)
+    public function testCallingNonExistantMethod()
     {
-        $stub = null;
+        $test = new PhakeTest_StaticClass();
+        $proxy = new Phake_Proxies_StaticVisibilityProxy($test);
 
-        if ($method == '__call' || $method == '__callStatic') {
-            $stub = $this->stubMapper->getStubByCall($arguments[0], $argumentReference[1]);
-        }
+        $this->setExpectedException('InvalidArgumentException');
+        $proxy->badFunctionName();
+    }
 
-        if ($stub === null) {
-            $stub = $this->stubMapper->getStubByCall($method, $argumentReference);
-        }
+    public function testCallingMagicMethod()
+    {
+        $mock = Phake::mock('PhakeTest_MagicClass');
+        $proxy = new Phake_Proxies_StaticVisibilityProxy($mock);
 
-        if ($stub === null) {
-            $answer = $this->defaultAnswer;
-        } else {
-            $answer = $stub->getAnswer();
-        }
+        Phake::whenStatic($mock)->test()->thenReturn('bar');
 
-        return $answer;
+        $test = $proxy->test();
+        Phake::verifyStatic($mock)->test();
+        $this->assertEquals('bar', $test);
+    }
+
+    public function testCallingProtectedMethod()
+    {
+        $mock = Phake::mock('PhakeTest_StaticClass');
+        $proxy = new Phake_Proxies_StaticVisibilityProxy($mock);
+
+        Phake::whenStatic($mock)->protectedStaticMethod()->thenReturn('bar');
+
+        $this->assertEquals('bar', $proxy->protectedStaticMethod());
+
+        Phake::verifyStatic($mock)->protectedStaticMethod();
+    }
+
+    public function testCallingPublicMethod()
+    {
+        $mock = Phake::mock('PhakeTest_StaticClass');
+        $proxy = new Phake_Proxies_StaticVisibilityProxy($mock);
+
+        Phake::whenStatic($mock)->staticMethod()->thenReturn('bar');
+
+        $this->assertEquals('bar', $proxy->staticMethod());
+
+        Phake::verifyStatic($mock)->staticMethod();
     }
 }
+
 

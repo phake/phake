@@ -120,6 +120,19 @@ class Phake_ClassGenerator_InvocationHandler_StubCallerTest extends PHPUnit_Fram
         );
     }
 
+    public function testMagicStaticCallMethodChecksForImplicitStubFirst()
+    {
+        $ref = array('foo', array('bar'));
+        Phake::when($this->stubMapper)->getStubByCall(Phake::anyParameters())->thenReturn(null);
+
+        $this->handler->invoke($this->mock, '__callStatic', $ref, $ref);
+
+        Phake::inOrder(
+            Phake::verify($this->stubMapper)->getStubByCall('foo', array('bar')),
+            Phake::verify($this->stubMapper)->getStubByCall('__callStatic', array('foo', array('bar')))
+        );
+    }
+
     public function testMagicCallMethodBypassesExplicitStub()
     {
         $ref = array('foo', array('bar'));

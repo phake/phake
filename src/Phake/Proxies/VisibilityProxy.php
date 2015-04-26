@@ -1,9 +1,8 @@
 <?php
-
-/*
+/* 
  * Phake - Mocking Framework
  * 
- * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
+ * Copyright (c) 2010-2015, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -44,49 +43,50 @@
  */
 
 /**
- * Records calls to a mock object's call recorder.
+ * Acts as a proxy to any object that allows calling any private or protected method on the wrapper and forward those
+ * calls to the wrapped object.
+ *
+ * I debated alot about putting anything like this in Phake and at some point I may just pull it out into its own
+ * library. It should be used with great caution and should really only need to be used to help ease steps in
+ * refactoring of otherwise hard to reach private and protected methods
+ *
+ * @author Mike Lively <m@digitalsandwich.com>
+ * @internal This class will quite likely change soon, don't use it outside of phake code
  */
-class Phake_ClassGenerator_InvocationHandler_StubCaller implements Phake_ClassGenerator_InvocationHandler_IInvocationHandler
+class Phake_Proxies_VisibilityProxy
 {
-    /**
-     * @var Phake_Stubber_StubMapper
-     */
-    private $stubMapper;
+    private $proxied;
 
-    /**
-     * @var Phake_Stubber_IAnswer
-     */
-    private $defaultAnswer;
-
-    /**
-     * @param Phake_Stubber_StubMapper $stubMapper
-     * @param Phake_Stubber_IAnswer $defaultAnswer
-     */
-    public function __construct(Phake_Stubber_StubMapper $stubMapper, Phake_Stubber_IAnswer $defaultAnswer)
+    public function __construct($proxied)
     {
-        $this->stubMapper = $stubMapper;
-        $this->defaultAnswer = $defaultAnswer;
+        if (!is_object($proxied))
+        {
+            throw new InvalidArgumentException("Phake_Proxies_VisibilityProxy was passed a non-object");
+        }
+        $this->proxied = $proxied;
     }
 
-    public function invoke($mock, $method, array $arguments, array &$argumentReference)
+    /**
+     * @param $method
+     * @param $arguments
+     * @return mixed
+     */
+    public function __call($method, $arguments)
     {
-        $stub = null;
-
-        if ($method == '__call' || $method == '__callStatic') {
-            $stub = $this->stubMapper->getStubByCall($arguments[0], $argumentReference[1]);
+        if (method_exists($this->proxied, $method))
+        {
+            $reflMethod = new ReflectionMethod(get_class($this->proxied), $method);
+            $reflMethod->setAccessible(true);
+            return $reflMethod->invokeArgs($this->proxied, $arguments);
         }
-
-        if ($stub === null) {
-            $stub = $this->stubMapper->getStubByCall($method, $argumentReference);
+        elseif (method_exists($this->proxied, '__call'))
+        {
+            $reflMethod = new ReflectionMethod(get_class($this->proxied), '__call');
+            return $reflMethod->invokeArgs($this->proxied, func_get_args());
         }
-
-        if ($stub === null) {
-            $answer = $this->defaultAnswer;
-        } else {
-            $answer = $stub->getAnswer();
+        else
+        {
+            throw new InvalidArgumentException("Method {$method} does not exist on " . get_class($this->proxied) . '.');
         }
-
-        return $answer;
     }
 }
-

@@ -36,7 +36,4 @@ Support
 If you think you have found a bug or an issue with Phake, please feel free to open up an issue on the
 `Phake Issue Tracker <https://github.com/mlively/Phake/issues>`_
 
-You can also email me directly at m@digitalsandwich.com or get ahold of me on various channels on the
-freenode irc network: mikelively.
-
 

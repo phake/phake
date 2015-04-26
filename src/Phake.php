@@ -650,4 +650,26 @@ class Phake
             return $mock::$__PHAKE_staticInfo;
         }
     }
+
+    /**
+     * Increases allows calling private and protected instance methods on the given mock.
+     *
+     * @param Phake_IMock $mock
+     * @return Phake_Proxies_VisibilityProxy $mock
+     */
+    public static function makeVisible(Phake_IMock $mock)
+    {
+        return new Phake_Proxies_VisibilityProxy($mock);
+    }
+
+    /**
+     * Increases allows calling private and protected static methods on the given mock.
+     *
+     * @param Phake_IMock $mock
+     * @return Phake_Proxies_VisibilityProxy $mock
+     */
+    public static function makeStaticsVisible(Phake_IMock $mock)
+    {
+        return new Phake_Proxies_StaticVisibilityProxy($mock);
+    }
 }

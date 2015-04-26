@@ -1,3 +1,5 @@
+.. _method-verification-section:
+
 *******************
 Method Verification
 *******************

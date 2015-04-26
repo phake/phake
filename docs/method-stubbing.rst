@@ -1,3 +1,5 @@
+.. _method-stubbing-section:
+
 Method Stubbing
 ===============
 

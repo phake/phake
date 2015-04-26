@@ -1307,6 +1307,15 @@ class PhakeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $mock->unStubbedCall());
     }
 
+    public function testStubbingMagicStaticCallMethod()
+    {
+        $mock = Phake::mock('PhakeTest_MagicClass');
+
+        Phake::whenStatic($mock)->magicCall()->thenReturn('magicCalled');
+
+        $this->assertEquals('magicCalled', $mock::magicCall());
+    }
+
     public function testMockingSoapClient()
     {
         // This test requires that E_STRICT be on
@@ -1608,5 +1617,21 @@ class PhakeTest extends PHPUnit_Framework_TestCase
         Phake::verify($mock)->foo('a');
         Phake::verify($mock)->foo('b');
         Phake::verifyNoOtherInteractions($mock);
+    }
+
+    public function testCallingProtectedMethods()
+    {
+        $mock = Phake::mock('PhakeTest_MockedClass');
+        Phake::makeVisible($mock)->innerFunc();
+
+        Phake::verify($mock)->innerFunc();
+    }
+
+    public function testCallingProtectedStaticMethods()
+    {
+        $mock = Phake::mock('PhakeTest_StaticClass');
+
+        Phake::makeStaticsVisible($mock)->protectedStaticMethod();
+        Phake::verifyStatic($mock)->protectedStaticMethod();
     }
 }

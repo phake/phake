@@ -49,5 +49,10 @@ class PhakeTest_StaticClass
     {
         return 'foo';
     }
+
+    protected static function protectedStaticMethod()
+    {
+        return 'foo';
+    }
 }
 

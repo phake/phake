@@ -11,6 +11,7 @@ Welcome to Phake - PHP Mocking Framework's documentation!
 
    introduction
    getting-started
+   mocks
    method-stubbing
    method-verification
    mocking-statics
