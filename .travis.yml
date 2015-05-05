@@ -28,7 +28,6 @@ matrix:
     - php: nightly
 
 install:
-  - ./.travis/install-hhvm-nightly.sh
   - composer require --dev phpunit/phpunit:${PHPUNIT_VERSION}
   - composer install --dev
 
