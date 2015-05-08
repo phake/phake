@@ -1606,4 +1606,15 @@ class PhakeTest extends PHPUnit_Framework_TestCase
         Phake::verify($mock)->foo('b');
         Phake::verifyNoOtherInteractions($mock);
     }
+
+    public function testThenReturnCallback()
+    {
+        $mock = Phake::mock('PhakeTest_MockedClass');
+
+        Phake::when($mock)->foo->thenReturnCallback(function () {
+            return true;
+        });
+
+        $this->assertTrue($mock->foo());
+    }
 }

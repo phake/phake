@@ -76,10 +76,25 @@ class Phake_Proxies_AnswerBinderProxy
      *
      * @param callback $value
      *
+     * @deprecated Use thenReturnCallback instead.
      * @throws InvalidArgumentException
      * @return Phake_Stubber_IAnswerContainer
      */
     public function thenGetReturnByLambda($value)
+    {
+        trigger_error('Use thenReturnCallback instead.', E_USER_DEPRECATED);
+        return $this->thenReturnCallback($value);
+    }
+
+    /**
+     * Binds a callback answer to the method.
+     *
+     * @param callback $value
+     *
+     * @throws InvalidArgumentException
+     * @return Phake_Stubber_IAnswerContainer
+     */
+    public function thenReturnCallback($value)
     {
         if (!is_callable($value)) {
             throw new InvalidArgumentException("Given lambda is not callable");
