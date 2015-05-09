@@ -82,6 +82,7 @@ class Phake_Proxies_AnswerBinderProxy
      */
     public function thenGetReturnByLambda($value)
     {
+        trigger_error('Use thenReturnCallback instead.', E_USER_DEPRECATED);
         return $this->thenReturnCallback($value);
     }
 
