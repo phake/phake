@@ -1634,4 +1634,15 @@ class PhakeTest extends PHPUnit_Framework_TestCase
         Phake::makeStaticsVisible($mock)->protectedStaticMethod();
         Phake::verifyStatic($mock)->protectedStaticMethod();
     }
+
+    public function testThenReturnCallback()
+    {
+        $mock = Phake::mock('PhakeTest_MockedClass');
+
+        Phake::when($mock)->foo->thenReturnCallback(function () {
+            return true;
+        });
+
+        $this->assertTrue($mock->foo());
+    }
 }

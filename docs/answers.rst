@@ -127,7 +127,7 @@ your unit tests there may occasionally be times when you need more control over 
 methods. When this is the case, you can use a callback answer. These do generally increase the complexity of tests and
 you really should only use them if you won't know what you need to return until call time.
 
-You can specify a callback answer using the thenGetReturnByLambda method. This argument takes a callback or a closure.
+You can specify a callback answer using the thenReturnCallback method. This argument takes a callback or a closure.
 The callback will be passed the same arguments as were passed to the method being stubbed. This allows you to use them
 to help determine the answer.
 
@@ -139,7 +139,7 @@ to help determine the answer.
         public function testCallback()
         {
             $mock = Phake::mock('MyClass');
-            Phake::when($mock)->foo()->thenGetReturnByLambda(function ($val) { return $val * 2; });
+            Phake::when($mock)->foo()->thenReturnCallback(function ($val) { return $val * 2; });
 
             $this->assertEquals(42, $mock->foo(21));
         }

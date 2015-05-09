@@ -78,7 +78,7 @@ class Phake_Matchers_ReferenceSetterTest extends PHPUnit_Framework_TestCase
     {
         $matcher = Phake::mock('Phake_Matchers_IChainableArgumentMatcher');
         $check = '';
-        Phake::when($matcher)->doArgumentsMatch->thenGetReturnByLambda(function ($arg) use (&$check) {
+        Phake::when($matcher)->doArgumentsMatch->thenReturnCallback(function ($arg) use (&$check) {
                 $check = $arg[0];
                 return true;
             });
