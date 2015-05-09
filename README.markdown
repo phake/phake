@@ -1,5 +1,6 @@
 Phake
 =======
+[![Documentation Status](https://readthedocs.org/projects/phake/badge/?version=2.1)](https://readthedocs.org/projects/phake/?badge=2.1)
 [![Build Status](https://secure.travis-ci.org/mlively/Phake.png)](http://travis-ci.org/mlively/Phake)
 [![Latest Stable Version](https://poser.pugx.org/phake/phake/v/stable.png)](https://packagist.org/packages/phake/phake) [![Total Downloads](https://poser.pugx.org/phake/phake/downloads.png)](https://packagist.org/packages/phake/phake) [![Latest Unstable Version](https://poser.pugx.org/phake/phake/v/unstable.png)](https://packagist.org/packages/phake/phake) [![License](https://poser.pugx.org/phake/phake/license.png)](https://packagist.org/packages/phake/phake)
 
