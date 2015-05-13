@@ -1622,17 +1622,23 @@ class PhakeTest extends PHPUnit_Framework_TestCase
     public function testCallingProtectedMethods()
     {
         $mock = Phake::mock('PhakeTest_MockedClass');
-        Phake::makeVisible($mock)->innerFunc();
+        Phake::when($mock)->innerFunc()->thenCallParent();
+
+        $returned = Phake::makeVisible($mock)->innerFunc();
 
         Phake::verify($mock)->innerFunc();
+        $this->assertSame('test', $returned);
     }
 
     public function testCallingProtectedStaticMethods()
     {
         $mock = Phake::mock('PhakeTest_StaticClass');
+        Phake::whenStatic($mock)->protectedStaticMethod()->thenCallParent();
 
-        Phake::makeStaticsVisible($mock)->protectedStaticMethod();
+        $returned = Phake::makeStaticsVisible($mock)->protectedStaticMethod();
+
         Phake::verifyStatic($mock)->protectedStaticMethod();
+        $this->assertSame('foo', $returned);
     }
 
     public function testThenReturnCallback()
