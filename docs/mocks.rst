@@ -74,7 +74,10 @@ Beginning in Phake 2.1 it is possible to invoke protected and private methods on
 a class, the mocked version will retain the same visibility on each of its functions as you would have had on your
 original class. However, using ``Phake::makeVisible()`` and ``Phake::makeStaticsVisible()`` you can allow direct
 invocation of instance methods and static methods accordingly. Both of these methods accept a mock object as its only
-parameter and returns a proxy class that you can invoke the methods on.
+parameter and returns a proxy class that you can invoke the methods on. Method calls on these proxies will still
+return whatever value was previously stubbed for that method call. So if you intend on the original method being called
+and you aren't using :ref:`partial-mocks`, then you can just enable :ref:`calling-the-parent` for that method call using
+the ``thenCallParent()`` answer. This is all discussed in greater depth in :ref:`method-stubbing` and :ref:`answers`.
 
 .. code-block:: php
 
