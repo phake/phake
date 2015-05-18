@@ -116,7 +116,7 @@ parameter for a stub can result in overly brittle tests. If you find yourself in
 shorthand stubbing to instruct Phake that a mock should be stubbed on any invocation. You could also use it to verify a
 method call regardless of parameters. This is not a very common use case but it is possible.
 
-To specify that a given stub or verification method should match any parameters you call the method your are stubbing
+To specify that a given stub or verification method should match any parameters, you call the method you are stubbing
 or mocking as a property of ``Phake::when()`` or ``Phake::verify()``. The code below will mock any invocation of
 $obj->foo() regardless of parameters to return bar.
 
