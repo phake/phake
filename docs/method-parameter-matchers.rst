@@ -43,11 +43,11 @@ to the ``deal()`` method on the ``Phake::verify($deal)`` object just as you woul
 In this example, if I were to have accidentally made the call to ``deal()`` with a property that was set to null as the
 first parameter then my test would fail with the following exception::
 
-    Expected DealerStrategy->fooWithArgument(equal to
+    Expected DealerStrategy->deal(equal to
     <object:CardCollection>, equal to <object:PlayerCollection>)
     to be called exactly 1 times, actually called 0 times.
     Other Invocations:
-      PhakeTest_MockedClass->fooWithArgument(<null>,
+      PhakeTest_MockedClass->deal(<null>,
     equal to <object:PlayerCollection>)
 
 Determining the appropriate method to stub works in exactly the same way.
@@ -251,7 +251,7 @@ side effect of better localizing your error. Here is the error you would see if 
     equal to <object:PlayerCollection>) to be called exactly 1
     times, actually called 0 times.
     Other Invocations:
-      PhakeTest_MockedClass->fooWithArgument(<array>,
+      PhakeTest_MockedClass->deal(<array>,
     <object:PlayerCollection>)
 
 It should be noted that while it is possible to use argument capturing for stubbing with ``Phake::when()`` I would
