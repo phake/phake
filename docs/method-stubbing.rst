@@ -790,6 +790,8 @@ You could stub an invocation of the ``__call()`` method through a userspace call
     }
 
 If for any reason you need to explicitly stub calls to ``__call()`` then you can use ``Phake::whenCallMethodWith()``.
+The matchers passed to ``Phake::whenCallMethod()`` will be matched to the method name and array of arguments similar to
+what you would expect to be passed to a ``__call()`` method. You can also use Phake::anyParameters() instead.
 
 .. code-block:: php
 
@@ -799,7 +801,7 @@ If for any reason you need to explicitly stub calls to ``__call()`` then you can
         {
             $mock = Phake::mock('MagicClass');
 
-            Phake::whenCallMethodWith('magicCall')->isCalledOn($mock)->thenReturn(42);
+            Phake::whenCallMethodWith('magicCall', array())->isCalledOn($mock)->thenReturn(42);
 
             $this->assertEquals(42, $mock->magicCall());
         }
