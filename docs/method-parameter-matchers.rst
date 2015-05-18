@@ -59,7 +59,7 @@ Using PHPUnit Matchers
 ======================
 Phake was developed with PHPUnit in mind. It is not dependent on PHPUnit, however if PHPUnit is your testing framework
 of choice there is some special integration available. Any constraints made available by the PHPUnit framework will
-work seamlessly inside of Phake. Here is an example of how the PHPUnit constraints can be used:
+work seamlessly inside of Phake. Here is an example of how the `PHPUnit constraints <https://phpunit.de/manual/current/en/appendixes.assertions.html#appendixes.assertions.assertThat.tables.constraints>`_ can be used:
 
 .. code-block:: php
 
@@ -88,7 +88,7 @@ be used in Phake.
 
 Using Hamcrest Matchers
 =======================
-If you do not use PHPUnit, Phake also supports Hamcrest matchers. This is in-line with the Phake's design goal of being
+If you do not use PHPUnit, Phake also supports `Hamcrest matchers <https://github.com/hamcrest/hamcrest-php#this-is-the-php-port-of-hamcrest-matchers>`_. This is in-line with the Phake's design goal of being
 usable with any testing framework. Here is a repeat of the PHPUnit example, this time using SimpleTest and Hamcrest
 matchers.
 
