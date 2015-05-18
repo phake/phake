@@ -24,7 +24,10 @@ static method.
 
     abstract class StaticFactory
     {
-        abstract protected static function factory();
+        protected static function factory()
+        {
+            // ...
+        }
 
         public static function getInstance()
         {
