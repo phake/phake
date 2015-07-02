@@ -198,7 +198,7 @@ class {$newClassName} {$extends}
     }
 
     /**
-     * Instantiates a new instance of the given mocked class.
+     * Instantiates a new instance of the given mocked class, and configures Phake data structures on said object.
      *
      * @param string                      $newClassName
      * @param Phake_CallRecorder_Recorder $recorder
@@ -215,50 +215,48 @@ class {$newClassName} {$extends}
         Phake_Stubber_IAnswer $defaultAnswer,
         array $constructorArgs = null
     ) {
-        $reflClass = new ReflectionClass($newClassName);
-        $constructor = $reflClass->getConstructor();
 
-        if ($constructor == null || ($constructor->class == $newClassName && $constructor->getNumberOfParameters() == 0))
-        {
-            $mockObject = new $newClassName;
-        }
-        elseif (version_compare(PHP_VERSION, '5.4.0', '>=')) {
-            try {
-                $mockObject = $reflClass->newInstanceWithoutConstructor();
-            } catch (ReflectionException $ignore) {
-            }
-        }
-
-        if (empty($mockObject))
-        {
-            $mockObject = @unserialize(sprintf('O:%d:"%s":0:{}', strlen($newClassName), $newClassName));
-            if ($mockObject == null)
-            {
-                $mockObject = unserialize(sprintf('C:%d:"%s":0:{}', strlen($newClassName), $newClassName));
-            }
-        }
-
-        try {
-            $mockObject = @unserialize(sprintf('O:%d:"%s":0:{}', strlen($newClassName), $newClassName));
-            if ($mockObject === false) {
-                $mockObject = @unserialize(sprintf('C:%d:"%s":0:{}', strlen($newClassName), $newClassName));
-            }
-            if (!$mockObject instanceof $newClassName) {
-                throw new \Exception('Unserialization failure: ' . $newClassName);
-            }
-        } catch (\Exception $e) {
-            $mockObject = new $newClassName();
-        }
-
+        $mockObject = $this->instanciateMockObject($newClassName);
         $mockObject->__PHAKE_info = $this->createMockInfo($newClassName::__PHAKE_name, $recorder, $mapper, $defaultAnswer);
         $mockObject->__PHAKE_constructorArgs = $constructorArgs;
 
-        $mockReflClass = new ReflectionClass($mockObject);
-        if (null !== $constructorArgs && $mockReflClass->hasMethod('__construct')) {
+        if (null !== $constructorArgs && method_exists($mockObject, '__construct')) {
             call_user_func_array(array($mockObject, '__construct'), $constructorArgs);
         }
 
         return $mockObject;
+    }
+
+    /**
+     * Instantiates a new instance of the given mocked class.
+     *
+     * @param $newClassName
+     * @return object
+     */
+    protected function instanciateMockObject ($newClassName) {
+
+        $reflClass = new ReflectionClass($newClassName);
+        $constructor = $reflClass->getConstructor();
+
+        if ($constructor == null || ($constructor->class == $newClassName && $constructor->getNumberOfParameters() == 0)) {
+            return new $newClassName;
+        }
+
+        if (method_exists($reflClass, "newInstanceWithoutConstructor")) {
+            try {
+                return $reflClass->newInstanceWithoutConstructor();
+            } catch (ReflectionException $ignore) {
+                /* Failed to create object, the class might be final. */
+            }
+        }
+
+        if (!is_subclass_of($newClassName, "Serializable")) {
+            /* Try to unserialize, this skips the constructor */
+            return unserialize(sprintf('O:%d:"%s":0:{}', strlen($newClassName), $newClassName));
+        }
+
+        /* Object implements custom unserialization */
+        return unserialize(sprintf('C:%d:"%s":0:{}', strlen($newClassName), $newClassName));
     }
 
     /**

@@ -44,8 +44,6 @@
 
 /**
  * Description of MockClass
- *
- * @todo Fix the instiate calls that are doing exactly the same basic thing...
  */
 class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 {
