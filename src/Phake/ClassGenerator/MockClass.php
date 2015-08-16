@@ -501,13 +501,17 @@ class {$newClassName} {$extends}
             }
         }
 
-        if ($parameter->isDefaultValueAvailable()) {
-            $default = ' = ' . var_export($parameter->getDefaultValue(), true);
-        } elseif ($parameter->isOptional()) {
-            $default = ' = null';
+        $isVariadic = method_exists($parameter, 'isVariadic') && $parameter->isVariadic();
+
+        if (!$isVariadic) {
+            if ($parameter->isDefaultValueAvailable()) {
+                $default = ' = ' . var_export($parameter->getDefaultValue(), true);
+            } elseif ($parameter->isOptional()) {
+                $default = ' = null';
+            }
         }
 
-        return $type . ($parameter->isPassedByReference() ? '&' : '') . '$' . $parameter->getName() . $default;
+        return $type . ($parameter->isPassedByReference() ? '&' : '') . ($isVariadic ? '...' : '') . '$' . $parameter->getName() . $default;
     }
 
     /**
