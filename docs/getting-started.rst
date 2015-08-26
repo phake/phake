@@ -1,8 +1,8 @@
 Getting Started
 ===============
 
-Phake depends on PHP 5.2.4 or greater. It has no dependency on PHPUnit and should be usable with
-any version of PHPUnit so long as the PHP version is 5.2.4 or greater.
+Phake depends on PHP 5.3.3 or greater. It has no dependency on PHPUnit and should be usable with
+any version of PHPUnit so long as the PHP version is 5.3.3 or greater.
 
 Composer Install
 ----------------
