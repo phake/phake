@@ -750,6 +750,21 @@ class PhakeTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    public function testCallOrderOnSameMethod()
+    {
+        $mock1 = Phake::mock('PhakeTest_MockedClass');
+
+        $mock1->foo("foo");
+        $mock1->foo("bar");
+        $mock1->foo("foo");
+
+        Phake::inOrder(
+            Phake::verify($mock1)->foo("foo"),
+            Phake::verify($mock1)->foo("bar"),
+            Phake::verify($mock1)->foo("foo")
+        );
+    }
+
     public function testCallOrderWithStatics()
     {
         $mock1 = Phake::mock('PhakeTest_MockedClass');
