@@ -16,6 +16,20 @@ can be overridden on a per method and even per parameter basis. This will be cov
 The mock  will also record all calls made to this class so that you can later verify that specific methods were called
 with the proper parameters. This will be covered in depth in :ref:`method-verification-section`.
 
+In addition to classes you can also mock interfaces directly. This is done in much the same way as a class name, you
+simply pass the interface name as the first parameter to ``Phake::mock()``.
+
+.. code-block:: php
+
+    $mock = Phake::mock('InterfaceToMock');
+
+You can also pass an array of interface names to ``Phake::mock()`` that also contains up to 1 class name. This allows
+for easier mocking of a dependency that is required to implement multiple interfaces.
+
+.. code-block:: php
+
+    $mock = Phake::mock(array('Interface1', 'Interface2'));
+
 Partial Mocks
 -------------
 

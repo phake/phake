@@ -196,7 +196,7 @@ class Phake_FacadeTest extends PHPUnit_Framework_TestCase
     {
         $mockGenerator->expects($this->once())
             ->method('generate')
-            ->with($this->matchesRegularExpression('#^[A-Za-z0-9_]+$#'), $this->equalTo($mockedClass), $this->equalTo($this->infoRegistry));
+            ->with($this->matchesRegularExpression('#^[A-Za-z0-9_]+$#'), $this->equalTo((array)$mockedClass), $this->equalTo($this->infoRegistry));
     }
 
     /**

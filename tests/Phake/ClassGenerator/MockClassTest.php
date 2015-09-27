@@ -171,6 +171,62 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
         $mock->fooWithArgument('bar');
     }
 
+    public function testGeneratingClassFromMultipleInterfaces()
+    {
+        $newClassName = __CLASS__ . '_testClass28';
+        $mockedClass = array('PhakeTest_MockedInterface', 'PhakeTest_ConstructorInterface');
+
+        $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
+
+        $reflClass = new ReflectionClass($newClassName);
+        $this->assertTrue($reflClass->implementsInterface('PhakeTest_MockedInterface'), "Implements PhakeTest_MockedInterface");
+        $this->assertTrue($reflClass->implementsInterface('PhakeTest_ConstructorInterface'), "Implements PhakeTest_ConstructorInterface");
+    }
+
+    public function testGeneratingClassFromSimilarInterfaces()
+    {
+        $newClassName = __CLASS__ . '_testClass29';
+        $mockedClass = array('PhakeTest_MockedInterface', 'PhakeTest_MockedInterface2');
+
+        $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
+
+        $reflClass = new ReflectionClass($newClassName);
+        $this->assertTrue($reflClass->implementsInterface('PhakeTest_MockedInterface'), "Implements PhakeTest_MockedInterface");
+        $this->assertTrue($reflClass->implementsInterface('PhakeTest_MockedInterface2'), "Implements PhakeTest_ConstructorInterface");
+    }
+
+    public function testGeneratingClassFromDuplicateInterfaces()
+    {
+        $newClassName = __CLASS__ . '_testClass30';
+        $mockedClass = array('PhakeTest_MockedInterface', 'PhakeTest_MockedInterface');
+
+        $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
+
+        $reflClass = new ReflectionClass($newClassName);
+        $this->assertTrue($reflClass->implementsInterface('PhakeTest_MockedInterface'), "Implements PhakeTest_MockedInterface");
+    }
+
+    public function testGeneratingClassFromInheritedInterfaces()
+    {
+        $newClassName = __CLASS__ . '_testClass31';
+        $mockedClass = array('PhakeTest_MockedInterface', 'PhakeTest_MockedChildInterface');
+
+        $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
+
+        $reflClass = new ReflectionClass($newClassName);
+        $this->assertTrue($reflClass->implementsInterface('PhakeTest_MockedInterface'), "Implements PhakeTest_MockedInterface");
+        $this->assertTrue($reflClass->implementsInterface('PhakeTest_MockedChildInterface'), "Implements PhakeTest_MockedInterface");
+    }
+
+    public function testGeneratingClassFromMultipleClasses()
+    {
+        $newClassName = __CLASS__ . '_testClass32';
+        $mockedClass = array('PhakeTest_MockedClass', 'PhakeTest_MockedConstructedClass');
+
+        $this->setExpectedException('RuntimeException');
+        $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
+    }
+
     /**
      * Tests the instantiation functionality of the mock generator.
      */
