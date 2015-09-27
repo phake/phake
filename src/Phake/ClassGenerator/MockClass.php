@@ -458,14 +458,28 @@ class {$newClassName} {$extends}
     protected function copyMethodParameters(ReflectionMethod $method)
     {
         $copies = "\$funcGetArgs = func_get_args();\n\t\t\$__PHAKE_numArgs = count(\$funcGetArgs);\n\t\t";
+        $variadicParameter = false;
+        $parameterCount = count($method->getParameters());
         foreach ($method->getParameters() as $parameter) {
             $pos = $parameter->getPosition();
-            $copies .= "if ({$pos} < \$__PHAKE_numArgs) \$__PHAKE_args[] =& \${$parameter->getName()};\n\t\t";
+            if (method_exists($parameter, 'isVariadic') && $parameter->isVariadic()) {
+                $parameterCount--;
+                $variadicParameter = $parameter->getName();
+                break;
+            }
+            else {
+                $copies .= "if ({$pos} < \$__PHAKE_numArgs) \$__PHAKE_args[] =& \${$parameter->getName()};\n\t\t";
+            }
         }
 
-        $copies .= "for (\$__PHAKE_i = " . count(
-            $method->getParameters()
-        ) . "; \$__PHAKE_i < \$__PHAKE_numArgs; \$__PHAKE_i++) \$__PHAKE_args[] = func_get_arg(\$__PHAKE_i);\n\t\t";
+        if ($variadicParameter)
+        {
+            $copies .= "for (\$__PHAKE_i = " . $parameterCount . "; \$__PHAKE_i < \$__PHAKE_numArgs; \$__PHAKE_i++) \$__PHAKE_args[] =& \${$variadicParameter}[\$__PHAKE_i - $parameterCount];\n\t\t";
+        }
+        else
+        {
+            $copies .= "for (\$__PHAKE_i = " . $parameterCount . "; \$__PHAKE_i < \$__PHAKE_numArgs; \$__PHAKE_i++) \$__PHAKE_args[] = func_get_arg(\$__PHAKE_i);\n\t\t";
+        }
 
         return $copies;
     }
@@ -501,13 +515,16 @@ class {$newClassName} {$extends}
             }
         }
 
+        $variadic = '';
         if ($parameter->isDefaultValueAvailable()) {
             $default = ' = ' . var_export($parameter->getDefaultValue(), true);
+        } elseif (method_exists($parameter, 'isVariadic') && $parameter->isVariadic()) {
+            $variadic = '...';
         } elseif ($parameter->isOptional()) {
             $default = ' = null';
         }
 
-        return $type . ($parameter->isPassedByReference() ? '&' : '') . '$' . $parameter->getName() . $default;
+        return $type . ($parameter->isPassedByReference() ? '&' : '') . $variadic . '$' . $parameter->getName() . $default;
     }
 
     /**
