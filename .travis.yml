@@ -11,10 +11,10 @@ php:
 
 env:
   - PHPUNIT_VERSION=4.8.*
-  - PHPUNIT_VERSION=4.8.x-dev@dev
-  - PHPUNIT_VERSION=5.0.x-dev@dev
-  - PHPUNIT_VERSION=5.1.x-dev@dev
-  - PHPUNIT_VERSION=6.0.x-dev@dev
+  - PHPUNIT_VERSION=4.8.x-dev
+  - PHPUNIT_VERSION=5.0.x-dev
+  - PHPUNIT_VERSION=5.1.x-dev
+  - PHPUNIT_VERSION=6.0.x-dev
 
 
 script:
@@ -23,31 +23,31 @@ script:
 matrix:
   allow_failures:
     - php: nightly
-    - env: PHPUNIT_VERSION=4.8.x-dev@dev
-    - env: PHPUNIT_VERSION=5.0.x-dev@dev
-    - env: PHPUNIT_VERSION=5.1.x-dev@dev
-    - env: PHPUNIT_VERSION=6.0.x-dev@dev
+    - env: PHPUNIT_VERSION=4.8.x-dev
+    - env: PHPUNIT_VERSION=5.0.x-dev
+    - env: PHPUNIT_VERSION=5.1.x-dev
+    - env: PHPUNIT_VERSION=6.0.x-dev
   exclude:
     - php: 5.3
-      env: PHPUNIT_VERSION=5.0.x-dev@dev
+      env: PHPUNIT_VERSION=5.0.x-dev
     - php: 5.4
-      env: PHPUNIT_VERSION=5.0.x-dev@dev
+      env: PHPUNIT_VERSION=5.0.x-dev
     - php: 5.5
-      env: PHPUNIT_VERSION=5.0.x-dev@dev
+      env: PHPUNIT_VERSION=5.0.x-dev
     - php: 5.3
-      env: PHPUNIT_VERSION=5.1.x-dev@dev
+      env: PHPUNIT_VERSION=5.1.x-dev
     - php: 5.4
-      env: PHPUNIT_VERSION=5.1.x-dev@dev
+      env: PHPUNIT_VERSION=5.1.x-dev
     - php: 5.5
-      env: PHPUNIT_VERSION=5.1.x-dev@dev
+      env: PHPUNIT_VERSION=5.1.x-dev
     - php: 5.3
-      env: PHPUNIT_VERSION=6.0.x-dev@dev
+      env: PHPUNIT_VERSION=6.0.x-dev
     - php: 5.4
-      env: PHPUNIT_VERSION=6.0.x-dev@dev
+      env: PHPUNIT_VERSION=6.0.x-dev
     - php: 5.5
-      env: PHPUNIT_VERSION=6.0.x-dev@dev
+      env: PHPUNIT_VERSION=6.0.x-dev
     - php: 5.6
-      env: PHPUNIT_VERSION=6.0.x-dev@dev
+      env: PHPUNIT_VERSION=6.0.x-dev
 
 install:
   - composer require --dev phpunit/phpunit:${PHPUNIT_VERSION}
