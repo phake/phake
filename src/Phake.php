@@ -85,7 +85,7 @@ class Phake
     public static function mock($className, Phake_Stubber_IAnswerContainer $defaultAnswer = null)
     {
         if ($defaultAnswer === null) {
-            $answer = new Phake_Stubber_Answers_StaticAnswer(null);
+            $answer = new Phake_Stubber_Answers_SmartDefaultAnswer();
         } else {
             $answer = $defaultAnswer->getAnswer();
         }

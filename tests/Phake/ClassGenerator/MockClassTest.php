@@ -639,5 +639,59 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 
         Phake::verify($mock)->variadicMethod(1, 2, 3, 4, 5, 6);
     }
+
+    public function testStubbingScalarReturnHints()
+    {
+        if (version_compare(phpversion(), '7.0.0RC1') < 0)
+        {
+            $this->markTestSkipped('Scalar type hints are not supported in PHP versions prior to 7.0');
+        }
+
+        $mock = Phake::mock('PhakeTest_ScalarTypes');
+
+        Phake::when($mock)->scalarHints->thenReturn(2);
+
+        $this->assertEquals(2, $mock->scalarHints(1, 1));
+    }
+
+    public function testStubbingScalarReturnsWrongType()
+    {
+        if (version_compare(phpversion(), '7.0.0RC1') < 0)
+        {
+            $this->markTestSkipped('Scalar type hints are not supported in PHP versions prior to 7.0');
+        }
+
+        $mock = Phake::mock('PhakeTest_ScalarTypes');
+
+        Phake::when($mock)->scalarHints->thenReturn(array());
+
+        try
+        {
+            $this->assertEquals(array(), $mock->scalarHints(1, 1));
+        }
+        catch (TypeError $e)
+        {
+            return;
+        }
+        catch (Throwable $e)
+        {
+            $this->fail("Expected A Type Error, instead got " . get_class($e) . " {$e}");
+        }
+        $this->fail("Expected A Type Error, no error received");
+    }
+
+    public function testDefaultStubChanged()
+    {
+        if (version_compare(phpversion(), '7.0.0RC1') < 0)
+        {
+            $this->markTestSkipped('Scalar type hints are not supported in PHP versions prior to 7.0');
+        }
+
+        $mock = Phake::mock('PhakeTest_ScalarTypes');
+
+        $mock->scalarHints(1, 1);
+
+        Phake::verify($mock)->scalarHints(1, 1);
+    }
 }
 

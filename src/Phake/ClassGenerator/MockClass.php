@@ -405,10 +405,16 @@ class {$newClassName} {$extends}
             $context = '$this';
         }
 
+        $returnType = '';
+        if (method_exists($method, 'hasReturnType') && $method->hasReturnType())
+        {
+            $returnType = ' : ' . $method->getReturnType();
+        }
+
         $docComment = $method->getDocComment() ?: '';
         $methodDef = "
 	{$docComment}
-	{$modifiers} function {$reference}{$method->getName()}({$this->generateMethodParameters($method)})
+	{$modifiers} function {$reference}{$method->getName()}({$this->generateMethodParameters($method)}){$returnType}
 	{
 		\$__PHAKE_args = array();
 		{$this->copyMethodParameters($method)}
@@ -504,6 +510,9 @@ class {$newClassName} {$extends}
                 $type = 'callable ';
             } elseif ($parameter->getClass() !== null) {
                 $type = $parameter->getClass()->getName() . ' ';
+            } elseif (method_exists($parameter, 'hasType') && $parameter->hasType())
+            {
+                $type = $parameter->getType() . ' ';
             }
         }
         catch (ReflectionException $e)
