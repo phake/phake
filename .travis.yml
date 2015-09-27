@@ -5,20 +5,17 @@ php:
   - 5.4
   - 5.5
   - 5.6
+  - 7.0
   - hhvm
   - nightly
 
 env:
-  - PHPUNIT_VERSION=3.7.*
-  - PHPUNIT_VERSION=4.0.*
-  - PHPUNIT_VERSION=4.1.*
-  - PHPUNIT_VERSION=4.2.*
-  - PHPUNIT_VERSION=4.3.*
-  - PHPUNIT_VERSION=4.4.*
-  - PHPUNIT_VERSION=4.5.*
-  - PHPUNIT_VERSION=4.6.*
-  - PHPUNIT_VERSION=4.7.*@dev
-  - PHPUNIT_VERSION=4.8.*@dev
+  - PHPUNIT_VERSION=4.8.*
+  - PHPUNIT_VERSION=4.8.x-dev
+  - PHPUNIT_VERSION=5.0.x-dev
+  - PHPUNIT_VERSION=5.1.x-dev
+  - PHPUNIT_VERSION=6.0.x-dev
+
 
 script:
   - ./bin/phpunit --coverage-clover=build/logs/clover.xml
@@ -26,6 +23,31 @@ script:
 matrix:
   allow_failures:
     - php: nightly
+    - env: PHPUNIT_VERSION=4.8.x-dev
+    - env: PHPUNIT_VERSION=5.0.x-dev
+    - env: PHPUNIT_VERSION=5.1.x-dev
+    - env: PHPUNIT_VERSION=6.0.x-dev
+  exclude:
+    - php: 5.3
+      env: PHPUNIT_VERSION=5.0.x-dev
+    - php: 5.4
+      env: PHPUNIT_VERSION=5.0.x-dev
+    - php: 5.5
+      env: PHPUNIT_VERSION=5.0.x-dev
+    - php: 5.3
+      env: PHPUNIT_VERSION=5.1.x-dev
+    - php: 5.4
+      env: PHPUNIT_VERSION=5.1.x-dev
+    - php: 5.5
+      env: PHPUNIT_VERSION=5.1.x-dev
+    - php: 5.3
+      env: PHPUNIT_VERSION=6.0.x-dev
+    - php: 5.4
+      env: PHPUNIT_VERSION=6.0.x-dev
+    - php: 5.5
+      env: PHPUNIT_VERSION=6.0.x-dev
+    - php: 5.6
+      env: PHPUNIT_VERSION=6.0.x-dev
 
 install:
   - composer require --dev phpunit/phpunit:${PHPUNIT_VERSION}
