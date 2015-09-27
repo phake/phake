@@ -611,5 +611,33 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
             $rflClass->getMethod("fooWithComment")->getDocComment()
         );
     }
+
+    public function testStubbingVariadics()
+    {
+        if (version_compare(phpversion(), '5.6.0') < 0)
+        {
+            $this->markTestSkipped('Variadics are not supported in PHP versions prior to 5.6');
+        }
+
+        $mock = Phake::mock('PhakeTest_Variadic');
+
+        Phake::when($mock)->variadicMethod->thenCallParent();
+
+        $this->assertEquals(array(1,2,3,4), $mock->variadicMethod(1, 2, 3, 4));
+    }
+
+    public function testMockingVariadics()
+    {
+        if (version_compare(phpversion(), '5.6.0') < 0)
+        {
+            $this->markTestSkipped('Variadics are not supported in PHP versions prior to 5.6');
+        }
+
+        $mock = Phake::mock('PhakeTest_Variadic');
+
+        $mock->variadicMethod(1, 2, 3, 4, 5, 6);
+
+        Phake::verify($mock)->variadicMethod(1, 2, 3, 4, 5, 6);
+    }
 }
 
