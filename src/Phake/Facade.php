@@ -68,7 +68,7 @@ class Phake_Facade
     /**
      * Creates a new mock class than can be stubbed and verified.
      *
-     * @param string                         $mockedClass   - The name of the class to mock
+     * @param string|array                   $mockedClassList - The name(s) of the class to mock
      * @param Phake_ClassGenerator_MockClass $mockGenerator - The generator used to construct mock classes
      * @param Phake_CallRecorder_Recorder    $callRecorder
      * @param Phake_Stubber_IAnswer          $defaultAnswer
@@ -78,25 +78,28 @@ class Phake_Facade
      * @return mixed
      */
     public function mock(
-        $mockedClass,
+        $mockedClassList,
         Phake_ClassGenerator_MockClass $mockGenerator,
         Phake_CallRecorder_Recorder $callRecorder,
         Phake_Stubber_IAnswer $defaultAnswer,
         array $constructorArgs = null
     ) {
+        $mockedClassList = (array)$mockedClassList;
+
+        foreach ($mockedClassList as $mockedClass)
         if (!class_exists($mockedClass, true) && !interface_exists($mockedClass, true)) {
             throw new InvalidArgumentException("The class / interface [{$mockedClass}] does not exist. Check the spelling and make sure it is loadable.");
         }
 
-        if (!isset($this->cachedClasses[$mockedClass])) {
-            $newClassName = $this->generateUniqueClassName($mockedClass);
-            $mockGenerator->generate($newClassName, $mockedClass, $this->infoRegistry);
+        if (!isset($this->cachedClasses[implode('__', $mockedClassList)])) {
+            $newClassName = $this->generateUniqueClassName($mockedClassList);
+            $mockGenerator->generate($newClassName, $mockedClassList, $this->infoRegistry);
 
-            $this->cachedClasses[$mockedClass] = $newClassName;
+            $this->cachedClasses[implode('__', $mockedClassList)] = $newClassName;
         }
 
         return $mockGenerator->instantiate(
-            $this->cachedClasses[$mockedClass],
+            $this->cachedClasses[implode('__', $mockedClassList)],
             $callRecorder,
             new Phake_Stubber_StubMapper(),
             $defaultAnswer,
@@ -118,18 +121,25 @@ class Phake_Facade
      *
      * @return string
      */
-    private function generateUniqueClassName($base)
+    private function generateUniqueClassName(array $bases)
     {
-        $ns_parts        = explode('\\', $base);
-        $base            = array_pop($ns_parts);
-        //Cygwin will drop a period from uniqid
-        $base_class_name = str_replace('.', '', uniqid($base . '_PHAKE'));
-        $i               = 1;
+        $base_class_name = array();
+        foreach ($bases as $base)
+        {
+            $ns_parts        = explode('\\', $base);
+            $base            = array_pop($ns_parts);
+            //Cygwin will drop a period from uniqid
+            $base_class_name[] = str_replace('.', '', uniqid($base . '_PHAKE'));
+        }
+
+        $i = 1;
+
+        $base_class_name = implode('__', $base_class_name);
 
         while (class_exists($base_class_name . $i, false)) {
             $i++;
         }
 
-        return $base_class_name;
+        return $base_class_name . $i;
     }
 }

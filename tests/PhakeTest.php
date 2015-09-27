@@ -1651,4 +1651,23 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue($mock->foo());
     }
+
+    public function testMockingMultipleInterfaces()
+    {
+        $mock = Phake::mock(array('PhakeTest_MockedInterface', 'PhakeTest_MockedClass'));
+        $this->assertInstanceOf('PhakeTest_MockedInterface', $mock);
+        $this->assertInstanceOf('PhakeTest_MockedClass', $mock);
+
+        Phake::when($mock)->foo->thenReturn('bar');
+        Phake::when($mock)->reference->thenReturn('foo');
+        Phake::when($mock)->fooWithArgument->thenReturn(42);
+
+        $this->assertEquals('bar', $mock->foo());
+        $this->assertEquals('foo', $mock->reference($test));
+        $this->assertEquals(42, $mock->fooWithArgument('blah'));
+
+        Phake::verify($mock)->foo();
+        Phake::verify($mock)->reference(null);
+        Phake::verify($mock)->fooWithArgument('blah');
+    }
 }

@@ -145,26 +145,63 @@ class Phake_ClassGenerator_MockClass
         $extends    = '';
         $implements = '';
         $interfaces = array();
+        $parent = null;
         $constructor = '';
 
-        $mockedClass = new ReflectionClass($mockedClassName);
+        $mockedClassNames = (array)$mockedClassName;
+        $mockedClasses = array();
 
-        if (!$mockedClass->isInterface()) {
-            $extends = "extends {$mockedClassName}";
-        } elseif ($mockedClassName != 'Phake_IMock') {
-            $implements = ", $mockedClassName";
+        foreach ($mockedClassNames as $mockedClassName)
+        {
+            $mockedClass = new ReflectionClass($mockedClassName);
+            $mockedClasses[] = $mockedClass;
 
-            if ($mockedClass->implementsInterface('Traversable') &&
-                !$mockedClass->implementsInterface('Iterator') &&
-                !$mockedClass->implementsInterface('IteratorAggregate')
-            ) {
-                if ($mockedClass->getName() == 'Traversable') {
-                    $implements = ', Iterator';
-                } else {
-                    $implements = ', Iterator'.$implements;
+            if (!$mockedClass->isInterface()) {
+                if (!empty($parent))
+                {
+                    throw new RuntimeException("You cannot use two classes in the same mock: {$parent->getName()}, {$mockedClass->getName()}. Use interfaces instead.");
                 }
-                $interfaces = array('Iterator');
+                $parent = $mockedClass;
+            } else {
+                if ($mockedClass->implementsInterface('Traversable') &&
+                    !$mockedClass->implementsInterface('Iterator') &&
+                    !$mockedClass->implementsInterface('IteratorAggregate')
+                ) {
+                    $interfaces[] = new ReflectionClass('Iterator');
+                    if ($mockedClass->getName() != 'Traversable') {
+                        $interfaces[] = $mockedClass;
+                    }
+                }
+                else
+                {
+                    $interfaces[] = $mockedClass;
+                }
             }
+        }
+
+       $interfaces = array_unique($interfaces);
+
+        if (!empty($parent))
+        {
+            $extends = "extends {$parent->getName()}";
+        }
+
+        $interfaceNames = array_map(function (ReflectionClass $c) { return $c->getName(); }, $interfaces);
+        if(($key = array_search('Phake_IMock', $interfaceNames)) !== false) {
+            unset($interfaceNames[$key]);
+        }
+        if (!empty($interfaceNames))
+        {
+            $implements = ', ' . implode(',', $interfaceNames);
+        }
+
+        if (empty($parent))
+        {
+            $mockedClass = array_shift($interfaces);
+        }
+        else
+        {
+            $mockedClass = $parent;
         }
 
         $classDef = "
@@ -186,7 +223,7 @@ class {$newClassName} {$extends}
 	 */
 	public function __destruct() {}
 
- 	{$this->generateSafeConstructorOverride($mockedClass)}
+ 	{$this->generateSafeConstructorOverride($mockedClasses)}
 
 	{$this->generateMockedMethods($mockedClass, $interfaces)}
 }
@@ -267,12 +304,15 @@ class {$newClassName} {$extends}
      *
      * @return string
      */
-    protected function generateMockedMethods(ReflectionClass $mockedClass, array $mockedInterfaces = array())
+    protected function generateMockedMethods(ReflectionClass $mockedClass, array $mockedInterfaces = array(), &$implementedMethods = array())
     {
         $methodDefs = '';
         $filter     = ReflectionMethod::IS_ABSTRACT | ReflectionMethod::IS_PROTECTED | ReflectionMethod::IS_PUBLIC | ~ReflectionMethod::IS_FINAL;
 
-        $implementedMethods = $this->reservedWords;
+        if (empty($implementedMethods))
+        {
+            $implementedMethods = $this->reservedWords;
+        }
         foreach ($mockedClass->getMethods($filter) as $method) {
             if (!$method->isConstructor() && !$method->isDestructor() && !$method->isFinal()
                 && !in_array($method->getName(), $implementedMethods)
@@ -283,7 +323,7 @@ class {$newClassName} {$extends}
         }
 
         foreach ($mockedInterfaces as $interface) {
-            $methodDefs .= $this->generateMockedMethods(new ReflectionClass($interface));
+            $methodDefs .= $this->generateMockedMethods($interface, array(), $implementedMethods);
         }
 
         return $methodDefs;
@@ -341,16 +381,27 @@ class {$newClassName} {$extends}
         return false;
     }
 
-    private function generateSafeConstructorOverride(ReflectionClass $mockedClass)
+    private function generateSafeConstructorOverride(array $mockedClasses)
     {
-        if (!$this->isConstructorDefinedAndFinal($mockedClass)
-            && !$this->isConstructorDefinedInInterface($mockedClass)
-        )
+        $overrideConstructor = true;
+
+        foreach ($mockedClasses as $class)
+        {
+            $overrideConstructor = $overrideConstructor
+                && !$this->isConstructorDefinedAndFinal($class)
+                && !$this->isConstructorDefinedInInterface($class);
+
+            if (!$class->isInterface())
+            {
+                $realClass = $class;
+            }
+        }
+        if ($overrideConstructor && !empty($realClass))
         {
             $constructorDef = "
 	public function __construct()
 	{
-	    {$this->getConstructorChaining($mockedClass)}
+	    {$this->getConstructorChaining($realClass)}
 	}
 ";
             return $constructorDef;
