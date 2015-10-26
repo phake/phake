@@ -75,7 +75,7 @@ class Phake_Stubber_StubMapper
      */
     public function getStubByCall($method, array &$args)
     {
-        $matcherStubMap = isset($this->matcherStubMap[$method]) ? array_reverse($this->matcherStubMap[$method]) : [];
+        $matcherStubMap = isset($this->matcherStubMap[$method]) ? array_reverse($this->matcherStubMap[$method]) : array();
 
         foreach ($matcherStubMap as $item) {
             list($matcher, $answer) = $item;
