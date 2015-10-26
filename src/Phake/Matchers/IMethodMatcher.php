@@ -61,4 +61,12 @@ interface Phake_Matchers_IMethodMatcher
      * @return boolean
      */
     public function matches($method, array &$args);
+
+    /**
+     * Accessor for the expected method.
+     *
+     * @return string
+     */
+    public function getMethod();
+
 }

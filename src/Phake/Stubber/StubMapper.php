@@ -62,7 +62,7 @@ class Phake_Stubber_StubMapper
      */
     public function mapStubToMatcher(Phake_Stubber_AnswerCollection $answer, Phake_Matchers_IMethodMatcher $matcher)
     {
-        $this->matcherStubMap[] = array($matcher, $answer);
+        $this->matcherStubMap[$matcher->getMethod()][] = array($matcher, $answer);
     }
 
     /**
@@ -75,7 +75,7 @@ class Phake_Stubber_StubMapper
      */
     public function getStubByCall($method, array &$args)
     {
-        $matcherStubMap = array_reverse($this->matcherStubMap);
+        $matcherStubMap = isset($this->matcherStubMap[$method]) ? array_reverse($this->matcherStubMap[$method]) : [];
 
         foreach ($matcherStubMap as $item) {
             list($matcher, $answer) = $item;

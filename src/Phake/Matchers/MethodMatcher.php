@@ -134,4 +134,12 @@ class Phake_Matchers_MethodMatcher implements Phake_Matchers_IMethodMatcher
             throw new Phake_Exception_MethodMatcherException("No matchers were given to Phake::when(), but arguments were received by this method.");
         }
     }
+
+    /**
+     * @return string
+     */
+    public function getMethod()
+    {
+        return $this->expectedMethod;
+    }
 }
