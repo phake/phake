@@ -87,7 +87,7 @@ calls return predictable values. This project is all coming together and I am re
 
         private $item3;
 
-        public function setUp()
+        protected function setUp()
         {
             $this->item1 = Phake::mock('Item');
             $this->item2 = Phake::mock('Item');
