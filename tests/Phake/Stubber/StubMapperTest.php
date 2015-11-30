@@ -75,6 +75,10 @@ class Phake_Stubber_StubMapperTest extends PHPUnit_Framework_TestCase
             ->with('foo', array('bar', 'test'))
             ->will($this->returnValue(true));
 
+        $matcher->expects($this->any())
+            ->method('getMethod')
+            ->will($this->returnValue('foo'));
+
         $this->mapper->mapStubToMatcher($stub, $matcher);
 
         $arguments = array('bar', 'test');
@@ -132,10 +136,18 @@ class Phake_Stubber_StubMapperTest extends PHPUnit_Framework_TestCase
         $also_matches->expects($this->never())
             ->method('matches');
 
+        $also_matches->expects($this->any())
+            ->method('getMethod')
+            ->will($this->returnvalue('foo'));
+
         $match_me->expects($this->any())
             ->method('matches')
             ->with('foo', array('bar', 'test'))
             ->will($this->returnValue(true));
+
+        $match_me->expects($this->any())
+            ->method('getMethod')
+            ->will($this->returnvalue('foo'));
 
         $this->mapper->mapStubToMatcher($also_matches_stub, $also_matches);
         $this->mapper->mapStubToMatcher($match_me_stub, $match_me);
