@@ -139,7 +139,7 @@ to help determine the answer.
         public function testCallback()
         {
             $mock = Phake::mock('MyClass');
-            Phake::when($mock)->foo()->thenReturnCallback(function ($val) { return $val * 2; });
+            Phake::when($mock)->foo->thenReturnCallback(function ($val) { return $val * 2; });
 
             $this->assertEquals(42, $mock->foo(21));
         }
