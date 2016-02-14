@@ -48,7 +48,7 @@
  */
 class Phake_PHPUnit_VerifierResultConstraint extends PHPUnit_Framework_Constraint
 {
-    public function evaluate($other)
+    public function evaluate($other, $description = '', $returnResult = FALSE)
     {
         if (!$other instanceof Phake_CallRecorder_VerifierResult) {
             throw new InvalidArgumentException("You must pass an instance of Phake_CallRecorder_VerifierResult");
