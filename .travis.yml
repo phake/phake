@@ -18,7 +18,13 @@ env:
 
 
 script:
-  - ./bin/phpunit --coverage-clover=build/logs/clover.xml
+  - |
+    if [[ $TRAVIS_PHP_VERSION = "hhv"* ]]; then
+      hhvm -vEval.EnableHipHopSyntax=true ./bin/phpunit --coverage-clover=build/logs/clover.xml
+    else
+      ./bin/phpunit --coverage-clover=build/logs/clover.xml
+    fi
+  -
 
 matrix:
   allow_failures:
@@ -54,12 +60,6 @@ matrix:
 install:
   - composer require --dev phpunit/phpunit:${PHPUNIT_VERSION}
   - composer install --dev
-
-before_script:
-  - |
-    if [[ $TRAVIS_PHP_VERSION = "hhv"* ]]; then
-      echo "hhvm.vm_stack_elms=32768" >> /etc/hhvm/php.ini
-    fi
 
 after_script:
   - wget https://scrutinizer-ci.com/ocular.phar

@@ -78,6 +78,10 @@ class Phake_Proxies_VisibilityProxyTest extends PHPUnit_Framework_TestCase
 
     public function testCallingPrivateMethod()
     {
+        if (defined('HHVM_VERSION'))
+        {
+            $this->markTestSkipped("Can't call private methods with hhvm");
+        }
         $mock = Phake::mock('PhakeTest_MockedClass');
         $proxy = new Phake_Proxies_VisibilityProxy($mock);
 
@@ -90,6 +94,10 @@ class Phake_Proxies_VisibilityProxyTest extends PHPUnit_Framework_TestCase
 
     public function testCallingPrivateMethodThatDelegatesToParent()
     {
+        if (defined('HHVM_VERSION'))
+        {
+            $this->markTestSkipped("Can't call private methods with hhvm");
+        }
         $mock = Phake::mock('PhakeTest_MockedClass');
         $proxy = new Phake_Proxies_VisibilityProxy($mock);
 

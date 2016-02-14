@@ -68,7 +68,14 @@ class Phake_Stubber_Answers_ParentDelegateTest extends PHPUnit_Framework_TestCas
         $m = Phake::mock('PhakeTest_MockedClass');
         $callback = $this->delegate->getAnswerCallback($m, 'fooWithReturnValue');
 
-        $this->assertEquals('blah', $callback(array()));
+        if (defined('HHVM_VERSION'))
+        {
+            $this->assertEquals(array('parent', 'fooWithReturnValue'), $callback);
+        }
+        else
+        {
+            $this->assertEquals('blah', $callback(array()));
+        }
     }
 
     /**
@@ -119,6 +126,11 @@ class Phake_Stubber_Answers_ParentDelegateTest extends PHPUnit_Framework_TestCas
 
     public function testCallBackCanCallPrivateInTheParent()
     {
+        if (defined('HHVM_VERSION'))
+        {
+            $this->markTestSkipped("Can't call private methods with hhvm");
+        }
+
         $callback = $this->delegate->getAnswerCallback(Phake::mock('PhakeTest_MockedClass'), 'privateFunc');
 
         $this->assertEquals('blah', call_user_func($callback, array()));
@@ -126,6 +138,11 @@ class Phake_Stubber_Answers_ParentDelegateTest extends PHPUnit_Framework_TestCas
 
     public function testCallBackCanCallPrivateStaticInTheParent()
     {
+        if (defined('HHVM_VERSION'))
+        {
+            $this->markTestSkipped("Can't call private methods with hhvm");
+        }
+
         $callback = $this->delegate->getAnswerCallback(Phake::mock('PhakeTest_MockedClass'), 'privateStaticFunc');
 
         $this->assertEquals('blah static', call_user_func($callback, array()));

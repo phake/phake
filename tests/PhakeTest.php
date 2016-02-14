@@ -1632,6 +1632,10 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 
     public function testCallingPrivateMethods()
     {
+        if (defined('HHVM_VERSION'))
+        {
+            $this->markTestSkipped("Can't call private methods with hhvm");
+        }
         $mock = Phake::mock('PhakeTest_MockedClass');
         Phake::when($mock)->privateFunc()->thenCallParent();
 
