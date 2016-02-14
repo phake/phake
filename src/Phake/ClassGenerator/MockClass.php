@@ -479,7 +479,15 @@ class {$newClassName} {$extends}
 		\$__PHAKE_answer = \$__PHAKE_info->getHandlerChain()->invoke({$context}, '{$method->getName()}', \$__PHAKE_funcArgs, \$__PHAKE_args);
 
 	    \$__PHAKE_callback = \$__PHAKE_answer->getAnswerCallback({$context}, '{$method->getName()}');
-	    \$__PHAKE_result = call_user_func_array(\$__PHAKE_callback, \$__PHAKE_args);
+
+	    if (\$__PHAKE_callback instanceof Phake_Stubber_Answers_ParentDelegateCallback)
+	    {
+    	    \$__PHAKE_result = \$__PHAKE_callback(\$__PHAKE_args);
+	    }
+	    else
+	    {
+    	    \$__PHAKE_result = call_user_func_array(\$__PHAKE_callback, \$__PHAKE_args);
+	    }
 	    \$__PHAKE_answer->processAnswer(\$__PHAKE_result);
 	    return \$__PHAKE_result;
 	}

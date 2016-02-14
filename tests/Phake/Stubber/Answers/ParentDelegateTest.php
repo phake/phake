@@ -66,9 +66,9 @@ class Phake_Stubber_Answers_ParentDelegateTest extends PHPUnit_Framework_TestCas
     public function testThatDelegateReturnsCorrectCallback()
     {
         $m = Phake::mock('PhakeTest_MockedClass');
-        $callback = $this->delegate->getAnswerCallback($m, 'foo');
+        $callback = $this->delegate->getAnswerCallback($m, 'fooWithReturnValue');
 
-        $this->assertSame(array('parent', 'foo'), $callback);
+        $this->assertEquals('blah', $callback(array()));
     }
 
     /**
@@ -115,6 +115,20 @@ class Phake_Stubber_Answers_ParentDelegateTest extends PHPUnit_Framework_TestCas
         $callback = $this->delegate->getAnswerCallback('ClassThatDoesntExist', 'methodThatDoesntExist');
 
         $this->assertEquals(array($this->delegate, 'getFallback'), $callback);
+    }
+
+    public function testCallBackCanCallPrivateInTheParent()
+    {
+        $callback = $this->delegate->getAnswerCallback(Phake::mock('PhakeTest_MockedClass'), 'privateFunc');
+
+        $this->assertEquals('blah', call_user_func($callback, array()));
+    }
+
+    public function testCallBackCanCallPrivateStaticInTheParent()
+    {
+        $callback = $this->delegate->getAnswerCallback(Phake::mock('PhakeTest_MockedClass'), 'privateStaticFunc');
+
+        $this->assertEquals('blah static', call_user_func($callback, array()));
     }
 }
 

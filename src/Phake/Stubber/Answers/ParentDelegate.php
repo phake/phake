@@ -81,7 +81,7 @@ class Phake_Stubber_Answers_ParentDelegate implements Phake_Stubber_IAnswer
 
             if (!$reflMethod->isAbstract())
             {
-                return array('parent', $method);
+                return new Phake_Stubber_Answers_ParentDelegateCallback($context, $reflMethod);
             }
         }
         catch (ReflectionException $e)

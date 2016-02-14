@@ -76,6 +76,30 @@ class Phake_Proxies_VisibilityProxyTest extends PHPUnit_Framework_TestCase
         Phake::verify($mock)->test();
     }
 
+    public function testCallingPrivateMethod()
+    {
+        $mock = Phake::mock('PhakeTest_MockedClass');
+        $proxy = new Phake_Proxies_VisibilityProxy($mock);
+
+        Phake::when($mock)->privateFunc()->thenReturn('bar');
+
+        $this->assertEquals('bar', $proxy->privateFunc());
+
+        Phake::verify($mock)->privateFunc();
+    }
+
+    public function testCallingPrivateMethodThatDelegatesToParent()
+    {
+        $mock = Phake::mock('PhakeTest_MockedClass');
+        $proxy = new Phake_Proxies_VisibilityProxy($mock);
+
+        Phake::when($mock)->privateFunc()->thenCallParent();
+
+        $proxy->privateFunc();
+
+        Phake::verify($mock)->privateFunc();
+    }
+
     public function testCallingProtectedMethod()
     {
         $mock = Phake::mock('PhakeTest_MockedClass');

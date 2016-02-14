@@ -1630,6 +1630,17 @@ class PhakeTest extends PHPUnit_Framework_TestCase
         $this->assertSame('test', $returned);
     }
 
+    public function testCallingPrivateMethods()
+    {
+        $mock = Phake::mock('PhakeTest_MockedClass');
+        Phake::when($mock)->privateFunc()->thenCallParent();
+
+        $returned = Phake::makeVisible($mock)->privateFunc();
+
+        Phake::verify($mock)->privateFunc();
+        $this->assertSame('blah', $returned);
+    }
+
     public function testCallingProtectedStaticMethods()
     {
         $mock = Phake::mock('PhakeTest_StaticClass');
