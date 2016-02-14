@@ -43,79 +43,35 @@
  */
 
 /**
- * Description of MockedClass
- *
- * @author Mike Lively <m@digitalsandwich.com>
+ * A callable class that allows for calling parent methods without losing references.
  */
-class PhakeTest_MockedClass
+class Phake_Stubber_Answers_ParentDelegateCallback
 {
-    public function foo()
-    {
-    }
-
-    public function fooWithDefault($default = null)
-    {
-    }
-
-    public function fooWithArgument($arg1)
-    {
-    }
-
-    public function fooWithReturnValue()
-    {
-        return 'blah';
-    }
-
-    public function callInnerFunc()
-    {
-        return $this->innerFunc();
-    }
-
-    protected function innerFunc()
-    {
-        return 'test';
-    }
-
-    private function privateFunc()
-    {
-        return 'blah';
-    }
-
-    private static function privateStaticFunc()
-    {
-        return 'blah static';
-    }
-
-    public function chainedCall()
-    {
-        return $this->callInnerFunc();
-    }
-
-    public function fooWithLotsOfParameters($parm1, $parm2, $parm3)
-    {
-
-    }
-
-    public function fooWithRefParm($parm1, &$parm2 = null)
-    {
-
-	}
-
-    public function fooWithVariableNumberOfArguments($x = null)
-    {
-        return func_get_args();
-    }
-
-    public function fooWithSetDefault($bar = 42)
-    {
-
-    }
+    private $context;
 
     /**
-     * @return void
+     * @var ReflectionMethod
      */
-    public function fooWithComment()
+    private $parentMethod;
+
+    public function __construct($context, ReflectionMethod $parentMethod)
     {
+        $this->context = $context;
+        $this->parentMethod = $parentMethod;
+    }
+
+    public function __invoke(array $arguments)
+    {
+        $this->parentMethod->setAccessible(true);
+        if ($this->parentMethod->isStatic())
+        {
+            $context = null;
+        }
+        else
+        {
+            $context = $this->context;
+        }
+        return $this->parentMethod->invokeArgs($context, $arguments);
     }
 }
 

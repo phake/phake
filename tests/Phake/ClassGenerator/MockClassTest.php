@@ -133,7 +133,7 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 
         $callRecorder = $this->getMock('Phake_CallRecorder_Recorder');
         $stubMapper   = $this->getMock('Phake_Stubber_StubMapper');
-        $answer       = Phake::mock('Phake_Stubber_Answers_NoAnswer', Phake::ifUnstubbed()->thenCallParent());
+        $answer       = new Phake_Stubber_Answers_NoAnswer();
         $mock         = $this->classGen->instantiate($newClassName, $callRecorder, $stubMapper, $answer);
 
         /* @var $callRecorder Phake_CallRecorder_Recorder */
@@ -247,6 +247,7 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 
     /**
      * Tests that calling a stubbed method will result in the stubbed answer being returned.
+     * @group testonly
      */
     public function testStubbedMethodsReturnStubbedAnswer()
     {

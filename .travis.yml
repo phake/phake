@@ -18,7 +18,13 @@ env:
 
 
 script:
-  - ./bin/phpunit --coverage-clover=build/logs/clover.xml
+  - |
+    if [[ $TRAVIS_PHP_VERSION = "hhv"* ]]; then
+      hhvm -vEval.EnableHipHopSyntax=true ./bin/phpunit --coverage-clover=build/logs/clover.xml
+    else
+      ./bin/phpunit --coverage-clover=build/logs/clover.xml
+    fi
+  -
 
 matrix:
   allow_failures:

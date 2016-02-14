@@ -116,10 +116,102 @@ Given the class above, you can invoke both private methods with the code below.
 
     Phake::makeStaticVisible($mock)->bar();
 
-    //Both calls below will STILL fail
-    $mock->foo();
-    $mock::bar();
-
 As you can see above when using the static variant you still call the method as though it were an instance method. The
 other thing to take note of is that there is no modification done on $mock itself. If you use ``Phake::makeVisible()``
 you will only be able to make those private and protected calls off of the return of that method itself.
+
+The best use case for this feature of Phake is if you have private or protected calls that are nested deep inside of
+public methods. Generally speaking you would always just test from your class's public interface. However these large
+legacy classes often require a significant amount of setup within fixtures to allow for calling those private and
+protected methods. If you are only intending on refactoring the private and protected method then using
+``Phake::makeVisible()`` removes the need for these complex fixtures.
+
+Consider this really poor object oriented code. The cleanRowContent() function does some basic text processing such as
+stripping html tags, cleaning up links, etc. It turns out that the original version of this method is written in a very
+unperformant manner and I have been tasked with rewriting it.
+
+.. code-block:: php
+
+    class MyReallyTerribleOldClass
+    {
+        public function __construct(Database $db)
+        {
+            //...
+        }
+
+        public function doWayTooMuch($data)
+        {
+            $result = $this->db->query($this->getQueryForData($data))
+
+            $rows = array();
+            while ($row = $this->db->fetch($result))
+            {
+                $rows[] = $this->cleanRowContent($row);
+            }
+
+            return $rows;
+        }
+
+        private function cleanRowContent($row)
+        {
+            //...
+        }
+
+        private function getQueryForData($data)
+        {
+            //...
+        }
+    }
+
+If I was about to make changes to cleanRowContent and wanted to make sure I didn't break previous functionality, in order to
+do so with the traditional fixture I would have to write a test similar to the following:
+
+.. code-block:: php
+
+    class Test extends PHPUnit_Framework_TestCase
+    {
+        public function testProcessRow()
+        {
+            $dbRow = array('id' => '1', 'content' => 'Text to be processed with <b>tags stripped</b>');
+            $expectedValue = array(array('id' => 1', 'content' => 'Text to be processed with tags stripped');
+
+            $db = Phake::mock('Database');
+            $result = Phake::mock('DatabaseResult');
+            $oldClass = new MyReallyTerribleOldClass($db);
+
+            Phake::when($db)->query->thenReturn($result);
+
+            Phake::when($db)->fetch->thenReturn($dbRow)->thenReturn(null);
+
+            $data = $oldClass->doWayTooMuch(array());
+
+            $this->assertEquals($expectedValue, $data);
+        }
+    }
+
+Using test helpers or PHPUnit data providers I could reuse this test to make sure I fully cover the various logic paths
+and use cases for the cleanRowContent(). However this test is doing alot of work to just set up this scenario. Whenever
+your test is hitting code not relevant to your test in increases the test's fragility. Here is how you could test the
+same code using ``Phake::makeVisible()``.
+
+.. code-block:: php
+
+    class Test extends PHPUnit_Framework_TestCase
+    {
+        public function testProcessRow()
+        {
+            $dbRow = array('id' => '1', 'content' => 'Text to be processed with <b>tags stripped</b>');
+            $expectedValue = array('id' => 1', 'content' => 'Text to be processed with tags stripped');
+
+            $oldClass = new Phake::partialMock('MyReallyTerribleOldClass');
+
+            $data = Phake::makeVisible($oldClass)->cleanRowContent($dbRow);
+            $this->assertEquals($expectedValue, $dbRow);
+        }
+    }
+
+As you can see the test is significantly simpler. One final note, if you find yourself using this strategy on newly
+written code, it could be a code smell indicitive of a class or public method doing too much. It is very reasonable
+to argue that in my example, the ``cleanRowContent()`` method should be a class in and of itself or possibly a method
+on a string manipulation type of class that my class then calls out to. This is a better design and also a much easier
+to test design.
