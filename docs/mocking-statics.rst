@@ -41,6 +41,58 @@ stubs and verifications would not work, because again the class is determined at
 The key thing to remember with testing statics using Phake is that you can only test statics that leverage Late Static
 Binding: http://www.php.net/manual/en/language.oop5.late-static-bindings.php
 
+The key to testing static methods using Phake is that you need to create a "seam" for your static methods. If you are
+not familiar with that term, a seam is a location where Phake is able to override and intercept calls to your code.
+The typical seem for Phake is a parameter that allows you to pass your object. Typically you would pass a real object,
+however during testing you pass in a mock object created by Phake. This is taking advantage of an instance seam.
+
+Thankfully in php now you can do something along the lines of $myVar::myStatic() where if $myVar is a string it
+resolves as you would think for a static method. The useful piece though is that if $myVar is an object, it will
+resolve that object down to the class name and use that for the static.
+
+So, the general idea here is that you can take code that is in class Foo:
+
+.. code-block:: php
+
+    class Foo
+    {
+        public function doSomething()
+        {
+            // ... code that does stuff ...
+            Logger::logData();
+        }
+    }
+
+which does not provide a seam for mocking Logger::logData() and provide that seem by changing it to:
+
+.. code-block:: php
+
+    class Foo
+    {
+        public $logger = 'Logger';
+        public function doSomething()
+        {
+            // ... code that does stuff ...
+            $logger = $this->logger;
+            $logger::logData($data);
+        }
+    }
+
+Now you can mock logData as follows:
+
+.. code-block:: php
+
+    class FooTest
+    {
+        public function testDoSomething()
+        {
+            $foo = new Foo();
+            $foo->logger = Phake::mock('Logger');
+            $foo->doSomething();
+            Phake::verify($foo->logger)->logData(Phake::anyParameter());
+        }
+    }
+
 Phake has alternative methods to handle interacting with static methods on your mock class. ``Phake::mock()`` is still
 used to create the mock class, but the remaining interactions with static methods use more specialized methods. The
 table below shows the Phake methods that have a separate counterpart for interacting with static calls.
