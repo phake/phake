@@ -55,6 +55,12 @@ install:
   - composer require --dev phpunit/phpunit:${PHPUNIT_VERSION}
   - composer install --dev
 
+before_script:
+  - |
+    if [[ $TRAVIS_PHP_VERSION = "hhv"* ]]; then
+      echo "hhvm.vm_stack_elms=32768" >> /etc/hhvm/php.ini
+    fi
+
 after_script:
   - wget https://scrutinizer-ci.com/ocular.phar
   - php ocular.phar code-coverage:upload --format=php-clover build/logs/clover.xml
