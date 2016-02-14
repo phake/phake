@@ -61,7 +61,7 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         Phake::initAnnotations($this);
-        $this->classGen = new Phake_ClassGenerator_MockClass(new Phake_ClassGenerator_FileLoader(__DIR__ . '/../../../cache'));
+        $this->classGen = new Phake_ClassGenerator_MockClass();
     }
 
     /**
