@@ -1685,4 +1685,12 @@ class PhakeTest extends PHPUnit_Framework_TestCase
         Phake::verify($mock)->reference(null);
         Phake::verify($mock)->fooWithArgument('blah');
     }
+
+    public function testReturningSelf()
+    {
+        $mock = Phake::mock('PhakeTest_MockedClass');
+        Phake::when($mock)->foo->thenReturnSelf();
+
+        $this->assertSame($mock, $mock->foo());
+    }
 }

@@ -184,6 +184,17 @@ class Phake_Proxies_AnswerBinderProxyTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame($this->binder, $this->proxy->thenDoNothing());
     }
+
+    public function testThenReturnSelf()
+    {
+        $this->binder->expects($this->once())
+            ->method('bindAnswer')
+            ->with($this->isInstanceOf('Phake_Stubber_Answers_SelfAnswer')
+            )
+            ->will($this->returnValue($this->binder));
+
+        $this->assertSame($this->binder, $this->proxy->thenReturnSelf());
+    }
 }
 
 
