@@ -140,4 +140,9 @@ class Phake_Proxies_AnswerBinderProxy
     {
         return $this->binder->bindAnswer(new Phake_Stubber_Answers_NoAnswer());
     }
+
+    public function thenReturnSelf()
+    {
+        return $this->binder->bindAnswer(new Phake_Stubber_Answers_SelfAnswer());
+    }
 }
