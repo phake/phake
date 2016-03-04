@@ -49,6 +49,7 @@
  */
 class Phake_ClassGenerator_MockClass
 {
+    private static $unsafeClasses = array('Memcached');
     /**
      * @var \Phake_ClassGenerator_ILoader
      */
@@ -229,9 +230,25 @@ class {$newClassName} {$extends}
 }
 ";
 
-        $this->loader->loadClassByString($newClassName, $classDef);
+        $this->loadClass($newClassName, $mockedClassName, $classDef);
         $newClassName::$__PHAKE_staticInfo = $this->createMockInfo($mockedClassName, new Phake_CallRecorder_Recorder(), new Phake_Stubber_StubMapper(), new Phake_Stubber_Answers_NoAnswer());
         $infoRegistry->addInfo($newClassName::$__PHAKE_staticInfo);
+    }
+
+    private function loadClass($newClassName, $mockedClassName, $classDef)
+    {
+        $isUnsafe = in_array($mockedClassName, self::$unsafeClasses);
+
+        $oldErrorReporting = ini_get('error_reporting');
+        if ($isUnsafe)
+        {
+            error_reporting($oldErrorReporting & ~E_STRICT);
+        }
+        $this->loader->loadClassByString($newClassName, $classDef);
+        if ($isUnsafe)
+        {
+            error_reporting($oldErrorReporting);
+        }
     }
 
     /**
