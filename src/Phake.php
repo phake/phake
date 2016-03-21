@@ -358,13 +358,16 @@ class Phake
     }
 
     /**
-     * Resets all calls and stubs on the given mock object
+     * Resets all calls and stubs on the given mock object and return the original class name
      *
      * @param Phake_IMock $mock
+     * @return string $name
      */
     public static function resetStatic(Phake_IMock $mock)
     {
-        self::getInfo(get_class($mock))->resetInfo();
+        $info = self::getInfo(get_class($mock));
+        $info->resetInfo();
+        return $info->getName();
     }
 
     /**

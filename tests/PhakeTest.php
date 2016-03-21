@@ -1693,4 +1693,20 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame($mock, $mock->foo());
     }
+
+    public function testResetStaticPostCall() {
+        $obj = new PhakeTest_StaticMethod;
+        $obj->className = Phake::mock('PhakeTest_ClassWithStaticMethod');
+        Phake::whenStatic($obj->className)->ask()->thenReturn('ASKED');
+
+        $val = $obj->askSomething();
+        Phake::verifyStatic($obj->className)->ask();
+
+        $this->assertEquals('ASKED', $val);
+
+        $obj->className = Phake::resetStatic($obj->className);
+
+        $val = $obj->askSomething();
+        $this->assertEquals('Asked', $val);
+    }
 }
