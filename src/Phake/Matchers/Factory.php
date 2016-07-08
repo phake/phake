@@ -48,6 +48,13 @@
  */
 class Phake_Matchers_Factory
 {
+    private $comparatorFactory;
+
+    public function __construct()
+    {
+        $this->comparatorFactory = new \SebastianBergmann\Comparator\Factory();
+    }
+
     /**
      * Creates an argument matcher based on the given value.
      *
@@ -72,7 +79,7 @@ class Phake_Matchers_Factory
         } elseif ($argument instanceof Phake_Matchers_IArgumentMatcher) {
             $return = new Phake_Matchers_ChainedArgumentMatcher($argument);
         } else {
-            $return = new Phake_Matchers_EqualsMatcher($argument, new \SebastianBergmann\Comparator\Factory());
+            $return = new Phake_Matchers_EqualsMatcher($argument, $this->comparatorFactory);
         }
 
         if ($nextMatcher !== null)

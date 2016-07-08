@@ -68,6 +68,11 @@ class Phake
      */
     private static $loader;
 
+	/**
+	 * @var Phake_Matchers_Factory
+	 */
+	private static $matchersFactory;
+
     /**
      * Constants identifying supported clients
      */
@@ -136,6 +141,22 @@ class Phake
         return call_user_func_array('Phake::partialMock', $args);
     }
 
+	/**
+	 * Create a Phake_Matchers_Factory that we can re-use multiple times. Creating too many
+	 * instances of this object is expensive.
+	 *
+	 * @return Phake_Matchers_Factory
+	 */
+	private static function getMatchersFactory ()
+	{
+		if (!self::$matchersFactory)
+		{
+			self::$matchersFactory = new Phake_Matchers_Factory();
+		}
+
+		return self::$matchersFactory;
+	}
+
     /**
      * Creates a new verifier for the given mock object.
      *
@@ -154,7 +175,7 @@ class Phake
         $info = Phake::getInfo($mock);
         $verifier = new Phake_CallRecorder_Verifier($info->getCallRecorder(), $mock);
 
-        return new Phake_Proxies_VerifierProxy($verifier, new Phake_Matchers_Factory(), $mode, self::getClient());
+        return new Phake_Proxies_VerifierProxy($verifier, self::getMatchersFactory(), $mode, self::getClient());
     }
 
     /**
@@ -175,7 +196,7 @@ class Phake
         $info = Phake::getInfo(get_class($mock));
         $verifier = new Phake_CallRecorder_Verifier($info->getCallRecorder(), get_class($mock));
 
-        return new Phake_Proxies_VerifierProxy($verifier, new Phake_Matchers_Factory(), $mode, self::getClient());
+        return new Phake_Proxies_VerifierProxy($verifier, self::getMatchersFactory(), $mode, self::getClient());
     }
 
 
@@ -189,7 +210,7 @@ class Phake
     public static function verifyCallMethodWith()
     {
         $arguments = func_get_args();
-        $factory   = new Phake_Matchers_Factory();
+        $factory   = self::getMatchersFactory();
         return new Phake_Proxies_CallVerifierProxy($factory->createMatcherChain(
             $arguments
         ), self::getClient(), false);
@@ -205,7 +226,7 @@ class Phake
     public static function verifyStaticCallMethodWith()
     {
         $arguments = func_get_args();
-        $factory   = new Phake_Matchers_Factory();
+        $factory   = self::getMatchersFactory();
         return new Phake_Proxies_CallVerifierProxy($factory->createMatcherChain(
             $arguments
         ), self::getClient(), true);
@@ -304,7 +325,7 @@ class Phake
      */
     public static function when(Phake_IMock $mock)
     {
-        return new Phake_Proxies_StubberProxy($mock, new Phake_Matchers_Factory());
+        return new Phake_Proxies_StubberProxy($mock, self::getMatchersFactory());
     }
 
     /**
@@ -316,7 +337,7 @@ class Phake
      */
     public static function whenStatic(Phake_IMock $mock)
     {
-        return new Phake_Proxies_StubberProxy(get_class($mock), new Phake_Matchers_Factory());
+        return new Phake_Proxies_StubberProxy(get_class($mock), self::getMatchersFactory());
     }
 
     /**
@@ -329,7 +350,7 @@ class Phake
     public static function whenCallMethodWith()
     {
         $arguments = func_get_args();
-        $factory   = new Phake_Matchers_Factory();
+        $factory   = self::getMatchersFactory();
         return new Phake_Proxies_CallStubberProxy($factory->createMatcherChain($arguments), false);
     }
 
@@ -343,7 +364,7 @@ class Phake
     public static function whenStaticCallMethodWith()
     {
         $arguments = func_get_args();
-        $factory   = new Phake_Matchers_Factory();
+        $factory   = self::getMatchersFactory();
         return new Phake_Proxies_CallStubberProxy($factory->createMatcherChain($arguments), true);
     }
 
