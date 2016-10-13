@@ -302,6 +302,68 @@ array containing all of the values used for that parameter. So with this functio
         }
     }
 
+In case if the same object was used as a parameter in consecutive calls, ``Phake::captureClones()`` should be used to
+capture state of the parameters as it was at the moment of calls. Imagine you have a method that persists an object
+several times:
+
+.. code-block:: php
+
+    class Foo
+    {
+        // ...
+        public function process(Request $request, ORM $orm)
+        {
+           $bar = new Bar();
+           $bar->setConfirmed(false);
+           $orm->persist($bar);
+           // ... do stuff
+           $bar->setConfirmed(true);
+           $orm->persist($bar);
+        }
+    }
+
+To assert value of ``$bar->getConfirmed()`` on both calls, the test should capture cloned values of ``$bar``:
+
+.. code-block:: php
+
+    class FooTest
+    {
+        public function testProcess()
+        {
+            $foo = new Foo();
+            $request = Phake::mock('Request');
+            $orm = Phake::mock('ORM');
+
+            $foo->process($request, $orm);
+
+            Phake::verify($orm, Phake::atLeast(1))->persist(Phake::captureClones($bars));
+
+            $this->assertFalse($bars[0]->getConfirmed());
+            $this->assertTrue($bars[1]->getConfirmed());
+        }
+    }
+
+In rare case when default shallow cloning is not enough, a custom cloning routine can be assigned to
+``Phake::$argumentCloner``:
+
+.. code-block:: php
+
+    class FooTest
+    {
+        protected function tearDown() {
+            parent::tearDown();
+            Phake::$argumentCloner = null;
+        }
+
+        public function testProcess()
+        {
+            Phake::$argumentCloner = function($arg) {
+                return unserialize(serialize($arg));
+            };
+            // test something
+        }
+    }
+
 Custom Parameter Matchers
 =========================
 

@@ -953,6 +953,54 @@ class PhakeTest extends PHPUnit_Framework_TestCase
         $this->assertSame(array($obj1, $obj2, $obj3), $toArgument);
     }
 
+    public function testArgumentCapturingAllClonesShallow()
+    {
+        $mock = Phake::mock('PhakeTest_MockedClass');
+
+        $obj1 = new stdClass;
+        $foo = new stdClass;
+        $obj1->bar = 1;
+        $obj1->foo = $foo;
+        $foo->bar = 1;
+        $mock->fooWithArgument($obj1);
+        $obj1->bar = 2;
+        $obj1->foo = $foo;
+        $foo->bar = 2;
+        $mock->fooWithArgument($obj1);
+
+        Phake::verify($mock, Phake::atLeast(1))->fooWithArgument(\Phake::captureClones($toArgument));
+
+        $this->assertEquals(1, $toArgument[0]->bar);
+        $this->assertEquals(2, $toArgument[0]->foo->bar);
+    }
+
+    public function testArgumentCapturingAllClonesDeep()
+    {
+        $mock = Phake::mock('PhakeTest_MockedClass');
+        Phake::$argumentCloner = function($arg) {
+            $clone = clone $arg;
+            $clone->foo = clone $arg->foo;
+            return $clone;
+        };
+
+        $obj1 = new stdClass;
+        $foo = new stdClass;
+        $obj1->bar = 1;
+        $obj1->foo = $foo;
+        $foo->bar = 1;
+        $mock->fooWithArgument($obj1);
+        $obj1->bar = 2;
+        $obj1->foo = $foo;
+        $foo->bar = 2;
+        $mock->fooWithArgument($obj1);
+        Phake::$argumentCloner = null;
+
+        Phake::verify($mock, Phake::atLeast(1))->fooWithArgument(\Phake::captureClones($toArgument));
+
+        $this->assertEquals(1, $toArgument[0]->bar);
+        $this->assertEquals(1, $toArgument[0]->foo->bar);
+    }
+
     /**
      * Make sure stub return value capturing returns the parent value
      */

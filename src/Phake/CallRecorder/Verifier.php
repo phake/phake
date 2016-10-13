@@ -81,7 +81,8 @@ class Phake_CallRecorder_Verifier
      */
     public function verifyCall(Phake_CallRecorder_CallExpectation $expectation)
     {
-        $matcher = new Phake_Matchers_MethodMatcher($expectation->getMethod(), $expectation->getArgumentMatcher());
+        $expectationMatcher = $expectation->getArgumentMatcher();
+        $matcher = new Phake_Matchers_MethodMatcher($expectation->getMethod(), $expectationMatcher);
         $calls   = $this->recorder->getAllCalls();
 
         $matchedCalls     = array();
@@ -91,7 +92,12 @@ class Phake_CallRecorder_Verifier
             /* @var $call Phake_CallRecorder_Call */
             if ($call->getObject() === $expectation->getObject()) {
                 $obj_interactions = true;
-                $args             = $call->getArguments();
+                if ($expectationMatcher && $expectationMatcher->isUsingClones()) {
+                    $args = $call->getClones();
+                } else {
+                    $args = $call->getArguments();
+                }
+
                 try
                 {
                     $matcher->assertMatches($call->getMethod(), $args);
