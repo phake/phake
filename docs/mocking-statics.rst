@@ -89,7 +89,7 @@ Now you can mock logData as follows:
             $foo = new Foo();
             $foo->logger = Phake::mock('Logger');
             $foo->doSomething();
-            Phake::verifyStatic($foo->logger)->logData(Phake::anyParameter());
+            Phake::verifyStatic($foo->logger)->logData(Phake::anyParameters());
         }
     }
 
