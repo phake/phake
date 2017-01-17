@@ -466,7 +466,7 @@ class {$newClassName} {$extends}
 
         \$__PHAKE_info = Phake::getInfo({$context});
 		if (\$__PHAKE_info === null) {
-		    return null;
+		    return" . ('void' == $method->getReturnType() ? '' : ' null') . ";
 		}
 
 		\$__PHAKE_funcArgs = func_get_args();
@@ -475,7 +475,7 @@ class {$newClassName} {$extends}
 	    \$__PHAKE_callback = \$__PHAKE_answer->getAnswerCallback({$context}, '{$method->getName()}');
 	    \$__PHAKE_result = call_user_func_array(\$__PHAKE_callback, \$__PHAKE_args);
 	    \$__PHAKE_answer->processAnswer(\$__PHAKE_result);
-	    return \$__PHAKE_result;
+	    return" . ('void' == $method->getReturnType() ? '' : ' $__PHAKE_result') . ";
 	}
 ";
 
