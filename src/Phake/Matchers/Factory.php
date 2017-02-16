@@ -67,6 +67,8 @@ class Phake_Matchers_Factory
             $return = $argument;
         } elseif ($argument instanceof PHPUnit_Framework_Constraint) {
             $return = new Phake_Matchers_PHPUnitConstraintAdapter($argument);
+        } elseif ($argument instanceof \PHPUnit\Framework\Constraint\Constraint) {
+            $return = new Phake_Matchers_PHPUnit6ConstraintAdapter($argument);
         } elseif ($argument instanceof Hamcrest\Matcher) {
             $return = new Phake_Matchers_HamcrestMatcherAdapter($argument);
         } elseif ($argument instanceof Phake_Matchers_IArgumentMatcher) {
