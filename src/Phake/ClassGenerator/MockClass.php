@@ -474,23 +474,32 @@ class {$newClassName} {$extends}
             $context = '$this';
         }
 
-        $returnType = '';
+        $returnHint = '';
+        $nullReturn = 'null';
+        $resultReturn = '$__PHAKE_result';
         if (method_exists($method, 'hasReturnType') && $method->hasReturnType())
         {
-            $returnType = ' : ' . $method->getReturnType();
+            $returnType = $method->getReturnType();
+            $returnHint = ' : ' . $returnType;
+
+            if ($returnType == 'void')
+            {
+                $nullReturn = '';
+                $resultReturn = '';
+            }
         }
 
         $docComment = $method->getDocComment() ?: '';
         $methodDef = "
 	{$docComment}
-	{$modifiers} function {$reference}{$method->getName()}({$this->generateMethodParameters($method)}){$returnType}
+	{$modifiers} function {$reference}{$method->getName()}({$this->generateMethodParameters($method)}){$returnHint}
 	{
 		\$__PHAKE_args = array();
 		{$this->copyMethodParameters($method)}
 
         \$__PHAKE_info = Phake::getInfo({$context});
 		if (\$__PHAKE_info === null) {
-		    return null;
+		    return {$nullReturn};
 		}
 
 		\$__PHAKE_funcArgs = func_get_args();
@@ -507,7 +516,7 @@ class {$newClassName} {$extends}
     	    \$__PHAKE_result = call_user_func_array(\$__PHAKE_callback, \$__PHAKE_args);
 	    }
 	    \$__PHAKE_answer->processAnswer(\$__PHAKE_result);
-	    return \$__PHAKE_result;
+	    return {$resultReturn};
 	}
 ";
 

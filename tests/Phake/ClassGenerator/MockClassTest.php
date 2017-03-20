@@ -750,5 +750,59 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 
         Phake::verify($mock)->scalarHints(1, 1);
     }
+
+    public function testVoidStubReturnsProperly()
+    {
+        if (version_compare(phpversion(), '7.1.0') < 0)
+        {
+            $this->markTestSkipped('Void type hints are not supported in PHP versions prior to 7.1');
+        }
+
+        $mock = Phake::mock('PhakeTest_VoidType');
+
+        $this->assertNull($mock->voidMethod());
+
+        Phake::verify($mock)->voidMethod();
+    }
+
+    public function testVoidStubThrowsException()
+    {
+        if (version_compare(phpversion(), '7.1.0') < 0)
+        {
+            $this->markTestSkipped('Void type hints are not supported in PHP versions prior to 7.1');
+        }
+
+        $mock = Phake::mock('PhakeTest_VoidType');
+
+        $expectedException = new Exception("Test Exception");
+        Phake::when($mock)->voidMethod->thenThrow($expectedException);
+
+        try
+        {
+            $mock->voidMethod();
+            $this->fail("The mocked void method did not throw an exception");
+        }
+        catch (Exception $actualException)
+        {
+            $this->assertSame($expectedException, $actualException, "The same exception was not thrown");
+        }
+    }
+
+
+    public function testVoidStubCanCallParent()
+    {
+        if (version_compare(phpversion(), '7.1.0') < 0)
+        {
+            $this->markTestSkipped('Void type hints are not supported in PHP versions prior to 7.1');
+        }
+
+        $mock = Phake::mock('PhakeTest_VoidType');
+
+        Phake::when($mock)->voidMethod->thenCallParent();
+
+        $mock->voidMethod();
+
+        $this->assertEquals(1, $mock->voidCallCount, "Void call count was not incremented, looks like callParent doesn't work");
+    }
 }
 
