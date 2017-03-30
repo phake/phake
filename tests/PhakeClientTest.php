@@ -1,6 +1,8 @@
 <?php
 
-class PhakeClientTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class PhakeClientTest extends TestCase
 {
     protected function setup()
     {

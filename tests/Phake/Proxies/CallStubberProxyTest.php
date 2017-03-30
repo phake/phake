@@ -42,7 +42,9 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-class Phake_Proxies_CallStubberProxyTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class Phake_Proxies_CallStubberProxyTest extends TestCase
 {
     /**
      * @var Phake_Proxies_CallStubberProxy

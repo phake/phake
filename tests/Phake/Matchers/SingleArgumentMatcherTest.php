@@ -42,7 +42,9 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-class Phake_Matchers_SingleArgumentMatcherTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class Phake_Matchers_SingleArgumentMatcherTest extends TestCase
 {
     /**
      * @var Phake_Matchers_SingleArgumentMatcher
@@ -84,7 +86,7 @@ class Phake_Matchers_SingleArgumentMatcherTest extends PHPUnit_Framework_TestCas
         Phake::when($this->matcher)->matches->thenThrow(new Phake_Exception_MethodMatcherException());
         Phake::when($this->nextMatcher)->doArgumentsMatch->thenReturn(true);
 
-        $this->setExpectedException('Exception');
+        $this->expectException('Exception');
         $this->matcher->doArgumentsMatch($args);
     }
 
@@ -95,7 +97,7 @@ class Phake_Matchers_SingleArgumentMatcherTest extends PHPUnit_Framework_TestCas
         Phake::when($this->matcher)->matches->thenReturn(true);
         Phake::when($this->nextMatcher)->doArgumentsMatch->thenThrow(new Phake_Exception_MethodMatcherException());
 
-        $this->setExpectedException('Exception');
+        $this->expectException('Exception');
         $this->matcher->doArgumentsMatch($args);
     }
 
@@ -119,7 +121,7 @@ class Phake_Matchers_SingleArgumentMatcherTest extends PHPUnit_Framework_TestCas
 
         Phake::when($this->matcher)->matches->thenReturn(true);
 
-        $this->setExpectedException('Exception');
+        $this->expectException('Exception');
         $this->matcher->doArgumentsMatch($args);
     }
 
@@ -135,4 +137,3 @@ class Phake_Matchers_SingleArgumentMatcherTest extends PHPUnit_Framework_TestCas
         $this->assertEquals('new value', $args[0]);
     }
 }
- 

@@ -42,7 +42,9 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-class Phake_Stubber_Answers_SelfAnswerTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class Phake_Stubber_Answers_SelfAnswerTest extends TestCase
 {
     /**
      * @var Phake_Stubber_Answers_SelfAnswer

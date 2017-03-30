@@ -1,8 +1,9 @@
 <?php
+
 /*
  * Phake - Mocking Framework
  *
- * Copyright (c) 2010-2012, Mike Lively <m@digitalsandwich.com>
+ * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -43,48 +44,59 @@
  */
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\ExpectationFailedException;
+use PHPUnit\Framework\Assert;
 
-/**
- * @author Brian Feaver <brian.feaver@gmail.com>
- */
-class Phake_Stubber_Answers_ExceptionAnswerTest extends TestCase
+class Phake_Client_PHPUnitTest6 extends TestCase
 {
-    /**
-     * @var Phake_Stubber_Answers_ExceptionAnswer
-     */
-    private $answer;
+    private $client;
 
-    /**
-     * @var RuntimeException
-     */
-    private $exception;
-
-    /**
-     * Sets up the answer fixture
-     */
     public function setUp()
     {
-        $this->exception = new RuntimeException();
-        $this->answer    = new Phake_Stubber_Answers_ExceptionAnswer($this->exception);
+        $this->client = new Phake_Client_PHPUnit6();
+    }
+
+    public function testImplementsIClient()
+    {
+        $this->assertInstanceOf('Phake_Client_IClient', $this->client);
+    }
+
+    public function testProcessVerifierResultReturnsCallsOnTrue()
+    {
+        $result = new Phake_CallRecorder_VerifierResult(true, array('call1'));
+
+        $this->assertEquals(array('call1'), $this->client->processVerifierResult($result));
+    }
+
+    public function testProcessVerifierThrowsExceptionOnFalse()
+    {
+        $result = new Phake_CallRecorder_VerifierResult(false, array(), 'failure message');
+
+        $this->expectException(ExpectationFailedException::class, 'failure message');
+        $this->client->processVerifierResult($result);
+    }
+
+    public function testProcessVerifierIncrementsAssertionCount()
+    {
+        $result = new Phake_CallRecorder_VerifierResult(true, array('call1'));
+
+        $assertionCount = Assert::getCount();
+        $this->client->processVerifierResult($result);
+        $newAssertionCount = Assert::getCount();
+
+        $this->assertGreaterThan($assertionCount, $newAssertionCount);
     }
 
     /**
-     * @expectedException RuntimeException
+     * Utilizes a dummy constraint to indicate that an assertion has happened.
      */
-    public function testAnswer()
+    public function testProcessObjectFreeze()
     {
-        call_user_func($this->answer->getAnswerCallback('stdClass', 'testMethod'));
-    }
+        $assertionCount = Assert::getCount();
+        $this->client->processObjectFreeze();
+        $newAssertionCount = Assert::getCount();
 
-    /**
-     * Tests that we throw the same exception instantiated in the answer.
-     */
-    public function testSameException()
-    {
-        try {
-            call_user_func($this->answer->getAnswerCallback('someObject', 'testMethod'));
-        } catch (Exception $e) {
-            $this->assertSame($this->exception, $e);
-        }
+        $this->assertGreaterThan($assertionCount, $newAssertionCount);
     }
 }
+

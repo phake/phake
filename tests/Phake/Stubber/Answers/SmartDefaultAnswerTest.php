@@ -42,10 +42,12 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * Tests the functionality of the parent delegate
  */
-class Phake_Stubber_Answers_SmartDefaultAnswerTest extends PHPUnit_Framework_TestCase
+class Phake_Stubber_Answers_SmartDefaultAnswerTest extends TestCase
 {
     /**
      * @var Phake_Stubber_Answers_SmartDefaultAnswer

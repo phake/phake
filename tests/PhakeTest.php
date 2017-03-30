@@ -42,6 +42,9 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\ExpectationFailedException;
+
 /**
  * Tests the behavior of the Phake class.
  *
@@ -49,7 +52,7 @@
  *
  * @author Mike Lively <m@digitalsandwich.com>
  */
-class PhakeTest extends PHPUnit_Framework_TestCase
+class PhakeTest extends TestCase
 {
     public function setUp()
     {
@@ -407,7 +410,7 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 
         Phake::reset($mock);
 
-        $this->setExpectedException('Phake_Exception_VerificationException');
+        $this->expectException('Phake_Exception_VerificationException');
 
         Phake::verify($mock)->foo();
     }
@@ -441,7 +444,7 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 
         Phake::resetStatic($mock);
 
-        $this->setExpectedException('Phake_Exception_VerificationException');
+        $this->expectException('Phake_Exception_VerificationException');
 
         Phake::verifyStatic($mock)->staticMethod();
     }
@@ -695,7 +698,7 @@ class PhakeTest extends PHPUnit_Framework_TestCase
         $mock->callInnerFunc();
         $mock->fooWithReturnValue();
 
-        $this->setExpectedException('Phake_Exception_VerificationException');
+        $this->expectException('Phake_Exception_VerificationException');
 
         Phake::inOrder(
             Phake::verify($mock)->foo(),
@@ -742,7 +745,7 @@ class PhakeTest extends PHPUnit_Framework_TestCase
         $mock2->fooWithReturnValue();
         $mock2->callInnerFunc();
 
-        $this->setExpectedException('Phake_Exception_VerificationException');
+        $this->expectException('Phake_Exception_VerificationException');
 
         Phake::inOrder(
             Phake::verify($mock2)->fooWithReturnValue(),
@@ -778,7 +781,7 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 
         Phake::verifyNoFurtherInteraction($mock);
 
-        $this->setExpectedException('Phake_Exception_VerificationException');
+        $this->expectException('Phake_Exception_VerificationException');
 
         $mock->foo();
     }
@@ -791,7 +794,7 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 
         Phake::verifyNoFurtherInteraction($mock);
 
-        $this->setExpectedException('Phake_Exception_VerificationException');
+        $this->expectException('Phake_Exception_VerificationException');
 
         $mock::staticMethod();
     }
@@ -809,7 +812,7 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 
         Phake::verifyNoFurtherInteraction($mock1, $mock2);
 
-        $this->setExpectedException('Phake_Exception_VerificationException');
+        $this->expectException('Phake_Exception_VerificationException');
 
         $mock2->foo();
     }
@@ -825,7 +828,7 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 
         $mock->foo();
 
-        $this->setExpectedException('Phake_Exception_VerificationException');
+        $this->expectException('Phake_Exception_VerificationException');
         Phake::verifyNoInteraction($mock);
     }
 
@@ -840,7 +843,7 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 
         $mock::staticMethod();
 
-        $this->setExpectedException('Phake_Exception_VerificationException');
+        $this->expectException('Phake_Exception_VerificationException');
         Phake::verifyNoInteraction($mock);
     }
 
@@ -856,7 +859,7 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 
         $mock2->foo();
 
-        $this->setExpectedException('Phake_Exception_VerificationException');
+        $this->expectException('Phake_Exception_VerificationException');
         Phake::verifyNoInteraction($mock1, $mock2);
     }
 
@@ -900,7 +903,7 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 
         $mock->fooWithArgument('FOO');
 
-        $this->setExpectedException('Phake_Exception_VerificationException');
+        $this->expectException('Phake_Exception_VerificationException');
         Phake::verify($mock)->fooWithArgument(Phake::capture($toArgument)->when('BAR'));
     }
 
@@ -1195,7 +1198,7 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 
         $mock->fooWithLotsOfParameters(3, 2, 1);
 
-        $this->setExpectedException('InvalidArgumentException', 'Other matchers cannot be passed with any '
+        $this->expectException('InvalidArgumentException', 'Other matchers cannot be passed with any '
             . 'parameters. It will not work the way you think it works');
         Phake::verify($mock)->fooWithLotsOfParameters(Phake::anyParameters(), 1);
     }
@@ -1206,7 +1209,7 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 
         $mock->fooWithLotsOfParameters(3, 2, 1);
 
-        $this->setExpectedException('InvalidArgumentException', 'Other matchers cannot be passed with any '
+        $this->expectException('InvalidArgumentException', 'Other matchers cannot be passed with any '
             . 'parameters. It will not work the way you think it works');
         Phake::verify($mock)->fooWithLotsOfParameters(3, Phake::anyParameters());
     }
@@ -1231,7 +1234,7 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 
         $mock->fooWithLotsOfParameters(3, 2, 1);
 
-        $this->setExpectedException('InvalidArgumentException', 'Other matchers cannot be checked after you ignore remaining parameters.');
+        $this->expectException('InvalidArgumentException', 'Other matchers cannot be checked after you ignore remaining parameters.');
         Phake::verify($mock)->fooWithLotsOfParameters(Phake::ignoreRemaining(), 1);
     }
 
@@ -1252,7 +1255,7 @@ class PhakeTest extends PHPUnit_Framework_TestCase
     {
         $mock = Phake::mock('PhakeTest_MockedClass');
 
-        $this->setExpectedException(
+        $this->expectException(
             'Phake_Exception_VerificationException',
             'Expected PhakeTest_MockedClass->foo() to be called exactly <1> times, actually called <0> times. In fact, there are no interactions with this mock.'
         );
@@ -1265,7 +1268,7 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 
         $mock->foo('test');
 
-        $this->setExpectedException(
+        $this->expectException(
             'Phake_Exception_VerificationException',
             'Expected PhakeTest_MockedClass->foo() to be called exactly <1> times, actually called <0> times.' . "\n"
                 . "Other Invocations:\n"
@@ -1481,7 +1484,7 @@ class PhakeTest extends PHPUnit_Framework_TestCase
         $mock->callInnerFunc();
         $mock->fooWithReturnValue();
 
-        $this->setExpectedException('PHPUnit_Framework_ExpectationFailedException');
+        $this->expectException(ExpectationFailedException::class);
 
         Phake::inOrder(
             Phake::verify($mock)->foo(),
@@ -1583,7 +1586,7 @@ class PhakeTest extends PHPUnit_Framework_TestCase
 
 
         eval('
-            $this->setExpectedException("InvalidArgumentException");
+            $this->expectException("InvalidArgumentException");
             $mock = Phake::mock("PhakeTest_MockedClass");
             try
             {
@@ -1604,7 +1607,7 @@ class PhakeTest extends PHPUnit_Framework_TestCase
         $mock->foo('b');
 
         Phake::verify($mock)->foo('a');
-        $this->setExpectedException('Phake_Exception_VerificationException');
+        $this->expectException('Phake_Exception_VerificationException');
         Phake::verifyNoOtherInteractions($mock);
     }
 

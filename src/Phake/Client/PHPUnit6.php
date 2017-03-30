@@ -1,8 +1,9 @@
 <?php
+
 /*
  * Phake - Mocking Framework
  *
- * Copyright (c) 2010-2012, Mike Lively <m@digitalsandwich.com>
+ * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -42,49 +43,31 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Assert;
 
 /**
- * @author Brian Feaver <brian.feaver@gmail.com>
+ * The client adapter used for PHPUnit.
+ *
+ * This adapter allows PHPUnit to report failed verify() calls as test failures instead of errors. It also counts
+ * verify() calls as assertions.
  */
-class Phake_Stubber_Answers_ExceptionAnswerTest extends TestCase
+class Phake_Client_PHPUnit6 implements Phake_Client_IClient
 {
-    /**
-     * @var Phake_Stubber_Answers_ExceptionAnswer
-     */
-    private $answer;
-
-    /**
-     * @var RuntimeException
-     */
-    private $exception;
-
-    /**
-     * Sets up the answer fixture
-     */
-    public function setUp()
+    public function processVerifierResult(Phake_CallRecorder_VerifierResult $result)
     {
-        $this->exception = new RuntimeException();
-        $this->answer    = new Phake_Stubber_Answers_ExceptionAnswer($this->exception);
+        Assert::assertThat($result, $this->getConstraint());
+
+        return $result->getMatchedCalls();
     }
 
-    /**
-     * @expectedException RuntimeException
-     */
-    public function testAnswer()
+    public function processObjectFreeze()
     {
-        call_user_func($this->answer->getAnswerCallback('stdClass', 'testMethod'));
+        Assert::assertThat(true, Assert::isTrue());
     }
 
-    /**
-     * Tests that we throw the same exception instantiated in the answer.
-     */
-    public function testSameException()
+    private function getConstraint()
     {
-        try {
-            call_user_func($this->answer->getAnswerCallback('someObject', 'testMethod'));
-        } catch (Exception $e) {
-            $this->assertSame($this->exception, $e);
-        }
+        return new Phake_PHPUnit_VerifierResultConstraintV6();
     }
 }
+

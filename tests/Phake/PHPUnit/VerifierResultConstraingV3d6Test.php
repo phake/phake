@@ -43,7 +43,10 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-class Phake_PHPUnit_VerifierResultConstraintV3d6Test extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\ExpectationFailedException;
+
+class Phake_PHPUnit_VerifierResultConstraintV3d6Test extends TestCase
 {
     private $constraint;
 
@@ -92,7 +95,7 @@ class Phake_PHPUnit_VerifierResultConstraintV3d6Test extends PHPUnit_Framework_T
         try {
             $this->constraint->evaluate($result, '');
             $this->fail('expected an exception to be thrown');
-        } catch (PHPUnit_Framework_ExpectationFailedException $e) {
+        } catch (ExpectationFailedException $e) {
             $this->assertEquals('Failed asserting that The call failed!.', $e->getMessage());
         }
     }

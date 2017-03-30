@@ -42,7 +42,9 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-class Phake_Matchers_IgnoreRemainingMatcherTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class Phake_Matchers_IgnoreRemainingMatcherTest extends TestCase
 {
     /**
      * @var Phake_Matchers_AnyParameters
@@ -78,7 +80,7 @@ class Phake_Matchers_IgnoreRemainingMatcherTest extends PHPUnit_Framework_TestCa
 
     public function testSetNextThrowsInvalidException()
     {
-        $this->setExpectedException('InvalidArgumentException', 'Other matchers cannot be checked after you ignore remaining parameters.');
+        $this->expectException('InvalidArgumentException', 'Other matchers cannot be checked after you ignore remaining parameters.');
         $this->matcher->setNextMatcher(Phake::mock('Phake_Matchers_IChainableArgumentMatcher'));
     }
 }
