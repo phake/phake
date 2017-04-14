@@ -570,7 +570,7 @@ class Phake
         if (!isset(self::$client)) {
             if (class_exists('PHPUnit_Framework_TestCase')) {
                 return self::$client = new Phake_Client_PHPUnit();
-            } else if (class_exists(PHPUnit\Framework\TestCase::class)) {
+            } else if (class_exists('PHPUnit\Framework\TestCase')) {
                 return self::$client = new Phake_Client_PHPUnit6();
             }
             return self::$client = new Phake_Client_Default();
