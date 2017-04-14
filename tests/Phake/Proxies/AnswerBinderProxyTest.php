@@ -66,7 +66,9 @@ class Phake_Proxies_AnswerBinderProxyTest extends TestCase
      */
     public function setUp()
     {
-        $this->binder = $this->getMock('Phake_Stubber_AnswerBinder', array(), array(), '', false);
+        $this->binder = $this->getMockBuilder('Phake_Stubber_AnswerBinder')
+                            ->disableOriginalConstructor()
+                            ->getMock();
         $this->proxy  = new Phake_Proxies_AnswerBinderProxy($this->binder);
     }
 

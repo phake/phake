@@ -77,7 +77,7 @@ class Phake_Matchers_FactoryTest extends TestCase
      */
     public function testPassThroughMatcher()
     {
-        $matcher = $this->getMock('Phake_Matchers_IChainableArgumentMatcher');
+        $matcher = $this->getMockBuilder('Phake_Matchers_IChainableArgumentMatcher')->getMock();
 
         $retMatcher = $this->factory->createMatcher($matcher);
 
@@ -89,7 +89,7 @@ class Phake_Matchers_FactoryTest extends TestCase
      */
     public function testPHPUnitConstraint()
     {
-        $matcher = $this->getMock('PHPUnit_Framework_Constraint');
+        $matcher = $this->getMockBuilder('PHPUnit_Framework_Constraint')->getMock();
         $matcher->expects($this->once())
             ->method('evaluate')
             ->with($this->equalTo('foo'))
@@ -106,7 +106,7 @@ class Phake_Matchers_FactoryTest extends TestCase
      */
     public function testHamcrestMatcher()
     {
-        $matcher = $this->getMock('Hamcrest\Matcher');
+        $matcher = $this->getMockBuilder('Hamcrest\Matcher')->getMock();
         $matcher->expects($this->once())
             ->method('matches')
             ->with($this->equalTo('foo'))

@@ -72,7 +72,9 @@ class Phake_Stubber_AnswerBinderTest extends TestCase
     public function setUp()
     {
         Phake::initAnnotations($this);
-        $this->matcher    = $this->getMock('Phake_Matchers_MethodMatcher', array(), array(), '', false);
+        $this->matcher    = $this->getMockBuilder('Phake_Matchers_MethodMatcher')
+                                ->disableOriginalConstructor()
+                                ->getMock();
         $this->stubMapper = Phake::mock('Phake_Stubber_StubMapper');
 
         $this->binder = new Phake_Stubber_AnswerBinder($this->matcher, $this->stubMapper);
@@ -80,7 +82,7 @@ class Phake_Stubber_AnswerBinderTest extends TestCase
 
     public function testBindAnswer()
     {
-        $answer = $this->getMock('Phake_Stubber_IAnswer');
+        $answer = $this->getMockBuilder('Phake_Stubber_IAnswer')->getMock();
 
         $this->binder->bindAnswer($answer);
 
@@ -89,7 +91,7 @@ class Phake_Stubber_AnswerBinderTest extends TestCase
 
     public function testBindAnswerReturnsAnswerCollectionBinder()
     {
-        $answer = $this->getMock('Phake_Stubber_IAnswer');
+        $answer = $this->getMockBuilder('Phake_Stubber_IAnswer')->getMock();
 
         $newBinder = $this->binder->bindAnswer($answer);
 

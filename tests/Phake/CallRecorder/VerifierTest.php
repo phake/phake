@@ -226,8 +226,11 @@ class Phake_CallRecorder_VerifierTest extends TestCase
     public function testVerifierBeingCalledWithMixedCallRecorder()
     {
         $recorder = new Phake_CallRecorder_Recorder();
-        $obj1     = $this->getMock('Phake_IMock');
-        $obj2     = $this->getMock('Phake_IMock');
+
+        $obj1     = $this->getMockBuilder('Phake_IMock')
+                        ->getMock();
+        $obj2     = $this->getMockBuilder('Phake_IMock')
+                        ->getMock();
 
         $expectation = new Phake_CallRecorder_CallExpectation(
             $obj1,

@@ -67,7 +67,7 @@ class Phake_Proxies_CallStubberProxyTest extends TestCase
     public function setUp()
     {
         $this->matcher1 = Phake::mock('Phake_Matchers_IChainableArgumentMatcher');
-        $this->obj      = $this->getMock('Phake_IMock');
+        $this->obj      = $this->getMockBuilder('Phake_IMock')->getMock();
         PhakeTestUtil::setStubMapper($this->obj, Phake::mock('Phake_Stubber_StubMapper'));
         $this->proxy    = new Phake_Proxies_CallStubberProxy($this->matcher1, false);
     }

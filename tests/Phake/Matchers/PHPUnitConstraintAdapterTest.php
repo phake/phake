@@ -64,7 +64,7 @@ class Phake_Matchers_PHPUnitConstraintAdapterTest extends TestCase
      */
     public function setUp()
     {
-        $this->constraint = $this->getMock('PHPUnit_Framework_Constraint');
+        $this->constraint = $this->getMockBuilder('PHPUnit_Framework_Constraint')->getMock();
         $this->adapter    = new Phake_Matchers_PHPUnitConstraintAdapter($this->constraint);
         $this->constraint->expects($this->any())
             ->method('toString')

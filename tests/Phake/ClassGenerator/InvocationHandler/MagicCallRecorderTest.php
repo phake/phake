@@ -70,7 +70,8 @@ class Phake_ClassGenerator_InvocationHandler_MagicCallRecorderTest extends TestC
 
     public function testMagicCallIsRecorded()
     {
-        $mock = $this->getMock('Phake_IMock');
+        $mock = $this->getMockBuilder('Phake_IMock')
+                    ->getMock();
 
         $ref = array('foo', array());
         $this->handler->invoke($mock, '__call', array('foo', array()), $ref);
@@ -82,7 +83,8 @@ class Phake_ClassGenerator_InvocationHandler_MagicCallRecorderTest extends TestC
 
     public function testStaticMagicCallIsRecorded()
     {
-        $mock = $this->getMock('Phake_IMock');
+        $mock = $this->getMockBuilder('Phake_IMock')
+                    ->getMock();
         $mockClass = get_class($mock);
 
         $ref = array('foo', array());
@@ -95,7 +97,8 @@ class Phake_ClassGenerator_InvocationHandler_MagicCallRecorderTest extends TestC
 
     public function testNonMagicCallDoesNothing()
     {
-        $mock = $this->getMock('Phake_IMock');
+        $mock = $this->getMockBuilder('Phake_IMock')
+                    ->getMock();
 
         $ref = array();
         $this->handler->invoke($mock, 'foo', array(), $ref);
@@ -103,4 +106,3 @@ class Phake_ClassGenerator_InvocationHandler_MagicCallRecorderTest extends TestC
         Phake::verifyNoInteraction($this->callRecorder);
     }
 }
-

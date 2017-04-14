@@ -46,6 +46,7 @@
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\Assert;
+use PHPUnit\Runner\Version;
 
 class Phake_Client_PHPUnitTest6 extends TestCase
 {
@@ -53,6 +54,10 @@ class Phake_Client_PHPUnitTest6 extends TestCase
 
     public function setUp()
     {
+        if (version_compare(Version::id(), '6.0.0') < 0) {
+            $this->markTestSkipped('The tested class is not compatible with current version of PHPUnit.');
+        }
+
         $this->client = new Phake_Client_PHPUnit6();
     }
 

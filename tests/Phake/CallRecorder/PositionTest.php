@@ -88,8 +88,8 @@ class Phake_CallRecorder_PositionTest extends TestCase
      */
     private function getCall()
     {
-        return $this->getMock('Phake_CallRecorder_Call', array(), array(), '', false);
+        return $this->getMockBuilder('Phake_CallRecorder_Call')
+                    ->disableOriginalConstructor()
+                    ->getMock();
     }
 }
-
-

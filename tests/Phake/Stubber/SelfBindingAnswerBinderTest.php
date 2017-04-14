@@ -67,7 +67,7 @@ class Phake_Stubber_SelfBindingAnswerBinderTest extends TestCase
      */
     public function testGetAnswer()
     {
-        $answer = $this->getMock('Phake_Stubber_IAnswer');
+        $answer = $this->getMockBuilder('Phake_Stubber_IAnswer')->getMock();
         $this->assertSame($this->binder, $this->binder->bindAnswer($answer));
 
         $this->assertSame($answer, $this->binder->getAnswer());

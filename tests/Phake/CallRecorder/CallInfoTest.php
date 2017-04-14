@@ -70,8 +70,12 @@ class Phake_CallRecorder_CallInfoTest extends TestCase
      */
     public function setUp()
     {
-        $this->call     = $this->getMock('Phake_CallRecorder_Call', array(), array(), '', false);
-        $this->position = $this->getMock('Phake_CallRecorder_Position', array(), array(), '', false);
+        $this->call     = $this->getMockBuilder('Phake_CallRecorder_Call')
+                                ->disableOriginalConstructor()
+                                ->getMock();
+        $this->position = $this->getMockBuilder('Phake_CallRecorder_Position')
+                                ->disableOriginalConstructor()
+                                ->getMock();
 
         $this->callInfo = new Phake_CallRecorder_CallInfo($this->call, $this->position);
     }

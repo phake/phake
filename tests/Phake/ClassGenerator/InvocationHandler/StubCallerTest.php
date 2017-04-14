@@ -75,7 +75,7 @@ class Phake_ClassGenerator_InvocationHandler_StubCallerTest extends TestCase
     public function setUp()
     {
         Phake::initAnnotations($this);
-        $this->mock          = $this->getMock('Phake_IMock');
+        $this->mock          = $this->getMockBuilder('Phake_IMock')->getMock();
         $this->stubMapper    = Phake::mock('Phake_Stubber_StubMapper');
         $this->defaultAnswer = Phake::mock('Phake_Stubber_IAnswer');
         Phake::when($this->defaultAnswer)->getAnswerCallback('foo')->thenReturn(function () { return '24'; });

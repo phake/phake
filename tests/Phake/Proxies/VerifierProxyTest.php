@@ -82,7 +82,7 @@ class Phake_Proxies_VerifierProxyTest extends TestCase
         );
 
         $this->proxy = new Phake_Proxies_VerifierProxy($this->verifier, new Phake_Matchers_Factory(), $this->mode, $this->client);
-        $obj         = $this->getMock('Phake_IMock');
+        $obj         = $this->getMockBuilder('Phake_IMock')->getMock();
         Phake::when($this->verifier)->getObject()->thenReturn($obj);
         Phake::when($this->mode)->__toString()->thenReturn('exactly 1 times');
         Phake::when($this->client)->processVerifierResult($this->anything())->thenReturn($this->matchedCalls);
