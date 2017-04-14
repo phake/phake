@@ -91,7 +91,9 @@ class Phake_Proxies_AnswerCollectionProxyTest extends TestCase
      */
     public function testThenGetReturnByLambda()
     {
-        $func = create_function('$arg1', 'return $arg1;');
+        $func = function($arg1) {
+            return $arg1;
+        };
 
         $this->assertSame($this->proxy, $this->proxy->thenGetReturnByLambda($func));
 

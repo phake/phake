@@ -101,7 +101,9 @@ class Phake_Proxies_AnswerBinderProxyTest extends TestCase
      */
     public function testThenReturnCallback()
     {
-        $func = create_function('$arg1', 'return $arg1;');
+        $func = function($arg1) {
+            return $arg1;
+        };
 
         $this->binder->expects($this->once())
             ->method('bindAnswer')
