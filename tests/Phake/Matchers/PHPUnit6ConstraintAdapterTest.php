@@ -43,11 +43,12 @@
  */
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Constraint\Constraint;
 
 /**
  * Tests the adapting of phpunit constraints into Phake matchers
  */
-class Phake_Matchers_PHPUnitConstraintAdapterTest extends TestCase
+class Phake_Matchers_PHPUnit6ConstraintAdapterTest extends TestCase
 {
     /**
      * @var Phake_Matchers_PHPUnitConstraintAdapter
@@ -55,7 +56,7 @@ class Phake_Matchers_PHPUnitConstraintAdapterTest extends TestCase
     private $adapter;
 
     /**
-     * @var PHPUnit_Framework_Constraint
+     * @var Constraint
      */
     private $constraint;
 
@@ -64,8 +65,8 @@ class Phake_Matchers_PHPUnitConstraintAdapterTest extends TestCase
      */
     public function setUp()
     {
-        $this->constraint = $this->getMockBuilder('PHPUnit_Framework_Constraint')->getMock();
-        $this->adapter    = new Phake_Matchers_PHPUnitConstraintAdapter($this->constraint);
+        $this->constraint = $this->getMockBuilder(Constraint::class)->getMock();
+        $this->adapter    = new Phake_Matchers_PHPUnit6ConstraintAdapter($this->constraint);
         $this->constraint->expects($this->any())
             ->method('toString')
             ->will($this->returnValue('phpunit matcher'));
@@ -90,5 +91,3 @@ class Phake_Matchers_PHPUnitConstraintAdapterTest extends TestCase
         $this->assertEquals('phpunit matcher', $this->adapter->__toString());
     }
 }
-
-

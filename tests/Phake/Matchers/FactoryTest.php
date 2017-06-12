@@ -43,6 +43,7 @@
  */
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Constraint\Constraint;
 
 class Phake_Matchers_FactoryTest extends TestCase
 {
@@ -87,9 +88,9 @@ class Phake_Matchers_FactoryTest extends TestCase
     /**
      * Tests creating a phpunit adapter matcher
      */
-    public function testPHPUnitConstraint()
+    public function testPHPUnit6Constraint()
     {
-        $matcher = $this->getMockBuilder('PHPUnit_Framework_Constraint')->getMock();
+        $matcher = $this->getMockBuilder(Constraint::class)->getMock();
         $matcher->expects($this->once())
             ->method('evaluate')
             ->with($this->equalTo('foo'))
@@ -160,5 +161,3 @@ class Phake_Matchers_FactoryTest extends TestCase
         $this->assertNull($this->factory->createMatcherChain(array()));
     }
 }
-
-
