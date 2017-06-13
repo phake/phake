@@ -815,13 +815,54 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
         $mock = Phake::mock('PhakeTest_NullableScalarTypes');
         Phake::when($mock)->objectReturn->thenReturn(null);
 
-        try {
-            $mock->objectReturn();
-        } catch (\Error $e) {
-            $this->fail($e->getMessage());
+        try
+        {
+            $this->assertSame(null, $mock->objectReturn());
+        }
+        catch (TypeError $e)
+        {
+            $this->fail('Expected stubbing objectReturn null');
         }
 
         Phake::verify($mock, Phake::times(1))->objectReturn();
+    }
+
+    public function testStubbingNullableScalarReturnWrongType()
+    {
+        if (version_compare(phpversion(), '7.1.0') < 0)
+        {
+            $this->markTestSkipped('Nullable scalar return hints are not supported in PHP versions prior to 7.1');
+        }
+
+        $mock = Phake::mock('PhakeTest_NullableScalarTypes');
+        Phake::when($mock)->objectReturn->thenReturn(array());
+
+        try
+        {
+            $mock->objectReturn();
+        }
+        catch (TypeError $e)
+        {
+            return;
+        }
+        catch (Throwable $e)
+        {
+            $this->fail("Expected A Type Error, instead got " . get_class($e) . " {$e}");
+        }
+
+        $this->fail("Expected A Type Error, no error received");
+    }
+
+    public function testStubbingNullableScalarDefaultReturnType()
+    {
+        if (version_compare(phpversion(), '7.1.0') < 0)
+        {
+            $this->markTestSkipped('Nullable scalar return hints are not supported in PHP versions prior to 7.1');
+        }
+
+        $mock = Phake::mock('PhakeTest_NullableScalarTypes');
+
+        $this->assertTrue($mock->objectReturn() instanceof PhakeTest_A);
     }
 }
 
