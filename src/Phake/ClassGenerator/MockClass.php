@@ -480,7 +480,12 @@ class {$newClassName} {$extends}
         if (method_exists($method, 'hasReturnType') && $method->hasReturnType())
         {
             $returnType = $method->getReturnType();
-            $returnHint = ' : ' . $returnType;
+            if ($returnType->allowsNull())
+            {
+                $returnHint = ' : ?' . $returnType;
+            } else {
+                $returnHint = ' : ' . $returnType;
+            }
 
             if ($returnType == 'void')
             {
