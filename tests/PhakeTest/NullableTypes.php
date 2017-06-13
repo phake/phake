@@ -1,6 +1,6 @@
 <?php
 
-class PhakeTest_NullableScalarTypes
+class PhakeTest_NullableTypes
 {
     public function objectReturn() : ?PhakeTest_A {
 

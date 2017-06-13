@@ -808,7 +808,7 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
     {
         if (version_compare(phpversion(), '7.1.0') < 0)
         {
-            $this->markTestSkipped('Nullable scalar return hints are not supported in PHP versions prior to 7.1');
+            $this->markTestSkipped('Nullable return hints are not supported in PHP versions prior to 7.1');
         }
 
         $mock = Phake::mock('PhakeTest_ScalarTypes');
@@ -827,14 +827,14 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 
     }
 
-    public function testStubbingNullableScalarReturnHints()
+    public function testStubbingNullableReturnHints()
     {
         if (version_compare(phpversion(), '7.1.0') < 0)
         {
-            $this->markTestSkipped('Nullable scalar return hints are not supported in PHP versions prior to 7.1');
+            $this->markTestSkipped('Nullable return hints are not supported in PHP versions prior to 7.1');
         }
 
-        $mock = Phake::mock('PhakeTest_NullableScalarTypes');
+        $mock = Phake::mock('PhakeTest_NullableTypes');
         Phake::when($mock)->objectReturn->thenReturn(null);
 
         try
@@ -849,14 +849,14 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
         Phake::verify($mock, Phake::times(1))->objectReturn();
     }
 
-    public function testStubbingNullableScalarReturnWrongType()
+    public function testStubbingNullableReturnWrongType()
     {
         if (version_compare(phpversion(), '7.1.0') < 0)
         {
-            $this->markTestSkipped('Nullable scalar return hints are not supported in PHP versions prior to 7.1');
+            $this->markTestSkipped('Nullable return hints are not supported in PHP versions prior to 7.1');
         }
 
-        $mock = Phake::mock('PhakeTest_NullableScalarTypes');
+        $mock = Phake::mock('PhakeTest_NullableTypes');
         Phake::when($mock)->objectReturn->thenReturn(array());
 
         try
@@ -875,15 +875,14 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
         $this->fail("Expected A Type Error, no error received");
     }
 
-    public function testStubbingNullableScalarDefaultReturnType()
+    public function testDefaultReturnType()
     {
         if (version_compare(phpversion(), '7.1.0') < 0)
         {
-            $this->markTestSkipped('Nullable scalar return hints are not supported in PHP versions prior to 7.1');
+            $this->markTestSkipped('Nullable return hints are not supported in PHP versions prior to 7.1');
         }
 
-        $mock = Phake::mock('PhakeTest_NullableScalarTypes');
-
+        $mock = Phake::mock('PhakeTest_NullableTypes');
         $this->assertTrue($mock->objectReturn() instanceof PhakeTest_A);
     }
 }
