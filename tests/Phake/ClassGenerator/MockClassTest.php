@@ -804,5 +804,20 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(1, $mock->voidCallCount, "Void call count was not incremented, looks like callParent doesn't work");
     }
+
+    public function testStubbingNullableScalarReturnHints()
+    {
+        if (version_compare(phpversion(), '7.1.0') < 0)
+        {
+            $this->markTestSkipped('Nullable scalar return hints are not supported in PHP versions prior to 7.1');
+        }
+
+        $mock = Phake::mock('PhakeTest_NullableScalarTypes');
+        Phake::when($mock)->objectReturn->thenReturn(null);
+
+        $mock->objectReturn();
+
+        Phake::verify($mock, Phake::times(1))->objectReturn();
+    }
 }
 
