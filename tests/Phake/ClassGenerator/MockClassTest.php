@@ -815,7 +815,11 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
         $mock = Phake::mock('PhakeTest_NullableScalarTypes');
         Phake::when($mock)->objectReturn->thenReturn(null);
 
-        $mock->objectReturn();
+        try {
+            $mock->objectReturn();
+        } catch (\Error $e) {
+            $this->fail($e->getMessage());
+        }
 
         Phake::verify($mock, Phake::times(1))->objectReturn();
     }
