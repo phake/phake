@@ -788,7 +788,6 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
         }
     }
 
-
     public function testVoidStubCanCallParent()
     {
         if (version_compare(phpversion(), '7.1.0') < 0)
@@ -803,6 +802,29 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
         $mock->voidMethod();
 
         $this->assertEquals(1, $mock->voidCallCount, "Void call count was not incremented, looks like callParent doesn't work");
+    }
+
+    public function testStubbingNotNullableReturnHint()
+    {
+        if (version_compare(phpversion(), '7.1.0') < 0)
+        {
+            $this->markTestSkipped('Nullable scalar return hints are not supported in PHP versions prior to 7.1');
+        }
+
+        $mock = Phake::mock('PhakeTest_ScalarTypes');
+
+        Phake::when($mock)->objectReturn->thenReturn(null);
+
+        try
+        {
+            $mock->objectReturn();
+            $this->fail('Expected TypeError');
+        }
+        catch (TypeError $e)
+        {
+            return;
+        }
+
     }
 
     public function testStubbingNullableScalarReturnHints()
