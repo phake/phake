@@ -53,7 +53,7 @@ use PHPUnit\Framework\Assert;
  */
 class Phake_Client_PHPUnit6 implements Phake_Client_IClient
 {
-    public function processVerifierResult(Phake_CallRecorder_VerifierResult $result)
+    public function processVerifierResult(\Phake_CallRecorder_VerifierResult $result)
     {
         Assert::assertThat($result, $this->getConstraint());
 
@@ -70,4 +70,3 @@ class Phake_Client_PHPUnit6 implements Phake_Client_IClient
         return new Phake_PHPUnit_VerifierResultConstraintV6();
     }
 }
-
