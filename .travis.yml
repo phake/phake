@@ -29,10 +29,10 @@ script:
 matrix:
   allow_failures:
     - php: nightly
+    - env: PHPUNIT_VERSION=4.8.*
     - env: PHPUNIT_VERSION=4.8.x-dev
     - env: PHPUNIT_VERSION=5.0.x-dev
     - env: PHPUNIT_VERSION=5.1.x-dev
-    - env: PHPUNIT_VERSION=6.0.x-dev
   exclude:
     - php: 5.3
       env: PHPUNIT_VERSION=5.0.x-dev

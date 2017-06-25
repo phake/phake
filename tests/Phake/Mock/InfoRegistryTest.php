@@ -6,7 +6,9 @@
  * Time: 3:29 PM
  */
 
-class Phake_Mock_InfoRegistryTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class Phake_Mock_InfoRegistryTest extends TestCase
 {
     /**
      * @var Phake_Mock_InfoRegistry
@@ -49,4 +51,3 @@ class Phake_Mock_InfoRegistryTest extends PHPUnit_Framework_TestCase
         Phake::verify($this->info3)->resetInfo();
     }
 }
- 

@@ -42,7 +42,9 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-class Phake_CallRecorder_CallExpectationTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class Phake_CallRecorder_CallExpectationTest extends TestCase
 {
     public function testToString()
     {

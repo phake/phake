@@ -42,12 +42,14 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * Tests the facade class for Phake
  *
  * @author Mike Lively <m@digitalsandwich.com>
  */
-class Phake_String_ConverterTest extends PHPUnit_Framework_TestCase
+class Phake_String_ConverterTest extends TestCase
 {
     /**
      * @var Phake_String_Converter

@@ -42,7 +42,9 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-class Phake_Matchers_AbstractChainableArgumentMatcherTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class Phake_Matchers_AbstractChainableArgumentMatcherTest extends TestCase
 {
     /**
      * @var Phake_Matchers_AbstractChainableArgumentMatcher
@@ -78,8 +80,7 @@ class Phake_Matchers_AbstractChainableArgumentMatcherTest extends PHPUnit_Framew
     {
         Phake::when($this->nextMatcher)->assertPreviousMatcher->thenThrow(new InvalidArgumentException());
 
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException('InvalidArgumentException');
         $this->matcher->setNextMatcher($this->nextMatcher);
     }
 }
- 

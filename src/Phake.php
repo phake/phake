@@ -78,6 +78,7 @@ class Phake
      */
     const CLIENT_DEFAULT = 'DEFAULT';
     const CLIENT_PHPUNIT = 'PHPUNIT';
+    const CLIENT_PHPUNIT6 = 'PHPUNIT6';
 
     /**
      * Returns a new mock object based on the given class name.
@@ -569,6 +570,8 @@ class Phake
         if (!isset(self::$client)) {
             if (class_exists('PHPUnit_Framework_TestCase')) {
                 return self::$client = new Phake_Client_PHPUnit();
+            } else if (class_exists('PHPUnit\Framework\TestCase')) {
+                return self::$client = new Phake_Client_PHPUnit6();
             }
             return self::$client = new Phake_Client_Default();
         } else {
@@ -589,7 +592,10 @@ class Phake
             self::$client = $client;
         } elseif ($client == self::CLIENT_PHPUNIT) {
             self::$client = new Phake_Client_PHPUnit();
-        } else {
+        } elseif ($client == self::CLIENT_PHPUNIT6) {
+            self::$client = new Phake_Client_PHPUnit6();
+        }
+        else {
             self::$client = new Phake_Client_Default();
         }
     }

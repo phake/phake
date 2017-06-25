@@ -43,7 +43,9 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-class Phake_Mock_InfoTest extends PHPUnit_Framework_TestCase {
+use PHPUnit\Framework\TestCase;
+
+class Phake_Mock_InfoTest extends TestCase {
     /**
      * @var Phake_Mock_Info
      */
@@ -141,4 +143,3 @@ class Phake_Mock_InfoTest extends PHPUnit_Framework_TestCase {
         Phake::verify($this->recorder)->removeAllCalls();
     }
 }
- 
