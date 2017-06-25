@@ -539,6 +539,18 @@ class Phake_ClassGenerator_MockClassTest extends TestCase
         $this->addToAssertionCount(1);
     }
 
+    public function testMockFinalClassThrowsException()
+    {
+        $expectedException = new InvalidArgumentException("Final classes cannot be mocked.");
+
+        try {
+            $mock = Phake::mock('PhakeTest_FinalClass');
+            $this->fail("The mocked final method did not throw an exception");
+        } catch(InvalidArgumentException $actualException) {
+            $this->assertEquals($actualException, $expectedException);
+        }
+    }
+
     /**
      * Tests that the mocked object's __toString() method returns a string by default.
      */
@@ -791,7 +803,6 @@ class Phake_ClassGenerator_MockClassTest extends TestCase
             $this->assertSame($expectedException, $actualException, "The same exception was not thrown");
         }
     }
-
 
     public function testVoidStubCanCallParent()
     {
