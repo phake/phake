@@ -12,13 +12,13 @@
         }
     ],
     "require": {
-        "php": ">=5.3.3",
-        "sebastian/comparator": "~1.1"
+        "php": ">=7",
+        "sebastian/comparator": "~1.1|~2.0"
     },
     "require-dev": {
         "ext-soap": "*",
         "doctrine/common": "2.3.*",
-        "phpunit/phpunit": "3.7.*",
+        "phpunit/phpunit": "^6.0",
         "hamcrest/hamcrest-php": "1.1.*",
         "codeclimate/php-test-reporter": "dev-master"
     },

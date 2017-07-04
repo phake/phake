@@ -1,6 +1,8 @@
 <?php
 
-class Phake_Stubber_Answers_LambdaAnswerTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class Phake_Stubber_Answers_LambdaAnswerTest extends TestCase
 {
     public function testLambdaAnswerAcceptsOldschoolLambda()
     {

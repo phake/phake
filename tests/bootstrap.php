@@ -50,7 +50,7 @@ $loader->add('PhakeTest', __DIR__);
 
 require dirname(__DIR__) . '/vendor/hamcrest/hamcrest-php/hamcrest/Hamcrest.php';
 
-Phake::setClient(Phake::CLIENT_DEFAULT);
+Phake::setClient(Phake::CLIENT_PHPUNIT6);
 
 $cacheDir = getenv('PHAKE_CACHEDIR');
 if (!empty($cacheDir)) {

@@ -1,26 +1,26 @@
 <?php
-/* 
+/*
  * Phake - Mocking Framework
- * 
+ *
  * Copyright (c) 2010-2012, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
- * 
+ *
  *  *  Redistributions of source code must retain the above copyright
  *     notice, this list of conditions and the following disclaimer.
- * 
+ *
  *  *  Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in
  *     the documentation and/or other materials provided with the
  *     distribution.
- * 
+ *
  *  *  Neither the name of Mike Lively nor the names of his
  *     contributors may be used to endorse or promote products derived
  *     from this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -33,7 +33,7 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  * @category   Testing
  * @package    Phake
  * @author     Mike Lively <m@digitalsandwich.com>
@@ -42,12 +42,14 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * Tests the facade class for Phake
  *
  * @author Mike Lively <m@digitalsandwich.com>
  */
-class Phake_FacadeTest extends PHPUnit_Framework_TestCase
+class Phake_FacadeTest extends TestCase
 {
     /**
      * @var Phake_Facade
@@ -71,7 +73,7 @@ class Phake_FacadeTest extends PHPUnit_Framework_TestCase
     public function setup()
     {
         Phake::initAnnotations($this);
-        $this->mockGenerator = $this->getMock('Phake_ClassGenerator_MockClass');
+        $this->mockGenerator = $this->getMockBuilder('Phake_ClassGenerator_MockClass')->getMock();
         $this->facade        = new Phake_Facade($this->infoRegistry);
     }
 
@@ -81,15 +83,15 @@ class Phake_FacadeTest extends PHPUnit_Framework_TestCase
     public function testMock()
     {
         $mockedClass   = 'stdClass';
-        $mockGenerator = $this->getMock('Phake_ClassGenerator_MockClass');
+        $mockGenerator = $this->getMockBuilder('Phake_ClassGenerator_MockClass')->getMock();
 
         $this->setMockGeneratorExpectations($mockedClass, $mockGenerator);
 
         $this->facade->mock(
             $mockedClass,
             $mockGenerator,
-            $this->getMock('Phake_CallRecorder_Recorder'),
-            $this->getMock('Phake_Stubber_IAnswer')
+            $this->getMockBuilder('Phake_CallRecorder_Recorder')->getMock(),
+            $this->getMockBuilder('Phake_Stubber_IAnswer')->getMock()
         );
     }
 
@@ -99,15 +101,15 @@ class Phake_FacadeTest extends PHPUnit_Framework_TestCase
     public function testMockInterface()
     {
         $mockedClass   = 'PhakeTest_MockedInterface';
-        $mockGenerator = $this->getMock('Phake_ClassGenerator_MockClass');
+        $mockGenerator = $this->getMockBuilder('Phake_ClassGenerator_MockClass')->getMock();
 
         $this->setMockGeneratorExpectations($mockedClass, $mockGenerator);
 
         $this->facade->mock(
             $mockedClass,
             $mockGenerator,
-            $this->getMock('Phake_CallRecorder_Recorder'),
-            $this->getMock('Phake_Stubber_IAnswer')
+            $this->getMockBuilder('Phake_CallRecorder_Recorder')->getMock(),
+            $this->getMockBuilder('Phake_Stubber_IAnswer')->getMock()
         );
     }
 
@@ -121,9 +123,9 @@ class Phake_FacadeTest extends PHPUnit_Framework_TestCase
 
         $this->facade->mock(
             $mockedClass,
-            $this->getMock('Phake_ClassGenerator_MockClass'),
-            $this->getMock('Phake_CallRecorder_Recorder'),
-            $this->getMock('Phake_Stubber_IAnswer')
+            $this->getMockBuilder('Phake_ClassGenerator_MockClass')->getMock(),
+            $this->getMockBuilder('Phake_CallRecorder_Recorder')->getMock(),
+            $this->getMockBuilder('Phake_Stubber_IAnswer')->getMock()
         );
     }
 
@@ -134,9 +136,9 @@ class Phake_FacadeTest extends PHPUnit_Framework_TestCase
     {
         $mockedClass = 'stdClass';
 
-        $recorder       = $this->getMock('Phake_CallRecorder_Recorder');
-        $classGenerator = $this->getMock('Phake_ClassGenerator_MockClass');
-        $answer         = $this->getMock('Phake_Stubber_IAnswer');
+        $recorder       = $this->getMockBuilder('Phake_CallRecorder_Recorder')->getMock();
+        $classGenerator = $this->getMockBuilder('Phake_ClassGenerator_MockClass')->getMock();
+        $answer         = $this->getMockBuilder('Phake_Stubber_IAnswer')->getMock();
 
 
         $this->setMockInstantiatorExpectations($classGenerator, $recorder, $answer);
@@ -152,15 +154,20 @@ class Phake_FacadeTest extends PHPUnit_Framework_TestCase
         spl_autoload_register(array(__CLASS__, 'autoload'));
         try {
             $mockedClass   = 'stdClass';
-            $mockGenerator = $this->getMock('Phake_ClassGenerator_MockClass');
+            $mockGenerator = $this->getMockBuilder('Phake_ClassGenerator_MockClass')->getMock();
+
+            $mockGenerator->expects($this->once())
+                ->method('instantiate')
+                ->withAnyParameters();
 
             //This test will fail if the autoload below is called
             $this->facade->mock(
                 $mockedClass,
                 $mockGenerator,
-                $this->getMock('Phake_CallRecorder_Recorder'),
-                $this->getMock('Phake_Stubber_IAnswer')
+                $this->getMockBuilder('Phake_CallRecorder_Recorder')->getMock(),
+                $this->getMockBuilder('Phake_Stubber_IAnswer')->getMock()
             );
+
             spl_autoload_unregister(array(__CLASS__, 'autoload'));
         }
         catch (Exception $e)

@@ -45,68 +45,63 @@
 
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\ExpectationFailedException;
+use PHPUnit\Framework\Assert;
 use PHPUnit\Runner\Version;
 
-class Phake_PHPUnit_VerifierResultConstraintTest extends TestCase
+class Phake_Client_PHPUnitTest6 extends TestCase
 {
-    private $constraint;
+    private $client;
 
     public function setUp()
     {
-        if (version_compare('3.6.0', Version::id()) != 1 && version_compare('6.0.0', Version::id()) != 1) {
+        if (version_compare(Version::id(), '6.0.0') < 0) {
             $this->markTestSkipped('The tested class is not compatible with current version of PHPUnit.');
         }
-        $this->constraint = new Phake_PHPUnit_VerifierResultConstraint($this->verifier);
+
+        $this->client = new Phake_Client_PHPUnit6();
     }
 
-    public function testExtendsPHPUnitConstraint()
+    public function testImplementsIClient()
     {
-        $this->assertInstanceOf('PHPUnit_Framework_Constraint', $this->constraint);
+        $this->assertInstanceOf('Phake_Client_IClient', $this->client);
     }
 
-    public function testEvaluateReturnsTrueIfVerifyResultIsTrue()
+    public function testProcessVerifierResultReturnsCallsOnTrue()
     {
-        $result = new Phake_CallRecorder_VerifierResult(true, array());
-        $this->assertTrue($this->constraint->evaluate($result));
+        $result = new Phake_CallRecorder_VerifierResult(true, array('call1'));
+
+        $this->assertEquals(array('call1'), $this->client->processVerifierResult($result));
     }
 
-    public function testEvaluateReturnsFalseWhenVerifierReturnsFalse()
+    public function testProcessVerifierThrowsExceptionOnFalse()
     {
-        $result = new Phake_CallRecorder_VerifierResult(false, array());
-        $this->assertFalse($this->constraint->evaluate($result));
+        $result = new Phake_CallRecorder_VerifierResult(false, array(), 'failure message');
+
+        $this->expectException(ExpectationFailedException::class, 'failure message');
+        $this->client->processVerifierResult($result);
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testEvaluateThrowsWhenArgumentIsNotAResult()
+    public function testProcessVerifierIncrementsAssertionCount()
     {
-        $this->constraint->evaluate('');
-    }
+        $result = new Phake_CallRecorder_VerifierResult(true, array('call1'));
 
-    public function testToString()
-    {
-        $this->assertEquals('is called', $this->constraint->toString());
-    }
+        $assertionCount = Assert::getCount();
+        $this->client->processVerifierResult($result);
+        $newAssertionCount = Assert::getCount();
 
-    public function testCustomFailureDescriptionReturnsDescriptionFromResult()
-    {
-        $result = new Phake_CallRecorder_VerifierResult(false, array(), "The call failed!");
-
-        try {
-            $this->constraint->fail($result, '');
-            $this->fail('expected an exception to be thrown');
-        } catch (ExpectationFailedException $e) {
-            $this->assertEquals('The call failed!', $e->getDescription());
-        }
+        $this->assertGreaterThan($assertionCount, $newAssertionCount);
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * Utilizes a dummy constraint to indicate that an assertion has happened.
      */
-    public function testFailThrowsWhenArgumentIsNotAResult()
+    public function testProcessObjectFreeze()
     {
-        $this->constraint->fail('', '');
+        $assertionCount = Assert::getCount();
+        $this->client->processObjectFreeze();
+        $newAssertionCount = Assert::getCount();
+
+        $this->assertGreaterThan($assertionCount, $newAssertionCount);
     }
 }
 

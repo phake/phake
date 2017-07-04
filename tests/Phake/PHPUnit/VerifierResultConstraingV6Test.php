@@ -47,33 +47,33 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Runner\Version;
 
-class Phake_PHPUnit_VerifierResultConstraintTest extends TestCase
+class Phake_PHPUnit_VerifierResultConstraingV6Test extends TestCase
 {
     private $constraint;
 
     public function setUp()
     {
-        if (version_compare('3.6.0', Version::id()) != 1 && version_compare('6.0.0', Version::id()) != 1) {
+        if (version_compare('6.0.0', Version::id()) != 1) {
             $this->markTestSkipped('The tested class is not compatible with current version of PHPUnit.');
         }
-        $this->constraint = new Phake_PHPUnit_VerifierResultConstraint($this->verifier);
+        $this->constraint = new Phake_PHPUnit_VerifierResultConstraintV3d6();
     }
 
     public function testExtendsPHPUnitConstraint()
     {
-        $this->assertInstanceOf('PHPUnit_Framework_Constraint', $this->constraint);
+        $this->assertInstanceOf('PHPUnit\Framework\Constraint\Constraint', $this->constraint);
     }
 
     public function testEvaluateReturnsTrueIfVerifyResultIsTrue()
     {
         $result = new Phake_CallRecorder_VerifierResult(true, array());
-        $this->assertTrue($this->constraint->evaluate($result));
+        $this->assertTrue($this->constraint->evaluate($result, '', true));
     }
 
     public function testEvaluateReturnsFalseWhenVerifierReturnsFalse()
     {
         $result = new Phake_CallRecorder_VerifierResult(false, array());
-        $this->assertFalse($this->constraint->evaluate($result));
+        $this->assertFalse($this->constraint->evaluate($result, '', true));
     }
 
     /**
@@ -94,10 +94,10 @@ class Phake_PHPUnit_VerifierResultConstraintTest extends TestCase
         $result = new Phake_CallRecorder_VerifierResult(false, array(), "The call failed!");
 
         try {
-            $this->constraint->fail($result, '');
+            $this->constraint->evaluate($result, '');
             $this->fail('expected an exception to be thrown');
         } catch (ExpectationFailedException $e) {
-            $this->assertEquals('The call failed!', $e->getDescription());
+            $this->assertEquals('Failed asserting that The call failed!.', $e->getMessage());
         }
     }
 
@@ -106,7 +106,7 @@ class Phake_PHPUnit_VerifierResultConstraintTest extends TestCase
      */
     public function testFailThrowsWhenArgumentIsNotAResult()
     {
-        $this->constraint->fail('', '');
+        $this->constraint->evaluate('', '');
     }
 }
 

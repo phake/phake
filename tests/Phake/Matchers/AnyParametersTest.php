@@ -42,7 +42,9 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-class Phake_Matchers_AnyParametersTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class Phake_Matchers_AnyParametersTest extends TestCase
 {
     /**
      * @var Phake_Matchers_AnyParameters
@@ -78,14 +80,14 @@ class Phake_Matchers_AnyParametersTest extends PHPUnit_Framework_TestCase
 
     public function testSetNextThrowsInvalidException()
     {
-        $this->setExpectedException('InvalidArgumentException', 'Other matchers cannot be passed with any '
+        $this->expectException('InvalidArgumentException', 'Other matchers cannot be passed with any '
             . 'parameters. It will not work the way you think it works');
         $this->matcher->setNextMatcher(Phake::mock('Phake_Matchers_IChainableArgumentMatcher'));
     }
 
     public function testAssertPreviousMatcherThrowsInvalidException()
     {
-        $this->setExpectedException('InvalidArgumentException', 'Other matchers cannot be passed with any '
+        $this->expectException('InvalidArgumentException', 'Other matchers cannot be passed with any '
             . 'parameters. It will not work the way you think it works');
         $this->matcher->assertPreviousMatcher(Phake::mock('Phake_Matchers_IChainableArgumentMatcher'));
     }

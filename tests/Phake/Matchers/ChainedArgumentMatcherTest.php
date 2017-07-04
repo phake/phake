@@ -42,7 +42,9 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-class Phake_Matchers_ChainedArgumentMatcherTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class Phake_Matchers_ChainedArgumentMatcherTest extends TestCase
 {
     /**
      * @var Phake_Matchers_ChainedArgumentMatcher
@@ -93,4 +95,3 @@ class Phake_Matchers_ChainedArgumentMatcherTest extends PHPUnit_Framework_TestCa
         $this->assertEquals('test string', $result);
     }
 }
- 

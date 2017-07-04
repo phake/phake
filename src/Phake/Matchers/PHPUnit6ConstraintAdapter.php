@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Phake - Mocking Framework
  *
@@ -42,6 +43,9 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+use PHPUnit\Framework\Constraint\Constraint;
+use PHPUnit\Framework\ExpectationFailedException;
+
 /**
  * An adapter class allowing PHPUnit constraints to be treated as though they were Phake argument
  * matchers.
@@ -54,9 +58,9 @@ class Phake_Matchers_PHPUnit6ConstraintAdapter extends Phake_Matchers_SingleArgu
     private $constraint;
 
     /**
-     * @param \PHPUnit\Framework\Constraint\Constraint $constraint
+     * @param Constraint $constraint
      */
-    public function __construct(\PHPUnit\Framework\Constraint\Constraint $constraint)
+    public function __construct(Constraint $constraint)
     {
         $this->constraint = $constraint;
     }
@@ -69,21 +73,15 @@ class Phake_Matchers_PHPUnit6ConstraintAdapter extends Phake_Matchers_SingleArgu
      * @param mixed $argument
      * @throws Phake_Exception_MethodMatcherException
      */
-    protected  function matches(&$argument)
+    protected function matches(&$argument)
     {
-        try
-        {
+        try {
             $this->constraint->evaluate($argument, '');
-        }
-        catch (\PHPUnit\Framework\ExpectationFailedException $e)
-        {
+        } catch (ExpectationFailedException $e) {
             $failure = $e->getComparisonFailure();
-            if ($failure instanceof \PHPUnit\Framework\ComparisonFailure)
-            {
+            if ($failure instanceof \PHPUnit\Framework\ComparisonFailure) {
                 $failure = $failure->getDiff();
-            }
-            else
-            {
+            } else {
                 $failure = '';
             }
             throw new Phake_Exception_MethodMatcherException($e->getMessage() . "\n" . $failure, $e);

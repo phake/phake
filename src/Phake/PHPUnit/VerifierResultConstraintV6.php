@@ -1,8 +1,9 @@
 <?php
+
 /*
  * Phake - Mocking Framework
  *
- * Copyright (c) 2010-2012, Mike Lively <m@digitalsandwich.com>
+ * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -42,49 +43,33 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Constraint\Constraint;
 
 /**
- * @author Brian Feaver <brian.feaver@gmail.com>
+ * A PHPUnit constraint that wraps a phake verifier to allow assertions on expected calls.
  */
-class Phake_Stubber_Answers_ExceptionAnswerTest extends TestCase
+class Phake_PHPUnit_VerifierResultConstraintV6 extends Constraint
 {
-    /**
-     * @var Phake_Stubber_Answers_ExceptionAnswer
-     */
-    private $answer;
-
-    /**
-     * @var RuntimeException
-     */
-    private $exception;
-
-    /**
-     * Sets up the answer fixture
-     */
-    public function setUp()
+    protected function matches($other)
     {
-        $this->exception = new RuntimeException();
-        $this->answer    = new Phake_Stubber_Answers_ExceptionAnswer($this->exception);
-    }
-
-    /**
-     * @expectedException RuntimeException
-     */
-    public function testAnswer()
-    {
-        call_user_func($this->answer->getAnswerCallback('stdClass', 'testMethod'));
-    }
-
-    /**
-     * Tests that we throw the same exception instantiated in the answer.
-     */
-    public function testSameException()
-    {
-        try {
-            call_user_func($this->answer->getAnswerCallback('someObject', 'testMethod'));
-        } catch (Exception $e) {
-            $this->assertSame($this->exception, $e);
+        if (!$other instanceof Phake_CallRecorder_VerifierResult) {
+            throw new InvalidArgumentException("You must pass an instance of Phake_CallRecorder_VerifierResult");
         }
+        return $other->getVerified();
+    }
+
+    public function toString()
+    {
+        return 'is called';
+    }
+
+    protected function failureDescription($other)
+    {
+        if (!$other instanceof Phake_CallRecorder_VerifierResult) {
+            throw new InvalidArgumentException("You must pass an instance of Phake_CallRecorder_VerifierResult");
+        }
+
+        return $other->getFailureDescription();
     }
 }
+

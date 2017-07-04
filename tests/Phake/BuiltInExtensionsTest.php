@@ -42,7 +42,9 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-class Phake_BuiltinExtensionsTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class Phake_BuiltinExtensionsTest extends TestCase
 {
     public function testMemcachedGet()
     {

@@ -43,13 +43,17 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-class Phake_PHPUnit_VerifierResultConstraintV3d6Test extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\ExpectationFailedException;
+use PHPUnit\Runner\Version;
+
+class Phake_PHPUnit_VerifierResultConstraintV3d6Test extends TestCase
 {
     private $constraint;
 
     public function setUp()
     {
-        if (version_compare('3.6.0', PHPUnit_Runner_Version::id()) == 1) {
+        if (version_compare('3.6.0', Version::id()) != 1) {
             $this->markTestSkipped('The tested class is not compatible with current version of PHPUnit.');
         }
         $this->constraint = new Phake_PHPUnit_VerifierResultConstraintV3d6();
@@ -92,7 +96,7 @@ class Phake_PHPUnit_VerifierResultConstraintV3d6Test extends PHPUnit_Framework_T
         try {
             $this->constraint->evaluate($result, '');
             $this->fail('expected an exception to be thrown');
-        } catch (PHPUnit_Framework_ExpectationFailedException $e) {
+        } catch (ExpectationFailedException $e) {
             $this->assertEquals('Failed asserting that The call failed!.', $e->getMessage());
         }
     }

@@ -157,6 +157,10 @@ class Phake_ClassGenerator_MockClass
             $mockedClass = new ReflectionClass($mockedClassName);
             $mockedClasses[] = $mockedClass;
 
+            if($mockedClass->isFinal()) {
+                throw new InvalidArgumentException("Final classes cannot be mocked.");
+            }
+
             if (!$mockedClass->isInterface()) {
                 if (!empty($parent))
                 {

@@ -1,9 +1,8 @@
 <?php
-
 /*
  * Phake - Mocking Framework
  *
- * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
+ * Copyright (c) 2010-2012, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -44,69 +43,51 @@
  */
 
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\ExpectationFailedException;
-use PHPUnit\Runner\Version;
+use PHPUnit\Framework\Constraint\Constraint;
 
-class Phake_PHPUnit_VerifierResultConstraintTest extends TestCase
+/**
+ * Tests the adapting of phpunit constraints into Phake matchers
+ */
+class Phake_Matchers_PHPUnit6ConstraintAdapterTest extends TestCase
 {
+    /**
+     * @var Phake_Matchers_PHPUnitConstraintAdapter
+     */
+    private $adapter;
+
+    /**
+     * @var Constraint
+     */
     private $constraint;
 
+    /**
+     * Sets up the test fixture
+     */
     public function setUp()
     {
-        if (version_compare('3.6.0', Version::id()) != 1 && version_compare('6.0.0', Version::id()) != 1) {
-            $this->markTestSkipped('The tested class is not compatible with current version of PHPUnit.');
-        }
-        $this->constraint = new Phake_PHPUnit_VerifierResultConstraint($this->verifier);
-    }
-
-    public function testExtendsPHPUnitConstraint()
-    {
-        $this->assertInstanceOf('PHPUnit_Framework_Constraint', $this->constraint);
-    }
-
-    public function testEvaluateReturnsTrueIfVerifyResultIsTrue()
-    {
-        $result = new Phake_CallRecorder_VerifierResult(true, array());
-        $this->assertTrue($this->constraint->evaluate($result));
-    }
-
-    public function testEvaluateReturnsFalseWhenVerifierReturnsFalse()
-    {
-        $result = new Phake_CallRecorder_VerifierResult(false, array());
-        $this->assertFalse($this->constraint->evaluate($result));
+        $this->constraint = $this->getMockBuilder(Constraint::class)->getMock();
+        $this->adapter    = new Phake_Matchers_PHPUnit6ConstraintAdapter($this->constraint);
+        $this->constraint->expects($this->any())
+            ->method('toString')
+            ->will($this->returnValue('phpunit matcher'));
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * Tests that matches() will forward calls to evaluate()
      */
-    public function testEvaluateThrowsWhenArgumentIsNotAResult()
+    public function testMatchesCallsForwarded()
     {
-        $this->constraint->evaluate('');
+        $this->constraint->expects($this->once())
+            ->method('evaluate')
+            ->with($this->equalTo('foo'))
+            ->will($this->returnValue(true));
+
+        $value = array('foo');
+        $this->assertNull($this->adapter->doArgumentsMatch($value));
     }
 
     public function testToString()
     {
-        $this->assertEquals('is called', $this->constraint->toString());
-    }
-
-    public function testCustomFailureDescriptionReturnsDescriptionFromResult()
-    {
-        $result = new Phake_CallRecorder_VerifierResult(false, array(), "The call failed!");
-
-        try {
-            $this->constraint->fail($result, '');
-            $this->fail('expected an exception to be thrown');
-        } catch (ExpectationFailedException $e) {
-            $this->assertEquals('The call failed!', $e->getDescription());
-        }
-    }
-
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testFailThrowsWhenArgumentIsNotAResult()
-    {
-        $this->constraint->fail('', '');
+        $this->assertEquals('phpunit matcher', $this->adapter->__toString());
     }
 }
-

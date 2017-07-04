@@ -42,10 +42,12 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @author Mike Lively <m@digitalsandwich.com>
  */
-class Phake_Proxies_StaticVisibilityProxyTest extends PHPUnit_Framework_TestCase
+class Phake_Proxies_StaticVisibilityProxyTest extends TestCase
 {
     /**
      * @expectedException InvalidArgumentException
@@ -60,7 +62,7 @@ class Phake_Proxies_StaticVisibilityProxyTest extends PHPUnit_Framework_TestCase
         $test = new PhakeTest_StaticClass();
         $proxy = new Phake_Proxies_StaticVisibilityProxy($test);
 
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException('InvalidArgumentException');
         $proxy->badFunctionName();
     }
 
