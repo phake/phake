@@ -1735,4 +1735,17 @@ class PhakeTest extends TestCase
         $val = $obj->askSomething();
         $this->assertEquals('Asked', $val);
     }
+
+    /**
+     * For #239
+     */
+    public function testChainingDoNothing()
+    {
+        $mock = Phake::mock(PhakeTest_MockedClass::class);
+
+        Phake::when($mock)->foo->thenReturn(42)->thenDoNothing();
+
+        $this->assertEquals(42, $mock->foo());
+        $this->assertNull($mock->foo());
+    }
 }
