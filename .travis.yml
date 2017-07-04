@@ -31,8 +31,18 @@ matrix:
   exclude:
 
 install:
-  - composer require --dev phpunit/phpunit:${PHPUNIT_VERSION}
-  - composer install --dev
+  - |
+    if [[ $TRAVIS_PHP_VERSION = "hhv"* ]]; then
+      hhvm -vEval.EnableHipHopSyntax=true -d hhvm.php7.all=1 composer require --dev phpunit/phpunit:${PHPUNIT_VERSION}
+    else
+      composer require --dev phpunit/phpunit:${PHPUNIT_VERSION}
+    fi
+  - |
+    if [[ $TRAVIS_PHP_VERSION = "hhv"* ]]; then
+      hhvm -vEval.EnableHipHopSyntax=true -d hhvm.php7.all=1 composer install --dev
+    else
+      composer install --dev
+    fi
 
 after_script:
   - wget https://scrutinizer-ci.com/ocular.phar
