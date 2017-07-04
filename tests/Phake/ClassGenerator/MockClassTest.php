@@ -822,5 +822,87 @@ class Phake_ClassGenerator_MockClassTest extends TestCase
 
         $this->assertEquals(1, $mock->voidCallCount, "Void call count was not incremented, looks like callParent doesn't work");
     }
+
+    public function testStubbingNotNullableReturnHint()
+    {
+        if (version_compare(phpversion(), '7.1.0') < 0)
+        {
+            $this->markTestSkipped('Nullable return hints are not supported in PHP versions prior to 7.1');
+        }
+
+        $mock = Phake::mock('PhakeTest_ScalarTypes');
+
+        Phake::when($mock)->objectReturn->thenReturn(null);
+
+        try
+        {
+            $mock->objectReturn();
+            $this->fail('Expected TypeError');
+        }
+        catch (TypeError $e)
+        {
+            return;
+        }
+
+    }
+
+    public function testStubbingNullableReturnHints()
+    {
+        if (version_compare(phpversion(), '7.1.0') < 0)
+        {
+            $this->markTestSkipped('Nullable return hints are not supported in PHP versions prior to 7.1');
+        }
+
+        $mock = Phake::mock('PhakeTest_NullableTypes');
+        Phake::when($mock)->objectReturn->thenReturn(null);
+
+        try
+        {
+            $this->assertSame(null, $mock->objectReturn());
+        }
+        catch (TypeError $e)
+        {
+            $this->fail('Expected stubbing objectReturn null');
+        }
+
+        Phake::verify($mock, Phake::times(1))->objectReturn();
+    }
+
+    public function testStubbingNullableReturnWrongType()
+    {
+        if (version_compare(phpversion(), '7.1.0') < 0)
+        {
+            $this->markTestSkipped('Nullable return hints are not supported in PHP versions prior to 7.1');
+        }
+
+        $mock = Phake::mock('PhakeTest_NullableTypes');
+        Phake::when($mock)->objectReturn->thenReturn(array());
+
+        try
+        {
+            $mock->objectReturn();
+        }
+        catch (TypeError $e)
+        {
+            return;
+        }
+        catch (Throwable $e)
+        {
+            $this->fail("Expected A Type Error, instead got " . get_class($e) . " {$e}");
+        }
+
+        $this->fail("Expected A Type Error, no error received");
+    }
+
+    public function testDefaultReturnType()
+    {
+        if (version_compare(phpversion(), '7.1.0') < 0)
+        {
+            $this->markTestSkipped('Nullable return hints are not supported in PHP versions prior to 7.1');
+        }
+
+        $mock = Phake::mock('PhakeTest_NullableTypes');
+        $this->assertTrue($mock->objectReturn() instanceof PhakeTest_A);
+    }
 }
 
