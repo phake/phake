@@ -586,7 +586,9 @@ class Phake_ClassGenerator_MockClassTest extends TestCase
 
         $mock = $this->classGen->instantiate($newClassName, $recorder, $mapper, $answer);
 
+        PhakeTest_DestructorClass::$destructCalled = false;
         unset($mock);
+        $this->assertFalse(PhakeTest_DestructorClass::$destructCalled, "It appears that the destructor was called");
     }
 
     public function testSerializableMock()
@@ -744,6 +746,7 @@ class Phake_ClassGenerator_MockClassTest extends TestCase
         }
         catch (TypeError $e)
         {
+            Phake::verify($mock)->scalarHints(1, 1);
             return;
         }
         catch (Throwable $e)
