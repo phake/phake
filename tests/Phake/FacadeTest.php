@@ -156,6 +156,10 @@ class Phake_FacadeTest extends TestCase
             $mockedClass   = 'stdClass';
             $mockGenerator = $this->getMockBuilder('Phake_ClassGenerator_MockClass')->getMock();
 
+            $mockGenerator->expects($this->once())
+                ->method('instantiate')
+                ->withAnyParameters();
+
             //This test will fail if the autoload below is called
             $this->facade->mock(
                 $mockedClass,
@@ -163,6 +167,7 @@ class Phake_FacadeTest extends TestCase
                 $this->getMockBuilder('Phake_CallRecorder_Recorder')->getMock(),
                 $this->getMockBuilder('Phake_Stubber_IAnswer')->getMock()
             );
+
             spl_autoload_unregister(array(__CLASS__, 'autoload'));
         }
         catch (Exception $e)

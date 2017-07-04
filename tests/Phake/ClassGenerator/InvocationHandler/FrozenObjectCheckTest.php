@@ -62,13 +62,9 @@ class Phake_ClassGenerator_InvocationHandler_FrozenObjectCheckTest extends TestC
 
     public function setUp()
     {
+        Phake::setClient(Phake::CLIENT_PHPUNIT6);
         Phake::initAnnotations($this);
         $this->handler    = new Phake_ClassGenerator_InvocationHandler_FrozenObjectCheck($this->mockInfo);
-    }
-
-    protected function tearDown()
-    {
-        Phake::setClient(Phake::CLIENT_DEFAULT);
     }
 
     public function testImplementIInvocationHandler()
@@ -88,6 +84,7 @@ class Phake_ClassGenerator_InvocationHandler_FrozenObjectCheckTest extends TestC
         } catch (Exception $e) {
             $this->fail('There should not have been an exception:' . $e->getMessage());
         }
+        Phake::verify($this->mockInfo)->isObjectFrozen();
     }
 
     public function testThrowsWhenObjectIsFrozen()
@@ -97,14 +94,13 @@ class Phake_ClassGenerator_InvocationHandler_FrozenObjectCheckTest extends TestC
         Phake::when($this->mockInfo)->isObjectFrozen()->thenReturn(true);
 
         $this->expectException('Phake_Exception_VerificationException', 'This object has been frozen.');
+        Phake::setClient(Phake::CLIENT_DEFAULT);
         $ref = array();
         $this->handler->invoke($mock, 'foo', array(), $ref);
     }
 
     public function testThrowsWhenObjectIsFrozenWithPHPUnit()
     {
-        Phake::setClient(Phake::CLIENT_PHPUNIT6);
-
         $mock = $this->getMockBuilder('Phake_IMock')
                     ->getMock();
         Phake::when($this->mockInfo)->isObjectFrozen()->thenReturn(true);
