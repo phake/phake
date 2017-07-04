@@ -47,7 +47,7 @@
  *
  * @author Mike Lively <m@digitalsandwich.com>
  */
-class Phake_Proxies_AnswerCollectionProxy implements Phake_Stubber_IAnswerContainer
+class Phake_Proxies_AnswerCollectionProxy implements Phake_Stubber_IAnswerContainer, Phake_Proxies_AnswerProxyInterface
 {
     /**
      * @var Phake_Stubber_AnswerCollection
@@ -127,6 +127,32 @@ class Phake_Proxies_AnswerCollectionProxy implements Phake_Stubber_IAnswerContai
     public function captureReturnTo(&$captor)
     {
         $this->collection->addAnswer(new Phake_Stubber_Answers_ParentDelegate($captor));
+        return $this;
+    }
+
+    /**
+     * Binds a callback answer to the method.
+     *
+     * @param callback $value
+     *
+     * @throws InvalidArgumentException
+     * @return Phake_Stubber_IAnswerContainer
+     */
+    public function thenReturnCallback($value)
+    {
+        $this->collection->addAnswer(new Phake_Stubber_Answers_LambdaAnswer($value));
+        return $this;
+    }
+
+    public function thenDoNothing()
+    {
+        $this->collection->addAnswer(new Phake_Stubber_Answers_NoAnswer());
+        return $this;
+    }
+
+    public function thenReturnSelf()
+    {
+        $this->collection->addAnswer(new Phake_Stubber_Answers_SelfAnswer());
         return $this;
     }
 
