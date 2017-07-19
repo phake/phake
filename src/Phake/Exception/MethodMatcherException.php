@@ -35,4 +35,23 @@ class MethodMatcherException extends \Exception
     {
         return $this->argument;
     }
+
+    /**
+     * Get the message, but include the comparison diff.
+     *
+     * @internal This is so we can lazy generate the comparison message.
+     * @return string
+     */
+    public function getMessageWithComparisonDiff()
+    {
+        $previous = $this;
+
+        while($previous = $previous->getPrevious()) {
+            if ($previous instanceof \SebastianBergmann\Comparator\ComparisonFailure) {
+                return trim($this->getMessage() . "\n" . $previous->getDiff());
+            }
+        }
+
+        return $this->getMessage();
+    }
 }
