@@ -76,6 +76,13 @@ class Phake_Matchers_EqualsMatcher extends Phake_Matchers_SingleArgumentMatcher
      */
     protected  function matches(&$argument)
     {
+        if ($this->value === $argument) {
+            /*
+             * If they are identical, skip the initialization of the Comparator factory and its objects.
+             */
+            return;
+        }
+
         try
         {
             $compare = $this->comparatorFactory->getComparatorFor($this->value, $argument);
@@ -83,7 +90,7 @@ class Phake_Matchers_EqualsMatcher extends Phake_Matchers_SingleArgumentMatcher
         }
         catch (\SebastianBergmann\Comparator\ComparisonFailure $e)
         {
-            throw new Phake_Exception_MethodMatcherException(trim($e->getMessage() . "\n" . $e->getDiff()), $e);
+            throw new Phake_Exception_MethodMatcherException($e->getMessage(), $e);
         }
     }
 

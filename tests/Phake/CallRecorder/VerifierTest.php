@@ -364,7 +364,6 @@ Other Invocations:
                 . "  \n"
                 . "  --- Expected\n"
                 . "  +++ Actual\n"
-                . "  @@ @@\n"
                 . "  -'test'\n"
                 . "  +'bar'\n"
                 . "===\n"

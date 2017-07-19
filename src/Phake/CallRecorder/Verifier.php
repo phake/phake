@@ -101,7 +101,7 @@ class Phake_CallRecorder_Verifier
                 catch (Phake_Exception_MethodMatcherException $e)
                 {
                     if ($call->getMethod() == $expectation->getMethod()) {
-                        $message = $e->getMessage();
+                        $message = $e->getMessageWithComparisonDiff();
                         if (strlen($message))
                         {
                             $message = "\n{$message}";
