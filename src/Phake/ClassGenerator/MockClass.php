@@ -610,8 +610,11 @@ class {$newClassName} {$extends}
                 $type = $parameter->getType() . ' ';
             }
 
-            if ($parameter->hasType() && $parameter->allowsNull()) {
-                $type = '?'.$type;
+            if (method_exists($parameter, 'hasType') && $parameter->hasType() && $parameter->allowsNull()) {
+                // a parameter can have a type hint and a default value of null without being a 7.1 nullable type hint
+                if (!($parameter->isDefaultValueAvailable() && $parameter->getDefaultValue() === null)) {
+                    $type = '?'.$type;
+                }
             }
         }
         catch (ReflectionException $e)
