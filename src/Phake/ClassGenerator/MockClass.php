@@ -609,6 +609,10 @@ class {$newClassName} {$extends}
             {
                 $type = $parameter->getType() . ' ';
             }
+
+            if ($parameter->hasType() && $parameter->allowsNull()) {
+                $type = '?'.$type;
+            }
         }
         catch (ReflectionException $e)
         {
