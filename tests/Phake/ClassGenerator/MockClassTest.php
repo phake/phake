@@ -868,6 +868,27 @@ class Phake_ClassGenerator_MockClassTest extends TestCase
         Phake::verify($mock, Phake::times(1))->objectReturn();
     }
 
+    public function testStubbingNullableParameterHints()
+    {
+        if (version_compare(phpversion(), '7.1.0') < 0)
+        {
+            $this->markTestSkipped('Nullable return hints are not supported in PHP versions prior to 7.1');
+        }
+
+        $mock = Phake::mock('PhakeTest_NullableTypes');
+
+        try
+        {
+            $mock->objectParameter(null);
+        }
+        catch (TypeError $e)
+        {
+            $this->fail('Expected stubbing objectParameter to accept null');
+        }
+
+        Phake::verify($mock, Phake::times(1))->objectParameter(null);
+    }
+
     public function testStubbingNullableReturnWrongType()
     {
         if (version_compare(phpversion(), '7.1.0') < 0)

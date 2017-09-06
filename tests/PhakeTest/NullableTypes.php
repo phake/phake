@@ -6,7 +6,15 @@ class PhakeTest_NullableTypes
 
     }
 
+    public function objectParameter(?PhakeTest_A $param) {
+
+    }
+
     public function intReturn() : ?int {
+
+    }
+
+    public function intParameter(?int $param) {
 
     }
 
@@ -14,7 +22,15 @@ class PhakeTest_NullableTypes
 
     }
 
+    public function floatParam(?float $param) {
+
+    }
+
     public function stringReturn() : ?string {
+
+    }
+
+    public function stringParam(?string $param) {
 
     }
 
@@ -22,11 +38,23 @@ class PhakeTest_NullableTypes
 
     }
 
+    public function boolParam(?bool $param) {
+
+    }
+
     public function arrayReturn() : ?array {
 
     }
 
+    public function arrayParam(?array $param) {
+
+    }
+
     public function callableReturn() : ?callable {
+
+    }
+
+    public function callableParam(?callable $param) {
 
     }
 }
