@@ -52,7 +52,7 @@ class Phake_Matchers_Factory
 
     public function __construct()
     {
-        $this->comparatorFactory = new \SebastianBergmann\Comparator\Factory();
+        $this->comparatorFactory =  \SebastianBergmann\Comparator\Factory::getInstance();
     }
 
     /**

@@ -149,8 +149,8 @@ class Phake_CallRecorder_VerifierTest extends TestCase
      */
     public function testVerifierDoesNotFindCallWithUnmatchedArguments()
     {
-        $matcher1 = new Phake_Matchers_EqualsMatcher('test', new \SebastianBergmann\Comparator\Factory());
-        $matcher2 = new Phake_Matchers_EqualsMatcher('test', new \SebastianBergmann\Comparator\Factory());
+        $matcher1 = new Phake_Matchers_EqualsMatcher('test', \SebastianBergmann\Comparator\Factory::getInstance());
+        $matcher2 = new Phake_Matchers_EqualsMatcher('test', \SebastianBergmann\Comparator\Factory::getInstance());
         $matcher1->setNextMatcher($matcher2);
         $expectation = new Phake_CallRecorder_CallExpectation(
             $this->obj,
@@ -337,7 +337,7 @@ Other Invocations:
         $expectation = new Phake_CallRecorder_CallExpectation(
             $this->obj,
             'foo',
-            new Phake_Matchers_EqualsMatcher('test', new \SebastianBergmann\Comparator\Factory()),
+            new Phake_Matchers_EqualsMatcher('test', \SebastianBergmann\Comparator\Factory::getInstance()),
             $this->verifierMode
         );
 
