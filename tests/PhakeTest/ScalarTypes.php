@@ -76,4 +76,8 @@ class PhakeTest_ScalarTypes
     public function callableReturn() : callable {
 
     }
+
+    public function selfReturn() : self {
+
+    }
 }

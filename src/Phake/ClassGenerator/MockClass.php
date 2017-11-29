@@ -340,7 +340,7 @@ class {$newClassName} {$extends}
                 && !isset($implementedMethods[$methodName])
             ) {
                 $implementedMethods[$methodName] = $methodName;
-                $methodDefs .= $this->implementMethod($method, $method->isStatic()) . "\n";
+                $methodDefs .= $this->implementMethod($method, $mockedClass->getName(), $method->isStatic()) . "\n";
             }
         }
 
@@ -457,10 +457,12 @@ class {$newClassName} {$extends}
      * Creates the implementation of a single method
      *
      * @param ReflectionMethod $method
+     * @param string           $mockedClassName
+     * @param bool             $static
      *
      * @return string
      */
-    protected function implementMethod(ReflectionMethod $method, $static = false)
+    protected function implementMethod(ReflectionMethod $method, $mockedClassName, $static = false)
     {
         $modifiers = implode(
             ' ',
@@ -484,14 +486,21 @@ class {$newClassName} {$extends}
         if (method_exists($method, 'hasReturnType') && $method->hasReturnType())
         {
             $returnType = $method->getReturnType();
-            if ($returnType->allowsNull())
+            $returnTypeName = (string)$returnType;
+
+            if ($returnTypeName == 'self')
             {
-                $returnHint = ' : ?' . $returnType;
-            } else {
-                $returnHint = ' : ' . $returnType;
+                $returnTypeName = $mockedClassName;
             }
 
-            if ($returnType == 'void')
+            if ($returnType->allowsNull())
+            {
+                $returnHint = ' : ?' . $returnTypeName;
+            } else {
+                $returnHint = ' : ' . $returnTypeName;
+            }
+
+            if ($returnTypeName == 'void')
             {
                 $nullReturn = '';
                 $resultReturn = '';
