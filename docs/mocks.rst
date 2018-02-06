@@ -114,7 +114,7 @@ Given the class above, you can invoke both private methods with the code below.
 
     Phake::makeVisible($mock)->foo();
 
-    Phake::makeStaticVisible($mock)->bar();
+    Phake::makeStaticsVisible($mock)->bar();
 
 As you can see above when using the static variant you still call the method as though it were an instance method. The
 other thing to take note of is that there is no modification done on $mock itself. If you use ``Phake::makeVisible()``
