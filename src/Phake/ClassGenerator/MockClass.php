@@ -560,7 +560,7 @@ class {$newClassName} {$extends}
                 break;
             }
             else {
-                $copies .= "if ({$pos} < \$__PHAKE_numArgs) \$__PHAKE_args[] =& \${$parameter->getName()};\n\t\t";
+                $copies .= "if ({$pos} < \$__PHAKE_numArgs) \$__PHAKE_args[] =& \${$this->getParameterName($parameter)};\n\t\t";
             }
         }
 
@@ -619,7 +619,21 @@ class {$newClassName} {$extends}
             $default = ' = null';
         }
 
-        return $type . ($parameter->isPassedByReference() ? '&' : '') . $variadic . '$' . $parameter->getName() . $default;
+        return $type . ($parameter->isPassedByReference() ? '&' : '') . $variadic . '$' . $this->getParameterName($parameter) . $default;
+    }
+
+    /**
+     * Get the name of a ReflectionParameter - sometimes they'll return null, if
+     * that happens we generate a name based on the offset in the method
+     * signature
+     *
+     * @param ReflectionParameter $parameter
+     * @return string
+     */
+    protected function getParameterName(ReflectionParameter $parameter) {
+        $name = $parameter->getName();
+        if (!empty($name)) return $name;
+        return "param".$parameter->getPosition();
     }
 
     /**

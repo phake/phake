@@ -804,5 +804,37 @@ class Phake_ClassGenerator_MockClassTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(1, $mock->voidCallCount, "Void call count was not incremented, looks like callParent doesn't work");
     }
+
+    /**
+     * Simulate a method with ReflectionParameters that fail to return a valid
+     * name as per https://github.com/mlively/Phake/issues/259
+     */
+    public function testUnnamedParameters()
+    {
+        $mockClass = Phake::partialMock('Phake_ClassGenerator_MockClass');
+
+        $foo = function($a, &$b, $c = 'bar') {};
+
+        $method = Phake::mock('ReflectionMethod');
+        $params = [
+            Phake::partialMock('ReflectionParameter', $foo, 'a'),
+            Phake::partialMock('ReflectionParameter', $foo, 'b'),
+            Phake::partialMock('ReflectionParameter', $foo, 'c'),
+        ];
+        foreach ($params as $param) {
+            Phake::when($param)->getName->thenReturn(null);
+        }
+
+        Phake::when($method)->getParameters->thenReturn($params);
+        $res = Phake::makeVisible($mockClass)->generateMethodParameters($method);
+        $this->assertEquals('$param0, &$param1, $param2 = \'bar\'', $res);
+
+        // I can't come up with a clean way to check the failure here
+        $code = Phake::makeVisible($mockClass)->copyMethodParameters($method);
+        // so lets do a negative check for the bad syntax
+        $this->assertNotRegExp('%=\& \$;%', $code);
+        // and eval the code to check the syntax for now
+        eval("function() { $code };");
+    }
 }
 
