@@ -206,7 +206,7 @@ same code using ``Phake::makeVisible()``.
             $oldClass = new Phake::partialMock('MyReallyTerribleOldClass');
 
             $data = Phake::makeVisible($oldClass)->cleanRowContent($dbRow);
-            $this->assertEquals($expectedValue, $dbRow);
+            $this->assertEquals($expectedValue, $data);
         }
     }
 
