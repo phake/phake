@@ -3,7 +3,7 @@
 /*
  * Phake - Mocking Framework
  *
- * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
+ * Copyright (c) 2010-2012, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -43,70 +43,53 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Constraint\Constraint;
 use PHPUnit\Framework\ExpectationFailedException;
-use PHPUnit\Runner\Version;
 
-class Phake_PHPUnit_VerifierResultConstraingV6Test extends TestCase
+/**
+ * An adapter class allowing PHPUnit constraints to be treated as though they were Phake argument
+ * matchers.
+ */
+class Phake_Matchers_PHPUnit7ConstraintAdapter extends Phake_Matchers_SingleArgumentMatcher
 {
+    /**
+     * @var \PHPUnit\Framework\Constraint\Constraint
+     */
     private $constraint;
 
-    public function setUp()
+    /**
+     * @param Constraint $constraint
+     */
+    public function __construct(Constraint $constraint)
     {
-        if (version_compare('6.0.0', Version::id()) != 1) {
-            $this->markTestSkipped('The tested class is not compatible with current version of PHPUnit.');
-        }
-        $this->constraint = new Phake_PHPUnit_VerifierResultConstraintV6();
-    }
-
-    public function testExtendsPHPUnitConstraint()
-    {
-        $this->assertInstanceOf('PHPUnit\Framework\Constraint\Constraint', $this->constraint);
-    }
-
-    public function testEvaluateReturnsTrueIfVerifyResultIsTrue()
-    {
-        $result = new Phake_CallRecorder_VerifierResult(true, array());
-        $this->assertTrue($this->constraint->evaluate($result, '', true));
-    }
-
-    public function testEvaluateReturnsFalseWhenVerifierReturnsFalse()
-    {
-        $result = new Phake_CallRecorder_VerifierResult(false, array());
-        $this->assertFalse($this->constraint->evaluate($result, '', true));
+        $this->constraint = $constraint;
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * Executes the matcher on a given argument value.
+     *
+     * Forwards the call to PHPUnit's evaluate() method.
+     *
+     * @param mixed $argument
+     * @throws Phake_Exception_MethodMatcherException
      */
-    public function testEvaluateThrowsWhenArgumentIsNotAResult()
+    protected function matches(&$argument)
     {
-        $this->constraint->evaluate('');
-    }
-
-    public function testToString()
-    {
-        $this->assertEquals('is called', $this->constraint->toString());
-    }
-
-    public function testCustomFailureDescriptionReturnsDescriptionFromResult()
-    {
-        $result = new Phake_CallRecorder_VerifierResult(false, array(), "The call failed!");
-
         try {
-            $this->constraint->evaluate($result, '');
-            $this->fail('expected an exception to be thrown');
+            $this->constraint->evaluate($argument, '');
         } catch (ExpectationFailedException $e) {
-            $this->assertEquals('Failed asserting that The call failed!.', $e->getMessage());
+            $failure = $e->getComparisonFailure();
+            if ($failure instanceof \SebastianBergmann\Comparator\ComparisonFailure) {
+                $failure = $failure->getDiff();
+            } else {
+                $failure = '';
+            }
+            throw new Phake_Exception_MethodMatcherException($e->getMessage() . "\n" . $failure, $e);
         }
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testFailThrowsWhenArgumentIsNotAResult()
+    public function __toString()
     {
-        $this->constraint->evaluate('', '');
+        return $this->constraint->toString();
     }
 }
-
