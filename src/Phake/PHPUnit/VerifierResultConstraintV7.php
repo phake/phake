@@ -1,8 +1,9 @@
 <?php
+
 /*
  * Phake - Mocking Framework
  *
- * Copyright (c) 2010-2012, Mike Lively <m@digitalsandwich.com>
+ * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -42,17 +43,33 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-error_reporting(E_ALL | E_STRICT);
+use PHPUnit\Framework\Constraint\Constraint;
 
-/** @var $loader \Composer\Autoload\ClassLoader */
-$loader = require dirname(__DIR__) . '/vendor/autoload.php';
-$loader->add('PhakeTest', __DIR__);
+/**
+ * A PHPUnit constraint that wraps a phake verifier to allow assertions on expected calls.
+ */
+class Phake_PHPUnit_VerifierResultConstraintV7 extends Constraint
+{
+    protected function matches($other): bool
+    {
+        if (!$other instanceof Phake_CallRecorder_VerifierResult) {
+            throw new InvalidArgumentException("You must pass an instance of Phake_CallRecorder_VerifierResult");
+        }
+        return $other->getVerified();
+    }
 
-require dirname(__DIR__) . '/vendor/hamcrest/hamcrest-php/hamcrest/Hamcrest.php';
+    public function toString(): string
+    {
+        return 'is called';
+    }
 
-Phake::setClient(Phake::CLIENT_PHPUNIT7);
+    protected function failureDescription($other): string
+    {
+        if (!$other instanceof Phake_CallRecorder_VerifierResult) {
+            throw new InvalidArgumentException("You must pass an instance of Phake_CallRecorder_VerifierResult");
+        }
 
-$cacheDir = getenv('PHAKE_CACHEDIR');
-if (!empty($cacheDir)) {
-    Phake::setMockLoader(new Phake_ClassGenerator_FileLoader($cacheDir));
+        return $other->getFailureDescription();
+    }
 }
+
