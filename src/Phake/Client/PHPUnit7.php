@@ -1,8 +1,9 @@
 <?php
+
 /*
  * Phake - Mocking Framework
  *
- * Copyright (c) 2010-2012, Mike Lively <m@digitalsandwich.com>
+ * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -42,17 +43,30 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-error_reporting(E_ALL | E_STRICT);
+use PHPUnit\Framework\Assert;
 
-/** @var $loader \Composer\Autoload\ClassLoader */
-$loader = require dirname(__DIR__) . '/vendor/autoload.php';
-$loader->add('PhakeTest', __DIR__);
+/**
+ * The client adapter used for PHPUnit.
+ *
+ * This adapter allows PHPUnit to report failed verify() calls as test failures instead of errors. It also counts
+ * verify() calls as assertions.
+ */
+class Phake_Client_PHPUnit7 implements Phake_Client_IClient
+{
+    public function processVerifierResult(\Phake_CallRecorder_VerifierResult $result)
+    {
+        Assert::assertThat($result, $this->getConstraint());
 
-require dirname(__DIR__) . '/vendor/hamcrest/hamcrest-php/hamcrest/Hamcrest.php';
+        return $result->getMatchedCalls();
+    }
 
-Phake::setClient(Phake::CLIENT_PHPUNIT7);
+    public function processObjectFreeze()
+    {
+        Assert::assertThat(true, Assert::isTrue());
+    }
 
-$cacheDir = getenv('PHAKE_CACHEDIR');
-if (!empty($cacheDir)) {
-    Phake::setMockLoader(new Phake_ClassGenerator_FileLoader($cacheDir));
+    private function getConstraint()
+    {
+        return new Phake_PHPUnit_VerifierResultConstraintV7();
+    }
 }
