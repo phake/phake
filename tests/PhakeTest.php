@@ -1390,7 +1390,7 @@ class PhakeTest extends TestCase
 
         Phake::setClient(Phake::CLIENT_PHPUNIT7);
 
-        $this->assertInstanceOf('Phake_Client_PHPUnit6', Phake::getClient());
+        $this->assertInstanceOf('Phake_Client_PHPUnit7', Phake::getClient());
 
         Phake::setClient($original_client);
     }
