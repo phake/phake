@@ -43,71 +43,65 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-use PHPUnit\Framework\ExpectationFailedException;
-
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\ExpectationFailedException;
+use PHPUnit\Framework\Assert;
+use PHPUnit\Runner\Version;
 
-class Phake_ClassGenerator_InvocationHandler_FrozenObjectCheckTest extends TestCase
+class Phake_Client_PHPUnitTest6 extends TestCase
 {
-    /**
-     * @var Phake_ClassGenerator_InvocationHandler_FrozenObjectCheck
-     */
-    private $handler;
-
-    /**
-     * @Mock
-     * @var Phake_Mock_Info
-     */
-    private $mockInfo;
+    private $client;
 
     public function setUp()
     {
-        Phake::setClient(Phake::CLIENT_PHPUNIT7);
-        Phake::initAnnotations($this);
-        $this->handler    = new Phake_ClassGenerator_InvocationHandler_FrozenObjectCheck($this->mockInfo);
-    }
-
-    public function testImplementIInvocationHandler()
-    {
-        $this->assertInstanceOf('Phake_ClassGenerator_InvocationHandler_IInvocationHandler', $this->handler);
-    }
-
-    public function testReturnsWithNoIssuesIfObjectIsNotFrozen()
-    {
-        $mock = $this->getMockBuilder('Phake_IMock')
-                    ->getMock();
-        Phake::when($this->mockInfo)->isObjectFrozen()->thenReturn(false);
-
-        try {
-            $ref = array();
-            $this->handler->invoke($mock, 'foo', array(), $ref);
-        } catch (Exception $e) {
-            $this->fail('There should not have been an exception:' . $e->getMessage());
+        if (version_compare(Version::id(), '7.0.0') < 0) {
+            $this->markTestSkipped('The tested class is not compatible with current version of PHPUnit.');
         }
-        Phake::verify($this->mockInfo)->isObjectFrozen();
+
+        $this->client = new Phake_Client_PHPUnit7();
     }
 
-    public function testThrowsWhenObjectIsFrozen()
+    public function testImplementsIClient()
     {
-        $mock = $this->getMockBuilder('Phake_IMock')
-                    ->getMock();
-        Phake::when($this->mockInfo)->isObjectFrozen()->thenReturn(true);
-
-        $this->expectException('Phake_Exception_VerificationException', 'This object has been frozen.');
-        Phake::setClient(Phake::CLIENT_DEFAULT);
-        $ref = array();
-        $this->handler->invoke($mock, 'foo', array(), $ref);
+        $this->assertInstanceOf('Phake_Client_IClient', $this->client);
     }
 
-    public function testThrowsWhenObjectIsFrozenWithPHPUnit()
+    public function testProcessVerifierResultReturnsCallsOnTrue()
     {
-        $mock = $this->getMockBuilder('Phake_IMock')
-                    ->getMock();
-        Phake::when($this->mockInfo)->isObjectFrozen()->thenReturn(true);
+        $result = new Phake_CallRecorder_VerifierResult(true, array('call1'));
 
-        $this->expectException(ExpectationFailedException::class, 'This object has been frozen.');
-        $ref = array();
-        $this->handler->invoke($mock, 'foo', array(), $ref);
+        $this->assertEquals(array('call1'), $this->client->processVerifierResult($result));
+    }
+
+    public function testProcessVerifierThrowsExceptionOnFalse()
+    {
+        $result = new Phake_CallRecorder_VerifierResult(false, array(), 'failure message');
+
+        $this->expectException(ExpectationFailedException::class, 'failure message');
+        $this->client->processVerifierResult($result);
+    }
+
+    public function testProcessVerifierIncrementsAssertionCount()
+    {
+        $result = new Phake_CallRecorder_VerifierResult(true, array('call1'));
+
+        $assertionCount = Assert::getCount();
+        $this->client->processVerifierResult($result);
+        $newAssertionCount = Assert::getCount();
+
+        $this->assertGreaterThan($assertionCount, $newAssertionCount);
+    }
+
+    /**
+     * Utilizes a dummy constraint to indicate that an assertion has happened.
+     */
+    public function testProcessObjectFreeze()
+    {
+        $assertionCount = Assert::getCount();
+        $this->client->processObjectFreeze();
+        $newAssertionCount = Assert::getCount();
+
+        $this->assertGreaterThan($assertionCount, $newAssertionCount);
     }
 }
 

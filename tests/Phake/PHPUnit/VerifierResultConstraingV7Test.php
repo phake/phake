@@ -43,71 +43,70 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-use PHPUnit\Framework\ExpectationFailedException;
-
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\ExpectationFailedException;
+use PHPUnit\Runner\Version;
 
-class Phake_ClassGenerator_InvocationHandler_FrozenObjectCheckTest extends TestCase
+class Phake_PHPUnit_VerifierResultConstraingV7Test extends TestCase
 {
-    /**
-     * @var Phake_ClassGenerator_InvocationHandler_FrozenObjectCheck
-     */
-    private $handler;
-
-    /**
-     * @Mock
-     * @var Phake_Mock_Info
-     */
-    private $mockInfo;
+    private $constraint;
 
     public function setUp()
     {
-        Phake::setClient(Phake::CLIENT_PHPUNIT7);
-        Phake::initAnnotations($this);
-        $this->handler    = new Phake_ClassGenerator_InvocationHandler_FrozenObjectCheck($this->mockInfo);
+        if (version_compare('6.0.0', Version::id()) != 1) {
+            $this->markTestSkipped('The tested class is not compatible with current version of PHPUnit.');
+        }
+        $this->constraint = new Phake_PHPUnit_VerifierResultConstraintV7();
     }
 
-    public function testImplementIInvocationHandler()
+    public function testExtendsPHPUnitConstraint()
     {
-        $this->assertInstanceOf('Phake_ClassGenerator_InvocationHandler_IInvocationHandler', $this->handler);
+        $this->assertInstanceOf('PHPUnit\Framework\Constraint\Constraint', $this->constraint);
     }
 
-    public function testReturnsWithNoIssuesIfObjectIsNotFrozen()
+    public function testEvaluateReturnsTrueIfVerifyResultIsTrue()
     {
-        $mock = $this->getMockBuilder('Phake_IMock')
-                    ->getMock();
-        Phake::when($this->mockInfo)->isObjectFrozen()->thenReturn(false);
+        $result = new Phake_CallRecorder_VerifierResult(true, array());
+        $this->assertTrue($this->constraint->evaluate($result, '', true));
+    }
+
+    public function testEvaluateReturnsFalseWhenVerifierReturnsFalse()
+    {
+        $result = new Phake_CallRecorder_VerifierResult(false, array());
+        $this->assertFalse($this->constraint->evaluate($result, '', true));
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testEvaluateThrowsWhenArgumentIsNotAResult()
+    {
+        $this->constraint->evaluate('');
+    }
+
+    public function testToString()
+    {
+        $this->assertEquals('is called', $this->constraint->toString());
+    }
+
+    public function testCustomFailureDescriptionReturnsDescriptionFromResult()
+    {
+        $result = new Phake_CallRecorder_VerifierResult(false, array(), "The call failed!");
 
         try {
-            $ref = array();
-            $this->handler->invoke($mock, 'foo', array(), $ref);
-        } catch (Exception $e) {
-            $this->fail('There should not have been an exception:' . $e->getMessage());
+            $this->constraint->evaluate($result, '');
+            $this->fail('expected an exception to be thrown');
+        } catch (ExpectationFailedException $e) {
+            $this->assertEquals('Failed asserting that The call failed!.', $e->getMessage());
         }
-        Phake::verify($this->mockInfo)->isObjectFrozen();
     }
 
-    public function testThrowsWhenObjectIsFrozen()
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testFailThrowsWhenArgumentIsNotAResult()
     {
-        $mock = $this->getMockBuilder('Phake_IMock')
-                    ->getMock();
-        Phake::when($this->mockInfo)->isObjectFrozen()->thenReturn(true);
-
-        $this->expectException('Phake_Exception_VerificationException', 'This object has been frozen.');
-        Phake::setClient(Phake::CLIENT_DEFAULT);
-        $ref = array();
-        $this->handler->invoke($mock, 'foo', array(), $ref);
-    }
-
-    public function testThrowsWhenObjectIsFrozenWithPHPUnit()
-    {
-        $mock = $this->getMockBuilder('Phake_IMock')
-                    ->getMock();
-        Phake::when($this->mockInfo)->isObjectFrozen()->thenReturn(true);
-
-        $this->expectException(ExpectationFailedException::class, 'This object has been frozen.');
-        $ref = array();
-        $this->handler->invoke($mock, 'foo', array(), $ref);
+        $this->constraint->evaluate('', '');
     }
 }
 
