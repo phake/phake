@@ -59,7 +59,7 @@ class Phake_Matchers_EqualsMatcherTest extends TestCase
      */
     public function setUp()
     {
-        $this->matcher = new Phake_Matchers_EqualsMatcher('foo', new \SebastianBergmann\Comparator\Factory());
+        $this->matcher = new Phake_Matchers_EqualsMatcher('foo', \SebastianBergmann\Comparator\Factory::getInstance());
     }
 
     /**
@@ -93,7 +93,7 @@ class Phake_Matchers_EqualsMatcherTest extends TestCase
      */
     public function testToStringOnNonStringableObject()
     {
-        $this->matcher = new Phake_Matchers_EqualsMatcher(new stdClass, new \SebastianBergmann\Comparator\Factory());
+        $this->matcher = new Phake_Matchers_EqualsMatcher(new stdClass, \SebastianBergmann\Comparator\Factory::getInstance());
 
         $this->assertEquals('equal to <object:stdClass>', $this->matcher->__toString());
     }
@@ -106,7 +106,7 @@ class Phake_Matchers_EqualsMatcherTest extends TestCase
         $a             = new stdClass;
         $a->b          = new stdClass;
         $a->b->a       = $a;
-        $this->matcher = new Phake_Matchers_EqualsMatcher($a, new \SebastianBergmann\Comparator\Factory());
+        $this->matcher = new Phake_Matchers_EqualsMatcher($a, \SebastianBergmann\Comparator\Factory::getInstance());
 
         $c       = new stdClass();
         $c->b    = new stdClass();
@@ -119,7 +119,7 @@ class Phake_Matchers_EqualsMatcherTest extends TestCase
 
     public function testDifferentClassObjects()
     {
-        $this->matcher = new Phake_Matchers_EqualsMatcher(new PhakeTest_A(), new \SebastianBergmann\Comparator\Factory());
+        $this->matcher = new Phake_Matchers_EqualsMatcher(new PhakeTest_A(), \SebastianBergmann\Comparator\Factory::getInstance());
 
         $value = array(new PhakeTest_B());
         $this->expectException('Exception');
@@ -128,7 +128,7 @@ class Phake_Matchers_EqualsMatcherTest extends TestCase
 
     public function testArraysWithDifferentCounts()
     {
-        $this->matcher = new Phake_Matchers_EqualsMatcher(array(1), new \SebastianBergmann\Comparator\Factory());
+        $this->matcher = new Phake_Matchers_EqualsMatcher(array(1), \SebastianBergmann\Comparator\Factory::getInstance());
 
         $test = array(array(1, 2));
         $this->expectException('Phake_Exception_MethodMatcherException');
@@ -137,7 +137,7 @@ class Phake_Matchers_EqualsMatcherTest extends TestCase
 
     public function testArraysWithDifferentKeys()
     {
-        $this->matcher = new Phake_Matchers_EqualsMatcher(array('one' => 1), new \SebastianBergmann\Comparator\Factory());
+        $this->matcher = new Phake_Matchers_EqualsMatcher(array('one' => 1), \SebastianBergmann\Comparator\Factory::getInstance());
 
         $test = array(array('two' => 1));
         $this->expectException('Exception');
