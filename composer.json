@@ -13,7 +13,7 @@
     ],
     "require": {
         "php": ">=7",
-        "sebastian/comparator": "~1.1|~2.0"
+        "sebastian/comparator": "^1.1|^2.0|^3.0"
     },
     "require-dev": {
         "ext-soap": "*",

@@ -1,6 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Runner\Version;
 
 class PhakeClientTest extends TestCase
 {
@@ -16,6 +17,6 @@ class PhakeClientTest extends TestCase
     public function testAutoDetectsPHPUnitClient()
     {
         $client = Phake::getClient();
-        $this->assertInstanceOf('Phake_Client_PHPUnit6', $client);
+        $this->assertInstanceOf('Phake_Client_PHPUnit' . substr(Version::id(), 0, 1), $client);
     }
 }
