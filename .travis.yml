@@ -23,6 +23,8 @@ matrix:
     - php: nightly
     - env: PHPUNIT_VERSION=6.3.x-dev
   exclude:
+    - php: 7.0
+      env: PHPUNIT_VERSION=7.2.x-dev
 
 install:
   - composer require --dev phpunit/phpunit:${PHPUNIT_VERSION}
