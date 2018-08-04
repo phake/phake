@@ -569,14 +569,14 @@ class Phake
     public static function getClient()
     {
         if (!isset(self::$client)) {
-            if (class_exists('PHPUnit_Framework_TestCase')) {
-                return self::$client = new Phake_Client_PHPUnit();
-            } else if (class_exists('PHPUnit\Framework\TestCase')) {
+            if (class_exists('PHPUnit\Framework\TestCase')) {
                 if (7 <= \PHPUnit\Runner\Version::id()) {
                     return self::$client = new Phake_Client_PHPUnit7();
                 } else {
                     return self::$client = new Phake_Client_PHPUnit6();
                 }
+            } elseif (class_exists('PHPUnit_Framework_TestCase')) {
+                return self::$client = new Phake_Client_PHPUnit();
             }
             return self::$client = new Phake_Client_Default();
         } else {
