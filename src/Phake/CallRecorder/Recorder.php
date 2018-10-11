@@ -103,6 +103,7 @@ class Phake_CallRecorder_Recorder
     {
         $this->calls     = array();
         $this->positions = array();
+        $this->unverifiedCalls = array();
     }
 
     /**
