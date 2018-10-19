@@ -575,7 +575,7 @@ class Phake_ClassGenerator_MockClassTest extends TestCase
 
     public function testDestructMocked()
     {
-        $newClassName = __CLASS__ . '_TestClass' . uniqid();
+        $newClassName = __CLASS__ . '_TestClass' . bin2hex(random_bytes(7));
         $mockedClass  = 'PhakeTest_DestructorClass';
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
@@ -644,7 +644,7 @@ class Phake_ClassGenerator_MockClassTest extends TestCase
 
     public function testGeneratedMockClassHasStaticInfo()
     {
-        $newClassName = __CLASS__ . '_TestClass' . uniqid();
+        $newClassName = __CLASS__ . '_TestClass' . bin2hex(random_bytes(7));
         $mockedClass  = 'stdClass';
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
