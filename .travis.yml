@@ -5,9 +5,11 @@ dist: trusty
 php:
   - 7.0
   - 7.1
-  - nightly
+  - 7.2
+  - 7.3
 
 env:
+  - PHPUNIT_VERSION=6.5.14
   - PHPUNIT_VERSION=7.5
   - PHPUNIT_VERSION=8.1
 
@@ -16,12 +18,13 @@ script:
   - ./bin/phpunit --coverage-clover=build/logs/clover.xml
 
 matrix:
-  allow_failures:
-    - php: nightly
-    - env: PHPUNIT_VERSION=6.3.x-dev
   exclude:
     - php: 7.0
-      env: PHPUNIT_VERSION=7.2.x-dev
+      env: PHPUNIT_VERSION=7.5
+    - php: 7.0
+      env: PHPUNIT_VERSION=8.1
+    - php: 7.1
+      env: PHPUNIT_VERSION=8.1
 
 install:
   - composer require --dev phpunit/phpunit:${PHPUNIT_VERSION}
