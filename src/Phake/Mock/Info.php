@@ -68,7 +68,7 @@ class Phake_Mock_Info {
 
     public function __construct($name, Phake_CallRecorder_Recorder $recorder, Phake_Stubber_StubMapper $mapper, Phake_Stubber_IAnswer $defaultAnswer)
     {
-        $this->uniqId = uniqid('', true);
+        $this->uniqId = bin2hex(random_bytes(7));
         $this->recorder = $recorder;
         $this->mapper = $mapper;
         $this->answer = $defaultAnswer;

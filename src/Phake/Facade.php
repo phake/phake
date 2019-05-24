@@ -128,8 +128,7 @@ class Phake_Facade
         {
             $ns_parts        = explode('\\', $base);
             $base            = array_pop($ns_parts);
-            //Cygwin will drop a period from uniqid
-            $base_class_name[] = str_replace('.', '', uniqid($base . '_PHAKE'));
+            $base_class_name[] = $base . '_PHAKE' . bin2hex(random_bytes(7));
         }
 
         $i = 1;
