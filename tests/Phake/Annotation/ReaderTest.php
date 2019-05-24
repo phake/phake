@@ -96,8 +96,7 @@ class Phake_Annotation_ReaderTest extends TestCase
             'emptyVar',
             'reader',
         );
-        sort($properties);
-        $this->assertEquals($expectedProperties, $properties);
+        $this->assertContains($properties[0]->getName(), $expectedProperties);
+        $this->assertContains($properties[1]->getName(), $expectedProperties);
     }
 }
-
