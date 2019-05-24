@@ -43,54 +43,19 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-/**
- * Initializes all properties of a given object that have the @Mock annotation.
- *
- * The class can be passed to the Mock annotation or it can also read the standard @var -annotation.
- *
- * In either case the fully qualified class name should be used. The use statements are not observed.
- */
-class Phake_Annotation_MockInitializer
+use PhakeTest\NamespacedClass;
+use PHPUnit\Framework\TestCase;
+
+abstract class Phake_Annotation_MockInitializerParentTestCase extends TestCase
 {
-    public function initialize($object)
+    /**
+     * @Mock
+     * @var NamespacedClass
+     */
+    protected $testMock;
+
+    protected function setUp()
     {
-        $reflectionClass = new ReflectionClass($object);
-        $reader          = new Phake_Annotation_Reader($reflectionClass);
-
-        if ($this->useDoctrineParser()) {
-            $parser = new \Doctrine\Common\Annotations\PhpParser();
-        }
-
-        $properties = $reader->getPropertiesWithAnnotation('Mock');
-
-        foreach ($properties as $property) {
-            $annotations = $reader->readReflectionAnnotation($property);
-
-            if ($annotations['Mock'] !== true) {
-                $mockedClass = $annotations['Mock'];
-            } else {
-                $mockedClass = $annotations['var'];
-            }
-
-            if (isset($parser)) {
-                // Ignore it if the class start with a backslash
-                if (substr($mockedClass, 0, 1) !== '\\') {
-                    $useStatements = $parser->parseClass($property->getDeclaringClass());
-                    $key           = strtolower($mockedClass);
-
-                    if (array_key_exists($key, $useStatements)) {
-                        $mockedClass = $useStatements[$key];
-                    }
-                }
-            }
-
-            $property->setAccessible(true);
-            $property->setValue($object, Phake::mock($mockedClass));
-        }
-    }
-
-    protected function useDoctrineParser()
-    {
-        return version_compare(PHP_VERSION, "5.3.3", ">=") && class_exists('Doctrine\Common\Annotations\PhpParser');
+        Phake::initAnnotations($this);
     }
 }
