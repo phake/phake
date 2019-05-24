@@ -8,11 +8,8 @@ php:
   - nightly
 
 env:
-  - PHPUNIT_VERSION=6.0.x-dev
-  - PHPUNIT_VERSION=6.1.x-dev
-  - PHPUNIT_VERSION=6.2.x-dev
-  - PHPUNIT_VERSION=6.3.x-dev
-  - PHPUNIT_VERSION=7.2.x-dev
+  - PHPUNIT_VERSION=7.5
+  - PHPUNIT_VERSION=8.1
 
 
 script:
