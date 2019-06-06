@@ -80,7 +80,7 @@ class Phake_Annotation_MockInitializer
 
                     if (array_key_exists($key, $useStatements)) {
                         $mockedClass = $useStatements[$key];
-                    } elseif ($this->definedUnderTestNamespace($mockedClass, $reflectionClass->getNamespaceName())) {
+                    } elseif ($reflectionClass->getNamespaceName() && $this->definedUnderTestNamespace($mockedClass, $reflectionClass->getNamespaceName())) {
                         $mockedClass = $reflectionClass->getNamespaceName() . '\\' . $mockedClass;
                     }
                 }
