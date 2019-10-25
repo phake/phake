@@ -486,7 +486,7 @@ class {$newClassName} {$extends}
         if (method_exists($method, 'hasReturnType') && $method->hasReturnType())
         {
             $returnType = $method->getReturnType();
-            $returnTypeName = (string)$returnType;
+            $returnTypeName = $returnType->getName();
 
             if ($returnTypeName == 'self')
             {
@@ -616,7 +616,7 @@ class {$newClassName} {$extends}
                 $type = $parameter->getClass()->getName() . ' ';
             } elseif (method_exists($parameter, 'hasType') && $parameter->hasType())
             {
-                $type = $parameter->getType() . ' ';
+                $type = $parameter->getType()->getName() . ' ';
             }
 
             if (method_exists($parameter, 'hasType') && $parameter->hasType() && $parameter->allowsNull()) {
