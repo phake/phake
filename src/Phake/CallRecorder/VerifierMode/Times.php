@@ -74,13 +74,13 @@ class Phake_CallRecorder_VerifierMode_Times implements Phake_CallRecorder_IVerif
      */
     public function verify(array $matchedCalls)
     {
-        $calledTimes = count($matchedCalls);
+        $calledTimes = \count($matchedCalls);
         if ($calledTimes == $this->times) {
             return new Phake_CallRecorder_VerifierMode_Result(true, '');
         } else {
-            return new Phake_CallRecorder_VerifierMode_Result(false, sprintf(
+            return new Phake_CallRecorder_VerifierMode_Result(false, \sprintf(
                 'actually called <%s> times',
-                count($matchedCalls)
+                \count($matchedCalls)
             ));
         }
     }

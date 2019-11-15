@@ -83,7 +83,7 @@ class Phake_CallRecorder_CallExpectationTest extends TestCase
         $verifierMode = Phake::mock('Phake_CallRecorder_IVerifierMode');
         Phake::when($verifierMode)->__toString()->thenReturn('2 times');
 
-        $expectation = new Phake_CallRecorder_CallExpectation(get_class($mock), 'method', $matcher1, $verifierMode);
+        $expectation = new Phake_CallRecorder_CallExpectation(\get_class($mock), 'method', $matcher1, $verifierMode);
         $this->assertEquals(
             "Expected Phake_IMock::method(100, 200) to be called 2 times",
             $expectation->__toString()

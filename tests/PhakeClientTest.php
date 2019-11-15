@@ -17,6 +17,6 @@ class PhakeClientTest extends TestCase
     public function testAutoDetectsPHPUnitClient()
     {
         $client = Phake::getClient();
-        $this->assertInstanceOf('Phake_Client_PHPUnit' . substr(Version::id(), 0, 1), $client);
+        $this->assertInstanceOf('Phake_Client_PHPUnit' . \substr(Version::id(), 0, 1), $client);
     }
 }

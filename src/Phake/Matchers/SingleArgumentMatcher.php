@@ -57,13 +57,13 @@ abstract class Phake_Matchers_SingleArgumentMatcher extends Phake_Matchers_Abstr
     {
         $argumentCopy = $arguments;
         $nextArgument =& $arguments[0];
-        array_shift($argumentCopy);
+        \array_shift($argumentCopy);
         $this->matches($nextArgument);
 
         $nextMatcher = $this->getNextMatcher();
         if (!isset($nextMatcher))
         {
-            if (count($argumentCopy) != 0)
+            if (\count($argumentCopy) != 0)
             {
                 throw new Phake_Exception_MethodMatcherException("There were more arguments than matchers");
             }

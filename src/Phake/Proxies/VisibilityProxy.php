@@ -59,7 +59,7 @@ class Phake_Proxies_VisibilityProxy
 
     public function __construct($proxied)
     {
-        if (!is_object($proxied))
+        if (!\is_object($proxied))
         {
             throw new InvalidArgumentException("Phake_Proxies_VisibilityProxy was passed a non-object");
         }
@@ -73,20 +73,20 @@ class Phake_Proxies_VisibilityProxy
      */
     public function __call($method, $arguments)
     {
-        if (method_exists($this->proxied, $method))
+        if (\method_exists($this->proxied, $method))
         {
-            $reflMethod = new ReflectionMethod(get_class($this->proxied), $method);
+            $reflMethod = new ReflectionMethod(\get_class($this->proxied), $method);
             $reflMethod->setAccessible(true);
             return $reflMethod->invokeArgs($this->proxied, $arguments);
         }
-        elseif (method_exists($this->proxied, '__call'))
+        elseif (\method_exists($this->proxied, '__call'))
         {
-            $reflMethod = new ReflectionMethod(get_class($this->proxied), '__call');
-            return $reflMethod->invokeArgs($this->proxied, func_get_args());
+            $reflMethod = new ReflectionMethod(\get_class($this->proxied), '__call');
+            return $reflMethod->invokeArgs($this->proxied, \func_get_args());
         }
         else
         {
-            throw new InvalidArgumentException("Method {$method} does not exist on " . get_class($this->proxied) . '.');
+            throw new InvalidArgumentException("Method {$method} does not exist on " . \get_class($this->proxied) . '.');
         }
     }
 }

@@ -87,19 +87,19 @@ class Phake_Facade
         $mockedClassList = (array)$mockedClassList;
 
         foreach ($mockedClassList as $mockedClass)
-        if (!class_exists($mockedClass, true) && !interface_exists($mockedClass, true)) {
+        if (!\class_exists($mockedClass, true) && !\interface_exists($mockedClass, true)) {
             throw new InvalidArgumentException("The class / interface [{$mockedClass}] does not exist. Check the spelling and make sure it is loadable.");
         }
 
-        if (!isset($this->cachedClasses[implode('__', $mockedClassList)])) {
+        if (!isset($this->cachedClasses[\implode('__', $mockedClassList)])) {
             $newClassName = $this->generateUniqueClassName($mockedClassList);
             $mockGenerator->generate($newClassName, $mockedClassList, $this->infoRegistry);
 
-            $this->cachedClasses[implode('__', $mockedClassList)] = $newClassName;
+            $this->cachedClasses[\implode('__', $mockedClassList)] = $newClassName;
         }
 
         return $mockGenerator->instantiate(
-            $this->cachedClasses[implode('__', $mockedClassList)],
+            $this->cachedClasses[\implode('__', $mockedClassList)],
             $callRecorder,
             new Phake_Stubber_StubMapper(),
             $defaultAnswer,
@@ -126,16 +126,16 @@ class Phake_Facade
         $base_class_name = array();
         foreach ($bases as $base)
         {
-            $ns_parts        = explode('\\', $base);
-            $base            = array_pop($ns_parts);
-            $base_class_name[] = $base . '_PHAKE' . bin2hex(random_bytes(7));
+            $ns_parts        = \explode('\\', $base);
+            $base            = \array_pop($ns_parts);
+            $base_class_name[] = $base . '_PHAKE' . \bin2hex(\random_bytes(7));
         }
 
         $i = 1;
 
-        $base_class_name = implode('__', $base_class_name);
+        $base_class_name = \implode('__', $base_class_name);
 
-        while (class_exists($base_class_name . $i, false)) {
+        while (\class_exists($base_class_name . $i, false)) {
             $i++;
         }
 

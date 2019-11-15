@@ -184,25 +184,25 @@ class Phake_ClassGenerator_MockClass
             }
         }
 
-       $interfaces = array_unique($interfaces);
+       $interfaces = \array_unique($interfaces);
 
         if (!empty($parent))
         {
             $extends = "extends {$parent->getName()}";
         }
 
-        $interfaceNames = array_map(function (ReflectionClass $c) { return $c->getName(); }, $interfaces);
-        if(($key = array_search('Phake_IMock', $interfaceNames)) !== false) {
+        $interfaceNames = \array_map(function (ReflectionClass $c) { return $c->getName(); }, $interfaces);
+        if(($key = \array_search('Phake_IMock', $interfaceNames)) !== false) {
             unset($interfaceNames[$key]);
         }
         if (!empty($interfaceNames))
         {
-            $implements = ', ' . implode(',', $interfaceNames);
+            $implements = ', ' . \implode(',', $interfaceNames);
         }
 
         if (empty($parent))
         {
-            $mockedClass = array_shift($interfaces);
+            $mockedClass = \array_shift($interfaces);
         }
         else
         {
@@ -241,17 +241,17 @@ class {$newClassName} {$extends}
 
     private function loadClass($newClassName, $mockedClassName, $classDef)
     {
-        $isUnsafe = in_array($mockedClassName, self::$unsafeClasses);
+        $isUnsafe = \in_array($mockedClassName, self::$unsafeClasses);
 
-        $oldErrorReporting = ini_get('error_reporting');
+        $oldErrorReporting = \ini_get('error_reporting');
         if ($isUnsafe)
         {
-            error_reporting($oldErrorReporting & ~E_STRICT);
+            \error_reporting($oldErrorReporting & ~E_STRICT);
         }
         $this->loader->loadClassByString($newClassName, $classDef);
         if ($isUnsafe)
         {
-            error_reporting($oldErrorReporting);
+            \error_reporting($oldErrorReporting);
         }
     }
 
@@ -278,8 +278,8 @@ class {$newClassName} {$extends}
         $mockObject->__PHAKE_info = $this->createMockInfo($newClassName::__PHAKE_name, $recorder, $mapper, $defaultAnswer);
         $mockObject->__PHAKE_constructorArgs = $constructorArgs;
 
-        if (null !== $constructorArgs && method_exists($mockObject, '__construct')) {
-            call_user_func_array(array($mockObject, '__construct'), $constructorArgs);
+        if (null !== $constructorArgs && \method_exists($mockObject, '__construct')) {
+            \call_user_func_array(array($mockObject, '__construct'), $constructorArgs);
         }
 
         return $mockObject;
@@ -300,7 +300,7 @@ class {$newClassName} {$extends}
             return new $newClassName;
         }
 
-        if (method_exists($reflClass, "newInstanceWithoutConstructor")) {
+        if (\method_exists($reflClass, "newInstanceWithoutConstructor")) {
             try {
                 return $reflClass->newInstanceWithoutConstructor();
             } catch (ReflectionException $ignore) {
@@ -308,13 +308,13 @@ class {$newClassName} {$extends}
             }
         }
 
-        if (!is_subclass_of($newClassName, "Serializable")) {
+        if (!\is_subclass_of($newClassName, "Serializable")) {
             /* Try to unserialize, this skips the constructor */
-            return unserialize(sprintf('O:%d:"%s":0:{}', strlen($newClassName), $newClassName));
+            return \unserialize(\sprintf('O:%d:"%s":0:{}', \strlen($newClassName), $newClassName));
         }
 
         /* Object implements custom unserialization */
-        return unserialize(sprintf('C:%d:"%s":0:{}', strlen($newClassName), $newClassName));
+        return \unserialize(\sprintf('C:%d:"%s":0:{}', \strlen($newClassName), $newClassName));
     }
 
     /**
@@ -464,7 +464,7 @@ class {$newClassName} {$extends}
      */
     protected function implementMethod(ReflectionMethod $method, $mockedClassName, $static = false)
     {
-        $modifiers = implode(
+        $modifiers = \implode(
             ' ',
             Reflection::getModifierNames($method->getModifiers() & ~ReflectionMethod::IS_ABSTRACT)
         );
@@ -483,7 +483,7 @@ class {$newClassName} {$extends}
         $returnHint = '';
         $nullReturn = 'null';
         $resultReturn = '$__PHAKE_result';
-        if (method_exists($method, 'hasReturnType') && $method->hasReturnType())
+        if (\method_exists($method, 'hasReturnType') && $method->hasReturnType())
         {
             $returnType = $method->getReturnType();
             $returnTypeName = (string)$returnType;
@@ -555,7 +555,7 @@ class {$newClassName} {$extends}
             $parameters[] = $this->implementParameter($parameter);
         }
 
-        return implode(', ', $parameters);
+        return \implode(', ', $parameters);
     }
 
     /**
@@ -569,10 +569,10 @@ class {$newClassName} {$extends}
     {
         $copies = "\$funcGetArgs = func_get_args();\n\t\t\$__PHAKE_numArgs = count(\$funcGetArgs);\n\t\t";
         $variadicParameter = false;
-        $parameterCount = count($method->getParameters());
+        $parameterCount = \count($method->getParameters());
         foreach ($method->getParameters() as $parameter) {
             $pos = $parameter->getPosition();
-            if (method_exists($parameter, 'isVariadic') && $parameter->isVariadic()) {
+            if (\method_exists($parameter, 'isVariadic') && $parameter->isVariadic()) {
                 $parameterCount--;
                 $variadicParameter = $parameter->getName();
                 break;
@@ -610,16 +610,16 @@ class {$newClassName} {$extends}
         {
             if ($parameter->isArray()) {
                 $type = 'array ';
-            } elseif (method_exists($parameter, 'isCallable') && $parameter->isCallable()) {
+            } elseif (\method_exists($parameter, 'isCallable') && $parameter->isCallable()) {
                 $type = 'callable ';
             } elseif ($parameter->getClass() !== null) {
                 $type = $parameter->getClass()->getName() . ' ';
-            } elseif (method_exists($parameter, 'hasType') && $parameter->hasType())
+            } elseif (\method_exists($parameter, 'hasType') && $parameter->hasType())
             {
                 $type = $parameter->getType() . ' ';
             }
 
-            if (method_exists($parameter, 'hasType') && $parameter->hasType() && $parameter->allowsNull()) {
+            if (\method_exists($parameter, 'hasType') && $parameter->hasType() && $parameter->allowsNull()) {
                 // a parameter can have a type hint and a default value of null without being a 7.1 nullable type hint
                 if (!($parameter->isDefaultValueAvailable() && $parameter->getDefaultValue() === null)) {
                     $type = '?'.$type;
@@ -629,7 +629,7 @@ class {$newClassName} {$extends}
         catch (ReflectionException $e)
         {
             //HVVM is throwing an exception when pulling class name when said class does not exist
-            if (!defined('HHVM_VERSION'))
+            if (!\defined('HHVM_VERSION'))
             {
                 throw $e;
             }
@@ -637,8 +637,8 @@ class {$newClassName} {$extends}
 
         $variadic = '';
         if ($parameter->isDefaultValueAvailable()) {
-            $default = ' = ' . var_export($parameter->getDefaultValue(), true);
-        } elseif (method_exists($parameter, 'isVariadic') && $parameter->isVariadic()) {
+            $default = ' = ' . \var_export($parameter->getDefaultValue(), true);
+        } elseif (\method_exists($parameter, 'isVariadic') && $parameter->isVariadic()) {
             $variadic = '...';
         } elseif ($parameter->isOptional()) {
             $default = ' = null';

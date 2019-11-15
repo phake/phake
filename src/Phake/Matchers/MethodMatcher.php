@@ -126,10 +126,10 @@ class Phake_Matchers_MethodMatcher implements Phake_Matchers_IMethodMatcher
             catch (Phake_Exception_MethodMatcherException $e)
             {
                 $position = $e->getArgumentPosition() + 1;
-                throw new Phake_Exception_MethodMatcherException(trim("Argument #{$position} failed test\n" . $e->getMessage()), $e);
+                throw new Phake_Exception_MethodMatcherException(\trim("Argument #{$position} failed test\n" . $e->getMessage()), $e);
             }
         }
-        elseif (count($args) != 0)
+        elseif (\count($args) != 0)
         {
             throw new Phake_Exception_MethodMatcherException("No matchers were given to Phake::when(), but arguments were received by this method.");
         }

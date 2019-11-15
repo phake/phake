@@ -78,7 +78,7 @@ class Phake_Proxies_CallStubberProxy
      */
     public function isCalledOn(Phake_IMock $obj)
     {
-        $context = $this->static ? get_class($obj) : $obj;
+        $context = $this->static ? \get_class($obj) : $obj;
         $call = $this->static ? '__callStatic' : '__call';
         $matcher = new Phake_Matchers_MethodMatcher($call, $this->argumentMatcher);
         $binder  = new Phake_Stubber_AnswerBinder($matcher, Phake::getInfo($context)->getStubMapper());

@@ -103,7 +103,7 @@ class PhakeTest_MockedClass
 
     public function fooWithVariableNumberOfArguments($x = null)
     {
-        return func_get_args();
+        return \func_get_args();
     }
 
     public function fooWithSetDefault($bar = 42)

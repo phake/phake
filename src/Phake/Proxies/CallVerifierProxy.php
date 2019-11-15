@@ -93,7 +93,7 @@ class Phake_Proxies_CallVerifierProxy
             $verifierMode = new Phake_CallRecorder_VerifierMode_Times(1);
         }
 
-        $context = $this->static ? get_class($obj) : $obj;
+        $context = $this->static ? \get_class($obj) : $obj;
         $call = $this->static ? '__callStatic' : '__call';
 
         $verifier    = new Phake_CallRecorder_Verifier(Phake::getInfo($context)->getCallRecorder(), $obj);

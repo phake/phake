@@ -65,7 +65,7 @@ class Phake_Client_PHPUnit implements Phake_Client_IClient
 
     private function getConstraint()
     {
-        if (version_compare('3.6.0', PHPUnit_Runner_Version::id()) == 1) {
+        if (\version_compare('3.6.0', PHPUnit_Runner_Version::id()) == 1) {
             return new Phake_PHPUnit_VerifierResultConstraint();
         } else {
             return new Phake_PHPUnit_VerifierResultConstraintV3d6();

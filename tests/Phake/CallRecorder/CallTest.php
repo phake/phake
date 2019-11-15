@@ -68,7 +68,7 @@ class Phake_CallRecorder_CallTest extends TestCase
         $this->mock = Phake::mock('Phake_IMock');
 
         $this->call = new Phake_CallRecorder_Call($this->mock, 'someMethod', array('foo', 'bar'));
-        $this->staticCall = new Phake_CallRecorder_Call(get_class($this->mock), 'someMethod', array('foo', 'bar'));
+        $this->staticCall = new Phake_CallRecorder_Call(\get_class($this->mock), 'someMethod', array('foo', 'bar'));
     }
 
     /**
@@ -77,7 +77,7 @@ class Phake_CallRecorder_CallTest extends TestCase
     public function testGetObject()
     {
         $this->assertSame($this->mock, $this->call->getObject());
-        $this->assertSame(get_class($this->mock), $this->staticCall->getObject());
+        $this->assertSame(\get_class($this->mock), $this->staticCall->getObject());
     }
 
     /**
@@ -107,7 +107,7 @@ class Phake_CallRecorder_CallTest extends TestCase
             new stdClass,
             array(),
             null,
-            opendir('.'),
+            \opendir('.'),
             'foo',
             42,
             true

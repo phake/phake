@@ -61,7 +61,7 @@ class Phake_Stubber_Answers_SmartDefaultAnswer implements Phake_Stubber_IAnswer
 
         $defaultAnswer = null;
 
-        if (method_exists($method, 'hasReturnType') && $method->hasReturnType())
+        if (\method_exists($method, 'hasReturnType') && $method->hasReturnType())
         {
             switch ((string)$method->getReturnType())
             {
@@ -84,7 +84,7 @@ class Phake_Stubber_Answers_SmartDefaultAnswer implements Phake_Stubber_IAnswer
                     $defaultAnswer = function () {};
                     break;
                 default:
-                    if (class_exists((string)$method->getReturnType()))
+                    if (\class_exists((string)$method->getReturnType()))
                     {
                         $defaultAnswer = Phake::mock((string)$method->getReturnType());
                     }

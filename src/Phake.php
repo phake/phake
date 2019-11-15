@@ -116,7 +116,7 @@ class Phake
      */
     public static function partialMock($className, $args = null)
     {
-        $args = array_slice(func_get_args(), 1);
+        $args = \array_slice(\func_get_args(), 1);
         $answer = new Phake_Stubber_Answers_ParentDelegate();
 
         return self::getPhake()->mock(
@@ -139,8 +139,8 @@ class Phake
      */
     public static function partMock($className, $args = null)
     {
-        $args = func_get_args();
-        return call_user_func_array('Phake::partialMock', $args);
+        $args = \func_get_args();
+        return \call_user_func_array('Phake::partialMock', $args);
     }
 
 	/**
@@ -169,7 +169,7 @@ class Phake
      */
     public static function verify(Phake_IMock $mock, Phake_CallRecorder_IVerifierMode $mode = null)
     {
-        if (is_null($mode)) {
+        if (\is_null($mode)) {
             $mode = self::times(1);
         }
 
@@ -190,13 +190,13 @@ class Phake
      */
     public static function verifyStatic(Phake_IMock $mock, Phake_CallRecorder_IVerifierMode $mode = null)
     {
-        if (is_null($mode)) {
+        if (\is_null($mode)) {
             $mode = self::times(1);
         }
 
         /* @var $info Phake_Mock_Info */
-        $info = Phake::getInfo(get_class($mock));
-        $verifier = new Phake_CallRecorder_Verifier($info->getCallRecorder(), get_class($mock));
+        $info = Phake::getInfo(\get_class($mock));
+        $verifier = new Phake_CallRecorder_Verifier($info->getCallRecorder(), \get_class($mock));
 
         return new Phake_Proxies_VerifierProxy($verifier, self::getMatchersFactory(), $mode, self::getClient());
     }
@@ -211,7 +211,7 @@ class Phake
      */
     public static function verifyCallMethodWith()
     {
-        $arguments = func_get_args();
+        $arguments = \func_get_args();
         $factory   = self::getMatchersFactory();
         return new Phake_Proxies_CallVerifierProxy($factory->createMatcherChain(
             $arguments
@@ -227,7 +227,7 @@ class Phake
      */
     public static function verifyStaticCallMethodWith()
     {
-        $arguments = func_get_args();
+        $arguments = \func_get_args();
         $factory   = self::getMatchersFactory();
         return new Phake_Proxies_CallVerifierProxy($factory->createMatcherChain(
             $arguments
@@ -239,7 +239,7 @@ class Phake
      */
     public static function inOrder()
     {
-        $calls         = func_get_args();
+        $calls         = \func_get_args();
         $orderVerifier = new Phake_CallRecorder_OrderVerifier();
 
         if (!$orderVerifier->verifyCallsInOrder(self::pullPositionsFromCallInfos($calls))) {
@@ -257,9 +257,9 @@ class Phake
     {
         $mockFreezer = new Phake_Mock_Freezer();
 
-        foreach (func_get_args() as $mock) {
+        foreach (\func_get_args() as $mock) {
             $mockFreezer->freeze(Phake::getInfo($mock), self::getClient());
-            $mockFreezer->freeze(Phake::getInfo(get_class($mock)), self::getClient());
+            $mockFreezer->freeze(Phake::getInfo(\get_class($mock)), self::getClient());
         }
     }
 
@@ -270,13 +270,13 @@ class Phake
      */
     public static function verifyNoInteraction(Phake_IMock $mock)
     {
-        foreach (func_get_args() as $mock) {
+        foreach (\func_get_args() as $mock) {
             $callRecorder = Phake::getInfo($mock)->getCallRecorder();
             $verifier = new Phake_CallRecorder_Verifier($callRecorder, $mock);
             self::getClient()->processVerifierResult($verifier->verifyNoCalls());
 
-            $sCallRecorder = Phake::getInfo(get_class($mock))->getCallRecorder();
-            $sVerifier = new Phake_CallRecorder_Verifier($sCallRecorder, get_class($mock));
+            $sCallRecorder = Phake::getInfo(\get_class($mock))->getCallRecorder();
+            $sVerifier = new Phake_CallRecorder_Verifier($sCallRecorder, \get_class($mock));
             self::getClient()->processVerifierResult($sVerifier->verifyNoCalls());
         }
     }
@@ -293,8 +293,8 @@ class Phake
         $verifier = new Phake_CallRecorder_Verifier($callRecorder, $mock);
         self::getClient()->processVerifierResult($verifier->verifyNoOtherCalls());
 
-        $sCallRecorder = Phake::getInfo(get_class($mock))->getCallRecorder();
-        $sVerifier = new Phake_CallRecorder_Verifier($sCallRecorder, get_class($mock));
+        $sCallRecorder = Phake::getInfo(\get_class($mock))->getCallRecorder();
+        $sVerifier = new Phake_CallRecorder_Verifier($sCallRecorder, \get_class($mock));
         self::getClient()->processVerifierResult($sVerifier->verifyNoOtherCalls());
     }
 
@@ -339,7 +339,7 @@ class Phake
      */
     public static function whenStatic(Phake_IMock $mock)
     {
-        return new Phake_Proxies_StubberProxy(get_class($mock), self::getMatchersFactory());
+        return new Phake_Proxies_StubberProxy(\get_class($mock), self::getMatchersFactory());
     }
 
     /**
@@ -351,7 +351,7 @@ class Phake
      */
     public static function whenCallMethodWith()
     {
-        $arguments = func_get_args();
+        $arguments = \func_get_args();
         $factory   = self::getMatchersFactory();
         return new Phake_Proxies_CallStubberProxy($factory->createMatcherChain($arguments), false);
     }
@@ -365,7 +365,7 @@ class Phake
      */
     public static function whenStaticCallMethodWith()
     {
-        $arguments = func_get_args();
+        $arguments = \func_get_args();
         $factory   = self::getMatchersFactory();
         return new Phake_Proxies_CallStubberProxy($factory->createMatcherChain($arguments), true);
     }
@@ -388,7 +388,7 @@ class Phake
      */
     public static function resetStatic(Phake_IMock $mock)
     {
-        $info = self::getInfo(get_class($mock));
+        $info = self::getInfo(\get_class($mock));
         $info->resetInfo();
         return $info->getName();
     }
@@ -569,13 +569,13 @@ class Phake
     public static function getClient()
     {
         if (!isset(self::$client)) {
-            if (class_exists('PHPUnit\Framework\TestCase')) {
+            if (\class_exists('PHPUnit\Framework\TestCase')) {
                 if (7 <= \PHPUnit\Runner\Version::id()) {
                     return self::$client = new Phake_Client_PHPUnit7();
                 } else {
                     return self::$client = new Phake_Client_PHPUnit6();
                 }
-            } elseif (class_exists('PHPUnit_Framework_TestCase')) {
+            } elseif (\class_exists('PHPUnit_Framework_TestCase')) {
                 return self::$client = new Phake_Client_PHPUnit();
             }
             return self::$client = new Phake_Client_Default();
@@ -641,7 +641,7 @@ class Phake
             return;
         }
 
-        if (is_string($mock) && class_exists($mock, false))
+        if (\is_string($mock) && \class_exists($mock, false))
         {
             $reflClass = new ReflectionClass($mock);
             if ($reflClass->implementsInterface('Phake_IMock'))
@@ -650,7 +650,7 @@ class Phake
             }
         }
 
-        throw new InvalidArgumentException("Received '" . (is_object($mock) ? get_class($mock) : $mock) . "' Expected an instance of Phake_IMock or the name of a class that implements Phake_IMock");
+        throw new InvalidArgumentException("Received '" . (\is_object($mock) ? \get_class($mock) : $mock) . "' Expected an instance of Phake_IMock or the name of a class that implements Phake_IMock");
     }
 
     /**

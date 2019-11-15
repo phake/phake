@@ -130,9 +130,9 @@ class Phake_CallRecorder_CallExpectation
         }
 
         $name = Phake::getName($this->getObject());
-        $access = is_string($this->object) ? '::' : '->';
+        $access = \is_string($this->object) ? '::' : '->';
 
-        return "Expected {$name}{$access}{$this->getMethod()}(" . implode(
+        return "Expected {$name}{$access}{$this->getMethod()}(" . \implode(
             ', ',
             $arguments
         ) . ") to be called {$this->getVerifierMode()->__toString()}";

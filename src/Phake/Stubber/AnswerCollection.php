@@ -82,13 +82,13 @@ class Phake_Stubber_AnswerCollection implements Phake_Stubber_IAnswerContainer
      */
     public function getAnswer()
     {
-        $answer = current($this->answers);
+        $answer = \current($this->answers);
 
         if ($answer === false) {
-            $answer = end($this->answers);
+            $answer = \end($this->answers);
         }
 
-        next($this->answers);
+        \next($this->answers);
 
         return $answer;
     }

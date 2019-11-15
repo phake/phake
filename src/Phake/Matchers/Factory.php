@@ -105,13 +105,13 @@ class Phake_Matchers_Factory
      */
     public function createMatcherChain(array $arguments)
     {
-        if (!count($arguments))
+        if (!\count($arguments))
         {
             return null;
         }
 
         $lastMatcher = null;
-        foreach (array_reverse($arguments) as $arg) {
+        foreach (\array_reverse($arguments) as $arg) {
             $matcher = $this->createMatcher($arg, $lastMatcher);
 
             $lastMatcher = $matcher;

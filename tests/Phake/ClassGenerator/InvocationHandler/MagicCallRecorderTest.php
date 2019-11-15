@@ -85,7 +85,7 @@ class Phake_ClassGenerator_InvocationHandler_MagicCallRecorderTest extends TestC
     {
         $mock = $this->getMockBuilder('Phake_IMock')
                     ->getMock();
-        $mockClass = get_class($mock);
+        $mockClass = \get_class($mock);
 
         $ref = array('foo', array());
         $this->handler->invoke($mockClass, '__callStatic', array('foo', array()), $ref);

@@ -458,7 +458,7 @@ class PhakeTest extends TestCase
 
 	public function testMockingPhar()
 	{
-		if (!class_exists('Phar'))
+		if (!\class_exists('Phar'))
 		{
 			$this->markTestSkipped('Phar class does not exist');
 		}
@@ -1460,7 +1460,7 @@ class PhakeTest extends TestCase
 
     public function testStubbingMemcacheSetMethod()
     {
-        if (!extension_loaded('memcache'))
+        if (!\extension_loaded('memcache'))
         {
             $this->markTestSkipped('memcache extension not loaded');
         }
@@ -1528,7 +1528,7 @@ class PhakeTest extends TestCase
 
     public function testConstructorInterfaceCanBeMocked()
     {
-        if (defined('HHVM_VERSION')) {
+        if (\defined('HHVM_VERSION')) {
             $this->markTestSkipped('This test causes a fatal error under HHVM.');
         }
 
@@ -1591,7 +1591,7 @@ class PhakeTest extends TestCase
 
     public function testMockRedis()
     {
-        if (!extension_loaded('redis'))
+        if (!\extension_loaded('redis'))
         {
             $this->markTestSkipped('Cannot run this test without mock redis');
         }
@@ -1602,7 +1602,7 @@ class PhakeTest extends TestCase
 
     public function testFinallyBlockFiresVerifications()
     {
-        if (version_compare(PHP_VERSION, '5.5.0', '<')) {
+        if (\version_compare(PHP_VERSION, '5.5.0', '<')) {
             $this->markTestSkipped('The finally keyword only exists in php 5.5 and above');
         }
 
@@ -1658,7 +1658,7 @@ class PhakeTest extends TestCase
 
     public function testCallingPrivateMethods()
     {
-        if (defined('HHVM_VERSION'))
+        if (\defined('HHVM_VERSION'))
         {
             $this->markTestSkipped("Can't call private methods with hhvm");
         }

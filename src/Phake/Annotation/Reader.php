@@ -90,7 +90,7 @@ class Phake_Annotation_Reader
         foreach ($this->clazz->getProperties() as $property) {
             $annotations = $this->getPropertyAnnotations($property->getName());
 
-            if (array_key_exists($annotation, $annotations)) {
+            if (\array_key_exists($annotation, $annotations)) {
                 $properties[] = $property;
             }
         }
@@ -111,8 +111,8 @@ class Phake_Annotation_Reader
         $comment = $reflVar->getDocComment();
 
         $annotations = array();
-        foreach (explode("\n", $comment) as $line) {
-            if (preg_match('#^\s+\*\s*@(\w+)(?:\s+(.*))?\s*$#', $line, $matches)) {
+        foreach (\explode("\n", $comment) as $line) {
+            if (\preg_match('#^\s+\*\s*@(\w+)(?:\s+(.*))?\s*$#', $line, $matches)) {
                 $annotations[$matches[1]] = isset($matches[2]) ? $matches[2] : true;
             }
         }

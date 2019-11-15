@@ -112,7 +112,7 @@ class Phake_CallRecorder_Call
         }
 
         $name = Phake::getName($this->object);
-        $access = is_string($this->object) ? '::' : '->';
-        return "{$name}{$access}{$this->method}(" . implode(', ', $arguments) . ")";
+        $access = \is_string($this->object) ? '::' : '->';
+        return "{$name}{$access}{$this->method}(" . \implode(', ', $arguments) . ")";
     }
 }

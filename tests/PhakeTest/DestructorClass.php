@@ -48,6 +48,6 @@ class PhakeTest_DestructorClass
     public function __destruct()
     {
         self::$destructCalled = true;
-        trigger_error('destruct should not be called');
+        \trigger_error('destruct should not be called');
     }
 }

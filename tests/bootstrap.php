@@ -42,17 +42,17 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-error_reporting(E_ALL | E_STRICT);
+\error_reporting(E_ALL | E_STRICT);
 
 /** @var $loader \Composer\Autoload\ClassLoader */
-$loader = require dirname(__DIR__) . '/vendor/autoload.php';
+$loader = require \dirname(__DIR__) . '/vendor/autoload.php';
 $loader->add('PhakeTest', __DIR__);
 
-require dirname(__DIR__) . '/vendor/hamcrest/hamcrest-php/hamcrest/Hamcrest.php';
+require \dirname(__DIR__) . '/vendor/hamcrest/hamcrest-php/hamcrest/Hamcrest.php';
 
 Phake::setClient(Phake::CLIENT_PHPUNIT7);
 
-$cacheDir = getenv('PHAKE_CACHEDIR');
+$cacheDir = \getenv('PHAKE_CACHEDIR');
 if (!empty($cacheDir)) {
     Phake::setMockLoader(new Phake_ClassGenerator_FileLoader($cacheDir));
 }

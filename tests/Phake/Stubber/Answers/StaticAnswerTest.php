@@ -66,7 +66,7 @@ class Phake_Stubber_Answers_StaticAnswerTest extends TestCase
 
     public function testAnswer()
     {
-        $this->assertEquals(42, call_user_func($this->answer->getAnswerCallback('someObject', 'testMethod')));
+        $this->assertEquals(42, \call_user_func($this->answer->getAnswerCallback('someObject', 'testMethod')));
     }
 }
 

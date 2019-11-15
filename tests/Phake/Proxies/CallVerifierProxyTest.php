@@ -86,7 +86,7 @@ class Phake_Proxies_CallVerifierProxyTest extends TestCase
 
         $verifier = $this->proxy->isCalledOn($mock);
 
-        $this->assertEquals(1, count($verifier));
+        $this->assertEquals(1, \count($verifier));
     }
 
     public function testStaticIsCalledOn()
@@ -101,7 +101,7 @@ class Phake_Proxies_CallVerifierProxyTest extends TestCase
 
         $verifier = $this->proxy->isCalledOn($mock);
 
-        $this->assertEquals(1, count($verifier));
+        $this->assertEquals(1, \count($verifier));
     }
 }
 

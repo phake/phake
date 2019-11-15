@@ -80,7 +80,7 @@ class Phake_Proxies_VisibilityProxyTest extends TestCase
 
     public function testCallingPrivateMethod()
     {
-        if (defined('HHVM_VERSION'))
+        if (\defined('HHVM_VERSION'))
         {
             $this->markTestSkipped("Can't call private methods with hhvm");
         }
@@ -96,7 +96,7 @@ class Phake_Proxies_VisibilityProxyTest extends TestCase
 
     public function testCallingPrivateMethodThatDelegatesToParent()
     {
-        if (defined('HHVM_VERSION'))
+        if (\defined('HHVM_VERSION'))
         {
             $this->markTestSkipped("Can't call private methods with hhvm");
         }

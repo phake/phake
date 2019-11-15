@@ -106,7 +106,7 @@ class Phake_ClassGenerator_InvocationHandler_StubCallerTest extends TestCase
     {
         $ref = array('bar');
 
-        $this->assertEquals('42', call_user_func($this->handler->invoke($this->mock, 'foo', $ref, $ref)->getAnswerCallback($this->mock, 'foo'), 'bar'));
+        $this->assertEquals('42', \call_user_func($this->handler->invoke($this->mock, 'foo', $ref, $ref)->getAnswerCallback($this->mock, 'foo'), 'bar'));
     }
 
     public function testMagicCallMethodChecksForImplicitStubFirst()

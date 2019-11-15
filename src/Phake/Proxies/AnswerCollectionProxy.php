@@ -85,7 +85,7 @@ class Phake_Proxies_AnswerCollectionProxy implements Phake_Stubber_IAnswerContai
      */
     public function thenGetReturnByLambda($value)
     {
-        if (!is_callable($value)) {
+        if (!\is_callable($value)) {
             throw new InvalidArgumentException("Given lambda is not callable");
         }
 

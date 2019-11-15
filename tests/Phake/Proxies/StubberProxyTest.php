@@ -87,7 +87,7 @@ class Phake_Proxies_StubberProxyTest extends TestCase
      */
     public function testStaticCall()
     {
-        $this->proxy     = new Phake_Proxies_StubberProxy(get_class($this->stubbable), new Phake_Matchers_Factory());
+        $this->proxy     = new Phake_Proxies_StubberProxy(\get_class($this->stubbable), new Phake_Matchers_Factory());
         $answerBinder = $this->proxy->foo();
 
         $this->assertThat($answerBinder, $this->isInstanceOf('Phake_Proxies_AnswerBinderProxy'));

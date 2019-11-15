@@ -48,7 +48,7 @@ class Phake_BuiltinExtensionsTest extends TestCase
 {
     public function testMemcachedGet()
     {
-        if (!extension_loaded('memcached'))
+        if (!\extension_loaded('memcached'))
         {
             $this->markTestSkipped("Cannot run test without memcached");
         }

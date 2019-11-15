@@ -82,7 +82,7 @@ class Phake_Matchers_ReferenceSetter extends Phake_Matchers_SingleArgumentMatche
             }
             catch (Phake_Exception_MethodMatcherException $e)
             {
-                throw new Phake_Exception_MethodMatcherException(trim("Failed in Phake::setReference()->when()\n" . $e->getMessage()), $e);
+                throw new Phake_Exception_MethodMatcherException(\trim("Failed in Phake::setReference()->when()\n" . $e->getMessage()), $e);
             }
             $this->matcher->doArgumentsMatch($args);
         }

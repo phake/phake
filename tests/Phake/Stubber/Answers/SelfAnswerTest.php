@@ -64,7 +64,7 @@ class Phake_Stubber_Answers_SelfAnswerTest extends TestCase
         $testObj = Phake::mock('PhakeTest_MockedClass');
         $callback = $this->answer->getAnswerCallback($testObj, 'foo');
 
-        $this->assertSame($testObj, call_user_func_array($callback, array()));
+        $this->assertSame($testObj, \call_user_func_array($callback, array()));
     }
 
     /**

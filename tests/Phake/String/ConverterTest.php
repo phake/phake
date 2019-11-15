@@ -81,15 +81,15 @@ class Phake_String_ConverterTest extends TestCase
 
     public function testResourceConversion()
     {
-        $dir = opendir('/tmp');
+        $dir = \opendir('/tmp');
         try {
             $this->assertEquals('<resource>', $this->converter->convertToString($dir));
         } catch (Exception $e) {
-            closedir($dir);
+            \closedir($dir);
             throw $e;
         }
 
-        closedir($dir);
+        \closedir($dir);
     }
 
     public function testBoolConversion()

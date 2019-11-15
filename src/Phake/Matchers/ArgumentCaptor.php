@@ -107,7 +107,7 @@ class Phake_Matchers_ArgumentCaptor extends Phake_Matchers_SingleArgumentMatcher
             }
             catch (Phake_Exception_MethodMatcherException $e)
             {
-                throw new Phake_Exception_MethodMatcherException(trim("Failed in Phake::capture()->when()\n" . $e->getMessage()), $e);
+                throw new Phake_Exception_MethodMatcherException(\trim("Failed in Phake::capture()->when()\n" . $e->getMessage()), $e);
             }
         }
         $this->boundVariable = $argument;
@@ -137,7 +137,7 @@ class Phake_Matchers_ArgumentCaptor extends Phake_Matchers_SingleArgumentMatcher
 
     public function __toString()
     {
-        return sprintf(
+        return \sprintf(
             '<captured parameter%s>',
             isset($this->matcher) ? " that is {$this->matcher->__toString()}" : ''
         );

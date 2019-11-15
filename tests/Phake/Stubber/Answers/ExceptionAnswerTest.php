@@ -73,7 +73,7 @@ class Phake_Stubber_Answers_ExceptionAnswerTest extends TestCase
      */
     public function testAnswer()
     {
-        call_user_func($this->answer->getAnswerCallback('stdClass', 'testMethod'));
+        \call_user_func($this->answer->getAnswerCallback('stdClass', 'testMethod'));
     }
 
     /**
@@ -82,7 +82,7 @@ class Phake_Stubber_Answers_ExceptionAnswerTest extends TestCase
     public function testSameException()
     {
         try {
-            call_user_func($this->answer->getAnswerCallback('someObject', 'testMethod'));
+            \call_user_func($this->answer->getAnswerCallback('someObject', 'testMethod'));
         } catch (Exception $e) {
             $this->assertSame($this->exception, $e);
         }

@@ -54,7 +54,7 @@ class Phake_Client_PHPUnitTest extends TestCase
 
     public function setUp()
     {
-        if (version_compare(Version::id(), '6.0.0') >= 0) {
+        if (\version_compare(Version::id(), '6.0.0') >= 0) {
             $this->markTestSkipped('The tested class is not compatible with current version of PHPUnit.');
         }
 
@@ -68,7 +68,7 @@ class Phake_Client_PHPUnitTest extends TestCase
 
     public function testProcessVerifierResultReturnsCallsOnTrue()
     {
-        if (version_compare('6.0.0', Version::id()) != 1) {
+        if (\version_compare('6.0.0', Version::id()) != 1) {
             $this->markTestSkipped('The tested class is not compatible with current version of PHPUnit.');
         }
         $result = new Phake_CallRecorder_VerifierResult(true, array('call1'));

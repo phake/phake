@@ -151,7 +151,7 @@ class Phake_FacadeTest extends TestCase
      */
     public function testAutoLoadNotCalledOnMock()
     {
-        spl_autoload_register(array(__CLASS__, 'autoload'));
+        \spl_autoload_register(array(__CLASS__, 'autoload'));
         try {
             $mockedClass   = 'stdClass';
             $mockGenerator = $this->getMockBuilder('Phake_ClassGenerator_MockClass')->getMock();
@@ -168,11 +168,11 @@ class Phake_FacadeTest extends TestCase
                 $this->getMockBuilder('Phake_Stubber_IAnswer')->getMock()
             );
 
-            spl_autoload_unregister(array(__CLASS__, 'autoload'));
+            \spl_autoload_unregister(array(__CLASS__, 'autoload'));
         }
         catch (Exception $e)
         {
-            spl_autoload_unregister(array(__CLASS__, 'autoload'));
+            \spl_autoload_unregister(array(__CLASS__, 'autoload'));
             throw $e;
         }
     }

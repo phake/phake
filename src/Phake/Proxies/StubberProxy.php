@@ -96,16 +96,16 @@ class Phake_Proxies_StubberProxy
      */
     public function __get($method)
     {
-        if (is_string($method) && ctype_digit($method[0])) {
+        if (\is_string($method) && \ctype_digit($method[0])) {
             throw new InvalidArgumentException('String parameter to __get() cannot start with an integer');
         }
 
-        if (!is_string($method) && !is_object($method)) { // assume an object is a matcher
-            $message = sprintf('Parameter to __get() must be a string, %s given', gettype($method));
+        if (!\is_string($method) && !\is_object($method)) { // assume an object is a matcher
+            $message = \sprintf('Parameter to __get() must be a string, %s given', \gettype($method));
             throw new InvalidArgumentException($message);
         }
 
-        if (method_exists($this->obj, '__get') && !(is_string($method) && method_exists($this->obj, $method))) {
+        if (\method_exists($this->obj, '__get') && !(\is_string($method) && \method_exists($this->obj, $method))) {
             return $this->__call('__get', array($method));
         }
 

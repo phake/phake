@@ -102,7 +102,7 @@ class Phake_CallRecorder_Verifier
                 {
                     if ($call->getMethod() == $expectation->getMethod()) {
                         $message = $e->getMessage();
-                        if (strlen($message))
+                        if (\strlen($message))
                         {
                             $message = "\n{$message}";
                         }
@@ -119,8 +119,8 @@ class Phake_CallRecorder_Verifier
                 $additions .= ' In fact, there are no interactions with this mock.';
             }
 
-            if (count($methodNonMatched)) {
-                $additions .= "\nOther Invocations:\n===\n  " . implode("\n===\n  ", str_replace("\n", "\n  ", $methodNonMatched)) . "\n===";
+            if (\count($methodNonMatched)) {
+                $additions .= "\nOther Invocations:\n===\n  " . \implode("\n===\n  ", \str_replace("\n", "\n  ", $methodNonMatched)) . "\n===";
             }
 
             return new Phake_CallRecorder_VerifierResult(
@@ -149,7 +149,7 @@ class Phake_CallRecorder_Verifier
         } else {
             $desc = 'Expected no interaction with mock' . "\n"
                 . 'Invocations:' . "\n  ";
-            return new Phake_CallRecorder_VerifierResult(false, array(), $desc . implode("\n  ", $reportedCalls));
+            return new Phake_CallRecorder_VerifierResult(false, array(), $desc . \implode("\n  ", $reportedCalls));
         }
     }
 
@@ -174,7 +174,7 @@ class Phake_CallRecorder_Verifier
         } else {
             $desc = 'Expected no interaction with mock' . "\n"
                 . 'Invocations:' . "\n  ";
-            return new Phake_CallRecorder_VerifierResult(false, array(), $desc . implode("\n  ", $reportedCalls));
+            return new Phake_CallRecorder_VerifierResult(false, array(), $desc . \implode("\n  ", $reportedCalls));
         }
     }
 

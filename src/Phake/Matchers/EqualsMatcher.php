@@ -83,7 +83,7 @@ class Phake_Matchers_EqualsMatcher extends Phake_Matchers_SingleArgumentMatcher
         }
         catch (\SebastianBergmann\Comparator\ComparisonFailure $e)
         {
-            throw new Phake_Exception_MethodMatcherException(trim($e->getMessage() . "\n" . $e->getDiff()), $e);
+            throw new Phake_Exception_MethodMatcherException(\trim($e->getMessage() . "\n" . $e->getDiff()), $e);
         }
     }
 

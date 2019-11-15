@@ -72,7 +72,7 @@ class Phake_Stubber_Answers_ParentDelegate implements Phake_Stubber_IAnswer
             $reflClass = new ReflectionClass($context);
             $reflParent = $reflClass->getParentClass();
 
-            if (!is_object($reflParent))
+            if (!\is_object($reflParent))
             {
                 return $fallback;
             }
@@ -81,7 +81,7 @@ class Phake_Stubber_Answers_ParentDelegate implements Phake_Stubber_IAnswer
 
             if (!$reflMethod->isAbstract())
             {
-                if (defined('HHVM_VERSION'))
+                if (\defined('HHVM_VERSION'))
                 {
                     return array('parent', $method);
                 }

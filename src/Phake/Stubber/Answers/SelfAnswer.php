@@ -53,7 +53,7 @@ class Phake_Stubber_Answers_SelfAnswer implements Phake_Stubber_IAnswer
      */
     public function getAnswerCallback($context, $method)
     {
-        if (!is_object($context))
+        if (!\is_object($context))
         {
             throw new Phake_Stubber_Answers_InvalidAnswerException("Invalid context for " . __CLASS__ . ". You can only use this answer on non-static methods");
         }

@@ -59,11 +59,11 @@ class Phake_Proxies_StaticVisibilityProxy
 
     public function __construct($proxied)
     {
-        if (!is_object($proxied))
+        if (!\is_object($proxied))
         {
             throw new InvalidArgumentException("Phake_Proxies_VisibilityProxy was passed a non-object");
         }
-        $this->proxied = get_class($proxied);
+        $this->proxied = \get_class($proxied);
     }
 
     /**
@@ -73,16 +73,16 @@ class Phake_Proxies_StaticVisibilityProxy
      */
     public function __call($method, $arguments)
     {
-        if (method_exists($this->proxied, $method))
+        if (\method_exists($this->proxied, $method))
         {
             $reflMethod = new ReflectionMethod($this->proxied, $method);
             $reflMethod->setAccessible(true);
             return $reflMethod->invokeArgs(null, $arguments);
         }
-        elseif (method_exists($this->proxied, '__callStatic'))
+        elseif (\method_exists($this->proxied, '__callStatic'))
         {
             $reflMethod = new ReflectionMethod($this->proxied, '__callStatic');
-            return $reflMethod->invokeArgs(null, func_get_args());
+            return $reflMethod->invokeArgs(null, \func_get_args());
         }
         else
         {

@@ -82,7 +82,7 @@ class Phake_Proxies_AnswerBinderProxy implements Phake_Proxies_AnswerProxyInterf
      */
     public function thenGetReturnByLambda($value)
     {
-        trigger_error('Use thenReturnCallback instead.', E_USER_DEPRECATED);
+        \trigger_error('Use thenReturnCallback instead.', E_USER_DEPRECATED);
         return $this->thenReturnCallback($value);
     }
 
@@ -96,7 +96,7 @@ class Phake_Proxies_AnswerBinderProxy implements Phake_Proxies_AnswerProxyInterf
      */
     public function thenReturnCallback($value)
     {
-        if (!is_callable($value)) {
+        if (!\is_callable($value)) {
             throw new InvalidArgumentException("Given lambda is not callable");
         }
 

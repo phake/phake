@@ -74,11 +74,11 @@ class Phake_Annotation_MockInitializer
 
             if (isset($parser)) {
                 // Ignore it if the class start with a backslash
-                if (substr($mockedClass, 0, 1) !== '\\') {
+                if (\substr($mockedClass, 0, 1) !== '\\') {
                     $useStatements = $parser->parseClass($property->getDeclaringClass());
-                    $key           = strtolower($mockedClass);
+                    $key           = \strtolower($mockedClass);
 
-                    if (array_key_exists($key, $useStatements)) {
+                    if (\array_key_exists($key, $useStatements)) {
                         $mockedClass = $useStatements[$key];
                     } elseif ($reflectionClass->getNamespaceName() && $this->definedUnderTestNamespace($mockedClass, $reflectionClass->getNamespaceName())) {
                         $mockedClass = $reflectionClass->getNamespaceName() . '\\' . $mockedClass;
@@ -93,11 +93,11 @@ class Phake_Annotation_MockInitializer
 
     protected function useDoctrineParser()
     {
-        return version_compare(PHP_VERSION, "5.3.3", ">=") && class_exists('Doctrine\Common\Annotations\PhpParser');
+        return \version_compare(PHP_VERSION, "5.3.3", ">=") && \class_exists('Doctrine\Common\Annotations\PhpParser');
     }
 
     protected function definedUnderTestNamespace($mockedClass, $testNamespace)
     {
-        return class_exists($testNamespace . '\\' . $mockedClass);
+        return \class_exists($testNamespace . '\\' . $mockedClass);
     }
 }

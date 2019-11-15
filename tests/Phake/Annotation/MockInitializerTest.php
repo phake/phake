@@ -81,7 +81,7 @@ class Phake_Annotation_MockInitializerTest extends TestCase
 
     protected function setUp()
     {
-        if (version_compare(PHP_VERSION, '5.3', '<')) {
+        if (\version_compare(PHP_VERSION, '5.3', '<')) {
             $this->markTestSkipped('ReflectionProperty::setAccessible() is not available');
         }
 
@@ -97,7 +97,7 @@ class Phake_Annotation_MockInitializerTest extends TestCase
 
     public function testInitialize()
     {
-        if (version_compare(PHP_VERSION, '5.3', '<')) {
+        if (\version_compare(PHP_VERSION, '5.3', '<')) {
             $this->markTestSkipped('ReflectionProperty::setAccessible() is not available');
         }
 

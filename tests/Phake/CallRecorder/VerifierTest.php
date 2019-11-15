@@ -140,7 +140,7 @@ class Phake_CallRecorder_VerifierTest extends TestCase
         );
 
         $result = $this->verifier->verifyCall($expectation)->getMatchedCalls();
-        $this->assertTrue(is_array($result), 'verifyCall did not return an array');
+        $this->assertTrue(\is_array($result), 'verifyCall did not return an array');
         $this->assertTrue(empty($result), 'test call was found but should not have been');
     }
 
@@ -248,7 +248,7 @@ class Phake_CallRecorder_VerifierTest extends TestCase
             new Phake_CallRecorder_VerifierMode_Result(true, '')
         );
 
-        $this->assertEquals(1, count($verifier->verifyCall($expectation)->getMatchedCalls()));
+        $this->assertEquals(1, \count($verifier->verifyCall($expectation)->getMatchedCalls()));
     }
 
     public function testVerifierChecksVerificationMode()

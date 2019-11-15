@@ -84,7 +84,7 @@ class Phake_ClassGenerator_InvocationHandler_CallRecorderTest extends TestCase
     {
         $mock = $this->getMockBuilder('Phake_IMock')
                     ->getMock();
-        $mockClass = get_class($mock);
+        $mockClass = \get_class($mock);
 
         $ref = array();
         $this->handler->invoke($mockClass, 'foo', array(), $ref);
