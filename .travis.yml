@@ -6,6 +6,7 @@ php:
   - 7.1
   - 7.2
   - 7.3
+  - 7.4
 
 env:
   - PHPUNIT_VERSION=6.5.14
@@ -19,9 +20,6 @@ script:
 matrix:
   allow_failures:
     - env: PHPUNIT_VERSION=8.1
-#  exclude:
-#    - php: 7.1
-#      env: PHPUNIT_VERSION=8.1
 
 install:
   - composer require --dev phpunit/phpunit:${PHPUNIT_VERSION}
