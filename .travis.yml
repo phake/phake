@@ -11,6 +11,7 @@ env:
   - PHPUNIT_VERSION=6.5.14
   - PHPUNIT_VERSION=7.5
   - PHPUNIT_VERSION=8.1
+  - PHPUNIT_VERSION=9.0
 
 
 script:
@@ -19,6 +20,7 @@ script:
 matrix:
   allow_failures:
     - env: PHPUNIT_VERSION=8.1
+    - env: PHPUNIT_VERSION=9.0
 #  exclude:
 #    - php: 7.1
 #      env: PHPUNIT_VERSION=8.1
