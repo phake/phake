@@ -340,7 +340,7 @@ class {$newClassName} {$extends}
                 && !isset($implementedMethods[$methodName])
             ) {
                 $implementedMethods[$methodName] = $methodName;
-                $methodDefs .= $this->implementMethod($method, $mockedClass->getName(), $method->isStatic()) . "\n";
+                $methodDefs .= $this->implementMethod($method, $method->isStatic()) . "\n";
             }
         }
 
@@ -457,12 +457,11 @@ class {$newClassName} {$extends}
      * Creates the implementation of a single method
      *
      * @param ReflectionMethod $method
-     * @param string           $mockedClassName
      * @param bool             $static
      *
      * @return string
      */
-    protected function implementMethod(ReflectionMethod $method, $mockedClassName, $static = false)
+    protected function implementMethod(ReflectionMethod $method, $static = false)
     {
         $modifiers = implode(
             ' ',
@@ -488,9 +487,9 @@ class {$newClassName} {$extends}
             $returnType = $method->getReturnType();
             $returnTypeName = $returnType->getName();
 
-            if ($returnTypeName == 'self')
+            if ($returnTypeName === 'self')
             {
-                $returnTypeName = $mockedClassName;
+                $returnTypeName = $method->getDeclaringClass()->getName();
             }
 
             if ($returnType->allowsNull())
@@ -500,7 +499,7 @@ class {$newClassName} {$extends}
                 $returnHint = ' : ' . $returnTypeName;
             }
 
-            if ($returnTypeName == 'void')
+            if ($returnTypeName === 'void')
             {
                 $nullReturn = '';
                 $resultReturn = '';
