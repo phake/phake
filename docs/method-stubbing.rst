@@ -379,9 +379,9 @@ of the parameters all being the same.
 Resetting A Mock's Stubs
 ------------------------
 If overriding a stub does not work for your particular case and you would rather start over with all default stubs then
-you can use ``Phake::reset()`` and ``Phake::staticReset()``. These will remove all stubs from a mock and also empty
+you can use ``Phake::reset()`` and ``Phake::resetStatic()``. These will remove all stubs from a mock and also empty
 out all recorded calls against a mock. ``Phake::reset()`` will do this for instance methods on the mock and
-``Phake::staticReset()`` will do this for all static methods on the mock.
+``Phake::resetStatic()`` will do this for all static methods on the mock.
 
 .. code-block:: php
     public function testResettingStubMapper()
