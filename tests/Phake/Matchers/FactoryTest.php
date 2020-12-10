@@ -55,7 +55,7 @@ class Phake_Matchers_FactoryTest extends TestCase
     /**
      * Sets up the test fixture
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->factory = new Phake_Matchers_Factory();
     }

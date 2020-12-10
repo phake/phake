@@ -71,7 +71,7 @@ class Phake_Proxies_VerifierProxyTest extends TestCase
      */
     private $matchedCalls;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->verifier = Phake::mock('Phake_CallRecorder_Verifier');
         $this->mode = Phake::mock('Phake_CallRecorder_IVerifierMode');

@@ -62,7 +62,7 @@ class Phake_Matchers_MethodMatcherTest extends TestCase
      */
     private $arguments;
 
-    public function setUp()
+    public function setUp(): void
     {
         Phake::initAnnotations($this);
 

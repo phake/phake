@@ -58,7 +58,7 @@ class Phake_Mock_FreezerTest extends TestCase
      */
     private $mockInfo;
 
-    public function setUp()
+    public function setUp(): void
     {
         Phake::initAnnotations($this);
         $this->freezer    = new Phake_Mock_Freezer();

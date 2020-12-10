@@ -57,7 +57,7 @@ class Phake_Matchers_EqualsMatcherTest extends TestCase
     /**
      * Sets up the test fixture
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->matcher = new Phake_Matchers_EqualsMatcher('foo', \SebastianBergmann\Comparator\Factory::getInstance());
     }

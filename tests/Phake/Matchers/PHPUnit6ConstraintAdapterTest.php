@@ -63,7 +63,7 @@ class Phake_Matchers_PHPUnit6ConstraintAdapterTest extends TestCase
     /**
      * Sets up the test fixture
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->constraint = $this->getMockBuilder(Constraint::class)->getMock();
         $this->adapter    = new Phake_Matchers_PHPUnit6ConstraintAdapter($this->constraint);

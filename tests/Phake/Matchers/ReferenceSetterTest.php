@@ -57,7 +57,7 @@ class Phake_Matchers_ReferenceSetterTest extends TestCase
     /**
      * Sets up the test fixture
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->setter = new Phake_Matchers_ReferenceSetter(42);
     }

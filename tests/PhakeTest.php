@@ -42,8 +42,8 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\ExpectationFailedException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests the behavior of the Phake class.
@@ -54,12 +54,12 @@ use PHPUnit\Framework\ExpectationFailedException;
  */
 class PhakeTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         Phake::setClient(Phake::CLIENT_PHPUNIT7);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         Phake::resetStaticInfo();
         Phake::setClient(Phake::CLIENT_PHPUNIT7);

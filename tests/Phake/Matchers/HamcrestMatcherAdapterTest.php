@@ -62,7 +62,7 @@ class Phake_Matchers_HamcrestMatcherAdapterTest extends TestCase
     /**
      * Sets up the test fixture
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->matcher = $this->getMockBuilder('Hamcrest\BaseMatcher')->getMock();
         $this->matcher->expects($this->any())

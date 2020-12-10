@@ -59,7 +59,7 @@ class Phake_Proxies_AnswerCollectionProxyTest extends TestCase
     /**
      * Sets up the test fixture
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->container = Phake::mock('Phake_Stubber_AnswerCollection');
         $this->proxy     = new Phake_Proxies_AnswerCollectionProxy($this->container);

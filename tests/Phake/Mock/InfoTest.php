@@ -75,7 +75,7 @@ class Phake_Mock_InfoTest extends TestCase {
      */
     private $handlerChain;
 
-    public function setUp()
+    public function setUp(): void
     {
         Phake::initAnnotations($this);
         $this->info = $this->getSUT();

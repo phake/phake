@@ -64,7 +64,7 @@ class Phake_Proxies_StubberProxyTest extends TestCase
     /**
      * Sets up test fixture
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->stubbable = Phake::mock('Phake_IMock');
         $this->proxy     = new Phake_Proxies_StubberProxy($this->stubbable, new Phake_Matchers_Factory());

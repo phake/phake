@@ -5,7 +5,7 @@ use PHPUnit\Runner\Version;
 
 class PhakeClientTest extends TestCase
 {
-    protected function setup()
+    protected function setUp(): void
     {
         // unset the $client in Phake
         $refClass = new ReflectionClass('Phake');

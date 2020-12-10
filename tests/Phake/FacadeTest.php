@@ -70,7 +70,7 @@ class Phake_FacadeTest extends TestCase
     /**
      * Sets up the mock generator
      */
-    public function setup()
+    public function setUp(): void
     {
         Phake::initAnnotations($this);
         $this->mockGenerator = $this->getMockBuilder('Phake_ClassGenerator_MockClass')->getMock();

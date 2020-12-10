@@ -605,33 +605,19 @@ class {$newClassName} {$extends}
     {
         $default = '';
         $type    = '';
+        $nullable = '';
 
-        try
-        {
-            if ($parameter->isArray()) {
-                $type = 'array ';
-            } elseif (method_exists($parameter, 'isCallable') && $parameter->isCallable()) {
-                $type = 'callable ';
-            } elseif ($parameter->getClass() !== null) {
-                $type = $parameter->getClass()->getName() . ' ';
-            } elseif (method_exists($parameter, 'hasType') && $parameter->hasType())
-            {
-                $type = $parameter->getType()->getName() . ' ';
+        if ($parameter->hasType()) {
+            $reflection_type = $parameter->getType();
+            if ($reflection_type instanceof ReflectionNamedType) {
+                $type = $parameter->getType()->getName();
             }
 
-            if (method_exists($parameter, 'hasType') && $parameter->hasType() && $parameter->allowsNull()) {
+            if ($type != 'mixed' && $parameter->allowsNull()) {
                 // a parameter can have a type hint and a default value of null without being a 7.1 nullable type hint
-                if (!($parameter->isDefaultValueAvailable() && $parameter->getDefaultValue() === null)) {
-                    $type = '?'.$type;
+                if (!$parameter->isDefaultValueAvailable() || $parameter->getDefaultValue() !== null) {
+                    $nullable = '?';
                 }
-            }
-        }
-        catch (ReflectionException $e)
-        {
-            //HVVM is throwing an exception when pulling class name when said class does not exist
-            if (!defined('HHVM_VERSION'))
-            {
-                throw $e;
             }
         }
 
@@ -644,7 +630,8 @@ class {$newClassName} {$extends}
             $default = ' = null';
         }
 
-        return $type . ($parameter->isPassedByReference() ? '&' : '') . $variadic . '$' . $parameter->getName() . $default;
+        $result = $nullable . $type . ' ' . ($parameter->isPassedByReference() ? '&' : '') . $variadic . '$' . $parameter->getName() . $default;
+        return $result;
     }
 
     /**

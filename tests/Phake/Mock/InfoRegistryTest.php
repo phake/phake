@@ -33,7 +33,7 @@ class Phake_Mock_InfoRegistryTest extends TestCase
      */
     private $info3;
 
-    public function setUp()
+    public function setUp(): void
     {
         Phake::initAnnotations($this);
         $this->registry = new Phake_Mock_InfoRegistry();

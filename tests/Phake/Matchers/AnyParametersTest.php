@@ -51,7 +51,7 @@ class Phake_Matchers_AnyParametersTest extends TestCase
      */
     private $matcher;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->matcher = new Phake_Matchers_AnyParameters();
     }

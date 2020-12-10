@@ -54,7 +54,7 @@ abstract class Phake_Annotation_MockInitializerParentTestCase extends TestCase
      */
     protected $testMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         Phake::initAnnotations($this);
     }

@@ -72,7 +72,7 @@ class Phake_ClassGenerator_InvocationHandler_StubCallerTest extends TestCase
      */
     private $defaultAnswer;
 
-    public function setUp()
+    public function setUp(): void
     {
         Phake::initAnnotations($this);
         $this->mock          = $this->getMockBuilder('Phake_IMock')->getMock();
