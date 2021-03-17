@@ -53,6 +53,10 @@ matrix:
      env: PHPUNIT_VERSION=9.5
      dist: xenial
 
+   - php: 8.0
+     env: PHPUNIT_VERSION=9.5
+     dist: xenial
+
 install:
   - composer require --dev phpunit/phpunit:${PHPUNIT_VERSION}
   - composer install --dev

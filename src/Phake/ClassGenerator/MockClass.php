@@ -336,7 +336,7 @@ class {$newClassName} {$extends}
         }
         foreach ($mockedClass->getMethods($filter) as $method) {
             $methodName = $method->getName();
-            if (!$method->isConstructor() && !$method->isDestructor() && !$method->isFinal()
+            if (($mockedClass->isInterface() || !$method->isConstructor() && !$method->isDestructor()) && !$method->isFinal()
                 && !isset($implementedMethods[$methodName])
             ) {
                 $implementedMethods[$methodName] = $methodName;
@@ -486,19 +486,8 @@ class {$newClassName} {$extends}
         if (method_exists($method, 'hasReturnType') && $method->hasReturnType())
         {
             $returnType = $method->getReturnType();
-            $returnTypeName = $returnType->getName();
-
-            if ($returnTypeName == 'self')
-            {
-                $returnTypeName = $mockedClassName;
-            }
-
-            if ($returnType->allowsNull())
-            {
-                $returnHint = ' : ?' . $returnTypeName;
-            } else {
-                $returnHint = ' : ' . $returnTypeName;
-            }
+            $returnTypeName = $this->implementType($returnType, $mockedClassName);
+            $returnHint = ': ' . $returnTypeName;
 
             if ($returnTypeName == 'void')
             {
@@ -510,7 +499,7 @@ class {$newClassName} {$extends}
         $docComment = $method->getDocComment() ?: '';
         $methodDef = "
 	{$docComment}
-	{$modifiers} function {$reference}{$method->getName()}({$this->generateMethodParameters($method)}){$returnHint}
+	{$modifiers} function {$reference}{$method->getName()}({$this->generateMethodParameters($method, $mockedClassName)}){$returnHint}
 	{
 		\$__PHAKE_args = array();
 		{$this->copyMethodParameters($method)}
@@ -545,14 +534,15 @@ class {$newClassName} {$extends}
      * Generates the code for all the parameters of a given method.
      *
      * @param ReflectionMethod $method
+     * @param string $mockedClassName
      *
      * @return string
      */
-    protected function generateMethodParameters(ReflectionMethod $method)
+    protected function generateMethodParameters(ReflectionMethod $method, $mockedClassName)
     {
         $parameters = array();
         foreach ($method->getParameters() as $parameter) {
-            $parameters[] = $this->implementParameter($parameter);
+            $parameters[] = $this->implementParameter($parameter, $mockedClassName);
         }
 
         return implode(', ', $parameters);
@@ -595,37 +585,68 @@ class {$newClassName} {$extends}
     }
 
     /**
-     * Generates the code for an individual method parameter.
-     *
-     * @param ReflectionParameter $parameter
+     * Generate the code for an individual type
+     * 
+     * @param ReflectionType $type
+     * @param string $mockedClassName
      *
      * @return string
      */
-    protected function implementParameter(ReflectionParameter $parameter)
+    private function implementType(ReflectionType $type, $mockedClassName)
     {
-        $default = '';
-        $type    = '';
+        $result = '';
+        $nullable = '';
+
+        if ($type instanceof ReflectionNamedType) {
+            $result = $type->getName();
+            if ($result == 'self') {
+                $result = $mockedClassName;
+            } elseif ($result != 'mixed' && $type->allowsNull()) {
+                $nullable = '?';
+            }
+        } elseif ($type instanceof ReflectionUnionType) {
+            $types = [];
+            foreach ($type->getTypes() as $singleType) {
+                switch ($t = $singleType->getName()) {
+                    case 'self':
+                        $types[] = $mockedClassName;
+                        break;
+                    case 'null':
+                        break;
+                    default:
+                        $types[] = $t;
+                        break;
+                }
+            }
+            if ($type->allowsNull()) {
+                $types[] = 'null';
+            }
+            $result = implode('|', $types);
+        }
+
+        return $nullable . $result;
+    }
+
+    /**
+     * Generates the code for an individual method parameter.
+     *
+     * @param ReflectionParameter $parameter
+     * @param string $mockedClassName
+     *
+     * @return string
+     */
+    protected function implementParameter(ReflectionParameter $parameter, $mockedClassName)
+    {
+        $default  = '';
+        $type     = '';
 
         try
         {
-            if ($parameter->isArray()) {
-                $type = 'array ';
-            } elseif (method_exists($parameter, 'isCallable') && $parameter->isCallable()) {
-                $type = 'callable ';
-            } elseif ($parameter->getClass() !== null) {
-                $type = $parameter->getClass()->getName() . ' ';
-            } elseif (method_exists($parameter, 'hasType') && $parameter->hasType())
-            {
-                $type = $parameter->getType()->getName() . ' ';
-            }
-
-            if (method_exists($parameter, 'hasType') && $parameter->hasType() && $parameter->allowsNull()) {
-                // a parameter can have a type hint and a default value of null without being a 7.1 nullable type hint
-                if (!($parameter->isDefaultValueAvailable() && $parameter->getDefaultValue() === null)) {
-                    $type = '?'.$type;
-                }
+            if ($parameter->hasType()) {
+                $type = $this->implementType($parameter->getType(), $mockedClassName);
             }
         }
+
         catch (ReflectionException $e)
         {
             //HVVM is throwing an exception when pulling class name when said class does not exist
