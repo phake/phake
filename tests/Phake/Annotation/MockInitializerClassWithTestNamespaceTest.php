@@ -61,7 +61,7 @@ class Phake_Annotation_MockInitializerWithNamespaceTest extends TestCase
      */
     private $testUtility;
 
-    public function setUp()
+    public function setUp(): void
     {
         Phake::initAnnotations($this);
     }

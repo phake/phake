@@ -64,7 +64,7 @@ class Phake_Proxies_CallVerifierProxyTest extends TestCase
     /**
      * Sets up test fixture
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->client     = new Phake_Client_Default();
         $this->obj        = new Phake_CallRecorder_Recorder();

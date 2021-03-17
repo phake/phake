@@ -59,7 +59,7 @@ class Phake_Stubber_Answers_StaticAnswerTest extends TestCase
     /**
      * Sets up the answer fixture
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->answer = new Phake_Stubber_Answers_StaticAnswer(42);
     }

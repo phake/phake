@@ -62,17 +62,16 @@ class Phake_Stubber_Answers_ExceptionAnswerTest extends TestCase
     /**
      * Sets up the answer fixture
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->exception = new RuntimeException();
         $this->answer    = new Phake_Stubber_Answers_ExceptionAnswer($this->exception);
     }
 
-    /**
-     * @expectedException RuntimeException
-     */
     public function testAnswer()
     {
+        $this->expectException(\RuntimeException::class);
+
         call_user_func($this->answer->getAnswerCallback('stdClass', 'testMethod'));
     }
 

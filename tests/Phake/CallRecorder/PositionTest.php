@@ -57,7 +57,7 @@ class Phake_CallRecorder_PositionTest extends TestCase
     /**
      * Sets up the test fixture
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->position = new Phake_CallRecorder_Position(10);
     }

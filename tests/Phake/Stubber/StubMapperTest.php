@@ -59,7 +59,7 @@ class Phake_Stubber_StubMapperTest extends TestCase
     /**
      * Sets up the test fixture
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->mapper = new Phake_Stubber_StubMapper();
     }

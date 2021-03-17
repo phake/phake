@@ -87,7 +87,7 @@ calls return predictable values. This project is all coming together and I am re
 
         private $item3;
 
-        protected function setUp()
+        protected function setUp(): void
         {
             $this->item1 = Phake::mock('Item');
             $this->item2 = Phake::mock('Item');
@@ -252,7 +252,7 @@ shows this flaw.
 
         private $item3;
 
-        public function setUp()
+        public function setUp(): void
         {
             $this->item1 = Phake::mock('Item');
             $this->item2 = Phake::mock('Item');
@@ -336,7 +336,7 @@ stubs.
 
         private $item3;
 
-        public function setUp()
+        public function setUp(): void
         {
             $this->item1 = Phake::mock('Item');
             $this->item2 = Phake::mock('Item');
@@ -471,7 +471,7 @@ stub will be for a call with a different ``Item``.
 
         private $item3;
 
-        public function setUp()
+        public function setUp(): void
         {
             $this->item1 = Phake::mock('Item');
             $this->item2 = Phake::mock('Item');
@@ -520,7 +520,7 @@ feature of Phake.
 
         private $item3;
 
-        public function setUp()
+        public function setUp(): void
         {
             $this->item1 = Phake::mock('Item');
             $this->item2 = Phake::mock('Item');

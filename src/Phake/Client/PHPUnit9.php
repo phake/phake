@@ -1,8 +1,9 @@
 <?php
+
 /*
  * Phake - Mocking Framework
  *
- * Copyright (c) 2010-2012, Mike Lively <m@digitalsandwich.com>
+ * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -42,56 +43,30 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Assert;
 
-class Phake_Matchers_ChainedArgumentMatcherTest extends TestCase
+/**
+ * The client adapter used for PHPUnit.
+ *
+ * This adapter allows PHPUnit to report failed verify() calls as test failures instead of errors. It also counts
+ * verify() calls as assertions.
+ */
+class Phake_Client_PHPUnit9 implements Phake_Client_IClient
 {
-    /**
-     * @var Phake_Matchers_ChainedArgumentMatcher
-     */
-    private $matcher;
-
-    /**
-     * @Mock
-     * @var Phake_Matchers_IArgumentMatcher
-     */
-    private $adapted;
-
-    /**
-     * @Mock
-     * @var Phake_Matchers_IChainableArgumentMatcher
-     */
-    private $nextMatcher;
-
-    public function setUp(): void
+    public function processVerifierResult(\Phake_CallRecorder_VerifierResult $result)
     {
-        Phake::initAnnotations($this);
+        Assert::assertThat($result, $this->getConstraint());
 
-        $this->matcher = new Phake_Matchers_ChainedArgumentMatcher($this->adapted);
-        $this->matcher->setNextMatcher($this->nextMatcher);
+        return $result->getMatchedCalls();
     }
 
-    public function testMatches()
+    public function processObjectFreeze()
     {
-        $args = array('test arg1', 'test arg2');
-
-        Phake::when($this->adapted)->matches->thenReturn(true);
-        Phake::when($this->nextMatcher)->doArgumentsMatch->thenReturn(true);
-
-        $result = $this->matcher->doArgumentsMatch($args);
-
-        Phake::verify($this->adapted)->matches('test arg1');
-        Phake::verify($this->nextMatcher)->doArgumentsMatch(array('test arg2'));
-        $this->assertNull($result);
+        Assert::assertThat(true, Assert::isTrue());
     }
 
-    public function testToString()
+    private function getConstraint()
     {
-        Phake::when($this->adapted)->__toString->thenReturn('test string');
-
-        $result = $this->matcher->__toString();
-
-        Phake::verify($this->adapted)->__toString();
-        $this->assertEquals('test string', $result);
+        return new Phake_PHPUnit_VerifierResultConstraintV7();
     }
 }

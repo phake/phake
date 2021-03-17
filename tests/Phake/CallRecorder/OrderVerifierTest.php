@@ -57,7 +57,7 @@ class Phake_CallRecorder_OrderVerifierTest extends TestCase
     /**
      * Sets up the test fixture
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->verifier = new Phake_CallRecorder_OrderVerifier();
     }

@@ -51,7 +51,7 @@ class Phake_CallRecorder_VerifierMode_AtMostTest extends TestCase
 {
     private $verifier;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->verifier = new Phake_CallRecorder_VerifierMode_AtMost(1);
     }

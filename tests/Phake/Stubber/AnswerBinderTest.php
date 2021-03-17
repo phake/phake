@@ -69,7 +69,7 @@ class Phake_Stubber_AnswerBinderTest extends TestCase
     /**
      * Sets up the test fixture
      */
-    public function setUp()
+    public function setUp(): void
     {
         Phake::initAnnotations($this);
         $this->matcher    = $this->getMockBuilder('Phake_Matchers_MethodMatcher')

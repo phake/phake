@@ -79,7 +79,7 @@ class Phake_Annotation_MockInitializerTest extends TestCase
      */
     private $shortNameMock2;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         if (version_compare(PHP_VERSION, '5.3', '<')) {
             $this->markTestSkipped('ReflectionProperty::setAccessible() is not available');
@@ -88,7 +88,7 @@ class Phake_Annotation_MockInitializerTest extends TestCase
         $this->initializer = new Phake_Annotation_MockInitializer();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->initializer    = null;
         $this->mock1          = $this->mock2 = null;

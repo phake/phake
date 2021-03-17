@@ -59,7 +59,7 @@ class Phake_String_ConverterTest extends TestCase
     /**
      * Sets up the mock generator
      */
-    public function setup()
+    public function setUp(): void
     {
         $this->converter = new Phake_String_Converter();
     }

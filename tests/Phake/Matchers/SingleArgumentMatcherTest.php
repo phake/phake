@@ -57,7 +57,7 @@ class Phake_Matchers_SingleArgumentMatcherTest extends TestCase
      */
     private $nextMatcher;
 
-    public function setUp()
+    public function setUp(): void
     {
         Phake::initAnnotations($this);
 

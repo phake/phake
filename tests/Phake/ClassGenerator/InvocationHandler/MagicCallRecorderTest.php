@@ -57,7 +57,7 @@ class Phake_ClassGenerator_InvocationHandler_MagicCallRecorderTest extends TestC
      */
     private $callRecorder;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->callRecorder = Phake::mock('Phake_CallRecorder_Recorder');
         $this->handler = new Phake_ClassGenerator_InvocationHandler_MagicCallRecorder($this->callRecorder);

@@ -51,7 +51,7 @@ class Phake_CallRecorder_VerifierMode_TimesTest extends TestCase
 {
     private $verifierModeTimes;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->verifierModeTimes = new Phake_CallRecorder_VerifierMode_Times(1);
     }

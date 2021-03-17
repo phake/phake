@@ -64,7 +64,7 @@ class Phake_Proxies_CallStubberProxyTest extends TestCase
     /**
      * Sets up test fixture
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->matcher1 = Phake::mock('Phake_Matchers_IChainableArgumentMatcher');
         $this->obj      = $this->getMockBuilder('Phake_IMock')->getMock();
@@ -81,7 +81,17 @@ class Phake_Proxies_CallStubberProxyTest extends TestCase
 
         $this->assertThat($answerBinder, $this->isInstanceOf('Phake_Proxies_AnswerBinderProxy'));
 
-        $this->assertAttributeInstanceOf('Phake_Stubber_AnswerBinder', 'binder', $answerBinder);
+        $this->phakeAssertAttributeInstanceOf('Phake_Stubber_AnswerBinder', 'binder', $answerBinder);
+    }
+
+    private function phakeAssertAttributeInstanceOf(string $class, string $propertyName, $object)
+    {
+         $reflectionObject = new \ReflectionObject($object);
+         $reflectionProperty = $reflectionObject->getProperty($propertyName);
+         $reflectionProperty->setAccessible(true);
+         $value = $reflectionProperty->getValue($object);
+
+         $this->assertInstanceOf($class, $value);
     }
 }
 

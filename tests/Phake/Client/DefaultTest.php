@@ -49,7 +49,7 @@ class Phake_Client_DefaultTest extends TestCase
 {
     private $client;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->client = new Phake_Client_Default();
     }

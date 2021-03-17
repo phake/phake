@@ -57,7 +57,7 @@ class Phake_Stubber_SelfBindingAnswerBinderTest extends TestCase
     /**
      * Sets up the test fixture
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->binder = new Phake_Stubber_SelfBindingAnswerBinder();
     }
