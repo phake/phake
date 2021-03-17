@@ -68,4 +68,3 @@ jobs:
       after_script:
         - wget https://scrutinizer-ci.com/ocular.phar
         - php ocular.phar code-coverage:upload --format=php-clover build/logs/clover.xml
-        - CODECLIMATE_REPO_TOKEN=74f9cd376c20c19d09d6c73e4bac9dad48209fa7f3fb44b650ec7d70db81a51a ./bin/test-reporter

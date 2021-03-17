@@ -19,8 +19,7 @@
         "ext-soap": "*",
         "doctrine/common": "^3.0",
         "phpunit/phpunit": "^7.0|^8.0",
-        "hamcrest/hamcrest-php": "1.1.*",
-        "codeclimate/php-test-reporter": "dev-master"
+        "hamcrest/hamcrest-php": "1.1.*"
     },
     "config": {
         "bin-dir": "bin"
