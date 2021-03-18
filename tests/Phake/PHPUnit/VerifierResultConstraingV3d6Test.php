@@ -51,7 +51,7 @@ class Phake_PHPUnit_VerifierResultConstraintV3d6Test extends TestCase
 {
     private $constraint;
 
-    public function setUp()
+    public function setUp(): void
     {
         if (version_compare('3.6.0', Version::id()) != 1) {
             $this->markTestSkipped('The tested class is not compatible with current version of PHPUnit.');
@@ -76,11 +76,10 @@ class Phake_PHPUnit_VerifierResultConstraintV3d6Test extends TestCase
         $this->assertFalse($this->constraint->evaluate($result, '', true));
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testEvaluateThrowsWhenArgumentIsNotAResult()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $this->constraint->evaluate('');
     }
 
@@ -101,11 +100,10 @@ class Phake_PHPUnit_VerifierResultConstraintV3d6Test extends TestCase
         }
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testFailThrowsWhenArgumentIsNotAResult()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $this->constraint->evaluate('', '');
     }
 }

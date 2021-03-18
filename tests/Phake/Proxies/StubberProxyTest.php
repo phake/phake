@@ -64,7 +64,7 @@ class Phake_Proxies_StubberProxyTest extends TestCase
     /**
      * Sets up test fixture
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->stubbable = Phake::mock('Phake_IMock');
         $this->proxy     = new Phake_Proxies_StubberProxy($this->stubbable, new Phake_Matchers_Factory());
@@ -79,7 +79,7 @@ class Phake_Proxies_StubberProxyTest extends TestCase
 
         $this->assertThat($answerBinder, $this->isInstanceOf('Phake_Proxies_AnswerBinderProxy'));
 
-        $this->assertAttributeInstanceOf('Phake_Stubber_AnswerBinder', 'binder', $answerBinder);
+        $this->phakeAssertAttributeInstanceOf('Phake_Stubber_AnswerBinder', 'binder', $answerBinder);
     }
 
     /**
@@ -92,7 +92,7 @@ class Phake_Proxies_StubberProxyTest extends TestCase
 
         $this->assertThat($answerBinder, $this->isInstanceOf('Phake_Proxies_AnswerBinderProxy'));
 
-        $this->assertAttributeInstanceOf('Phake_Stubber_AnswerBinder', 'binder', $answerBinder);
+        $this->phakeAssertAttributeInstanceOf('Phake_Stubber_AnswerBinder', 'binder', $answerBinder);
     }
 
     /**
@@ -103,7 +103,7 @@ class Phake_Proxies_StubberProxyTest extends TestCase
         $answerBinder = $this->proxy->foo;
 
         $this->assertInstanceOf('Phake_Proxies_AnswerBinderProxy', $answerBinder);
-        $this->assertAttributeInstanceOf('Phake_Stubber_AnswerBinder', 'binder', $answerBinder);
+        $this->phakeAssertAttributeInstanceOf('Phake_Stubber_AnswerBinder', 'binder', $answerBinder);
     }
 
     /**
@@ -114,7 +114,7 @@ class Phake_Proxies_StubberProxyTest extends TestCase
         $answerBinder = $this->proxy->foo;
 
         $this->assertInstanceOf('Phake_Proxies_AnswerBinderProxy', $answerBinder);
-        $this->assertAttributeInstanceOf('Phake_Stubber_AnswerBinder', 'binder', $answerBinder);
+        $this->phakeAssertAttributeInstanceOf('Phake_Stubber_AnswerBinder', 'binder', $answerBinder);
     }
 
     public function testGetWithMatcher()
@@ -144,4 +144,15 @@ class Phake_Proxies_StubberProxyTest extends TestCase
             array(1,      'must be a string'),
         );
     }
+
+    private function phakeAssertAttributeInstanceOf(string $class, string $propertyName, $object)
+    {
+         $reflectionObject = new \ReflectionObject($object);
+         $reflectionProperty = $reflectionObject->getProperty($propertyName);
+         $reflectionProperty->setAccessible(true);
+         $value = $reflectionProperty->getValue($object);
+
+         $this->assertInstanceOf($class, $value);
+     }
+
 }

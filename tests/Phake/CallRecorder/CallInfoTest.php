@@ -68,7 +68,7 @@ class Phake_CallRecorder_CallInfoTest extends TestCase
     /**
      * Sets up the test fixture
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->call     = $this->getMockBuilder('Phake_CallRecorder_Call')
                                 ->disableOriginalConstructor()

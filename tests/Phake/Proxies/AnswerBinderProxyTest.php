@@ -64,7 +64,7 @@ class Phake_Proxies_AnswerBinderProxyTest extends TestCase
     /**
      * Sets up the test fixture
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->binder = $this->getMockBuilder('Phake_Stubber_AnswerBinder')
                             ->disableOriginalConstructor()
@@ -83,12 +83,7 @@ class Phake_Proxies_AnswerBinderProxyTest extends TestCase
     {
         $this->binder->expects($this->once())
             ->method('bindAnswer')
-            ->with(
-                $this->logicalAnd(
-                    $this->isInstanceOf('Phake_Stubber_Answers_StaticAnswer'),
-                    $this->attributeEqualTo('answer', 42)
-                )
-            )
+            ->with($this->isInstanceOf('Phake_Stubber_Answers_StaticAnswer'))
             ->will($this->returnValue($this->binder));
 
         $this->assertSame($this->binder, $this->proxy->thenReturn(42));
@@ -107,12 +102,7 @@ class Phake_Proxies_AnswerBinderProxyTest extends TestCase
 
         $this->binder->expects($this->once())
             ->method('bindAnswer')
-            ->with(
-                $this->logicalAnd(
-                    $this->isInstanceOf('Phake_Stubber_Answers_LambdaAnswer'),
-                    $this->attributeEqualTo('answerLambda', $func)
-                )
-            )
+            ->with($this->isInstanceOf('Phake_Stubber_Answers_LambdaAnswer'))
             ->will($this->returnValue($this->binder));
 
         $this->assertSame($this->binder, $this->proxy->thenReturnCallback($func));
@@ -164,12 +154,7 @@ class Phake_Proxies_AnswerBinderProxyTest extends TestCase
 
         $this->binder->expects($this->once())
             ->method('bindAnswer')
-            ->with(
-                $this->logicalAnd(
-                    $this->isInstanceOf('Phake_Stubber_Answers_ExceptionAnswer'),
-                    $this->attributeEqualTo('answer', $exception)
-                )
-            )
+            ->with($this->isInstanceOf('Phake_Stubber_Answers_ExceptionAnswer'))
             ->will($this->returnValue($this->binder));
 
         $this->assertSame($this->binder, $this->proxy->thenThrow($exception));

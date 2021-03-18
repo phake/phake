@@ -56,7 +56,7 @@ class Phake_Stubber_AnswerCollectionTest extends TestCase
      */
     private $answer;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->answer     = Phake::mock('Phake_Stubber_IAnswer');
         $this->collection = new Phake_Stubber_AnswerCollection($this->answer);

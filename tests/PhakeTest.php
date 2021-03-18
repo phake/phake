@@ -54,12 +54,12 @@ use PHPUnit\Framework\ExpectationFailedException;
  */
 class PhakeTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         Phake::setClient(Phake::CLIENT_PHPUNIT7);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         Phake::resetStaticInfo();
         Phake::setClient(Phake::CLIENT_PHPUNIT7);
@@ -88,11 +88,11 @@ class PhakeTest extends TestCase
     /**
      * Tests that a simple method call verification with throw an exception if that method was not
      * called.
-     *
-     * @expectedException Phake_Exception_VerificationException
      */
     public function testSimpleVerifyThrowsExceptionOnFail()
     {
+        $this->expectException(Phake_Exception_VerificationException::class);
+
         Phake::setClient(Phake::CLIENT_DEFAULT);
         $mock = Phake::mock('PhakeTest_MockedClass');
 
@@ -256,11 +256,11 @@ class PhakeTest extends TestCase
 
     /**
      * Tests passing a basic equals matcher to the verify method will correctly fail when matcher is not satisfied.
-     *
-     * @expectedException Phake_Exception_VerificationException
      */
     public function testVerifyCallWithEqualsMatcherFails()
     {
+        $this->expectException(Phake_Exception_VerificationException::class);
+
         Phake::setClient(Phake::CLIENT_DEFAULT);
         $mock = Phake::mock('PhakeTest_MockedClass');
 
@@ -283,11 +283,11 @@ class PhakeTest extends TestCase
 
     /**
      * Tests passing a default matcher type to the verify method will correctly fail when matcher is not satisfied.
-     *
-     * @expectedException Phake_Exception_VerificationException
      */
     public function testVerifyCallWithDefaultMatcherFails()
     {
+        $this->expectException(Phake_Exception_VerificationException::class);
+
         Phake::setClient(Phake::CLIENT_DEFAULT);
         $mock = Phake::mock('PhakeTest_MockedClass');
 
@@ -310,11 +310,11 @@ class PhakeTest extends TestCase
 
     /**
      * Tests passing in a PHPUnit constraint to the verifier fails when constraint not met.
-     *
-     * @expectedException Phake_Exception_VerificationException
      */
     public function testVerifyCallWithPHPUnitMatcherFails()
     {
+        $this->expectException(Phake_Exception_VerificationException::class);
+
         Phake::setClient(Phake::CLIENT_DEFAULT);
         $mock = Phake::mock('PhakeTest_MockedClass');
 
@@ -337,11 +337,11 @@ class PhakeTest extends TestCase
 
     /**
      * Tests passing in a Hamcrest matcher to the verifier fails when constraint not met.
-     *
-     * @expectedException Phake_Exception_VerificationException
      */
     public function testVerifyCallWithHamcrestMatcherFails()
     {
+        $this->expectException(Phake_Exception_VerificationException::class);
+
         Phake::setClient(Phake::CLIENT_DEFAULT);
         $mock = Phake::mock('PhakeTest_MockedClass');
 
@@ -1071,10 +1071,11 @@ class PhakeTest extends TestCase
 
     /**
      * Tests times doesn't match
-     * @expectedException Phake_Exception_VerificationException
      */
     public function testVerifyTimesMismatch()
     {
+        $this->expectException('Phake_Exception_VerificationException');
+
         Phake::setClient(Phake::CLIENT_DEFAULT);
         $mock = Phake::mock('PhakeTest_MockedClass');
 
@@ -1111,10 +1112,11 @@ class PhakeTest extends TestCase
 
     /**
      * Tests that at least doesn't match
-     * @expectedException Phake_Exception_VerificationException
      */
     public function testVerifyAtLeastMismatch()
     {
+        $this->expectException('Phake_Exception_VerificationException');
+
         Phake::setClient(Phake::CLIENT_DEFAULT);
         $mock = Phake::mock('PhakeTest_MockedClass');
 
@@ -1132,10 +1134,11 @@ class PhakeTest extends TestCase
 
     /**
      * Tests that never catches an invocation
-     * @expectedException Phake_Exception_VerificationException
      */
     public function testNeverMismatch()
     {
+        $this->expectException(Phake_Exception_VerificationException::class);
+
         Phake::setClient(Phake::CLIENT_DEFAULT);
         $mock = Phake::mock('PhakeTest_MockedClass');
         $mock->foo();
@@ -1163,10 +1166,11 @@ class PhakeTest extends TestCase
 
     /**
      * Tests that atMost fails on over calls
-     * @expectedException Phake_Exception_VerificationException
      */
     public function testAtMostOver()
     {
+        $this->expectException(Phake_Exception_VerificationException::class);
+
         Phake::setClient(Phake::CLIENT_DEFAULT);
         $mock = Phake::mock('PhakeTest_MockedClass');
         $mock->foo();
@@ -1176,10 +1180,11 @@ class PhakeTest extends TestCase
 
     /**
      * Tests that the given exception is thrown on thenThrow.
-     * @expectedException Phake_Exception_VerificationException
      */
     public function testStubThenThrow()
     {
+        $this->expectException(Phake_Exception_VerificationException::class);
+
         $mock = Phake::mock('PhakeTest_MockedClass');
         Phake::when($mock)->foo()->thenThrow(new Phake_Exception_VerificationException());
         $mock->foo();

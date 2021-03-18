@@ -57,7 +57,7 @@ class Phake_Stubber_Answers_SmartDefaultAnswerTest extends TestCase
     /**
      * Sets up the test fixture
      */
-    public function setUp()
+    public function setUp(): void
     {
         if (version_compare(phpversion(), '7.0.0RC1') < 0)
         {

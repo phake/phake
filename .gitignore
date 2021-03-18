@@ -2,6 +2,7 @@
 .project
 .settings
 .idea
+.phpunit.result.cache
 nbproject
 vendor
 bin

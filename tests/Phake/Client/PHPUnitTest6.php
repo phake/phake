@@ -52,7 +52,7 @@ class Phake_Client_PHPUnitTest6 extends TestCase
 {
     private $client;
 
-    public function setUp()
+    public function setUp(): void
     {
         if (version_compare(Version::id(), '6.0.0') < 0) {
             $this->markTestSkipped('The tested class is not compatible with current version of PHPUnit.');

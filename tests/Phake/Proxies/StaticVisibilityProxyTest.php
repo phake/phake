@@ -49,11 +49,10 @@ use PHPUnit\Framework\TestCase;
  */
 class Phake_Proxies_StaticVisibilityProxyTest extends TestCase
 {
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testCallingOnANonObject()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $proxy = new Phake_Proxies_StaticVisibilityProxy(42);
     }
 

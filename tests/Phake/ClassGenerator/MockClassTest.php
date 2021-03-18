@@ -60,7 +60,7 @@ class Phake_ClassGenerator_MockClassTest extends TestCase
      */
     private $infoRegistry;
 
-    public function setUp()
+    public function setUp(): void
     {
         Phake::initAnnotations($this);
         $this->classGen = new Phake_ClassGenerator_MockClass();

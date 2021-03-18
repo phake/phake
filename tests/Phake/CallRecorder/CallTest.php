@@ -63,7 +63,7 @@ class Phake_CallRecorder_CallTest extends TestCase
 
     private $mock;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->mock = Phake::mock('Phake_IMock');
 

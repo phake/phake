@@ -57,7 +57,7 @@ class Phake_Stubber_Answers_ParentDelegateTest extends TestCase
     /**
      * Sets up the test fixture
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->delegate = new Phake_Stubber_Answers_ParentDelegate();
     }

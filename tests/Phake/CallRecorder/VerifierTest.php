@@ -79,7 +79,7 @@ class Phake_CallRecorder_VerifierTest extends TestCase
     /**
      * Sets up the verifier and its call recorder
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->obj        = Phake::mock('Phake_IMock');
 

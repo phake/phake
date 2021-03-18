@@ -59,7 +59,7 @@ class Phake_Proxies_AnswerCollectionProxyTest extends TestCase
     /**
      * Sets up the test fixture
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->container = Phake::mock('Phake_Stubber_AnswerCollection');
         $this->proxy     = new Phake_Proxies_AnswerCollectionProxy($this->container);
@@ -76,12 +76,10 @@ class Phake_Proxies_AnswerCollectionProxyTest extends TestCase
     {
         $this->assertSame($this->proxy, $this->proxy->thenReturn(42));
 
-        Phake::verify($this->container)->addAnswer(
-            $this->logicalAnd(
-                $this->isInstanceOf('Phake_Stubber_Answers_StaticAnswer'),
-                $this->attributeEqualTo('answer', 42)
-            )
-        );
+        Phake::verify($this->container)->addAnswer(Phake::capture($answer));
+
+        $this->assertInstanceOf('Phake_Stubber_Answers_StaticAnswer', $answer);
+		$this->phakeAssertAttributeEqualTo(42, 'answer', $answer);
     }
 
     /**
@@ -97,12 +95,10 @@ class Phake_Proxies_AnswerCollectionProxyTest extends TestCase
 
         $this->assertSame($this->proxy, $this->proxy->thenGetReturnByLambda($func));
 
-        Phake::verify($this->container)->addAnswer(
-            $this->logicalAnd(
-                $this->isInstanceOf('Phake_Stubber_Answers_LambdaAnswer'),
-                $this->attributeEqualTo('answerLambda', $func)
-            )
-        );
+        Phake::verify($this->container)->addAnswer(Phake::capture($answer));
+
+        $this->assertInstanceOf('Phake_Stubber_Answers_LambdaAnswer', $answer);
+		$this->phakeAssertAttributeEqualTo($func, 'answerLambda', $answer);
     }
 
     /**
@@ -145,12 +141,23 @@ class Phake_Proxies_AnswerCollectionProxyTest extends TestCase
 
         $this->assertSame($this->proxy, $this->proxy->thenThrow($exception));
 
-        Phake::verify($this->container)->addAnswer(
-            $this->logicalAnd(
-                $this->isInstanceOf('Phake_Stubber_Answers_ExceptionAnswer'),
-                $this->attributeEqualTo('answer', $exception)
-            )
-        );
+        Phake::verify($this->container)->addAnswer(Phake::capture($answer));
+
+        $this->assertInstanceOf('Phake_Stubber_Answers_ExceptionAnswer', $answer);
+		$this->phakeAssertAttributeEqualTo($exception, 'answer', $answer);
     }
+
+    private function phakeAssertAttributeEqualTo($expectedValue, string $propertyName, $object)
+    {
+         $reflectionObject = new \ReflectionObject($object);
+         $reflectionProperty = $reflectionObject->getProperty($propertyName);
+         $reflectionProperty->setAccessible(true);
+         $value = $reflectionProperty->getValue($object);
+
+         $this->assertEquals($expectedValue, $value);
+    }
+
+	
+
 }
 

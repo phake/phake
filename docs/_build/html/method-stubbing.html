@@ -124,7 +124,7 @@ calls return predictable values. This project is all coming together and I am re
 
 <span class="x">    private $item3;</span>
 
-<span class="x">    public function setUp()</span>
+<span class="x">    public function setUp(): void</span>
 <span class="x">    {</span>
 <span class="x">        $this-&gt;item1 = Phake::mock(&#39;Item&#39;);</span>
 <span class="x">        $this-&gt;item2 = Phake::mock(&#39;Item&#39;);</span>
@@ -274,7 +274,7 @@ shows this flaw.</p>
 
 <span class="x">    private $item3;</span>
 
-<span class="x">    public function setUp()</span>
+<span class="x">    public function setUp(): void</span>
 <span class="x">    {</span>
 <span class="x">        $this-&gt;item1 = Phake::mock(&#39;Item&#39;);</span>
 <span class="x">        $this-&gt;item2 = Phake::mock(&#39;Item&#39;);</span>
@@ -354,7 +354,7 @@ stubs.</p>
 
 <span class="x">    private $item3;</span>
 
-<span class="x">    public function setUp()</span>
+<span class="x">    public function setUp(): void</span>
 <span class="x">    {</span>
 <span class="x">        $this-&gt;item1 = Phake::mock(&#39;Item&#39;);</span>
 <span class="x">        $this-&gt;item2 = Phake::mock(&#39;Item&#39;);</span>
@@ -447,7 +447,7 @@ stub will be for a call with a different <tt class="docutils literal"><span clas
 
 <span class="x">    private $item3;</span>
 
-<span class="x">    public function setUp()</span>
+<span class="x">    public function setUp(): void</span>
 <span class="x">    {</span>
 <span class="x">        $this-&gt;item1 = Phake::mock(&#39;Item&#39;);</span>
 <span class="x">        $this-&gt;item2 = Phake::mock(&#39;Item&#39;);</span>
@@ -493,7 +493,7 @@ of Phake.</p>
 
 <span class="x">    private $item3;</span>
 
-<span class="x">    public function setUp()</span>
+<span class="x">    public function setUp(): void</span>
 <span class="x">    {</span>
 <span class="x">        $this-&gt;item1 = Phake::mock(&#39;Item&#39;);</span>
 <span class="x">        $this-&gt;item2 = Phake::mock(&#39;Item&#39;);</span>

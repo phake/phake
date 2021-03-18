@@ -12,15 +12,14 @@
         }
     ],
     "require": {
-        "php": ">=7",
+        "php": "^7.1|^8.0",
         "sebastian/comparator": "^1.1|^2.0|^3.0|^4.0"
     },
     "require-dev": {
         "ext-soap": "*",
-        "doctrine/common": "2.3.*",
-        "phpunit/phpunit": "^7.0",
-        "hamcrest/hamcrest-php": "1.1.*",
-        "codeclimate/php-test-reporter": "dev-master"
+        "doctrine/common": "^3.0",
+        "phpunit/phpunit": "^7.0|^8.0",
+        "hamcrest/hamcrest-php": "1.1.*"
     },
     "config": {
         "bin-dir": "bin"

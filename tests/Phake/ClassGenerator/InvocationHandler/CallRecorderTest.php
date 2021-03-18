@@ -58,7 +58,7 @@ class Phake_ClassGenerator_InvocationHandler_CallRecorderTest extends TestCase
      */
     private $callRecorder;
 
-    public function setUp()
+    public function setUp(): void
     {
         Phake::initAnnotations($this);
         $this->handler    = new Phake_ClassGenerator_InvocationHandler_CallRecorder($this->callRecorder);

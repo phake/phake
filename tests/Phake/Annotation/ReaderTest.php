@@ -64,13 +64,13 @@ class Phake_Annotation_ReaderTest extends TestCase
 
     private $emptyVar2;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $reflectionClass = new ReflectionClass($this);
         $this->reader    = new Phake_Annotation_Reader($reflectionClass);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->reader    = null;
         $this->emptyVar  = null;

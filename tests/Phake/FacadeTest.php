@@ -70,7 +70,7 @@ class Phake_FacadeTest extends TestCase
     /**
      * Sets up the mock generator
      */
-    public function setup()
+    public function setUp(): void
     {
         Phake::initAnnotations($this);
         $this->mockGenerator = $this->getMockBuilder('Phake_ClassGenerator_MockClass')->getMock();
@@ -115,10 +115,11 @@ class Phake_FacadeTest extends TestCase
 
     /**
      * Tests that the mock generator will fail when given a class that does not exist.
-     * @expectedException InvalidArgumentException
      */
     public function testMockThrowsOnNonExistantClass()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $mockedClass = 'NonExistantClass';
 
         $this->facade->mock(

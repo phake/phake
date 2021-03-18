@@ -54,7 +54,7 @@ class Phake_Stubber_Answers_SelfAnswerTest extends TestCase
     /**
      * Sets up the answer fixture
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->answer = new Phake_Stubber_Answers_SelfAnswer();
     }
@@ -67,11 +67,10 @@ class Phake_Stubber_Answers_SelfAnswerTest extends TestCase
         $this->assertSame($testObj, call_user_func_array($callback, array()));
     }
 
-    /**
-     * @expectedException Phake_Stubber_Answers_InvalidAnswerException
-     */
     public function testThrowsOnStatic()
     {
+        $this->expectException(Phake_Stubber_Answers_InvalidAnswerException::class);
+
         $testObj = 'PhakeTest_StaticClass'; //class name indicates static method call
         $this->answer->getAnswerCallback($testObj, 'staticMethod');
     }
