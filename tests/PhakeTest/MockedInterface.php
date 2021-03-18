@@ -61,6 +61,8 @@ interface PhakeTest_MockedInterface
     public function referenceHinted(PhakeTest_MockedInterface &$hinted);
 
     public function referenceDefault(&$hinted = 'blah');
+
+    public function returnSelf(): self;
 }
 
 

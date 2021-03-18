@@ -486,7 +486,7 @@ class {$newClassName} {$extends}
         if (method_exists($method, 'hasReturnType') && $method->hasReturnType())
         {
             $returnType = $method->getReturnType();
-            $returnTypeName = $this->implementType($returnType, $mockedClassName);
+            $returnTypeName = $this->implementType($returnType, $method->getDeclaringClass());
             $returnHint = ': ' . $returnTypeName;
 
             if ($returnTypeName == 'void')
@@ -592,7 +592,7 @@ class {$newClassName} {$extends}
      *
      * @return string
      */
-    private function implementType(ReflectionType $type, $mockedClassName)
+    private function implementType(ReflectionType $type, ReflectionClass $selfClass)
     {
         $result = '';
         $nullable = '';
@@ -600,7 +600,7 @@ class {$newClassName} {$extends}
         if ($type instanceof ReflectionNamedType) {
             $result = $type->getName();
             if ($result == 'self') {
-                $result = $mockedClassName;
+                $result = $selfClass->getName();
             } elseif ($result != 'mixed' && $type->allowsNull()) {
                 $nullable = '?';
             }
@@ -609,7 +609,7 @@ class {$newClassName} {$extends}
             foreach ($type->getTypes() as $singleType) {
                 switch ($t = $singleType->getName()) {
                     case 'self':
-                        $types[] = $mockedClassName;
+                        $types[] = $selfClass->getName();
                         break;
                     case 'null':
                         break;
@@ -643,7 +643,7 @@ class {$newClassName} {$extends}
         try
         {
             if ($parameter->hasType()) {
-                $type = $this->implementType($parameter->getType(), $mockedClassName);
+                $type = $this->implementType($parameter->getType(), $parameter->getDeclaringClass());
             }
         }
 
