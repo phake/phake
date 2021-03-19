@@ -104,6 +104,26 @@ class Phake_Stubber_Answers_SmartDefaultAnswerTest extends TestCase
         $this->assertInstanceOf('PhakeTest_A', $cb());
         $this->assertInstanceOf('Phake_IMock', $cb());
     }
+
+    public function testUnionTypeReturn()
+    {
+        if (version_compare(phpversion(), '8.0.0') < 0) {
+            $this->markTestSkipped('Union types are not supported in PHP versions prior to 8.0');
+        }
+
+        $context = new PhakeTest_UnionTypes();
+        $cb = $this->answer->getAnswerCallback($context, 'unionReturn');
+
+        $this->assertTrue(in_array($cb(), [0, '']));
+    }
+
+    public function testSelfReturn()
+    {
+        $context = new PhakeTest_ScalarTypes();
+        $cb = $this->answer->getAnswerCallback($context, 'selfReturn');
+
+        $this->assertInstanceOf('PhakeTest_ScalarTypes', $cb());
+    }
 }
 
 
