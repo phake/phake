@@ -246,7 +246,7 @@ class {$newClassName} {$extends}
                 && !isset($implementedMethods[$methodName])
             ) {
                 $implementedMethods[$methodName] = $methodName;
-                $methodDefs .= $this->implementMethod($method, $mockedClass->getName(), $method->isStatic()) . "\n";
+                $methodDefs .= $this->implementMethod($method, $method->isStatic()) . "\n";
             }
         }
 
@@ -363,12 +363,11 @@ class {$newClassName} {$extends}
      * Creates the implementation of a single method
      *
      * @param \ReflectionMethod $method
-     * @param string           $mockedClassName
      * @param bool             $static
      *
      * @return string
      */
-    protected function implementMethod(\ReflectionMethod $method, $mockedClassName, $static = false)
+    protected function implementMethod(\ReflectionMethod $method, $static = false)
     {
         $modifiers = implode(
             ' ',
@@ -405,7 +404,7 @@ class {$newClassName} {$extends}
         $docComment = $method->getDocComment() ?: '';
         $methodDef = "
 	{$docComment}
-	{$modifiers} function {$reference}{$method->getName()}({$this->generateMethodParameters($method, $mockedClassName)}){$returnHint}
+	{$modifiers} function {$reference}{$method->getName()}({$this->generateMethodParameters($method)}){$returnHint}
 	{
 		\$__PHAKE_args = array();
 		{$this->copyMethodParameters($method)}
@@ -440,15 +439,14 @@ class {$newClassName} {$extends}
      * Generates the code for all the parameters of a given method.
      *
      * @param \ReflectionMethod $method
-     * @param string $mockedClassName
      *
      * @return string
      */
-    protected function generateMethodParameters(\ReflectionMethod $method, $mockedClassName)
+    protected function generateMethodParameters(\ReflectionMethod $method)
     {
         $parameters = array();
         foreach ($method->getParameters() as $parameter) {
-            $parameters[] = $this->implementParameter($parameter, $mockedClassName);
+            $parameters[] = $this->implementParameter($parameter);
         }
 
         return implode(', ', $parameters);
@@ -494,7 +492,7 @@ class {$newClassName} {$extends}
      * Generate the code for an individual type
      * 
      * @param \ReflectionType $type
-     * @param string $mockedClassName
+     * @param \ReflectionClass $selfClass
      *
      * @return string
      */
@@ -537,11 +535,10 @@ class {$newClassName} {$extends}
      * Generates the code for an individual method parameter.
      *
      * @param \ReflectionParameter $parameter
-     * @param string $mockedClassName
      *
      * @return string
      */
-    protected function implementParameter(\ReflectionParameter $parameter, $mockedClassName)
+    protected function implementParameter(\ReflectionParameter $parameter)
     {
         $default  = '';
         $type     = '';
