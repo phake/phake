@@ -49,6 +49,8 @@ abstract class Phake_Matchers_AbstractChainableArgumentMatcher implements Phake_
 {
     private $nextMatcher;
 
+    protected $useClones = false;
+
     public function setNextMatcher(Phake_Matchers_IChainableArgumentMatcher $nextMatcher)
     {
         $nextMatcher->assertPreviousMatcher($this);
@@ -70,5 +72,20 @@ abstract class Phake_Matchers_AbstractChainableArgumentMatcher implements Phake_
      */
     public function assertPreviousMatcher(Phake_Matchers_IChainableArgumentMatcher $matcher)
     {
+    }
+
+    public function isUsingClones()
+    {
+        return $this->useClones;
+    }
+
+    public function useClones()
+    {
+        $this->useClones = true;
+    }
+
+    public function useObjects()
+    {
+        $this->useClones = false;
     }
 }

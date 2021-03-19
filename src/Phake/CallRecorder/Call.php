@@ -65,6 +65,11 @@ class Phake_CallRecorder_Call
     private $arguments;
 
     /**
+     * @var array
+     */
+    private $clones;
+
+    /**
      * @param string|\Phake_IMock $context - The object the method was called on
      * @param string              $method - The method that was made
      * @param array               $arguments
@@ -74,6 +79,10 @@ class Phake_CallRecorder_Call
         $this->object     = $context;
         $this->method     = $method;
         $this->arguments  = $arguments;
+        $this->clones     = array();
+        foreach ($arguments as $argument) {
+            $this->clones[] = Phake::cloneArgument($argument);
+        }
     }
 
     /**
@@ -98,6 +107,14 @@ class Phake_CallRecorder_Call
     public function getArguments()
     {
         return $this->arguments;
+    }
+
+    /**
+     * @return array
+     */
+    public function getClones()
+    {
+        return $this->clones;
     }
 
     /**

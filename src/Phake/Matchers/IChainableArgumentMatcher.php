@@ -81,6 +81,12 @@ interface Phake_Matchers_IChainableArgumentMatcher
     public function assertPreviousMatcher(Phake_Matchers_IChainableArgumentMatcher $matcher);
 
     /**
+     * Returns whether matcher should use cloned objects or original ones
+     * @return bool
+     */
+    public function isUsingClones();
+
+    /**
      * Returns a human readable description of the argument matcher
      * @return string
      */

@@ -74,6 +74,11 @@ class Phake
 	private static $matchersFactory;
 
     /**
+     * @var callable
+     */
+    public static $argumentCloner;
+
+    /**
      * Constants identifying supported clients
      */
     const CLIENT_DEFAULT = 'DEFAULT';
@@ -486,6 +491,22 @@ class Phake
 
 
     /**
+     * Returns a capturing matcher that is bound to store ALL of its calls in the variable passed in.
+     *
+     * $value will initially be set to an empty array;
+     *
+     * @param mixed $value - Will be set to the cloned values of the called argument.
+     *
+     * @return Phake_Matchers_ArgumentCaptor
+     */
+    public static function captureClones(&$value)
+    {
+        $captor = self::captureAll($value);
+        $captor->useClones();
+        return $captor;
+    }
+
+    /**
      * Returns a setter matcher that will set a reference parameter passed in as an argument to the
      * given value.
      *
@@ -717,5 +738,17 @@ class Phake
     public static function makeStaticsVisible(Phake_IMock $mock)
     {
         return new Phake_Proxies_StaticVisibilityProxy($mock);
+    }
+
+    public static function cloneArgument(&$arg)
+    {
+        if (!is_object($arg)) {
+            return $arg;
+        }
+
+        if(is_callable(static::$argumentCloner)) {
+            return call_user_func(static::$argumentCloner, $arg);
+        }
+        return clone $arg;
     }
 }
