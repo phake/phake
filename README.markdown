@@ -48,6 +48,6 @@ Links
 There are a few links that have information on how you can utilize Phake.
 
 * [Phake Documentation](http://phake.readthedocs.org/en/latest/)
-* [Initial Phake Announcement](http://digitalsandwich.com/archives/84-introducing-phake-mocking-framework.html)
+* [Initial Phake Announcement](https://web.archive.org/web/20101230174850/http://digitalsandwich.com/archives/84-introducing-phake-mocking-framework.html)
 
 If you have an article or tutorial that you would like to share, feel free to open an [issue](https://github.com/mlively/Phake/issues) on github and I will add it to this list
