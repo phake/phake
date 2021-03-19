@@ -889,4 +889,154 @@ class Phake_ClassGenerator_MockClassTest extends TestCase
         $mock = Phake::mock('PhakeTest_NullableTypes');
         $this->assertTrue($mock->objectReturn() instanceof PhakeTest_A);
     }
+
+    public function testStubbingUnionTypes()
+    {
+        if (version_compare(phpversion(), '8.0.0') < 0) {
+            $this->markTestSkipped('Union types are not supported in PHP versions prior to 8.0');
+        }
+
+        $this->assertInstanceOf('PhakeTest_UnionTypes', Phake::mock('PhakeTest_UnionTypes'));
+    }
+
+    public function testStubbingUnionParameterHints()
+    {
+        if (version_compare(phpversion(), '8.0.0') < 0) {
+            $this->markTestSkipped('Union types are not supported in PHP versions prior to 8.0');
+        }
+
+        $mock = Phake::mock('PhakeTest_UnionTypes');
+
+        try {
+            $mock->unionParam(1);
+            $mock->unionParam('foo');
+        } catch (TypeError $e) {
+            $this->fail('Expected stubbing objectParameter to accept 1 and \'foo\'');
+        }
+        Phake::verify($mock, Phake::times(1))->unionParam(1);
+        Phake::verify($mock, Phake::times(1))->unionParam('foo');
+    }
+
+    public function testStubbingUnionParameterHintsWrongType()
+    {
+        if (version_compare(phpversion(), '8.0.0') < 0) {
+            $this->markTestSkipped('Union types are not supported in PHP versions prior to 8.0');
+        }
+
+        $mock = Phake::mock('PhakeTest_UnionTypes');
+
+        try {
+            $mock->unionParam(null);
+        } catch (TypeError $e) {
+            $this->assertTrue(true);
+            return true;
+        }
+        $this->fail('Expected TypeError');
+    }
+
+    public function testStubbingNullableUnionParameterHints()
+    {
+        if (version_compare(phpversion(), '8.0.0') < 0) {
+            $this->markTestSkipped('Union types are not supported in PHP versions prior to 8.0');
+        }
+
+        $mock = Phake::mock('PhakeTest_UnionTypes');
+
+        try {
+            $mock->unionParamNullable(1);
+            $mock->unionParamNullable('foo');
+            $mock->unionParamNullable(null);
+        } catch (TypeError $e) {
+            $this->fail('Expected stubbing objectParameter to accept 1, \'foo\', and null');
+        }
+        Phake::verify($mock, Phake::times(1))->unionParamNullable(1);
+        Phake::verify($mock, Phake::times(1))->unionParamNullable('foo');
+        Phake::verify($mock, Phake::times(1))->unionParamNullable(null);
+    }
+
+    public function testStubbingUnionReturnType()
+    {
+        if (version_compare(phpversion(), '8.0.0') < 0) {
+            $this->markTestSkipped('Union types are not supported in PHP versions prior to 8.0');
+        }
+
+        $mock = Phake::mock('PhakeTest_UnionTypes');
+        Phake::when($mock)->unionReturn()->thenReturn(1)->thenreturn('foo');
+
+        try {
+            $this->assertSame(1, $mock->unionReturn());
+            $this->assertSame('foo', $mock->unionReturn());
+        } catch (TypeError $e) {
+            $this->fail('Expected stubbing return 1 and \'foo\'');
+        }
+    }
+
+    public function testStubbingUnionReturnWrongType()
+    {
+        if (version_compare(phpversion(), '8.0.0') < 0) {
+            $this->markTestSkipped('Union types are not supported in PHP versions prior to 8.0');
+        }
+
+        $mock = Phake::mock('PhakeTest_UnionTypes');
+        Phake::when($mock)->unionReturn()->thenReturn(null);
+
+        try {
+            $mock->unionReturn();
+        } catch (TypeError $e) {
+            $this->assertTrue(true);
+            return true;
+        }
+        $this->fail('Expected stubbing return 1 and \'foo\'');
+    }
+
+    public function testStubbingUnionReturnNullableType()
+    {
+        if (version_compare(phpversion(), '8.0.0') < 0) {
+            $this->markTestSkipped('Union types are not supported in PHP versions prior to 8.0');
+        }
+
+        $mock = Phake::mock('PhakeTest_UnionTypes');
+        Phake::when($mock)->unionReturnNullable()->thenReturn(1)->thenreturn('foo')->thenReturn(null);
+
+        try {
+            $this->assertSame(1, $mock->unionReturnNullable());
+            $this->assertSame('foo', $mock->unionReturnNullable());
+            $this->assertSame(null, $mock->unionReturnNullable());
+        } catch (TypeError $e) {
+            $this->fail('Expected stubbing return 1 and \'foo\'');
+        }
+    }
+
+    public function testStubbingUnionSelfParameterHints()
+    {
+        if (version_compare(phpversion(), '8.0.0') < 0) {
+            $this->markTestSkipped('Union types are not supported in PHP versions prior to 8.0');
+        }
+
+        $mock = Phake::mock('PhakeTest_UnionTypes');
+
+        try {
+            $mock->unionParamWithSelf($mock);
+        } catch (TypeError $e) {
+            $this->fail('Expected stubbing parameter to accept self');
+        }
+
+        Phake::verify($mock, Phake::times(1))->unionParamWithSelf($mock);
+    }
+
+    public function testStubbingUnionReturnWithSelf()
+    {
+        if (version_compare(phpversion(), '8.0.0') < 0) {
+            $this->markTestSkipped('Union types are not supported in PHP versions prior to 8.0');
+        }
+
+        $mock = Phake::mock('PhakeTest_UnionTypes');
+        Phake::when($mock)->unionReturnWithSelf()->thenReturnSelf();
+
+        try {
+            $this->assertSame($mock, $mock->unionReturnWithSelf());
+        } catch (TypeError $e) {
+            $this->fail('Expected stubbing return self');
+        }
+    }
 }
