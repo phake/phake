@@ -385,7 +385,7 @@ class {$newClassName} {$extends}
         $returnHint = '';
         $nullReturn = 'null';
         $resultReturn = '$__PHAKE_result';
-        if (method_exists($method, 'hasReturnType') && $method->hasReturnType())
+        if ($method->hasReturnType())
         {
             $returnType = $method->getReturnType();
             $returnTypeName = $this->implementType($returnType, $method->getDeclaringClass());
@@ -464,7 +464,7 @@ class {$newClassName} {$extends}
         $parameterCount = count($method->getParameters());
         foreach ($method->getParameters() as $parameter) {
             $pos = $parameter->getPosition();
-            if (method_exists($parameter, 'isVariadic') && $parameter->isVariadic()) {
+            if ($parameter->isVariadic()) {
                 $parameterCount--;
                 $variadicParameter = $parameter->getName();
                 break;
@@ -561,7 +561,7 @@ class {$newClassName} {$extends}
         $variadic = '';
         if ($parameter->isDefaultValueAvailable()) {
             $default = ' = ' . var_export($parameter->getDefaultValue(), true);
-        } elseif (method_exists($parameter, 'isVariadic') && $parameter->isVariadic()) {
+        } elseif ($parameter->isVariadic()) {
             $variadic = '...';
         } elseif ($parameter->isOptional()) {
             $default = ' = null';

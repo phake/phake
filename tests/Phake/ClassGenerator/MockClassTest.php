@@ -625,10 +625,6 @@ class Phake_ClassGenerator_MockClassTest extends TestCase
      */
     public function testCallableTypeHint()
     {
-        if (!version_compare(PHP_VERSION, '5.4', '>=')) {
-            $this->markTestSkipped('callable typehint require PHP 5.4');
-        }
-
         $this->assertInstanceOf('PhakeTest_CallableTypehint', Phake::mock('PhakeTest_CallableTypehint'));
     }
 
@@ -688,10 +684,6 @@ class Phake_ClassGenerator_MockClassTest extends TestCase
 
     public function testStubbingVariadics()
     {
-        if (version_compare(phpversion(), '5.6.0') < 0) {
-            $this->markTestSkipped('Variadics are not supported in PHP versions prior to 5.6');
-        }
-
         $mock = Phake::mock('PhakeTest_Variadic');
 
         Phake::when($mock)->variadicMethod->thenCallParent();
@@ -701,10 +693,6 @@ class Phake_ClassGenerator_MockClassTest extends TestCase
 
     public function testMockingVariadics()
     {
-        if (version_compare(phpversion(), '5.6.0') < 0) {
-            $this->markTestSkipped('Variadics are not supported in PHP versions prior to 5.6');
-        }
-
         $mock = Phake::mock('PhakeTest_Variadic');
 
         $mock->variadicMethod(1, 2, 3, 4, 5, 6);
@@ -714,10 +702,6 @@ class Phake_ClassGenerator_MockClassTest extends TestCase
 
     public function testStubbingScalarReturnHints()
     {
-        if (version_compare(phpversion(), '7.0.0RC1') < 0) {
-            $this->markTestSkipped('Scalar type hints are not supported in PHP versions prior to 7.0');
-        }
-
         $mock = Phake::mock('PhakeTest_ScalarTypes');
 
         Phake::when($mock)->scalarHints->thenReturn(2);
@@ -727,10 +711,6 @@ class Phake_ClassGenerator_MockClassTest extends TestCase
 
     public function testStubbingScalarReturnsWrongType()
     {
-        if (version_compare(phpversion(), '7.0.0RC1') < 0) {
-            $this->markTestSkipped('Scalar type hints are not supported in PHP versions prior to 7.0');
-        }
-
         $mock = Phake::mock('PhakeTest_ScalarTypes');
 
         Phake::when($mock)->scalarHints->thenReturn(array());
@@ -748,10 +728,6 @@ class Phake_ClassGenerator_MockClassTest extends TestCase
 
     public function testDefaultStubChanged()
     {
-        if (version_compare(phpversion(), '7.0.0RC1') < 0) {
-            $this->markTestSkipped('Scalar type hints are not supported in PHP versions prior to 7.0');
-        }
-
         $mock = Phake::mock('PhakeTest_ScalarTypes');
 
         $mock->scalarHints(1, 1);
@@ -761,10 +737,6 @@ class Phake_ClassGenerator_MockClassTest extends TestCase
 
     public function testVoidStubReturnsProperly()
     {
-        if (version_compare(phpversion(), '7.1.0') < 0) {
-            $this->markTestSkipped('Void type hints are not supported in PHP versions prior to 7.1');
-        }
-
         $mock = Phake::mock('PhakeTest_VoidType');
 
         $this->assertNull($mock->voidMethod());
@@ -774,10 +746,6 @@ class Phake_ClassGenerator_MockClassTest extends TestCase
 
     public function testVoidStubThrowsException()
     {
-        if (version_compare(phpversion(), '7.1.0') < 0) {
-            $this->markTestSkipped('Void type hints are not supported in PHP versions prior to 7.1');
-        }
-
         $mock = Phake::mock('PhakeTest_VoidType');
 
         $expectedException = new Exception("Test Exception");
@@ -793,10 +761,6 @@ class Phake_ClassGenerator_MockClassTest extends TestCase
 
     public function testVoidStubCanCallParent()
     {
-        if (version_compare(phpversion(), '7.1.0') < 0) {
-            $this->markTestSkipped('Void type hints are not supported in PHP versions prior to 7.1');
-        }
-
         $mock = Phake::mock('PhakeTest_VoidType');
 
         Phake::when($mock)->voidMethod->thenCallParent();
@@ -808,10 +772,6 @@ class Phake_ClassGenerator_MockClassTest extends TestCase
 
     public function testStubbingNotNullableReturnHint()
     {
-        if (version_compare(phpversion(), '7.1.0') < 0) {
-            $this->markTestSkipped('Nullable return hints are not supported in PHP versions prior to 7.1');
-        }
-
         $mock = Phake::mock('PhakeTest_ScalarTypes');
 
         Phake::when($mock)->objectReturn->thenReturn(null);
@@ -826,10 +786,6 @@ class Phake_ClassGenerator_MockClassTest extends TestCase
 
     public function testStubbingNullableReturnHints()
     {
-        if (version_compare(phpversion(), '7.1.0') < 0) {
-            $this->markTestSkipped('Nullable return hints are not supported in PHP versions prior to 7.1');
-        }
-
         $mock = Phake::mock('PhakeTest_NullableTypes');
         Phake::when($mock)->objectReturn->thenReturn(null);
 
@@ -844,10 +800,6 @@ class Phake_ClassGenerator_MockClassTest extends TestCase
 
     public function testStubbingNullableParameterHints()
     {
-        if (version_compare(phpversion(), '7.1.0') < 0) {
-            $this->markTestSkipped('Nullable return hints are not supported in PHP versions prior to 7.1');
-        }
-
         $mock = Phake::mock('PhakeTest_NullableTypes');
 
         try {
@@ -861,10 +813,6 @@ class Phake_ClassGenerator_MockClassTest extends TestCase
 
     public function testStubbingNullableReturnWrongType()
     {
-        if (version_compare(phpversion(), '7.1.0') < 0) {
-            $this->markTestSkipped('Nullable return hints are not supported in PHP versions prior to 7.1');
-        }
-
         $mock = Phake::mock('PhakeTest_NullableTypes');
         Phake::when($mock)->objectReturn->thenReturn(array());
 
@@ -882,10 +830,6 @@ class Phake_ClassGenerator_MockClassTest extends TestCase
 
     public function testDefaultReturnType()
     {
-        if (version_compare(phpversion(), '7.1.0') < 0) {
-            $this->markTestSkipped('Nullable return hints are not supported in PHP versions prior to 7.1');
-        }
-
         $mock = Phake::mock('PhakeTest_NullableTypes');
         $this->assertTrue($mock->objectReturn() instanceof PhakeTest_A);
     }

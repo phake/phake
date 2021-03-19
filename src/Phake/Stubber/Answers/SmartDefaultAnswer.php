@@ -61,7 +61,7 @@ class Phake_Stubber_Answers_SmartDefaultAnswer implements Phake_Stubber_IAnswer
 
         $defaultAnswer = null;
 
-        if (method_exists($method, 'hasReturnType') && $method->hasReturnType())
+        if ($method->hasReturnType())
         {
             $returnType = $method->getReturnType();
             $typeNames = $returnType instanceof \ReflectionNamedType ? [ $returnType->getName() ] : array_map(function($t) { return $t->getName(); }, $returnType->getTypes());

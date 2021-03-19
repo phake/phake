@@ -59,10 +59,6 @@ class Phake_Stubber_Answers_SmartDefaultAnswerTest extends TestCase
      */
     public function setUp(): void
     {
-        if (version_compare(phpversion(), '7.0.0RC1') < 0)
-        {
-            $this->markTestSkipped('Scalar type hints are not supported in PHP versions prior to 7.0');
-        }
         $this->answer = new Phake_Stubber_Answers_SmartDefaultAnswer();
     }
 
