@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\Proxies;
 /*
  * Phake - Mocking Framework
  *
@@ -47,14 +49,14 @@
  * 
  * @author Mike Lively <m@digitalsandwich.com>
  */
-interface Phake_Proxies_AnswerProxyInterface
+interface AnswerProxyInterface
 {
     /**
      * Binds a static answer to the method and object in the proxied binder.
      *
      * @param mixed $value
      *
-     * @return Phake_Stubber_IAnswerContainer
+     * @return \Phake\Stubber\IAnswerContainer
      */
     public function thenReturn($value);
 
@@ -64,8 +66,8 @@ interface Phake_Proxies_AnswerProxyInterface
      * @param callback $value
      *
      * @deprecated Use thenReturnCallback instead.
-     * @throws InvalidArgumentException
-     * @return Phake_Stubber_IAnswerContainer
+     * @throws \InvalidArgumentException
+     * @return \Phake\Stubber\IAnswerContainer
      */
     public function thenGetReturnByLambda($value);
 
@@ -74,33 +76,33 @@ interface Phake_Proxies_AnswerProxyInterface
      *
      * @param callback $value
      *
-     * @throws InvalidArgumentException
-     * @return Phake_Stubber_IAnswerContainer
+     * @throws \InvalidArgumentException
+     * @return \Phake\Stubber\IAnswerContainer
      */
     public function thenReturnCallback($value);
 
 
     /**
      * Binds a delegated call that will call a given method's parent.
-     * @return Phake_Stubber_IAnswerContainer
+     * @return \Phake\Stubber\IAnswerContainer
      */
     public function thenCallParent();
 
     /**
      * Binds an exception answer to the method and object in the proxied binder.
      *
-     * @param Exception $value
+     * @param \Exception $value
      *
-     * @return Phake_Stubber_IAnswerContainer
+     * @return \Phake\Stubber\IAnswerContainer
      */
-    public function thenThrow(Exception $value);
+    public function thenThrow(\Exception $value);
 
     /**
      * Binds a delegated call that will call a given method's parent while capturing that value to the passed in variable.
      *
      * @param mixed $captor
      *
-     * @return Phake_Stubber_IAnswerContainer
+     * @return \Phake\Stubber\IAnswerContainer
      */
     public function captureReturnTo(&$captor);
 

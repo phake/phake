@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\CallRecorder;
 /*
  * Phake - Mocking Framework
  *
@@ -43,11 +45,11 @@
  */
 
 /**
- * An api to process verification failures found by Phake_CallRecorder_Verifier
+ * An api to process verification failures found by Verifier
  *
- * @see Phake_CallRecorder_Verifier
+ * @see Verifier
  */
-interface Phake_CallRecorder_IVerificationFailureHandler
+interface IVerificationFailureHandler
 {
     public function verificationFailed(
         $object,

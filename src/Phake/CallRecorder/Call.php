@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\CallRecorder;
 /* 
  * Phake - Mocking Framework
  * 
@@ -47,7 +49,7 @@
  *
  * @author Mike Lively <m@digitalsandwich.com>
  */
-class Phake_CallRecorder_Call
+class Call
 {
     /**
      * @var object
@@ -65,7 +67,7 @@ class Phake_CallRecorder_Call
     private $arguments;
 
     /**
-     * @param string|\Phake_IMock $context - The object the method was called on
+     * @param string|\Phake\IMock $context - The object the method was called on
      * @param string              $method - The method that was made
      * @param array               $arguments
      */
@@ -105,13 +107,13 @@ class Phake_CallRecorder_Call
      */
     public function __toString()
     {
-        $converter = new Phake_String_Converter();
+        $converter = new \Phake\String\Converter();
         $arguments = array();
         foreach ($this->arguments as $argument) {
             $arguments[] = $converter->convertToString($argument);
         }
 
-        $name = Phake::getName($this->object);
+        $name = \Phake::getName($this->object);
         $access = is_string($this->object) ? '::' : '->';
         return "{$name}{$access}{$this->method}(" . implode(', ', $arguments) . ")";
     }

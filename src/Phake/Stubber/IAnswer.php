@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\Stubber;
 /* 
  * Phake - Mocking Framework
  * 
@@ -45,7 +47,7 @@
 /**
  * Defines an interface for answers
  */
-interface Phake_Stubber_IAnswer
+interface IAnswer
 {
     /**
      * Returns the answer that should be used when a method stubbed to this answer is called.

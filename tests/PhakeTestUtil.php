@@ -47,25 +47,25 @@
  */
 class PhakeTestUtil
 {
-    public static function setCallRecorder(Phake_IMock $mock, Phake_CallRecorder_Recorder $recorder)
+    public static function setCallRecorder(Phake\IMock $mock, Phake\CallRecorder\Recorder $recorder)
     {
         Phake::when(static::getMockedInfo($mock))->getCallRecorder()->thenReturn($recorder);
     }
 
-    public static function setStubMapper(Phake_IMock $mock, Phake_Stubber_StubMapper $stubMapper)
+    public static function setStubMapper(Phake\IMock $mock, Phake\Stubber\StubMapper $stubMapper)
     {
         Phake::when(static::getMockedInfo($mock))->getStubMapper()->thenReturn($stubMapper);
     }
 
     /**
-     * @param Phake_IMock $mock
-     * @return Phake_Mock_Info
+     * @param Phake\IMock $mock
+     * @return Phake\Mock\Info
      */
-    public static function getMockedInfo(Phake_IMock $mock)
+    public static function getMockedInfo(Phake\IMock $mock)
     {
         if (empty($mock->__PHAKE_info))
         {
-            $mock->__PHAKE_info = Phake::mock('Phake_Mock_Info');
+            $mock->__PHAKE_info = Phake::mock(Phake\Mock\Info::class);
         }
 
         return $mock->__PHAKE_info;

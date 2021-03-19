@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\CallRecorder;
 /* 
  * Phake - Mocking Framework
  * 
@@ -45,7 +47,7 @@
 /**
  * Verifies whether given positions are given in order.
  */
-class Phake_CallRecorder_OrderVerifier
+class OrderVerifier
 {
     /**
      * @param array $calls
@@ -62,7 +64,7 @@ class Phake_CallRecorder_OrderVerifier
 
             $callFound = false;
             foreach ($callList as $call) {
-                /* @var $call Phake_CallRecorder_Position */
+                /* @var $call Position */
                 if ($call->thisIsAfter($call2)) {
                     $callFound = true;
                     $call2     = $call;

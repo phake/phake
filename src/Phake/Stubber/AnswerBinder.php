@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\Stubber;
 /* 
  * Phake - Mocking Framework
  * 
@@ -47,25 +49,25 @@
  *
  * @author Mike Lively <m@digitalsandwich.com>
  */
-class Phake_Stubber_AnswerBinder implements Phake_Stubber_IAnswerBinder
+class AnswerBinder implements IAnswerBinder
 {
     /**
-     * @var Phake_Matchers_MethodMatcher
+     * @var \Phake\Matchers\MethodMatcher
      */
     private $matcher;
 
     /**
-     * @var Phake_Stubber_StubMapper
+     * @var StubMapper
      */
     private $stubMapper;
 
     /**
      * Creates a new Answer Binder
      *
-     * @param Phake_Matchers_MethodMatcher $matcher
-     * @param Phake_Stubber_StubMapper     $stubMapper
+     * @param \Phake\Matchers\MethodMatcher $matcher
+     * @param StubMapper     $stubMapper
      */
-    public function __construct(Phake_Matchers_MethodMatcher $matcher, Phake_Stubber_StubMapper $stubMapper)
+    public function __construct(\Phake\Matchers\MethodMatcher $matcher, StubMapper $stubMapper)
     {
         $this->matcher    = $matcher;
         $this->stubMapper = $stubMapper;
@@ -74,16 +76,16 @@ class Phake_Stubber_AnswerBinder implements Phake_Stubber_IAnswerBinder
     /**
      * Binds an answer to the the classes
      *
-     * @param Phake_Stubber_IAnswer $answer
+     * @param IAnswer $answer
      *
-     * @return Phake_Proxies_AnswerCollectionProxy
+     * @return \Phake\Proxies\AnswerCollectionProxy
      */
-    public function bindAnswer(Phake_Stubber_IAnswer $answer)
+    public function bindAnswer(IAnswer $answer)
     {
-        $collection = new Phake_Stubber_AnswerCollection($answer);
+        $collection = new AnswerCollection($answer);
         $this->stubMapper->mapStubToMatcher($collection, $this->matcher);
 
-        return new Phake_Proxies_AnswerCollectionProxy($collection);
+        return new \Phake\Proxies\AnswerCollectionProxy($collection);
     }
 }
 

@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\ClassGenerator;
 /*
  * Phake - Mocking Framework
  *
@@ -46,7 +48,7 @@
 /**
  * Create instance of a class
  */
-interface Phake_ClassGenerator_IInstantiator
+interface IInstantiator
 {
     /**
      * @param string $className

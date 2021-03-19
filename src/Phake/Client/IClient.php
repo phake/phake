@@ -1,5 +1,7 @@
 <?php
 
+namespace Phake\Client;
+
 /*
  * Phake - Mocking Framework
  * 
@@ -46,15 +48,15 @@
 /**
  * Defines the interface for Phake clients.
  */
-interface Phake_Client_IClient
+interface IClient
 {
     /**
      * Handles the processing of a verifier result. When the verifier is true it should return the matched calls.
      * The behavior for if the verifier is false is up to the client.
      *
-     * @param Phake_CallRecorder_VerifierResult $result
+     * @param \Phake\CallRecorder\VerifierResult $result
      */
-    public function processVerifierResult(Phake_CallRecorder_VerifierResult $result);
+    public function processVerifierResult(\Phake\CallRecorder\VerifierResult $result);
 
     /**
      * Used to notify the client that a mock has been frozen.

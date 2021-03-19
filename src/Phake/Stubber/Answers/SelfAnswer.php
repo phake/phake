@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\Stubber\Answers;
 /*
  * Phake - Mocking Framework
  *
@@ -42,7 +44,7 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-class Phake_Stubber_Answers_SelfAnswer implements Phake_Stubber_IAnswer
+class SelfAnswer implements \Phake\Stubber\IAnswer
 {
 
     /**
@@ -55,7 +57,7 @@ class Phake_Stubber_Answers_SelfAnswer implements Phake_Stubber_IAnswer
     {
         if (!is_object($context))
         {
-            throw new Phake_Stubber_Answers_InvalidAnswerException("Invalid context for " . __CLASS__ . ". You can only use this answer on non-static methods");
+            throw new InvalidAnswerException("Invalid context for " . __CLASS__ . ". You can only use this answer on non-static methods");
         }
         return function () use ($context)
         {

@@ -1,4 +1,7 @@
 <?php
+
+namespace Phake\Matchers;
+
 /*
  * Phake - Mocking Framework
  *
@@ -42,15 +45,16 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+use Phake;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Tests the argument captor functionality.
  */
-class Phake_Matchers_ArgumentCaptorTest extends TestCase
+class ArgumentCaptorTest extends TestCase
 {
     /**
-     * @var Phake_Matchers_ArgumentCaptor
+     * @var ArgumentCaptor
      */
     private $captor;
 
@@ -64,7 +68,7 @@ class Phake_Matchers_ArgumentCaptorTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->captor = new Phake_Matchers_ArgumentCaptor($this->refVariable);
+        $this->captor = new ArgumentCaptor($this->refVariable);
     }
 
     /**
@@ -83,7 +87,7 @@ class Phake_Matchers_ArgumentCaptorTest extends TestCase
      */
     public function testConditionalCapturing()
     {
-        $matcher = Phake::mock('Phake_Matchers_IChainableArgumentMatcher');
+        $matcher = Phake::mock(IChainableArgumentMatcher::class);
         Phake::when($matcher)->doArgumentsMatch->thenReturn(true);
 
         $this->captor->when($matcher);
@@ -101,8 +105,8 @@ class Phake_Matchers_ArgumentCaptorTest extends TestCase
      */
     public function testConditionalCapturingWontCapture()
     {
-        $matcher = Phake::mock('Phake_Matchers_IChainableArgumentMatcher');
-        Phake::when($matcher)->doArgumentsMatch->thenThrow(new Phake_Exception_MethodMatcherException());
+        $matcher = Phake::mock(IChainableArgumentMatcher::class);
+        Phake::when($matcher)->doArgumentsMatch->thenThrow(new Phake\Exception\MethodMatcherException());
 
         $this->captor->when($matcher);
 
@@ -112,7 +116,7 @@ class Phake_Matchers_ArgumentCaptorTest extends TestCase
             $this->captor->doArgumentsMatch($value);
         }
         //Need to atually catch the exception to validate that the refrence didn't change
-        catch (Phake_Exception_MethodMatcherException $e)
+        catch (Phake\Exception\MethodMatcherException $e)
         {
             $this->assertNull($this->refVariable);
         }
@@ -120,8 +124,8 @@ class Phake_Matchers_ArgumentCaptorTest extends TestCase
 
     public function testConditionalCaptureFailureUpdatesMessage()
     {
-        $matcher = Phake::mock('Phake_Matchers_IChainableArgumentMatcher');
-        Phake::when($matcher)->doArgumentsMatch->thenThrow(new Phake_Exception_MethodMatcherException("test"));
+        $matcher = Phake::mock(IChainableArgumentMatcher::class);
+        Phake::when($matcher)->doArgumentsMatch->thenThrow(new Phake\Exception\MethodMatcherException("test"));
 
         $this->captor->when($matcher);
 
@@ -131,7 +135,7 @@ class Phake_Matchers_ArgumentCaptorTest extends TestCase
             $this->captor->doArgumentsMatch($value);
         }
             //Need to atually catch the exception to validate that the refrence didn't change
-        catch (Phake_Exception_MethodMatcherException $e)
+        catch (Phake\Exception\MethodMatcherException $e)
         {
             $this->assertStringStartsWith("Failed in Phake::capture()->when()\n", $e->getMessage(), "The methodmatcherexception is not prepended with capture info");
         }
@@ -152,7 +156,7 @@ class Phake_Matchers_ArgumentCaptorTest extends TestCase
 
     public function testToStringWithConditional()
     {
-        $matcher = Phake::mock('Phake_Matchers_IChainableArgumentMatcher');
+        $matcher = Phake::mock(Phake\Matchers\IChainableArgumentMatcher::class);
         Phake::when($matcher)->__toString()->thenReturn('an argument');
         $this->captor->when($matcher);
         $this->assertEquals('<captured parameter that is an argument>', $this->captor->__toString());
@@ -160,9 +164,9 @@ class Phake_Matchers_ArgumentCaptorTest extends TestCase
 
     public function testBindAllCapturedValuePreMatch()
     {
-        $value1 = array(new stdClass());
-        $value2 = array(new stdClass());
-        $value3 = array(new stdClass());
+        $value1 = array(new \stdClass());
+        $value2 = array(new \stdClass());
+        $value3 = array(new \stdClass());
 
         $this->captor->bindAllCapturedValues($allCaptures);
 
@@ -177,9 +181,9 @@ class Phake_Matchers_ArgumentCaptorTest extends TestCase
 
     public function testBindAllCapturedValuePostMatch()
     {
-        $value1 = array(new stdClass());
-        $value2 = array(new stdClass());
-        $value3 = array(new stdClass());
+        $value1 = array(new \stdClass());
+        $value2 = array(new \stdClass());
+        $value3 = array(new \stdClass());
 
         $this->captor->doArgumentsMatch($value1);
         $this->captor->doArgumentsMatch($value2);

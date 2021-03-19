@@ -1,5 +1,7 @@
 <?php
 
+namespace Phake\Mock;
+
 /*
  * Phake - Mocking Framework
  *
@@ -43,30 +45,31 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+use Phake;
 use PHPUnit\Framework\TestCase;
 
-class Phake_Mock_FreezerTest extends TestCase
+class FreezerTest extends TestCase
 {
     /**
-     * @var Phake_Mock_Freezer
+     * @var Phake\Mock\Freezer
      */
     private $freezer;
 
     /**
      * @Mock
-     * @var Phake_Mock_Info
+     * @var Phake\Mock\Info
      */
     private $mockInfo;
 
     public function setUp(): void
     {
         Phake::initAnnotations($this);
-        $this->freezer    = new Phake_Mock_Freezer();
+        $this->freezer    = new Freezer();
     }
 
     public function testFreeze()
     {
-        $client = Phake::mock('Phake_Client_IClient');
+        $client = Phake::mock(Phake\Client\IClient::class);
         $this->freezer->freeze($this->mockInfo, $client);
 
         Phake::verify($client)->processObjectFreeze();

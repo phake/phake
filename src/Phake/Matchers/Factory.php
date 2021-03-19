@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\Matchers;
 /* 
  * Phake - Mocking Framework
  * 
@@ -43,10 +45,10 @@
  */
 
 /**
- * Creates (or passes through) instances of Phake_Matchers_IArgumentMatcher using Phake's
+ * Creates (or passes through) instances of IArgumentMatcher using Phake's
  * translation rules
  */
-class Phake_Matchers_Factory
+class Factory
 {
     private $comparatorFactory;
 
@@ -58,34 +60,34 @@ class Phake_Matchers_Factory
     /**
      * Creates an argument matcher based on the given value.
      *
-     * If the given values is already an instance of Phake_Matchers_IChainableArgumentMatcher it is passed
+     * If the given values is already an instance of IChainableArgumentMatcher it is passed
      * through. If it is an instance of PHPUnit_Framework_Constraint a PHPUnit adapter is returned.
      * If it is an instance of Hamcrest_Matcher a Hamcrest adapter is returned. For everything else
      * a EqualsMatcher is returned set to the passed in value.
      *
      * @param mixed $argument
      *
-     * @return Phake_Matchers_IChainableArgumentMatcher
+     * @return IChainableArgumentMatcher
      */
-    public function createMatcher($argument, Phake_Matchers_IChainableArgumentMatcher $nextMatcher = null)
+    public function createMatcher($argument, IChainableArgumentMatcher $nextMatcher = null)
     {
         $return = null;
-        if ($argument instanceof Phake_Matchers_IChainableArgumentMatcher) {
+        if ($argument instanceof IChainableArgumentMatcher) {
             $return = $argument;
         } elseif ($argument instanceof PHPUnit_Framework_Constraint) {
-            $return = new Phake_Matchers_PHPUnitConstraintAdapter($argument);
+            $return = new PHPUnitConstraintAdapter($argument);
         } elseif ($argument instanceof \PHPUnit\Framework\Constraint\Constraint) {
             if (7 <= \PHPUnit\Runner\Version::id()) {
-                $return = new Phake_Matchers_PHPUnit7ConstraintAdapter($argument);
+                $return = new PHPUnit7ConstraintAdapter($argument);
             } else {
-                $return = new Phake_Matchers_PHPUnit6ConstraintAdapter($argument);
+                $return = new PHPUnit6ConstraintAdapter($argument);
             }
-        } elseif ($argument instanceof Hamcrest\Matcher) {
-            $return = new Phake_Matchers_HamcrestMatcherAdapter($argument);
-        } elseif ($argument instanceof Phake_Matchers_IArgumentMatcher) {
-            $return = new Phake_Matchers_ChainedArgumentMatcher($argument);
+        } elseif ($argument instanceof \Hamcrest\Matcher) {
+            $return = new HamcrestMatcherAdapter($argument);
+        } elseif ($argument instanceof IArgumentMatcher) {
+            $return = new ChainedArgumentMatcher($argument);
         } else {
-            $return = new Phake_Matchers_EqualsMatcher($argument, $this->comparatorFactory);
+            $return = new EqualsMatcher($argument, $this->comparatorFactory);
         }
 
         if ($nextMatcher !== null)
@@ -101,7 +103,7 @@ class Phake_Matchers_Factory
      *
      * @param array $arguments
      *
-     * @return Phake_Matchers_IChainableArgumentMatcher or null if the arg list was empty
+     * @return IChainableArgumentMatcher or null if the arg list was empty
      */
     public function createMatcherChain(array $arguments)
     {

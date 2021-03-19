@@ -1,9 +1,11 @@
 <?php
 
+namespace Phake\Exception;
+
 /**
  * Thrown when a method call doesn't match an expection
  */
-class Phake_Exception_MethodMatcherException extends Exception
+class MethodMatcherException extends \Exception
 {
     private $argument;
 
@@ -11,7 +13,7 @@ class Phake_Exception_MethodMatcherException extends Exception
      * @param string $message
      * @param Exception $previous
      */
-    public function __construct($message = "", Exception $previous = null)
+    public function __construct($message = "", \Exception $previous = null)
     {
         parent::__construct($message, 0, $previous);
         $this->argument = 0;

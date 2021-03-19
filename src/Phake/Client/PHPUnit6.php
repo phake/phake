@@ -1,5 +1,7 @@
 <?php
 
+namespace Phake\Client;
+
 /*
  * Phake - Mocking Framework
  *
@@ -51,9 +53,9 @@ use PHPUnit\Framework\Assert;
  * This adapter allows PHPUnit to report failed verify() calls as test failures instead of errors. It also counts
  * verify() calls as assertions.
  */
-class Phake_Client_PHPUnit6 implements Phake_Client_IClient
+class PHPUnit6 implements IClient
 {
-    public function processVerifierResult(\Phake_CallRecorder_VerifierResult $result)
+    public function processVerifierResult(\Phake\CallRecorder\VerifierResult $result)
     {
         Assert::assertThat($result, $this->getConstraint());
 
@@ -67,6 +69,6 @@ class Phake_Client_PHPUnit6 implements Phake_Client_IClient
 
     private function getConstraint()
     {
-        return new Phake_PHPUnit_VerifierResultConstraintV6();
+        return new \Phake\PHPUnit\VerifierResultConstraintV6();
     }
 }

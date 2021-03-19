@@ -1,5 +1,7 @@
 <?php
 
+namespace Phake\Mock;
+
 /*
  * Phake - Mocking Framework
  *
@@ -48,7 +50,7 @@
  *
  * @author Mike Lively <m@digitalsandwich.com>
  */
-class Phake_Mock_Info {
+class Info {
     private $uniqId;
 
     private $recorder;
@@ -62,11 +64,11 @@ class Phake_Mock_Info {
     private $name;
 
     /**
-     * @var Phake_ClassGenerator_InvocationHandler_IInvocationHandler
+     * @var \Phake\ClassGenerator\InvocationHandler\IInvocationHandler
      */
     private $handlerChain;
 
-    public function __construct($name, Phake_CallRecorder_Recorder $recorder, Phake_Stubber_StubMapper $mapper, Phake_Stubber_IAnswer $defaultAnswer)
+    public function __construct($name, \Phake\CallRecorder\Recorder $recorder, \Phake\Stubber\StubMapper $mapper, \Phake\Stubber\IAnswer $defaultAnswer)
     {
         $this->uniqId = bin2hex(random_bytes(7));
         $this->recorder = $recorder;
@@ -111,7 +113,7 @@ class Phake_Mock_Info {
         return $this->handlerChain;
     }
 
-    public function setHandlerChain(Phake_ClassGenerator_InvocationHandler_IInvocationHandler $handlerChain)
+    public function setHandlerChain(\Phake\ClassGenerator\InvocationHandler\IInvocationHandler $handlerChain)
     {
         $this->handlerChain = $handlerChain;
     }

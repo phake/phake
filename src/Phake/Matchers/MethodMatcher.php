@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\Matchers;
 /* 
  * Phake - Mocking Framework
  * 
@@ -47,7 +49,7 @@
  *
  * @author Mike Lively <m@digitalsandwich.com>
  */
-class Phake_Matchers_MethodMatcher implements Phake_Matchers_IMethodMatcher
+class MethodMatcher implements IMethodMatcher
 {
     /**
      * @var string
@@ -55,11 +57,11 @@ class Phake_Matchers_MethodMatcher implements Phake_Matchers_IMethodMatcher
     private $expectedMethod;
 
     /**
-     * @var Phake_Matchers_IChainableArgumentMatcher
+     * @var IChainableArgumentMatcher
      */
     private $argumentMatcherChain;
 
-    public function __construct($expectedMethod, Phake_Matchers_IChainableArgumentMatcher $argumentMatcherChain = null)
+    public function __construct($expectedMethod, IChainableArgumentMatcher $argumentMatcherChain = null)
     {
         $this->expectedMethod   = $expectedMethod;
         $this->argumentMatcherChain = $argumentMatcherChain;
@@ -81,7 +83,7 @@ class Phake_Matchers_MethodMatcher implements Phake_Matchers_IMethodMatcher
             $this->assertMatches($method, $args);
             return true;
         }
-        catch (Phake_Exception_MethodMatcherException $e)
+        catch (\Phake\Exception\MethodMatcherException $e)
         {
             return false;
         }
@@ -94,13 +96,13 @@ class Phake_Matchers_MethodMatcher implements Phake_Matchers_IMethodMatcher
      * @param string $method
      * @param array $args
      * @return bool
-     * @throws Phake_Exception_MethodMatcherException
+     * @throws \Phake\Exception\MethodMatcherException
      */
     public function assertMatches($method, array &$args)
     {
         if ($this->expectedMethod != $method)
         {
-            throw new Phake_Exception_MethodMatcherException("Expected method {$this->expectedMethod} but received {$method}");
+            throw new \Phake\Exception\MethodMatcherException("Expected method {$this->expectedMethod} but received {$method}");
         }
 
         $this->doArgumentsMatch($args);
@@ -113,7 +115,7 @@ class Phake_Matchers_MethodMatcher implements Phake_Matchers_IMethodMatcher
      *
      * @param array $args
      * @return bool
-     * @throws Phake_Exception_MethodMatcherException
+     * @throws \Phake\Exception\MethodMatcherException
      */
     private function doArgumentsMatch(array &$args)
     {
@@ -123,15 +125,15 @@ class Phake_Matchers_MethodMatcher implements Phake_Matchers_IMethodMatcher
             {
                 $this->argumentMatcherChain->doArgumentsMatch($args);
             }
-            catch (Phake_Exception_MethodMatcherException $e)
+            catch (\Phake\Exception\MethodMatcherException $e)
             {
                 $position = $e->getArgumentPosition() + 1;
-                throw new Phake_Exception_MethodMatcherException(trim("Argument #{$position} failed test\n" . $e->getMessage()), $e);
+                throw new \Phake\Exception\MethodMatcherException(trim("Argument #{$position} failed test\n" . $e->getMessage()), $e);
             }
         }
         elseif (count($args) != 0)
         {
-            throw new Phake_Exception_MethodMatcherException("No matchers were given to Phake::when(), but arguments were received by this method.");
+            throw new \Phake\Exception\MethodMatcherException("No matchers were given to Phake::when(), but arguments were received by this method.");
         }
     }
 

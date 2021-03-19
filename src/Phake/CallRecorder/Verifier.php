@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\CallRecorder;
 /* 
  * Phake - Mocking Framework
  * 
@@ -47,24 +49,24 @@
  *
  * @author Mike Lively <m@digitalsandwich.com>
  */
-class Phake_CallRecorder_Verifier
+class Verifier
 {
 
     /**
-     * @var Phake_CallRecorder_Recorder
+     * @var Recorder
      */
     protected $recorder;
 
     /**
-     * @var Phake_IMock
+     * @var \Phake\IMock
      */
     protected $obj;
 
     /**
-     * @param Phake_CallRecorder_Recorder $recorder
+     * @param Recorder $recorder
      * @param <type> $obj
      */
-    public function __construct(Phake_CallRecorder_Recorder $recorder, $obj)
+    public function __construct(Recorder $recorder, $obj)
     {
         $this->recorder = $recorder;
         $this->obj      = $obj;
@@ -75,20 +77,20 @@ class Phake_CallRecorder_Verifier
      *
      * @todo Maybe rename this to findMatchedCalls?
      *
-     * @param Phake_CallRecorder_CallExpectation $expectation
+     * @param CallExpectation $expectation
      *
-     * @return Phake_CallRecorder_VerifierResult
+     * @return VerifierResult
      */
-    public function verifyCall(Phake_CallRecorder_CallExpectation $expectation)
+    public function verifyCall(CallExpectation $expectation)
     {
-        $matcher = new Phake_Matchers_MethodMatcher($expectation->getMethod(), $expectation->getArgumentMatcher());
+        $matcher = new \Phake\Matchers\MethodMatcher($expectation->getMethod(), $expectation->getArgumentMatcher());
         $calls   = $this->recorder->getAllCalls();
 
         $matchedCalls     = array();
         $methodNonMatched = array();
         $obj_interactions = false;
         foreach ($calls as $call) {
-            /* @var $call Phake_CallRecorder_Call */
+            /* @var $call Call */
             if ($call->getObject() === $expectation->getObject()) {
                 $obj_interactions = true;
                 $args             = $call->getArguments();
@@ -98,7 +100,7 @@ class Phake_CallRecorder_Verifier
                     $matchedCalls[] = $this->recorder->getCallInfo($call);
                     $this->recorder->markCallVerified($call);
                 }
-                catch (Phake_Exception_MethodMatcherException $e)
+                catch (\Phake\Exception\MethodMatcherException $e)
                 {
                     if ($call->getMethod() == $expectation->getMethod()) {
                         $message = $e->getMessage();
@@ -123,7 +125,7 @@ class Phake_CallRecorder_Verifier
                 $additions .= "\nOther Invocations:\n===\n  " . implode("\n===\n  ", str_replace("\n", "\n  ", $methodNonMatched)) . "\n===";
             }
 
-            return new Phake_CallRecorder_VerifierResult(
+            return new VerifierResult(
                 false,
                 array(),
                 $expectation->__toString() . ', ' . $verifierModeResult->getFailureDescription() . '.' . $additions
@@ -131,7 +133,7 @@ class Phake_CallRecorder_Verifier
         }
 
 
-        return new Phake_CallRecorder_VerifierResult(true, $matchedCalls);
+        return new VerifierResult(true, $matchedCalls);
     }
 
     public function verifyNoCalls()
@@ -145,18 +147,18 @@ class Phake_CallRecorder_Verifier
         }
 
         if ($result) {
-            return new Phake_CallRecorder_VerifierResult(true, array());
+            return new VerifierResult(true, array());
         } else {
             $desc = 'Expected no interaction with mock' . "\n"
                 . 'Invocations:' . "\n  ";
-            return new Phake_CallRecorder_VerifierResult(false, array(), $desc . implode("\n  ", $reportedCalls));
+            return new VerifierResult(false, array(), $desc . implode("\n  ", $reportedCalls));
         }
     }
 
     /**
      * Ensures all calls for this verifier have actually been verified
      *
-     * @return Phake_CallRecorder_VerifierResult
+     * @return VerifierResult
      */
     public function verifyNoOtherCalls()
     {
@@ -170,11 +172,11 @@ class Phake_CallRecorder_Verifier
         }
 
         if ($result) {
-            return new Phake_CallRecorder_VerifierResult(true, array());
+            return new VerifierResult(true, array());
         } else {
             $desc = 'Expected no interaction with mock' . "\n"
                 . 'Invocations:' . "\n  ";
-            return new Phake_CallRecorder_VerifierResult(false, array(), $desc . implode("\n  ", $reportedCalls));
+            return new VerifierResult(false, array(), $desc . implode("\n  ", $reportedCalls));
         }
     }
 

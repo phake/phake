@@ -1,5 +1,7 @@
 <?php
 
+namespace Phake\Mock;
+
 /*
  * Phake - Mocking Framework
  *
@@ -43,35 +45,36 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+use Phake;
 use PHPUnit\Framework\TestCase;
 
-class Phake_Mock_InfoTest extends TestCase {
+class InfoTest extends TestCase {
     /**
-     * @var Phake_Mock_Info
+     * @var Phake\Mock\Info
      */
     private $info;
 
     /**
      * @Mock
-     * @var Phake_CallRecorder_Recorder
+     * @var Phake\CallRecorder\Recorder
      */
     private $recorder;
 
     /**
      * @Mock
-     * @var Phake_Stubber_StubMapper
+     * @var Phake\Stubber\StubMapper
      */
     private $mapper;
 
     /**
      * @Mock
-     * @var Phake_Stubber_IAnswer
+     * @var Phake\Stubber\IAnswer
      */
     private $answer;
 
     /**
      * @Mock
-     * @var Phake_ClassGenerator_InvocationHandler_IInvocationHandler
+     * @var Phake\ClassGenerator\InvocationHandler\IInvocationHandler
      */
     private $handlerChain;
 
@@ -83,7 +86,7 @@ class Phake_Mock_InfoTest extends TestCase {
 
     private function getSUT()
     {
-        return new Phake_Mock_Info('name', $this->recorder, $this->mapper, $this->answer);
+        return new Info('name', $this->recorder, $this->mapper, $this->answer);
     }
 
     /**

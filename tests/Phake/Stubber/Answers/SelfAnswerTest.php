@@ -1,4 +1,7 @@
 <?php
+
+namespace Phake\Stubber\Answers;
+
 /*
  * Phake - Mocking Framework
  *
@@ -42,12 +45,13 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+use Phake;
 use PHPUnit\Framework\TestCase;
 
-class Phake_Stubber_Answers_SelfAnswerTest extends TestCase
+class SelfAnswerTest extends TestCase
 {
     /**
-     * @var Phake_Stubber_Answers_SelfAnswer
+     * @var Phake\Stubber\Answers\SelfAnswer
      */
     private $answer;
 
@@ -56,7 +60,7 @@ class Phake_Stubber_Answers_SelfAnswerTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->answer = new Phake_Stubber_Answers_SelfAnswer();
+        $this->answer = new SelfAnswer();
     }
 
     public function testAnswer()
@@ -69,7 +73,7 @@ class Phake_Stubber_Answers_SelfAnswerTest extends TestCase
 
     public function testThrowsOnStatic()
     {
-        $this->expectException(Phake_Stubber_Answers_InvalidAnswerException::class);
+        $this->expectException(InvalidAnswerException::class);
 
         $testObj = 'PhakeTest_StaticClass'; //class name indicates static method call
         $this->answer->getAnswerCallback($testObj, 'staticMethod');

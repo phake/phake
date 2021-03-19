@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\Matchers;
 /*
  * Phake - Mocking Framework
  *
@@ -45,18 +47,18 @@
 /**
  * Implements the base setNextMatcher() getNextMatcher for chaining.
  */
-abstract class Phake_Matchers_AbstractChainableArgumentMatcher implements Phake_Matchers_IChainableArgumentMatcher
+abstract class AbstractChainableArgumentMatcher implements IChainableArgumentMatcher
 {
     private $nextMatcher;
 
-    public function setNextMatcher(Phake_Matchers_IChainableArgumentMatcher $nextMatcher)
+    public function setNextMatcher(IChainableArgumentMatcher $nextMatcher)
     {
         $nextMatcher->assertPreviousMatcher($this);
         $this->nextMatcher = $nextMatcher;
     }
 
     /**
-     * @return Phake_Matchers_IChainableArgumentMatcher
+     * @return IChainableArgumentMatcher
      */
     public function getNextMatcher()
     {
@@ -64,11 +66,11 @@ abstract class Phake_Matchers_AbstractChainableArgumentMatcher implements Phake_
     }
 
     /**
-     * @param Phake_Matchers_IChainableArgumentMatcher $matcher
-     * @throws InvalidArgumentException When this matcher cannot be chained to the previous matcher.
+     * @param IChainableArgumentMatcher $matcher
+     * @throws \InvalidArgumentException When this matcher cannot be chained to the previous matcher.
      * @return null
      */
-    public function assertPreviousMatcher(Phake_Matchers_IChainableArgumentMatcher $matcher)
+    public function assertPreviousMatcher(IChainableArgumentMatcher $matcher)
     {
     }
 }

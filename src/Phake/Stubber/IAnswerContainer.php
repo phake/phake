@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\Stubber;
 /* 
  * Phake - Mocking Framework
  * 
@@ -45,11 +47,11 @@
 /**
  * Answer containers are classes used to store answers.
  */
-interface Phake_Stubber_IAnswerContainer
+interface IAnswerContainer
 {
     /**
      * Returns an answer from the container
-     * @return Phake_Stubber_IAnswer
+     * @return IAnswer
      */
     public function getAnswer();
 }

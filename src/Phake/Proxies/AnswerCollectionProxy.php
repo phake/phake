@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\Proxies;
 /* 
  * Phake - Mocking Framework
  * 
@@ -47,17 +49,17 @@
  *
  * @author Mike Lively <m@digitalsandwich.com>
  */
-class Phake_Proxies_AnswerCollectionProxy implements Phake_Stubber_IAnswerContainer, Phake_Proxies_AnswerProxyInterface
+class AnswerCollectionProxy implements \Phake\Stubber\IAnswerContainer, AnswerProxyInterface
 {
     /**
-     * @var Phake_Stubber_AnswerCollection
+     * @var \Phake\Stubber\AnswerCollection
      */
     private $collection;
 
     /**
-     * @param Phake_Stubber_AnswerCollection $collection
+     * @param \Phake\Stubber\AnswerCollection $collection
      */
-    public function __construct(Phake_Stubber_AnswerCollection $collection)
+    public function __construct(\Phake\Stubber\AnswerCollection $collection)
     {
         $this->collection = $collection;
     }
@@ -67,11 +69,11 @@ class Phake_Proxies_AnswerCollectionProxy implements Phake_Stubber_IAnswerContai
      *
      * @param mixed $value
      *
-     * @return Phake_Proxies_AnswerCollectionProxy
+     * @return AnswerCollectionProxy
      */
     public function thenReturn($value)
     {
-        $this->collection->addAnswer(new Phake_Stubber_Answers_StaticAnswer($value));
+        $this->collection->addAnswer(new \Phake\Stubber\Answers\StaticAnswer($value));
         return $this;
     }
 
@@ -80,40 +82,40 @@ class Phake_Proxies_AnswerCollectionProxy implements Phake_Stubber_IAnswerContai
      *
      * @param callback $value
      *
-     * @throws InvalidArgumentException
-     * @return Phake_Proxies_AnswerCollectionProxy
+     * @throws \InvalidArgumentException
+     * @return AnswerCollectionProxy
      */
     public function thenGetReturnByLambda($value)
     {
         if (!is_callable($value)) {
-            throw new InvalidArgumentException("Given lambda is not callable");
+            throw new \InvalidArgumentException("Given lambda is not callable");
         }
 
-        $this->collection->addAnswer(new Phake_Stubber_Answers_LambdaAnswer($value));
+        $this->collection->addAnswer(new \Phake\Stubber\Answers\LambdaAnswer($value));
 
         return $this;
     }
 
     /**
      * Binds a delegated call that will call a given method's parent.
-     * @return Phake_Proxies_AnswerCollectionProxy
+     * @return AnswerCollectionProxy
      */
     public function thenCallParent()
     {
-        $this->collection->addAnswer(new Phake_Stubber_Answers_ParentDelegate());
+        $this->collection->addAnswer(new \Phake\Stubber\Answers\ParentDelegate());
         return $this;
     }
 
     /**
      * Binds an exception answer to the method and object in the proxied binder.
      *
-     * @param Exception $value
+     * @param \Exception $value
      *
-     * @return Phake_Proxies_AnswerCollectionProxy
+     * @return AnswerCollectionProxy
      */
-    public function thenThrow(Exception $value)
+    public function thenThrow(\Exception $value)
     {
-        $this->collection->addAnswer(new Phake_Stubber_Answers_ExceptionAnswer($value));
+        $this->collection->addAnswer(new \Phake\Stubber\Answers\ExceptionAnswer($value));
         return $this;
     }
 
@@ -122,11 +124,11 @@ class Phake_Proxies_AnswerCollectionProxy implements Phake_Stubber_IAnswerContai
      *
      * @param mixed $captor
      *
-     * @return Phake_Proxies_AnswerCollectionProxy
+     * @return AnswerCollectionProxy
      */
     public function captureReturnTo(&$captor)
     {
-        $this->collection->addAnswer(new Phake_Stubber_Answers_ParentDelegate($captor));
+        $this->collection->addAnswer(new \Phake\Stubber\Answers\ParentDelegate($captor));
         return $this;
     }
 
@@ -135,30 +137,30 @@ class Phake_Proxies_AnswerCollectionProxy implements Phake_Stubber_IAnswerContai
      *
      * @param callback $value
      *
-     * @throws InvalidArgumentException
-     * @return Phake_Stubber_IAnswerContainer
+     * @throws \InvalidArgumentException
+     * @return \Phake\Stubber\IAnswerContainer
      */
     public function thenReturnCallback($value)
     {
-        $this->collection->addAnswer(new Phake_Stubber_Answers_LambdaAnswer($value));
+        $this->collection->addAnswer(new \Phake\Stubber\Answers\LambdaAnswer($value));
         return $this;
     }
 
     public function thenDoNothing()
     {
-        $this->collection->addAnswer(new Phake_Stubber_Answers_NoAnswer());
+        $this->collection->addAnswer(new \Phake\Stubber\Answers\NoAnswer());
         return $this;
     }
 
     public function thenReturnSelf()
     {
-        $this->collection->addAnswer(new Phake_Stubber_Answers_SelfAnswer());
+        $this->collection->addAnswer(new \Phake\Stubber\Answers\SelfAnswer());
         return $this;
     }
 
     /**
      * Returns an answer from the container
-     * @return Phake_Stubber_IAnswer
+     * @return \Phake\Stubber\IAnswer
      */
     public function getAnswer()
     {

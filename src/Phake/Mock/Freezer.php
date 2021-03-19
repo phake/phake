@@ -1,5 +1,7 @@
 <?php
 
+namespace Phake\Mock;
+
 /*
  * Phake - Mocking Framework
  * 
@@ -46,17 +48,17 @@
 /**
  * Freezes a mock so that no other calls can be made
  *
- * @see Phake_ClassGeneration_InvocationHandler_FrozenObjectCheck
+ * @see \Phake\ClassGeneration\InvocationHandler\FrozenObjectCheck
  */
-class Phake_Mock_Freezer
+class Freezer
 {
     /**
      * Freezes the given $mock and notifies the given $client
      *
-     * @param Phake_Mock_Info $mockInfo
-     * @param Phake_Client_IClient $client
+     * @param Info $mockInfo
+     * @param \Phake\Client\IClient $client
      */
-    public function freeze(Phake_Mock_Info $mockInfo, Phake_Client_IClient $client)
+    public function freeze(Info $mockInfo, \Phake\Client\IClient $client)
     {
         $client->processObjectFreeze();
         $mockInfo->freezeObject();

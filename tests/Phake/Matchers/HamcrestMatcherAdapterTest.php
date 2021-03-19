@@ -1,4 +1,7 @@
 <?php
+
+namespace Phake\Matchers;
+
 /*
  * Phake - Mocking Framework
  *
@@ -42,15 +45,16 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+use Phake;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Tests the adapting of Hamcrest matchers to Phake matchers
  */
-class Phake_Matchers_HamcrestMatcherAdapterTest extends TestCase
+class HamcrestMatcherAdapterTest extends TestCase
 {
     /**
-     * @var Phake_Matchers_HamcrestMatcherAdapter
+     * @var HamcrestMatcherAdapter
      */
     private $adapter;
 
@@ -69,7 +73,7 @@ class Phake_Matchers_HamcrestMatcherAdapterTest extends TestCase
             ->method('__toString')
             ->will($this->returnValue('hamcrest matcher'));
 
-        $this->adapter = new Phake_Matchers_HamcrestMatcherAdapter($this->matcher);
+        $this->adapter = new HamcrestMatcherAdapter($this->matcher);
     }
 
     /**

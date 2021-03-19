@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\Matchers;
 /* 
  * Phake - Mocking Framework
  * 
@@ -47,7 +49,7 @@
  *
  * This matcher utilizes the same functionality as non-strict equality in php, in other words '=='
  */
-class Phake_Matchers_EqualsMatcher extends Phake_Matchers_SingleArgumentMatcher
+class EqualsMatcher extends SingleArgumentMatcher
 {
     /**
      * @var mixed
@@ -83,7 +85,7 @@ class Phake_Matchers_EqualsMatcher extends Phake_Matchers_SingleArgumentMatcher
         }
         catch (\SebastianBergmann\Comparator\ComparisonFailure $e)
         {
-            throw new Phake_Exception_MethodMatcherException(trim($e->getMessage() . "\n" . $e->getDiff()), $e);
+            throw new \Phake\Exception\MethodMatcherException(trim($e->getMessage() . "\n" . $e->getDiff()), $e);
         }
     }
 
@@ -92,7 +94,7 @@ class Phake_Matchers_EqualsMatcher extends Phake_Matchers_SingleArgumentMatcher
      */
     public function __toString()
     {
-        $converter = new Phake_String_Converter();
+        $converter = new \Phake\String\Converter();
         return "equal to {$converter->convertToString($this->value)}";
     }
 }

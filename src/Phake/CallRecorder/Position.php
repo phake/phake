@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\CallRecorder;
 /* 
  * Phake - Mocking Framework
  * 
@@ -45,7 +47,7 @@
 /**
  * Provides information on the position of a given call.
  */
-class Phake_CallRecorder_Position
+class Position
 {
     /**
      * @var int
@@ -63,11 +65,11 @@ class Phake_CallRecorder_Position
     /**
      * Determines if this call position is after the given position
      *
-     * @param Phake_CallRecorder_Position $other
+     * @param Position $other
      *
      * @return boolean
      */
-    public function thisIsAfter(Phake_CallRecorder_Position $other)
+    public function thisIsAfter(Position $other)
     {
         return ($this->position > $other->position);
     }

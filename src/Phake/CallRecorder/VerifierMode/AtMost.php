@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\CallRecorder\VerifierMode;
 /* 
  * Phake - Mocking Framework
  * 
@@ -46,7 +48,7 @@
  * Verifier mode that checks that the number of matched items is less than or equal than the set amount.
  * @author Brian Feaver <brian.feaver@gmail.com>
  */
-class Phake_CallRecorder_VerifierMode_AtMost implements Phake_CallRecorder_IVerifierMode
+class AtMost implements \Phake\CallRecorder\IVerifierMode
 {
     /**
      * @var int
@@ -75,9 +77,9 @@ class Phake_CallRecorder_VerifierMode_AtMost implements Phake_CallRecorder_IVeri
     {
         $calledTimes = count($matchedCalls);
         if ($calledTimes <= $this->times) {
-            return new Phake_CallRecorder_VerifierMode_Result(true, '');
+            return new Result(true, '');
         } else {
-            return new Phake_CallRecorder_VerifierMode_Result(false, sprintf(
+            return new Result(false, sprintf(
                 'actually called <%s> times',
                 count($matchedCalls)
             ));

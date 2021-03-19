@@ -1,4 +1,7 @@
 <?php
+
+namespace Phake\CallRecorder\VerifierMode;
+
 /*
  * Phake - Mocking Framework
  *
@@ -47,13 +50,13 @@ use PHPUnit\Framework\TestCase;
 /**
  * Tests the functionality of the Times class.
  */
-class Phake_CallRecorder_VerifierMode_TimesTest extends TestCase
+class TimesTest extends TestCase
 {
     private $verifierModeTimes;
 
     public function setUp(): void
     {
-        $this->verifierModeTimes = new Phake_CallRecorder_VerifierMode_Times(1);
+        $this->verifierModeTimes = new Times(1);
     }
 
     /**

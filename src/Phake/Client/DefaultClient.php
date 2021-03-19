@@ -1,5 +1,7 @@
 <?php
 
+namespace Phake\Client;
+
 /*
  * Phake - Mocking Framework
  * 
@@ -46,14 +48,14 @@
 /**
  * The default client adapter used by Phake.
  */
-class Phake_Client_Default implements Phake_Client_IClient
+class DefaultClient implements IClient
 {
-    public function processVerifierResult(Phake_CallRecorder_VerifierResult $result)
+    public function processVerifierResult(\Phake\CallRecorder\VerifierResult $result)
     {
         if ($result->getVerified()) {
             return $result->getMatchedCalls();
         } else {
-            throw new Phake_Exception_VerificationException($result->getFailureDescription());
+            throw new \Phake\Exception\VerificationException($result->getFailureDescription());
         }
     }
 

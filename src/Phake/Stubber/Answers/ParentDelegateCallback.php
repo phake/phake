@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\Stubber\Answers;
 /* 
  * Phake - Mocking Framework
  * 
@@ -45,16 +47,16 @@
 /**
  * A callable class that allows for calling parent methods without losing references.
  */
-class Phake_Stubber_Answers_ParentDelegateCallback
+class ParentDelegateCallback
 {
     private $context;
 
     /**
-     * @var ReflectionMethod
+     * @var \ReflectionMethod
      */
     private $parentMethod;
 
-    public function __construct($context, ReflectionMethod $parentMethod)
+    public function __construct($context, \ReflectionMethod $parentMethod)
     {
         $this->context = $context;
         $this->parentMethod = $parentMethod;

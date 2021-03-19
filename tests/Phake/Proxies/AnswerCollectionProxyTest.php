@@ -1,4 +1,7 @@
 <?php
+
+namespace Phake\Proxies;
+
 /*
  * Phake - Mocking Framework
  *
@@ -42,17 +45,18 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+use Phake;
 use PHPUnit\Framework\TestCase;
 
-class Phake_Proxies_AnswerCollectionProxyTest extends TestCase
+class AnswerCollectionProxyTest extends TestCase
 {
     /**
-     * @var Phake_Proxies_AnswerCollectionProxyTest
+     * @var Phake\Proxies\AnswerCollectionProxyTest
      */
     private $proxy;
 
     /**
-     * @var Phake_Stubber_AnswerCollection
+     * @var Phake\Stubber\AnswerCollection
      */
     private $container;
 
@@ -61,8 +65,8 @@ class Phake_Proxies_AnswerCollectionProxyTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->container = Phake::mock('Phake_Stubber_AnswerCollection');
-        $this->proxy     = new Phake_Proxies_AnswerCollectionProxy($this->container);
+        $this->container = Phake::mock(Phake\Stubber\AnswerCollection::class);
+        $this->proxy     = new AnswerCollectionProxy($this->container);
     }
 
     /**
@@ -78,7 +82,7 @@ class Phake_Proxies_AnswerCollectionProxyTest extends TestCase
 
         Phake::verify($this->container)->addAnswer(Phake::capture($answer));
 
-        $this->assertInstanceOf('Phake_Stubber_Answers_StaticAnswer', $answer);
+        $this->assertInstanceOf('Phake\Stubber\Answers\StaticAnswer', $answer);
 		$this->phakeAssertAttributeEqualTo(42, 'answer', $answer);
     }
 
@@ -97,7 +101,7 @@ class Phake_Proxies_AnswerCollectionProxyTest extends TestCase
 
         Phake::verify($this->container)->addAnswer(Phake::capture($answer));
 
-        $this->assertInstanceOf('Phake_Stubber_Answers_LambdaAnswer', $answer);
+        $this->assertInstanceOf('Phake\Stubber\Answers\LambdaAnswer', $answer);
 		$this->phakeAssertAttributeEqualTo($func, 'answerLambda', $answer);
     }
 
@@ -119,7 +123,7 @@ class Phake_Proxies_AnswerCollectionProxyTest extends TestCase
     {
         $this->assertSame($this->proxy, $this->proxy->thenCallParent());
 
-        Phake::verify($this->container)->addAnswer($this->isInstanceOf('Phake_Stubber_Answers_ParentDelegate'));
+        Phake::verify($this->container)->addAnswer($this->isInstanceOf('Phake\Stubber\Answers\ParentDelegate'));
     }
 
     /**
@@ -129,7 +133,7 @@ class Phake_Proxies_AnswerCollectionProxyTest extends TestCase
     {
         $this->assertSame($this->proxy, $this->proxy->captureReturnTo($var));
 
-        Phake::verify($this->container)->addAnswer($this->isInstanceOf('Phake_Stubber_Answers_ParentDelegate'));
+        Phake::verify($this->container)->addAnswer($this->isInstanceOf('Phake\Stubber\Answers\ParentDelegate'));
     }
 
     /**
@@ -137,13 +141,13 @@ class Phake_Proxies_AnswerCollectionProxyTest extends TestCase
      */
     public function testThenThrow()
     {
-        $exception = new RuntimeException();
+        $exception = new \RuntimeException();
 
         $this->assertSame($this->proxy, $this->proxy->thenThrow($exception));
 
         Phake::verify($this->container)->addAnswer(Phake::capture($answer));
 
-        $this->assertInstanceOf('Phake_Stubber_Answers_ExceptionAnswer', $answer);
+        $this->assertInstanceOf('Phake\Stubber\Answers\ExceptionAnswer', $answer);
 		$this->phakeAssertAttributeEqualTo($exception, 'answer', $answer);
     }
 

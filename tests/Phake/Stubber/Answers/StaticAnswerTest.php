@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\Stubber\Answers;
 /*
  * Phake - Mocking Framework
  *
@@ -49,10 +51,10 @@ use PHPUnit\Framework\TestCase;
  *
  * @author Mike Lively <m@digitalsandwich.com>
  */
-class Phake_Stubber_Answers_StaticAnswerTest extends TestCase
+class StaticAnswerTest extends TestCase
 {
     /**
-     * @var Phake_Stubber_Answers_StaticAnswer
+     * @var Phake\Stubber\Answers\StaticAnswer
      */
     private $answer;
 
@@ -61,7 +63,7 @@ class Phake_Stubber_Answers_StaticAnswerTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->answer = new Phake_Stubber_Answers_StaticAnswer(42);
+        $this->answer = new StaticAnswer(42);
     }
 
     public function testAnswer()

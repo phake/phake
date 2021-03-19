@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\Stubber;
 /* 
  * Phake - Mocking Framework
  * 
@@ -48,7 +50,7 @@
  *
  * If there are no answers left to return, the last answer is returned again.
  */
-class Phake_Stubber_AnswerCollection implements Phake_Stubber_IAnswerContainer
+class AnswerCollection implements IAnswerContainer
 {
     /**
      * @var array
@@ -58,9 +60,9 @@ class Phake_Stubber_AnswerCollection implements Phake_Stubber_IAnswerContainer
     /**
      * Adds the passed answer to a new answer collection.
      *
-     * @param Phake_Stubber_IAnswer $answer
+     * @param IAnswer $answer
      */
-    public function __construct(Phake_Stubber_IAnswer $answer)
+    public function __construct(IAnswer $answer)
     {
         $this->answers = array($answer);
     }
@@ -68,9 +70,9 @@ class Phake_Stubber_AnswerCollection implements Phake_Stubber_IAnswerContainer
     /**
      * Adds a new answer to the end of the collection.
      *
-     * @param Phake_Stubber_IAnswer $answer
+     * @param IAnswer $answer
      */
-    public function addAnswer(Phake_Stubber_IAnswer $answer)
+    public function addAnswer(IAnswer $answer)
     {
         $this->answers[] = $answer;
     }
@@ -78,7 +80,7 @@ class Phake_Stubber_AnswerCollection implements Phake_Stubber_IAnswerContainer
     /**
      * Returns the next answer in the collection.
      *
-     * @return Phake_Stubber_IAnswer
+     * @return IAnswer
      */
     public function getAnswer()
     {

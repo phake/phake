@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\Matchers;
 /*
  * Phake - Mocking Framework
  *
@@ -45,7 +47,7 @@
 /**
  * A matcher that will return true for any invocation of a particular method
  */
-class Phake_Matchers_AnyParameters extends  Phake_Matchers_AbstractChainableArgumentMatcher
+class AnyParameters extends  AbstractChainableArgumentMatcher
 {
     /**
      * Do nothing, any parameters always matches
@@ -65,15 +67,15 @@ class Phake_Matchers_AnyParameters extends  Phake_Matchers_AbstractChainableArgu
         return '<any parameters>';
     }
 
-    public function setNextMatcher(Phake_Matchers_IChainableArgumentMatcher $nextMatcher)
+    public function setNextMatcher(IChainableArgumentMatcher $nextMatcher)
     {
-        throw new InvalidArgumentException('Other matchers cannot be passed with any parameters. It will not work the '
+        throw new \InvalidArgumentException('Other matchers cannot be passed with any parameters. It will not work the '
             . 'way you think it works');
     }
 
-    public function assertPreviousMatcher(Phake_Matchers_IChainableArgumentMatcher $matcher)
+    public function assertPreviousMatcher(IChainableArgumentMatcher $matcher)
     {
-        throw new InvalidArgumentException('Other matchers cannot be passed with any parameters. It will not work the '
+        throw new \InvalidArgumentException('Other matchers cannot be passed with any parameters. It will not work the '
             . 'way you think it works');
     }
 }

@@ -1,4 +1,7 @@
 <?php
+
+namespace Phake\Matchers;
+
 /*
  * Phake - Mocking Framework
  *
@@ -42,16 +45,17 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+use Phake;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Constraint\Constraint;
 
 /**
  * Tests the adapting of phpunit constraints into Phake matchers
  */
-class Phake_Matchers_PHPUnit6ConstraintAdapterTest extends TestCase
+class PHPUnit6ConstraintAdapterTest extends TestCase
 {
     /**
-     * @var Phake_Matchers_PHPUnitConstraintAdapter
+     * @var PHPUnitConstraintAdapter
      */
     private $adapter;
 
@@ -66,7 +70,7 @@ class Phake_Matchers_PHPUnit6ConstraintAdapterTest extends TestCase
     public function setUp(): void
     {
         $this->constraint = $this->getMockBuilder(Constraint::class)->getMock();
-        $this->adapter    = new Phake_Matchers_PHPUnit6ConstraintAdapter($this->constraint);
+        $this->adapter    = new PHPUnit6ConstraintAdapter($this->constraint);
         $this->constraint->expects($this->any())
             ->method('toString')
             ->will($this->returnValue('phpunit matcher'));

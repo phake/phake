@@ -1,4 +1,7 @@
 <?php
+
+namespace Phake\Proxies;
+
 /*
  * Phake - Mocking Framework
  *
@@ -42,6 +45,7 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+use Phake;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -49,20 +53,20 @@ use PHPUnit\Framework\TestCase;
  *
  * @author Mike Lively <m@digitalsandwich.com>
  */
-class Phake_Proxies_VerifierProxyTest extends TestCase
+class VerifierProxyTest extends TestCase
 {
     /**
-     * @var Phake_CallRecorder_Verifier
+     * @var Phake\CallRecorder\Verifier
      */
     private $verifier;
 
     /**
-     * @var Phake_Proxies_VerifierProxy
+     * @var Phake\Proxies\VerifierProxy
      */
     private $proxy;
 
     /**
-     * @var Phake_Client_IClient
+     * @var Phake\Client\IClient
      */
     private $client;
 
@@ -73,16 +77,16 @@ class Phake_Proxies_VerifierProxyTest extends TestCase
 
     public function setUp(): void
     {
-        $this->verifier = Phake::mock('Phake_CallRecorder_Verifier');
-        $this->mode = Phake::mock('Phake_CallRecorder_IVerifierMode');
-        $this->client = Phake::mock('Phake_Client_IClient');
+        $this->verifier = Phake::mock(Phake\CallRecorder\Verifier::class);
+        $this->mode = Phake::mock(Phake\CallRecorder\IVerifierMode::class);
+        $this->client = Phake::mock(Phake\Client\IClient::class);
         $this->matchedCalls = array(
-            Phake::mock('Phake_CallRecorder_CallInfo'),
-            Phake::mock('Phake_CallRecorder_CallInfo'),
+            Phake::mock(Phake\CallRecorder\CallInfo::class),
+            Phake::mock(Phake\CallRecorder\CallInfo::class),
         );
 
-        $this->proxy = new Phake_Proxies_VerifierProxy($this->verifier, new Phake_Matchers_Factory(), $this->mode, $this->client);
-        $obj         = $this->getMockBuilder('Phake_IMock')->getMock();
+        $this->proxy = new VerifierProxy($this->verifier, new Phake\Matchers\Factory(), $this->mode, $this->client);
+        $obj         = $this->getMockBuilder(Phake\IMock::class)->getMock();
         Phake::when($this->verifier)->getObject()->thenReturn($obj);
         Phake::when($this->mode)->__toString()->thenReturn('exactly 1 times');
         Phake::when($this->client)->processVerifierResult($this->anything())->thenReturn($this->matchedCalls);
@@ -94,7 +98,7 @@ class Phake_Proxies_VerifierProxyTest extends TestCase
     public function testVerifierCallsAreForwardedMethod()
     {
         Phake::when($this->verifier)->verifyCall(Phake::anyParameters())->thenReturn(
-            new Phake_CallRecorder_VerifierResult(true, array(Phake::mock('Phake_CallRecorder_CallInfo')))
+            new Phake\CallRecorder\VerifierResult(true, array(Phake::mock('Phake\CallRecorder\CallInfo')))
         );
         $this->proxy->foo();
 
@@ -108,7 +112,7 @@ class Phake_Proxies_VerifierProxyTest extends TestCase
     public function testVerifierReturnsCallInfoData()
     {
         Phake::when($this->verifier)->verifyCall(Phake::anyParameters())->thenReturn(
-            new Phake_CallRecorder_VerifierResult(true, $this->matchedCalls)
+            new Phake\CallRecorder\VerifierResult(true, $this->matchedCalls)
         );
 
         $this->assertSame($this->matchedCalls, $this->proxy->foo());
@@ -119,10 +123,10 @@ class Phake_Proxies_VerifierProxyTest extends TestCase
      */
     public function testVerifierCallsAreForwardedArguments()
     {
-        $argumentMatcher = Phake::mock('Phake_Matchers_IChainableArgumentMatcher');
+        $argumentMatcher = Phake::mock('Phake\Matchers\IChainableArgumentMatcher');
 
         Phake::when($this->verifier)->verifyCall(Phake::anyParameters())->thenReturn(
-            new Phake_CallRecorder_VerifierResult(true, array(Phake::mock('Phake_CallRecorder_CallInfo')))
+            new Phake\CallRecorder\VerifierResult(true, array(Phake::mock('Phake\CallRecorder\CallInfo')))
         );
         $this->proxy->foo($argumentMatcher);
 
@@ -136,9 +140,9 @@ class Phake_Proxies_VerifierProxyTest extends TestCase
      */
     public function testProxyTransformsNonMatchersToEqualsMatcher()
     {
-        $argumentMatcher = new Phake_Matchers_EqualsMatcher('test', \SebastianBergmann\Comparator\Factory::getInstance());
+        $argumentMatcher = new Phake\Matchers\EqualsMatcher('test', \SebastianBergmann\Comparator\Factory::getInstance());
         Phake::when($this->verifier)->verifyCall(Phake::anyParameters())->thenReturn(
-            new Phake_CallRecorder_VerifierResult(true, array(Phake::mock('Phake_CallRecorder_CallInfo')))
+            new Phake\CallRecorder\VerifierResult(true, array(Phake::mock('Phake\CallRecorder\CallInfo')))
         );
         $this->proxy->foo('test');
 
@@ -148,7 +152,7 @@ class Phake_Proxies_VerifierProxyTest extends TestCase
 
     public function testClientResultProcessorIsCalled()
     {
-        $result = new Phake_CallRecorder_VerifierResult(true, $this->matchedCalls);
+        $result = new Phake\CallRecorder\VerifierResult(true, $this->matchedCalls);
         Phake::when($this->verifier)->verifyCall(Phake::anyParameters())->thenReturn($result);
 
         $this->proxy->foo();

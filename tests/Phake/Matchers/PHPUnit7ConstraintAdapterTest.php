@@ -1,4 +1,7 @@
 <?php
+
+namespace Phake\Matchers;
+
 /*
  * Phake - Mocking Framework
  *
@@ -48,10 +51,10 @@ use PHPUnit\Framework\Constraint\Constraint;
 /**
  * Tests the adapting of phpunit constraints into Phake matchers
  */
-class Phake_Matchers_PHPUnit7ConstraintAdapterTest extends TestCase
+class PHPUnit7ConstraintAdapterTest extends TestCase
 {
     /**
-     * @var Phake_Matchers_PHPUnitConstraintAdapter
+     * @var PHPUnitConstraintAdapter
      */
     private $adapter;
 
@@ -66,7 +69,7 @@ class Phake_Matchers_PHPUnit7ConstraintAdapterTest extends TestCase
     public function setUp(): void
     {
         $this->constraint = $this->getMockBuilder(Constraint::class)->getMock();
-        $this->adapter    = new Phake_Matchers_PHPUnit7ConstraintAdapter($this->constraint);
+        $this->adapter    = new PHPUnit7ConstraintAdapter($this->constraint);
         $this->constraint->expects($this->any())
             ->method('toString')
             ->will($this->returnValue('phpunit matcher'));

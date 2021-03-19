@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\Matchers;
 /*
  * Phake - Mocking Framework
  *
@@ -45,13 +47,13 @@
 /**
  * Implements matches so that you can easily match a single argument
  */
-abstract class Phake_Matchers_SingleArgumentMatcher extends Phake_Matchers_AbstractChainableArgumentMatcher {
+abstract class SingleArgumentMatcher extends AbstractChainableArgumentMatcher {
 
     /**
      * Executes the matcher on a given list of argument values. Returns TRUE on a match, FALSE otherwise.
      *
      * @param array $arguments
-     * @throws Phake_Exception_MethodMatcherException
+     * @throws \Phake\Exception\MethodMatcherException
      */
     public function doArgumentsMatch(array &$arguments)
     {
@@ -65,7 +67,7 @@ abstract class Phake_Matchers_SingleArgumentMatcher extends Phake_Matchers_Abstr
         {
             if (count($argumentCopy) != 0)
             {
-                throw new Phake_Exception_MethodMatcherException("There were more arguments than matchers");
+                throw new \Phake\Exception\MethodMatcherException("There were more arguments than matchers");
             }
         }
         else
@@ -74,7 +76,7 @@ abstract class Phake_Matchers_SingleArgumentMatcher extends Phake_Matchers_Abstr
             {
                 $this->getNextMatcher()->doArgumentsMatch($argumentCopy);
             }
-            catch (Phake_Exception_MethodMatcherException $e)
+            catch (\Phake\Exception\MethodMatcherException $e)
             {
                 $e->incrementArgumentPosition();
                 throw $e;

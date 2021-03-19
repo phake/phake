@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\Matchers;
 /* 
  * Phake - Mocking Framework
  * 
@@ -45,7 +47,7 @@
 /**
  * The interface for argument matchers
  */
-interface Phake_Matchers_IArgumentMatcher
+interface IArgumentMatcher
 {
     /**
      * Executes the matcher on a given argument value. Returns TRUE on a match, FALSE otherwise.

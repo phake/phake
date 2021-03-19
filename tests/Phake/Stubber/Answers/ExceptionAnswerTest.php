@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\Stubber\Answers;
 /*
  * Phake - Mocking Framework
  *
@@ -47,10 +49,10 @@ use PHPUnit\Framework\TestCase;
 /**
  * @author Brian Feaver <brian.feaver@gmail.com>
  */
-class Phake_Stubber_Answers_ExceptionAnswerTest extends TestCase
+class ExceptionAnswerTest extends TestCase
 {
     /**
-     * @var Phake_Stubber_Answers_ExceptionAnswer
+     * @var Phake\Stubber\Answers\ExceptionAnswer
      */
     private $answer;
 
@@ -64,8 +66,8 @@ class Phake_Stubber_Answers_ExceptionAnswerTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->exception = new RuntimeException();
-        $this->answer    = new Phake_Stubber_Answers_ExceptionAnswer($this->exception);
+        $this->exception = new \RuntimeException();
+        $this->answer    = new ExceptionAnswer($this->exception);
     }
 
     public function testAnswer()
@@ -82,7 +84,7 @@ class Phake_Stubber_Answers_ExceptionAnswerTest extends TestCase
     {
         try {
             call_user_func($this->answer->getAnswerCallback('someObject', 'testMethod'));
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->assertSame($this->exception, $e);
         }
     }

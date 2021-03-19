@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\Stubber;
 /* 
  * Phake - Mocking Framework
  * 
@@ -45,16 +47,16 @@
 /**
  * Provides the interface for an answer binder
  */
-interface Phake_Stubber_IAnswerBinder
+interface IAnswerBinder
 {
     /**
      * Binds the given answer to an object.
      *
      * Returns an answer container that will contain the given answer.
      *
-     * @param Phake_Stubber_IAnswer $answer
+     * @param IAnswer $answer
      *
-     * @return Phake_Stubber_IAnswerContainer
+     * @return IAnswerContainer
      */
-    public function bindAnswer(Phake_Stubber_IAnswer $answer);
+    public function bindAnswer(IAnswer $answer);
 }

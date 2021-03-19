@@ -1,5 +1,7 @@
 <?php
 
+namespace Phake\ClassGenerator\InvocationHandler;
+
 /*
  * Phake - Mocking Framework
  * 
@@ -46,23 +48,23 @@
 /**
  * Records calls to a mock object's call recorder.
  */
-class Phake_ClassGenerator_InvocationHandler_StubCaller implements Phake_ClassGenerator_InvocationHandler_IInvocationHandler
+class StubCaller implements IInvocationHandler
 {
     /**
-     * @var Phake_Stubber_StubMapper
+     * @var \Phake\Stubber\StubMapper
      */
     private $stubMapper;
 
     /**
-     * @var Phake_Stubber_IAnswer
+     * @var \Phake\Stubber\IAnswer
      */
     private $defaultAnswer;
 
     /**
-     * @param Phake_Stubber_StubMapper $stubMapper
-     * @param Phake_Stubber_IAnswer $defaultAnswer
+     * @param \Phake\Stubber\StubMapper $stubMapper
+     * @param \Phake\Stubber\IAnswer $defaultAnswer
      */
-    public function __construct(Phake_Stubber_StubMapper $stubMapper, Phake_Stubber_IAnswer $defaultAnswer)
+    public function __construct(\Phake\Stubber\StubMapper $stubMapper, \Phake\Stubber\IAnswer $defaultAnswer)
     {
         $this->stubMapper = $stubMapper;
         $this->defaultAnswer = $defaultAnswer;

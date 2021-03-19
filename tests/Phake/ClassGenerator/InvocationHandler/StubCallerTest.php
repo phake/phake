@@ -1,5 +1,7 @@
 <?php
 
+namespace Phake\ClassGenerator\InvocationHandler;
+
 /*
  * Phake - Mocking Framework
  *
@@ -43,55 +45,56 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+use Phake;
 use PHPUnit\Framework\TestCase;
 
-class Phake_ClassGenerator_InvocationHandler_StubCallerTest extends TestCase
+class StubCallerTest extends TestCase
 {
     /**
-     * @var Phake_ClassGenerator_InvocationHandler_StubCaller
+     * @var StubCaller
      */
     private $handler;
 
     /**
-     * @var Phake_IMock
+     * @var Phake\IMock
      */
     private $mock;
 
     /**
-     * @var Phake_Stubber_AnswerCollection
+     * @var Phake\Stubber\AnswerCollection
      */
     private $answerCollection;
 
     /**
-     * @var Phake_Stubber_StubMapper
+     * @var Phake\Stubber\StubMapper
      */
     private $stubMapper;
 
     /**
-     * @var Phake_Stubber_IAnswer
+     * @var Phake\Stubber\IAnswer
      */
     private $defaultAnswer;
 
     public function setUp(): void
     {
         Phake::initAnnotations($this);
-        $this->mock          = $this->getMockBuilder('Phake_IMock')->getMock();
-        $this->stubMapper    = Phake::mock('Phake_Stubber_StubMapper');
-        $this->defaultAnswer = Phake::mock('Phake_Stubber_IAnswer');
+        $this->mock          = $this->getMockBuilder(Phake\IMock::class)->getMock();
+        $this->stubMapper    = Phake::mock(Phake\Stubber\StubMapper::class);
+        $this->defaultAnswer = Phake::mock(Phake\Stubber\IAnswer::class);
         Phake::when($this->defaultAnswer)->getAnswerCallback('foo')->thenReturn(function () { return '24'; });
 
-        $this->answerCollection = Phake::mock('Phake_Stubber_AnswerCollection');
-        $answer                 = Phake::mock('Phake_Stubber_IAnswer');
+        $this->answerCollection = Phake::mock(Phake\Stubber\AnswerCollection::class);
+        $answer                 = Phake::mock(Phake\Stubber\IAnswer::class);
         Phake::when($this->answerCollection)->getAnswer()->thenReturn($answer);
         Phake::when($answer)->getAnswerCallback($this->anything(), 'foo')->thenReturn(function () { return '42'; });
         Phake::when($this->stubMapper)->getStubByCall(Phake::anyParameters())->thenReturn($this->answerCollection);
 
-        $this->handler = new Phake_ClassGenerator_InvocationHandler_StubCaller($this->stubMapper, $this->defaultAnswer);
+        $this->handler = new StubCaller($this->stubMapper, $this->defaultAnswer);
     }
 
     public function testImplementIInvocationHandler()
     {
-        $this->assertInstanceOf('Phake_ClassGenerator_InvocationHandler_IInvocationHandler', $this->handler);
+        $this->assertInstanceOf(IInvocationHandler::class, $this->handler);
     }
 
     public function testStubIsPulled()

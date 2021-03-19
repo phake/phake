@@ -1,4 +1,7 @@
 <?php
+
+namespace Phake\Matchers;
+
 /*
  * Phake - Mocking Framework
  *
@@ -42,24 +45,25 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+use Phake;
 use PHPUnit\Framework\TestCase;
 
-class Phake_Matchers_ChainedArgumentMatcherTest extends TestCase
+class ChainedArgumentMatcherTest extends TestCase
 {
     /**
-     * @var Phake_Matchers_ChainedArgumentMatcher
+     * @var ChainedArgumentMatcher
      */
     private $matcher;
 
     /**
      * @Mock
-     * @var Phake_Matchers_IArgumentMatcher
+     * @var Phake\Matchers\IArgumentMatcher
      */
     private $adapted;
 
     /**
      * @Mock
-     * @var Phake_Matchers_IChainableArgumentMatcher
+     * @var Phake\Matchers\IChainableArgumentMatcher
      */
     private $nextMatcher;
 
@@ -67,7 +71,7 @@ class Phake_Matchers_ChainedArgumentMatcherTest extends TestCase
     {
         Phake::initAnnotations($this);
 
-        $this->matcher = new Phake_Matchers_ChainedArgumentMatcher($this->adapted);
+        $this->matcher = new ChainedArgumentMatcher($this->adapted);
         $this->matcher->setNextMatcher($this->nextMatcher);
     }
 

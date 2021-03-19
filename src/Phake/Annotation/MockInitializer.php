@@ -1,5 +1,7 @@
 <?php
 
+namespace Phake\Annotation;
+
 /*
  * Phake - Mocking Framework
  *
@@ -50,12 +52,12 @@
  *
  * In either case the fully qualified class name should be used. The use statements are not observed.
  */
-class Phake_Annotation_MockInitializer
+class MockInitializer
 {
     public function initialize($object)
     {
-        $reflectionClass = new ReflectionClass($object);
-        $reader          = new Phake_Annotation_Reader($reflectionClass);
+        $reflectionClass = new \ReflectionClass($object);
+        $reader          = new Reader($reflectionClass);
 
         if ($this->useDoctrineParser()) {
             $parser = new \Doctrine\Common\Annotations\PhpParser();
@@ -87,7 +89,7 @@ class Phake_Annotation_MockInitializer
             }
 
             $property->setAccessible(true);
-            $property->setValue($object, Phake::mock($mockedClass));
+            $property->setValue($object, \Phake::mock($mockedClass));
         }
     }
 

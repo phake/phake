@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\Stubber\Answers;
 /* 
  * Phake - Mocking Framework
  * 
@@ -47,7 +49,7 @@
  *
  * @author Mike Lively <m@digitalsandwich.com>
  */
-class Phake_Stubber_Answers_NoAnswer extends Phake_Stubber_Answers_StaticAnswer
+class NoAnswer extends StaticAnswer
 {
     public function __construct()
     {

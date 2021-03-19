@@ -1,5 +1,7 @@
 <?php
 
+namespace Phake\PHPUnit;
+
 /*
  * Phake - Mocking Framework
  *
@@ -46,12 +48,12 @@
 /**
  * A PHPUnit constraint that wraps a phake verifier to allow assertions on expected calls.
  */
-class Phake_PHPUnit_VerifierResultConstraintV3d6 extends PHPUnit_Framework_Constraint
+class VerifierResultConstraintV3d6 extends \PHPUnit_Framework_Constraint
 {
     protected function matches($other)
     {
-        if (!$other instanceof Phake_CallRecorder_VerifierResult) {
-            throw new InvalidArgumentException("You must pass an instance of Phake_CallRecorder_VerifierResult");
+        if (!$other instanceof \Phake\CallRecorder\VerifierResult) {
+            throw new \InvalidArgumentException("You must pass an instance of \Phake\CallRecorder\VerifierResult");
         }
         return $other->getVerified();
     }
@@ -63,8 +65,8 @@ class Phake_PHPUnit_VerifierResultConstraintV3d6 extends PHPUnit_Framework_Const
 
     protected function failureDescription($other)
     {
-        if (!$other instanceof Phake_CallRecorder_VerifierResult) {
-            throw new InvalidArgumentException("You must pass an instance of Phake_CallRecorder_VerifierResult");
+        if (!$other instanceof \Phake\CallRecorder\VerifierResult) {
+            throw new \InvalidArgumentException("You must pass an instance of \Phake\CallRecorder\VerifierResult");
         }
 
         return $other->getFailureDescription();

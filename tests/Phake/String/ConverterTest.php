@@ -1,4 +1,7 @@
 <?php
+
+namespace Phake\String;
+
 /*
  * Phake - Mocking Framework
  *
@@ -49,10 +52,10 @@ use PHPUnit\Framework\TestCase;
  *
  * @author Mike Lively <m@digitalsandwich.com>
  */
-class Phake_String_ConverterTest extends TestCase
+class ConverterTest extends TestCase
 {
     /**
-     * @var Phake_String_Converter
+     * @var Phake\String\Converter
      */
     private $converter;
 
@@ -61,12 +64,12 @@ class Phake_String_ConverterTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->converter = new Phake_String_Converter();
+        $this->converter = new Converter();
     }
 
     public function testObjectConversion()
     {
-        $this->assertEquals('<object:stdClass>', $this->converter->convertToString(new stdClass()));
+        $this->assertEquals('<object:stdClass>', $this->converter->convertToString(new \stdClass()));
     }
 
     public function testArrayConversion()

@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\Stubber;
 /* 
  * Phake - Mocking Framework
  * 
@@ -47,21 +49,21 @@
  *
  * @todo probably not the best to do this, kind of dual purposing an interface :(
  */
-class Phake_Stubber_SelfBindingAnswerBinder implements Phake_Stubber_IAnswerBinder, Phake_Stubber_IAnswerContainer
+class SelfBindingAnswerBinder implements IAnswerBinder, IAnswerContainer
 {
     /**
-     * @var Phake_Stubber_IAnswer
+     * @var IAnswer
      */
     private $answer;
 
     /**
      * Binds the given answer to the current object.
      *
-     * @param Phake_Stubber_IAnswer $answer
+     * @param IAnswer $answer
      *
-     * @return $this|\Phake_Stubber_IAnswerContainer
+     * @return $this|IAnswerContainer
      */
-    public function bindAnswer(Phake_Stubber_IAnswer $answer)
+    public function bindAnswer(IAnswer $answer)
     {
         $this->answer = $answer;
 
@@ -70,7 +72,7 @@ class Phake_Stubber_SelfBindingAnswerBinder implements Phake_Stubber_IAnswerBind
 
     /**
      * Returns the answer bound to this object.
-     * @return Phake_Stubber_IAnswer
+     * @return IAnswer
      */
     public function getAnswer()
     {

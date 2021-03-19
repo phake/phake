@@ -1,4 +1,7 @@
 <?php
+
+namespace Phake\Stubber\Answers;
+
 /*
  * Phake - Mocking Framework
  *
@@ -42,15 +45,16 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+use Phake;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Tests the functionality of the parent delegate
  */
-class Phake_Stubber_Answers_ParentDelegateTest extends TestCase
+class ParentDelegateTest extends TestCase
 {
     /**
-     * @var Phake_Stubber_Answers_ParentDelegate
+     * @var Phake\Stubber\Answers\ParentDelegate
      */
     private $delegate;
 
@@ -59,7 +63,7 @@ class Phake_Stubber_Answers_ParentDelegateTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->delegate = new Phake_Stubber_Answers_ParentDelegate();
+        $this->delegate = new ParentDelegate();
     }
 
     /**
@@ -86,7 +90,7 @@ class Phake_Stubber_Answers_ParentDelegateTest extends TestCase
     public function testProcessAnswerSetsCapturedValue()
     {
         $value    = null;
-        $delegate = new Phake_Stubber_Answers_ParentDelegate($value);
+        $delegate = new ParentDelegate($value);
         $delegate->processAnswer("test");
 
         $this->assertEquals("test", $value);

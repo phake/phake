@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\Matchers;
 /*
  * Phake - Mocking Framework
  *
@@ -42,18 +44,19 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+use Phake;
 use PHPUnit\Framework\TestCase;
 
-class Phake_Matchers_AnyParametersTest extends TestCase
+class AnyParametersTest extends TestCase
 {
     /**
-     * @var Phake_Matchers_AnyParameters
+     * @var AnyParameters
      */
     private $matcher;
 
     public function setUp(): void
     {
-        $this->matcher = new Phake_Matchers_AnyParameters();
+        $this->matcher = new AnyParameters();
     }
 
     public static function matchesDataProvider()
@@ -82,13 +85,13 @@ class Phake_Matchers_AnyParametersTest extends TestCase
     {
         $this->expectException('InvalidArgumentException', 'Other matchers cannot be passed with any '
             . 'parameters. It will not work the way you think it works');
-        $this->matcher->setNextMatcher(Phake::mock('Phake_Matchers_IChainableArgumentMatcher'));
+        $this->matcher->setNextMatcher(Phake::mock(IChainableArgumentMatcher::class));
     }
 
     public function testAssertPreviousMatcherThrowsInvalidException()
     {
         $this->expectException('InvalidArgumentException', 'Other matchers cannot be passed with any '
             . 'parameters. It will not work the way you think it works');
-        $this->matcher->assertPreviousMatcher(Phake::mock('Phake_Matchers_IChainableArgumentMatcher'));
+        $this->matcher->assertPreviousMatcher(Phake::mock(IChainableArgumentMatcher::class));
     }
 }

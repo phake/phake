@@ -1,5 +1,7 @@
 <?php
 
+namespace Phake\CallRecorder;
+
 /*
  * Phake - Mocking Framework
  * 
@@ -46,7 +48,7 @@
 /**
  * A value object containing the results of a run of verifyCall()
  */
-class Phake_CallRecorder_VerifierResult
+class VerifierResult
 {
     private $verified;
 

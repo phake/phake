@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\Mock;
 /**
  * Created by PhpStorm.
  * User: mlively
@@ -6,37 +8,38 @@
  * Time: 3:29 PM
  */
 
+use Phake;
 use PHPUnit\Framework\TestCase;
 
-class Phake_Mock_InfoRegistryTest extends TestCase
+class InfoRegistryTest extends TestCase
 {
     /**
-     * @var Phake_Mock_InfoRegistry
+     * @var InfoRegistry
      */
     private $registry;
 
     /**
      * @Mock
-     * @var Phake_Mock_Info
+     * @var Phake\Mock\Info
      */
     private $info1;
 
     /**
      * @Mock
-     * @var Phake_Mock_Info
+     * @var Phake\Mock\Info
      */
     private $info2;
 
     /**
      * @Mock
-     * @var Phake_Mock_Info
+     * @var Phake\Mock\Info
      */
     private $info3;
 
     public function setUp(): void
     {
         Phake::initAnnotations($this);
-        $this->registry = new Phake_Mock_InfoRegistry();
+        $this->registry = new Phake\Mock\InfoRegistry();
         $this->registry->addInfo($this->info1);
         $this->registry->addInfo($this->info2);
         $this->registry->addInfo($this->info3);

@@ -1,5 +1,7 @@
 <?php
 
+namespace Phake\Matchers;
+
 /*
  * Phake - Mocking Framework
  *
@@ -50,7 +52,7 @@ use PHPUnit\Framework\ExpectationFailedException;
  * An adapter class allowing PHPUnit constraints to be treated as though they were Phake argument
  * matchers.
  */
-class Phake_Matchers_PHPUnit6ConstraintAdapter extends Phake_Matchers_SingleArgumentMatcher
+class PHPUnit6ConstraintAdapter extends SingleArgumentMatcher
 {
     /**
      * @var \PHPUnit\Framework\Constraint\Constraint
@@ -71,7 +73,7 @@ class Phake_Matchers_PHPUnit6ConstraintAdapter extends Phake_Matchers_SingleArgu
      * Forwards the call to PHPUnit's evaluate() method.
      *
      * @param mixed $argument
-     * @throws Phake_Exception_MethodMatcherException
+     * @throws \Phake\Exception\MethodMatcherException
      */
     protected function matches(&$argument)
     {
@@ -84,7 +86,7 @@ class Phake_Matchers_PHPUnit6ConstraintAdapter extends Phake_Matchers_SingleArgu
             } else {
                 $failure = '';
             }
-            throw new Phake_Exception_MethodMatcherException($e->getMessage() . "\n" . $failure, $e);
+            throw new \Phake\Exception\MethodMatcherException($e->getMessage() . "\n" . $failure, $e);
         }
     }
 

@@ -1,4 +1,7 @@
 <?php
+
+namespace Phake\Stubber;
+
 /*
  * Phake - Mocking Framework
  *
@@ -42,6 +45,7 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+use Phake;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -49,20 +53,20 @@ use PHPUnit\Framework\TestCase;
  *
  * @author Mike Lively <m@digitalsandwich.com>
  */
-class Phake_Stubber_AnswerBinderTest extends TestCase
+class AnswerBinderTest extends TestCase
 {
     /**
-     * @var Phake_Stubber_AnswerBinder
+     * @var Phake\Stubber\AnswerBinder
      */
     private $binder;
 
     /**
-     * @var Phake_Matchers_MethodMatcher
+     * @var Phake\Matchers\MethodMatcher
      */
     private $matcher;
 
     /**
-     * @var Phake_Stubber_StubMapper
+     * @var Phake\Stubber\StubMapper
      */
     private $stubMapper;
 
@@ -72,30 +76,30 @@ class Phake_Stubber_AnswerBinderTest extends TestCase
     public function setUp(): void
     {
         Phake::initAnnotations($this);
-        $this->matcher    = $this->getMockBuilder('Phake_Matchers_MethodMatcher')
+        $this->matcher    = $this->getMockBuilder('Phake\Matchers\MethodMatcher')
                                 ->disableOriginalConstructor()
                                 ->getMock();
-        $this->stubMapper = Phake::mock('Phake_Stubber_StubMapper');
+        $this->stubMapper = Phake::mock('Phake\Stubber\StubMapper');
 
-        $this->binder = new Phake_Stubber_AnswerBinder($this->matcher, $this->stubMapper);
+        $this->binder = new Phake\Stubber\AnswerBinder($this->matcher, $this->stubMapper);
     }
 
     public function testBindAnswer()
     {
-        $answer = $this->getMockBuilder('Phake_Stubber_IAnswer')->getMock();
+        $answer = $this->getMockBuilder('Phake\Stubber\IAnswer')->getMock();
 
         $this->binder->bindAnswer($answer);
 
-        Phake::verify($this->stubMapper)->mapStubToMatcher(new Phake_Stubber_AnswerCollection($answer), $this->matcher);
+        Phake::verify($this->stubMapper)->mapStubToMatcher(new Phake\Stubber\AnswerCollection($answer), $this->matcher);
     }
 
     public function testBindAnswerReturnsAnswerCollectionBinder()
     {
-        $answer = $this->getMockBuilder('Phake_Stubber_IAnswer')->getMock();
+        $answer = $this->getMockBuilder('Phake\Stubber\IAnswer')->getMock();
 
         $newBinder = $this->binder->bindAnswer($answer);
 
-        $this->assertInstanceOf('Phake_Proxies_AnswerCollectionProxy', $newBinder);
+        $this->assertInstanceOf('Phake\Proxies\AnswerCollectionProxy', $newBinder);
 
         $this->assertEquals($answer, $newBinder->getAnswer());
     }

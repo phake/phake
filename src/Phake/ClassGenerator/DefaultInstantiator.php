@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\ClassGenerator;
 /*
  * Phake - Mocking Framework
  *
@@ -46,7 +48,7 @@
 /**
  * Create instance of a class
  */
-class Phake_ClassGenerator_DefaultInstantiator implements Phake_ClassGenerator_IInstantiator
+class DefaultInstantiator implements IInstantiator
 {
     /**
      * @param string $className
@@ -55,7 +57,7 @@ class Phake_ClassGenerator_DefaultInstantiator implements Phake_ClassGenerator_I
      */
     public function instantiate($className)
     {
-        $reflClass = new ReflectionClass($className);
+        $reflClass = new \ReflectionClass($className);
         $constructor = $reflClass->getConstructor();
 
         if (null == $constructor || ($constructor->class == $className && 0 == $constructor->getNumberOfParameters())) {
@@ -65,7 +67,7 @@ class Phake_ClassGenerator_DefaultInstantiator implements Phake_ClassGenerator_I
         if (method_exists($reflClass, 'newInstanceWithoutConstructor')) {
             try {
                 return $reflClass->newInstanceWithoutConstructor();
-            } catch (ReflectionException $ignore) {
+            } catch (\ReflectionException $ignore) {
                 /* Failed to create object, the class might be final. */
             }
         }

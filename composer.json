@@ -26,9 +26,10 @@
         "bin-dir": "bin"
     },
     "autoload": {
-        "psr-0": {
-            "Phake": "src/"
-        }
+        "psr-4": {
+            "Phake\\": "src/Phake"
+        },
+        "files": ["src/Phake.php"]
     },
     "suggest": {
         "doctrine/common": "Allows mock annotations to use import statements for classes.",

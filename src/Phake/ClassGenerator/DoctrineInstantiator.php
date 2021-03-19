@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\ClassGenerator;
 /*
  * Phake - Mocking Framework
  *
@@ -46,7 +48,7 @@
 /**
  * Create instance of a class using Doctrine instantiator
  */
-class Phake_ClassGenerator_DoctrineInstantiator implements Phake_ClassGenerator_IInstantiator
+class DoctrineInstantiator implements IInstantiator
 {
     private $doctrineInstantiator;
 

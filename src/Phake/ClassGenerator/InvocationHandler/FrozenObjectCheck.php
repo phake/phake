@@ -1,5 +1,7 @@
 <?php
 
+namespace Phake\ClassGenerator\InvocationHandler;
+
 /*
  * Phake - Mocking Framework
  * 
@@ -46,17 +48,17 @@
 /**
  * Tests a mock to see if it is frozen.
  */
-class Phake_ClassGenerator_InvocationHandler_FrozenObjectCheck implements Phake_ClassGenerator_InvocationHandler_IInvocationHandler
+class FrozenObjectCheck implements IInvocationHandler
 {
     /**
-     * @var Phake_Mock_Info
+     * @var \Phake\Mock\Info
      */
     private $mockInfo;
 
     /**
-     * @param Phake_Mock_Info $mockInfo
+     * @param \Phake\Mock\Info $mockInfo
      */
-    public function __construct(Phake_Mock_Info $mockInfo)
+    public function __construct(\Phake\Mock\Info $mockInfo)
     {
         $this->mockInfo = $mockInfo;
     }
@@ -64,8 +66,8 @@ class Phake_ClassGenerator_InvocationHandler_FrozenObjectCheck implements Phake_
     public function invoke($mock, $method, array $arguments, array &$argumentReference)
     {
         if ($this->mockInfo->isObjectFrozen()) {
-            $result = new Phake_CallRecorder_VerifierResult(false, array(), 'This object has been frozen.');
-            Phake::getClient()->processVerifierResult($result);
+            $result = new \Phake\CallRecorder\VerifierResult(false, array(), 'This object has been frozen.');
+            \Phake::getClient()->processVerifierResult($result);
         }
     }
 }

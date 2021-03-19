@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\Stubber;
 /*
  * Phake - Mocking Framework
  *
@@ -47,10 +49,10 @@ use PHPUnit\Framework\TestCase;
 /**
  * Tests the self binding answer binder
  */
-class Phake_Stubber_SelfBindingAnswerBinderTest extends TestCase
+class SelfBindingAnswerBinderTest extends TestCase
 {
     /**
-     * @var Phake_Stubber_SelfBindingAnswerBinder
+     * @var SelfBindingAnswerBinder
      */
     private $binder;
 
@@ -59,7 +61,7 @@ class Phake_Stubber_SelfBindingAnswerBinderTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->binder = new Phake_Stubber_SelfBindingAnswerBinder();
+        $this->binder = new SelfBindingAnswerBinder();
     }
 
     /**
@@ -67,7 +69,7 @@ class Phake_Stubber_SelfBindingAnswerBinderTest extends TestCase
      */
     public function testGetAnswer()
     {
-        $answer = $this->getMockBuilder('Phake_Stubber_IAnswer')->getMock();
+        $answer = $this->getMockBuilder(IAnswer::class)->getMock();
         $this->assertSame($this->binder, $this->binder->bindAnswer($answer));
 
         $this->assertSame($answer, $this->binder->getAnswer());

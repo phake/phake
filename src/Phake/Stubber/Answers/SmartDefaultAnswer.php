@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\Stubber\Answers;
 /*
  * Phake - Mocking Framework
  *
@@ -47,7 +49,7 @@
  *
  * @author Mike Lively <m@digitalsandwich.com>
  */
-class Phake_Stubber_Answers_SmartDefaultAnswer implements Phake_Stubber_IAnswer
+class SmartDefaultAnswer implements \Phake\Stubber\IAnswer
 {
     public function processAnswer($answer)
     {
@@ -56,7 +58,7 @@ class Phake_Stubber_Answers_SmartDefaultAnswer implements Phake_Stubber_IAnswer
 
     public function getAnswerCallback($context, $method)
     {
-        $class = new ReflectionClass($context);
+        $class = new \ReflectionClass($context);
         $method = $class->getMethod($method);
 
         $defaultAnswer = null;
@@ -88,12 +90,12 @@ class Phake_Stubber_Answers_SmartDefaultAnswer implements Phake_Stubber_IAnswer
                         $defaultAnswer = function () {};
                         break 2;
                     case 'self':
-                        $defaultAnswer = Phake::mock($method->getDeclaringClass()->getName());
+                        $defaultAnswer = \Phake::mock($method->getDeclaringClass()->getName());
                         break 2;
                     default:
                         if (class_exists($typeName))
                         {
-                            $defaultAnswer = Phake::mock($typeName);
+                            $defaultAnswer = \Phake::mock($typeName);
                             break 2;
                         }
                         break;

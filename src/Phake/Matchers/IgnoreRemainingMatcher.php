@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\Matchers;
 /*
  * Phake - Mocking Framework
  *
@@ -45,7 +47,7 @@
 /**
  * A matcher that will return true for any invocation of a particular method
  */
-class Phake_Matchers_IgnoreRemainingMatcher extends Phake_Matchers_AbstractChainableArgumentMatcher
+class IgnoreRemainingMatcher extends AbstractChainableArgumentMatcher
 {
     /**
      * Do nothing, ignore remaining always matches
@@ -65,8 +67,8 @@ class Phake_Matchers_IgnoreRemainingMatcher extends Phake_Matchers_AbstractChain
         return '<any parameters>';
     }
 
-    public function setNextMatcher(Phake_Matchers_IChainableArgumentMatcher $nextMatcher)
+    public function setNextMatcher(IChainableArgumentMatcher $nextMatcher)
     {
-        throw new InvalidArgumentException('Other matchers cannot be checked after you ignore remaining parameters.');
+        throw new \InvalidArgumentException('Other matchers cannot be checked after you ignore remaining parameters.');
     }
 }

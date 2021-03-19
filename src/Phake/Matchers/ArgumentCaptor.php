@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\Matchers;
 /* 
  * Phake - Mocking Framework
  * 
@@ -47,7 +49,7 @@
  *
  * The constructor takes a parameter by reference that is populated when the matching runs.
  */
-class Phake_Matchers_ArgumentCaptor extends Phake_Matchers_SingleArgumentMatcher
+class ArgumentCaptor extends SingleArgumentMatcher
 {
     /**
      * @var mixed
@@ -60,7 +62,7 @@ class Phake_Matchers_ArgumentCaptor extends Phake_Matchers_SingleArgumentMatcher
     private $allCapturedValues;
 
     /**
-     * @var Phake_Matchers_IChainableArgumentMatcher
+     * @var IChainableArgumentMatcher
      */
     private $matcher;
 
@@ -92,7 +94,7 @@ class Phake_Matchers_ArgumentCaptor extends Phake_Matchers_SingleArgumentMatcher
      * Will bind the argument to the variable passed to the constructor.
      *
      * @param mixed $argument
-     * @throws Phake_Exception_MethodMatcherException
+     * @throws \Phake\Exception\MethodMatcherException
      */
     protected function matches(&$argument)
     {
@@ -105,9 +107,9 @@ class Phake_Matchers_ArgumentCaptor extends Phake_Matchers_SingleArgumentMatcher
             {
                 $this->matcher->doArgumentsMatch($args);
             }
-            catch (Phake_Exception_MethodMatcherException $e)
+            catch (\Phake\Exception\MethodMatcherException $e)
             {
-                throw new Phake_Exception_MethodMatcherException(trim("Failed in Phake::capture()->when()\n" . $e->getMessage()), $e);
+                throw new \Phake\Exception\MethodMatcherException(trim("Failed in Phake::capture()->when()\n" . $e->getMessage()), $e);
             }
         }
         $this->boundVariable = $argument;
@@ -124,11 +126,11 @@ class Phake_Matchers_ArgumentCaptor extends Phake_Matchers_SingleArgumentMatcher
      *
      * @param mixed $matcher
      *
-     * @return Phake_Matchers_ArgumentCaptor the current instance
+     * @return ArgumentCaptor the current instance
      */
     public function when($matcher)
     {
-        $factory = new Phake_Matchers_Factory();
+        $factory = new Factory();
 
         $this->matcher = $factory->createMatcher($matcher);
 

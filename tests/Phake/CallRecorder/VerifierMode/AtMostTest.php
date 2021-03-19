@@ -1,4 +1,7 @@
 <?php
+
+namespace Phake\CallRecorder\VerifierMode;
+
 /*
  * Phake - Mocking Framework
  *
@@ -47,13 +50,13 @@ use PHPUnit\Framework\TestCase;
 /**
  * Tests the functionality of the AtMost class.
  */
-class Phake_CallRecorder_VerifierMode_AtMostTest extends TestCase
+class AtMostTest extends TestCase
 {
     private $verifier;
 
     public function setUp(): void
     {
-        $this->verifier = new Phake_CallRecorder_VerifierMode_AtMost(1);
+        $this->verifier = new AtMost(1);
     }
 
     /**
