@@ -73,6 +73,11 @@ class Phake
      */
     private static $instantiator;
 
+    /**
+     * @var Phake_ClassGenerator_MockClass
+     */
+    private static $classGenerator;
+
 	/**
 	 * @var Phake_Matchers_Factory
 	 */
@@ -106,7 +111,7 @@ class Phake
 
         return self::getPhake()->mock(
             $className,
-            new Phake_ClassGenerator_MockClass(self::getMockLoader(), self::getMockInstantiator()),
+            self::getMockClassGenerator(),
             new Phake_CallRecorder_Recorder(),
             $answer
         );
@@ -128,7 +133,7 @@ class Phake
 
         return self::getPhake()->mock(
             $className,
-            new Phake_ClassGenerator_MockClass(self::getMockLoader(), self::getMockInstantiator()),
+            self::getMockClassGenerator(),
             new Phake_CallRecorder_Recorder(),
             $answer,
             $args
@@ -621,31 +626,42 @@ class Phake
         }
     }
 
+    public static function getMockClassGenerator()
+    {
+        if (!self::$classGenerator) {
+            self::$classGenerator = new Phake_ClassGenerator_MockClass(self::getMockLoader(), self::getMockInstantiator());
+        }
+
+        return self::$classGenerator;
+    }
+
     public static function getMockLoader()
     {
-        if (isset(self::$loader)) {
-            return self::$loader;
-        } else {
-            return new Phake_ClassGenerator_EvalLoader();
+        if (!self::$loader) {
+            self::$loader = new Phake_ClassGenerator_EvalLoader();
         }
+
+        return self::$loader;
     }
 
     public static function setMockLoader(Phake_ClassGenerator_ILoader $loader)
     {
+        self::$classGenerator = null;
         self::$loader = $loader;
     }
 
     public static function getMockInstantiator()
     {
-        if (isset(self::$instantiator)) {
-            return self::$instantiator;
-        } else {
-            return new Phake_ClassGenerator_DefaultInstantiator();
+        if (!self::$instantiator) {
+            self::$instantiator = new Phake_ClassGenerator_DefaultInstantiator();
         }
+
+        return self::$instantiator;
     }
 
     public static function setMockInstantiator(Phake_ClassGenerator_IInstatiator $instantiator)
     {
+        self::$classGenerator = null;
         self::$instantiator = $instantiator;
     }
 
