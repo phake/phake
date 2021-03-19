@@ -68,6 +68,11 @@ class Phake
      */
     private static $loader;
 
+    /**
+     * @var Phake_ClassGenerator_IInstatiator
+     */
+    private static $instantiator;
+
 	/**
 	 * @var Phake_Matchers_Factory
 	 */
@@ -101,7 +106,7 @@ class Phake
 
         return self::getPhake()->mock(
             $className,
-            new Phake_ClassGenerator_MockClass(self::getMockLoader()),
+            new Phake_ClassGenerator_MockClass(self::getMockLoader(), self::getMockInstantiator()),
             new Phake_CallRecorder_Recorder(),
             $answer
         );
@@ -123,7 +128,7 @@ class Phake
 
         return self::getPhake()->mock(
             $className,
-            new Phake_ClassGenerator_MockClass(self::getMockLoader()),
+            new Phake_ClassGenerator_MockClass(self::getMockLoader(), self::getMockInstantiator()),
             new Phake_CallRecorder_Recorder(),
             $answer,
             $args
@@ -628,6 +633,20 @@ class Phake
     public static function setMockLoader(Phake_ClassGenerator_ILoader $loader)
     {
         self::$loader = $loader;
+    }
+
+    public static function getMockInstantiator()
+    {
+        if (isset(self::$instantiator)) {
+            return self::$instantiator;
+        } else {
+            return new Phake_ClassGenerator_DefaultInstantiator();
+        }
+    }
+
+    public static function setMockInstantiator(Phake_ClassGenerator_IInstatiator $instantiator)
+    {
+        self::$instantiator = $instantiator;
     }
 
     public static function initAnnotations($obj)

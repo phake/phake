@@ -50,21 +50,24 @@
 class Phake_ClassGenerator_MockClass
 {
     private static $unsafeClasses = array('Memcached');
+
     /**
      * @var \Phake_ClassGenerator_ILoader
      */
     private $loader;
 
     /**
+     * @var \Phake_ClassGenerator_IInstantiator
+     */
+    private $instantiator;
+
+    /**
      * @param Phake_ClassGenerator_ILoader $loader
      */
-    public function __construct(Phake_ClassGenerator_ILoader $loader = null)
+    public function __construct(Phake_ClassGenerator_ILoader $loader = null, \Phake_ClassGenerator_IInstantiator $instantiator = null)
     {
-        if (empty($loader)) {
-            $loader = new Phake_ClassGenerator_EvalLoader();
-        }
-
-        $this->loader = $loader;
+        $this->loader = $loader ?: new Phake_ClassGenerator_EvalLoader();
+        $this->instantiator = $instantiator ?: new \Phake_ClassGenerator_DoctrineInstantiator();
     }
 
     /**
@@ -209,7 +212,7 @@ class {$newClassName} {$extends}
         array $constructorArgs = null
     ) {
 
-        $mockObject = $this->instanciateMockObject($newClassName);
+        $mockObject = $this->instantiator->instantiate($newClassName);
         $mockObject->__PHAKE_info = $this->createMockInfo($newClassName::__PHAKE_name, $recorder, $mapper, $defaultAnswer);
         $mockObject->__PHAKE_constructorArgs = $constructorArgs;
 
@@ -218,38 +221,6 @@ class {$newClassName} {$extends}
         }
 
         return $mockObject;
-    }
-
-    /**
-     * Instantiates a new instance of the given mocked class.
-     *
-     * @param $newClassName
-     * @return object
-     */
-    protected function instanciateMockObject ($newClassName) {
-
-        $reflClass = new ReflectionClass($newClassName);
-        $constructor = $reflClass->getConstructor();
-
-        if ($constructor == null || ($constructor->class == $newClassName && $constructor->getNumberOfParameters() == 0)) {
-            return new $newClassName;
-        }
-
-        if (method_exists($reflClass, "newInstanceWithoutConstructor")) {
-            try {
-                return $reflClass->newInstanceWithoutConstructor();
-            } catch (ReflectionException $ignore) {
-                /* Failed to create object, the class might be final. */
-            }
-        }
-
-        if (!is_subclass_of($newClassName, "Serializable")) {
-            /* Try to unserialize, this skips the constructor */
-            return unserialize(sprintf('O:%d:"%s":0:{}', strlen($newClassName), $newClassName));
-        }
-
-        /* Object implements custom unserialization */
-        return unserialize(sprintf('C:%d:"%s":0:{}', strlen($newClassName), $newClassName));
     }
 
     /**
