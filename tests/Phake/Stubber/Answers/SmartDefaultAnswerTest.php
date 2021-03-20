@@ -1,4 +1,7 @@
 <?php
+
+namespace Phake\Stubber\Answers;
+
 /*
  * Phake - Mocking Framework
  *
@@ -47,10 +50,10 @@ use PHPUnit\Framework\TestCase;
 /**
  * Tests the functionality of the parent delegate
  */
-class Phake_Stubber_Answers_SmartDefaultAnswerTest extends TestCase
+class SmartDefaultAnswerTest extends TestCase
 {
     /**
-     * @var Phake_Stubber_Answers_SmartDefaultAnswer
+     * @var Phake\Stubber\Answers\SmartDefaultAnswer
      */
     private $answer;
 
@@ -59,11 +62,7 @@ class Phake_Stubber_Answers_SmartDefaultAnswerTest extends TestCase
      */
     public function setUp(): void
     {
-        if (version_compare(phpversion(), '7.0.0RC1') < 0)
-        {
-            $this->markTestSkipped('Scalar type hints are not supported in PHP versions prior to 7.0');
-        }
-        $this->answer = new Phake_Stubber_Answers_SmartDefaultAnswer();
+        $this->answer = new SmartDefaultAnswer();
     }
 
     public static function typeReturnMap()
@@ -82,7 +81,7 @@ class Phake_Stubber_Answers_SmartDefaultAnswerTest extends TestCase
      */
     public function testSimpleReturn($method, $expectedValue)
     {
-        $context = new PhakeTest_ScalarTypes();
+        $context = new \PhakeTest_ScalarTypes();
         $cb = $this->answer->getAnswerCallback($context, $method);
 
         $this->assertSame($expectedValue, $cb());
@@ -90,7 +89,7 @@ class Phake_Stubber_Answers_SmartDefaultAnswerTest extends TestCase
 
     public function testCallableReturn()
     {
-        $context = new PhakeTest_ScalarTypes();
+        $context = new \PhakeTest_ScalarTypes();
         $cb = $this->answer->getAnswerCallback($context, 'callableReturn');
 
         $this->assertEquals(function () {}, $cb());
@@ -98,11 +97,11 @@ class Phake_Stubber_Answers_SmartDefaultAnswerTest extends TestCase
 
     public function testObjectReturn()
     {
-        $context = new PhakeTest_ScalarTypes();
+        $context = new \PhakeTest_ScalarTypes();
         $cb = $this->answer->getAnswerCallback($context, 'objectReturn');
 
         $this->assertInstanceOf('PhakeTest_A', $cb());
-        $this->assertInstanceOf('Phake_IMock', $cb());
+        $this->assertInstanceOf('Phake\IMock', $cb());
     }
 
     public function testUnionTypeReturn()
@@ -111,7 +110,7 @@ class Phake_Stubber_Answers_SmartDefaultAnswerTest extends TestCase
             $this->markTestSkipped('Union types are not supported in PHP versions prior to 8.0');
         }
 
-        $context = new PhakeTest_UnionTypes();
+        $context = new \PhakeTest_UnionTypes();
         $cb = $this->answer->getAnswerCallback($context, 'unionReturn');
 
         $this->assertTrue(in_array($cb(), [0, '']));
@@ -119,7 +118,7 @@ class Phake_Stubber_Answers_SmartDefaultAnswerTest extends TestCase
 
     public function testSelfReturn()
     {
-        $context = new PhakeTest_ScalarTypes();
+        $context = new \PhakeTest_ScalarTypes();
         $cb = $this->answer->getAnswerCallback($context, 'selfReturn');
 
         $this->assertInstanceOf('PhakeTest_ScalarTypes', $cb());

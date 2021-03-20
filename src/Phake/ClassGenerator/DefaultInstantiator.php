@@ -1,29 +1,28 @@
 <?php
 
-namespace Phake\CallRecorder;
-
+namespace Phake\ClassGenerator;
 /*
  * Phake - Mocking Framework
- * 
- * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
+ *
+ * Copyright (c) 2010-2012, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
- * 
+ *
  *  *  Redistributions of source code must retain the above copyright
  *     notice, this list of conditions and the following disclaimer.
- * 
+ *
  *  *  Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in
  *     the documentation and/or other materials provided with the
  *     distribution.
- * 
+ *
  *  *  Neither the name of Mike Lively nor the names of his
  *     contributors may be used to endorse or promote products derived
  *     from this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -36,59 +35,49 @@ namespace Phake\CallRecorder;
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  * @category   Testing
  * @package    Phake
  * @author     Mike Lively <m@digitalsandwich.com>
+ * @author     Pierrick Charron <pierrick@adoy.net>
  * @copyright  2010 Mike Lively <m@digitalsandwich.com>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link       http://www.digitalsandwich.com/
  */
 
 /**
- * A value object containing the results of a run of verifyCall()
+ * Create instance of a class
  */
-class VerifierResult
+class DefaultInstantiator implements IInstantiator
 {
-    private $verified;
-
-    private $matchedCalls;
-
-    private $failureDescription;
-
     /**
-     * @param boolean $verified
-     * @param array   $matchedCalls
-     * @param string  $failureDescription
+     * @param string $className
+     *
+     * @return object
      */
-    function __construct($verified, array $matchedCalls, $failureDescription = '')
+    public function instantiate($className)
     {
-        $this->verified           = $verified;
-        $this->matchedCalls       = $matchedCalls;
-        $this->failureDescription = $failureDescription;
-    }
+        $reflClass = new \ReflectionClass($className);
+        $constructor = $reflClass->getConstructor();
 
-    /**
-     * @return boolean
-     */
-    public function getVerified()
-    {
-        return $this->verified;
-    }
+        if (null == $constructor || ($constructor->class == $className && 0 == $constructor->getNumberOfParameters())) {
+            return new $className();
+        }
 
-    /**
-     * @return array
-     */
-    public function getMatchedCalls()
-    {
-        return $this->matchedCalls;
-    }
+        if (method_exists($reflClass, 'newInstanceWithoutConstructor')) {
+            try {
+                return $reflClass->newInstanceWithoutConstructor();
+            } catch (\ReflectionException $ignore) {
+                /* Failed to create object, the class might be final. */
+            }
+        }
 
-    /**
-     * @return string
-     */
-    public function getFailureDescription()
-    {
-        return $this->failureDescription;
+        if (!is_subclass_of($className, 'Serializable')) {
+            /* Try to unserialize, this skips the constructor */
+            return unserialize(sprintf('O:%d:"%s":0:{}', strlen($className), $className));
+        }
+
+        /* Object implements custom unserialization */
+        return unserialize(sprintf('C:%d:"%s":0:{}', strlen($className), $className));
     }
 }

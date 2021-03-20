@@ -1,29 +1,29 @@
 <?php
 
-namespace Phake\CallRecorder;
+namespace Phake\Client;
 
 /*
  * Phake - Mocking Framework
- * 
+ *
  * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
- * 
+ *
  *  *  Redistributions of source code must retain the above copyright
  *     notice, this list of conditions and the following disclaimer.
- * 
+ *
  *  *  Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in
  *     the documentation and/or other materials provided with the
  *     distribution.
- * 
+ *
  *  *  Neither the name of Mike Lively nor the names of his
  *     contributors may be used to endorse or promote products derived
  *     from this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -36,7 +36,7 @@ namespace Phake\CallRecorder;
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  * @category   Testing
  * @package    Phake
  * @author     Mike Lively <m@digitalsandwich.com>
@@ -45,50 +45,36 @@ namespace Phake\CallRecorder;
  * @link       http://www.digitalsandwich.com/
  */
 
-/**
- * A value object containing the results of a run of verifyCall()
- */
-class VerifierResult
+use Phake;
+use PHPUnit\Framework\TestCase;
+
+class DefaultClientTest extends TestCase
 {
-    private $verified;
+    private $client;
 
-    private $matchedCalls;
-
-    private $failureDescription;
-
-    /**
-     * @param boolean $verified
-     * @param array   $matchedCalls
-     * @param string  $failureDescription
-     */
-    function __construct($verified, array $matchedCalls, $failureDescription = '')
+    public function setUp(): void
     {
-        $this->verified           = $verified;
-        $this->matchedCalls       = $matchedCalls;
-        $this->failureDescription = $failureDescription;
+        $this->client = new DefaultClient();
     }
 
-    /**
-     * @return boolean
-     */
-    public function getVerified()
+    public function testImplementsIClient()
     {
-        return $this->verified;
+        $this->assertInstanceOf(IClient::class, $this->client);
     }
 
-    /**
-     * @return array
-     */
-    public function getMatchedCalls()
+    public function testProcessVerifierResultReturnsCallsOnTrue()
     {
-        return $this->matchedCalls;
+        $result = new Phake\CallRecorder\VerifierResult(true, array('call1'));
+
+        $this->assertEquals(array('call1'), $this->client->processVerifierResult($result));
     }
 
-    /**
-     * @return string
-     */
-    public function getFailureDescription()
+    public function testProcessVerifierThrowsExceptionOnFalse()
     {
-        return $this->failureDescription;
+        $result = new Phake\CallRecorder\VerifierResult(false, array(), 'failure message');
+
+        $this->expectException('Phake\Exception\VerificationException', 'failure message');
+        $this->client->processVerifierResult($result);
     }
 }
+

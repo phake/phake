@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\Matchers;
 /* 
  * Phake - Mocking Framework
  * 
@@ -42,7 +44,7 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-class Phake_Matchers_ReferenceSetter extends Phake_Matchers_SingleArgumentMatcher
+class ReferenceSetter extends SingleArgumentMatcher
 {
     /**
      * @var mixed
@@ -50,7 +52,7 @@ class Phake_Matchers_ReferenceSetter extends Phake_Matchers_SingleArgumentMatche
     private $value;
 
     /**
-     * @var Phake_Matchers_IChainableArgumentMatcher
+     * @var IChainableArgumentMatcher
      */
     private $matcher;
 
@@ -68,7 +70,7 @@ class Phake_Matchers_ReferenceSetter extends Phake_Matchers_SingleArgumentMatche
      * Sets the $argument to the value passed in the constructor
      *
      * @param mixed $argument
-     * @throws Phake_Exception_MethodMatcherException
+     * @throws \Phake\Exception\MethodMatcherException
      */
     protected function matches(&$argument)
     {
@@ -80,9 +82,9 @@ class Phake_Matchers_ReferenceSetter extends Phake_Matchers_SingleArgumentMatche
             {
                 $this->matcher->doArgumentsMatch($args);
             }
-            catch (Phake_Exception_MethodMatcherException $e)
+            catch (\Phake\Exception\MethodMatcherException $e)
             {
-                throw new Phake_Exception_MethodMatcherException(trim("Failed in Phake::setReference()->when()\n" . $e->getMessage()), $e);
+                throw new \Phake\Exception\MethodMatcherException(trim("Failed in Phake::setReference()->when()\n" . $e->getMessage()), $e);
             }
             $this->matcher->doArgumentsMatch($args);
         }
@@ -107,11 +109,11 @@ class Phake_Matchers_ReferenceSetter extends Phake_Matchers_SingleArgumentMatche
      *
      * @param mixed $matcher
      *
-     * @return Phake_Matchers_ReferenceSetter the current instance
+     * @return ReferenceSetter the current instance
      */
     public function when($matcher)
     {
-        $factory = new Phake_Matchers_Factory();
+        $factory = new Factory();
 
         $this->matcher = $factory->createMatcher($matcher);
 

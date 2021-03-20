@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\Proxies;
 /* 
  * Phake - Mocking Framework
  * 
@@ -47,25 +49,25 @@
  *
  * @author Mike Lively <m@digitalsandwich.com>
  */
-class Phake_Proxies_StubberProxy
+class StubberProxy
 {
     /**
-     * @var Phake_IMock
+     * @var \Phake\IMock
      */
     private $obj;
 
     /**
-     * @var Phake_Matchers_Factory
+     * @var \Phake\Matchers\Factory
      */
     private $matcherFactory;
 
     /**
-     * @param Phake_IMock|string     $obj
-     * @param Phake_Matchers_Factory $matcherFactory
+     * @param \Phake\IMock|string     $obj
+     * @param \Phake\Matchers\Factory $matcherFactory
      */
-    public function __construct($obj, Phake_Matchers_Factory $matcherFactory)
+    public function __construct($obj, \Phake\Matchers\Factory $matcherFactory)
     {
-        Phake::assertValidMock($obj);
+        \Phake::assertValidMock($obj);
         $this->obj            = $obj;
         $this->matcherFactory = $matcherFactory;
     }
@@ -76,13 +78,13 @@ class Phake_Proxies_StubberProxy
      * @param string $method
      * @param array  $arguments
      *
-     * @return Phake_Proxies_AnswerBinderProxy
+     * @return AnswerBinderProxy
      */
     public function __call($method, array $arguments)
     {
-        $matcher = new Phake_Matchers_MethodMatcher($method, $this->matcherFactory->createMatcherChain($arguments));
-        $binder  = new Phake_Stubber_AnswerBinder($matcher, Phake::getInfo($this->obj)->getStubMapper());
-        return new Phake_Proxies_AnswerBinderProxy($binder);
+        $matcher = new \Phake\Matchers\MethodMatcher($method, $this->matcherFactory->createMatcherChain($arguments));
+        $binder  = new \Phake\Stubber\AnswerBinder($matcher, \Phake::getInfo($this->obj)->getStubMapper());
+        return new AnswerBinderProxy($binder);
     }
 
     /**
@@ -90,25 +92,25 @@ class Phake_Proxies_StubberProxy
      *
      * @param string $method
      *
-     * @throws InvalidArgumentException if $method is not a valid parameter/method name
+     * @throws \InvalidArgumentException if $method is not a valid parameter/method name
      *
-     * @return Phake_Proxies_AnswerBinderProxy
+     * @return AnswerBinderProxy
      */
     public function __get($method)
     {
         if (is_string($method) && ctype_digit($method[0])) {
-            throw new InvalidArgumentException('String parameter to __get() cannot start with an integer');
+            throw new \InvalidArgumentException('String parameter to __get() cannot start with an integer');
         }
 
         if (!is_string($method) && !is_object($method)) { // assume an object is a matcher
             $message = sprintf('Parameter to __get() must be a string, %s given', gettype($method));
-            throw new InvalidArgumentException($message);
+            throw new \InvalidArgumentException($message);
         }
 
         if (method_exists($this->obj, '__get') && !(is_string($method) && method_exists($this->obj, $method))) {
             return $this->__call('__get', array($method));
         }
 
-        return $this->__call($method, array(new Phake_Matchers_AnyParameters()));
+        return $this->__call($method, array(new \Phake\Matchers\AnyParameters()));
     }
 }

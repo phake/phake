@@ -1,4 +1,7 @@
 <?php
+
+namespace Phake\Matchers;
+
 /*
  * Phake - Mocking Framework
  *
@@ -42,18 +45,19 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+use Phake;
 use PHPUnit\Framework\TestCase;
 
-class Phake_Matchers_AbstractChainableArgumentMatcherTest extends TestCase
+class AbstractChainableArgumentMatcherTest extends TestCase
 {
     /**
-     * @var Phake_Matchers_AbstractChainableArgumentMatcher
+     * @var AbstractChainableArgumentMatcher
      */
     private $matcher;
 
     /**
      * @Mock
-     * @var Phake_Matchers_IChainableArgumentMatcher
+     * @var Phake\Matchers\IChainableArgumentMatcher
      */
     private $nextMatcher;
 
@@ -61,7 +65,7 @@ class Phake_Matchers_AbstractChainableArgumentMatcherTest extends TestCase
     {
         Phake::initAnnotations($this);
 
-        $this->matcher = Phake::partialMock('Phake_Matchers_AbstractChainableArgumentMatcher');
+        $this->matcher = Phake::partialMock(AbstractChainableArgumentMatcher::class);
     }
 
     public function testGetNext()
@@ -78,9 +82,9 @@ class Phake_Matchers_AbstractChainableArgumentMatcherTest extends TestCase
 
     public function testSetNextMatcherCallsAssertPreviousMatcher()
     {
-        Phake::when($this->nextMatcher)->assertPreviousMatcher->thenThrow(new InvalidArgumentException());
+        Phake::when($this->nextMatcher)->assertPreviousMatcher->thenThrow(new \InvalidArgumentException());
 
-        $this->expectException('InvalidArgumentException');
+        $this->expectException(\InvalidArgumentException::class);
         $this->matcher->setNextMatcher($this->nextMatcher);
     }
 }

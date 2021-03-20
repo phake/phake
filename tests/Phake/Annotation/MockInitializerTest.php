@@ -1,5 +1,6 @@
 <?php
 
+namespace Phake\Annotation;
 /*
  * Phake - Mocking Framework
  *
@@ -50,10 +51,10 @@ use PhakeTest\AnotherNamespacedClass;
  * @ann1 Test Annotation
  * @ann2
  */
-class Phake_Annotation_MockInitializerTest extends TestCase
+class MockInitializerTest extends TestCase
 {
     /**
-     * @var Phake_Annotation_MockInitializer
+     * @var MockInitializer
      */
     private $initializer;
 
@@ -81,11 +82,7 @@ class Phake_Annotation_MockInitializerTest extends TestCase
 
     protected function setUp(): void
     {
-        if (version_compare(PHP_VERSION, '5.3', '<')) {
-            $this->markTestSkipped('ReflectionProperty::setAccessible() is not available');
-        }
-
-        $this->initializer = new Phake_Annotation_MockInitializer();
+        $this->initializer = new MockInitializer();
     }
 
     protected function tearDown(): void
@@ -97,16 +94,12 @@ class Phake_Annotation_MockInitializerTest extends TestCase
 
     public function testInitialize()
     {
-        if (version_compare(PHP_VERSION, '5.3', '<')) {
-            $this->markTestSkipped('ReflectionProperty::setAccessible() is not available');
-        }
-
         $this->initializer->initialize($this);
 
         $this->assertInstanceOf('stdClass', $this->mock1);
         $this->assertInstanceOf('stdClass', $this->mock2);
-        $this->assertInstanceOf('Phake_IMock', $this->mock1);
-        $this->assertInstanceOf('Phake_IMock', $this->mock2);
+        $this->assertInstanceOf('Phake\IMock', $this->mock1);
+        $this->assertInstanceOf('Phake\IMock', $this->mock2);
     }
 
     /**
@@ -116,7 +109,7 @@ class Phake_Annotation_MockInitializerTest extends TestCase
     {
         $this->initializer->initialize($this);
 
-        $this->assertInstanceOf('Phake_IMock', $this->shortNameMock1);
+        $this->assertInstanceOf('Phake\IMock', $this->shortNameMock1);
     }
 
     /**
@@ -126,7 +119,7 @@ class Phake_Annotation_MockInitializerTest extends TestCase
     {
         $this->initializer->initialize($this);
 
-        $this->assertInstanceOf('Phake_IMock', $this->shortNameMock2);
+        $this->assertInstanceOf('Phake\IMock', $this->shortNameMock2);
     }
 }
 

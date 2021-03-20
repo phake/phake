@@ -1,5 +1,7 @@
 <?php
 
+namespace Phake\ClassGenerator\InvocationHandler;
+
 /*
  * Phake - Mocking Framework
  * 
@@ -48,10 +50,10 @@
  *
  * Invocation handlers are used to provide various functionality in reaction to a method invocation on a mock object.
  */
-interface Phake_ClassGenerator_InvocationHandler_IInvocationHandler
+interface IInvocationHandler
 {
     /**
-     * @param Phake_IMock|string $mock
+     * @param \Phake\IMock|string $mock
      * @param $method
      * @param array $arguments
      * @param array $argumentReference

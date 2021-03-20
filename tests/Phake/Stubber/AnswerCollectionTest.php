@@ -1,4 +1,7 @@
 <?php
+
+namespace Phake\Stubber;
+
 /*
  * Phake - Mocking Framework
  *
@@ -42,24 +45,25 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+use Phake;
 use PHPUnit\Framework\TestCase;
 
-class Phake_Stubber_AnswerCollectionTest extends TestCase
+class AnswerCollectionTest extends TestCase
 {
     /**
-     * @var Phake_Stubber_AnswerCollection
+     * @var Phake\Stubber\AnswerCollection
      */
     private $collection;
 
     /**
-     * @var Phake_Stubber_IAnswer
+     * @var Phake\Stubber\IAnswer
      */
     private $answer;
 
     public function setUp(): void
     {
-        $this->answer     = Phake::mock('Phake_Stubber_IAnswer');
-        $this->collection = new Phake_Stubber_AnswerCollection($this->answer);
+        $this->answer     = Phake::mock(IAnswer::class);
+        $this->collection = new AnswerCollection($this->answer);
     }
 
     public function testConstructionSetsFirstAnswer()
@@ -69,7 +73,7 @@ class Phake_Stubber_AnswerCollectionTest extends TestCase
 
     public function testAdditionalAnswersAreReturned()
     {
-        $answer2 = Phake::mock('Phake_Stubber_IAnswer');
+        $answer2 = Phake::mock(IAnswer::class);
         $this->collection->addAnswer($answer2);
 
         $this->assertSame($this->answer, $this->collection->getAnswer());
@@ -84,7 +88,7 @@ class Phake_Stubber_AnswerCollectionTest extends TestCase
 
     public function testFinalAnswerReturnedRepeatedly()
     {
-        $answer2 = Phake::mock('Phake_Stubber_IAnswer');
+        $answer2 = Phake::mock(IAnswer::class);
         $this->collection->addAnswer($answer2);
 
         $this->assertSame($this->answer, $this->collection->getAnswer());
@@ -94,8 +98,8 @@ class Phake_Stubber_AnswerCollectionTest extends TestCase
 
     public function testAddAnswersOnTheFly()
     {
-        $answer2 = Phake::mock('Phake_Stubber_IAnswer');
-        $answer3 = Phake::mock('Phake_Stubber_IAnswer');
+        $answer2 = Phake::mock(IAnswer::class);
+        $answer3 = Phake::mock(IAnswer::class);
         $this->collection->addAnswer($answer2);
 
         $this->assertSame($this->answer, $this->collection->getAnswer());

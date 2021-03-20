@@ -1,5 +1,7 @@
 <?php
 
+namespace Phake\ClassGenerator\InvocationHandler;
+
 /*
  * Phake - Mocking Framework
  * 
@@ -46,17 +48,17 @@
 /**
  * Records calls to a mock object's call recorder.
  */
-class Phake_ClassGenerator_InvocationHandler_CallRecorder implements Phake_ClassGenerator_InvocationHandler_IInvocationHandler
+class CallRecorder implements IInvocationHandler
 {
     /**
-     * @var Phake_CallRecorder_Recorder
+     * @var \Phake\CallRecorder\Recorder
      */
     private $callRecorder;
 
     /**
-     * @param Phake_CallRecorder_Recorder $callRecorder
+     * @param \Phake\CallRecorder\Recorder $callRecorder
      */
-    public function __construct(Phake_CallRecorder_Recorder $callRecorder)
+    public function __construct(\Phake\CallRecorder\Recorder $callRecorder)
     {
         $this->callRecorder = $callRecorder;
     }
@@ -64,7 +66,7 @@ class Phake_ClassGenerator_InvocationHandler_CallRecorder implements Phake_Class
     public function invoke($mock, $method, array $arguments, array &$argumentReference)
     {
         $this->callRecorder->recordCall(
-            new Phake_CallRecorder_Call($mock, $method, $arguments)
+            new \Phake\CallRecorder\Call($mock, $method, $arguments)
         );
     }
 }

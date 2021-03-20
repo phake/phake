@@ -1,4 +1,7 @@
 <?php
+
+namespace Phake\CallRecorder;
+
 /*
  * Phake - Mocking Framework
  *
@@ -45,10 +48,10 @@
 /**
  * A call or set of calls that was expected
  */
-class Phake_CallRecorder_CallExpectation
+class CallExpectation
 {
     /**
-     * @var Phake_IMock
+     * @var \Phake\IMock
      */
     private $object;
 
@@ -58,26 +61,26 @@ class Phake_CallRecorder_CallExpectation
     private $method;
 
     /**
-     * @var Phake_Matchers_IChainableArgumentMatcher
+     * @var \Phake\Matchers\IChainableArgumentMatcher
      */
     private $argumentMatcher;
 
     /**
-     * @var Phake_CallRecorder_IVerifierMode
+     * @var IVerifierMode
      */
     private $verifierMode;
 
     /**
-     * @param Phake_IMock|mixed $object
+     * @param \Phake\IMock|mixed $object
      * @param string $method
-     * @param Phake_Matchers_IChainableArgumentMatcher $argumentMatcher
-     * @param Phake_CallRecorder_IVerifierMode $verificationMode
+     * @param \Phake\Matchers\IChainableArgumentMatcher $argumentMatcher
+     * @param IVerifierMode $verificationMode
      */
     public function __construct(
         $object,
         $method,
-        Phake_Matchers_IChainableArgumentMatcher $argumentMatcher = null,
-        Phake_CallRecorder_IVerifierMode $verificationMode
+        \Phake\Matchers\IChainableArgumentMatcher $argumentMatcher = null,
+        IVerifierMode $verificationMode
     ) {
         $this->object           = $object;
         $this->method           = $method;
@@ -86,7 +89,7 @@ class Phake_CallRecorder_CallExpectation
     }
 
     /**
-     * @return Phake_IMock
+     * @return \Phake\IMock
      */
     public function getObject()
     {
@@ -102,7 +105,7 @@ class Phake_CallRecorder_CallExpectation
     }
 
     /**
-     * @return Phake_Matchers_IChainableArgumentMatcher
+     * @return \Phake\Matchers\IChainableArgumentMatcher
      */
     public function getArgumentMatcher()
     {
@@ -110,7 +113,7 @@ class Phake_CallRecorder_CallExpectation
     }
 
     /**
-     * @return Phake_CallRecorder_IVerifierMode
+     * @return IVerifierMode
      */
     public function getVerifierMode()
     {
@@ -129,7 +132,7 @@ class Phake_CallRecorder_CallExpectation
             $argumentMatcher = $argumentMatcher->getNextMatcher();
         }
 
-        $name = Phake::getName($this->getObject());
+        $name = \Phake::getName($this->getObject());
         $access = is_string($this->object) ? '::' : '->';
 
         return "Expected {$name}{$access}{$this->getMethod()}(" . implode(

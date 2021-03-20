@@ -1,5 +1,7 @@
 <?php
 
+namespace Phake\ClassGenerator\InvocationHandler;
+
 /*
  * Phake - Mocking Framework
  *
@@ -43,47 +45,48 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+use Phake;
 use PHPUnit\Framework\TestCase;
 
-class Phake_ClassGenerator_InvocationHandler_MagicCallRecorderTest extends TestCase
+class MagicCallRecorderTest extends TestCase
 {
     /**
-     * @var Phake_ClassGenerator_InvocationHandler_MagicCallRecorder
+     * @var MagicCallRecorder
      */
     private $handler;
 
     /**
-     * @var Phake_CallRecorder_Recorder
+     * @var Phake\CallRecorder\Recorder
      */
     private $callRecorder;
 
     public function setUp(): void
     {
-        $this->callRecorder = Phake::mock('Phake_CallRecorder_Recorder');
-        $this->handler = new Phake_ClassGenerator_InvocationHandler_MagicCallRecorder($this->callRecorder);
+        $this->callRecorder = Phake::mock(Phake\CallRecorder\Recorder::class);
+        $this->handler = new MagicCallRecorder($this->callRecorder);
     }
 
     public function testImplementIInvocationHandler()
     {
-        $this->assertInstanceOf('Phake_ClassGenerator_InvocationHandler_IInvocationHandler', $this->handler);
+        $this->assertInstanceOf(IInvocationHandler::class, $this->handler);
     }
 
     public function testMagicCallIsRecorded()
     {
-        $mock = $this->getMockBuilder('Phake_IMock')
+        $mock = $this->getMockBuilder(Phake\IMock::class)
                     ->getMock();
 
         $ref = array('foo', array());
         $this->handler->invoke($mock, '__call', array('foo', array()), $ref);
 
         Phake::verify($this->callRecorder)->recordCall(
-            new Phake_CallRecorder_Call($mock, 'foo', array())
+            new Phake\CallRecorder\Call($mock, 'foo', array())
         );
     }
 
     public function testStaticMagicCallIsRecorded()
     {
-        $mock = $this->getMockBuilder('Phake_IMock')
+        $mock = $this->getMockBuilder(Phake\IMock::class)
                     ->getMock();
         $mockClass = get_class($mock);
 
@@ -91,13 +94,13 @@ class Phake_ClassGenerator_InvocationHandler_MagicCallRecorderTest extends TestC
         $this->handler->invoke($mockClass, '__callStatic', array('foo', array()), $ref);
 
         Phake::verify($this->callRecorder)->recordCall(
-            new Phake_CallRecorder_Call($mockClass, 'foo', array())
+            new Phake\CallRecorder\Call($mockClass, 'foo', array())
         );
     }
 
     public function testNonMagicCallDoesNothing()
     {
-        $mock = $this->getMockBuilder('Phake_IMock')
+        $mock = $this->getMockBuilder(Phake\IMock::class)
                     ->getMock();
 
         $ref = array();

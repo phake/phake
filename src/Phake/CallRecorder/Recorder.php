@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\CallRecorder;
 /* 
  * Phake - Mocking Framework
  * 
@@ -51,7 +53,7 @@
  *
  * @author Mike Lively <m@digitalsandwich.com>
  */
-class Phake_CallRecorder_Recorder
+class Recorder
 {
     /**
      * @var array
@@ -76,12 +78,12 @@ class Phake_CallRecorder_Recorder
     /**
      * Records that a given
      *
-     * @param Phake_CallRecorder_Call $call
+     * @param Call $call
      */
-    public function recordCall(Phake_CallRecorder_Call $call)
+    public function recordCall(Call $call)
     {
         $this->calls[]                           = $call;
-        $this->positions[spl_object_hash($call)] = new Phake_CallRecorder_Position(self::$lastPosition++);
+        $this->positions[spl_object_hash($call)] = new Position(self::$lastPosition++);
         $this->unverifiedCalls[spl_object_hash($call)] = $call;
     }
 
@@ -109,14 +111,14 @@ class Phake_CallRecorder_Recorder
     /**
      * Retrieves call info for a particular call
      *
-     * @param Phake_CallRecorder_Call $call
+     * @param Call $call
      *
-     * @return Phake_CallRecorder_CallInfo
+     * @return CallInfo
      */
-    public function getCallInfo(Phake_CallRecorder_Call $call)
+    public function getCallInfo(Call $call)
     {
         if (in_array($call, $this->calls, true)) {
-            return new Phake_CallRecorder_CallInfo($call, $this->positions[spl_object_hash($call)]);
+            return new CallInfo($call, $this->positions[spl_object_hash($call)]);
         } else {
             return null;
         }
@@ -125,9 +127,9 @@ class Phake_CallRecorder_Recorder
     /**
      * Marks an individual call as being verified
      *
-     * @param Phake_CallRecorder_Call $call
+     * @param Call $call
      */
-    public function markCallVerified(Phake_CallRecorder_Call $call)
+    public function markCallVerified(Call $call)
     {
         unset($this->unverifiedCalls[spl_object_hash($call)]);
     }

@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\Proxies;
 /* 
  * Phake - Mocking Framework
  * 
@@ -43,47 +45,47 @@
  */
 
 /**
- * Acts as a proxy to Phake_CallRecorder_Verifier that allows verifying methods using the magic
+ * Acts as a proxy to \Phake\CallRecorder\Verifier that allows verifying methods using the magic
  * __call() method in PHP.
  *
  * Also throws an exception when a verification call fails.
  *
  * @author Mike Lively <m@digitalsandwich.com>
  */
-class Phake_Proxies_VerifierProxy
+class VerifierProxy
 {
     /**
-     * @var Phake_CallRecorder_Verifier
+     * @var \Phake\CallRecorder\Verifier
      */
     private $verifier;
 
     /**
-     * @var Phake_Matchers_Factory
+     * @var \Phake\Matchers\Factory
      */
     private $matcherFactory;
 
     /**
-     * @var Phake_CallRecorder_IVerifierMode
+     * @var \Phake\CallRecorder\IVerifierMode
      */
     private $mode;
 
     /**
      *
-     * @var Phake_Client_IClient
+     * @var \Phake\Client\IClient
      */
     private $client;
 
     /**
-     * @param Phake_CallRecorder_Verifier      $verifier
-     * @param Phake_Matchers_Factory           $matcherFactory
-     * @param Phake_CallRecorder_IVerifierMode $mode
-     * @param Phake_Client_IClient             $client
+     * @param \Phake\CallRecorder\Verifier      $verifier
+     * @param \Phake\Matchers\Factory           $matcherFactory
+     * @param \Phake\CallRecorder\IVerifierMode $mode
+     * @param \Phake\Client\IClient             $client
      */
     public function __construct(
-        Phake_CallRecorder_Verifier $verifier,
-        Phake_Matchers_Factory $matcherFactory,
-        Phake_CallRecorder_IVerifierMode $mode,
-        Phake_Client_IClient $client
+        \Phake\CallRecorder\Verifier $verifier,
+        \Phake\Matchers\Factory $matcherFactory,
+        \Phake\CallRecorder\IVerifierMode $mode,
+        \Phake\Client\IClient $client
     ) {
         $this->verifier       = $verifier;
         $this->matcherFactory = $matcherFactory;
@@ -97,11 +99,11 @@ class Phake_Proxies_VerifierProxy
      * @param string $method
      * @param array  $arguments
      *
-     * @return Phake_CallRecorder_VerifierResult
+     * @return \Phake\CallRecorder\VerifierResult
      */
     public function __call($method, array $arguments)
     {
-        $expectation = new Phake_CallRecorder_CallExpectation($this->verifier->getObject(
+        $expectation = new \Phake\CallRecorder\CallExpectation($this->verifier->getObject(
         ), $method, $this->matcherFactory->createMatcherChain($arguments), $this->mode);
 
         $result = $this->verifier->verifyCall($expectation);
@@ -114,27 +116,27 @@ class Phake_Proxies_VerifierProxy
      *
      * @param string $method
      *
-     * @throws InvalidArgumentException if $method is not a valid parameter/method name
+     * @throws \InvalidArgumentException if $method is not a valid parameter/method name
      *
-     * @return Phake_CallRecorder_VerifierResult
+     * @return \Phake\CallRecorder\VerifierResult
      */
     public function __get($method)
     {
         $obj = $this->verifier->getObject();
 
         if (is_string($method) && ctype_digit($method[0])) {
-            throw new InvalidArgumentException('String parameter to __get() cannot start with an integer');
+            throw new \InvalidArgumentException('String parameter to __get() cannot start with an integer');
         }
 
         if (!is_string($method) && !is_object($method)) {
             $message = sprintf('Parameter to __get() must be a string, %s given', gettype($method));
-            throw new InvalidArgumentException($message);
+            throw new \InvalidArgumentException($message);
         }
 
         if (method_exists($obj, '__get') && !(is_string($method) && method_exists($obj, $method))) {
             return $this->__call('__get', array($method));
         }
 
-        return $this->__call($method, array(new Phake_Matchers_AnyParameters));
+        return $this->__call($method, array(new \Phake\Matchers\AnyParameters));
     }
 }

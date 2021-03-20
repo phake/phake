@@ -1,5 +1,7 @@
 <?php
 
+namespace Phake\ClassGenerator\InvocationHandler;
+
 /*
  * Phake - Mocking Framework
  * 
@@ -46,7 +48,7 @@
 /**
  * A composite invocation handler
  */
-class Phake_ClassGenerator_InvocationHandler_Composite implements Phake_ClassGenerator_InvocationHandler_IInvocationHandler
+class Composite implements IInvocationHandler
 {
     /**
      * @var array

@@ -1,4 +1,7 @@
 <?php
+
+namespace Phake\Matchers;
+
 /*
  * Phake - Mocking Framework
  *
@@ -42,15 +45,16 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+use Phake;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Tests the reference setter functionality.
  */
-class Phake_Matchers_ReferenceSetterTest extends TestCase
+class ReferenceSetterTest extends TestCase
 {
     /**
-     * @var Phake_Matchers_ReferenceSetter
+     * @var ReferenceSetter
      */
     private $setter;
 
@@ -59,7 +63,7 @@ class Phake_Matchers_ReferenceSetterTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->setter = new Phake_Matchers_ReferenceSetter(42);
+        $this->setter = new ReferenceSetter(42);
     }
 
     /**
@@ -78,7 +82,7 @@ class Phake_Matchers_ReferenceSetterTest extends TestCase
      */
     public function testConditionalSetting()
     {
-        $matcher = Phake::mock('Phake_Matchers_IChainableArgumentMatcher');
+        $matcher = Phake::mock(IChainableArgumentMatcher::class);
         $check = '';
         Phake::when($matcher)->doArgumentsMatch->thenReturnCallback(function ($arg) use (&$check) {
                 $check = $arg[0];
@@ -98,9 +102,9 @@ class Phake_Matchers_ReferenceSetterTest extends TestCase
      */
     public function testConditionalSettingWontSet()
     {
-        $matcher = Phake::mock('Phake_Matchers_IChainableArgumentMatcher');
+        $matcher = Phake::mock(IChainableArgumentMatcher::class);
         $check = '';
-        Phake::when($matcher)->doArgumentsMatch->thenThrow(new Phake_Exception_MethodMatcherException());
+        Phake::when($matcher)->doArgumentsMatch->thenThrow(new Phake\Exception\MethodMatcherException());
 
         $this->setter->when($matcher);
 
@@ -113,9 +117,9 @@ class Phake_Matchers_ReferenceSetterTest extends TestCase
 
     public function testConditionalSettingFailureUpdatesMessage()
     {
-        $matcher = Phake::mock('Phake_Matchers_IChainableArgumentMatcher');
+        $matcher = Phake::mock(IChainableArgumentMatcher::class);
         $check = '';
-        Phake::when($matcher)->doArgumentsMatch->thenThrow(new Phake_Exception_MethodMatcherException("test"));
+        Phake::when($matcher)->doArgumentsMatch->thenThrow(new Phake\Exception\MethodMatcherException("test"));
 
         $this->setter->when($matcher);
 
@@ -125,7 +129,7 @@ class Phake_Matchers_ReferenceSetterTest extends TestCase
         {
             $this->setter->doArgumentsMatch($value);
         }
-        catch (Phake_Exception_MethodMatcherException $e)
+        catch (Phake\Exception\MethodMatcherException $e)
         {
             $this->assertStringStartsWith("Failed in Phake::setReference()->when()\n", $e->getMessage(), "The methodmatcherexception is not prepended with capture info");
         }

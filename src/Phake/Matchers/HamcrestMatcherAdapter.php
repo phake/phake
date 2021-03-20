@@ -1,4 +1,8 @@
 <?php
+
+namespace Phake\Matchers;
+
+use Hamcrest;
 /* 
  * Phake - Mocking Framework
  * 
@@ -45,10 +49,10 @@
 /**
  * An adapter class allowing hamcrest matchers to be used as Phake matchers
  */
-class Phake_Matchers_HamcrestMatcherAdapter extends Phake_Matchers_SingleArgumentMatcher
+class HamcrestMatcherAdapter extends SingleArgumentMatcher
 {
     /**
-     * @var Hamcrest\Matcher
+     * @var \Hamcrest\Matcher
      */
     private $matcher;
 
@@ -66,7 +70,7 @@ class Phake_Matchers_HamcrestMatcherAdapter extends Phake_Matchers_SingleArgumen
      * Forwards the call to Hamcrest's matches() method.
      *
      * @param mixed $argument
-     * @throws Phake_Exception_MethodMatcherException
+     * @throws \Phake\Exception\MethodMatcherException
      */
     protected  function matches(&$argument)
     {
@@ -78,7 +82,7 @@ class Phake_Matchers_HamcrestMatcherAdapter extends Phake_Matchers_SingleArgumen
                 ->appendText(' but ');
 
             $this->matcher->describeMismatch($argument, $description);
-            throw new Phake_Exception_MethodMatcherException($description);
+            throw new \Phake\Exception\MethodMatcherException($description);
         }
     }
 

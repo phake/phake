@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\Proxies;
 /*
  * Phake - Mocking Framework
  *
@@ -47,10 +49,10 @@
  *
  * @author Mike Lively <m@digitalsandwich.com>
  */
-class Phake_Proxies_CallStubberProxy
+class CallStubberProxy
 {
     /**
-     * @var Phake_Matchers_IChainableArgumentMatcher
+     * @var \Phake\Matchers\IChainableArgumentMatcher
      */
     private $argumentMatcher;
 
@@ -60,10 +62,10 @@ class Phake_Proxies_CallStubberProxy
     private $static;
 
     /**
-     * @param Phake_Matchers_IChainableArgumentMatcher $argumentMatcher
+     * @param \Phake\Matchers\IChainableArgumentMatcher $argumentMatcher
      * @param bool $static
      */
-    public function __construct(Phake_Matchers_IChainableArgumentMatcher $argumentMatcher = null, $static)
+    public function __construct(\Phake\Matchers\IChainableArgumentMatcher $argumentMatcher = null, $static)
     {
         $this->argumentMatcher = $argumentMatcher;
         $this->static = $static;
@@ -72,17 +74,17 @@ class Phake_Proxies_CallStubberProxy
     /**
      * Creates an answer binder proxy associated with the matchers from the constructor and the object passed here
      *
-     * @param Phake_IMock $obj
+     * @param \Phake\IMock $obj
      *
-     * @return Phake_Proxies_AnswerBinderProxy
+     * @return AnswerBinderProxy
      */
-    public function isCalledOn(Phake_IMock $obj)
+    public function isCalledOn(\Phake\IMock $obj)
     {
         $context = $this->static ? get_class($obj) : $obj;
         $call = $this->static ? '__callStatic' : '__call';
-        $matcher = new Phake_Matchers_MethodMatcher($call, $this->argumentMatcher);
-        $binder  = new Phake_Stubber_AnswerBinder($matcher, Phake::getInfo($context)->getStubMapper());
-        return new Phake_Proxies_AnswerBinderProxy($binder);
+        $matcher = new \Phake\Matchers\MethodMatcher($call, $this->argumentMatcher);
+        $binder  = new \Phake\Stubber\AnswerBinder($matcher, \Phake::getInfo($context)->getStubMapper());
+        return new AnswerBinderProxy($binder);
     }
 }
 

@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\String;
 /* 
  * Phake - Mocking Framework
  * 
@@ -47,7 +49,7 @@
  *
  * @author Mike Lively <m@digitalsandwich.com>
  */
-class Phake_String_Converter
+class Converter
 {
     public function convertToString($value)
     {

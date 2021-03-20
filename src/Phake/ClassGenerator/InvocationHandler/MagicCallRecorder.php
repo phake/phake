@@ -1,5 +1,7 @@
 <?php
 
+namespace Phake\ClassGenerator\InvocationHandler;
+
 /*
  * Phake - Mocking Framework
  * 
@@ -48,17 +50,17 @@
  *
  * If the invocation isn't of __call...does nothing.
  */
-class Phake_ClassGenerator_InvocationHandler_MagicCallRecorder implements Phake_ClassGenerator_InvocationHandler_IInvocationHandler
+class MagicCallRecorder implements IInvocationHandler
 {
     /**
-     * @var Phake_CallRecorder_Recorder
+     * @var \Phake\CallRecorder\Recorder
      */
     private $callRecorder;
 
     /**
-     * @param Phake_CallRecorder_Recorder $callRecorder
+     * @param \Phake\CallRecorder\Recorder $callRecorder
      */
-    public function __construct(Phake_CallRecorder_Recorder $callRecorder)
+    public function __construct(\Phake\CallRecorder\Recorder $callRecorder)
     {
         $this->callRecorder = $callRecorder;
     }
@@ -67,7 +69,7 @@ class Phake_ClassGenerator_InvocationHandler_MagicCallRecorder implements Phake_
     {
         if ($method == '__call' || $method == '__callStatic') {
             $this->callRecorder->recordCall(
-                new Phake_CallRecorder_Call($mock, $arguments[0], $arguments[1])
+                new \Phake\CallRecorder\Call($mock, $arguments[0], $arguments[1])
             );
         }
     }

@@ -1,5 +1,7 @@
 <?php
 
+namespace Phake\CallRecorder\VerifierMode;
+
 /*
  * Phake - Mocking Framework
  * 
@@ -43,7 +45,7 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-class Phake_CallRecorder_VerifierMode_Result
+class Result
 {
     private $verified;
 

@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\Mock;
 /*
  * Phake - Mocking Framework
  *
@@ -43,19 +45,19 @@
  */
 
 /**
- * Stores all Phake_Mock_Info instances for static classes.
+ * Stores all Info instances for static classes.
  */
-class Phake_Mock_InfoRegistry {
+class InfoRegistry {
     private $registry = array();
 
-    public function addInfo(Phake_Mock_Info $info)
+    public function addInfo(Info $info)
     {
         $this->registry[] = $info;
     }
 
     public function resetAll()
     {
-        /* @var $info Phake_Mock_Info */
+        /* @var $info Info */
         foreach ($this->registry as $info)
         {
             $info->resetInfo();

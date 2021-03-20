@@ -1,5 +1,7 @@
 <?php
 
+namespace Phake\Annotation;
+
 /*
  * Phake - Mocking Framework
  *
@@ -49,7 +51,7 @@ use PHPUnit\Framework\TestCase;
  * @ann1 Test Annotation
  * @ann2
  */
-class Phake_Annotation_ReaderTest extends TestCase
+class ReaderTest extends TestCase
 {
     /**
      * @ann3 Test Annotation
@@ -66,8 +68,8 @@ class Phake_Annotation_ReaderTest extends TestCase
 
     protected function setUp(): void
     {
-        $reflectionClass = new ReflectionClass($this);
-        $this->reader    = new Phake_Annotation_Reader($reflectionClass);
+        $reflectionClass = new \ReflectionClass($this);
+        $this->reader    = new Reader($reflectionClass);
     }
 
     protected function tearDown(): void

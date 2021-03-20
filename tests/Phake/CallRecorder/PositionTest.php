@@ -1,4 +1,7 @@
 <?php
+
+namespace Phake\CallRecorder;
+
 /*
  * Phake - Mocking Framework
  *
@@ -47,10 +50,10 @@ use PHPUnit\Framework\TestCase;
 /**
  * Tests the call recorder position class.
  */
-class Phake_CallRecorder_PositionTest extends TestCase
+class PositionTest extends TestCase
 {
     /**
-     * @var Phake_CallRecorder_Position
+     * @var Position
      */
     private $position;
 
@@ -59,7 +62,7 @@ class Phake_CallRecorder_PositionTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->position = new Phake_CallRecorder_Position(10);
+        $this->position = new Position(10);
     }
 
     /**
@@ -67,7 +70,7 @@ class Phake_CallRecorder_PositionTest extends TestCase
      */
     public function testIsAfterTrue()
     {
-        $position = new Phake_CallRecorder_Position(9);
+        $position = new Position(9);
 
         $this->assertTrue($this->position->thisIsAfter($position));
     }
@@ -77,18 +80,18 @@ class Phake_CallRecorder_PositionTest extends TestCase
      */
     public function testIsAfterFalse()
     {
-        $position = new Phake_CallRecorder_Position(11);
+        $position = new Position(11);
 
         $this->assertFalse($this->position->thisIsAfter($position));
     }
 
     /**
      * Creates a call object
-     * @return Phake_CallRecorder_Call
+     * @return Call
      */
     private function getCall()
     {
-        return $this->getMockBuilder('Phake_CallRecorder_Call')
+        return $this->getMockBuilder(Call::class)
                     ->disableOriginalConstructor()
                     ->getMock();
     }

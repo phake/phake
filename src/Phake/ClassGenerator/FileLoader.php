@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\ClassGenerator;
 /*
  * Phake - Mocking Framework
  *
@@ -45,7 +47,7 @@
 /**
  * Saves the files into a store directory with a file name the same as the class and then includes that file.
  */
-class Phake_ClassGenerator_FileLoader implements Phake_ClassGenerator_ILoader
+class FileLoader implements ILoader
 {
     private $dir;
 

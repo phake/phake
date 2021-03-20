@@ -1,4 +1,7 @@
 <?php
+
+namespace Phake\Matchers;
+
 /*
  * Phake - Mocking Framework
  *
@@ -42,18 +45,19 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+use Phake;
 use PHPUnit\Framework\TestCase;
 
-class Phake_Matchers_IgnoreRemainingMatcherTest extends TestCase
+class IgnoreRemainingMatcherTest extends TestCase
 {
     /**
-     * @var Phake_Matchers_AnyParameters
+     * @var AnyParameters
      */
     private $matcher;
 
     public function setUp(): void
     {
-        $this->matcher = new Phake_Matchers_IgnoreRemainingMatcher();
+        $this->matcher = new IgnoreRemainingMatcher();
     }
 
     public static function matchesDataProvider()
@@ -81,6 +85,6 @@ class Phake_Matchers_IgnoreRemainingMatcherTest extends TestCase
     public function testSetNextThrowsInvalidException()
     {
         $this->expectException('InvalidArgumentException', 'Other matchers cannot be checked after you ignore remaining parameters.');
-        $this->matcher->setNextMatcher(Phake::mock('Phake_Matchers_IChainableArgumentMatcher'));
+        $this->matcher->setNextMatcher(Phake::mock(IChainableArgumentMatcher::class));
     }
 }

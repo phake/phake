@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\Stubber\Answers;
 /* 
  * Phake - Mocking Framework
  * 
@@ -50,7 +52,7 @@
  *
  * This class is both the delegator and the delegate.
  */
-class Phake_Stubber_Answers_ParentDelegate implements Phake_Stubber_IAnswer
+class ParentDelegate implements \Phake\Stubber\IAnswer
 {
     private $capturedReturn;
 
@@ -69,7 +71,7 @@ class Phake_Stubber_Answers_ParentDelegate implements Phake_Stubber_IAnswer
         $fallback =  array($this, "getFallback");
         try
         {
-            $reflClass = new ReflectionClass($context);
+            $reflClass = new \ReflectionClass($context);
             $reflParent = $reflClass->getParentClass();
 
             if (!is_object($reflParent))
@@ -87,11 +89,11 @@ class Phake_Stubber_Answers_ParentDelegate implements Phake_Stubber_IAnswer
                 }
                 else
                 {
-                    return new Phake_Stubber_Answers_ParentDelegateCallback($context, $reflMethod);
+                    return new ParentDelegateCallback($context, $reflMethod);
                 }
             }
         }
-        catch (ReflectionException $e)
+        catch (\ReflectionException $e)
         {
         }
         return $fallback;

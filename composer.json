@@ -13,7 +13,8 @@
     ],
     "require": {
         "php": "^7.1|^8.0",
-        "sebastian/comparator": "^1.1|^2.0|^3.0|^4.0"
+        "sebastian/comparator": "^1.1|^2.0|^3.0|^4.0",
+        "doctrine/instantiator": "^1.4"
     },
     "require-dev": {
         "ext-soap": "*",
@@ -25,9 +26,10 @@
         "bin-dir": "bin"
     },
     "autoload": {
-        "psr-0": {
-            "Phake": "src/"
-        }
+        "psr-4": {
+            "Phake\\": "src/Phake"
+        },
+        "files": ["src/Phake.php"]
     },
     "suggest": {
         "doctrine/common": "Allows mock annotations to use import statements for classes.",

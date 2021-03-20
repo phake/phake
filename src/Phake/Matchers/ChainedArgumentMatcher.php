@@ -1,5 +1,7 @@
 <?php
 
+namespace Phake\Matchers;
+
 /*
  * Phake - Mocking Framework
  *
@@ -46,17 +48,17 @@
 /**
  * Adapts argument matchers into chainable argument matchers.
  */
-class Phake_Matchers_ChainedArgumentMatcher extends Phake_Matchers_SingleArgumentMatcher
+class ChainedArgumentMatcher extends SingleArgumentMatcher
 {
     /**
-     * @var Phake_Matchers_IArgumentMatcher
+     * @var IArgumentMatcher
      */
     private $adaptedMatcher;
 
     /**
-     * @param Phake_Matchers_IArgumentMatcher $adaptedMatcher
+     * @param IArgumentMatcher $adaptedMatcher
      */
-    public function __construct(Phake_Matchers_IArgumentMatcher $adaptedMatcher)
+    public function __construct(IArgumentMatcher $adaptedMatcher)
     {
         $this->adaptedMatcher = $adaptedMatcher;
     }

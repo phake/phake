@@ -1,9 +1,10 @@
 <?php
 
+namespace Phake\ClassGenerator;
 /*
  * Phake - Mocking Framework
  *
- * Copyright (c) 2010, Mike Lively <mike.lively@sellingsource.com>
+ * Copyright (c) 2010-2012, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -38,40 +39,21 @@
  * @category   Testing
  * @package    Phake
  * @author     Mike Lively <m@digitalsandwich.com>
+ * @author     Pierrick Charron <pierrick@adoy.net>
  * @copyright  2010 Mike Lively <m@digitalsandwich.com>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link       http://www.digitalsandwich.com/
  */
 
-use PHPUnit\Framework\TestCase;
-
-class Phake_Client_DefaultTest extends TestCase
+/**
+ * Create instance of a class
+ */
+interface IInstantiator
 {
-    private $client;
-
-    public function setUp(): void
-    {
-        $this->client = new Phake_Client_Default();
-    }
-
-    public function testImplementsIClient()
-    {
-        $this->assertInstanceOf('Phake_Client_IClient', $this->client);
-    }
-
-    public function testProcessVerifierResultReturnsCallsOnTrue()
-    {
-        $result = new Phake_CallRecorder_VerifierResult(true, array('call1'));
-
-        $this->assertEquals(array('call1'), $this->client->processVerifierResult($result));
-    }
-
-    public function testProcessVerifierThrowsExceptionOnFalse()
-    {
-        $result = new Phake_CallRecorder_VerifierResult(false, array(), 'failure message');
-
-        $this->expectException('Phake_Exception_VerificationException', 'failure message');
-        $this->client->processVerifierResult($result);
-    }
+    /**
+     * @param string $className
+     *
+     * @return object
+     */
+    public function instantiate($className);
 }
-

@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\CallRecorder;
 /* 
  * Phake - Mocking Framework
  * 
@@ -45,30 +47,30 @@
 /**
  * Aggregates various objects holding information about a particular call.
  */
-class Phake_CallRecorder_CallInfo
+class CallInfo
 {
     /**
-     * @var Phake_CallRecorder_Call
+     * @var Call
      */
     private $call;
 
     /**
-     * @var Phake_CallRecorder_Position
+     * @var Position
      */
     private $position;
 
     /**
-     * @param Phake_CallRecorder_Call     $call
-     * @param Phake_CallRecorder_Position $position
+     * @param Call     $call
+     * @param Position $position
      */
-    public function __construct(Phake_CallRecorder_Call $call, Phake_CallRecorder_Position $position)
+    public function __construct(Call $call, Position $position)
     {
         $this->call     = $call;
         $this->position = $position;
     }
 
     /**
-     * @return Phake_CallRecorder_Call
+     * @return Call
      */
     public function getCall()
     {
@@ -76,7 +78,7 @@ class Phake_CallRecorder_CallInfo
     }
 
     /**
-     * @return Phake_CallRecorder_Position
+     * @return Position
      */
     public function getPosition()
     {

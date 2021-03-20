@@ -1,5 +1,7 @@
 <?php
 
+namespace Phake\ClassGenerator\InvocationHandler;
+
 /*
  * Phake - Mocking Framework
  *
@@ -43,20 +45,20 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+use Phake;
 use PHPUnit\Framework\ExpectationFailedException;
-
 use PHPUnit\Framework\TestCase;
 
-class Phake_ClassGenerator_InvocationHandler_FrozenObjectCheckTest extends TestCase
+class FrozenObjectCheckTest extends TestCase
 {
     /**
-     * @var Phake_ClassGenerator_InvocationHandler_FrozenObjectCheck
+     * @var FrozenObjectCheck
      */
     private $handler;
 
     /**
      * @Mock
-     * @var Phake_Mock_Info
+     * @var Phake\Mock\Info
      */
     private $mockInfo;
 
@@ -64,17 +66,17 @@ class Phake_ClassGenerator_InvocationHandler_FrozenObjectCheckTest extends TestC
     {
         Phake::setClient(Phake::CLIENT_PHPUNIT7);
         Phake::initAnnotations($this);
-        $this->handler    = new Phake_ClassGenerator_InvocationHandler_FrozenObjectCheck($this->mockInfo);
+        $this->handler    = new FrozenObjectCheck($this->mockInfo);
     }
 
     public function testImplementIInvocationHandler()
     {
-        $this->assertInstanceOf('Phake_ClassGenerator_InvocationHandler_IInvocationHandler', $this->handler);
+        $this->assertInstanceOf(IInvocationHandler::class, $this->handler);
     }
 
     public function testReturnsWithNoIssuesIfObjectIsNotFrozen()
     {
-        $mock = $this->getMockBuilder('Phake_IMock')
+        $mock = $this->getMockBuilder(Phake\IMock::class)
                     ->getMock();
         Phake::when($this->mockInfo)->isObjectFrozen()->thenReturn(false);
 
@@ -89,11 +91,11 @@ class Phake_ClassGenerator_InvocationHandler_FrozenObjectCheckTest extends TestC
 
     public function testThrowsWhenObjectIsFrozen()
     {
-        $mock = $this->getMockBuilder('Phake_IMock')
+        $mock = $this->getMockBuilder(Phake\IMock::class)
                     ->getMock();
         Phake::when($this->mockInfo)->isObjectFrozen()->thenReturn(true);
 
-        $this->expectException('Phake_Exception_VerificationException', 'This object has been frozen.');
+        $this->expectException(Phake\Exception\VerificationException::class, 'This object has been frozen.');
         Phake::setClient(Phake::CLIENT_DEFAULT);
         $ref = array();
         $this->handler->invoke($mock, 'foo', array(), $ref);
@@ -101,7 +103,7 @@ class Phake_ClassGenerator_InvocationHandler_FrozenObjectCheckTest extends TestC
 
     public function testThrowsWhenObjectIsFrozenWithPHPUnit()
     {
-        $mock = $this->getMockBuilder('Phake_IMock')
+        $mock = $this->getMockBuilder(Phake\IMock::class)
                     ->getMock();
         Phake::when($this->mockInfo)->isObjectFrozen()->thenReturn(true);
 

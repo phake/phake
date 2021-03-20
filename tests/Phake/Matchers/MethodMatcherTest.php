@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\Matchers;
 /*
  * Phake - Mocking Framework
  *
@@ -42,18 +44,19 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+use Phake;
 use PHPUnit\Framework\TestCase;
 
-class Phake_Matchers_MethodMatcherTest extends TestCase
+class MethodMatcherTest extends TestCase
 {
     /**
-     * @var Phake_Matchers_MethodMatcher
+     * @var MethodMatcher
      */
     private $matcher;
 
     /**
      * @Mock
-     * @var Phake_Matchers_IChainableArgumentMatcher
+     * @var Phake\Matchers\IChainableArgumentMatcher
      */
     private $rootArgumentMatcher;
 
@@ -66,7 +69,7 @@ class Phake_Matchers_MethodMatcherTest extends TestCase
     {
         Phake::initAnnotations($this);
 
-        $this->matcher   = new Phake_Matchers_MethodMatcher('foo', $this->rootArgumentMatcher);
+        $this->matcher   = new MethodMatcher('foo', $this->rootArgumentMatcher);
     }
 
     /**
@@ -107,7 +110,7 @@ class Phake_Matchers_MethodMatcherTest extends TestCase
      */
     public function testNoMatcherOnBadArg1()
     {
-        Phake::when($this->rootArgumentMatcher)->doArgumentsMatch->thenThrow(new Phake_Exception_MethodMatcherException);
+        Phake::when($this->rootArgumentMatcher)->doArgumentsMatch->thenThrow(new Phake\Exception\MethodMatcherException);
 
         $arguments = array('foo', 'bar');
         $this->assertFalse($this->matcher->matches('foo', $arguments));
@@ -115,7 +118,7 @@ class Phake_Matchers_MethodMatcherTest extends TestCase
 
     public function testAnyParameterMatching()
     {
-        $matcher = new Phake_Matchers_MethodMatcher('method', new Phake_Matchers_AnyParameters());
+        $matcher = new MethodMatcher('method', new AnyParameters());
 
         $arguments = array(1, 2, 3);
         $this->assertTrue($matcher->matches('method', $arguments));
@@ -127,7 +130,7 @@ class Phake_Matchers_MethodMatcherTest extends TestCase
 
     public function testSetterMatcher()
     {
-        $matcher = new Phake_Matchers_MethodMatcher('method', new Phake_Matchers_ReferenceSetter(42));
+        $matcher = new MethodMatcher('method', new ReferenceSetter(42));
 
         $value        = 'blah';
         $arguments    = array();
@@ -140,7 +143,7 @@ class Phake_Matchers_MethodMatcherTest extends TestCase
 
     public function testNullMatcherWithNoArguments()
     {
-        $matcher = new Phake_Matchers_MethodMatcher('method', null);
+        $matcher = new MethodMatcher('method', null);
 
         $emptyArray = array();
         $this->assertTrue($matcher->matches('method', $emptyArray));
@@ -148,7 +151,7 @@ class Phake_Matchers_MethodMatcherTest extends TestCase
 
     public function testNullMatcherWithArguments()
     {
-        $matcher = new Phake_Matchers_MethodMatcher('method', null);
+        $matcher = new MethodMatcher('method', null);
 
         $arguments = array('foo');
         $this->assertFalse($matcher->matches('method', $arguments));

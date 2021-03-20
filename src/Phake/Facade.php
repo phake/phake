@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake;
 /* 
  * Phake - Mocking Framework
  * 
@@ -47,19 +49,19 @@
  *
  * @author Mike Lively <m@digitalsandwich.com>
  */
-class Phake_Facade
+class Facade
 {
     private $cachedClasses;
 
     /**
-     * @var Phake_Mock_InfoRegistry
+     * @var Mock\InfoRegistry
      */
     private $infoRegistry;
 
     /**
-     * @param Phake_Mock_InfoRegistry $infoRegistry
+     * @param Mock\InfoRegistry $infoRegistry
      */
-    public function __construct(Phake_Mock_InfoRegistry $infoRegistry)
+    public function __construct(Mock\InfoRegistry $infoRegistry)
     {
         $this->cachedClasses = array();
         $this->infoRegistry = $infoRegistry;
@@ -68,27 +70,27 @@ class Phake_Facade
     /**
      * Creates a new mock class than can be stubbed and verified.
      *
-     * @param string|array                   $mockedClassList - The name(s) of the class to mock
-     * @param Phake_ClassGenerator_MockClass $mockGenerator - The generator used to construct mock classes
-     * @param Phake_CallRecorder_Recorder    $callRecorder
-     * @param Phake_Stubber_IAnswer          $defaultAnswer
-     * @param array                          $constructorArgs
+     * @param string|array             $mockedClassList - The name(s) of the class to mock
+     * @param ClassGenerator\MockClass $mockGenerator - The generator used to construct mock classes
+     * @param CallRecorder\Recorder    $callRecorder
+     * @param Stubber\IAnswer          $defaultAnswer
+     * @param array                    $constructorArgs
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      * @return mixed
      */
     public function mock(
         $mockedClassList,
-        Phake_ClassGenerator_MockClass $mockGenerator,
-        Phake_CallRecorder_Recorder $callRecorder,
-        Phake_Stubber_IAnswer $defaultAnswer,
+        ClassGenerator\MockClass $mockGenerator,
+        CallRecorder\Recorder $callRecorder,
+        Stubber\IAnswer $defaultAnswer,
         array $constructorArgs = null
     ) {
         $mockedClassList = (array)$mockedClassList;
 
         foreach ($mockedClassList as $mockedClass)
         if (!class_exists($mockedClass, true) && !interface_exists($mockedClass, true)) {
-            throw new InvalidArgumentException("The class / interface [{$mockedClass}] does not exist. Check the spelling and make sure it is loadable.");
+            throw new \InvalidArgumentException("The class / interface [{$mockedClass}] does not exist. Check the spelling and make sure it is loadable.");
         }
 
         if (!isset($this->cachedClasses[implode('__', $mockedClassList)])) {
@@ -101,7 +103,7 @@ class Phake_Facade
         return $mockGenerator->instantiate(
             $this->cachedClasses[implode('__', $mockedClassList)],
             $callRecorder,
-            new Phake_Stubber_StubMapper(),
+            new Stubber\StubMapper(),
             $defaultAnswer,
             $constructorArgs
         );

@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\Stubber\Answers;
 /* 
  * Phake - Mocking Framework
  * 
@@ -47,7 +49,7 @@
  *
  * @author Brian Feaver <brian.feaver@gmail.com>
  */
-class Phake_Stubber_Answers_ExceptionAnswer implements Phake_Stubber_IAnswer
+class ExceptionAnswer implements \Phake\Stubber\IAnswer
 {
     /**
      * @var mixed
@@ -57,7 +59,7 @@ class Phake_Stubber_Answers_ExceptionAnswer implements Phake_Stubber_IAnswer
     /**
      * @param mixed $answer
      */
-    public function __construct(Exception $answer)
+    public function __construct(\Exception $answer)
     {
         $this->answer = $answer;
     }

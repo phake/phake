@@ -1,4 +1,7 @@
 <?php
+
+namespace Phake\CallRecorder;
+
 /*
  * Phake - Mocking Framework
  *
@@ -47,20 +50,20 @@ use PHPUnit\Framework\TestCase;
 /**
  * Tests the functionality of the call info class
  */
-class Phake_CallRecorder_CallInfoTest extends TestCase
+class CallInfoTest extends TestCase
 {
     /**
-     * @var Phake_CallRecorder_CallInfo
+     * @var CallInfo
      */
     private $callInfo;
 
     /**
-     * @var Phake_CallRecorder_Call
+     * @var Call
      */
     private $call;
 
     /**
-     * @var Phake_CallRecorder_Position
+     * @var Position
      */
     private $position;
 
@@ -70,14 +73,14 @@ class Phake_CallRecorder_CallInfoTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->call     = $this->getMockBuilder('Phake_CallRecorder_Call')
+        $this->call     = $this->getMockBuilder(Call::class)
                                 ->disableOriginalConstructor()
                                 ->getMock();
-        $this->position = $this->getMockBuilder('Phake_CallRecorder_Position')
+        $this->position = $this->getMockBuilder(Position::class)
                                 ->disableOriginalConstructor()
                                 ->getMock();
 
-        $this->callInfo = new Phake_CallRecorder_CallInfo($this->call, $this->position);
+        $this->callInfo = new CallInfo($this->call, $this->position);
     }
 
     /**

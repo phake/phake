@@ -1,4 +1,7 @@
 <?php
+
+namespace Phake\Proxies;
+
 /*
  * Phake - Mocking Framework
  *
@@ -42,22 +45,23 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+use Phake;
 use PHPUnit\Framework\TestCase;
 
-class Phake_Proxies_CallVerifierProxyTest extends TestCase
+class CallVerifierProxyTest extends TestCase
 {
     /**
-     * @var Phake_Proxies_CallVerifierProxy
+     * @var Phake\Proxies\CallVerifierProxy
      */
     private $proxy;
 
     /**
-     * @var Phake_CallRecorder_Recorder
+     * @var Phake\CallRecorder\Recorder
      */
     private $obj;
 
     /**
-     * @var Phake_Client_IClient
+     * @var Phake\Client\IClient
      */
     private $client;
 
@@ -66,13 +70,13 @@ class Phake_Proxies_CallVerifierProxyTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->client     = new Phake_Client_Default();
-        $this->obj        = new Phake_CallRecorder_Recorder();
+        $this->client     = new Phake\Client\DefaultClient();
+        $this->obj        = new Phake\CallRecorder\Recorder();
 
-        $matcher1 = new Phake_Matchers_EqualsMatcher('foo', \SebastianBergmann\Comparator\Factory::getInstance());
-        $matcher2 = new Phake_Matchers_EqualsMatcher(array(), \SebastianBergmann\Comparator\Factory::getInstance());
+        $matcher1 = new Phake\Matchers\EqualsMatcher('foo', \SebastianBergmann\Comparator\Factory::getInstance());
+        $matcher2 = new Phake\Matchers\EqualsMatcher(array(), \SebastianBergmann\Comparator\Factory::getInstance());
         $matcher1->setNextMatcher($matcher2);
-        $this->proxy = new Phake_Proxies_CallVerifierProxy($matcher1, $this->client, false);
+        $this->proxy = new CallVerifierProxy($matcher1, $this->client, false);
 
     }
 
@@ -91,10 +95,10 @@ class Phake_Proxies_CallVerifierProxyTest extends TestCase
 
     public function testStaticIsCalledOn()
     {
-        $matcher1 = new Phake_Matchers_EqualsMatcher('foo', \SebastianBergmann\Comparator\Factory::getInstance());
-        $matcher2 = new Phake_Matchers_EqualsMatcher(array(), \SebastianBergmann\Comparator\Factory::getInstance());
+        $matcher1 = new Phake\Matchers\EqualsMatcher('foo', \SebastianBergmann\Comparator\Factory::getInstance());
+        $matcher2 = new Phake\Matchers\EqualsMatcher(array(), \SebastianBergmann\Comparator\Factory::getInstance());
         $matcher1->setNextMatcher($matcher2);
-        $this->proxy = new Phake_Proxies_CallVerifierProxy($matcher1, $this->client, true);
+        $this->proxy = new CallVerifierProxy($matcher1, $this->client, true);
 
         $mock = Phake::mock('PhakeTest_MagicClass');
         $mock::foo();

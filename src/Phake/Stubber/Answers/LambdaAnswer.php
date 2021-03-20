@@ -1,11 +1,13 @@
 <?php
 
+namespace Phake\Stubber\Answers;
+
 /**
  * Allows providing a static answer to a stubbed method call.
  *
  * @author Mathieu Kooiman <mathieuk@gmail.com>
  */
-class Phake_Stubber_Answers_LambdaAnswer implements Phake_Stubber_IAnswer
+class LambdaAnswer implements \Phake\Stubber\IAnswer
 {
     /**
      * @var mixed

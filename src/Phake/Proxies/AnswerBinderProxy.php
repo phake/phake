@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\Proxies;
 /* 
  * Phake - Mocking Framework
  * 
@@ -47,14 +49,14 @@
  *
  * @author Mike Lively <m@digitalsandwich.com>
  */
-class Phake_Proxies_AnswerBinderProxy implements Phake_Proxies_AnswerProxyInterface
+class AnswerBinderProxy implements AnswerProxyInterface
 {
     /**
-     * @var Phake_Stubber_IAnswerBinder
+     * @var \Phake\Stubber\IAnswerBinder
      */
     private $binder;
 
-    public function __construct(Phake_Stubber_IAnswerBinder $binder)
+    public function __construct(\Phake\Stubber\IAnswerBinder $binder)
     {
         $this->binder = $binder;
     }
@@ -64,11 +66,11 @@ class Phake_Proxies_AnswerBinderProxy implements Phake_Proxies_AnswerProxyInterf
      *
      * @param mixed $value
      *
-     * @return Phake_Stubber_IAnswerContainer
+     * @return \Phake\Stubber\IAnswerContainer
      */
     public function thenReturn($value)
     {
-        return $this->binder->bindAnswer(new Phake_Stubber_Answers_StaticAnswer($value));
+        return $this->binder->bindAnswer(new \Phake\Stubber\Answers\StaticAnswer($value));
     }
 
     /**
@@ -77,8 +79,8 @@ class Phake_Proxies_AnswerBinderProxy implements Phake_Proxies_AnswerProxyInterf
      * @param callback $value
      *
      * @deprecated Use thenReturnCallback instead.
-     * @throws InvalidArgumentException
-     * @return Phake_Stubber_IAnswerContainer
+     * @throws \InvalidArgumentException
+     * @return \Phake\Stubber\IAnswerContainer
      */
     public function thenGetReturnByLambda($value)
     {
@@ -91,37 +93,37 @@ class Phake_Proxies_AnswerBinderProxy implements Phake_Proxies_AnswerProxyInterf
      *
      * @param callback $value
      *
-     * @throws InvalidArgumentException
-     * @return Phake_Stubber_IAnswerContainer
+     * @throws \InvalidArgumentException
+     * @return \Phake\Stubber\IAnswerContainer
      */
     public function thenReturnCallback($value)
     {
         if (!is_callable($value)) {
-            throw new InvalidArgumentException("Given lambda is not callable");
+            throw new \InvalidArgumentException("Given lambda is not callable");
         }
 
-        return $this->binder->bindAnswer(new Phake_Stubber_Answers_LambdaAnswer($value));
+        return $this->binder->bindAnswer(new \Phake\Stubber\Answers\LambdaAnswer($value));
     }
 
     /**
      * Binds a delegated call that will call a given method's parent.
-     * @return Phake_Stubber_IAnswerContainer
+     * @return \Phake\Stubber\IAnswerContainer
      */
     public function thenCallParent()
     {
-        return $this->binder->bindAnswer(new Phake_Stubber_Answers_ParentDelegate());
+        return $this->binder->bindAnswer(new \Phake\Stubber\Answers\ParentDelegate());
     }
 
     /**
      * Binds an exception answer to the method and object in the proxied binder.
      *
-     * @param Exception $value
+     * @param \Exception $value
      *
-     * @return Phake_Stubber_IAnswerContainer
+     * @return \Phake\Stubber\IAnswerContainer
      */
-    public function thenThrow(Exception $value)
+    public function thenThrow(\Exception $value)
     {
-        return $this->binder->bindAnswer(new Phake_Stubber_Answers_ExceptionAnswer($value));
+        return $this->binder->bindAnswer(new \Phake\Stubber\Answers\ExceptionAnswer($value));
     }
 
     /**
@@ -129,20 +131,20 @@ class Phake_Proxies_AnswerBinderProxy implements Phake_Proxies_AnswerProxyInterf
      *
      * @param mixed $captor
      *
-     * @return Phake_Stubber_IAnswerContainer
+     * @return \Phake\Stubber\IAnswerContainer
      */
     public function captureReturnTo(&$captor)
     {
-        return $this->binder->bindAnswer(new Phake_Stubber_Answers_ParentDelegate($captor));
+        return $this->binder->bindAnswer(new \Phake\Stubber\Answers\ParentDelegate($captor));
     }
 
     public function thenDoNothing()
     {
-        return $this->binder->bindAnswer(new Phake_Stubber_Answers_NoAnswer());
+        return $this->binder->bindAnswer(new \Phake\Stubber\Answers\NoAnswer());
     }
 
     public function thenReturnSelf()
     {
-        return $this->binder->bindAnswer(new Phake_Stubber_Answers_SelfAnswer());
+        return $this->binder->bindAnswer(new \Phake\Stubber\Answers\SelfAnswer());
     }
 }

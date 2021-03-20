@@ -1,4 +1,7 @@
 <?php
+
+namespace Phake\CallRecorder;
+
 /*
  * Phake - Mocking Framework
  *
@@ -42,6 +45,7 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+use Phake;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -49,15 +53,15 @@ use PHPUnit\Framework\TestCase;
  *
  * @author Mike Lively <m@digitalsandwich.com>
  */
-class Phake_CallRecorder_CallTest extends TestCase
+class CallTest extends TestCase
 {
     /**
-     * @var Phake_CallRecorder_Call
+     * @var Call
      */
     private $call;
 
     /**
-     * @var Phake_CallRecorder_Call
+     * @var Call
      */
     private $staticCall;
 
@@ -65,10 +69,10 @@ class Phake_CallRecorder_CallTest extends TestCase
 
     public function setUp(): void
     {
-        $this->mock = Phake::mock('Phake_IMock');
+        $this->mock = Phake::mock(Phake\IMock::class);
 
-        $this->call = new Phake_CallRecorder_Call($this->mock, 'someMethod', array('foo', 'bar'));
-        $this->staticCall = new Phake_CallRecorder_Call(get_class($this->mock), 'someMethod', array('foo', 'bar'));
+        $this->call = new Call($this->mock, 'someMethod', array('foo', 'bar'));
+        $this->staticCall = new Call(get_class($this->mock), 'someMethod', array('foo', 'bar'));
     }
 
     /**
@@ -97,14 +101,14 @@ class Phake_CallRecorder_CallTest extends TestCase
 
     public function testToString()
     {
-        $this->assertEquals('Phake_IMock->someMethod(<string:foo>, <string:bar>)', $this->call->__toString());
-        $this->assertEquals('Phake_IMock::someMethod(<string:foo>, <string:bar>)', $this->staticCall->__toString());
+        $this->assertEquals('Phake\IMock->someMethod(<string:foo>, <string:bar>)', $this->call->__toString());
+        $this->assertEquals('Phake\IMock::someMethod(<string:foo>, <string:bar>)', $this->staticCall->__toString());
     }
 
     public function testToStringOnAllArgumentTypes()
     {
-        $call = new Phake_CallRecorder_Call($this->mock, 'someMethod', array(
-            new stdClass,
+        $call = new Call($this->mock, 'someMethod', array(
+            new \stdClass,
             array(),
             null,
             opendir('.'),
@@ -113,7 +117,7 @@ class Phake_CallRecorder_CallTest extends TestCase
             true
         ));
         $this->assertEquals(
-            'Phake_IMock->someMethod(<object:stdClass>, <array>, <null>, <resource>, <string:foo>, <integer:42>, <boolean:true>)',
+            'Phake\IMock->someMethod(<object:stdClass>, <array>, <null>, <resource>, <string:foo>, <integer:42>, <boolean:true>)',
             $call->__toString()
         );
     }

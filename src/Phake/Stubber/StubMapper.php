@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\Stubber;
 /* 
  * Phake - Mocking Framework
  * 
@@ -47,7 +49,7 @@
  *
  * @author Mike Lively <m@digitalsandwich.com>
  */
-class Phake_Stubber_StubMapper
+class StubMapper
 {
     /**
      * @var array
@@ -57,10 +59,10 @@ class Phake_Stubber_StubMapper
     /**
      * Maps a given answer collection to a given $matcher
      *
-     * @param Phake_Stubber_AnswerCollection $answer
-     * @param Phake_Matchers_IMethodMatcher  $matcher
+     * @param AnswerCollection $answer
+     * @param \Phake\Matchers\IMethodMatcher  $matcher
      */
-    public function mapStubToMatcher(Phake_Stubber_AnswerCollection $answer, Phake_Matchers_IMethodMatcher $matcher)
+    public function mapStubToMatcher(AnswerCollection $answer, \Phake\Matchers\IMethodMatcher $matcher)
     {
         $this->matcherStubMap[$matcher->getMethod()][] = array($matcher, $answer);
     }
@@ -71,7 +73,7 @@ class Phake_Stubber_StubMapper
      * @param string $method
      * @param array  $args
      *
-     * @return Phake_Stubber_AnswerCollection or NULL if a matcher is not found
+     * @return AnswerCollection or NULL if a matcher is not found
      */
     public function getStubByCall($method, array &$args)
     {
@@ -80,7 +82,7 @@ class Phake_Stubber_StubMapper
         foreach ($matcherStubMap as $item) {
             list($matcher, $answer) = $item;
 
-            /* @var $matcher Phake_Matchers_MethodMatcher */
+            /* @var $matcher \Phake\Matchers\MethodMatcher */
             if ($matcher->matches($method, $args)) {
                 return $answer;
             }

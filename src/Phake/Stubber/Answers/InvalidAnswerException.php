@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\Stubber\Answers;
 /*
  * Phake - Mocking Framework
  *
@@ -45,6 +47,6 @@
 /**
  * Thrown when an invalid answer is created or used
  */
-class Phake_Stubber_Answers_InvalidAnswerException extends LogicException
+class InvalidAnswerException extends \LogicException
 {
 }

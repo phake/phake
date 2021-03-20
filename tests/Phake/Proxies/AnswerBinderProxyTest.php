@@ -1,4 +1,7 @@
 <?php
+
+namespace Phake\Proxies;
+
 /*
  * Phake - Mocking Framework
  *
@@ -42,6 +45,7 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+use Phake;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -49,15 +53,15 @@ use PHPUnit\Framework\TestCase;
  *
  * @author Mike Lively <m@digitalsandwich.com>
  */
-class Phake_Proxies_AnswerBinderProxyTest extends TestCase
+class AnswerBinderProxyTest extends TestCase
 {
     /**
-     * @var Phake_Proxies_AnswerBinderProxy
+     * @var AnswerBinderProxy
      */
     private $proxy;
 
     /**
-     * @var Phake_Stubber_AnswerBinder
+     * @var Phake\Stubber\AnswerBinder
      */
     private $binder;
 
@@ -66,10 +70,10 @@ class Phake_Proxies_AnswerBinderProxyTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->binder = $this->getMockBuilder('Phake_Stubber_AnswerBinder')
+        $this->binder = $this->getMockBuilder(Phake\Stubber\AnswerBinder::class)
                             ->disableOriginalConstructor()
                             ->getMock();
-        $this->proxy  = new Phake_Proxies_AnswerBinderProxy($this->binder);
+        $this->proxy  = new AnswerBinderProxy($this->binder);
     }
 
     /**
@@ -83,7 +87,7 @@ class Phake_Proxies_AnswerBinderProxyTest extends TestCase
     {
         $this->binder->expects($this->once())
             ->method('bindAnswer')
-            ->with($this->isInstanceOf('Phake_Stubber_Answers_StaticAnswer'))
+            ->with($this->isInstanceOf(Phake\Stubber\Answers\StaticAnswer::class))
             ->will($this->returnValue($this->binder));
 
         $this->assertSame($this->binder, $this->proxy->thenReturn(42));
@@ -102,7 +106,7 @@ class Phake_Proxies_AnswerBinderProxyTest extends TestCase
 
         $this->binder->expects($this->once())
             ->method('bindAnswer')
-            ->with($this->isInstanceOf('Phake_Stubber_Answers_LambdaAnswer'))
+            ->with($this->isInstanceOf(Phake\Stubber\Answers\LambdaAnswer::class))
             ->will($this->returnValue($this->binder));
 
         $this->assertSame($this->binder, $this->proxy->thenReturnCallback($func));
@@ -126,7 +130,7 @@ class Phake_Proxies_AnswerBinderProxyTest extends TestCase
     {
         $this->binder->expects($this->once())
             ->method('bindAnswer')
-            ->with($this->isInstanceOf('Phake_Stubber_Answers_ParentDelegate'))
+            ->with($this->isInstanceOf(Phake\Stubber\Answers\ParentDelegate::class))
             ->will($this->returnValue($this->binder));
 
         $this->assertSame($this->binder, $this->proxy->thenCallParent());
@@ -139,7 +143,7 @@ class Phake_Proxies_AnswerBinderProxyTest extends TestCase
     {
         $this->binder->expects($this->once())
             ->method('bindAnswer')
-            ->with($this->isInstanceOf('Phake_Stubber_Answers_ParentDelegate'))
+            ->with($this->isInstanceOf(Phake\Stubber\Answers\ParentDelegate::class))
             ->will($this->returnValue($this->binder));
 
         $this->assertSame($this->binder, $this->proxy->captureReturnTo($var));
@@ -150,11 +154,11 @@ class Phake_Proxies_AnswerBinderProxyTest extends TestCase
      */
     public function testThenThrow()
     {
-        $exception = new RuntimeException();
+        $exception = new \RuntimeException();
 
         $this->binder->expects($this->once())
             ->method('bindAnswer')
-            ->with($this->isInstanceOf('Phake_Stubber_Answers_ExceptionAnswer'))
+            ->with($this->isInstanceOf(Phake\Stubber\Answers\ExceptionAnswer::class))
             ->will($this->returnValue($this->binder));
 
         $this->assertSame($this->binder, $this->proxy->thenThrow($exception));
@@ -169,7 +173,7 @@ class Phake_Proxies_AnswerBinderProxyTest extends TestCase
     {
         $this->binder->expects($this->once())
             ->method('bindAnswer')
-            ->with($this->isInstanceOf('Phake_Stubber_Answers_NoAnswer')
+            ->with($this->isInstanceOf(Phake\Stubber\Answers\NoAnswer::class)
             )
             ->will($this->returnValue($this->binder));
 
@@ -180,7 +184,7 @@ class Phake_Proxies_AnswerBinderProxyTest extends TestCase
     {
         $this->binder->expects($this->once())
             ->method('bindAnswer')
-            ->with($this->isInstanceOf('Phake_Stubber_Answers_SelfAnswer')
+            ->with($this->isInstanceOf(Phake\Stubber\Answers\SelfAnswer::class)
             )
             ->will($this->returnValue($this->binder));
 

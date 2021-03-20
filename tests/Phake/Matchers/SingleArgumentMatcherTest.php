@@ -1,4 +1,7 @@
 <?php
+
+namespace Phake\Matchers;
+
 /*
  * Phake - Mocking Framework
  *
@@ -42,18 +45,19 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+use Phake;
 use PHPUnit\Framework\TestCase;
 
-class Phake_Matchers_SingleArgumentMatcherTest extends TestCase
+class SingleArgumentMatcherTest extends TestCase
 {
     /**
-     * @var Phake_Matchers_SingleArgumentMatcher
+     * @var Phake\Matchers\SingleArgumentMatcher
      */
     private $matcher;
 
     /**
      * @Mock
-     * @var Phake_Matchers_IChainableArgumentMatcher
+     * @var Phake\Matchers\IChainableArgumentMatcher
      */
     private $nextMatcher;
 
@@ -61,7 +65,7 @@ class Phake_Matchers_SingleArgumentMatcherTest extends TestCase
     {
         Phake::initAnnotations($this);
 
-        $this->matcher = Phake::partialMock('Phake_Matchers_SingleArgumentMatcher');
+        $this->matcher = Phake::partialMock(SingleArgumentMatcher::class);
         $this->matcher->setNextMatcher($this->nextMatcher);
     }
 
@@ -83,7 +87,7 @@ class Phake_Matchers_SingleArgumentMatcherTest extends TestCase
     {
         $args = array('test arg1', 'test arg2');
 
-        Phake::when($this->matcher)->matches->thenThrow(new Phake_Exception_MethodMatcherException());
+        Phake::when($this->matcher)->matches->thenThrow(new Phake\Exception\MethodMatcherException());
         Phake::when($this->nextMatcher)->doArgumentsMatch->thenReturn(true);
 
         $this->expectException('Exception');
@@ -95,7 +99,7 @@ class Phake_Matchers_SingleArgumentMatcherTest extends TestCase
         $args = array('test arg1', 'test arg2');
 
         Phake::when($this->matcher)->matches->thenReturn(true);
-        Phake::when($this->nextMatcher)->doArgumentsMatch->thenThrow(new Phake_Exception_MethodMatcherException());
+        Phake::when($this->nextMatcher)->doArgumentsMatch->thenThrow(new Phake\Exception\MethodMatcherException());
 
         $this->expectException('Exception');
         $this->matcher->doArgumentsMatch($args);
@@ -103,7 +107,7 @@ class Phake_Matchers_SingleArgumentMatcherTest extends TestCase
 
     public function testMatchWithNoNext()
     {
-        $this->matcher = Phake::partialMock('Phake_Matchers_SingleArgumentMatcher');
+        $this->matcher = Phake::partialMock(SingleArgumentMatcher::class);
         $args = array('test arg1');
 
         Phake::when($this->matcher)->matches->thenReturn(true);
@@ -116,7 +120,7 @@ class Phake_Matchers_SingleArgumentMatcherTest extends TestCase
 
     public function testMatchWithNoNextAndExtraParameters()
     {
-        $this->matcher = Phake::partialMock('Phake_Matchers_SingleArgumentMatcher');
+        $this->matcher = Phake::partialMock(SingleArgumentMatcher::class);
         $args = array('test arg1', 'test arg2');
 
         Phake::when($this->matcher)->matches->thenReturn(true);
@@ -127,7 +131,7 @@ class Phake_Matchers_SingleArgumentMatcherTest extends TestCase
 
     public function testReferencesPassedThrough()
     {
-        $this->matcher = Phake::partialMock('Phake_Matchers_SingleArgumentMatcher');
+        $this->matcher = Phake::partialMock(SingleArgumentMatcher::class);
         $args = array('test arg1');
 
         Phake::when($this->matcher)->matches(Phake::setReference('new value'))->thenReturn(true);

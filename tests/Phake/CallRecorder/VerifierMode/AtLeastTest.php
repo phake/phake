@@ -1,4 +1,7 @@
 <?php
+
+namespace Phake\CallRecorder\VerifierMode;
+
 /*
  * Phake - Mocking Framework
  *
@@ -42,18 +45,19 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+use Phake;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Tests the functionality of the AtLeast class.
  */
-class Phake_CallRecorder_VerifierMode_AtLeastTest extends TestCase
+class AtLeastTest extends TestCase
 {
     private $verifierModeAtLeast;
 
     public function setUp(): void
     {
-        $this->verifierModeAtLeast = new Phake_CallRecorder_VerifierMode_AtLeast(1);
+        $this->verifierModeAtLeast = new AtLeast(1);
     }
 
     /**

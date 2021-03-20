@@ -1,5 +1,7 @@
 <?php
 
+namespace Phake\Annotation;
+
 /*
  * Phake - Mocking Framework
  *
@@ -46,19 +48,19 @@
 /**
  * Allows reading annotations from various components
  */
-class Phake_Annotation_Reader
+class Reader
 {
     /**
-     * @var ReflectionClass
+     * @var \ReflectionClass
      */
     private $clazz;
 
     /**
-     * @param ReflectionClass $clazz
+     * @param \ReflectionClass $clazz
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
-    public function __construct(ReflectionClass $clazz)
+    public function __construct(\ReflectionClass $clazz)
     {
         $this->clazz = $clazz;
     }

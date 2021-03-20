@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake;
 /*
  * Phake - Mocking Framework
  *
@@ -44,7 +46,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-class Phake_BuiltinExtensionsTest extends TestCase
+class BuiltinExtensionsTest extends TestCase
 {
     public function testMemcachedGet()
     {
@@ -53,7 +55,7 @@ class Phake_BuiltinExtensionsTest extends TestCase
             $this->markTestSkipped("Cannot run test without memcached");
         }
 
-        $mock = Phake::mock('Memcached');
+        $mock = \Phake::mock('Memcached');
 
         $this->assertInstanceOf('Memcached', $mock);
     }

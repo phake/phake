@@ -1,4 +1,7 @@
 <?php
+
+namespace Phake\Proxies;
+
 /*
  * Phake - Mocking Framework
  *
@@ -42,24 +45,25 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+use Phake;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @author Mike Lively <m@digitalsandwich.com>
  */
-class Phake_Proxies_VisibilityProxyTest extends TestCase
+class VisibilityProxyTest extends TestCase
 {
     public function testCallingOnANonObject()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
 
-        $proxy = new Phake_Proxies_VisibilityProxy(42);
+        $proxy = new VisibilityProxy(42);
     }
 
     public function testCallingNonExistantMethod()
     {
-        $test = new PhakeTest_MockedClass();
-        $proxy = new Phake_Proxies_VisibilityProxy($test);
+        $test = new \PhakeTest_MockedClass();
+        $proxy = new VisibilityProxy($test);
 
         $this->expectException('InvalidArgumentException');
         $proxy->badFunctionName();
@@ -68,7 +72,7 @@ class Phake_Proxies_VisibilityProxyTest extends TestCase
     public function testCallingMagicMethod()
     {
         $mock = Phake::mock('PhakeTest_MagicClass');
-        $proxy = new Phake_Proxies_VisibilityProxy($mock);
+        $proxy = new VisibilityProxy($mock);
 
         Phake::when($mock)->test()->thenReturn('bar');
 
@@ -84,7 +88,7 @@ class Phake_Proxies_VisibilityProxyTest extends TestCase
             $this->markTestSkipped("Can't call private methods with hhvm");
         }
         $mock = Phake::mock('PhakeTest_MockedClass');
-        $proxy = new Phake_Proxies_VisibilityProxy($mock);
+        $proxy = new VisibilityProxy($mock);
 
         Phake::when($mock)->privateFunc()->thenReturn('bar');
 
@@ -100,7 +104,7 @@ class Phake_Proxies_VisibilityProxyTest extends TestCase
             $this->markTestSkipped("Can't call private methods with hhvm");
         }
         $mock = Phake::mock('PhakeTest_MockedClass');
-        $proxy = new Phake_Proxies_VisibilityProxy($mock);
+        $proxy = new VisibilityProxy($mock);
 
         Phake::when($mock)->privateFunc()->thenCallParent();
 
@@ -112,7 +116,7 @@ class Phake_Proxies_VisibilityProxyTest extends TestCase
     public function testCallingProtectedMethod()
     {
         $mock = Phake::mock('PhakeTest_MockedClass');
-        $proxy = new Phake_Proxies_VisibilityProxy($mock);
+        $proxy = new VisibilityProxy($mock);
 
         Phake::when($mock)->innerFunc()->thenReturn('bar');
 
@@ -124,7 +128,7 @@ class Phake_Proxies_VisibilityProxyTest extends TestCase
     public function testCallingPublicMethod()
     {
         $mock = Phake::mock('PhakeTest_MockedClass');
-        $proxy = new Phake_Proxies_VisibilityProxy($mock);
+        $proxy = new VisibilityProxy($mock);
 
         Phake::when($mock)->foo()->thenReturn('bar');
 
@@ -133,5 +137,3 @@ class Phake_Proxies_VisibilityProxyTest extends TestCase
         Phake::verify($mock)->foo();
     }
 }
-
-

@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\Proxies;
 /*
  * Phake - Mocking Framework
  *
@@ -53,7 +55,7 @@
  * @author Mike Lively <m@digitalsandwich.com>
  * @internal This class will quite likely change soon, don't use it outside of phake code
  */
-class Phake_Proxies_StaticVisibilityProxy
+class StaticVisibilityProxy
 {
     private $proxied;
 
@@ -61,7 +63,7 @@ class Phake_Proxies_StaticVisibilityProxy
     {
         if (!is_object($proxied))
         {
-            throw new InvalidArgumentException("Phake_Proxies_VisibilityProxy was passed a non-object");
+            throw new \InvalidArgumentException("\Phake\Proxies\VisibilityProxy was passed a non-object");
         }
         $this->proxied = get_class($proxied);
     }
@@ -75,18 +77,18 @@ class Phake_Proxies_StaticVisibilityProxy
     {
         if (method_exists($this->proxied, $method))
         {
-            $reflMethod = new ReflectionMethod($this->proxied, $method);
+            $reflMethod = new \ReflectionMethod($this->proxied, $method);
             $reflMethod->setAccessible(true);
             return $reflMethod->invokeArgs(null, $arguments);
         }
         elseif (method_exists($this->proxied, '__callStatic'))
         {
-            $reflMethod = new ReflectionMethod($this->proxied, '__callStatic');
+            $reflMethod = new \ReflectionMethod($this->proxied, '__callStatic');
             return $reflMethod->invokeArgs(null, func_get_args());
         }
         else
         {
-            throw new InvalidArgumentException("Method {$method} does not exist on {$this->proxied}");
+            throw new \InvalidArgumentException("Method {$method} does not exist on {$this->proxied}");
         }
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Phake\CallRecorder;
+namespace Phake\Client;
 
 /*
  * Phake - Mocking Framework
@@ -46,49 +46,20 @@ namespace Phake\CallRecorder;
  */
 
 /**
- * A value object containing the results of a run of verifyCall()
+ * The default client adapter used by Phake.
  */
-class VerifierResult
+class DefaultClient implements IClient
 {
-    private $verified;
-
-    private $matchedCalls;
-
-    private $failureDescription;
-
-    /**
-     * @param boolean $verified
-     * @param array   $matchedCalls
-     * @param string  $failureDescription
-     */
-    function __construct($verified, array $matchedCalls, $failureDescription = '')
+    public function processVerifierResult(\Phake\CallRecorder\VerifierResult $result)
     {
-        $this->verified           = $verified;
-        $this->matchedCalls       = $matchedCalls;
-        $this->failureDescription = $failureDescription;
+        if ($result->getVerified()) {
+            return $result->getMatchedCalls();
+        } else {
+            throw new \Phake\Exception\VerificationException($result->getFailureDescription());
+        }
     }
 
-    /**
-     * @return boolean
-     */
-    public function getVerified()
+    public function processObjectFreeze()
     {
-        return $this->verified;
-    }
-
-    /**
-     * @return array
-     */
-    public function getMatchedCalls()
-    {
-        return $this->matchedCalls;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFailureDescription()
-    {
-        return $this->failureDescription;
     }
 }

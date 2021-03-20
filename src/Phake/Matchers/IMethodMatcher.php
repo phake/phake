@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\Matchers;
 /*
  * Phake - Mocking Framework
  *
@@ -49,7 +51,7 @@
  *
  * @author Mike Lively <m@digitalsandwich.com>
  */
-interface Phake_Matchers_IMethodMatcher
+interface IMethodMatcher
 {
     /**
      * Determines if the given method and arguments match the configured method and argument matchers

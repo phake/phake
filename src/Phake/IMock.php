@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake;
 /* 
  * Phake - Mocking Framework
  * 
@@ -47,6 +49,6 @@
  *
  * Just a marker interface.
  */
-interface Phake_IMock
+interface IMock
 {
 }

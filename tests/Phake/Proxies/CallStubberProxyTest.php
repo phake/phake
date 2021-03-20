@@ -1,4 +1,7 @@
 <?php
+
+namespace Phake\Proxies;
+
 /*
  * Phake - Mocking Framework
  *
@@ -42,22 +45,23 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+use Phake;
 use PHPUnit\Framework\TestCase;
 
-class Phake_Proxies_CallStubberProxyTest extends TestCase
+class CallStubberProxyTest extends TestCase
 {
     /**
-     * @var Phake_Proxies_CallStubberProxy
+     * @var Phake\Proxies\CallStubberProxy
      */
     private $proxy;
 
     /**
-     * @var Phake_Matchers_IChainableArgumentMatcher
+     * @var Phake\Matchers\IChainableArgumentMatcher
      */
     private $matcher1;
 
     /**
-     * @var Phake_IMock
+     * @var Phake\IMock
      */
     private $obj;
 
@@ -66,10 +70,10 @@ class Phake_Proxies_CallStubberProxyTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->matcher1 = Phake::mock('Phake_Matchers_IChainableArgumentMatcher');
-        $this->obj      = $this->getMockBuilder('Phake_IMock')->getMock();
-        PhakeTestUtil::setStubMapper($this->obj, Phake::mock('Phake_Stubber_StubMapper'));
-        $this->proxy    = new Phake_Proxies_CallStubberProxy($this->matcher1, false);
+        $this->matcher1 = Phake::mock(Phake\Matchers\IChainableArgumentMatcher::class);
+        $this->obj      = $this->getMockBuilder(Phake\IMock::class)->getMock();
+        \PhakeTestUtil::setStubMapper($this->obj, Phake::mock(Phake\Stubber\StubMapper::class));
+        $this->proxy    = new CallStubberProxy($this->matcher1, false);
     }
 
     /**
@@ -79,9 +83,9 @@ class Phake_Proxies_CallStubberProxyTest extends TestCase
     {
         $answerBinder = $this->proxy->isCalledOn($this->obj);
 
-        $this->assertThat($answerBinder, $this->isInstanceOf('Phake_Proxies_AnswerBinderProxy'));
+        $this->assertThat($answerBinder, $this->isInstanceOf(Phake\Proxies\AnswerBinderProxy::class));
 
-        $this->phakeAssertAttributeInstanceOf('Phake_Stubber_AnswerBinder', 'binder', $answerBinder);
+        $this->phakeAssertAttributeInstanceOf(Phake\Stubber\AnswerBinder::class, 'binder', $answerBinder);
     }
 
     private function phakeAssertAttributeInstanceOf(string $class, string $propertyName, $object)

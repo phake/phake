@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\ClassGenerator;
 /*
  * Phake - Mocking Framework
  *
@@ -45,7 +47,7 @@
 /**
  * Loads classes into the system via the eval method
  */
-class Phake_ClassGenerator_EvalLoader implements Phake_ClassGenerator_ILoader
+class EvalLoader implements ILoader
 {
     /**
      * @param string $className

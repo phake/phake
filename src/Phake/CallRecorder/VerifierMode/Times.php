@@ -1,4 +1,6 @@
 <?php
+
+namespace Phake\CallRecorder\VerifierMode;
 /* 
  * Phake - Mocking Framework
  * 
@@ -47,7 +49,7 @@
  * to the expected amount.
  * @author Brian Feaver <brian.feaver@gmail.com>
  */
-class Phake_CallRecorder_VerifierMode_Times implements Phake_CallRecorder_IVerifierMode
+class Times implements \Phake\CallRecorder\IVerifierMode
 {
     /**
      * @var int
@@ -76,9 +78,9 @@ class Phake_CallRecorder_VerifierMode_Times implements Phake_CallRecorder_IVerif
     {
         $calledTimes = count($matchedCalls);
         if ($calledTimes == $this->times) {
-            return new Phake_CallRecorder_VerifierMode_Result(true, '');
+            return new Result(true, '');
         } else {
-            return new Phake_CallRecorder_VerifierMode_Result(false, sprintf(
+            return new Result(false, sprintf(
                 'actually called <%s> times',
                 count($matchedCalls)
             ));

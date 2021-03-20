@@ -1,4 +1,7 @@
 <?php
+
+namespace Phake\Exception;
+
 /**
  * Created by JetBrains PhpStorm.
  * User: mikel
@@ -7,7 +10,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-class Phake_Exception_VerificationException extends Exception
+class VerificationException extends \Exception
 {
 
 }
