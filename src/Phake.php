@@ -126,9 +126,8 @@ class Phake
      * @param mixed $args,... the remaining arguments will be passed as constructor arguments
      * @return \Phake\IMock
      */
-    public static function partialMock($className, $args = null)
+    public static function partialMock($className, ...$args)
     {
-        $args = array_slice(func_get_args(), 1);
         $answer = new \Phake\Stubber\Answers\ParentDelegate();
 
         return self::getPhake()->mock(
@@ -149,10 +148,9 @@ class Phake
      * @return \Phake\IMock
      * @deprecated Please use Phake::partialMock() instead
      */
-    public static function partMock($className, $args = null)
+    public static function partMock($className, ...$args)
     {
-        $args = func_get_args();
-        return call_user_func_array('Phake::partialMock', $args);
+        return self::partialMock($className, ...$args);
     }
 
 	/**
@@ -221,9 +219,8 @@ class Phake
      *
      * @return \Phake\Proxies\CallVerifierProxy
      */
-    public static function verifyCallMethodWith()
+    public static function verifyCallMethodWith(...$arguments)
     {
-        $arguments = func_get_args();
         $factory   = self::getMatchersFactory();
         return new \Phake\Proxies\CallVerifierProxy($factory->createMatcherChain(
             $arguments
@@ -237,9 +234,8 @@ class Phake
      *
      * @return \Phake\Proxies\CallVerifierProxy
      */
-    public static function verifyStaticCallMethodWith()
+    public static function verifyStaticCallMethodWith(...$arguments)
     {
-        $arguments = func_get_args();
         $factory   = self::getMatchersFactory();
         return new \Phake\Proxies\CallVerifierProxy($factory->createMatcherChain(
             $arguments
@@ -249,9 +245,8 @@ class Phake
     /**
      * Allows verification of methods in a particular order
      */
-    public static function inOrder()
+    public static function inOrder(...$calls)
     {
-        $calls         = func_get_args();
         $orderVerifier = new \Phake\CallRecorder\OrderVerifier();
 
         if (!$orderVerifier->verifyCallsInOrder(self::pullPositionsFromCallInfos($calls))) {
@@ -263,13 +258,13 @@ class Phake
     /**
      * Allows for verifying that a mock object has no further calls made to it.
      *
-     * @param \Phake\IMock $mock
+     * @param \Phake\IMock ...$mocks
      */
-    public static function verifyNoFurtherInteraction(\Phake\IMock $mock)
+    public static function verifyNoFurtherInteraction(\Phake\IMock ...$mocks)
     {
         $mockFreezer = new \Phake\Mock\Freezer();
 
-        foreach (func_get_args() as $mock) {
+        foreach ($mocks as $mock) {
             $mockFreezer->freeze(Phake::getInfo($mock), self::getClient());
             $mockFreezer->freeze(Phake::getInfo(get_class($mock)), self::getClient());
         }
@@ -278,11 +273,11 @@ class Phake
     /**
      * Allows for verifying that no interaction occurred with a mock object
      *
-     * @param \Phake\IMock $mock
+     * @param \Phake\IMock ...$mocks
      */
-    public static function verifyNoInteraction(\Phake\IMock $mock)
+    public static function verifyNoInteraction(\Phake\IMock ...$mocks)
     {
-        foreach (func_get_args() as $mock) {
+        foreach ($mocks as $mock) {
             $callRecorder = Phake::getInfo($mock)->getCallRecorder();
             $verifier = new \Phake\CallRecorder\Verifier($callRecorder, $mock);
             self::getClient()->processVerifierResult($verifier->verifyNoCalls());
@@ -361,9 +356,8 @@ class Phake
      *
      * @return \\Phake\Proxies\CallStubberProxy
      */
-    public static function whenCallMethodWith()
+    public static function whenCallMethodWith(...$arguments)
     {
-        $arguments = func_get_args();
         $factory   = self::getMatchersFactory();
         return new \Phake\Proxies\CallStubberProxy($factory->createMatcherChain($arguments), false);
     }
@@ -375,9 +369,8 @@ class Phake
      *
      * @return \\Phake\Proxies\CallStubberProxy
      */
-    public static function whenStaticCallMethodWith()
+    public static function whenStaticCallMethodWith(...$arguments)
     {
-        $arguments = func_get_args();
         $factory   = self::getMatchersFactory();
         return new \Phake\Proxies\CallStubberProxy($factory->createMatcherChain($arguments), true);
     }
