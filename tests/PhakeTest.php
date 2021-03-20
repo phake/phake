@@ -1191,6 +1191,18 @@ class PhakeTest extends TestCase
     }
 
     /**
+     * Tests that the thenThrow also now supports throwable
+     */
+    public function testStubThenThrowWithThrowable()
+    {
+        $this->expectException(\AssertionError::class);
+
+        $mock = Phake::mock('PhakeTest_MockedClass');
+        Phake::when($mock)->foo()->thenThrow(new \AssertionError);
+        $mock->foo();
+    }
+
+    /**
      * Tests that Phake::anyParameters() returns an instance of Phake\Matchers\AnyParameters
      */
     public function testAnyParameters()

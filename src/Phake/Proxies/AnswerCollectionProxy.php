@@ -109,11 +109,11 @@ class AnswerCollectionProxy implements \Phake\Stubber\IAnswerContainer, AnswerPr
     /**
      * Binds an exception answer to the method and object in the proxied binder.
      *
-     * @param \Exception $value
+     * @param \Throwable $value
      *
      * @return AnswerCollectionProxy
      */
-    public function thenThrow(\Exception $value)
+    public function thenThrow(\Throwable $value)
     {
         $this->collection->addAnswer(new \Phake\Stubber\Answers\ExceptionAnswer($value));
         return $this;

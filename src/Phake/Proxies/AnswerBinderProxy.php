@@ -117,11 +117,11 @@ class AnswerBinderProxy implements AnswerProxyInterface
     /**
      * Binds an exception answer to the method and object in the proxied binder.
      *
-     * @param \Exception $value
+     * @param \Throwable $value
      *
      * @return \Phake\Stubber\IAnswerContainer
      */
-    public function thenThrow(\Exception $value)
+    public function thenThrow(\Throwable $value)
     {
         return $this->binder->bindAnswer(new \Phake\Stubber\Answers\ExceptionAnswer($value));
     }

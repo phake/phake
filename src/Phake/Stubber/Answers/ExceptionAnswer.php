@@ -59,7 +59,7 @@ class ExceptionAnswer implements \Phake\Stubber\IAnswer
     /**
      * @param mixed $answer
      */
-    public function __construct(\Exception $answer)
+    public function __construct(\Throwable $answer)
     {
         $this->answer = $answer;
     }

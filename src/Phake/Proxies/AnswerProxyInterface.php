@@ -91,11 +91,11 @@ interface AnswerProxyInterface
     /**
      * Binds an exception answer to the method and object in the proxied binder.
      *
-     * @param \Exception $value
+     * @param \Throwable $value
      *
      * @return \Phake\Stubber\IAnswerContainer
      */
-    public function thenThrow(\Exception $value);
+    public function thenThrow(\Throwable $value);
 
     /**
      * Binds a delegated call that will call a given method's parent while capturing that value to the passed in variable.
