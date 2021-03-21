@@ -69,7 +69,7 @@ class Phake
     private static $loader;
 
     /**
-     * @var \Phake\ClassGenerator\IInstatiator
+     * @var \Phake\ClassGenerator\IInstantiator
      */
     private static $instantiator;
 
@@ -631,7 +631,7 @@ class Phake
     public static function getMockLoader()
     {
         if (!self::$loader) {
-            self::$loader = new \Phake\ClassGenerator\EvalLoader();
+            self::setMockLoader(new \Phake\ClassGenerator\EvalLoader());
         }
 
         return self::$loader;
@@ -646,13 +646,13 @@ class Phake
     public static function getMockInstantiator()
     {
         if (!self::$instantiator) {
-            self::$instantiator = new \Phake\ClassGenerator\DefaultInstantiator();
+            self::setMockInstantiator(new \Phake\ClassGenerator\DefaultInstantiator());
         }
 
         return self::$instantiator;
     }
 
-    public static function setMockInstantiator(\Phake\ClassGenerator\IInstatiator $instantiator)
+    public static function setMockInstantiator(\Phake\ClassGenerator\IInstantiator $instantiator)
     {
         self::$classGenerator = null;
         self::$instantiator = $instantiator;
