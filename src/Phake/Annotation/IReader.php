@@ -40,84 +40,15 @@ namespace Phake\Annotation;
  * @category   Testing
  * @package    Phake
  * @author     Mike Lively <m@digitalsandwich.com>
+ * @author     Pierrick Charron <pierrick@adoy.net>
  * @copyright  2010 Mike Lively <m@digitalsandwich.com>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link       http://www.digitalsandwich.com/
  */
 
-/**
- * Allows reading annotations from various components
- */
-class Reader
+interface IReader
 {
-    /**
-     * @var \ReflectionClass
-     */
-    private $clazz;
+    public function getPropertiesWithMockAnnotation(\ReflectionClass $class): iterable;
 
-    /**
-     * @param \ReflectionClass $clazz
-     *
-     * @throws \InvalidArgumentException
-     */
-    public function __construct(\ReflectionClass $clazz)
-    {
-        $this->clazz = $clazz;
-    }
-
-    /**
-     * Returns an associative array containing a property's annotations and their values.
-     *
-     * @param string $property
-     *
-     * @return array
-     */
-    public function getPropertyAnnotations($property)
-    {
-        $property = $this->clazz->getProperty($property);
-
-        return $this->readReflectionAnnotation($property);
-    }
-
-    /**
-     * Returns an array containing the names of all properties containing a particular annotation.
-     *
-     * @param string $annotation
-     *
-     * @return ReflectionProperty[]
-     */
-    public function getPropertiesWithAnnotation($annotation)
-    {
-        $properties = array();
-        foreach ($this->clazz->getProperties() as $property) {
-            $annotations = $this->getPropertyAnnotations($property->getName());
-
-            if (array_key_exists($annotation, $annotations)) {
-                $properties[] = $property;
-            }
-        }
-        return $properties;
-    }
-
-    /**
-     * Returns all annotations for the given reflection object.
-     *
-     * @internal
-     *
-     * @param mixed $reflVar - must be an object that has the 'getDocComment' method.
-     *
-     * @return array
-     */
-    public function readReflectionAnnotation($reflVar)
-    {
-        $comment = $reflVar->getDocComment();
-
-        $annotations = array();
-        foreach (explode("\n", $comment) as $line) {
-            if (preg_match('#^\s+\*\s*@(\w+)(?:\s+(.*))?\s*$#', $line, $matches)) {
-                $annotations[$matches[1]] = isset($matches[2]) ? $matches[2] : true;
-            }
-        }
-        return $annotations;
-    }
+    public function getMockType(\ReflectionProperty $property): ?string;
 }

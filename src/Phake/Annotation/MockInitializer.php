@@ -40,6 +40,7 @@ namespace Phake\Annotation;
  * @category   Testing
  * @package    Phake
  * @author     Mike Lively <m@digitalsandwich.com>
+ * @author     Pierrick Charron <pierrick@adoy.net>
  * @copyright  2010 Mike Lively <m@digitalsandwich.com>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link       http://www.digitalsandwich.com/
@@ -54,61 +55,44 @@ namespace Phake\Annotation;
  */
 class MockInitializer
 {
-    public function initialize($object)
-    {
-        $reflectionClass = new \ReflectionClass($object);
-        $reader          = new Reader($reflectionClass);
+    private static $defaultReader;
 
-        if ($this->useDoctrineParser()) {
-            $parser = new \Doctrine\Common\Annotations\PhpParser();
+    private $reader;
+
+    public static function getDefaultReader(): IReader
+    {
+        if (!self::$defaultReader) {
+            self::$defaultReader = version_compare(PHP_VERSION, '8.0.0', '<') ? new LegacyReader() : new NativeReader();
         }
 
-        $properties = $reader->getPropertiesWithAnnotation('Mock');
+        return self::$defaultReader;
+    }
 
-        foreach ($properties as $property) {
-            $mockedClass = null;
-            if (method_exists($property, 'hasType') && $property->hasType()) {
+    public static function setDefaultReader(IReader $reader)
+    {
+        self::$defaultReader = $reader;
+    }
+
+    public function __construct(IReader $reader = null)
+    {
+        $this->reader = $reader ?: self::getDefaultReader();
+    }
+
+    public function initialize($object)
+    {
+        $class  = new \ReflectionClass($object);
+
+        foreach ($this->reader->getPropertiesWithMockAnnotation($class) as $property) {
+            $mockedClass = $this->reader->getMockType($property);
+            if (!$mockedClass && method_exists($property, 'hasType') && $property->hasType()) {
                 $type = $property->getType();
                 if ($type instanceof \ReflectionNamedType) {
                     $mockedClass = $type->getName();
-                }
-            }
-            if (null === $mockedClass) {
-                $annotations = $reader->readReflectionAnnotation($property);
-
-                if ($annotations['Mock'] !== true) {
-                    $mockedClass = $annotations['Mock'];
-                } else {
-                    $mockedClass = $annotations['var'];
-                }
-            }
-
-            if (isset($parser)) {
-                // Ignore it if the class start with a backslash
-                if (substr($mockedClass, 0, 1) !== '\\') {
-                    $useStatements = $parser->parseClass($property->getDeclaringClass());
-                    $key           = strtolower($mockedClass);
-
-                    if (array_key_exists($key, $useStatements)) {
-                        $mockedClass = $useStatements[$key];
-                    } elseif ($reflectionClass->getNamespaceName() && $this->definedUnderTestNamespace($mockedClass, $reflectionClass->getNamespaceName())) {
-                        $mockedClass = $reflectionClass->getNamespaceName() . '\\' . $mockedClass;
-                    }
                 }
             }
 
             $property->setAccessible(true);
             $property->setValue($object, \Phake::mock($mockedClass));
         }
-    }
-
-    protected function useDoctrineParser()
-    {
-        return class_exists('Doctrine\Common\Annotations\PhpParser');
-    }
-
-    protected function definedUnderTestNamespace($mockedClass, $testNamespace)
-    {
-        return class_exists($testNamespace . '\\' . $mockedClass);
     }
 }

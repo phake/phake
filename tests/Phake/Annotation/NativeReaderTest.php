@@ -1,5 +1,14 @@
 <?php
 
+if (version_compare(PHP_VERSION, '8.0.0', '>=')) {
+    $fp = fopen(__FILE__, 'r');
+    fseek($fp, __COMPILER_HALT_OFFSET__);
+    eval(stream_get_contents($fp));
+}
+
+__halt_compiler();
+
+
 namespace Phake\Annotation;
 
 /*
@@ -47,58 +56,57 @@ namespace Phake\Annotation;
 
 use PHPUnit\Framework\TestCase;
 
-/**
- * @ann1 Test Annotation
- * @ann2
- */
-class ReaderTest extends TestCase
+class NativeReaderTest extends TestCase
 {
-    /**
-     * @ann3 Test Annotation
-     * @ann4
-     */
     private $reader;
 
-    /**
-     * @ann4
-     */
-    private $emptyVar;
+    #[\Phake\Mock]
+    private $mock;
 
-    private $emptyVar2;
+    #[\Phake\Mock(self::class)]
+    private $mockWithOrderedType;
+
+    #[\Phake\Mock(class: self::class)]
+    private $mockWithNamedType;
+
+    #[\Phake\Mock(foo: self::class)]
+    private $mockWithNoType;
 
     protected function setUp(): void
     {
-        $reflectionClass = new \ReflectionClass($this);
-        $this->reader    = new Reader($reflectionClass);
+        $this->reader = new NativeReader();
     }
 
-    protected function tearDown(): void
+    public function testGettingPropertiesWithMockAnnotations()
     {
-        $this->reader    = null;
-        $this->emptyVar  = null;
-        $this->emptyVar2 = null;
-    }
-
-    public function testReadingAnnotationsFromAProperty()
-    {
-        $annotations = $this->reader->getPropertyAnnotations('reader');
-
-        $expectedAnnotations = array(
-            'ann3' => 'Test Annotation',
-            'ann4' => true,
+        $properties = array_map(
+            function($p) { return $p->getName(); },
+            $this->reader->getPropertiesWithMockAnnotation(new \ReflectionClass($this))
         );
-        $this->assertEquals($expectedAnnotations, $annotations);
+
+        $expectedProperties = [
+            'mock',
+            'mockWithOrderedType',
+            'mockWithNamedType',
+            'mockWithNoType',
+        ];
+
+        $this->assertSame($expectedProperties, $properties);
     }
 
-    public function testGettingPropertiesWithAnnotation()
+    public static function getMockTypeDataProvider()
     {
-        $properties = $this->reader->getPropertiesWithAnnotation('ann4');
+        yield 'no type' => [ null, 'mock' ];
+        yield 'mock ordered type' => [ self::class, 'mockWithOrderedType' ];
+        yield 'mock named type' => [ self::class, 'mockWithNamedType' ];
+        yield 'no type 2' => [ null , 'mockWithNoType' ];
+    }
 
-        $expectedProperties = array(
-            'emptyVar',
-            'reader',
-        );
-        $this->assertContains($properties[0]->getName(), $expectedProperties);
-        $this->assertContains($properties[1]->getName(), $expectedProperties);
+    /**
+     * @dataProvider getMockTypeDataProvider
+     */
+    public function testGettingMockType(?string $expectedType, string $propertyName)
+    {
+        $this->assertSame($expectedType, $this->reader->getMockType(new \ReflectionProperty($this, $propertyName)));
     }
 }

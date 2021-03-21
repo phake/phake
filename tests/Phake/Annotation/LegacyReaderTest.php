@@ -1,6 +1,7 @@
 <?php
 
 namespace Phake\Annotation;
+
 /*
  * Phake - Mocking Framework
  *
@@ -45,96 +46,68 @@ namespace Phake\Annotation;
  */
 
 use PHPUnit\Framework\TestCase;
-use PhakeTest\AnotherNamespacedClass;
 
-/**
- * @ann1 Test Annotation
- * @ann2
- */
-class MockInitializerTest extends TestCase
+class LegacyReaderTest extends TestCase
 {
-    /**
-     * @var MockInitializer
-     */
-    private $initializer;
-
-    /**
-     * @Mock stdClass
-     */
-    private $mock1;
+    private $reader;
 
     /**
      * @Mock
-     * @var stdClass
      */
-    private $mock2;
+    private $mock;
+
+    /**
+     * @Mock Mock\Class\Name
+     */
+    private $mockWithType;
 
     /**
      * @Mock
-     * @var \PhakeTest\NamespacedClass
+     * @var Mock\Class\Name2
      */
-    private $shortNameMock1;
+    private $mockWithVar;
 
     /**
-     * @Mock AnotherNamespacedClass
+     * @Mock Mock\Class\Name3
+     * @var Mock\Class\Name4
      */
-    private $shortNameMock2;
-
-    #[\Phake\Mock(\stdClass::class)]
-    private $nativeMock;
+    private $mockWithTypeAndVar;
 
     protected function setUp(): void
     {
-        $this->initializer = new MockInitializer();
+        $this->reader    = new LegacyReader();
     }
 
-    protected function tearDown(): void
+    public function testGettingPropertiesWithMockAnnotations()
     {
-        $this->initializer    = null;
-        $this->mock1          = $this->mock2 = null;
-        $this->shortNameMock1 = $this->shortNameMock2 = null;
+        $properties = array_map(
+            function($p) { return $p->getName(); },
+            $this->reader->getPropertiesWithMockAnnotation(new \ReflectionClass($this))
+        );
+
+        $expectedProperties = [
+            'mock',
+            'mockWithType',
+            'mockWithVar',
+            'mockWithTypeAndVar'
+        ];
+
+        $this->assertSame($expectedProperties, $properties);
     }
 
-    public function testInitialize()
+    public static function getMockTypeDataProvider()
     {
-        $this->initializer->initialize($this);
-
-        $this->assertInstanceOf('stdClass', $this->mock1);
-        $this->assertInstanceOf('stdClass', $this->mock2);
-        $this->assertInstanceOf('Phake\IMock', $this->mock1);
-        $this->assertInstanceOf('Phake\IMock', $this->mock2);
+        yield 'no type' => [ null, 'mock' ];
+        yield 'mock type' => [ 'Mock\Class\Name', 'mockWithType' ];
+        yield 'var annotation' => [ 'Mock\Class\Name2', 'mockWithVar' ];
+        yield 'mock type + var annotation' => [ 'Mock\Class\Name3', 'mockWithTypeAndVar' ];
     }
 
     /**
-     * @depends testInitialize
+     * @dataProvider getMockTypeDataProvider
      */
-    public function testNamespaceAliasOnVar()
+    public function testGettingMockType(?string $expectedType, string $propertyName)
     {
-        $this->initializer->initialize($this);
-
-        $this->assertInstanceOf('Phake\IMock', $this->shortNameMock1);
-    }
-
-    /**
-     * @depends testInitialize
-     */
-    public function testNamespaceAliasOnMock()
-    {
-        $this->initializer->initialize($this);
-
-        $this->assertInstanceOf('Phake\IMock', $this->shortNameMock2);
-    }
-
-    public function testWithNativeReader()
-    {
-        if (version_compare(phpversion(), '8.0.0') < 0) {
-            $this->markTestSkipped('Native attributes are not supported in PHP versions prior to 8.0');
-        }
-
-        $this->initializer = new MockInitializer(new NativeReader);
-        $this->initializer->initialize($this);
-
-        $this->assertInstanceOf('stdClass', $this->nativeMock);
+        $this->assertSame($expectedType, $this->reader->getMockType(new \ReflectionProperty($this, $propertyName)));
     }
 }
-

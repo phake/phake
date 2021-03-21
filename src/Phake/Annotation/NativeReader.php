@@ -1,14 +1,9 @@
 <?php
 
-if (version_compare(PHP_VERSION, '7.4.0', '>=')) {
-    $fp = fopen(__FILE__, 'r');
-    fseek($fp, __COMPILER_HALT_OFFSET__);
-    eval(stream_get_contents($fp));
-}
-
-__halt_compiler();
-
 namespace Phake\Annotation;
+
+use ReflectionClass;
+use ReflectionProperty;
 
 /*
  * Phake - Mocking Framework
@@ -48,51 +43,44 @@ namespace Phake\Annotation;
  * @category   Testing
  * @package    Phake
  * @author     Mike Lively <m@digitalsandwich.com>
+ * @author     Pierrick Charron <pierrick@adoy.net>
  * @copyright  2010 Mike Lively <m@digitalsandwich.com>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link       http://www.digitalsandwich.com/
  */
 
-use Phake\Mock;
-use PHPUnit\Framework\TestCase;
-use PhakeTest\AnotherNamespacedClass;
-
-/**
- * @ann1 Test Annotation
- * @ann2
- */
-class MockInitializerTypesPropertiesTest extends TestCase
+class NativeReader implements IReader
 {
-    /**
-     * @Mock
-     */
-    private \stdClass $mock;
+    private const ANNOTATION_NAME = 'Phake\Mock';
 
-    #[Mock]
-    private AnotherNamespacedClass $nativeMock;
-
-    protected function setUp(): void
+    public function __construct()
     {
-        $this->initializer = new MockInitializer();
+        if (version_compare(PHP_VERSION, '8.0.0', '<')) {
+            throw new \RuntimeException('NativeReader is only available for PHP >= 8.0.0');
+        }
     }
 
-    public function testInitialize()
+    public function getPropertiesWithMockAnnotation(ReflectionClass $class): iterable
     {
-        $this->initializer->initialize($this);
-
-        $this->assertInstanceOf(\stdClass::class, $this->mock);
-    }
-
-    public function testWithNativeReader()
-    {
-        if (version_compare(phpversion(), '8.0.0') < 0) {
-            $this->markTestSkipped('Native attributes are not supported in PHP versions prior to 8.0');
+        $properties = [];
+        foreach ($class->getProperties() as $property) {
+            $annotations = $property->getAttributes(self::ANNOTATION_NAME);
+            if (array_pop($annotations)) {
+                $properties[] = $property;
+            }
         }
 
-        $this->initializer = new MockInitializer(new NativeReader);
-        $this->initializer->initialize($this);
+        return $properties;
+    }
 
-        $this->assertInstanceOf(AnotherNamespacedClass::class, $this->nativeMock);
+    public function getMockType(ReflectionProperty $property): ?string
+    {
+        foreach($property->getAttributes(self::ANNOTATION_NAME) as $attribute) {
+            $args = $attribute->getArguments();
+
+            return $args[0] ?? $args['class'] ?? null;
+        }
+
+        return null;
     }
 }
-
