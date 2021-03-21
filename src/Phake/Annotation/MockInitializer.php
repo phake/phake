@@ -66,12 +66,21 @@ class MockInitializer
         $properties = $reader->getPropertiesWithAnnotation('Mock');
 
         foreach ($properties as $property) {
-            $annotations = $reader->readReflectionAnnotation($property);
+            $mockedClass = null;
+            if (method_exists($property, 'hasType') && $property->hasType()) {
+                $type = $property->getType();
+                if ($type instanceof \ReflectionNamedType) {
+                    $mockedClass = $type->getName();
+                }
+            }
+            if (null === $mockedClass) {
+                $annotations = $reader->readReflectionAnnotation($property);
 
-            if ($annotations['Mock'] !== true) {
-                $mockedClass = $annotations['Mock'];
-            } else {
-                $mockedClass = $annotations['var'];
+                if ($annotations['Mock'] !== true) {
+                    $mockedClass = $annotations['Mock'];
+                } else {
+                    $mockedClass = $annotations['var'];
+                }
             }
 
             if (isset($parser)) {
@@ -95,7 +104,7 @@ class MockInitializer
 
     protected function useDoctrineParser()
     {
-        return version_compare(PHP_VERSION, "5.3.3", ">=") && class_exists('Doctrine\Common\Annotations\PhpParser');
+        return class_exists('Doctrine\Common\Annotations\PhpParser');
     }
 
     protected function definedUnderTestNamespace($mockedClass, $testNamespace)
