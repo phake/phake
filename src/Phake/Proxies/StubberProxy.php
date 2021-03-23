@@ -51,6 +51,8 @@ namespace Phake\Proxies;
  */
 class StubberProxy
 {
+    use NamedArgumentsResolver;
+
     /**
      * @var \Phake\IMock
      */
@@ -82,7 +84,7 @@ class StubberProxy
      */
     public function __call($method, array $arguments)
     {
-        $matcher = new \Phake\Matchers\MethodMatcher($method, $this->matcherFactory->createMatcherChain($arguments));
+        $matcher = new \Phake\Matchers\MethodMatcher($method, $this->matcherFactory->createMatcherChain($this->resolveNamedArguments($this->obj, $method, $arguments)));
         $binder  = new \Phake\Stubber\AnswerBinder($matcher, \Phake::getInfo($this->obj)->getStubMapper());
         return new AnswerBinderProxy($binder);
     }

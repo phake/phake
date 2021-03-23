@@ -54,6 +54,8 @@ namespace Phake\Proxies;
  */
 class VerifierProxy
 {
+    use NamedArgumentsResolver;
+
     /**
      * @var \Phake\CallRecorder\Verifier
      */
@@ -103,6 +105,7 @@ class VerifierProxy
      */
     public function __call($method, array $arguments)
     {
+        $arguments = $this->resolveNamedArguments($this->verifier->getObject(), $method, $arguments);
         $expectation = new \Phake\CallRecorder\CallExpectation($this->verifier->getObject(
         ), $method, $this->matcherFactory->createMatcherChain($arguments), $this->mode);
 

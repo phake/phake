@@ -1,4 +1,7 @@
 <?php
+
+namespace Phake\Proxies;
+
 /* 
  * Phake - Mocking Framework
  * 
@@ -36,91 +39,48 @@
  * 
  * @category   Testing
  * @package    Phake
- * @author     Mike Lively <m@digitalsandwich.com>
+ * @author     Pierrick Charron <pierrick@adoy.net>
  * @copyright  2010 Mike Lively <m@digitalsandwich.com>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link       http://www.digitalsandwich.com/
  */
 
 /**
- * Description of MockedClass
+ * Resovle named arguments as positional arguments
  *
- * @author Mike Lively <m@digitalsandwich.com>
+ * @author Pierrick Charron <pierrick@adoy.net>
  */
-class PhakeTest_MockedClass
+trait NamedArgumentsResolver
 {
-    public function foo()
+    private function resolveNamedArguments($object, $method, array $arguments)
     {
-    }
+        $positionalArguments = [];
+        $namedArguments      = [];
+        foreach ($arguments as $key => $arg) {
+            if (is_int($key)) {
+                $positionalArguments[$key] = $arg;
+            } else {
+                $namedArguments[$key] = $arg;
+            }
+        }
 
-    public function fooWithDefault($default = null)
-    {
-    }
+        if (!empty($namedArguments)) {
+            try {
+                $parameters = (new \ReflectionObject($object))->getMethod($method)->getParameters();
+            } catch (\ReflectionException $e) {
+                $parameters = [];
+            }
+            foreach ($parameters as $position => $parameter) {
+                $name = $parameter->getName();
+                if (array_key_exists($name, $namedArguments)) {
+                    $positionalArguments[$position] = $namedArguments[$name];
+                    unset($namedArguments[$name]);
+                } elseif ($parameter->isOptional() && !array_key_exists($position, $positionalArguments)) {
+                    $positionalArguments[$position] = $parameter->getDefaultValue();
+                }
+            }
+        }
 
-    public function fooWithMultipleDefault($p1 = null, $p2 = null)
-    {
-    }
-
-    public function fooWithArgument($arg1)
-    {
-    }
-
-    public function fooWithReturnValue()
-    {
-        return 'blah';
-    }
-
-    public function callInnerFunc()
-    {
-        return $this->innerFunc();
-    }
-
-    protected function innerFunc()
-    {
-        return 'test';
-    }
-
-    private function privateFunc()
-    {
-        return 'blah';
-    }
-
-    private static function privateStaticFunc()
-    {
-        return 'blah static';
-    }
-
-    public function chainedCall()
-    {
-        return $this->callInnerFunc();
-    }
-
-    public function fooWithLotsOfParameters($parm1, $parm2, $parm3)
-    {
-
-    }
-
-    public function fooWithRefParm($parm1, &$parm2 = null)
-    {
-
-	}
-
-    public function fooWithVariableNumberOfArguments($x = null)
-    {
-        return func_get_args();
-    }
-
-    public function fooWithSetDefault($bar = 42)
-    {
-
-    }
-
-    /**
-     * @return void
-     */
-    public function fooWithComment()
-    {
+        return $positionalArguments;
     }
 }
-
-
