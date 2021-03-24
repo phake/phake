@@ -505,7 +505,10 @@ class {$newClassName} {$extends}
             $result = $type->getName();
             if ($result == 'self') {
                 $result = $selfClass->getName();
-            } elseif ($result != 'mixed' && $type->allowsNull()) {
+            } elseif ($result == 'parent') {
+                $result = $selfClass->getParentClass()->getName();
+            }
+            if ($result != 'mixed' && $type->allowsNull()) {
                 $nullable = '?';
             }
         } elseif ($type instanceof \ReflectionUnionType) {
@@ -514,6 +517,9 @@ class {$newClassName} {$extends}
                 switch ($t = $singleType->getName()) {
                     case 'self':
                         $types[] = $selfClass->getName();
+                        break;
+                    case 'parent':
+                        $types[] = $selfClass->getParentClass()->getName();
                         break;
                     case 'null':
                         break;

@@ -45,5 +45,5 @@
 
 class PhakeTest_ExtendedMockedConstructedClass extends PhakeTest_MockedConstructedClass
 {
-
+    public function foo(): parent {}
 }

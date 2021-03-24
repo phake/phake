@@ -63,6 +63,8 @@ interface PhakeTest_MockedInterface
     public function referenceDefault(&$hinted = 'blah');
 
     public function returnSelf(): self;
+
+    public function returnNullableSelf(): ?self;
 }
 
 
