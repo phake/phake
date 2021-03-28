@@ -31,7 +31,7 @@ in the require-dev section.
 
 ``` json
 "require-dev": {
-	"phake/phake": "3.*"
+	"phake/phake": "4.*"
 }
 ```
 
