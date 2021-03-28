@@ -6,12 +6,12 @@ like to mock.
 
 .. code-block:: php
 
-    $mock = Phake::mock('ClassToMock');
+    $mock = Phake::mock(ClassToMock::class);
 
 The ``$mock`` variable is now an instance of a generated class that inherits from ``ClassToMock`` with hooks that allow
-you to force functions to return known values. By default, all methods on a mock object will return null. This behavior
-can be overridden on a per method and even per parameter basis. This will be covered in depth in
-:ref:`method-stubbing-section`.
+you to force functions to return known values. By default, all methods on a mock object will return the type specified
+in the return type or null. This behavior can be overridden on a per method and even per parameter basis. This will be
+covered in depth in :ref:`method-stubbing-section`.
 
 The mock  will also record all calls made to this class so that you can later verify that specific methods were called
 with the proper parameters. This will be covered in depth in :ref:`method-verification-section`.
@@ -21,14 +21,14 @@ simply pass the interface name as the first parameter to ``Phake::mock()``.
 
 .. code-block:: php
 
-    $mock = Phake::mock('InterfaceToMock');
+    $mock = Phake::mock(InterfaceToMock::class);
 
 You can also pass an array of interface names to ``Phake::mock()`` that also contains up to 1 class name. This allows
 for easier mocking of a dependency that is required to implement multiple interfaces.
 
 .. code-block:: php
 
-    $mock = Phake::mock(array('Interface1', 'Interface2'));
+    $mock = Phake::mock([ Interface1::class, Interface2::class ]);
 
 Partial Mocks
 -------------
@@ -69,11 +69,11 @@ Below is an example that shows the usage of ``Phake::partialMock()``.
 
 .. code-block:: php
 
-    class MyClassTest extends PHPUnit_Framework_TestCase
+    class MyClassTest extends PHPUnit\Framework\TestCase
     {
         public function testCallingParent()
         {
-            $mock = Phake::partialMock('MyClass', 42);
+            $mock = Phake::partialMock(MyClass::class, 42);
 
             $this->assertEquals(42, $mock->foo());
         }
@@ -84,7 +84,8 @@ inspect your design to make sure that the class you are creating a partial mock 
 
 Calling Private and Protected Methods on Mocks
 ----------------------------------------------
-Beginning in Phake 2.1 it is possible to invoke protected and private methods on your mocks using Phake. When you mock
+
+It is possible to invoke protected and private methods on your mocks using Phake. When you mock
 a class, the mocked version will retain the same visibility on each of its functions as you would have had on your
 original class. However, using ``Phake::makeVisible()`` and ``Phake::makeStaticsVisible()`` you can allow direct
 invocation of instance methods and static methods accordingly. Both of these methods accept a mock object as its only
@@ -110,7 +111,7 @@ Given the class above, you can invoke both private methods with the code below.
 
 .. code-block:: php
 
-    $mock = Phake::mock('MyClass');
+    $mock = Phake::mock(MyClass::class);
 
     Phake::makeVisible($mock)->foo();
 
@@ -168,15 +169,15 @@ do so with the traditional fixture I would have to write a test similar to the f
 
 .. code-block:: php
 
-    class Test extends PHPUnit_Framework_TestCase
+    class Test extends PHPUnit\Framework\TestCase
     {
         public function testProcessRow()
         {
-            $dbRow = array('id' => '1', 'content' => 'Text to be processed with <b>tags stripped</b>');
-            $expectedValue = array(array('id' => 1', 'content' => 'Text to be processed with tags stripped');
+            $dbRow = [ 'id' => '1', 'content' => 'Text to be processed with <b>tags stripped</b>' ];
+            $expectedValue = [ [ 'id' => 1', 'content' => 'Text to be processed with tags stripped' ] ];
 
-            $db = Phake::mock('Database');
-            $result = Phake::mock('DatabaseResult');
+            $db = Phake::mock(Database::class);
+            $result = Phake::mock(DatabaseResult::class);
             $oldClass = new MyReallyTerribleOldClass($db);
 
             Phake::when($db)->query->thenReturn($result);
@@ -196,14 +197,14 @@ same code using ``Phake::makeVisible()``.
 
 .. code-block:: php
 
-    class Test extends PHPUnit_Framework_TestCase
+    class Test extends PHPUnit\Framework\TestCase
     {
         public function testProcessRow()
         {
-            $dbRow = array('id' => '1', 'content' => 'Text to be processed with <b>tags stripped</b>');
-            $expectedValue = array('id' => 1', 'content' => 'Text to be processed with tags stripped');
+            $dbRow = [ 'id' => '1', 'content' => 'Text to be processed with <b>tags stripped</b>' ];
+            $expectedValue = [ [ 'id' => 1', 'content' => 'Text to be processed with tags stripped' ] ];
 
-            $oldClass = new Phake::partialMock('MyReallyTerribleOldClass');
+            $oldClass = new Phake::partialMock(MyReallyTerribleOldClass::class);
 
             $data = Phake::makeVisible($oldClass)->cleanRowContent($dbRow);
             $this->assertEquals($expectedValue, $data);

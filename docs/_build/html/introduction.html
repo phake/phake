@@ -1,30 +1,36 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Introduction to Phake &mdash; Phake - PHP Mocking Framework v1.0.3 documentation</title>
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <title>Introduction to Phake &#8212; Phake - PHP Mocking Framework 4.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
-        VERSION:     '1.0.3',
-        COLLAPSE_MODINDEX: false,
+        URL_ROOT:    './',
+        VERSION:     '4.0.0',
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Phake - PHP Mocking Framework v1.0.3 documentation" href="index.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="Phake - PHP Mocking Framework 4.0.0 documentation" href="index.html" />
     <link rel="next" title="Getting Started" href="getting-started.html" />
     <link rel="prev" title="Welcome to Phake - PHP Mocking Framework’s documentation!" href="index.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -36,14 +42,14 @@
         <li class="right" >
           <a href="index.html" title="Welcome to Phake - PHP Mocking Framework’s documentation!"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Phake - PHP Mocking Framework v1.0.3 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Phake - PHP Mocking Framework 4.0.0 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="introduction-to-phake">
 <h1>Introduction to Phake<a class="headerlink" href="#introduction-to-phake" title="Permalink to this headline">¶</a></h1>
@@ -54,12 +60,12 @@ your SUT. This is done by stubbing methods that supply indirect input into your 
 verifying parameters to methods that receive indirect output from your test.</p>
 <p>In true Las Vegas spirit I am implementing a new framework that allows you to easily create
 new card games. Most every card game at one point or another needs a dealer. In the example below
-I have created a new class called <tt class="docutils literal"><span class="pre">CardGame</span></tt> that implements the basic functionality for a card game:</p>
-<div class="highlight-php"><div class="highlight"><pre><span class="x">class CardGame</span>
+I have created a new class called <code class="docutils literal"><span class="pre">CardGame</span></code> that implements the basic functionality for a card game:</p>
+<div class="highlight-php"><div class="highlight"><pre><span></span><span class="x">class CardGame</span>
 <span class="x">{</span>
-<span class="x">    private $dealerStrategy;</span>
-<span class="x">    private $deck;</span>
-<span class="x">    private $players;</span>
+<span class="x">    private DealerStrategy   $dealerStrategy;</span>
+<span class="x">    private CardCollection   $deck;</span>
+<span class="x">    private PlayerCollection $players;</span>
 
 <span class="x">    public function CardGame(DealerStrategy $dealerStrategy, CardCollection $deck, PlayerCollection $players)</span>
 <span class="x">    {</span>
@@ -76,22 +82,22 @@ I have created a new class called <tt class="docutils literal"><span class="pre"
 <span class="x">}</span>
 </pre></div>
 </div>
-<p>If I want to create a new test to ensure that <tt class="docutils literal"><span class="pre">dealCards()</span></tt> works properly, what do I need to test?
+<p>If I want to create a new test to ensure that <code class="docutils literal"><span class="pre">dealCards()</span></code> works properly, what do I need to test?
 Everything I read about testing says that I need to establish known input for my test, and then
-test its output. However, in this case, I don’t have any parameters that are passed into <tt class="docutils literal"><span class="pre">dealCards()</span></tt>
-nor do I have any return values I can check. I could just run the <tt class="docutils literal"><span class="pre">dealCards()</span></tt> method and make sure
+test its output. However, in this case, I don’t have any parameters that are passed into <code class="docutils literal"><span class="pre">dealCards()</span></code>
+nor do I have any return values I can check. I could just run the <code class="docutils literal"><span class="pre">dealCards()</span></code> method and make sure
 I don’t get any errors or exceptions, but that proves little more than my method isn’t blowing up
 spectacularly. It is apparent that I need to ensure that what I actually assert is that
-the <tt class="docutils literal"><span class="pre">shuffle()</span></tt> and <tt class="docutils literal"><span class="pre">deal()</span></tt> methods are being called. If
+the <code class="docutils literal"><span class="pre">shuffle()</span></code> and <code class="docutils literal"><span class="pre">deal()</span></code> methods are being called. If
 I want to continue testing this using concrete
-classes that already exist in my system, I could conjure up one of my implementations of <tt class="docutils literal"><span class="pre">DealerStrategy</span></tt>,
-<tt class="docutils literal"><span class="pre">CardCollection</span></tt> and <tt class="docutils literal"><span class="pre">PlayerCollection</span></tt>. All of those
+classes that already exist in my system, I could conjure up one of my implementations of <code class="docutils literal"><span class="pre">DealerStrategy</span></code>,
+<code class="docutils literal"><span class="pre">CardCollection</span></code> and <code class="docutils literal"><span class="pre">PlayerCollection</span></code>. All of those
 objects are closer to being true value objects
 with a testable state. I could feasibly construct instances of those objects, pass them into an
-instance of <tt class="docutils literal"><span class="pre">CardGame</span></tt>, call <tt class="docutils literal"><span class="pre">dealCards()</span></tt> and then assert
+instance of <code class="docutils literal"><span class="pre">CardGame</span></code>, call <code class="docutils literal"><span class="pre">dealCards()</span></code> and then assert
 the state of those same objects. A test doing
 this might look something like:</p>
-<div class="highlight-php"><div class="highlight"><pre><span class="x">class CardGameTest1 extends PHPUnit_Framework_TestCase</span>
+<div class="highlight-php"><div class="highlight"><pre><span></span><span class="x">class CardGameTest1 extends PHPUnit\Framework\TestCase</span>
 <span class="x">{</span>
 <span class="x">    public function testDealCards()</span>
 <span class="x">    {</span>
@@ -101,7 +107,7 @@ this might look something like:</p>
 <span class="x">        $player2 = new Player();</span>
 <span class="x">        $player3 = new Player();</span>
 <span class="x">        $player4 = new Player();</span>
-<span class="x">        $players = new PlayerCollection(array($player1, $player2, $player3, $player4);</span>
+<span class="x">        $players = new PlayerCollection([$player1, $player2, $player3, $player4]);</span>
 
 <span class="x">        $cardGame = new CardGame($dealer, $deck, $players);</span>
 <span class="x">        $cardGame-&gt;dealCards();</span>
@@ -117,32 +123,32 @@ this might look something like:</p>
 <p>This test isn’t all that bad, it’s not difficult to understand and it does make sure that cards
 are dealt through making sure that each player has 5 cards. There are at least two significant problems
 with this test however. The first problem is that there is not any isolation of the SUT which in
-this case is <tt class="docutils literal"><span class="pre">dealCards()</span></tt>. If something is broken in the <tt class="docutils literal"><span class="pre">FiveCardPokerDealer</span></tt>
-class, the <tt class="docutils literal"><span class="pre">Player</span></tt> class,
-or the <tt class="docutils literal"><span class="pre">PlayerCollection</span></tt> class, it will manifest itself here as a broken <tt class="docutils literal"><span class="pre">CardGame</span></tt>
+this case is <code class="docutils literal"><span class="pre">dealCards()</span></code>. If something is broken in the <code class="docutils literal"><span class="pre">FiveCardPokerDealer</span></code>
+class, the <code class="docutils literal"><span class="pre">Player</span></code> class,
+or the <code class="docutils literal"><span class="pre">PlayerCollection</span></code> class, it will manifest itself here as a broken <code class="docutils literal"><span class="pre">CardGame</span></code>
 class. Thinking
 about how each of these classes might be implemented, one could easily make the argument that this
-really tests the <tt class="docutils literal"><span class="pre">FiveCardPokerDealer</span></tt> class much more than the <tt class="docutils literal"><span class="pre">dealCards()</span></tt> method.
+really tests the <code class="docutils literal"><span class="pre">FiveCardPokerDealer</span></code> class much more than the <code class="docutils literal"><span class="pre">dealCards()</span></code> method.
 The second problem
-is significantly more problematic. It is perfectly feasible that I could remove the call to <tt class="docutils literal"><span class="pre">$this-&gt;deck-&gt;shuffle()</span></tt>
+is significantly more problematic. It is perfectly feasible that I could remove the call to <code class="docutils literal"><span class="pre">$this-&gt;deck-&gt;shuffle()</span></code>
 in my SUT and the test I have created will still test just fine. In order to solidify my test I
 need to introduce logic to ensure that the deck has been shuffled. With the current mindset of using
 real objects in my tests I could wind up with incredibly complicated logic. I could feasibly add
-an identifier of some sort to <tt class="docutils literal"><span class="pre">DealerStrategy::shuffle()</span></tt> to mark the deck as shuffled thereby making
+an identifier of some sort to <code class="docutils literal"><span class="pre">DealerStrategy::shuffle()</span></code> to mark the deck as shuffled thereby making
 it checkable state, however that makes my design more fragile as I would have to ensure that identifier
-was set probably on every implementation of <tt class="docutils literal"><span class="pre">DealerStrategy::shuffle()</span></tt>.</p>
+was set probably on every implementation of <code class="docutils literal"><span class="pre">DealerStrategy::shuffle()</span></code>.</p>
 <p>This is the type of problem that mock frameworks solve. A mock framework such as Phake can
-be used to create implementations of my <tt class="docutils literal"><span class="pre">DealerStrategy</span></tt>, <tt class="docutils literal"><span class="pre">CardCollection</span></tt>, and <tt class="docutils literal"><span class="pre">PlayerCollection</span></tt> classes.
+be used to create implementations of my <code class="docutils literal"><span class="pre">DealerStrategy</span></code>, <code class="docutils literal"><span class="pre">CardCollection</span></code>, and <code class="docutils literal"><span class="pre">PlayerCollection</span></code> classes.
 I can then exercise my SUT. Finally, I can verify that the methods that should be called on these
 objects were called correctly. If this test were
 re-written to use Phake, it would become:</p>
-<div class="highlight-php"><div class="highlight"><pre><span class="x">class CardGameTest2 extends PHPUnit_Framework_TestCase</span>
+<div class="highlight-php"><div class="highlight"><pre><span></span><span class="x">class CardGameTest2 extends PHPUnit\Framework\TestCase</span>
 <span class="x">{</span>
 <span class="x">    public function testDealCards()</span>
 <span class="x">    {</span>
-<span class="x">        $dealer = Phake::mock(&#39;DealerStrategy&#39;);</span>
-<span class="x">        $deck = Phake::mock(&#39;CardCollection&#39;);</span>
-<span class="x">        $players = Phake::mock(&#39;PlayerCollection&#39;);</span>
+<span class="x">        $dealer  = Phake::mock(DealerStrategy::class);</span>
+<span class="x">        $deck    = Phake::mock(CardCollection::class);</span>
+<span class="x">        $players = Phake::mock(PlayerCollection::class);</span>
 
 <span class="x">        $cardGame = new CardGame($dealer, $deck, $players);</span>
 <span class="x">        $cardGame-&gt;dealCards();</span>
@@ -164,56 +170,55 @@ under test (direct dependencies,) and the values returned by additional method c
 method under test (indirect dependencies.)</p>
 <p>The second benefit is the test is only testing the SUT. If this test fails due to a change in anything
 but the interfaces of the classes involved, the change would have had to been made in either the
-constructor of <tt class="docutils literal"><span class="pre">CardGame</span></tt>, or the <tt class="docutils literal"><span class="pre">dealCards()</span></tt> method itself.
+constructor of <code class="docutils literal"><span class="pre">CardGame</span></code>, or the <code class="docutils literal"><span class="pre">dealCards()</span></code> method itself.
 Obviously, if an interface change is
-made (such as removing the <tt class="docutils literal"><span class="pre">shuffle()</span></tt>) method, then I would have a scenario
+made (such as removing the <code class="docutils literal"><span class="pre">shuffle()</span></code>) method, then I would have a scenario
 where the changed code is outside of this class. However, provided the removal of that method was
 intentional, I will know that this code needs to be addressed as it is depending on a method that no longer exists.</p>
 <p>The third benefit is that I have truer verification and assertions of the outcome of exercising
-my SUT. In this case for instance, I can be sure that if the call to <tt class="docutils literal"><span class="pre">shuffle()</span></tt> is removed, this
+my SUT. In this case for instance, I can be sure that if the call to <code class="docutils literal"><span class="pre">shuffle()</span></code> is removed, this
 test will fail. It also does it in a way that keeps the code necessary to assert your final state
 simple and concise. This makes my test overall much easier to understand and maintain. There is
-still one flaw with this example however. There is nothing here to ensure that <tt class="docutils literal"><span class="pre">shuffle()</span></tt> is called
-before <tt class="docutils literal"><span class="pre">deal()</span></tt> it is quite possible for someone to mistakenly reverse the order of these two calls.
+still one flaw with this example however. There is nothing here to ensure that <code class="docutils literal"><span class="pre">shuffle()</span></code> is called
+before <code class="docutils literal"><span class="pre">deal()</span></code> it is quite possible for someone to mistakenly reverse the order of these two calls.
 The Phake framework does have the ability to track call order to make this test even more bullet
-proof via the <tt class="docutils literal"><span class="pre">Phake::inOrder()</span></tt> method. I will go over this in more detail later.</p>
+proof via the <code class="docutils literal"><span class="pre">Phake::inOrder()</span></code> method. I will go over this in more detail later.</p>
 </div>
 
 
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-            <h4>Previous topic</h4>
-            <p class="topless"><a href="index.html"
-                                  title="previous chapter">Welcome to Phake - PHP Mocking Framework&#8217;s documentation!</a></p>
-            <h4>Next topic</h4>
-            <p class="topless"><a href="getting-started.html"
-                                  title="next chapter">Getting Started</a></p>
-            <h3>This Page</h3>
-            <ul class="this-page-menu">
-              <li><a href="_sources/introduction.txt"
-                     rel="nofollow">Show Source</a></li>
-            </ul>
-          <div id="searchbox" style="display: none">
-            <h3>Quick search</h3>
-              <form class="search" action="search.html" method="get">
-                <input type="text" name="q" size="18" />
-                <input type="submit" value="Go" />
-                <input type="hidden" name="check_keywords" value="yes" />
-                <input type="hidden" name="area" value="default" />
-              </form>
-              <p class="searchtip" style="font-size: 90%">
-              Enter search terms or a module, class or function name.
-              </p>
-          </div>
-          <script type="text/javascript">$('#searchbox').show(0);</script>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to Phake - PHP Mocking Framework&#8217;s documentation!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="getting-started.html"
+                        title="next chapter">Getting Started</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/introduction.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -225,12 +230,12 @@ proof via the <tt class="docutils literal"><span class="pre">Phake::inOrder()</s
         <li class="right" >
           <a href="index.html" title="Welcome to Phake - PHP Mocking Framework’s documentation!"
              >previous</a> |</li>
-        <li><a href="index.html">Phake - PHP Mocking Framework v1.0.3 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Phake - PHP Mocking Framework 4.0.0 documentation</a> &#187;</li> 
       </ul>
     </div>
-    <div class="footer">
-      &copy; Copyright 2014, Mike Lively &lt;m@digitalsandwich.com&gt;.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.6.
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2010-2021, Mike Lively &lt;m@digitalsandwich.com&gt;.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
     </div>
   </body>
 </html>

@@ -1,30 +1,36 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Method Parameter Matchers &mdash; Phake - PHP Mocking Framework v1.0.3 documentation</title>
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <title>Method Parameter Matchers &#8212; Phake - PHP Mocking Framework 4.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
-        VERSION:     '1.0.3',
-        COLLAPSE_MODINDEX: false,
+        URL_ROOT:    './',
+        VERSION:     '4.0.0',
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Phake - PHP Mocking Framework v1.0.3 documentation" href="index.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="Phake - PHP Mocking Framework 4.0.0 documentation" href="index.html" />
     <link rel="next" title="Configuration" href="configuration.html" />
     <link rel="prev" title="Answers" href="answers.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -36,14 +42,14 @@
         <li class="right" >
           <a href="answers.html" title="Answers"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Phake - PHP Mocking Framework v1.0.3 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Phake - PHP Mocking Framework 4.0.0 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="method-parameter-matchers">
 <span id="method-parameter-matchers-section"></span><h1>Method Parameter Matchers<a class="headerlink" href="#method-parameter-matchers" title="Permalink to this headline">¶</a></h1>
@@ -54,37 +60,38 @@ matches.</p>
 the default matcher will ensure that the parameter you pass to the mock method is equal (essentially using the &#8216;==&#8217;
 notation) to the parameter passed to the actual invocation before validating the call or returning the mocked stub. So
 going back to the card game demonstration from the introduction. Consider the following interface:</p>
-<div class="highlight-php"><div class="highlight"><pre><span class="x">interface DealerStrategy</span>
+<div class="highlight-php"><div class="highlight"><pre><span></span><span class="x">interface DealerStrategy</span>
 <span class="x">{</span>
 <span class="x">    public function deal(CardCollection $deck, PlayerCollection $players);</span>
 <span class="x">}</span>
 </pre></div>
 </div>
-<p>Here we have a <tt class="docutils literal"><span class="pre">deal()</span></tt> method that accepts two parameters. If you want to verify that <tt class="docutils literal"><span class="pre">deal()</span></tt> was called, chances
+<p>Here we have a <code class="docutils literal"><span class="pre">deal()</span></code> method that accepts two parameters. If you want to verify that <code class="docutils literal"><span class="pre">deal()</span></code> was called, chances
 are very good that you want to verify the the parameters as well. To do this is as simple as passing those parameters
-to the <tt class="docutils literal"><span class="pre">deal()</span></tt> method on the <tt class="docutils literal"><span class="pre">Phake::verify($deal)</span></tt> object just as you would if you were calling the actual
-<tt class="docutils literal"><span class="pre">deal()</span></tt> method itself. Here is a short albeit silly example:</p>
-<div class="highlight-php"><div class="highlight"><pre><span class="x">//I don&#39;t have Concrete versions of</span>
+to the <code class="docutils literal"><span class="pre">deal()</span></code> method on the <code class="docutils literal"><span class="pre">Phake::verify($deal)</span></code> object just as you would if you were calling the actual
+<code class="docutils literal"><span class="pre">deal()</span></code> method itself. Here is a short albeit silly example:</p>
+<div class="highlight-php"><div class="highlight"><pre><span></span><span class="x">//I don&#39;t have Concrete versions of</span>
 <span class="x">// CardCollection or PlayerCollection yet</span>
-<span class="x">$deck = Phake::mock(&#39;CardCollection&#39;);</span>
-<span class="x">$players = Phake::mock(&#39;PlayerCollection&#39;);</span>
+<span class="x">$deck = Phake::mock(CardCollection::class);</span>
+<span class="x">$players = Phake::mock(PlayerCollection::class);</span>
 
 
-<span class="x">$dealer = Phake::mock(&#39;DealerStrategy&#39;);</span>
+<span class="x">$dealer = Phake::mock(DealerStrategy::class);</span>
 
 <span class="x">$dealer-&gt;deal($deck, $players);</span>
 
 <span class="x">Phake::verify($dealer)-&gt;deal($deck, $players);</span>
 </pre></div>
 </div>
-<p>In this example, if I were to have accidentally made the call to <tt class="docutils literal"><span class="pre">deal()</span></tt> with a property that was set to null as the
+<p>In this example, if I were to have accidentally made the call to <code class="docutils literal"><span class="pre">deal()</span></code> with a property that was set to null as the
 first parameter then my test would fail with the following exception:</p>
-<div class="highlight-python"><pre>Expected DealerStrategy-&gt;fooWithArgument(equal to
-&lt;object:CardCollection&gt;, equal to &lt;object:PlayerCollection&gt;)
-to be called exactly 1 times, actually called 0 times.
-Other Invocations:
-  PhakeTest_MockedClass-&gt;fooWithArgument(&lt;null&gt;,
-equal to &lt;object:PlayerCollection&gt;)</pre>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Expected</span> <span class="n">DealerStrategy</span><span class="o">-&gt;</span><span class="n">deal</span><span class="p">(</span><span class="n">equal</span> <span class="n">to</span>
+<span class="o">&lt;</span><span class="nb">object</span><span class="p">:</span><span class="n">CardCollection</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">equal</span> <span class="n">to</span> <span class="o">&lt;</span><span class="nb">object</span><span class="p">:</span><span class="n">PlayerCollection</span><span class="o">&gt;</span><span class="p">)</span>
+<span class="n">to</span> <span class="n">be</span> <span class="n">called</span> <span class="n">exactly</span> <span class="mi">1</span> <span class="n">times</span><span class="p">,</span> <span class="n">actually</span> <span class="n">called</span> <span class="mi">0</span> <span class="n">times</span><span class="o">.</span>
+<span class="n">Other</span> <span class="n">Invocations</span><span class="p">:</span>
+  <span class="n">PhakeTest_MockedClass</span><span class="o">-&gt;</span><span class="n">deal</span><span class="p">(</span><span class="o">&lt;</span><span class="n">null</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="n">equal</span> <span class="n">to</span> <span class="o">&lt;</span><span class="nb">object</span><span class="p">:</span><span class="n">PlayerCollection</span><span class="o">&gt;</span><span class="p">)</span>
+</pre></div>
 </div>
 <p>Determining the appropriate method to stub works in exactly the same way.</p>
 <p>There may be cases when it is necessary to verify or stub parameters based on something slightly more complex then
@@ -93,15 +100,15 @@ basic equality. This is what we will talk about next.</p>
 <h2>Using PHPUnit Matchers<a class="headerlink" href="#using-phpunit-matchers" title="Permalink to this headline">¶</a></h2>
 <p>Phake was developed with PHPUnit in mind. It is not dependent on PHPUnit, however if PHPUnit is your testing framework
 of choice there is some special integration available. Any constraints made available by the PHPUnit framework will
-work seemlessly inside of Phake. Here is an example of how the PHPUnit constraints can be used:</p>
-<div class="highlight-php"><div class="highlight"><pre><span class="x">class TestPHPUnitConstraint extends PHPUnit_Framework_TestCase</span>
+work seamlessly inside of Phake. Here is an example of how the <a class="reference external" href="https://phpunit.de/manual/current/en/appendixes.assertions.html#appendixes.assertions.assertThat.tables.constraints">PHPUnit constraints</a> can be used:</p>
+<div class="highlight-php"><div class="highlight"><pre><span></span><span class="x">class TestPHPUnitConstraint extends PHPUnit\Framework\TestCase</span>
 <span class="x">{</span>
 <span class="x">    public function testDealNumberOfCards()</span>
 <span class="x">    {</span>
-<span class="x">        $deck = Phake::mock(&#39;CardCollection&#39;);</span>
-<span class="x">        $players = Phake::mock(&#39;PlayerCollection&#39;);</span>
+<span class="x">        $deck = Phake::mock(CardCollection::class);</span>
+<span class="x">        $players = Phake::mock(PlayerCollection::class);</span>
 
-<span class="x">        $dealer = Phake::mock(&#39;DealerStrategy&#39;);</span>
+<span class="x">        $dealer = Phake::mock(DealerStrategy::class);</span>
 <span class="x">        $dealer-&gt;deal($deck, $players, 11);</span>
 
 <span class="x">        Phake::verify($dealer)</span>
@@ -110,31 +117,90 @@ work seemlessly inside of Phake. Here is an example of how the PHPUnit constrain
 <span class="x">}</span>
 </pre></div>
 </div>
-<p>I have added another parameter to my <tt class="docutils literal"><span class="pre">deal()</span></tt> method that allows me to specify the number of cards to deal to each
+<p>I have added another parameter to my <code class="docutils literal"><span class="pre">deal()</span></code> method that allows me to specify the number of cards to deal to each
 player. In the test above I wanted to verify that the number passed to this parameter was greater than 10.</p>
 <p>For a list of the constraints you have available to you through PHPUnit, I recommend reading the PHPUnit&#8217;s
-documentation on assertions and constraints. Any constraint that can be used with <tt class="docutils literal"><span class="pre">assertThat()</span></tt> in PHPUnit can also
+documentation on assertions and constraints. Any constraint that can be used with <code class="docutils literal"><span class="pre">assertThat()</span></code> in PHPUnit can also
 be used in Phake.</p>
 </div>
 <div class="section" id="using-hamcrest-matchers">
 <h2>Using Hamcrest Matchers<a class="headerlink" href="#using-hamcrest-matchers" title="Permalink to this headline">¶</a></h2>
-<p>If you do not use PHPUnit, Phake also supports Hamcrest matchers. This is in-line with the Phake&#8217;s design goal of being
+<p>If you do not use PHPUnit, Phake also supports <a class="reference external" href="https://github.com/hamcrest/hamcrest-php#this-is-the-php-port-of-hamcrest-matchers">Hamcrest matchers</a>. This is in-line with the Phake&#8217;s design goal of being
 usable with any testing framework. Here is a repeat of the PHPUnit example, this time using SimpleTest and Hamcrest
 matchers.</p>
-<div class="highlight-php"><div class="highlight"><pre><span class="x">class TestHamcrestMatcher extends UnitTestCase</span>
+<div class="highlight-php"><div class="highlight"><pre><span></span><span class="x">class TestHamcrestMatcher extends UnitTestCase</span>
 <span class="x">{</span>
 <span class="x">    public function testDealNumberOfCards()</span>
 <span class="x">    {</span>
-<span class="x">        $deck = Phake::mock(&#39;CardCollection&#39;);</span>
-<span class="x">        $players = Phake::mock(&#39;PlayerCollection&#39;);</span>
+<span class="x">        $deck = Phake::mock(CardCollection::class);</span>
+<span class="x">        $players = Phake::mock(PlayerCollection::class);</span>
 
-<span class="x">        $dealer = Phake::mock(&#39;DealerStrategy&#39;);</span>
+<span class="x">        $dealer = Phake::mock(DealerStrategy::class);</span>
 <span class="x">        $dealer-&gt;deal($deck, $players, 11);</span>
 
 <span class="x">        Phake::verify($dealer)-&gt;deal($deck, $players, greaterThan(10));</span>
 <span class="x">    }</span>
 <span class="x">}</span>
 </pre></div>
+</div>
+</div>
+<div class="section" id="wildcard-parameters">
+<span id="id1"></span><h2>Wildcard Parameters<a class="headerlink" href="#wildcard-parameters" title="Permalink to this headline">¶</a></h2>
+<p>Frequently when stubbing methods, you do not really care about matching parameters. Often times matching every
+parameter for a stub can result in overly brittle tests. If you find yourself in this situation you can use Phake&#8217;s
+shorthand stubbing to instruct Phake that a mock should be stubbed on any invocation. You could also use it to verify a
+method call regardless of parameters. This is not a very common use case but it is possible.</p>
+<p>To specify that a given stub or verification method should match any parameters, you call the method you are stubbing
+or mocking as a property of <code class="docutils literal"><span class="pre">Phake::when()</span></code> or <code class="docutils literal"><span class="pre">Phake::verify()</span></code>. The code below will mock any invocation of
+$obj-&gt;foo() regardless of parameters to return bar.</p>
+<div class="highlight-php"><div class="highlight"><pre><span></span><span class="x">class FooTest extends PHPUnit\Framework\TestCase</span>
+<span class="x">{</span>
+<span class="x">    public function testAddItemsToCart()</span>
+<span class="x">    {</span>
+<span class="x">        $obj = Phake::mock(MyObject::class);</span>
+
+<span class="x">        Phake::when($obj)-&gt;foo-&gt;thenReturn(&#39;bar&#39;);</span>
+
+<span class="x">        $this-&gt;assertEquals(&#39;bar&#39;, $obj-&gt;foo());</span>
+<span class="x">        $this-&gt;assertEquals(&#39;bar&#39;, $obj-&gt;foo(&#39;a parameter&#39;));</span>
+<span class="x">        $this-&gt;assertEquals(&#39;bar&#39;, $obj-&gt;foo(&#39;multiple&#39;, &#39;parameters&#39;));</span>
+<span class="x">    }</span>
+<span class="x">}</span>
+</pre></div>
+</div>
+<p>If you are familiar with <code class="docutils literal"><span class="pre">Phake::anyParameters()</span></code> then you will recognize that the shorthand functionality is really
+just short hand of <code class="docutils literal"><span class="pre">Phake::anyParameters()</span></code>. You can still use <code class="docutils literal"><span class="pre">Phake::anyParameters()</span></code> but it will likely be
+deprecated at some point in the future.</p>
+<div class="section" id="default-and-variable-parameters">
+<h3>Default and Variable Parameters<a class="headerlink" href="#default-and-variable-parameters" title="Permalink to this headline">¶</a></h3>
+<p>Wildcards can also come in handy when stubbing or verifying methods with default parameters or variable parameters. In
+addition to <code class="docutils literal"><span class="pre">Phake::anyParameters()</span></code>, <code class="docutils literal"><span class="pre">Phake::ignoreRemaining()</span></code> can be used to instruct Phake to not attempt to
+match any further parameters.</p>
+<p>A good example of where this could be handy is if you are mocking or verifying a method where the first parameter is
+important to stubbing but maybe the remaining parameters aren&#8217;t. The code below stubs a factory method where the first
+parameter sets an item&#8217;s name, but the remaining parameters are all available as defaults.</p>
+<div class="highlight-php"><div class="highlight"><pre><span></span><span class="x">class MyFactory</span>
+<span class="x">{</span>
+<span class="x">    public function createItem($name, $color = &#39;red&#39;, $size = &#39;large&#39;)</span>
+<span class="x">    {</span>
+<span class="x">        //...</span>
+<span class="x">    }</span>
+<span class="x">}</span>
+
+<span class="x">class MyTest extends PHPUnit\Framework\TestCase</span>
+<span class="x">{</span>
+<span class="x">    public function testUsingItemFactory()</span>
+<span class="x">    {</span>
+<span class="x">        $factory = Phake::mock(MyFactory::class);</span>
+
+<span class="x">        $factory-&gt;createItem(&#39;Item1&#39;, &#39;blue&#39;, &#39;small&#39;);</span>
+
+<span class="x">        //Verification below will succeed</span>
+<span class="x">        Phake::verify($factory)-&gt;createItem(&#39;Item1&#39;, Phake::ignoreRemaining());</span>
+<span class="x">    }</span>
+<span class="x">}</span>
+</pre></div>
+</div>
 </div>
 </div>
 <div class="section" id="parameter-capturing">
@@ -144,25 +210,25 @@ methods. However, there may be times when the prebuilt constraints and matchers 
 there is method that accepts a complex object where only certain components of the object need to be validated.
 Parameter capturing will allow you to store the parameter that was used to call your method so that it can be used in
 assertions later on.</p>
-<p>Consider the following example where I have defined a <tt class="docutils literal"><span class="pre">getNumberOfCards()</span></tt> method on the <tt class="docutils literal"><span class="pre">CardCollection</span></tt> interface.</p>
-<div class="highlight-php"><div class="highlight"><pre><span class="x">interface CardCollection</span>
+<p>Consider the following example where I have defined a <code class="docutils literal"><span class="pre">getNumberOfCards()</span></code> method on the <code class="docutils literal"><span class="pre">CardCollection</span></code> interface.</p>
+<div class="highlight-php"><div class="highlight"><pre><span></span><span class="x">interface CardCollection</span>
 <span class="x">{</span>
 <span class="x">    public function getNumberOfCards();</span>
 <span class="x">}</span>
 </pre></div>
 </div>
 <p>I want to create new functionality for a my poker dealer strategy that will check to make sure we are playing with a
-full deck of 52 cards when the <tt class="docutils literal"><span class="pre">deal()</span></tt> call is made. It would be rather cumbersome to create a copy of a
-<tt class="docutils literal"><span class="pre">CardCollection</span></tt> implementation that I could be sure would match in an equals scenario. Such a test would look
+full deck of 52 cards when the <code class="docutils literal"><span class="pre">deal()</span></code> call is made. It would be rather cumbersome to create a copy of a
+<code class="docutils literal"><span class="pre">CardCollection</span></code> implementation that I could be sure would match in an equals scenario. Such a test would look
 something like this.</p>
-<p>Please note, I do not generally advocate this type of design. I prefer a dependency injection versus instantiation. So
+<p>Please note, I do not generally advocate this type of design. I prefer dependency injection to instantiation. So
 please remember, this is not an example of clean design, simply an example of what you can do with argument capturing.</p>
-<div class="highlight-php"><div class="highlight"><pre><span class="x">class MyPokerGameTest extends PHPUnit_Framework_TestCase</span>
+<div class="highlight-php"><div class="highlight"><pre><span></span><span class="x">class MyPokerGameTest extends PHPUnit\Framework\TestCase</span>
 <span class="x">{</span>
 <span class="x">    public function testDealCards()</span>
 <span class="x">    {</span>
-<span class="x">        $dealer = Phake::mock(&#39;MyPokerDealer&#39;);</span>
-<span class="x">        $players = Phake::mock(&#39;PlayerCollection&#39;);</span>
+<span class="x">        $dealer = Phake::mock(MyPokerDealer::class);</span>
+<span class="x">        $players = Phake::mock(PlayerCollection::class);</span>
 
 <span class="x">        $cardGame = new MyPokerGame($dealer, $players);</span>
 
@@ -174,22 +240,22 @@ please remember, this is not an example of clean design, simply an example of wh
 </pre></div>
 </div>
 <p>You can also capture parameters if they meet a certain condition. For instance, if someone mistakenly passed an array
-as the first parameter to the <tt class="docutils literal"><span class="pre">deal()</span></tt> method then PHPUnit would fatal error out. This can be protected against by
-using the the <tt class="docutils literal"><span class="pre">Phake::capture()-&gt;when()</span></tt> method. The <tt class="docutils literal"><span class="pre">when()</span></tt> method accepts the same constraints that
-<tt class="docutils literal"><span class="pre">Phake::verify()</span></tt> accepts. Here is how you could leverage that functionality to bulletproof your captures a little
+as the first parameter to the <code class="docutils literal"><span class="pre">deal()</span></code> method then PHPUnit would fatal error out. This can be protected against by
+using the the <code class="docutils literal"><span class="pre">Phake::capture()-&gt;when()</span></code> method. The <code class="docutils literal"><span class="pre">when()</span></code> method accepts the same constraints that
+<code class="docutils literal"><span class="pre">Phake::verify()</span></code> accepts. Here is how you could leverage that functionality to bulletproof your captures a little
 bit.</p>
-<div class="highlight-php"><div class="highlight"><pre><span class="x">class MyBetterPokerGameTest extends PHPUnit_Framework_TestCase</span>
+<div class="highlight-php"><div class="highlight"><pre><span></span><span class="x">class MyBetterPokerGameTest extends PHPUnit\Framework\TestCase</span>
 <span class="x">{</span>
 <span class="x">    public function testDealCards()</span>
 <span class="x">    {</span>
-<span class="x">        $dealer = Phake::mock(&#39;MyPokerDealer&#39;);</span>
-<span class="x">        $players = Phake::mock(&#39;PlayerCollection&#39;);</span>
+<span class="x">        $dealer = Phake::mock(MyPokerDealer::class);</span>
+<span class="x">        $players = Phake::mock(PlayerCollection::class);</span>
 
 <span class="x">        $cardGame = new MyPokerGame($dealer, $players);</span>
 
 <span class="x">        Phake::verify($dealer)-&gt;deal(</span>
 <span class="x">            Phake::capture($deck)</span>
-<span class="x">                -&gt;when($this-&gt;isInstanceOf(&#39;CardCollection&#39;)),</span>
+<span class="x">                -&gt;when($this-&gt;isInstanceOf(CardCollection::class)),</span>
 <span class="x">            $players</span>
 <span class="x">        );</span>
 
@@ -200,27 +266,67 @@ bit.</p>
 </div>
 <p>This could also be done by using PHPUnit&#8217;s assertions later on with the captured parameter, however this also has a
 side effect of better localizing your error. Here is the error you would see if the above test failed.</p>
-<div class="highlight-python"><pre>Exception: Expected MyPokerDealer-&gt;deal(&lt;captured parameter&gt;,
-equal to &lt;object:PlayerCollection&gt;) to be called exactly 1
-times, actually called 0 times.
-Other Invocations:
-  PhakeTest_MockedClass-&gt;fooWithArgument(&lt;array&gt;,
-&lt;object:PlayerCollection&gt;)</pre>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="ne">Exception</span><span class="p">:</span> <span class="n">Expected</span> <span class="n">MyPokerDealer</span><span class="o">-&gt;</span><span class="n">deal</span><span class="p">(</span><span class="o">&lt;</span><span class="n">captured</span> <span class="n">parameter</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="n">equal</span> <span class="n">to</span> <span class="o">&lt;</span><span class="nb">object</span><span class="p">:</span><span class="n">PlayerCollection</span><span class="o">&gt;</span><span class="p">)</span> <span class="n">to</span> <span class="n">be</span> <span class="n">called</span> <span class="n">exactly</span> <span class="mi">1</span>
+<span class="n">times</span><span class="p">,</span> <span class="n">actually</span> <span class="n">called</span> <span class="mi">0</span> <span class="n">times</span><span class="o">.</span>
+<span class="n">Other</span> <span class="n">Invocations</span><span class="p">:</span>
+  <span class="n">PhakeTest_MockedClass</span><span class="o">-&gt;</span><span class="n">deal</span><span class="p">(</span><span class="o">&lt;</span><span class="n">array</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="o">&lt;</span><span class="nb">object</span><span class="p">:</span><span class="n">PlayerCollection</span><span class="o">&gt;</span><span class="p">)</span>
+</pre></div>
 </div>
-<p>It should be noted that while it is possible to use argument capturing for stubbing with <tt class="docutils literal"><span class="pre">Phake::when()</span></tt> I would
-discourage it. When stubbing a method you should only be concerned about making sure an expected value is return and
-argument capturing in no way helps with that goal. In the worst case scenario you will have some incredibly difficult
+<p>It should be noted that while it is possible to use argument capturing for stubbing with <code class="docutils literal"><span class="pre">Phake::when()</span></code> I would
+discourage it. When stubbing a method, you should only be concerned about making sure an expected value is returned.
+Argument capturing in no way helps with that goal. In the worst case scenario, you will have some incredibly difficult
 test failures to diagnose.</p>
+<p>Beginning in Phake 2.1 you can also capture all values for a given parameter for every matching invocation. For
+instance imagine if you have a method <code class="docutils literal"><span class="pre">$foo-&gt;process($eventManager)</span></code> that should send a series of events.</p>
+<div class="highlight-php"><div class="highlight"><pre><span></span><span class="x">class Foo</span>
+<span class="x">{</span>
+<span class="x">    // ...</span>
+<span class="x">    public function process(Request $request, EventManager $eventManager)</span>
+<span class="x">    {</span>
+<span class="x">       $eventManager-&gt;fire(new PreProcessEvent($request));</span>
+<span class="x">       // ... do stuff</span>
+<span class="x">       $eventManager-&gt;fire(new PostProcessEvent($request, $result));</span>
+<span class="x">    }</span>
+<span class="x">}</span>
+</pre></div>
+</div>
+<p>If you wanted to verify different aspects of the <code class="docutils literal"><span class="pre">$eventManager-&gt;fire()</span></code> calls this would have been very difficult
+and brittle using standard argument captors. There is now a new method <code class="docutils literal"><span class="pre">Phake::captureAll()</span></code> that can be used to
+capture all otherwise matching invocations of method. The variable passed to <code class="docutils literal"><span class="pre">Phake::captureAll()</span></code> will be set to an
+array containing all of the values used for that parameter. So with this function the following test can be written.</p>
+<div class="highlight-php"><div class="highlight"><pre><span></span><span class="x">class FooTest</span>
+<span class="x">{</span>
+<span class="x">    public function testProcess()</span>
+<span class="x">    {</span>
+<span class="x">        $foo = new Foo();</span>
+<span class="x">        $request = Phake::mock(Request::class);</span>
+<span class="x">        $eventManager = Phake::mock(EventManager::class);</span>
+
+<span class="x">        $foo-&gt;process($request, $eventManager);</span>
+
+<span class="x">        Phake::verify($eventManager, Phake::atLeast(1))-&gt;fire(Phake::captureAll($events));</span>
+
+<span class="x">        $this-&gt;assertInstanceOf(PreProcessEvent::class, $events[0]);</span>
+<span class="x">        $this-&gt;assertEquals($request, $events[0]-&gt;getRequest());</span>
+
+<span class="x">        $this-&gt;assertInstanceOf(PostProcessEvent::class, $events[1]);</span>
+<span class="x">        $this-&gt;assertEquals($request, $events[1]-&gt;getRequest());</span>
+<span class="x">    }</span>
+<span class="x">}</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="custom-parameter-matchers">
 <h2>Custom Parameter Matchers<a class="headerlink" href="#custom-parameter-matchers" title="Permalink to this headline">¶</a></h2>
 <p>An alternative to using argument capturing is creating custom matchers. All parameter matchers implement the interface
-<tt class="docutils literal"><span class="pre">Phake_Matchers_IArgumentMatcher</span></tt>. You can create custom implementations of this interface. This is especially useful
+<code class="docutils literal"><span class="pre">Phake_Matchers_IArgumentMatcher</span></code>. You can create custom implementations of this interface. This is especially useful
 if you find yourself using a similar capturing pattern over and over again. If I were to rewriting the test above using
 a customer argument matcher it would look something like this.</p>
-<div class="highlight-php"><div class="highlight"><pre><span class="x">class FiftyTwoCardDeckMatcher implements Phake_Matchers_IArgumentMatcher</span>
+<div class="highlight-php"><div class="highlight"><pre><span></span><span class="x">class FiftyTwoCardDeckMatcher implements Phake\Matchers\IArgumentMatcher</span>
 <span class="x">{</span>
-<span class="x">    public function matches($argument)</span>
+<span class="x">    public function matches(&amp;$argument)</span>
 <span class="x">    {</span>
 <span class="x">        return ($argument instanceof CardCollection</span>
 <span class="x">            &amp;&amp; $argument-&gt;getNumberOfCards() == 52);</span>
@@ -232,16 +338,16 @@ a customer argument matcher it would look something like this.</p>
 <span class="x">    }</span>
 <span class="x">}</span>
 
-<span class="x">class MyBestPokerGameTest extends PHPUnit_Framework_TestCase</span>
+<span class="x">class MyBestPokerGameTest extends PHPUnit\Framework\TestCase</span>
 <span class="x">{</span>
 <span class="x">    public function testDealCards()</span>
 <span class="x">    {</span>
-<span class="x">        $dealer = Phake::mock(&#39;MyPokerDealer&#39;);</span>
-<span class="x">        $players = Phake::mock(&#39;PlayerCollection&#39;);</span>
+<span class="x">        $dealer = Phake::mock(MyPokerDealer::class);</span>
+<span class="x">        $players = Phake::mock(PlayerCollection::class);</span>
 
 <span class="x">        $cardGame = new MyPokerGame($dealer, $players);</span>
 
-<span class="x">        Phake::verify($dealer)-&gt;deal(new 52CardDeckMatcher(), $players);</span>
+<span class="x">        Phake::verify($dealer)-&gt;deal(new FiftyTwoCardDeckMatcher(), $players);</span>
 <span class="x">    }</span>
 <span class="x">}</span>
 </pre></div>
@@ -253,48 +359,51 @@ a customer argument matcher it would look something like this.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-            <h3><a href="index.html">Table Of Contents</a></h3>
-            <ul>
-<li><a class="reference external" href="#">Method Parameter Matchers</a><ul>
-<li><a class="reference external" href="#using-phpunit-matchers">Using PHPUnit Matchers</a></li>
-<li><a class="reference external" href="#using-hamcrest-matchers">Using Hamcrest Matchers</a></li>
-<li><a class="reference external" href="#parameter-capturing">Parameter Capturing</a></li>
-<li><a class="reference external" href="#custom-parameter-matchers">Custom Parameter Matchers</a></li>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Method Parameter Matchers</a><ul>
+<li><a class="reference internal" href="#using-phpunit-matchers">Using PHPUnit Matchers</a></li>
+<li><a class="reference internal" href="#using-hamcrest-matchers">Using Hamcrest Matchers</a></li>
+<li><a class="reference internal" href="#wildcard-parameters">Wildcard Parameters</a><ul>
+<li><a class="reference internal" href="#default-and-variable-parameters">Default and Variable Parameters</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#parameter-capturing">Parameter Capturing</a></li>
+<li><a class="reference internal" href="#custom-parameter-matchers">Custom Parameter Matchers</a></li>
 </ul>
 </li>
 </ul>
 
-            <h4>Previous topic</h4>
-            <p class="topless"><a href="answers.html"
-                                  title="previous chapter">Answers</a></p>
-            <h4>Next topic</h4>
-            <p class="topless"><a href="configuration.html"
-                                  title="next chapter">Configuration</a></p>
-            <h3>This Page</h3>
-            <ul class="this-page-menu">
-              <li><a href="_sources/method-parameter-matchers.txt"
-                     rel="nofollow">Show Source</a></li>
-            </ul>
-          <div id="searchbox" style="display: none">
-            <h3>Quick search</h3>
-              <form class="search" action="search.html" method="get">
-                <input type="text" name="q" size="18" />
-                <input type="submit" value="Go" />
-                <input type="hidden" name="check_keywords" value="yes" />
-                <input type="hidden" name="area" value="default" />
-              </form>
-              <p class="searchtip" style="font-size: 90%">
-              Enter search terms or a module, class or function name.
-              </p>
-          </div>
-          <script type="text/javascript">$('#searchbox').show(0);</script>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="answers.html"
+                        title="previous chapter">Answers</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="configuration.html"
+                        title="next chapter">Configuration</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/method-parameter-matchers.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -306,12 +415,12 @@ a customer argument matcher it would look something like this.</p>
         <li class="right" >
           <a href="answers.html" title="Answers"
              >previous</a> |</li>
-        <li><a href="index.html">Phake - PHP Mocking Framework v1.0.3 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Phake - PHP Mocking Framework 4.0.0 documentation</a> &#187;</li> 
       </ul>
     </div>
-    <div class="footer">
-      &copy; Copyright 2014, Mike Lively &lt;m@digitalsandwich.com&gt;.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.6.
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2010-2021, Mike Lively &lt;m@digitalsandwich.com&gt;.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.
     </div>
   </body>
 </html>

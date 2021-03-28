@@ -15,9 +15,9 @@ I have created a new class called ``CardGame`` that implements the basic functio
 
     class CardGame
     {
-        private $dealerStrategy;
-        private $deck;
-        private $players;
+        private DealerStrategy   $dealerStrategy;
+        private CardCollection   $deck;
+        private PlayerCollection $players;
 
         public function CardGame(DealerStrategy $dealerStrategy, CardCollection $deck, PlayerCollection $players)
         {
@@ -51,7 +51,7 @@ this might look something like:
 
 .. code-block:: php
 
-    class CardGameTest1 extends PHPUnit_Framework_TestCase
+    class CardGameTest1 extends PHPUnit\Framework\TestCase
     {
         public function testDealCards()
         {
@@ -61,7 +61,7 @@ this might look something like:
             $player2 = new Player();
             $player3 = new Player();
             $player4 = new Player();
-            $players = new PlayerCollection(array($player1, $player2, $player3, $player4));
+            $players = new PlayerCollection([$player1, $player2, $player3, $player4]);
 
             $cardGame = new CardGame($dealer, $deck, $players);
             $cardGame->dealCards();
@@ -99,13 +99,13 @@ re-written to use Phake, it would become:
 
 .. code-block:: php
 
-    class CardGameTest2 extends PHPUnit_Framework_TestCase
+    class CardGameTest2 extends PHPUnit\Framework\TestCase
     {
         public function testDealCards()
         {
-            $dealer = Phake::mock('DealerStrategy');
-            $deck = Phake::mock('CardCollection');
-            $players = Phake::mock('PlayerCollection');
+            $dealer  = Phake::mock(DealerStrategy::class);
+            $deck    = Phake::mock(CardCollection::class);
+            $players = Phake::mock(PlayerCollection::class);
 
             $cardGame = new CardGame($dealer, $deck, $players);
             $cardGame->dealCards();

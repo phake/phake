@@ -15,11 +15,11 @@ or not a certain call was made.
 
 .. code-block:: php
 
-    class PhakeTest1 extends PHPUnit_Framework_TestCase
+    class PhakeTest1 extends PHPUnit\Framework\TestCase
     {
         public function testBasicVerify()
         {
-            $mock = Phake::mock('MyClass');
+            $mock = Phake::mock(MyClass::class);
 
             $mock->foo();
 
@@ -54,11 +54,11 @@ mocking test below would fail for this reason.
 
 .. code-block:: php
 
-    class MyTest extends PHPUnit_Framework_TestCase
+    class MyTest extends PHPUnit\Framework\TestCase
     {
         public function testPHPUnitMock()
         {
-            $mock = $this->getMock('PhakeTest_MockedClass');
+            $mock = $this->getMock(PhakeTest_MockedClass::class);
 
             $mock->expects($this->once())->method('fooWithArgument')
                     ->with('foo');
@@ -77,11 +77,11 @@ again. So to make the test above work you would have to change it.
 
 .. code-block:: php
 
-    class MyTest extends PHPUnit_Framework_TestCase
+    class MyTest extends PHPUnit\Framework\TestCase
     {
         public function testPHPUnitMock()
         {
-            $mock = $this->getMock('PhakeTest_MockedClass');
+            $mock = $this->getMock(PhakeTest_MockedClass::class);
 
             //NOTICE this is now at() instead of once()
             $mock->expects($this->at(0))->method('fooWithArgument')
@@ -105,11 +105,11 @@ distinct. Here is the same test written using Phake.
 
 .. code-block:: php
 
-    class MyTest extends PHPUnit_Framework_TestCase
+    class MyTest extends PHPUnit\Framework\TestCase
     {
         public function testPHPUnitMock()
         {
-            $mock = Phake::mock('PhakeTest_MockedClass');
+            $mock = Phake::mock(PhakeTest_MockedClass::class);
 
             $mock->fooWithArgument('foo');
             $mock->fooWithArgument('bar');
@@ -136,11 +136,11 @@ Here is an example of this in action.
 
 .. code-block:: php
 
-    class MyTest extends PHPUnit_Framework_TestCase
+    class MyTest extends PHPUnit\Framework\TestCase
     {
         public function testPHPUnitMock()
         {
-            $mock = Phake::mock('PhakeTest_MockedClass');
+            $mock = Phake::mock(PhakeTest_MockedClass::class);
 
             $mock->fooWithArgument('foo');
             $mock->fooWithArgument('foo');
@@ -162,11 +162,11 @@ order relative to each other. Below is an example Phake test that behaves simila
 
 .. code-block:: php
 
-    class MyTest extends PHPUnit_Framework_TestCase
+    class MyTest extends PHPUnit\Framework\TestCase
     {
         public function testPHPUnitMock()
         {
-            $mock = Phake::mock('PhakeTest_MockedClass');
+            $mock = Phake::mock(PhakeTest_MockedClass::class);
 
             $mock->fooWithArgument('foo');
             $mock->fooWithArgument('bar');
@@ -194,7 +194,7 @@ object to ``Phake::verifyNoFurtherInteraction($mock)``. You can pass multiple ar
 verify no further interaction occurs with multiple mock objects.
 
 Verifying No Unverified Interaction with a Mock
-============================================
+===============================================
 
 By default any unverified calls to a mock are ignored. That is to say, if a call is made to `$mock->foo()` but
 `Phake::verify($mock)->foo()` is never used, then no failures are thrown. If you want to be stricter and ensure that
@@ -209,9 +209,9 @@ on a particular object. One useful case for instance could be in testing a metho
         public function testFilteredList()
         {
             $filter = new MyFilter();
-            $list = Phake::Mock('MyList');
+            $list = Phake::Mock(MyList::class);
 
-            $filter->addEvenToList(array(1, 2, 3, 4, 5), $list);
+            $filter->addEvenToList([ 1, 2, 3, 4, 5 ], $list);
 
             Phake::verify($list)->push(2);
             Phake::verify($list)->push(4);
@@ -248,11 +248,11 @@ You could mock an invocation of the `__call()` method through a userspace call t
 
 .. code-block:: php
 
-    class MagicClassTest extends PHPUnit_Framework_TestCase
+    class MagicClassTest extends PHPUnit\Framework\TestCase
     {
         public function testMagicCall()
         {
-            $mock = Phake::mock('MagicClass');
+            $mock = Phake::mock(MagicClass::class);
 
             $mock->magicCall();
 
@@ -264,15 +264,15 @@ If for any reason you need to explicitly verify calls to ``__call()`` then you c
 
 .. code-block:: php
 
-    class MagicClassTest extends PHPUnit_Framework_TestCase
+    class MagicClassTest extends PHPUnit\Framework\TestCase
     {
         public function testMagicCall()
         {
-            $mock = Phake::mock('MagicClass');
+            $mock = Phake::mock(MagicClass::class);
 
             $mock->magicCall(42);
 
-            Phake::verifyCallMethodWith('magicCall', array(42))->isCalledOn($mock);
+            Phake::verifyCallMethodWith('magicCall', [ 42 ])->isCalledOn($mock);
         }
     }
     
