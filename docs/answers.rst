@@ -20,9 +20,9 @@ message.
 
     class MyClass
     {
-        private $logger;
+        private Logger $logger;
 
-        public function __construct(LOGGER $logger)
+        public function __construct(Logger $logger)
         {
             $this->logger = $logger;
         }
@@ -45,13 +45,13 @@ In order to test this we must mock ``foo()`` so that it throws an exception when
 
 .. code-block:: php
 
-    class MyClassTest extends PHPUnit_Framework_TestCase
+    class MyClassTest extends PHPUnit\Framework\TestCase
     {
         public function testProcessSomeDataLogsExceptions()
         {
-            $logger = Phake::mock('LOGGER');
-            $data = Phake::mock('MyData');
-            $processor = Phake::mock('MyDataProcessor');
+            $logger = Phake::mock(Logger::class);
+            $data = Phake::mock(MyData::class);
+            $processor = Phake::mock(MyDataProcessor::class);
 
             Phake::when($processor)->process($data)->thenThrow(new Exception('My error message!'));
 
@@ -64,6 +64,7 @@ In order to test this we must mock ``foo()`` so that it throws an exception when
     }
 
 .. _then-call-parent:
+
 Calling the Parent
 ==================
 
@@ -86,11 +87,11 @@ called resulting in the value 42 being returned from calls to that mocked method
 
 .. code-block:: php
 
-    class MyClassTest extends PHPUnit_Framework_TestCase
+    class MyClassTest extends PHPUnit\Framework\TestCase
     {
         public function testCallingParent()
         {
-            $mock = Phake::mock('MyClass');
+            $mock = Phake::mock(MyClass::class);
             Phake::when($mock)->foo()->thenCallParent();
 
             $this->assertEquals(42, $mock->foo());
@@ -134,11 +135,11 @@ to help determine the answer.
 
 .. code-block:: php
 
-    class MyClassTest extends PHPUnit_Framework_TestCase
+    class MyClassTest extends PHPUnit\Framework\TestCase
     {
         public function testCallback()
         {
-            $mock = Phake::mock('MyClass');
+            $mock = Phake::mock(MyClass::class);
             Phake::when($mock)->foo->thenReturnCallback(function ($val) { return $val * 2; });
 
             $this->assertEquals(42, $mock->foo(21));
@@ -148,15 +149,15 @@ to help determine the answer.
 Custom Answers
 ==============
 
-You can also create custom answers. All answers in Phake implement the ``Phake_Stubber_IAnswer`` interface. This
+You can also create custom answers. All answers in Phake implement the ``Phake\Stubber\IAnswer`` interface. This
 interface defines a single method called ``getAnswer()`` that can be used to return what will be returned from a call
 to the method being stubbed. If you need to get access to how the method you are stubbing was invoked, there is a more
-complex set of interfaces that can be implemented: ``Phake_Stubber_Answers_IDelegator`` and
-``Phake_Stubber_IAnswerDelegate``.
+complex set of interfaces that can be implemented: ``Phake\Stubber\Answers\IDelegator`` and
+``Phake\Stubber\IAnswerDelegate``.
 
-``Phake_Stubber_Answers_IDelegator`` extends ``Phake_Stubber_IAnswer`` and defines an additional method called
+``Phake\Stubber\Answers\IDelegator`` extends ``Phake\Stubber\IAnswer`` and defines an additional method called
 ``processAnswer()`` that is used to perform processing on the results of ``getAnswer()`` prior to passing it on to the
-stub’s caller. ``Phake_Stubber_IAnswerDelegate`` defines an interface that allows you to create a callback that is
+stub’s caller. ``Phake\Stubber\IAnswerDelegate`` defines an interface that allows you to create a callback that is
 called to generate the answer from the stub. It defines ``getCallBack()`` which allows you to generate a PHP callback
 based on the object, method, and arguments that a stub was called with. It also defines ``getArguments()`` which allows
 you to generate the arguments that will be passed to the callback based on the method name and arguments the stub was

@@ -24,10 +24,7 @@ names. Great, now check out the initial definitions for my objects.
      */
     interface Item
     {
-        /**
-         * @return money
-         */
-        public function getPrice();
+        public function getPrice()
     }
 
     /**
@@ -35,20 +32,18 @@ names. Great, now check out the initial definitions for my objects.
      */
     class ShoppingCart
     {
-        private $items = array();
+        private array $items = [];
 
         /**
          * Adds an item to the customer's order
-         * @param Item $item
          */
-        public function addItem(Item $item)
+        public function addItem(Item $item): void
         {
             $this->items[] = $item;
         }
 
         /**
          * Returns the current sub total of the customer's order
-         * @return money
          */
         public function getSubTotal()
         {
@@ -77,35 +72,24 @@ calls return predictable values. This project is all coming together and I am re
 
 .. code-block:: php
 
-    class ShoppingCartTest extends PHPUnit_Framework_TestCase
+    class ShoppingCartTest extends PHPUnit\Framework\TestCase
     {
-        private $shoppingCart;
-
-        private $item1;
-
-        private $item2;
-
-        private $item3;
-
-        protected function setUp(): void
-        {
-            $this->item1 = Phake::mock('Item');
-            $this->item2 = Phake::mock('Item');
-            $this->item3 = Phake::mock('Item');
-
-            Phake::when($this->item1)->getPrice()->thenReturn(100);
-            Phake::when($this->item2)->getPrice()->thenReturn(200);
-            Phake::when($this->item3)->getPrice()->thenReturn(300);
-
-            $this->shoppingCart = new ShoppingCart();
-            $this->shoppingCart->addItem($this->item1);
-            $this->shoppingCart->addItem($this->item2);
-            $this->shoppingCart->addItem($this->item3);
-        }
-
         public function testGetSub()
         {
-            $this->assertEquals(600, $this->shoppingCart->getSubTotal());
+            $item1 = Phake::mock(Item::class);
+            $item2 = Phake::mock(Item::class);
+            $item3 = Phake::mock(Item::class);
+
+            Phake::when($item1)->getPrice()->thenReturn(100);
+            Phake::when($item2)->getPrice()->thenReturn(200);
+            Phake::when($item3)->getPrice()->thenReturn(300);
+
+            $shoppingCart = new ShoppingCart();
+            $shoppingCart->addItem($item1);
+            $shoppingCart->addItem($item2);
+            $shoppingCart->addItem($item3);
+
+            $this->assertEquals(600, $shoppingCart->getSubTotal());
         }
     }
 
@@ -118,23 +102,21 @@ order.
 My test is written so now it is time to see how it fails. I run it with phpunit and see the output below::
 
     $ phpunit ExampleTests/ShoppingCartTest.php
-    PHPUnit 3.5.13 by Sebastian Bergmann.
+    PHPUnit 9.5.4 by Sebastian Bergmann and contributors.
 
-    F
+    F                                                                   1 / 1 (100%)
 
-    Time: 0 seconds, Memory: 8.50Mb
+    Time: 00:00.012, Memory: 4.00 MB
 
     There was 1 failure:
 
     1) ShoppingCartTest::testGetSub
-    Failed asserting that <null> matches expected <integer:600>.
+    Failed asserting that null matches expected 600.
 
     /home/mikel/Documents/Projects/Phake/tests/ShoppingCartTest.php:69
 
     FAILURES!
     Tests: 1, Assertions: 1, Failures: 1.
-
-    Generating code coverage report, this may take a moment.
 
 
 Now that I have a working (and I by working I mean breaking!) test it is time to look at the code necessary to make
@@ -148,7 +130,6 @@ the test pass.
 
         /**
          * Returns the current sub total of the customer's order
-         * @return money
          */
         public function getSubTotal()
         {
@@ -169,15 +150,13 @@ and I am getting off to a great start with my shopping cart.
 ::
 
     $ phpunit ExampleTests/ShoppingCartTest.php
-    PHPUnit 3.5.13 by Sebastian Bergmann.
+    PHPUnit 9.5.4 by Sebastian Bergmann and contributors.
 
-    .
+    .                                                                   1 / 1 (100%)
 
-    Time: 0 seconds, Memory: 8.25Mb
+    Time: 00:00.011, Memory: 4.00 MB
 
     OK (1 test, 1 assertion)
-
-    Generating code coverage report, this may take a moment.
 
 So, what is Phake doing here? Phake is providing us a predictable implementation of the ``Item::getPrice()``
 method that we can use in our test. It helps me to ensure the when my test breaks I know exactly where it is breaking.
@@ -214,19 +193,6 @@ returns another object that you can set the answer on using Phake's fluent api. 
 ``Phake::when($this->item1)->getPrice()->thenReturn(100)``. The ``thenReturn()`` method will
 bind a static answer to a matcher for ``getPrice()`` in the stub map for $this->item1.
 
-Why do Phake stubs return Null by default?
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-The reasoning behind this is that generally speaking, each method you test should depend on only what it needs to perform the
-(hopefully one) responsibility assigned to it. Normally you will have very controlled delegation to other objects. To help with
-localization of errors in your test it is assumed that you will always want to mock external dependencies to keep them from
-influencing the results of unit tests dedicated to the behavior of other parts of the system. Another reason for this default
-behavior is that it provides consistent and predictable behavior regardless of whether you are testing concrete classes, abstract
-classes, or interfaces. It should be noted that this default behavior for concrete methods in classes is different then the default
-behavior in PHPUnit. In PHPUnit, you have to explicitly indicate that you are mocking a method, otherwise it will call the actual
-method code. There are certainly cases where this is useful and this behavior can be achieved in Phake. I will discuss this aspect
-of Phake in :ref:`partial-mocks`.
-
 Overwriting Existing Stubs
 --------------------------
 
@@ -237,87 +203,65 @@ playing around with this idea I notice that the math isn't always adding up. If 
 then add a discount that is $81.40 I see that the total price isn't adding up to $18.60. This is definitely problematic
 After doing some further research, I realize I made a silly mistake. I am just using simple floats to calculate the
 costs. Floats are by nature inaccurate. Once you start using them in mathematical operations they start to show their
-inadequacy for precision. In keeping with the test driven method of creating code I need to create a unit test that
-shows this flaw.
+inadequacy for precision. In keeping with the test driven method of creating code I need to create a unit test this flaw.
 
 .. code-block:: php
 
-    class ShoppingCartTest extends PHPUnit_Framework_TestCase
+    class ShoppingCartTest extends PHPUnit\Framework\TestCase
     {
-        private $shoppingCart;
-
-        private $item1;
-
-        private $item2;
-
-        private $item3;
-
-        public function setUp(): void
-        {
-            $this->item1 = Phake::mock('Item');
-            $this->item2 = Phake::mock('Item');
-            $this->item3 = Phake::mock('Item');
-
-            Phake::when($this->item1)->getPrice()->thenReturn(100);
-            Phake::when($this->item2)->getPrice()->thenReturn(200);
-            Phake::when($this->item3)->getPrice()->thenReturn(300);
-
-            $this->shoppingCart = new ShoppingCart();
-            $this->shoppingCart->addItem($this->item1);
-            $this->shoppingCart->addItem($this->item2);
-            $this->shoppingCart->addItem($this->item3);
-        }
-
-        public function testGetSub()
-        {
-            $this->assertEquals(600, $this->shoppingCart->getSubTotal());
-        }
-
-        public function testGetSubTotalWithPrecision()
-        {
-            $this->item1 = Phake::mock('Item');
-            $this->item2 = Phake::mock('Item');
-            $this->item3 = Phake::mock('Item');
-
-            Phake::when($this->item1)->getPrice()->thenReturn(100);
-            Phake::when($this->item2)->getPrice()->thenReturn(-81.4);
-            Phake::when($this->item3)->getPrice()->thenReturn(20);
-
-            $this->shoppingCart = new ShoppingCart();
-            $this->shoppingCart->addItem($this->item1);
-            $this->shoppingCart->addItem($this->item2);
-            $this->shoppingCart->addItem($this->item3);
-
-            $this->assertEquals(38.6, $this->shoppingCart->getSubTotal());
-        }
+          public function testGetSub()
+          {
+              $item1 = Phake::mock(Item::class);
+              $item2 = Phake::mock(Item::class);
+              $item3 = Phake::mock(Item::class);
+      
+              Phake::when($item1)->getPrice()->thenReturn(100);
+              Phake::when($item2)->getPrice()->thenReturn(200);
+              Phake::when($item3)->getPrice()->thenReturn(300);
+      
+              $shoppingCart = new ShoppingCart();
+              $shoppingCart->addItem($item1);
+              $shoppingCart->addItem($item2);
+              $shoppingCart->addItem($item3);
+      
+              $this->assertEquals(600, $shoppingCart->getSubTotal());
+          }
+      
+          public function testGetSubTotalWithPrecision()
+          {
+              $item1 = Phake::mock(Item::class);
+              $item2 = Phake::mock(Item::class);
+              $item3 = Phake::mock(Item::class);
+      
+              Phake::when($item1)->getPrice()->thenReturn(100);
+              Phake::when($item2)->getPrice()->thenReturn(-81.4);
+              Phake::when($item3)->getPrice()->thenReturn(20);
+      
+              $shoppingCart = new ShoppingCart();
+              $shoppingCart->addItem($item1);
+              $shoppingCart->addItem($item2);
+              $shoppingCart->addItem($item3);
+      
+              $this->assertEquals(38.6, $shoppingCart->getSubTotal());
+          }
     }
 
 You can see that I added another test method that uses actual floats for some of the prices as opposed to round numbers.
-Now when I run my test suite I can see the fantastic floating point issue.
+Now when I run my test suite I can see the result.
 ::
 
     $ phpunit ExampleTests/ShoppingCartTest.php
-    PHPUnit 3.5.13 by Sebastian Bergmann.
+    PHPUnit 9.5.4 by Sebastian Bergmann and contributors.
 
-    .F
+    ..                                                                  2 / 2 (100%)
 
-    Time: 0 seconds, Memory: 10.25Mb
+    Time: 00:00.012, Memory: 4.00 MB
 
-    There was 1 failure:
+    OK (2 tests, 2 assertions)
 
-    1) ShoppingCartTest::testGetSubTotalWithPrecision
-    Failed asserting that <double:38.6> matches expected <double:38.6>.
-
-    /home/mikel/Documents/Projects/Phake/tests/ShoppingCartTest.php:95
-
-    FAILURES!
-    Tests: 2, Assertions: 2, Failures: 1.
-
-    Generating code coverage report, this may take a moment.
-
-Once you get over the strangeness of 38.6 not equaling 38.6 I want to discuss streamlining test cases with you. You
+Once you confirmed that your implementation works, I want to discuss streamlining test cases with you. You
 will notice that the code in ``ShoppingCartTest::testGetSubTotalWithPrecision()`` contains almost
-all duplicate code when compared to ``ShoppingCartTest::setUp()``. If I were to continue following
+all duplicate code when compared to ``ShoppingCartTest::testGetSub()``. If I were to continue following
 this pattern of doing things I would eventually have tests that are difficult to maintain. Phake allows you to very
 easily override stubs. This is very important in helping you to reduce duplication in your tests and leads to tests
 that will be easier to maintain. To overwrite a previous stub you simply have to redefine it. I am going to change
@@ -326,21 +270,18 @@ stubs.
 
 .. code-block:: php
 
-    class ShoppingCartTest extends PHPUnit_Framework_TestCase
+    class ShoppingCartTest extends PHPUnit\Framework\TestCase
     {
-        private $shoppingCart;
-
-        private $item1;
-
-        private $item2;
-
-        private $item3;
+        private ShoppingCart $shoppingCart;
+        private Item $item1;
+        private Item $item2;
+        private Item $item3;
 
         public function setUp(): void
         {
-            $this->item1 = Phake::mock('Item');
-            $this->item2 = Phake::mock('Item');
-            $this->item3 = Phake::mock('Item');
+            $this->item1 = Phake::mock(Item::class);
+            $this->item2 = Phake::mock(Item::class);
+            $this->item3 = Phake::mock(Item::class);
 
             Phake::when($this->item1)->getPrice()->thenReturn(100);
             Phake::when($this->item2)->getPrice()->thenReturn(200);
@@ -384,9 +325,10 @@ out all recorded calls against a mock. ``Phake::reset()`` will do this for insta
 ``Phake::resetStatic()`` will do this for all static methods on the mock.
 
 .. code-block:: php
+
     public function testResettingStubMapper()
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(PhakeTest_MockedClass::class);
         Phake::when($mock)->foo()->thenReturn(42);
 
         $this->assertEquals(42, $mock->foo());
@@ -398,7 +340,7 @@ out all recorded calls against a mock. ``Phake::reset()`` will do this for insta
 
     public function testResettingCallRecorder()
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(PhakeTest_MockedClass::class);
         $mock->foo();
 
         //Will work as normal
@@ -461,28 +403,25 @@ stub will be for a call with a different ``Item``.
 
 .. code-block:: php
 
-    class ItemGroupTest extends PHPUnit_Framework_TestCase
+    class ItemGroupTest extends PHPUnit\Framework\TestCase
     {
-        private $itemGroup;
-
-        private $item1;
-
-        private $item2;
-
-        private $item3;
+        private ItemGroup $itemGroup;
+        private Item $item1;
+        private Item $item2;
+        private Item $item3;
 
         public function setUp(): void
         {
-            $this->item1 = Phake::mock('Item');
-            $this->item2 = Phake::mock('Item');
-            $this->item3 = Phake::mock('Item');
+            $this->item1 = Phake::mock(Item::class);
+            $this->item2 = Phake::mock(Item::class);
+            $this->item3 = Phake::mock(Item::class);
 
-            $this->itemGroup = new ItemGroup(array($this->item1, $this->item2, $this->item3));
+            $this->itemGroup = new ItemGroup([ $this->item1, $this->item2, $this->item3 ]);
         }
 
         public function testAddItemsToCart()
         {
-            $cart = Phake::mock('ShoppingCart');
+            $cart = Phake::mock(ShoppingCart::class);
             Phake::when($cart)->addItem($this->item1)->thenReturn(10);
             Phake::when($cart)->addItem($this->item2)->thenReturn(20);
             Phake::when($cart)->addItem($this->item3)->thenReturn(30);
@@ -510,28 +449,25 @@ feature of Phake.
 
 .. code-block:: php
 
-    class ItemGroupTest extends PHPUnit_Framework_TestCase
+    class ItemGroupTest extends PHPUnit\Framework\TestCase
     {
-        private $itemGroup;
-
-        private $item1;
-
-        private $item2;
-
-        private $item3;
+        private ItemGroup $itemGroup;
+        private Item $item1;
+        private Item $item2;
+        private Item $item3;
 
         public function setUp(): void
         {
-            $this->item1 = Phake::mock('Item');
-            $this->item2 = Phake::mock('Item');
-            $this->item3 = Phake::mock('Item');
+            $this->item1 = Phake::mock(Item::class);
+            $this->item2 = Phake::mock(Item::class);
+            $this->item3 = Phake::mock(Item::class);
 
-            $this->itemGroup = new ItemGroup(array($this->item1, $this->item2, $this->item3));
+            $this->itemGroup = new ItemGroup([ $this->item1, $this->item2, $this->item3 ]);
         }
 
         public function testAddItemsToCart()
         {
-            $cart = Phake::mock('ShoppingCart');
+            $cart = Phake::mock(ShoppingCart::class);
             Phake::when($cart)->addItem(Phake::anyParameters())->thenReturn(10)
                 ->thenReturn(20)
                 ->thenReturn(30);
@@ -596,31 +532,31 @@ to provided all other parameters match.
                     $this->log->info("Validation Error: {$error}");
                 }
 
-                return FALSE;
+                return false;
             }
 
-            return TRUE;
+            return true;
         }
     }
 
-    class ValidationLoggerTest extends PHPUnit_Framework_TestCase
+    class ValidationLoggerTest extends PHPUnit\Framework\TestCase
     {
         public function testValidate()
         {
             //Mock the dependencies
-            $validator = Phake::mock('IValidator');
-            $log = Phake::mock('Logger');
-            $data = array('data1' => 'value');
-            $expectedErrors = array('data1 is not valid');
+            $validator = Phake::mock(IValidator::class);
+            $log = Phake::mock(Logger::class);
+            $data = [ 'data1' => 'value' ];
+            $expectedErrors = ['data1 is not valid'];
 
             //Setup the stubs (Notice the Phake::setReference()
-            Phake::when($validator)->validate($data, Phake::setReference($expectedErrors))->thenReturn(FALSE);
+            Phake::when($validator)->validate($data, Phake::setReference($expectedErrors))->thenReturn(false);
 
             //Instantiate the SUT
             $validationLogger = new ValidationLogger($validator, $log);
 
             //verify the validation is false and the message is logged
-            $errors = array();
+            $errors = [];
             $this->assertFalse($validationLogger->validate($data, $errors));
             Phake::verify($log)->info('Validation Error: data1 is not valid');
         }
@@ -652,24 +588,24 @@ is initially passed as an empty array.
 
 .. code-block:: php
 
-    class ValidationLoggerTest extends PHPUnit_Framework_TestCase
+    class ValidationLoggerTest extends PHPUnit\Framework\TestCase
     {
         public function testValidate()
         {
             //Mock the dependencies
-            $validator = Phake::mock('IValidator');
-            $log = Phake::mock('Logger');
-            $data = array('data1' => 'value');
-            $expectedErrors = array('data1 is not valid');
+            $validator = Phake::mock(IValidator::class);
+            $log = Phake::mock(Logger::class);
+            $data = [ 'data1' => 'value' ];
+            $expectedErrors = [ 'data1 is not valid' ];
 
             //Setup the stubs (Notice the Phake::setReference()
-            Phake::when($validator)->validate($data, Phake::setReference($expectedErrors)->when(array())->thenReturn(FALSE);
+            Phake::when($validator)->validate($data, Phake::setReference($expectedErrors)->when([])->thenReturn(false);
 
             //Instantiate the SUT
             $validationLogger = new ValidationLogger($validator, $log);
 
             //verify the validation is false and the message is logged
-            $errors = array();
+            $errors = [];
             $this->assertFalse($validationLogger->validate($data, $errors));
             Phake::verify($log)->info('Validation Error: data1 is not valid');
         }
@@ -718,11 +654,11 @@ Below is an example that shows the usage of ``Phake::partialMock()``.
 
 .. code-block:: php
 
-    class MyClassTest extends PHPUnit_Framework_TestCase
+    class MyClassTest extends PHPUnit\Framework\TestCase
     {
         public function testCallingParent()
         {
-            $mock = Phake::partialMock('MyClass', 42);
+            $mock = Phake::partialMock(MyClass::class, 42);
 
             $this->assertEquals(42, $mock->foo());
         }
@@ -743,11 +679,11 @@ this can be seen below.
 
 .. code-block:: php
 
-    class MyClassTest extends PHPUnit_Framework_TestCase
+    class MyClassTest extends PHPUnit\Framework\TestCase
     {
         public function testDefaultStubs()
         {
-            $mock = Phake::mock('MyClass', Phake::ifUnstubbed()->thenReturn(42));
+            $mock = Phake::mock(MyClass::class, Phake::ifUnstubbed()->thenReturn(42));
 
             $this->assertEquals(42, $mock->foo());
         }
@@ -777,11 +713,11 @@ You could stub an invocation of the ``__call()`` method through a userspace call
 
 .. code-block:: php
 
-    class MagicClassTest extends PHPUnit_Framework_TestCase
+    class MagicClassTest extends PHPUnit\Framework\TestCase
     {
         public function testMagicCall()
         {
-            $mock = Phake::mock('MagicClass');
+            $mock = Phake::mock(MagicClass::class);
 
             Phake::when($mock)->magicCall()->thenReturn(42);
 
@@ -795,13 +731,13 @@ what you would expect to be passed to a ``__call()`` method. You can also use Ph
 
 .. code-block:: php
 
-    class MagicClassTest extends PHPUnit_Framework_TestCase
+    class MagicClassTest extends PHPUnit\Framework\TestCase
     {
         public function testMagicCall()
         {
-            $mock = Phake::mock('MagicClass');
+            $mock = Phake::mock(MagicClass::class);
 
-            Phake::whenCallMethodWith('magicCall', array())->isCalledOn($mock)->thenReturn(42);
+            Phake::whenCallMethodWith('magicCall', [])->isCalledOn($mock)->thenReturn(42);
 
             $this->assertEquals(42, $mock->magicCall());
         }

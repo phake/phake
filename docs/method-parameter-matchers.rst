@@ -30,11 +30,11 @@ to the ``deal()`` method on the ``Phake::verify($deal)`` object just as you woul
 
     //I don't have Concrete versions of
     // CardCollection or PlayerCollection yet
-    $deck = Phake::mock('CardCollection');
-    $players = Phake::mock('PlayerCollection');
+    $deck = Phake::mock(CardCollection::class);
+    $players = Phake::mock(PlayerCollection::class);
 
 
-    $dealer = Phake::mock('DealerStrategy');
+    $dealer = Phake::mock(DealerStrategy::class);
 
     $dealer->deal($deck, $players);
 
@@ -63,14 +63,14 @@ work seamlessly inside of Phake. Here is an example of how the `PHPUnit constrai
 
 .. code-block:: php
 
-    class TestPHPUnitConstraint extends PHPUnit_Framework_TestCase
+    class TestPHPUnitConstraint extends PHPUnit\Framework\TestCase
     {
         public function testDealNumberOfCards()
         {
-            $deck = Phake::mock('CardCollection');
-            $players = Phake::mock('PlayerCollection');
+            $deck = Phake::mock(CardCollection::class);
+            $players = Phake::mock(PlayerCollection::class);
 
-            $dealer = Phake::mock('DealerStrategy');
+            $dealer = Phake::mock(DealerStrategy::class);
             $dealer->deal($deck, $players, 11);
 
             Phake::verify($dealer)
@@ -98,10 +98,10 @@ matchers.
     {
         public function testDealNumberOfCards()
         {
-            $deck = Phake::mock('CardCollection');
-            $players = Phake::mock('PlayerCollection');
+            $deck = Phake::mock(CardCollection::class);
+            $players = Phake::mock(PlayerCollection::class);
 
-            $dealer = Phake::mock('DealerStrategy');
+            $dealer = Phake::mock(DealerStrategy::class);
             $dealer->deal($deck, $players, 11);
 
             Phake::verify($dealer)->deal($deck, $players, greaterThan(10));
@@ -109,6 +109,7 @@ matchers.
     }
 
 .. _wildcard-parameters:
+
 Wildcard Parameters
 ===================
 Frequently when stubbing methods, you do not really care about matching parameters. Often times matching every
@@ -122,11 +123,11 @@ $obj->foo() regardless of parameters to return bar.
 
 .. code-block:: php
 
-    class FooTest extends PHPUnit_Framework_TestCase
+    class FooTest extends PHPUnit\Framework\TestCase
     {
         public function testAddItemsToCart()
         {
-            $obj = Phake::mock('MyObject');
+            $obj = Phake::mock(MyObject::class);
 
             Phake::when($obj)->foo->thenReturn('bar');
 
@@ -160,11 +161,11 @@ parameter sets an item's name, but the remaining parameters are all available as
         }
     }
 
-    class MyTest extends PHPUnit_Framework_TestCase
+    class MyTest extends PHPUnit\Framework\TestCase
     {
         public function testUsingItemFactory()
         {
-            $factory = Phake::mock('MyFactory');
+            $factory = Phake::mock(MyFactory::class);
 
             $factory->createItem('Item1', 'blue', 'small');
 
@@ -200,12 +201,12 @@ please remember, this is not an example of clean design, simply an example of wh
 
 .. code-block:: php
 
-    class MyPokerGameTest extends PHPUnit_Framework_TestCase
+    class MyPokerGameTest extends PHPUnit\Framework\TestCase
     {
         public function testDealCards()
         {
-            $dealer = Phake::mock('MyPokerDealer');
-            $players = Phake::mock('PlayerCollection');
+            $dealer = Phake::mock(MyPokerDealer::class);
+            $players = Phake::mock(PlayerCollection::class);
 
             $cardGame = new MyPokerGame($dealer, $players);
 
@@ -223,18 +224,18 @@ bit.
 
 .. code-block:: php
 
-    class MyBetterPokerGameTest extends PHPUnit_Framework_TestCase
+    class MyBetterPokerGameTest extends PHPUnit\Framework\TestCase
     {
         public function testDealCards()
         {
-            $dealer = Phake::mock('MyPokerDealer');
-            $players = Phake::mock('PlayerCollection');
+            $dealer = Phake::mock(MyPokerDealer::class);
+            $players = Phake::mock(PlayerCollection::class);
 
             $cardGame = new MyPokerGame($dealer, $players);
 
             Phake::verify($dealer)->deal(
                 Phake::capture($deck)
-                    ->when($this->isInstanceOf('CardCollection')),
+                    ->when($this->isInstanceOf(CardCollection::class)),
                 $players
             );
 
@@ -287,17 +288,17 @@ array containing all of the values used for that parameter. So with this functio
         public function testProcess()
         {
             $foo = new Foo();
-            $request = Phake::mock('Request');
-            $eventManager = Phake::mock('EventManager');
+            $request = Phake::mock(Request::class);
+            $eventManager = Phake::mock(EventManager::class);
 
             $foo->process($request, $eventManager);
 
             Phake::verify($eventManager, Phake::atLeast(1))->fire(Phake::captureAll($events));
 
-            $this->assertInstanceOf('PreProcessEvent', $events[0]);
+            $this->assertInstanceOf(PreProcessEvent::class, $events[0]);
             $this->assertEquals($request, $events[0]->getRequest());
 
-            $this->assertInstanceOf('PostProcessEvent', $events[1]);
+            $this->assertInstanceOf(PostProcessEvent::class, $events[1]);
             $this->assertEquals($request, $events[1]->getRequest());
         }
     }
@@ -312,7 +313,7 @@ a customer argument matcher it would look something like this.
 
 .. code-block:: php
 
-    class FiftyTwoCardDeckMatcher implements Phake_Matchers_IArgumentMatcher
+    class FiftyTwoCardDeckMatcher implements Phake\Matchers\IArgumentMatcher
     {
         public function matches(&$argument)
         {
@@ -326,12 +327,12 @@ a customer argument matcher it would look something like this.
         }
     }
 
-    class MyBestPokerGameTest extends PHPUnit_Framework_TestCase
+    class MyBestPokerGameTest extends PHPUnit\Framework\TestCase
     {
         public function testDealCards()
         {
-            $dealer = Phake::mock('MyPokerDealer');
-            $players = Phake::mock('PlayerCollection');
+            $dealer = Phake::mock(MyPokerDealer::class);
+            $players = Phake::mock(PlayerCollection::class);
 
             $cardGame = new MyPokerGame($dealer, $players);
 

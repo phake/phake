@@ -1,8 +1,8 @@
 Getting Started
 ===============
 
-Phake depends on PHP 5.3.3 or greater. It has no dependency on PHPUnit and should be usable with
-any version of PHPUnit so long as the PHP version is 5.3.3 or greater.
+Phake 4.0 depends on PHP 7.1 or greater. It has no dependency on PHPUnit and should be usable with
+any version of PHPUnit compatible with your PHP version.
 
 Composer Install
 ----------------
@@ -14,7 +14,7 @@ as a development requirement. To do so you can add the following to your ``compo
     {
         // ..
         "require-dev": {
-            "phake/phake": "@stable"
+            "phake/phake": "^4.0"
         }
         // ..
     }

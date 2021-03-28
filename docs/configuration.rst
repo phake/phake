@@ -36,9 +36,9 @@ file and then require that file. This will allow for accurate and easily researc
 tests. This shouldn't typically be required for most users of Phake, however if your are having errors or
 working on code for Phake itself it can be incredibly useful.
 
-``Phake::setMockLoader()`` accepts a single parameter of type ``Phake_ClassGenerator_ILoader``. The default
-behavior is contained in the ``Phake_ClassGenerator_EvalLoader`` class. If you would instead like to dump the
-classes to files you can instead use the ``Phake_ClassGenerator_FileLoader`` class. The constructor accepts a
+``Phake::setMockLoader()`` accepts a single parameter of type ``Phake\ClassGenerator\ILoader``. The default
+behavior is contained in the ``Phake\ClassGenerator\EvalLoader`` class. If you would instead like to dump the
+classes to files you can instead use the ``Phake\ClassGenerator\FileLoader`` class. The constructor accepts a
 single parameter containing the directory you would like to dump the classes to. The classes will be stored
 in files with the same name as the generated class.
 
@@ -48,4 +48,4 @@ Below is an example of the code required to dump mock classes into the /tmp fold
 
     require_once('Phake.php');
     require_once('Phake/ClassGenerator/FileLoader.php');
-    Phake::setMockLoader(new Phake_ClassGenerator_FileLoader('/tmp'));
+    Phake::setMockLoader(new Phake\ClassGenerator\FileLoader('/tmp'));
