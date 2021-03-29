@@ -103,7 +103,7 @@ class SmartDefaultAnswer implements \Phake\Stubber\IAnswer
             }
         }
 
-        return function () use ($defaultAnswer)
+        return function (...$args) use ($defaultAnswer)
         {
             return $defaultAnswer;
         };

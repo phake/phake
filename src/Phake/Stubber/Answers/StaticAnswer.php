@@ -72,7 +72,7 @@ class StaticAnswer implements \Phake\Stubber\IAnswer
     public function getAnswerCallback($context, $method)
     {
         $answer = $this->answer;
-        return function () use ($answer) {
+        return function (...$args) use ($answer) {
             return $answer;
         };
     }

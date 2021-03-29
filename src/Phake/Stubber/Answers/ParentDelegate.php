@@ -99,7 +99,7 @@ class ParentDelegate implements \Phake\Stubber\IAnswer
         return $fallback;
     }
 
-    public function getFallback()
+    public function getFallback(...$args)
     {
         return null;
     }

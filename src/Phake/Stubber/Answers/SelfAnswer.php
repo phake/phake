@@ -59,7 +59,7 @@ class SelfAnswer implements \Phake\Stubber\IAnswer
         {
             throw new InvalidAnswerException("Invalid context for " . __CLASS__ . ". You can only use this answer on non-static methods");
         }
-        return function () use ($context)
+        return function (...$args) use ($context)
         {
             return $context;
         };

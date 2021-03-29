@@ -122,4 +122,44 @@ class PhakeNamedArgumentsTest extends TestCase
 
         Phake::verify($mock)->fooWithMultipleDefault(p2: 2);
     }
+   
+    public function testVariadicWithNamedParams()
+    {
+        $mock = Phake::mock('PhakeTest_Variadic');
+        Phake::when($mock)->variadicMethod(1, 2, c: 3, d: 4)->thenReturn(42);
+
+        $this->assertSame(42, $mock->variadicMethod(d: 4, c: 3, b: 2, a: 1));
+
+        Phake::verify($mock)->variadicMethod(1, 2, c: 3, d: 4);
+    }
+
+    public function testVariadicWithMixedNamedArguments()
+    {
+        $mock = Phake::mock('PhakeTest_Variadic');
+        Phake::when($mock)->variadicMethod(1, 2, 3, 4, e: 5, f: 6)->thenReturn(42);
+
+        $this->assertSame(42, $mock->variadicMethod(1, 2, 3, 4, e: 5, f: 6));
+
+        Phake::verify($mock)->variadicMethod(1, 2, 3, 4, e: 5, f: 6);
+    }
+
+    public function testVariadicWithNamedParametersShuffled()
+    {
+        $mock = Phake::mock('PhakeTest_Variadic');
+        Phake::when($mock)->variadicMethod(b: 2, a: 1, c: 3, d: 4)->thenReturn(42);
+
+        $this->assertSame(42, $mock->variadicMethod(d: 4, c: 3, b: 2, a: 1));
+
+        Phake::verify($mock)->variadicMethod(c: 3, d: 4, a: 1, b: 2);
+    }
+
+    public function testWithNamedParanetersAndEmptyVariadic()
+    {
+        $mock = Phake::mock('PhakeTest_Variadic');
+        Phake::when($mock)->variadicMethod(a: 'a', b: 'b')->thenReturn(42);
+
+        $this->assertSame(42, $mock->variadicMethod('a', b: 'b'));
+
+        Phake::verify($mock)->variadicMethod('a', b: 'b');
+    }
 }

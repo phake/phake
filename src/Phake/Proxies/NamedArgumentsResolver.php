@@ -71,8 +71,13 @@ trait NamedArgumentsResolver
                 $parameters = [];
             }
             foreach ($parameters as $position => $parameter) {
+                if (empty($namedArguments)) {
+                    break;
+                }
                 $name = $parameter->getName();
-                if (array_key_exists($name, $namedArguments)) {
+                if ($parameter->isVariadic()) {
+                    $positionalArguments[count($positionalArguments)] = $namedArguments;
+                } elseif (array_key_exists($name, $namedArguments)) {
                     $positionalArguments[$position] = $namedArguments[$name];
                     unset($namedArguments[$name]);
                 } elseif ($parameter->isOptional() && !array_key_exists($position, $positionalArguments)) {

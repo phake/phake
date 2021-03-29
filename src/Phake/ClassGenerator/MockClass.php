@@ -413,7 +413,7 @@ class {$newClassName} {$extends}
 		    return {$nullReturn};
 		}
 
-		\$__PHAKE_funcArgs = func_get_args();
+		\$__PHAKE_funcArgs = array_map(function (\$x) { return \$x; }, \$__PHAKE_args);
 		\$__PHAKE_answer = \$__PHAKE_info->getHandlerChain()->invoke({$context}, '{$method->getName()}', \$__PHAKE_funcArgs, \$__PHAKE_args);
 
 	    \$__PHAKE_callback = \$__PHAKE_answer->getAnswerCallback({$context}, '{$method->getName()}');
