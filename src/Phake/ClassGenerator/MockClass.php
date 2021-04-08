@@ -189,7 +189,6 @@ class {$newClassName} {$extends}
         {
             error_reporting($oldErrorReporting & ~E_STRICT);
         }
-        file_put_contents('/tmp/debug', $classDef);
         $this->loader->loadClassByString($newClassName, $classDef);
         if ($isUnsafe)
         {
