@@ -551,7 +551,7 @@ class {$newClassName} {$extends}
         try
         {
             if ($parameter->hasType()) {
-                $type = $this->implementType($parameter->getType(), $parameter->getDeclaringClass());
+                $type = $this->implementType($parameter->getType(), $parameter->getDeclaringClass()) . ' ';
             }
         }
 
