@@ -55,71 +55,6 @@ class Phake_ClassGenerator_MockClass
      */
     private $loader;
 
-    private $reservedWords = array(
-        'abstract' => 'abstract',
-        'and' => 'and',
-        'array' => 'array',
-        'as' => 'as',
-        'break' => 'break',
-        'case' => 'case',
-        'catch' => 'catch',
-        'class' => 'class',
-        'clone' => 'clone',
-        'const' => 'const',
-        'continue' => 'continue',
-        'declare' => 'declare',
-        'default' => 'default',
-        'do' => 'do',
-        'else' => 'else',
-        'elseif' => 'elseif',
-        'enddeclare' => 'enddeclare',
-        'endfor' => 'endfor',
-        'endforeach' => 'endforeach',
-        'endif' => 'endif',
-        'endswitch' => 'endswitch',
-        'endwhile' => 'endwhile',
-        'extends' => 'extends',
-        'final' => 'final',
-        'for' => 'for',
-        'foreach' => 'foreach',
-        'function' => 'function',
-        'global' => 'global',
-        'goto' => 'goto',
-        'if' => 'if',
-        'implements' => 'implements',
-        'interface' => 'interface',
-        'instanceof' => 'instanceof',
-        'namespace' => 'namespace',
-        'new' => 'new',
-        'or' => 'or',
-        'private' => 'private',
-        'protected' => 'protected',
-        'public' => 'public',
-        'static' => 'static',
-        'switch' => 'switch',
-        'throw' => 'throw',
-        'try' => 'try',
-        'use' => 'use',
-        'var' => 'var',
-        'while' => 'while',
-        'xor' => 'xor',
-        'die' => 'die',
-        'echo' => 'echo',
-        'empty' => 'empty',
-        'exit' => 'exit',
-        'eval' => 'eval',
-        'include' => 'include',
-        'include_once' => 'include_once',
-        'isset' => 'isset',
-        'list' => 'list',
-        'require' => 'require',
-        'require_once' => 'require_once',
-        'return' => 'return',
-        'print' => 'print',
-        'unset' => 'unset',
-        '__halt_compiler' => '__halt_compiler'
-    );
-
     /**
      * @param Phake_ClassGenerator_ILoader $loader
      */
@@ -330,10 +265,6 @@ class {$newClassName} {$extends}
         $methodDefs = '';
         $filter     = ReflectionMethod::IS_ABSTRACT | ReflectionMethod::IS_PROTECTED | ReflectionMethod::IS_PUBLIC | ~ReflectionMethod::IS_FINAL;
 
-        if (empty($implementedMethods))
-        {
-            $implementedMethods = $this->reservedWords;
-        }
         foreach ($mockedClass->getMethods($filter) as $method) {
             $methodName = $method->getName();
             if (!$method->isConstructor() && !$method->isDestructor() && !$method->isFinal()
