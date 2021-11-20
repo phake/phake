@@ -116,6 +116,20 @@ class SmartDefaultAnswerTest extends TestCase
         $this->assertTrue(in_array($cb(), [0, '']));
     }
 
+    public function testIntersectionTypeReturn()
+    {
+        if (version_compare(phpversion(), '8.1.0') < 0) {
+            $this->markTestSkipped('Intersection types are not supported in PHP versions prior to 8.1');
+        }
+
+        $context = new \PhakeTest_IntersectionTypes();
+        $cb = $this->answer->getAnswerCallback($context, 'intersectionReturn');
+
+        $result = $cb();
+        $this->assertInstanceOf(\ArrayAccess::class, $result);
+        $this->assertInstanceOf(\Countable::class, $result);
+    }
+
     public function testSelfReturn()
     {
         $context = new \PhakeTest_ScalarTypes();
