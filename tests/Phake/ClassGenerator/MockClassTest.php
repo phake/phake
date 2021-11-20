@@ -987,4 +987,29 @@ class MockClassTest extends TestCase
             $this->fail('Expected stubbing return self');
         }
     }
+
+    public function testStubbingIntersectionTypes()
+    {
+        if (version_compare(phpversion(), '8.1.0') < 0) {
+            $this->markTestSkipped('Intersection types are not supported in PHP versions prior to 8.1');
+        }
+        $this->assertInstanceOf('PhakeTest_IntersectionTypes', Phake::mock('PhakeTest_IntersectionTypes'));
+    }
+
+    public function testStubbingIntersectionReturnType()
+    {
+        if (version_compare(phpversion(), '8.1.0') < 0) {
+            $this->markTestSkipped('Intersection types are not supported in PHP versions prior to 8.1');
+        }
+
+        $mock = Phake::mock('PhakeTest_IntersectionTypes');
+        $expectedResult = new \ArrayObject();
+        Phake::when($mock)->intersectionReturn()->thenReturn($expectedResult);
+
+        try {
+            $this->assertSame($expectedResult, $mock->intersectionReturn());
+        } catch (\TypeError $e) {
+            $this->fail('Expected stubbing return ArrayObject');
+        }
+    }
 }
