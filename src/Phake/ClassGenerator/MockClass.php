@@ -540,6 +540,8 @@ class {$newClassName} {$extends}
                 $types[] = 'null';
             }
             $result = implode('|', $types);
+        } elseif ($type instanceof \ReflectionIntersectionType) {
+            $result = (string) $type;
         }
 
         return $nullable . $result;
