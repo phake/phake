@@ -1748,6 +1748,31 @@ class PhakeTest extends TestCase
         $this->assertEquals('Asked', $val);
     }
 
+    public function testCallingNeverReturnMockedMethodThrowsNeverReturnMethodCalledException() {
+        if (version_compare(phpversion(), '8.1.0') < 0) {
+            $this->markTestSkipped('never type is not supported in PHP versions prior to 8.1');
+        }
+
+        $this->expectException(Phake\Exception\NeverReturnMethodCalledException::class);
+
+        $mock = Phake::mock(\PhakeTest_NeverReturn::class);
+        $mock->neverReturn();
+    }
+
+    public function testCallingNeverReturnMockedMethodWithThenThrows() {
+        if (version_compare(phpversion(), '8.1.0') < 0) {
+            $this->markTestSkipped('never type is not supported in PHP versions prior to 8.1');
+        }
+
+        $mock = Phake::mock(\PhakeTest_NeverReturn::class);
+        Phake::when($mock)->neverReturn()->thenThrow($expectedException = new \RuntimeException());
+        try {
+            $mock->neverReturn();
+        } catch (\Exception $e) {
+            $this->assertSame($expectedException, $e);
+        }
+    }
+
     /**
      * For #239
      */

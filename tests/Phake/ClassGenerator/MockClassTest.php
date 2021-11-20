@@ -1012,4 +1012,12 @@ class MockClassTest extends TestCase
             $this->fail('Expected stubbing return ArrayObject');
         }
     }
+
+    public function testStubbingNeverReturnType()
+    {
+        if (version_compare(phpversion(), '8.1.0') < 0) {
+            $this->markTestSkipped('never type is not supported in PHP versions prior to 8.1');
+        }
+        $this->assertInstanceOf('PhakeTest_NeverReturn', Phake::mock('PhakeTest_NeverReturn'));
+    }
 }
