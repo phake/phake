@@ -103,12 +103,12 @@ class LegacyReader implements IReader
      */
     private function getPropertyAnnotations(\ReflectionProperty $property)
     {
-        $comment = $property->getDocComment();
-
-        $annotations = array();
-        foreach (explode("\n", $comment) as $line) {
-            if (preg_match('#^\s+\*\s*@(\w+)(?:\s+(.*))?\s*$#', $line, $matches)) {
-                $annotations[$matches[1]] = isset($matches[2]) ? $matches[2] : true;
+        $annotations = [];
+        if ($comment = $property->getDocComment()) {
+            foreach (explode("\n", $comment) as $line) {
+                if (preg_match('#^\s+\*\s*@(\w+)(?:\s+(.*))?\s*$#', $line, $matches)) {
+                    $annotations[$matches[1]] = isset($matches[2]) ? $matches[2] : true;
+                }
             }
         }
         return $annotations;
