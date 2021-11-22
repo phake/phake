@@ -184,7 +184,7 @@ class {$newClassName} {$extends}
     {
         $isUnsafe = in_array($mockedClassName, self::$unsafeClasses);
 
-        $oldErrorReporting = ini_get('error_reporting');
+        $oldErrorReporting = error_reporting();
         if ($isUnsafe)
         {
             error_reporting($oldErrorReporting & ~E_STRICT);
