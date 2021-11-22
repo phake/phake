@@ -1749,7 +1749,7 @@ class PhakeTest extends TestCase
     }
 
     public function testCallingNeverReturnMockedMethodThrowsNeverReturnMethodCalledException() {
-        if (version_compare(phpversion(), '8.1.0') < 0) {
+        if (PHP_VERSION_ID < 80100) {
             $this->markTestSkipped('never type is not supported in PHP versions prior to 8.1');
         }
 
@@ -1760,7 +1760,7 @@ class PhakeTest extends TestCase
     }
 
     public function testCallingNeverReturnMockedMethodWithThenThrows() {
-        if (version_compare(phpversion(), '8.1.0') < 0) {
+        if (PHP_VERSION_ID < 80100) {
             $this->markTestSkipped('never type is not supported in PHP versions prior to 8.1');
         }
 

@@ -840,7 +840,7 @@ class MockClassTest extends TestCase
 
     public function testStubbingUnionTypes()
     {
-        if (version_compare(phpversion(), '8.0.0') < 0) {
+        if (PHP_VERSION_ID < 80000) {
             $this->markTestSkipped('Union types are not supported in PHP versions prior to 8.0');
         }
 
@@ -849,7 +849,7 @@ class MockClassTest extends TestCase
 
     public function testStubbingUnionParameterHints()
     {
-        if (version_compare(phpversion(), '8.0.0') < 0) {
+        if (PHP_VERSION_ID < 80000) {
             $this->markTestSkipped('Union types are not supported in PHP versions prior to 8.0');
         }
 
@@ -867,7 +867,7 @@ class MockClassTest extends TestCase
 
     public function testStubbingUnionParameterHintsWrongType()
     {
-        if (version_compare(phpversion(), '8.0.0') < 0) {
+        if (PHP_VERSION_ID < 80000) {
             $this->markTestSkipped('Union types are not supported in PHP versions prior to 8.0');
         }
 
@@ -884,7 +884,7 @@ class MockClassTest extends TestCase
 
     public function testStubbingNullableUnionParameterHints()
     {
-        if (version_compare(phpversion(), '8.0.0') < 0) {
+        if (PHP_VERSION_ID < 80000) {
             $this->markTestSkipped('Union types are not supported in PHP versions prior to 8.0');
         }
 
@@ -904,7 +904,7 @@ class MockClassTest extends TestCase
 
     public function testStubbingUnionReturnType()
     {
-        if (version_compare(phpversion(), '8.0.0') < 0) {
+        if (PHP_VERSION_ID < 80000) {
             $this->markTestSkipped('Union types are not supported in PHP versions prior to 8.0');
         }
 
@@ -921,7 +921,7 @@ class MockClassTest extends TestCase
 
     public function testStubbingUnionReturnWrongType()
     {
-        if (version_compare(phpversion(), '8.0.0') < 0) {
+        if (PHP_VERSION_ID < 80000) {
             $this->markTestSkipped('Union types are not supported in PHP versions prior to 8.0');
         }
 
@@ -939,7 +939,7 @@ class MockClassTest extends TestCase
 
     public function testStubbingUnionReturnNullableType()
     {
-        if (version_compare(phpversion(), '8.0.0') < 0) {
+        if (PHP_VERSION_ID < 80000) {
             $this->markTestSkipped('Union types are not supported in PHP versions prior to 8.0');
         }
 
@@ -957,7 +957,7 @@ class MockClassTest extends TestCase
 
     public function testStubbingUnionSelfParameterHints()
     {
-        if (version_compare(phpversion(), '8.0.0') < 0) {
+        if (PHP_VERSION_ID < 80000) {
             $this->markTestSkipped('Union types are not supported in PHP versions prior to 8.0');
         }
 
@@ -974,7 +974,7 @@ class MockClassTest extends TestCase
 
     public function testStubbingUnionReturnWithSelf()
     {
-        if (version_compare(phpversion(), '8.0.0') < 0) {
+        if (PHP_VERSION_ID < 80000) {
             $this->markTestSkipped('Union types are not supported in PHP versions prior to 8.0');
         }
 
@@ -990,7 +990,7 @@ class MockClassTest extends TestCase
 
     public function testStubbingIntersectionTypes()
     {
-        if (version_compare(phpversion(), '8.1.0') < 0) {
+        if (PHP_VERSION_ID < 80100) {
             $this->markTestSkipped('Intersection types are not supported in PHP versions prior to 8.1');
         }
         $this->assertInstanceOf('PhakeTest_IntersectionTypes', Phake::mock('PhakeTest_IntersectionTypes'));
@@ -998,7 +998,7 @@ class MockClassTest extends TestCase
 
     public function testStubbingIntersectionReturnType()
     {
-        if (version_compare(phpversion(), '8.1.0') < 0) {
+        if (PHP_VERSION_ID < 80100) {
             $this->markTestSkipped('Intersection types are not supported in PHP versions prior to 8.1');
         }
 
@@ -1015,7 +1015,7 @@ class MockClassTest extends TestCase
 
     public function testStubbingNeverReturnType()
     {
-        if (version_compare(phpversion(), '8.1.0') < 0) {
+        if (PHP_VERSION_ID < 80100) {
             $this->markTestSkipped('never type is not supported in PHP versions prior to 8.1');
         }
         $this->assertInstanceOf('PhakeTest_NeverReturn', Phake::mock('PhakeTest_NeverReturn'));

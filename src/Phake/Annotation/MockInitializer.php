@@ -62,7 +62,7 @@ class MockInitializer
     public static function getDefaultReader(): IReader
     {
         if (!self::$defaultReader) {
-            self::$defaultReader = version_compare(PHP_VERSION, '8.0.0', '<') ? new LegacyReader() : new NativeReader();
+            self::$defaultReader = PHP_VERSION_ID < 80000 ? new LegacyReader() : new NativeReader();
         }
 
         return self::$defaultReader;

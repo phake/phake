@@ -106,7 +106,7 @@ class SmartDefaultAnswerTest extends TestCase
 
     public function testUnionTypeReturn()
     {
-        if (version_compare(phpversion(), '8.0.0') < 0) {
+        if (PHP_VERSION_ID < 80000) {
             $this->markTestSkipped('Union types are not supported in PHP versions prior to 8.0');
         }
 
@@ -118,7 +118,7 @@ class SmartDefaultAnswerTest extends TestCase
 
     public function testIntersectionTypeReturn()
     {
-        if (version_compare(phpversion(), '8.1.0') < 0) {
+        if (PHP_VERSION_ID < 80100) {
             $this->markTestSkipped('Intersection types are not supported in PHP versions prior to 8.1');
         }
 

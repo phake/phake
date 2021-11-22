@@ -1,6 +1,6 @@
 <?php
 
-if (version_compare(PHP_VERSION, '7.4.0', '>=')) {
+if (PHP_VERSION_ID >= 70400) {
     $fp = fopen(__FILE__, 'r');
     fseek($fp, __COMPILER_HALT_OFFSET__);
     eval(stream_get_contents($fp));
@@ -85,7 +85,7 @@ class MockInitializerTypesPropertiesTest extends TestCase
 
     public function testWithNativeReader()
     {
-        if (version_compare(phpversion(), '8.0.0') < 0) {
+        if (PHP_VERSION_ID < 80000) {
             $this->markTestSkipped('Native attributes are not supported in PHP versions prior to 8.0');
         }
 

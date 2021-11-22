@@ -1,6 +1,6 @@
 <?php
 
-if (version_compare(PHP_VERSION, '8.1.0', '>=')) {
+if (PHP_VERSION_ID < 80100) {
 
     class PhakeTest_SerializableClass implements \Serializable
     {
