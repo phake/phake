@@ -82,7 +82,7 @@ class HamcrestMatcherAdapter extends SingleArgumentMatcher
                 ->appendText(' but ');
 
             $this->matcher->describeMismatch($argument, $description);
-            throw new \Phake\Exception\MethodMatcherException($description);
+            throw new \Phake\Exception\MethodMatcherException((string) $description);
         }
     }
 
