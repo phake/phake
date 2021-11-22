@@ -385,7 +385,7 @@ class {$newClassName} {$extends}
         }
 
         $returnHint = '';
-	$attributes = '';
+        $attributes = '';
         $nullReturn = 'null';
         $resultReturn = '$__PHAKE_result';
         if ($method->hasReturnType())
@@ -400,10 +400,10 @@ class {$newClassName} {$extends}
                 $resultReturn = '';
             }
         }
-	elseif (PHP_VERSION_ID >= 80100 && PHP_VERSION_ID < 90000 && $method->isInternal())
-	{
-	    $attributes = '#[\ReturnTypeWillChange]';
-	}
+        elseif (PHP_VERSION_ID >= 80100 && PHP_VERSION_ID < 90000 && $method->isInternal())
+        {
+            $attributes = '#[\ReturnTypeWillChange]';
+        }
 
         $docComment = $method->getDocComment() ?: '';
         $methodDef = "
