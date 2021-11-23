@@ -352,7 +352,7 @@ class {$newClassName} {$extends}
 
 		if (is_array(\$this->__PHAKE_constructorArgs))
 		{
-			call_user_func_array(array(\$this, 'parent::__construct'), \$this->__PHAKE_constructorArgs);
+			call_user_func_array([parent::class, '__construct'], \$this->__PHAKE_constructorArgs);
 			\$this->__PHAKE_constructorArgs = null;
 		}
 		" : "";
