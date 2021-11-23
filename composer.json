@@ -2,7 +2,7 @@
     "name": "phake/phake",
     "type": "library",
     "description": "The Phake mock testing library",
-    "keywords": ["testing", "mock"],
+    "keywords": ["phake", "testing", "mock", "stub", "spy", "test-doubles"],
     "homepage": "https://github.com/phake/phake",
     "license": "BSD-3-Clause",
     "authors": [
@@ -37,7 +37,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "4.1.0-dev"
+            "dev-master": "4.2-dev"
         }
     },
     "minimum-stability": "dev",
