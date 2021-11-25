@@ -113,7 +113,9 @@ class Phake
             $className,
             self::getMockClassGenerator(),
             new \Phake\CallRecorder\Recorder(),
-            $answer
+            $answer,
+            new \Phake\Stubber\Answers\NoAnswer(),
+            true
         );
     }
 
@@ -129,12 +131,15 @@ class Phake
     public static function partialMock($className, ...$args)
     {
         $answer = new \Phake\Stubber\Answers\ParentDelegate();
+        $staticAnswer = new \Phake\Stubber\Answers\ParentDelegate();
 
         return self::getPhake()->mock(
             $className,
             self::getMockClassGenerator(),
             new \Phake\CallRecorder\Recorder(),
             $answer,
+            $staticAnswer,
+            false,
             $args
         );
     }

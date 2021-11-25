@@ -84,6 +84,8 @@ class Facade
         ClassGenerator\MockClass $mockGenerator,
         CallRecorder\Recorder $callRecorder,
         Stubber\IAnswer $defaultAnswer,
+        Stubber\IAnswer $defaultStaticAnswer,
+        bool $cache,
         array $constructorArgs = null
     ) {
         $mockedClassList = (array)$mockedClassList;
@@ -93,20 +95,37 @@ class Facade
             throw new \InvalidArgumentException("The class / interface [{$mockedClass}] does not exist. Check the spelling and make sure it is loadable.");
         }
 
-        if (!isset($this->cachedClasses[implode('__', $mockedClassList)])) {
-            $newClassName = $this->generateUniqueClassName($mockedClassList);
-            $mockGenerator->generate($newClassName, $mockedClassList, $this->infoRegistry);
-
-            $this->cachedClasses[implode('__', $mockedClassList)] = $newClassName;
+        if ($cache) {
+            $cacheKey = implode('__', $mockedClassList);
+            if (!isset($this->cachedClasses[$cacheKey])) {
+                $newClassName = $this->generateNewClass($mockedClassList, $mockGenerator, $defaultStaticAnswer);
+                $this->cachedClasses[$cacheKey] = $newClassName;
+                $className = $newClassName;
+            } else {
+                $className = $this->cachedClasses[$cacheKey];
+            }
+        } else {
+            $className = $this->generateNewClass($mockedClassList, $mockGenerator, $defaultStaticAnswer);
         }
 
         return $mockGenerator->instantiate(
-            $this->cachedClasses[implode('__', $mockedClassList)],
+            $className,
             $callRecorder,
             new Stubber\StubMapper(),
             $defaultAnswer,
             $constructorArgs
         );
+    }
+
+    private function generateNewClass(
+        $mockedClassList,
+        ClassGenerator\MockClass $mockGenerator,
+        Stubber\IAnswer $defaultStaticAnswer
+    ) {
+        $newClassName = $this->generateUniqueClassName($mockedClassList);
+        $mockGenerator->generate($newClassName, $mockedClassList, $this->infoRegistry, $defaultStaticAnswer);
+
+        return $newClassName;
     }
 
     public function resetStaticInfo()

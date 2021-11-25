@@ -1785,4 +1785,38 @@ class PhakeTest extends TestCase
         $this->assertEquals(42, $mock->foo());
         $this->assertNull($mock->foo());
     }
+
+    public function testCachingOfMockDoesntAffectPartialMock()
+    {
+        Phake::mock(\PhakeTest_ClassWithStaticMethodCalledWithStatic::class);
+        $partialMock = Phake::partialMock(\PhakeTest_ClassWithStaticMethodCalledWithStatic::class);
+
+        $this->assertSame("hello", $partialMock->callingStaticWithStaticAccessor());
+    }
+
+    public function testPartialMockStubsStaticMethodsWithCallParent()
+    {
+        $partialMock = Phake::partialMock(\PhakeTest_ClassWithStaticMethodCalledWithStatic::class);
+
+        $this->assertSame("hello", $partialMock->callingStaticWithStaticAccessor());
+    }
+
+    public function testPartialMockThenCallParentWorks()
+    {
+        $partialMock = Phake::partialMock(\PhakeTest_ClassWithStaticMethodCalledWithStatic::class);
+        Phake::whenStatic($partialMock)->staticMethod->thenCallParent();
+
+        $this->assertSame("hello", $partialMock->callingStaticWithStaticAccessor());
+    }
+
+    public function testPartialMocksDontShareStubs()
+    {
+        $partialMock1 = Phake::partialMock(\PhakeTest_ClassWithStaticMethodCalledWithStatic::class);
+        Phake::whenStatic($partialMock1)->staticMethod->thenCallParent();
+        $partialMock2 = Phake::partialMock(\PhakeTest_ClassWithStaticMethodCalledWithStatic::class);
+        Phake::whenStatic($partialMock2)->staticMethod->thenReturn("world");
+
+        $this->assertSame("hello", $partialMock1->callingStaticWithStaticAccessor());
+        $this->assertSame("world", $partialMock2->callingStaticWithStaticAccessor());
+    }
 }
