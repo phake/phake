@@ -582,7 +582,12 @@ class {$newClassName} {$extends}
 
         $variadic = '';
         if ($parameter->isDefaultValueAvailable()) {
-            $default = ' = ' . var_export($parameter->getDefaultValue(), true);
+            $defaultValue = $parameter->getDefaultValue();
+            if (!is_object($defaultValue)) {
+                $default = ' = ' . var_export($parameter->getDefaultValue(), true);
+            } elseif (preg_match('/= (.+?)\s*]$/', (string) $parameter, $matches)) {
+                $default = ' = ' . $matches[1];
+            }
         } elseif ($parameter->isVariadic()) {
             $variadic = '...';
         } elseif ($parameter->isOptional()) {

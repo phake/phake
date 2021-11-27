@@ -1020,4 +1020,12 @@ class MockClassTest extends TestCase
         }
         $this->assertInstanceOf('PhakeTest_NeverReturn', Phake::mock('PhakeTest_NeverReturn'));
     }
+
+    public function testStubbingClassWithNewInInitializers()
+    {
+        if (PHP_VERSION_ID < 80100) {
+            $this->markTestSkipped('new in initializer is not supported in PHP versions prior to 8.1');
+        }
+        $this->assertInstanceOf('PhakeTest_NewInInitializers', Phake::mock('PhakeTest_NewInInitializers'));
+    }
 }
