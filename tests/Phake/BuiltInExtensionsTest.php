@@ -54,6 +54,10 @@ class BuiltinExtensionsTest extends TestCase
         {
             $this->markTestSkipped("Cannot run test without memcached");
         }
+        elseif (PHP_VERSION_ID >= 80000 && 0 === (new \ReflectionMethod('Memcached', 'getDelayed'))->getParameters()[1]->getDefaultValue())
+        {
+            $this->markTestSkipped("Bugged version of Memcached, reflection is not consistent. Default is 0 but definition is bool");
+        }
 
         $mock = \Phake::mock('Memcached');
 
