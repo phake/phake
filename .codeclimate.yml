@@ -1,7 +1,0 @@
-languages:
-  PHP: true
-exclude_paths:
-- "docs/*"
-- "bin/*"
-- "tests/*"
-- "vendor/*"
