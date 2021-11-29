@@ -482,7 +482,8 @@ class {$newClassName} {$extends}
                 break;
             }
             else {
-                $copies .= "if ({$pos} < \$__PHAKE_numArgs) \$__PHAKE_args[] =& \${$parameter->getName()};\n\t\t";
+                $name = $parameter->getName() ?: 'param' . $parameter->getPosition();
+                $copies .= "if ({$pos} < \$__PHAKE_numArgs) \$__PHAKE_args[] =& \${$name};\n\t\t";
             }
         }
 
@@ -594,7 +595,9 @@ class {$newClassName} {$extends}
             $default = ' = null';
         }
 
-        return $type . ($parameter->isPassedByReference() ? '&' : '') . $variadic . '$' . $parameter->getName() . $default;
+        $name = $parameter->getName() ?: 'param' . $parameter->getPosition();
+
+        return $type . ($parameter->isPassedByReference() ? '&' : '') . $variadic . '$' . $name . $default;
     }
 
     /**
