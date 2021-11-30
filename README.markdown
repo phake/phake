@@ -23,18 +23,9 @@ Installation - Composer
 
 Phake can be installed using [Composer](https://github.com/composer/composer).
 
-1. Add Phake as a dependency.
-
-You'll usually want this as a development dependency, so the example shows it
-in the require-dev section.
-
-``` json
-"require-dev": {
-	"phake/phake": "4.*"
-}
 ```
-
-2. Run Composer: `php composer.phar install --dev` or `php composer.phar update phake/phake`
+composer require --dev phake/phake
+```
 
 Installation - Source
 ---------------------
