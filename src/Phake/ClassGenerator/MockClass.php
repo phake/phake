@@ -417,7 +417,7 @@ class {$newClassName} {$extends}
         if (method_exists($method, 'hasReturnType') && $method->hasReturnType())
         {
             $returnType = $method->getReturnType();
-            $returnTypeName = $returnType->getName();
+            $returnTypeName = Phake_Reflection_ReflectionUtils::getTypeName($returnType);
 
             if ($returnTypeName == 'self')
             {
@@ -547,7 +547,7 @@ class {$newClassName} {$extends}
                 $type = $parameter->getClass()->getName() . ' ';
             } elseif (method_exists($parameter, 'hasType') && $parameter->hasType())
             {
-                $type = $parameter->getType()->getName() . ' ';
+                $type = Phake_Reflection_ReflectionUtils::getTypeName($parameter->getType()) . ' ';
             }
 
             if (method_exists($parameter, 'hasType') && $parameter->hasType() && $parameter->allowsNull()) {
