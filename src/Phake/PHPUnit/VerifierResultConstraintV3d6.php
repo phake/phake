@@ -47,6 +47,7 @@ namespace Phake\PHPUnit;
 
 /**
  * A PHPUnit constraint that wraps a phake verifier to allow assertions on expected calls.
+ * @psalm-suppress UndefinedClass
  */
 class VerifierResultConstraintV3d6 extends \PHPUnit_Framework_Constraint
 {

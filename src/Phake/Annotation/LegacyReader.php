@@ -66,6 +66,9 @@ class LegacyReader implements IReader
         return $properties;
     }
 
+    /**
+     * @psalm-suppress DeprecatedMethod
+     */
     public function getMockType(ReflectionProperty $property): ?string
     {
         $mockedClass = null;
@@ -97,7 +100,7 @@ class LegacyReader implements IReader
     /**
      * Returns an associative array containing a property's annotations and their values.
      *
-     * @param string $property
+     * @param \ReflectionProperty $property
      *
      * @return array
      */
@@ -119,6 +122,11 @@ class LegacyReader implements IReader
         return class_exists('Doctrine\Common\Annotations\PhpParser');
     }
 
+    /**
+     * @param string $mockedClass
+     * @param string $testNamespace
+     * @return bool
+     */
     private function definedUnderTestNamespace($mockedClass, $testNamespace): bool
     {
         return class_exists($testNamespace . '\\' . $mockedClass);

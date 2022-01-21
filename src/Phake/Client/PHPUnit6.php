@@ -55,6 +55,9 @@ use PHPUnit\Framework\Assert;
  */
 class PHPUnit6 implements IClient
 {
+    /**
+     * {@inheritDoc}
+     */
     public function processVerifierResult(\Phake\CallRecorder\VerifierResult $result)
     {
         Assert::assertThat($result, $this->getConstraint());
@@ -62,11 +65,17 @@ class PHPUnit6 implements IClient
         return $result->getMatchedCalls();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function processObjectFreeze()
     {
         Assert::assertThat(true, Assert::isTrue());
     }
 
+    /**
+     * @return \Phake\PHPUnit\VerifierResultConstraintV6
+     */
     private function getConstraint()
     {
         return new \Phake\PHPUnit\VerifierResultConstraintV6();

@@ -55,8 +55,14 @@ namespace Phake\Annotation;
  */
 class MockInitializer
 {
+    /**
+     * @var IReader|null
+     */
     private static $defaultReader;
 
+    /**
+     * @var IReader
+     */
     private $reader;
 
     public static function getDefaultReader(): IReader
@@ -68,6 +74,9 @@ class MockInitializer
         return self::$defaultReader;
     }
 
+    /**
+     * @return void
+     */
     public static function setDefaultReader(IReader $reader)
     {
         self::$defaultReader = $reader;
@@ -78,6 +87,12 @@ class MockInitializer
         $this->reader = $reader ?: self::getDefaultReader();
     }
 
+    /**
+     * @psalm-suppress RedundantCondition
+     *
+     * @param object $object
+     * @return void
+     */
     public function initialize($object)
     {
         $class  = new \ReflectionClass($object);
@@ -91,8 +106,10 @@ class MockInitializer
                 }
             }
 
-            $property->setAccessible(true);
-            $property->setValue($object, \Phake::mock($mockedClass));
+            if ($mockedClass) {
+                $property->setAccessible(true);
+                $property->setValue($object, \Phake::mock($mockedClass));
+            }
         }
     }
 }

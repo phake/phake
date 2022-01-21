@@ -51,7 +51,7 @@ namespace Phake\CallRecorder;
 class CallExpectation
 {
     /**
-     * @var \Phake\IMock
+     * @var \Phake\IMock|class-string
      */
     private $object;
 
@@ -61,7 +61,7 @@ class CallExpectation
     private $method;
 
     /**
-     * @var \Phake\Matchers\IChainableArgumentMatcher
+     * @var \Phake\Matchers\IChainableArgumentMatcher|null
      */
     private $argumentMatcher;
 
@@ -71,9 +71,9 @@ class CallExpectation
     private $verifierMode;
 
     /**
-     * @param \Phake\IMock|mixed $object
+     * @param \Phake\IMock|class-string $object
      * @param string $method
-     * @param \Phake\Matchers\IChainableArgumentMatcher $argumentMatcher
+     * @param \Phake\Matchers\IChainableArgumentMatcher|null $argumentMatcher
      * @param IVerifierMode $verificationMode
      */
     public function __construct(
@@ -89,7 +89,7 @@ class CallExpectation
     }
 
     /**
-     * @return \Phake\IMock
+     * @return \Phake\IMock|class-string
      */
     public function getObject()
     {
@@ -105,7 +105,7 @@ class CallExpectation
     }
 
     /**
-     * @return \Phake\Matchers\IChainableArgumentMatcher
+     * @return \Phake\Matchers\IChainableArgumentMatcher|null
      */
     public function getArgumentMatcher()
     {

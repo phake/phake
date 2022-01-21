@@ -52,7 +52,7 @@ namespace Phake\Stubber;
 class SelfBindingAnswerBinder implements IAnswerBinder, IAnswerContainer
 {
     /**
-     * @var IAnswer
+     * @var IAnswer|null
      */
     private $answer;
 
@@ -61,7 +61,7 @@ class SelfBindingAnswerBinder implements IAnswerBinder, IAnswerContainer
      *
      * @param IAnswer $answer
      *
-     * @return $this|IAnswerContainer
+     * @return IAnswerContainer
      */
     public function bindAnswer(IAnswer $answer)
     {
@@ -72,7 +72,8 @@ class SelfBindingAnswerBinder implements IAnswerBinder, IAnswerContainer
 
     /**
      * Returns the answer bound to this object.
-     * @return IAnswer
+     *
+     * @return IAnswer|null
      */
     public function getAnswer()
     {

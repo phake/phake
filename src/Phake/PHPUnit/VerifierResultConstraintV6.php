@@ -52,7 +52,7 @@ use PHPUnit\Framework\Constraint\Constraint;
  */
 class VerifierResultConstraintV6 extends Constraint
 {
-    protected function matches($other)
+    protected function matches($other): bool
     {
         if (!$other instanceof \Phake\CallRecorder\VerifierResult) {
             throw new \InvalidArgumentException("You must pass an instance of \Phake\CallRecorder\VerifierResult");
@@ -60,12 +60,12 @@ class VerifierResultConstraintV6 extends Constraint
         return $other->getVerified();
     }
 
-    public function toString()
+    public function toString(): string
     {
         return 'is called';
     }
 
-    protected function failureDescription($other)
+    protected function failureDescription($other): string
     {
         if (!$other instanceof \Phake\CallRecorder\VerifierResult) {
             throw new \InvalidArgumentException("You must pass an instance of \Phake\CallRecorder\VerifierResult");

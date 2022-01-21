@@ -75,6 +75,9 @@ class EqualsMatcher extends SingleArgumentMatcher
 
     /**
      * Returns whether or not the passed argument matches the matcher.
+     *
+     * @param mixed &$argument
+     * @return void
      */
     protected  function matches(&$argument)
     {

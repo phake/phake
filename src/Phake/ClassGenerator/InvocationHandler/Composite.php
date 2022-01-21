@@ -63,8 +63,12 @@ class Composite implements IInvocationHandler
         $this->handlers = $handlers;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function invoke($mock, $method, array $arguments, array &$argumentReference)
     {
+        $result = null;
         foreach ($this->handlers as $handler) {
             $result = $handler->invoke($mock, $method, $arguments, $argumentReference);
         }

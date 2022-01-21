@@ -49,6 +49,9 @@ namespace Phake\ClassGenerator;
  */
 class FileLoader implements ILoader
 {
+    /**
+     * @var string
+     */
     private $dir;
 
     /**
@@ -60,6 +63,8 @@ class FileLoader implements ILoader
     }
 
     /**
+     * @psalm-suppress UnresolvableInclude
+     *
      * @param string $className
      * @param string $classDef
      *

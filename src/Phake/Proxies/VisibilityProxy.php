@@ -57,8 +57,14 @@ namespace Phake\Proxies;
  */
 class VisibilityProxy
 {
+    /**
+     * @var object
+     */
     private $proxied;
 
+    /**
+     * @param mixed $proxied
+     */
     public function __construct($proxied)
     {
         if (!is_object($proxied))
@@ -69,8 +75,8 @@ class VisibilityProxy
     }
 
     /**
-     * @param $method
-     * @param $arguments
+     * @param string $method
+     * @param array $arguments
      * @return mixed
      */
     public function __call($method, $arguments)

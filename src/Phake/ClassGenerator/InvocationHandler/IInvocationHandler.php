@@ -53,8 +53,8 @@ namespace Phake\ClassGenerator\InvocationHandler;
 interface IInvocationHandler
 {
     /**
-     * @param \Phake\IMock|string $mock
-     * @param $method
+     * @param \Phake\IMock|class-string $mock
+     * @param string $method
      * @param array $arguments
      * @param array $argumentReference
      * @return mixed

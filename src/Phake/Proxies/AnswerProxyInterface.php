@@ -63,7 +63,7 @@ interface AnswerProxyInterface
     /**
      * Binds a Lambda answer to the method
      *
-     * @param callback $value
+     * @param \callable $value
      *
      * @deprecated Use thenReturnCallback instead.
      * @throws \InvalidArgumentException
@@ -74,7 +74,7 @@ interface AnswerProxyInterface
     /**
      * Binds a callback answer to the method.
      *
-     * @param callback $value
+     * @param \callable $value
      *
      * @throws \InvalidArgumentException
      * @return \Phake\Stubber\IAnswerContainer
@@ -106,7 +106,13 @@ interface AnswerProxyInterface
      */
     public function captureReturnTo(&$captor);
 
+    /**
+     * @return \Phake\Stubber\IAnswerContainer
+     */
     public function thenDoNothing();
 
+    /**
+     * @return \Phake\Stubber\IAnswerContainer
+     */
     public function thenReturnSelf();
 }

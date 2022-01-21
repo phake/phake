@@ -71,6 +71,7 @@ class HamcrestMatcherAdapter extends SingleArgumentMatcher
      *
      * @param mixed $argument
      * @throws \Phake\Exception\MethodMatcherException
+     * @retrun void
      */
     protected  function matches(&$argument)
     {

@@ -47,6 +47,8 @@ namespace Phake\Matchers;
 /**
  * An adapter class allowing PHPUnit constraints to be treated as though they were Phake argument
  * matchers.
+ *
+ * @psalm-suppress UndefinedDocblockClass
  */
 class PHPUnitConstraintAdapter extends SingleArgumentMatcher
 {
@@ -56,6 +58,8 @@ class PHPUnitConstraintAdapter extends SingleArgumentMatcher
     private $constraint;
 
     /**
+     * @psalm-suppress UndefinedClass
+     *
      * @param PHPUnit_Framework_Constraint $constraint
      */
     public function __construct(PHPUnit_Framework_Constraint $constraint)
@@ -68,8 +72,12 @@ class PHPUnitConstraintAdapter extends SingleArgumentMatcher
      *
      * Forwards the call to PHPUnit's evaluate() method.
      *
+     * @psalm-suppress UndefinedClass
+     * @psalm-suppress InvalidArgument
+     *
      * @param mixed $argument
      * @throws \Phake\Exception\MethodMatcherException
+     * @return void
      */
     protected  function matches(&$argument)
     {

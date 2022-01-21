@@ -50,6 +50,9 @@ namespace Phake\ClassGenerator;
  */
 class DoctrineInstantiator implements IInstantiator
 {
+    /**
+     * @var \Doctrine\Instantiator\Instantiator
+     */
     private $doctrineInstantiator;
 
     public function __construct()
@@ -58,7 +61,7 @@ class DoctrineInstantiator implements IInstantiator
     }
 
     /**
-     * @param string $className
+     * @param class-string $className
      *
      * @return object
      */

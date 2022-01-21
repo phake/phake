@@ -61,6 +61,7 @@ class StubMapper
      *
      * @param AnswerCollection $answer
      * @param \Phake\Matchers\IMethodMatcher  $matcher
+     * @return void
      */
     public function mapStubToMatcher(AnswerCollection $answer, \Phake\Matchers\IMethodMatcher $matcher)
     {
@@ -73,7 +74,7 @@ class StubMapper
      * @param string $method
      * @param array  $args
      *
-     * @return AnswerCollection or NULL if a matcher is not found
+     * @return AnswerCollection|null
      */
     public function getStubByCall($method, array &$args)
     {
@@ -93,6 +94,7 @@ class StubMapper
 
     /**
      * Removes all answer collections from the stub mapper.
+     * @return void
      */
     public function removeAllAnswers()
     {

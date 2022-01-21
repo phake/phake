@@ -101,13 +101,17 @@ class VerifierProxy
      * @param string $method
      * @param array  $arguments
      *
-     * @return \Phake\CallRecorder\VerifierResult
+     * @return array<int, \Phake\CallRecorder\CallInfo>
      */
     public function __call($method, array $arguments)
     {
         $arguments = $this->resolveNamedArguments($this->verifier->getObject(), $method, $arguments);
-        $expectation = new \Phake\CallRecorder\CallExpectation($this->verifier->getObject(
-        ), $method, $this->matcherFactory->createMatcherChain($arguments), $this->mode);
+        $expectation = new \Phake\CallRecorder\CallExpectation(
+            $this->verifier->getObject(),
+            $method,
+            $this->matcherFactory->createMatcherChain($arguments),
+            $this->mode
+        );
 
         $result = $this->verifier->verifyCall($expectation);
 
@@ -117,11 +121,14 @@ class VerifierProxy
     /**
      * A magic call to verify a call with any parameters.
      *
+     * @psalm-suppress DocblockTypeContradiction
+     * @psalm-suppress RedundantConditionGivenDocblockType
+     *
      * @param string $method
      *
      * @throws \InvalidArgumentException if $method is not a valid parameter/method name
      *
-     * @return \Phake\CallRecorder\VerifierResult
+     * @return array<int, \Phake\CallRecorder\CallInfo>
      */
     public function __get($method)
     {

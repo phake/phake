@@ -53,9 +53,13 @@ class SmartDefaultAnswer implements \Phake\Stubber\IAnswer
 {
     public function processAnswer($answer)
     {
-
     }
 
+    /**
+     * @psalm-suppress UndefinedMethod
+     * @psalm-suppress MissingClosureParamType
+     * @psalm-suppress MissingClosureReturnType
+     */
     public function getAnswerCallback($context, $method)
     {
         $class = new \ReflectionClass($context);
@@ -68,7 +72,7 @@ class SmartDefaultAnswer implements \Phake\Stubber\IAnswer
             $returnType = $method->getReturnType();
             if ($returnType instanceof \ReflectionIntersectionType) {
                 $defaultAnswer = \Phake::mock(array_map(function($t) { return $t->getName(); }, $returnType->getTypes()));
-            } else {
+            } elseif (null !== $returnType) {
                 $typeNames = $returnType instanceof \ReflectionNamedType ? [ $returnType->getName() ] : array_map(function($t) { return $t->getName(); }, $returnType->getTypes());
                 foreach ($typeNames as $typeName) {
                     switch ($typeName)

@@ -57,10 +57,13 @@ class MethodMatcher implements IMethodMatcher
     private $expectedMethod;
 
     /**
-     * @var IChainableArgumentMatcher
+     * @var IChainableArgumentMatcher|null
      */
     private $argumentMatcherChain;
 
+    /**
+     * @param string $expectedMethod
+     */
     public function __construct($expectedMethod, IChainableArgumentMatcher $argumentMatcherChain = null)
     {
         $this->expectedMethod   = $expectedMethod;
@@ -95,7 +98,7 @@ class MethodMatcher implements IMethodMatcher
      *
      * @param string $method
      * @param array $args
-     * @return bool
+     * @return void
      * @throws \Phake\Exception\MethodMatcherException
      */
     public function assertMatches($method, array &$args)
@@ -114,7 +117,7 @@ class MethodMatcher implements IMethodMatcher
      * Throws an exception with a description if the arguments do not match.
      *
      * @param array $args
-     * @return bool
+     * @return void
      * @throws \Phake\Exception\MethodMatcherException
      */
     private function doArgumentsMatch(array &$args)

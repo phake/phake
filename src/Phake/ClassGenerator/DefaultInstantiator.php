@@ -51,7 +51,7 @@ namespace Phake\ClassGenerator;
 class DefaultInstantiator implements IInstantiator
 {
     /**
-     * @param string $className
+     * @param class-string $className
      *
      * @return object
      */
@@ -64,15 +64,13 @@ class DefaultInstantiator implements IInstantiator
             return new $className();
         }
 
-        if (method_exists($reflClass, 'newInstanceWithoutConstructor')) {
-            try {
-                return $reflClass->newInstanceWithoutConstructor();
-            } catch (\ReflectionException $ignore) {
-                /* Failed to create object, the class might be final. */
-            }
+        try {
+            return $reflClass->newInstanceWithoutConstructor();
+        } catch (\ReflectionException $ignore) {
+            /* Failed to create object, the class might be final. */
         }
 
-        if (!is_subclass_of($className, 'Serializable')) {
+        if (!is_subclass_of($className, \Serializable::class)) {
             /* Try to unserialize, this skips the constructor */
             return unserialize(sprintf('O:%d:"%s":0:{}', strlen($className), $className));
         }

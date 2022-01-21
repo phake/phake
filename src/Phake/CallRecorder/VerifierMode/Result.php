@@ -47,21 +47,37 @@ namespace Phake\CallRecorder\VerifierMode;
 
 class Result
 {
+    /**
+     * @var bool
+     */
     private $verified;
 
+    /**
+     * @var string
+     */
     private $failureDescription;
 
+    /**
+     * @param bool $verified
+     * @param string $failureDescription
+     */
     function __construct($verified, $failureDescription)
     {
         $this->verified           = $verified;
         $this->failureDescription = $failureDescription;
     }
 
+    /**
+     * @return bool
+     */
     public function getVerified()
     {
         return $this->verified;
     }
 
+    /**
+     * @return string
+     */
     public function getFailureDescription()
     {
         return $this->failureDescription;

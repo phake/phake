@@ -51,7 +51,10 @@ namespace Phake\ClassGenerator;
  */
 class MockClass
 {
-    private static $unsafeClasses = array('Memcached');
+    /**
+     * @var array<class-string>
+     */
+    private static $unsafeClasses = array(\Memcached::class);
 
     /**
      * @var ILoader
@@ -76,11 +79,13 @@ class MockClass
     /**
      * Generates a new class with the given class name
      *
-     * @param string $newClassName - The name of the new class
-     * @param string $mockedClassName - The name of the class being mocked
+     * @psalm-suppress InvalidPropertyFetch
+     *
+     * @param class-string $newClassName - The name of the new class
+     * @param class-string|array<class-string> $mockedClassName - The name of the class being mocked
      * @param \Phake\Mock\InfoRegistry $infoRegistry
 
-     * @return NULL
+     * @return void
      */
     public function generate($newClassName, $mockedClassName, \Phake\Mock\InfoRegistry $infoRegistry)
     {
@@ -90,6 +95,7 @@ class MockClass
         $parent = null;
         $constructor = '';
 
+        /** @var array<class-string> $mockedClassNames */
         $mockedClassNames = (array)$mockedClassName;
         $mockedClasses = array();
 
@@ -109,11 +115,11 @@ class MockClass
                 }
                 $parent = $mockedClass;
             } else {
-                if ($mockedClass->implementsInterface('Traversable') &&
-                    !$mockedClass->implementsInterface('Iterator') &&
-                    !$mockedClass->implementsInterface('IteratorAggregate')
+                if ($mockedClass->implementsInterface(\Traversable::class) &&
+                    !$mockedClass->implementsInterface(\Iterator::class) &&
+                    !$mockedClass->implementsInterface(\IteratorAggregate::class)
                 ) {
-                    $interfaces[] = new \ReflectionClass('Iterator');
+                    $interfaces[] = new \ReflectionClass(\Iterator::class);
                     if ($mockedClass->getName() != 'Traversable') {
                         $interfaces[] = $mockedClass;
                     }
@@ -150,6 +156,8 @@ class MockClass
             $mockedClass = $parent;
         }
 
+        /** @var class-string $mockedClassName */
+
         $classDef = "
 class {$newClassName} {$extends}
 	implements \Phake\IMock {$implements}
@@ -180,6 +188,12 @@ class {$newClassName} {$extends}
         $infoRegistry->addInfo($newClassName::$__PHAKE_staticInfo);
     }
 
+    /**
+     * @param class-string $newClassName
+     * @param class-string $mockedClassName
+     * @param string $classDef
+     * @return void
+     */
     private function loadClass($newClassName, $mockedClassName, $classDef)
     {
         $isUnsafe = in_array($mockedClassName, self::$unsafeClasses);
@@ -199,7 +213,9 @@ class {$newClassName} {$extends}
     /**
      * Instantiates a new instance of the given mocked class, and configures Phake data structures on said object.
      *
-     * @param string                       $newClassName
+     * @psalm-suppress NoInterfaceProperties
+     *
+     * @param class-string                 $newClassName
      * @param \Phake\CallRecorder\Recorder $recorder
      * @param \Phake\Stubber\StubMapper    $mapper
      * @param \Phake\Stubber\IAnswer       $defaultAnswer
@@ -216,6 +232,8 @@ class {$newClassName} {$extends}
     ) {
 
         $mockObject = $this->instantiator->instantiate($newClassName);
+        assert($mockObject instanceof \Phake\IMock);
+
         $mockObject->__PHAKE_info = $this->createMockInfo($newClassName::__PHAKE_name, $recorder, $mapper, $defaultAnswer);
         $mockObject->__PHAKE_constructorArgs = $constructorArgs;
 
@@ -229,8 +247,9 @@ class {$newClassName} {$extends}
     /**
      * Generate mock implementations of all public and protected methods in the mocked class.
      *
-     * @param \ReflectionClass   $mockedClass
-     * @param \ReflectionClass[] $mockedInterfaces
+     * @param \ReflectionClass      $mockedClass
+     * @param \ReflectionClass[]    $mockedInterfaces
+     * @param array<string, string> $implementedMethods
      *
      * @return string
      */
@@ -257,6 +276,9 @@ class {$newClassName} {$extends}
     }
 
 
+    /**
+     * @return bool
+     */
     private function isConstructorDefinedInInterface(\ReflectionClass $mockedClass)
     {
         $constructor = $mockedClass->getConstructor();
@@ -298,6 +320,9 @@ class {$newClassName} {$extends}
         }
     }
 
+    /**
+     * @return bool
+     */
     private function isConstructorDefinedAndFinal(\ReflectionClass $mockedClass)
     {
         $constructor = $mockedClass->getConstructor();
@@ -308,6 +333,9 @@ class {$newClassName} {$extends}
         return false;
     }
 
+    /**
+     * @return string
+     */
     private function generateSafeConstructorOverride(array $mockedClasses)
     {
         $overrideConstructor = true;
@@ -361,6 +389,7 @@ class {$newClassName} {$extends}
     /**
      * Creates the implementation of a single method
      *
+     * @psalm-suppress PossiblyNullArgument
      * @param \ReflectionMethod $method
      * @param bool             $static
      *
@@ -556,6 +585,7 @@ class {$newClassName} {$extends}
     /**
      * Generates the code for an individual method parameter.
      *
+     * @psalm-suppress PossiblyNullArgument
      * @param \ReflectionParameter $parameter
      *
      * @return string
@@ -601,7 +631,7 @@ class {$newClassName} {$extends}
     }
 
     /**
-     * @param $newClassName
+     * @param class-string $className
      * @param \Phake\CallRecorder\Recorder $recorder
      * @param \Phake\Stubber\StubMapper $mapper
      * @param \Phake\Stubber\IAnswer $defaultAnswer

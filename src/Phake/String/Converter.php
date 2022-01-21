@@ -51,6 +51,10 @@ namespace Phake\String;
  */
 class Converter
 {
+    /**
+     * @param mixed $value
+     * @return string
+     */
     public function convertToString($value)
     {
         if (is_object($value)) {

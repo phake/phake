@@ -52,7 +52,7 @@ namespace Phake\Proxies;
 class CallStubberProxy
 {
     /**
-     * @var \Phake\Matchers\IChainableArgumentMatcher
+     * @var \Phake\Matchers\IChainableArgumentMatcher|null
      */
     private $argumentMatcher;
 
@@ -62,10 +62,10 @@ class CallStubberProxy
     private $static;
 
     /**
-     * @param \Phake\Matchers\IChainableArgumentMatcher $argumentMatcher
+     * @param \Phake\Matchers\IChainableArgumentMatcher|null $argumentMatcher
      * @param bool $static
      */
-    public function __construct(\Phake\Matchers\IChainableArgumentMatcher $argumentMatcher = null, $static)
+    public function __construct(?\Phake\Matchers\IChainableArgumentMatcher $argumentMatcher, $static)
     {
         $this->argumentMatcher = $argumentMatcher;
         $this->static = $static;

@@ -56,17 +56,17 @@ namespace Phake\CallRecorder;
 class Recorder
 {
     /**
-     * @var array
+     * @var array<Call>
      */
     private $calls = array();
 
     /**
-     * @var array
+     * @var array<Position>
      */
     private $positions = array();
 
     /**
-     * @var array
+     * @var array<Call>
      */
     private $unverifiedCalls = array();
 
@@ -79,6 +79,7 @@ class Recorder
      * Records that a given
      *
      * @param Call $call
+     * @return void
      */
     public function recordCall(Call $call)
     {
@@ -100,6 +101,7 @@ class Recorder
      * Removes all calls from the call recorder.
      *
      * Also removes all positions
+     * @return void
      */
     public function removeAllCalls()
     {
@@ -113,7 +115,7 @@ class Recorder
      *
      * @param Call $call
      *
-     * @return CallInfo
+     * @return CallInfo|null
      */
     public function getCallInfo(Call $call)
     {
@@ -128,6 +130,7 @@ class Recorder
      * Marks an individual call as being verified
      *
      * @param Call $call
+     * @return void
      */
     public function markCallVerified(Call $call)
     {

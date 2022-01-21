@@ -57,6 +57,7 @@ class Freezer
      *
      * @param Info $mockInfo
      * @param \Phake\Client\IClient $client
+     * @return void
      */
     public function freeze(Info $mockInfo, \Phake\Client\IClient $client)
     {

@@ -54,8 +54,14 @@ namespace Phake\Stubber\Answers;
  */
 class ParentDelegate implements \Phake\Stubber\IAnswer
 {
+    /**
+     * @var mixed
+     */
     private $capturedReturn;
 
+    /**
+     * @param mixed &$captor
+     */
     public function __construct(&$captor = null)
     {
         $this->capturedReturn =& $captor;
@@ -99,6 +105,10 @@ class ParentDelegate implements \Phake\Stubber\IAnswer
         return $fallback;
     }
 
+    /**
+     * @param mixed ...$args
+     * @return mixed
+     */
     public function getFallback(...$args)
     {
         return null;

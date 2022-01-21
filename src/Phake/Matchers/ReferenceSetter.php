@@ -52,7 +52,7 @@ class ReferenceSetter extends SingleArgumentMatcher
     private $value;
 
     /**
-     * @var IChainableArgumentMatcher
+     * @var IChainableArgumentMatcher|null
      */
     private $matcher;
 
@@ -71,6 +71,7 @@ class ReferenceSetter extends SingleArgumentMatcher
      *
      * @param mixed $argument
      * @throws \Phake\Exception\MethodMatcherException
+     * @return void
      */
     protected function matches(&$argument)
     {

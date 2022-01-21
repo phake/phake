@@ -51,7 +51,7 @@ interface IAnswerContainer
 {
     /**
      * Returns an answer from the container
-     * @return IAnswer
+     * @return IAnswer|null
      */
     public function getAnswer();
 }

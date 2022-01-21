@@ -80,7 +80,7 @@ class AnswerCollectionProxy implements \Phake\Stubber\IAnswerContainer, AnswerPr
     /**
      * Binds a Lambda answer to the method
      *
-     * @param callback $value
+     * @param \callable $value
      *
      * @throws \InvalidArgumentException
      * @return AnswerCollectionProxy
@@ -135,7 +135,7 @@ class AnswerCollectionProxy implements \Phake\Stubber\IAnswerContainer, AnswerPr
     /**
      * Binds a callback answer to the method.
      *
-     * @param callback $value
+     * @param \callable $value
      *
      * @throws \InvalidArgumentException
      * @return \Phake\Stubber\IAnswerContainer

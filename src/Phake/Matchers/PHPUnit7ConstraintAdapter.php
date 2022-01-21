@@ -72,8 +72,11 @@ class PHPUnit7ConstraintAdapter extends SingleArgumentMatcher
      *
      * Forwards the call to PHPUnit's evaluate() method.
      *
+     * @psalm-suppress InternalMethod
+     *
      * @param mixed $argument
      * @throws \Phake\Exception\MethodMatcherException
+     * @return void
      */
     protected function matches(&$argument)
     {
@@ -90,6 +93,9 @@ class PHPUnit7ConstraintAdapter extends SingleArgumentMatcher
         }
     }
 
+    /**
+     * @psalm-suppress InternalMethod
+     */
     public function __toString()
     {
         return $this->constraint->toString();
