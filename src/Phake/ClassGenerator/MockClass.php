@@ -82,8 +82,12 @@ class MockClass
 
      * @return NULL
      */
-    public function generate($newClassName, $mockedClassName, \Phake\Mock\InfoRegistry $infoRegistry)
-    {
+    public function generate(
+        $newClassName,
+        $mockedClassName,
+        \Phake\Mock\InfoRegistry $infoRegistry,
+        \Phake\Stubber\IAnswer $defaultStaticAnswer = null
+    ) {
         $extends    = '';
         $implements = '';
         $interfaces = array();
@@ -176,7 +180,8 @@ class {$newClassName} {$extends}
 ";
 
         $this->loadClass($newClassName, $mockedClassName, $classDef);
-        $newClassName::$__PHAKE_staticInfo = $this->createMockInfo($mockedClassName, new \Phake\CallRecorder\Recorder(), new \Phake\Stubber\StubMapper(), new \Phake\Stubber\Answers\NoAnswer());
+        $newClassName::$__PHAKE_staticInfo = $this->createMockInfo($mockedClassName, new \Phake\CallRecorder\Recorder(),
+            new \Phake\Stubber\StubMapper(), $defaultStaticAnswer !== null ? $defaultStaticAnswer : new \Phake\Stubber\Answers\NoAnswer());
         $infoRegistry->addInfo($newClassName::$__PHAKE_staticInfo);
     }
 

@@ -95,7 +95,9 @@ class FacadeTest extends TestCase
             $mockedClass,
             $mockGenerator,
             $this->getMockBuilder(Phake\CallRecorder\Recorder::class)->getMock(),
-            $this->getMockBuilder(Phake\Stubber\IAnswer::class)->getMock()
+            $this->getMockBuilder(Phake\Stubber\IAnswer::class)->getMock(),
+            $this->getMockBuilder(Phake\Stubber\IAnswer::class)->getMock(),
+            true
         );
     }
 
@@ -113,7 +115,9 @@ class FacadeTest extends TestCase
             $mockedClass,
             $mockGenerator,
             $this->getMockBuilder(Phake\CallRecorder\Recorder::class)->getMock(),
-            $this->getMockBuilder(Phake\Stubber\IAnswer::class)->getMock()
+            $this->getMockBuilder(Phake\Stubber\IAnswer::class)->getMock(),
+            $this->getMockBuilder(Phake\Stubber\IAnswer::class)->getMock(),
+            true
         );
     }
 
@@ -130,7 +134,9 @@ class FacadeTest extends TestCase
             $mockedClass,
             $this->getMockBuilder(Phake\ClassGenerator\MockClass::class)->getMock(),
             $this->getMockBuilder(Phake\CallRecorder\Recorder::class)->getMock(),
-            $this->getMockBuilder(Phake\Stubber\IAnswer::class)->getMock()
+            $this->getMockBuilder(Phake\Stubber\IAnswer::class)->getMock(),
+            $this->getMockBuilder(Phake\Stubber\IAnswer::class)->getMock(),
+            true
         );
     }
 
@@ -144,11 +150,12 @@ class FacadeTest extends TestCase
         $recorder       = $this->getMockBuilder(Phake\CallRecorder\Recorder::class)->getMock();
         $classGenerator = $this->getMockBuilder(Phake\ClassGenerator\MockClass::class)->getMock();
         $answer         = $this->getMockBuilder(Phake\Stubber\IAnswer::class)->getMock();
+        $staticAnswer   = $this->getMockBuilder(Phake\Stubber\IAnswer::class)->getMock();
 
 
         $this->setMockInstantiatorExpectations($classGenerator, $recorder, $answer);
 
-        $this->facade->mock($mockedClass, $classGenerator, $recorder, $answer);
+        $this->facade->mock($mockedClass, $classGenerator, $recorder, $answer, $staticAnswer, true);
     }
 
     /**
@@ -170,7 +177,9 @@ class FacadeTest extends TestCase
                 $mockedClass,
                 $mockGenerator,
                 $this->getMockBuilder(Phake\CallRecorder\Recorder::class)->getMock(),
-                $this->getMockBuilder(Phake\Stubber\IAnswer::class)->getMock()
+                $this->getMockBuilder(Phake\Stubber\IAnswer::class)->getMock(),
+                $this->getMockBuilder(Phake\Stubber\IAnswer::class)->getMock(),
+                false
             );
 
             spl_autoload_unregister(array(__CLASS__, 'autoload'));
