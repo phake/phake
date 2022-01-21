@@ -66,7 +66,7 @@ trait NamedArgumentsResolver
 
         if (!empty($namedArguments)) {
             try {
-                $parameters = (new \ReflectionObject($object))->getMethod($method)->getParameters();
+                $parameters = (new \ReflectionClass($object))->getMethod($method)->getParameters();
             } catch (\ReflectionException $e) {
                 $parameters = [];
             }

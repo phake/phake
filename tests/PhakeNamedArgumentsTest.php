@@ -68,7 +68,7 @@ class PhakeNamedArgumentsTest extends TestCase
         Phake::when($mock)->fooWithLotsOfParameters(parm3: 3, parm2: 2, parm1: 1)->thenReturn(42);
 
         $this->assertSame(42, $mock->fooWithLotsOfParameters(1, 2, 3));
-        
+
         Phake::verify($mock)->fooWithLotsOfParameters(parm3: 3, parm2: 2, parm1: 1);
     }
 
@@ -161,5 +161,13 @@ class PhakeNamedArgumentsTest extends TestCase
         $this->assertSame(42, $mock->variadicMethod('a', b: 'b'));
 
         Phake::verify($mock)->variadicMethod('a', b: 'b');
+    }
+
+    public function testNamedArgumentsOnStaticMethod()
+    {
+        $mock = Phake::mock('PhakeTest_ClassWithStaticMethod');
+        Phake::whenStatic($mock)->askWho(who: 'who ?')->thenReturn(10);
+
+        $this->assertSame(10, $mock::askWho('who ?'));
     }
 }
