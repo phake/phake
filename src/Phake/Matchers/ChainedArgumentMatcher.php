@@ -86,6 +86,8 @@ class ChainedArgumentMatcher extends SingleArgumentMatcher
      */
     protected function matches(&$argument)
     {
-        $this->adaptedMatcher->matches($argument);
+        if (!$this->adaptedMatcher->matches($argument)) {
+            throw new \Phake\Exception\MethodMatcherException(sprintf("Failed to match argument using '%s'", get_class($this->adaptedMatcher)));
+        }
     }
 }

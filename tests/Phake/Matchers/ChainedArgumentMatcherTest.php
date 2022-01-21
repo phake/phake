@@ -89,6 +89,17 @@ class ChainedArgumentMatcherTest extends TestCase
         $this->assertNull($result);
     }
 
+    public function testMatchesError()
+    {
+        $this->expectException(\Phake\Exception\MethodMatcherException::class);
+
+        $args = array('test arg1', 'test arg2');
+
+        Phake::when($this->adapted)->matches->thenReturn(false);
+
+        $this->matcher->doArgumentsMatch($args);
+    }
+
     public function testToString()
     {
         Phake::when($this->adapted)->__toString->thenReturn('test string');
