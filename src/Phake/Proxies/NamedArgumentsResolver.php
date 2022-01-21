@@ -52,6 +52,15 @@ namespace Phake\Proxies;
  */
 trait NamedArgumentsResolver
 {
+    /**
+     * @psalm-suppress TypeDoesNotContainType
+     *
+     * @param \Phake\IMock|class-string $object
+     * @param string $method
+     * @param array $arguments
+     *
+     * @return array
+     */
     private function resolveNamedArguments($object, $method, array $arguments)
     {
         $positionalArguments = [];

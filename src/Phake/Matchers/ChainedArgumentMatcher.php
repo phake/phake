@@ -72,6 +72,9 @@ class ChainedArgumentMatcher extends SingleArgumentMatcher
         return $this->adaptedMatcher->__toString();
     }
 
+    /**
+     * @return IArgumentMatcher
+     */
     public function getAdaptedMatcher()
     {
         return $this->adaptedMatcher;
@@ -81,8 +84,7 @@ class ChainedArgumentMatcher extends SingleArgumentMatcher
      * Executes the matcher on a given argument value. Returns TRUE on a match, FALSE otherwise.
      *
      * @param mixed $argument
-     *
-     * @return boolean
+     * @return void
      */
     protected function matches(&$argument)
     {

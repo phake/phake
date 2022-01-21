@@ -67,7 +67,7 @@ class AnyParameters extends  AbstractChainableArgumentMatcher
         return '<any parameters>';
     }
 
-    public function setNextMatcher(IChainableArgumentMatcher $nextMatcher)
+    public function setNextMatcher(IChainableArgumentMatcher $matcher)
     {
         throw new \InvalidArgumentException('Other matchers cannot be passed with any parameters. It will not work the '
             . 'way you think it works');

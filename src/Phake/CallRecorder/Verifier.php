@@ -58,13 +58,13 @@ class Verifier
     protected $recorder;
 
     /**
-     * @var \Phake\IMock
+     * @var \Phake\IMock|class-string
      */
     protected $obj;
 
     /**
      * @param Recorder $recorder
-     * @param <type> $obj
+     * @param \Phake\IMock|class-string $obj
      */
     public function __construct(Recorder $recorder, $obj)
     {
@@ -97,7 +97,9 @@ class Verifier
                 try
                 {
                     $matcher->assertMatches($call->getMethod(), $args);
-                    $matchedCalls[] = $this->recorder->getCallInfo($call);
+                    $callInfo = $this->recorder->getCallInfo($call);
+                    assert($callInfo instanceof CallInfo);
+                    $matchedCalls[] = $callInfo;
                     $this->recorder->markCallVerified($call);
                 }
                 catch (\Phake\Exception\MethodMatcherException $e)
@@ -136,6 +138,9 @@ class Verifier
         return new VerifierResult(true, $matchedCalls);
     }
 
+    /**
+     * @return VerifierResult
+     */
     public function verifyNoCalls()
     {
         $result = true;
@@ -180,6 +185,9 @@ class Verifier
         }
     }
 
+    /**
+     * @return \Phake\IMock|class-string
+     */
     public function getObject()
     {
         return $this->obj;

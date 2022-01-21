@@ -64,6 +64,10 @@ class ExceptionAnswer implements \Phake\Stubber\IAnswer
         $this->answer = $answer;
     }
 
+    /**
+     * @psalm-suppress MissingClosureParamType
+     * @psalm-suppress MissingClosureReturnType
+     */
     public function getAnswerCallback($context, $method)
     {
         $answer = $this->answer;

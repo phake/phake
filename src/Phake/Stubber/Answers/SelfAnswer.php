@@ -49,6 +49,10 @@ class SelfAnswer implements \Phake\Stubber\IAnswer
 
     /**
      * Returns the answer that should be used when a method stubbed to this answer is called.
+     *
+     * @psalm-suppress MissingClosureParamType
+     * @psalm-suppress MissingClosureReturnType
+     *
      * @param mixed $context class name or object instance
      * @param string $method
      * @return callable
@@ -68,7 +72,7 @@ class SelfAnswer implements \Phake\Stubber\IAnswer
     /**
      * Allows for post processing an answer if necessary
      * @param mixed $answer
-     * @return mixed
+     * @return void
      */
     public function processAnswer($answer)
     {

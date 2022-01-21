@@ -71,6 +71,7 @@ class AnswerCollection implements IAnswerContainer
      * Adds a new answer to the end of the collection.
      *
      * @param IAnswer $answer
+     * @return void
      */
     public function addAnswer(IAnswer $answer)
     {

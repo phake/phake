@@ -60,7 +60,7 @@ interface IAnswer
     /**
      * Allows for post processing an answer if necessary
      * @param mixed $answer
-     * @return mixed
+     * @return void
      */
     public function processAnswer($answer);
 }

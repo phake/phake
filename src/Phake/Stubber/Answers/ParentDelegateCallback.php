@@ -49,6 +49,9 @@ namespace Phake\Stubber\Answers;
  */
 class ParentDelegateCallback
 {
+    /**
+     * @var class-string|\Phake\IMock
+     */
     private $context;
 
     /**
@@ -56,12 +59,19 @@ class ParentDelegateCallback
      */
     private $parentMethod;
 
+    /**
+     * @param class-string|\Phake\IMock $context
+     * @param \ReflectionMethod $parentMethod
+     */
     public function __construct($context, \ReflectionMethod $parentMethod)
     {
         $this->context = $context;
         $this->parentMethod = $parentMethod;
     }
 
+    /**
+     * @psalm-suppress PossiblyInvalidArgument
+     */
     public function __invoke(array $arguments)
     {
         $this->parentMethod->setAccessible(true);

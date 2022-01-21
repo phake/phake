@@ -62,7 +62,7 @@ class ArgumentCaptor extends SingleArgumentMatcher
     private $allCapturedValues;
 
     /**
-     * @var IChainableArgumentMatcher
+     * @var IChainableArgumentMatcher|null
      */
     private $matcher;
 
@@ -81,6 +81,7 @@ class ArgumentCaptor extends SingleArgumentMatcher
      * $values will be set to an array
      *
      * @param array $values
+     * @return void
      */
     public function bindAllCapturedValues(&$values)
     {
@@ -95,6 +96,7 @@ class ArgumentCaptor extends SingleArgumentMatcher
      *
      * @param mixed $argument
      * @throws \Phake\Exception\MethodMatcherException
+     * @return void
      */
     protected function matches(&$argument)
     {

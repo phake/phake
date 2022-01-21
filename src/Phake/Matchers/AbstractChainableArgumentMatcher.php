@@ -49,16 +49,19 @@ namespace Phake\Matchers;
  */
 abstract class AbstractChainableArgumentMatcher implements IChainableArgumentMatcher
 {
+    /**
+     * @var IChainableArgumentMatcher|null
+     */
     private $nextMatcher;
 
-    public function setNextMatcher(IChainableArgumentMatcher $nextMatcher)
+    public function setNextMatcher(IChainableArgumentMatcher $matcher)
     {
-        $nextMatcher->assertPreviousMatcher($this);
-        $this->nextMatcher = $nextMatcher;
+        $matcher->assertPreviousMatcher($this);
+        $this->nextMatcher = $matcher;
     }
 
     /**
-     * @return IChainableArgumentMatcher
+     * @return IChainableArgumentMatcher|null
      */
     public function getNextMatcher()
     {
@@ -68,7 +71,7 @@ abstract class AbstractChainableArgumentMatcher implements IChainableArgumentMat
     /**
      * @param IChainableArgumentMatcher $matcher
      * @throws \InvalidArgumentException When this matcher cannot be chained to the previous matcher.
-     * @return null
+     * @return void
      */
     public function assertPreviousMatcher(IChainableArgumentMatcher $matcher)
     {

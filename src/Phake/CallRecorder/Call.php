@@ -52,7 +52,7 @@ namespace Phake\CallRecorder;
 class Call
 {
     /**
-     * @var object
+     * @var class-string|\Phake\IMock
      */
     private $object;
 
@@ -67,7 +67,7 @@ class Call
     private $arguments;
 
     /**
-     * @param string|\Phake\IMock $context - The object the method was called on
+     * @param class-string|\Phake\IMock $context - The object the method was called on
      * @param string              $method - The method that was made
      * @param array               $arguments
      */
@@ -79,7 +79,7 @@ class Call
     }
 
     /**
-     * @return object
+     * @return class-string|\Phake\IMock
      */
     public function getObject()
     {

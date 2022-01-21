@@ -50,6 +50,9 @@ namespace Phake\Matchers;
  */
 class Factory
 {
+    /**
+     * @var \SebastianBergmann\Comparator\Factory
+     */
     private $comparatorFactory;
 
     public function __construct()
@@ -64,6 +67,8 @@ class Factory
      * through. If it is an instance of PHPUnit_Framework_Constraint a PHPUnit adapter is returned.
      * If it is an instance of Hamcrest_Matcher a Hamcrest adapter is returned. For everything else
      * a EqualsMatcher is returned set to the passed in value.
+     *
+     * @psalm-suppress UndefinedClass
      *
      * @param mixed $argument
      *
@@ -103,7 +108,7 @@ class Factory
      *
      * @param array $arguments
      *
-     * @return IChainableArgumentMatcher or null if the arg list was empty
+     * @return IChainableArgumentMatcher|null
      */
     public function createMatcherChain(array $arguments)
     {

@@ -63,11 +63,16 @@ class CallRecorder implements IInvocationHandler
         $this->callRecorder = $callRecorder;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function invoke($mock, $method, array $arguments, array &$argumentReference)
     {
         $this->callRecorder->recordCall(
             new \Phake\CallRecorder\Call($mock, $method, $arguments)
         );
+
+        return null;
     }
 }
 

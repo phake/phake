@@ -48,6 +48,9 @@ namespace Phake\Annotation;
 
 interface IReader
 {
+    /**
+     * @return iterable<\ReflectionProperty>
+     */
     public function getPropertiesWithMockAnnotation(\ReflectionClass $class): iterable;
 
     public function getMockType(\ReflectionProperty $property): ?string;

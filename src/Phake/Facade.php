@@ -51,6 +51,9 @@ namespace Phake;
  */
 class Facade
 {
+    /**
+     * @var array<string, class-string>
+     */
     private $cachedClasses;
 
     /**
@@ -70,7 +73,7 @@ class Facade
     /**
      * Creates a new mock class than can be stubbed and verified.
      *
-     * @param string|array             $mockedClassList - The name(s) of the class to mock
+     * @param string|array<string>     $mockedClassList - The name(s) of the class to mock
      * @param ClassGenerator\MockClass $mockGenerator - The generator used to construct mock classes
      * @param CallRecorder\Recorder    $callRecorder
      * @param Stubber\IAnswer          $defaultAnswer
@@ -93,6 +96,7 @@ class Facade
             throw new \InvalidArgumentException("The class / interface [{$mockedClass}] does not exist. Check the spelling and make sure it is loadable.");
         }
 
+        /** @var array<class-string> $mockedClassList */
         if (!isset($this->cachedClasses[implode('__', $mockedClassList)])) {
             $newClassName = $this->generateUniqueClassName($mockedClassList);
             $mockGenerator->generate($newClassName, $mockedClassList, $this->infoRegistry);
@@ -109,6 +113,9 @@ class Facade
         );
     }
 
+    /**
+     * @return void
+     */
     public function resetStaticInfo()
     {
         $this->infoRegistry->resetAll();
@@ -119,9 +126,11 @@ class Facade
      *
      * The $base will be used as the prefix for the new class name.
      *
-     * @param string $base
+     * @psalm-suppress MoreSpecificReturnType
      *
-     * @return string
+     * @param array<class-string> $bases
+     *
+     * @return class-string
      */
     private function generateUniqueClassName(array $bases)
     {
@@ -141,6 +150,7 @@ class Facade
             $i++;
         }
 
+        /** @psalm-suppress LessSpecificReturnStatement */
         return $base_class_name . $i;
     }
 }

@@ -50,16 +50,25 @@ namespace Phake\CallRecorder;
  */
 class VerifierResult
 {
+    /**
+     * @var bool
+     */
     private $verified;
 
+    /**
+     * @var array<int, CallInfo>
+     */
     private $matchedCalls;
 
+    /**
+     * @var string
+     */
     private $failureDescription;
 
     /**
-     * @param boolean $verified
-     * @param array   $matchedCalls
-     * @param string  $failureDescription
+     * @param boolean               $verified
+     * @param array<int, CallInfo>  $matchedCalls
+     * @param string                $failureDescription
      */
     function __construct($verified, array $matchedCalls, $failureDescription = '')
     {
@@ -77,7 +86,7 @@ class VerifierResult
     }
 
     /**
-     * @return array
+     * @return array<int, CallInfo>
      */
     public function getMatchedCalls()
     {

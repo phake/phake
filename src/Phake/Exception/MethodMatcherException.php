@@ -50,11 +50,14 @@ namespace Phake\Exception;
  */
 class MethodMatcherException extends \Exception
 {
+    /**
+     * @var int
+     */
     private $argument;
 
     /**
      * @param string $message
-     * @param Exception $previous
+     * @param \Exception $previous
      */
     public function __construct($message = "", \Exception $previous = null)
     {
@@ -64,6 +67,7 @@ class MethodMatcherException extends \Exception
 
     /**
      * Updates the argument position (used in the argument chain)
+     * @return void
      */
     public function incrementArgumentPosition()
     {

@@ -51,7 +51,7 @@ namespace Phake\ClassGenerator;
 interface IInstantiator
 {
     /**
-     * @param string $className
+     * @param class-string $className
      *
      * @return object
      */

@@ -76,7 +76,7 @@ class AnswerBinderProxy implements AnswerProxyInterface
     /**
      * Binds a Lambda answer to the method
      *
-     * @param callback $value
+     * @param \callable $value
      *
      * @deprecated Use thenReturnCallback instead.
      * @throws \InvalidArgumentException
@@ -91,7 +91,7 @@ class AnswerBinderProxy implements AnswerProxyInterface
     /**
      * Binds a callback answer to the method.
      *
-     * @param callback $value
+     * @param \callable $value
      *
      * @throws \InvalidArgumentException
      * @return \Phake\Stubber\IAnswerContainer

@@ -48,13 +48,23 @@ namespace Phake\Mock;
  * Stores all Info instances for static classes.
  */
 class InfoRegistry {
+
+    /**
+     * @var array<Info>
+     */
     private $registry = array();
 
+    /**
+     * @return void
+     */
     public function addInfo(Info $info)
     {
         $this->registry[] = $info;
     }
 
+    /**
+     * @return void
+     */
     public function resetAll()
     {
         /* @var $info Info */
@@ -63,4 +73,4 @@ class InfoRegistry {
             $info->resetInfo();
         }
     }
-} 
+}

@@ -50,6 +50,9 @@ namespace Phake\Client;
  */
 class DefaultClient implements IClient
 {
+    /**
+     * {@inheritDoc}
+     */
     public function processVerifierResult(\Phake\CallRecorder\VerifierResult $result)
     {
         if ($result->getVerified()) {
@@ -59,6 +62,9 @@ class DefaultClient implements IClient
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function processObjectFreeze()
     {
     }

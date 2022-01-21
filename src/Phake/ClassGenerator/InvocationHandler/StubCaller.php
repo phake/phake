@@ -70,6 +70,9 @@ class StubCaller implements IInvocationHandler
         $this->defaultAnswer = $defaultAnswer;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function invoke($mock, $method, array $arguments, array &$argumentReference)
     {
         $stub = null;

@@ -54,7 +54,7 @@ class StubberProxy
     use NamedArgumentsResolver;
 
     /**
-     * @var \Phake\IMock
+     * @var \Phake\IMock|class-string
      */
     private $obj;
 
@@ -64,7 +64,7 @@ class StubberProxy
     private $matcherFactory;
 
     /**
-     * @param \Phake\IMock|string     $obj
+     * @param \Phake\IMock|class-string     $obj
      * @param \Phake\Matchers\Factory $matcherFactory
      */
     public function __construct($obj, \Phake\Matchers\Factory $matcherFactory)
@@ -91,6 +91,9 @@ class StubberProxy
 
     /**
      * A magic call to instantiate an Answer Binder Proxy that matches any parameters.
+     *
+     * @psalm-suppress RedundantConditionGivenDocblockType
+     * @psalm-suppress DocblockTypeContradiction
      *
      * @param string $method
      *

@@ -64,11 +64,19 @@ class StaticAnswer implements \Phake\Stubber\IAnswer
         $this->answer = $answer;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function processAnswer($answer)
     {
-
     }
 
+    /**
+     * @psalm-suppress MissingClosureParamType
+     * @psalm-suppress MissingClosureReturnType
+     *
+     * {@inheritdoc}
+     */
     public function getAnswerCallback($context, $method)
     {
         $answer = $this->answer;

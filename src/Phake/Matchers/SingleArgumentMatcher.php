@@ -54,16 +54,19 @@ abstract class SingleArgumentMatcher extends AbstractChainableArgumentMatcher {
      *
      * @param array $arguments
      * @throws \Phake\Exception\MethodMatcherException
+     * @return void
      */
     public function doArgumentsMatch(array &$arguments)
     {
         $argumentCopy = $arguments;
+        $nextArgument = null;
         foreach ($arguments as $key => $_) {
             if (is_int($key)) {
                 $nextArgument =& $arguments[$key];
                 array_shift($argumentCopy);
                 break;
             } else {
+                if (null === $nextArgument) $nextArgument = [];
                 $nextArgument[$key] =& $arguments[$key];
                 array_shift($argumentCopy);
             }
@@ -82,7 +85,7 @@ abstract class SingleArgumentMatcher extends AbstractChainableArgumentMatcher {
         {
             try
             {
-                $this->getNextMatcher()->doArgumentsMatch($argumentCopy);
+                $nextMatcher->doArgumentsMatch($argumentCopy);
             }
             catch (\Phake\Exception\MethodMatcherException $e)
             {
@@ -96,6 +99,7 @@ abstract class SingleArgumentMatcher extends AbstractChainableArgumentMatcher {
      * Asserts the matcher on a given argument value. Throws an exception on false
      *
      * @param mixed $argument
+     * @return void
      */
     abstract protected function matches(&$argument);
 }

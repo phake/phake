@@ -71,7 +71,7 @@ class AtMost implements \Phake\CallRecorder\IVerifierMode
      *
      * @param array $matchedCalls
      *
-     * @return boolean
+     * @return Result
      */
     public function verify(array $matchedCalls)
     {

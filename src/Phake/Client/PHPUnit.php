@@ -53,6 +53,11 @@ namespace Phake\Client;
  */
 class PHPUnit implements IClient
 {
+    /**
+     * @psalm-suppress UndefinedClass
+     *
+     * {@inheritDoc}
+     */
     public function processVerifierResult(\Phake\CallRecorder\VerifierResult $result)
     {
         PHPUnit_Framework_Assert::assertThat($result, $this->getConstraint());
@@ -60,11 +65,22 @@ class PHPUnit implements IClient
         return $result->getMatchedCalls();
     }
 
+    /**
+     * @psalm-suppress UndefinedClass
+     *
+     * {@inheritDoc}
+     */
     public function processObjectFreeze()
     {
         PHPUnit_Framework_Assert::assertThat(true, PHPUnit_Framework_Assert::isTrue());
     }
 
+    /**
+     * @psalm-suppress MissingDependency
+     * @psalm-suppress UndefinedClass
+     *
+     * @return \Phake\PHPUnit\VerifierResultConstraint|\Phake\PHPUnit\VerifierResultConstraintV3d6
+     */
     private function getConstraint()
     {
         if (version_compare('3.6.0', PHPUnit_Runner_Version::id()) == 1) {
