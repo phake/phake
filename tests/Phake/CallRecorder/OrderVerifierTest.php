@@ -70,11 +70,11 @@ class OrderVerifierTest extends TestCase
      */
     public function testInOrderValidation()
     {
-        $position1 = array(new Position(1));
-        $position2 = array(new Position(2));
-        $position3 = array(new Position(3));
+        $position1 = [new Position(1)];
+        $position2 = [new Position(2)];
+        $position3 = [new Position(3)];
 
-        $this->assertTrue($this->verifier->verifyCallsInOrder(array($position1, $position2, $position3)));
+        $this->assertTrue($this->verifier->verifyCallsInOrder([$position1, $position2, $position3]));
     }
 
     /**
@@ -82,11 +82,11 @@ class OrderVerifierTest extends TestCase
      */
     public function testOutOfOrderValidation()
     {
-        $position1 = array(new Position(1));
-        $position2 = array(new Position(3));
-        $position3 = array(new Position(2));
+        $position1 = [new Position(1)];
+        $position2 = [new Position(3)];
+        $position3 = [new Position(2)];
 
-        $this->assertFalse($this->verifier->verifyCallsInOrder(array($position1, $position2, $position3)));
+        $this->assertFalse($this->verifier->verifyCallsInOrder([$position1, $position2, $position3]));
     }
 
     /**
@@ -94,12 +94,10 @@ class OrderVerifierTest extends TestCase
      */
     public function testOutOfOrderValidationWithMultipleCalls()
     {
-        $position1 = array(new Position(1));
-        $position2 = array(new Position(3));
-        $position3 = array(new Position(2), new Position(4));
+        $position1 = [new Position(1)];
+        $position2 = [new Position(3)];
+        $position3 = [new Position(2), new Position(4)];
 
-        $this->assertTrue($this->verifier->verifyCallsInOrder(array($position1, $position2, $position3)));
+        $this->assertTrue($this->verifier->verifyCallsInOrder([$position1, $position2, $position3]));
     }
 }
-
-

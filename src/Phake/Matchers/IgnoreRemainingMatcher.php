@@ -1,6 +1,7 @@
 <?php
 
 namespace Phake\Matchers;
+
 /*
  * Phake - Mocking Framework
  *

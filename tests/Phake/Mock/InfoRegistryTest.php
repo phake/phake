@@ -1,6 +1,7 @@
 <?php
 
 namespace Phake\Mock;
+
 /**
  * Created by PhpStorm.
  * User: mlively

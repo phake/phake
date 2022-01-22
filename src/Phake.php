@@ -78,20 +78,20 @@ class Phake
      */
     private static $classGenerator;
 
-	/**
-	 * @var \Phake\Matchers\Factory|null
-	 */
-	private static $matchersFactory;
+    /**
+     * @var \Phake\Matchers\Factory|null
+     */
+    private static $matchersFactory;
 
     /**
      * Constants identifying supported clients
      */
-    const CLIENT_DEFAULT = 'DEFAULT';
-    const CLIENT_PHPUNIT = 'PHPUNIT';
-    const CLIENT_PHPUNIT6 = 'PHPUNIT6';
-    const CLIENT_PHPUNIT7 = 'PHPUNIT7';
-    const CLIENT_PHPUNIT8 = 'PHPUNIT8';
-    const CLIENT_PHPUNIT9 = 'PHPUNIT9';
+    public const CLIENT_DEFAULT = 'DEFAULT';
+    public const CLIENT_PHPUNIT = 'PHPUNIT';
+    public const CLIENT_PHPUNIT6 = 'PHPUNIT6';
+    public const CLIENT_PHPUNIT7 = 'PHPUNIT7';
+    public const CLIENT_PHPUNIT8 = 'PHPUNIT8';
+    public const CLIENT_PHPUNIT9 = 'PHPUNIT9';
 
     /**
      * Returns a new mock object based on the given class name.
@@ -103,7 +103,7 @@ class Phake
      */
     public static function mock($className, \Phake\Stubber\IAnswerContainer $defaultAnswer = null)
     {
-        if ($defaultAnswer === null) {
+        if (null === $defaultAnswer) {
             $answer = new \Phake\Stubber\Answers\SmartDefaultAnswer();
         } else {
             $answer = $defaultAnswer->getAnswer();
@@ -156,21 +156,20 @@ class Phake
         return self::partialMock($className, ...$args);
     }
 
-	/**
-	 * Create a \Phake\Matchers\Factory that we can re-use multiple times. Creating too many
-	 * instances of this object is expensive.
-	 *
-	 * @return \Phake\Matchers\Factory
-	 */
-	private static function getMatchersFactory ()
-	{
-		if (!self::$matchersFactory)
-		{
-			self::$matchersFactory = new \Phake\Matchers\Factory();
-		}
+    /**
+     * Create a \Phake\Matchers\Factory that we can re-use multiple times. Creating too many
+     * instances of this object is expensive.
+     *
+     * @return \Phake\Matchers\Factory
+     */
+    private static function getMatchersFactory()
+    {
+        if (!self::$matchersFactory) {
+            self::$matchersFactory = new \Phake\Matchers\Factory();
+        }
 
-		return self::$matchersFactory;
-	}
+        return self::$matchersFactory;
+    }
 
     /**
      * Creates a new verifier for the given mock object.
@@ -224,7 +223,7 @@ class Phake
      */
     public static function verifyCallMethodWith(...$arguments)
     {
-        $factory   = self::getMatchersFactory();
+        $factory = self::getMatchersFactory();
         return new \Phake\Proxies\CallVerifierProxy($factory->createMatcherChain(
             $arguments
         ), self::getClient(), false);
@@ -239,7 +238,7 @@ class Phake
      */
     public static function verifyStaticCallMethodWith(...$arguments)
     {
-        $factory   = self::getMatchersFactory();
+        $factory = self::getMatchersFactory();
         return new \Phake\Proxies\CallVerifierProxy($factory->createMatcherChain(
             $arguments
         ), self::getClient(), true);
@@ -255,7 +254,7 @@ class Phake
         $orderVerifier = new \Phake\CallRecorder\OrderVerifier();
 
         if (!$orderVerifier->verifyCallsInOrder(self::pullPositionsFromCallInfos($calls))) {
-            $result = new \Phake\CallRecorder\VerifierResult(false, array(), "Calls not made in order");
+            $result = new \Phake\CallRecorder\VerifierResult(false, [], 'Calls not made in order');
             self::getClient()->processVerifierResult($result);
         }
     }
@@ -322,9 +321,9 @@ class Phake
      */
     private static function pullPositionsFromCallInfos(array $calls)
     {
-        $transformed = array();
+        $transformed = [];
         foreach ($calls as $callList) {
-            $transformedList = array();
+            $transformedList = [];
             foreach ($callList as $call) {
                 $transformedList[] = $call->getPosition();
             }
@@ -362,11 +361,11 @@ class Phake
      *
      * @param mixed ...$arguments A vararg containing the expected arguments for this call
      *
-     * @return \\Phake\Proxies\CallStubberProxy
+     * @return \Phake\Proxies\CallStubberProxy
      */
     public static function whenCallMethodWith(...$arguments)
     {
-        $factory   = self::getMatchersFactory();
+        $factory = self::getMatchersFactory();
         return new \Phake\Proxies\CallStubberProxy($factory->createMatcherChain($arguments), false);
     }
 
@@ -379,7 +378,7 @@ class Phake
      */
     public static function whenStaticCallMethodWith(...$arguments)
     {
-        $factory   = self::getMatchersFactory();
+        $factory = self::getMatchersFactory();
         return new \Phake\Proxies\CallStubberProxy($factory->createMatcherChain($arguments), true);
     }
 
@@ -525,7 +524,7 @@ class Phake
      */
     public static function times($count)
     {
-        return new \Phake\CallRecorder\VerifierMode\Times((int)$count);
+        return new \Phake\CallRecorder\VerifierMode\Times((int) $count);
     }
 
     /**
@@ -548,7 +547,7 @@ class Phake
      */
     public static function atLeast($count)
     {
-        return new \Phake\CallRecorder\VerifierMode\AtLeast((int)$count);
+        return new \Phake\CallRecorder\VerifierMode\AtLeast((int) $count);
     }
 
     /**
@@ -562,7 +561,7 @@ class Phake
      */
     public static function atMost($count)
     {
-        return new \Phake\CallRecorder\VerifierMode\AtMost((int)$count);
+        return new \Phake\CallRecorder\VerifierMode\AtMost((int) $count);
     }
 
     /**
@@ -593,23 +592,21 @@ class Phake
     public static function getClient()
     {
         if (!isset(self::$client)) {
-            if (class_exists('PHPUnit\Framework\TestCase')) {
+            if (class_exists(\PHPUnit\Framework\TestCase::class)) {
                 if (9 <= \PHPUnit\Runner\Version::id()) {
                     return self::$client = new \Phake\Client\PHPUnit9();
                 } elseif (8 <= \PHPUnit\Runner\Version::id()) {
                     return self::$client = new \Phake\Client\PHPUnit8();
                 } elseif (7 <= \PHPUnit\Runner\Version::id()) {
                     return self::$client = new \Phake\Client\PHPUnit7();
-                } else {
-                    return self::$client = new \Phake\Client\PHPUnit6();
                 }
+                return self::$client = new \Phake\Client\PHPUnit6();
             } elseif (class_exists('PHPUnit_Framework_TestCase')) {
                 return self::$client = new \Phake\Client\PHPUnit();
             }
             return self::$client = new \Phake\Client\DefaultClient();
-        } else {
-            return self::$client;
         }
+        return self::$client;
     }
 
     /**
@@ -624,15 +621,15 @@ class Phake
     {
         if ($client instanceof \Phake\Client\IClient) {
             self::$client = $client;
-        } elseif ($client == self::CLIENT_PHPUNIT) {
+        } elseif (self::CLIENT_PHPUNIT == $client) {
             self::$client = new \Phake\Client\PHPUnit();
-        } elseif ($client == self::CLIENT_PHPUNIT6) {
+        } elseif (self::CLIENT_PHPUNIT6 == $client) {
             self::$client = new \Phake\Client\PHPUnit6();
-        } elseif ($client == self::CLIENT_PHPUNIT7) {
+        } elseif (self::CLIENT_PHPUNIT7 == $client) {
             self::$client = new \Phake\Client\PHPUnit7();
-        } elseif ($client == self::CLIENT_PHPUNIT8) {
+        } elseif (self::CLIENT_PHPUNIT8 == $client) {
             self::$client = new \Phake\Client\PHPUnit8();
-        } elseif ($client == self::CLIENT_PHPUNIT9) {
+        } elseif (self::CLIENT_PHPUNIT9 == $client) {
             self::$client = new \Phake\Client\PHPUnit9();
         } else {
             self::$client = new \Phake\Client\DefaultClient();
@@ -719,16 +716,13 @@ class Phake
      */
     public static function assertValidMock($mock)
     {
-        if ($mock instanceof \Phake\IMock)
-        {
+        if ($mock instanceof \Phake\IMock) {
             return;
         }
 
-        if (is_string($mock) && class_exists($mock, false))
-        {
+        if (is_string($mock) && class_exists($mock, false)) {
             $reflClass = new \ReflectionClass($mock);
-            if ($reflClass->implementsInterface(\Phake\IMock::class))
-            {
+            if ($reflClass->implementsInterface(\Phake\IMock::class)) {
                 return;
             }
         }
@@ -764,16 +758,14 @@ class Phake
     public static function getInfo($mock)
     {
         static::assertValidMock($mock);
-        if ($mock instanceof \Phake\IMock)
-        {
+        if ($mock instanceof \Phake\IMock) {
             assert(isset($mock->__PHAKE_info));
             return $mock->__PHAKE_info;
         }
-        else
-        {
-            assert(isset($mock::$__PHAKE_staticInfo));
-            return $mock::$__PHAKE_staticInfo;
-        }
+
+
+        assert(isset($mock::$__PHAKE_staticInfo));
+        return $mock::$__PHAKE_staticInfo;
     }
 
     /**

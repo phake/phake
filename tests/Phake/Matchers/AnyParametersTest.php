@@ -1,6 +1,7 @@
 <?php
 
 namespace Phake\Matchers;
+
 /*
  * Phake - Mocking Framework
  *
@@ -61,11 +62,11 @@ class AnyParametersTest extends TestCase
 
     public static function matchesDataProvider()
     {
-        return array(
-            array(array()),
-            array(array('foo')),
-            array(array('foo', 'bar')),
-        );
+        return [
+            [[]],
+            [['foo']],
+            [['foo', 'bar']],
+        ];
     }
 
     /**

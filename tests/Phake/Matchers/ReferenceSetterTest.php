@@ -71,7 +71,7 @@ class ReferenceSetterTest extends TestCase
      */
     public function testSettingParameter()
     {
-        $value = array('');
+        $value = [''];
         $this->assertNull($this->setter->doArgumentsMatch($value));
 
         $this->assertEquals(42, $value[0]);
@@ -85,13 +85,13 @@ class ReferenceSetterTest extends TestCase
         $matcher = Phake::mock(IChainableArgumentMatcher::class);
         $check = '';
         Phake::when($matcher)->doArgumentsMatch->thenReturnCallback(function ($arg) use (&$check) {
-                $check = $arg[0];
-                return true;
-            });
+            $check = $arg[0];
+            return true;
+        });
 
         $this->setter->when($matcher);
 
-        $value = array('blah');
+        $value = ['blah'];
         $this->assertNull($this->setter->doArgumentsMatch($value));
         $this->assertEquals('blah', $check);
         $this->assertEquals(42, $value[0]);
@@ -108,7 +108,7 @@ class ReferenceSetterTest extends TestCase
 
         $this->setter->when($matcher);
 
-        $value = array('blah');
+        $value = ['blah'];
         $this->expectException('Exception');
         $this->setter->doArgumentsMatch($value);
 
@@ -119,19 +119,16 @@ class ReferenceSetterTest extends TestCase
     {
         $matcher = Phake::mock(IChainableArgumentMatcher::class);
         $check = '';
-        Phake::when($matcher)->doArgumentsMatch->thenThrow(new Phake\Exception\MethodMatcherException("test"));
+        Phake::when($matcher)->doArgumentsMatch->thenThrow(new Phake\Exception\MethodMatcherException('test'));
 
         $this->setter->when($matcher);
 
-        $value = array('blah');
+        $value = ['blah'];
 
-        try
-        {
+        try {
             $this->setter->doArgumentsMatch($value);
-        }
-        catch (Phake\Exception\MethodMatcherException $e)
-        {
-            $this->assertStringStartsWith("Failed in Phake::setReference()->when()\n", $e->getMessage(), "The methodmatcherexception is not prepended with capture info");
+        } catch (Phake\Exception\MethodMatcherException $e) {
+            $this->assertStringStartsWith("Failed in Phake::setReference()->when()\n", $e->getMessage(), 'The methodmatcherexception is not prepended with capture info');
         }
     }
 
@@ -148,5 +145,3 @@ class ReferenceSetterTest extends TestCase
         $this->assertEquals('<reference parameter>', $this->setter->__toString());
     }
 }
-
-

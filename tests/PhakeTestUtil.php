@@ -63,11 +63,10 @@ class PhakeTestUtil
      */
     public static function getMockedInfo(Phake\IMock $mock)
     {
-        if (empty($mock->__PHAKE_info))
-        {
+        if (empty($mock->__PHAKE_info)) {
             $mock->__PHAKE_info = Phake::mock(Phake\Mock\Info::class);
         }
 
         return $mock->__PHAKE_info;
     }
-} 
+}

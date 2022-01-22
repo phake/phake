@@ -2,7 +2,7 @@
 
 class PhakeTest_ReturnByReferenceMethodClass
 {
-    private $something = array();
+    private $something = [];
 
     /**
      * Returns the something array by reference.

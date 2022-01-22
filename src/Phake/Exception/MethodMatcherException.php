@@ -59,7 +59,7 @@ class MethodMatcherException extends \Exception
      * @param string $message
      * @param \Exception $previous
      */
-    public function __construct($message = "", \Exception $previous = null)
+    public function __construct($message = '', \Exception $previous = null)
     {
         parent::__construct($message, 0, $previous);
         $this->argument = 0;
@@ -93,7 +93,7 @@ class MethodMatcherException extends \Exception
     {
         $previous = $this;
 
-        while($previous = $previous->getPrevious()) {
+        while ($previous = $previous->getPrevious()) {
             if ($previous instanceof \SebastianBergmann\Comparator\ComparisonFailure) {
                 return trim($this->getMessage() . "\n" . $previous->getDiff());
             }

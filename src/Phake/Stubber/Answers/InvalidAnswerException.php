@@ -1,6 +1,7 @@
 <?php
 
 namespace Phake\Stubber\Answers;
+
 /*
  * Phake - Mocking Framework
  *

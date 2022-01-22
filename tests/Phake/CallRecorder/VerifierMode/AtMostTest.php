@@ -65,7 +65,7 @@ class AtMostTest extends TestCase
     public function testVerifyMatches()
     {
         // Will throw an exception if it wasn't working
-        $matchedCalls = array('1item');
+        $matchedCalls = ['1item'];
         $this->assertTrue($this->verifier->verify($matchedCalls)->getVerified());
     }
 
@@ -74,7 +74,7 @@ class AtMostTest extends TestCase
      */
     public function testVerifyOnOver()
     {
-        $matchedCalls = array('1item', '2items');
+        $matchedCalls = ['1item', '2items'];
         $result       = $this->verifier->verify($matchedCalls);
         $this->assertFalse($result->getVerified());
         $this->assertEquals('actually called <2> times', $result->getFailureDescription());
@@ -85,12 +85,12 @@ class AtMostTest extends TestCase
      */
     public function testVerifyOnUnder()
     {
-        $matchedCalls = array();
+        $matchedCalls = [];
         $this->assertTrue($this->verifier->verify($matchedCalls)->getVerified());
     }
 
     public function testToString()
     {
-        $this->assertEquals("at most <1> times", $this->verifier->__toString());
+        $this->assertEquals('at most <1> times', $this->verifier->__toString());
     }
 }

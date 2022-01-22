@@ -75,7 +75,7 @@ class NativeReader implements IReader
 
     public function getMockType(ReflectionProperty $property): ?string
     {
-        foreach($property->getAttributes(self::ANNOTATION_NAME) as $attribute) {
+        foreach ($property->getAttributes(self::ANNOTATION_NAME) as $attribute) {
             $args = $attribute->getArguments();
 
             return $args[0] ?? $args['class'] ?? null;

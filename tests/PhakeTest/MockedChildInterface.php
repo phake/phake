@@ -44,7 +44,4 @@
 
 interface PhakeTest_MockedChildInterface extends PhakeTest_MockedInterface
 {
-
 }
-
-

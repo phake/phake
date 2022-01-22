@@ -74,7 +74,7 @@ class ConverterTest extends TestCase
 
     public function testArrayConversion()
     {
-        $this->assertEquals('<array>', $this->converter->convertToString(array()));
+        $this->assertEquals('<array>', $this->converter->convertToString([]));
     }
 
     public function testNullConversion()
@@ -116,5 +116,3 @@ class ConverterTest extends TestCase
         $this->assertEquals('<double:42.01>', $this->converter->convertToString(42.01));
     }
 }
-
-

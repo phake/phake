@@ -1,4 +1,5 @@
 <?php
+
 namespace PhakeTest;
 
 /**
@@ -8,5 +9,4 @@ namespace PhakeTest;
  */
 class AnotherNamespacedClass
 {
-
 }

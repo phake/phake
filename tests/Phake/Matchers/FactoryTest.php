@@ -46,8 +46,8 @@ namespace Phake\Matchers;
  */
 
 use Phake;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Constraint\Constraint;
+use PHPUnit\Framework\TestCase;
 
 class FactoryTest extends TestCase
 {
@@ -73,7 +73,7 @@ class FactoryTest extends TestCase
 
         $this->assertInstanceOf(EqualsMatcher::class, $matcher);
 
-        $value = array('foo');
+        $value = ['foo'];
         $this->assertNull($matcher->doArgumentsMatch($value));
     }
 
@@ -102,7 +102,7 @@ class FactoryTest extends TestCase
 
         $retMatcher = $this->factory->createMatcher($matcher);
 
-        $value = array('foo');
+        $value = ['foo'];
         $this->assertNull($retMatcher->doArgumentsMatch($value));
     }
 
@@ -119,7 +119,7 @@ class FactoryTest extends TestCase
 
         $retMatcher = $this->factory->createMatcher($matcher);
 
-        $value = array('foo');
+        $value = ['foo'];
         $this->assertNull($retMatcher->doArgumentsMatch($value));
     }
 
@@ -151,7 +151,7 @@ class FactoryTest extends TestCase
         $matcher2 = Phake::mock(IChainableArgumentMatcher::class);
         $matcher3 = Phake::mock(IChainableArgumentMatcher::class);
 
-        $matcherChain = $this->factory->createMatcherChain(array($matcher1, $matcher2, $matcher3));
+        $matcherChain = $this->factory->createMatcherChain([$matcher1, $matcher2, $matcher3]);
 
         $this->assertSame($matcher1, $matcherChain);
 
@@ -162,6 +162,6 @@ class FactoryTest extends TestCase
 
     public function testMatcherChainReturnsNullOnNoArguments()
     {
-        $this->assertNull($this->factory->createMatcherChain(array()));
+        $this->assertNull($this->factory->createMatcherChain([]));
     }
 }

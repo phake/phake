@@ -105,5 +105,3 @@ class StaticVisibilityProxyTest extends TestCase
         Phake::verifyStatic($mock)->staticMethod();
     }
 }
-
-

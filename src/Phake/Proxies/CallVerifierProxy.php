@@ -1,6 +1,7 @@
 <?php
 
 namespace Phake\Proxies;
+
 /*
  * Phake - Mocking Framework
  *
@@ -75,8 +76,8 @@ class CallVerifierProxy
      */
     public function __construct(?\Phake\Matchers\IChainableArgumentMatcher $argumentMatcher, \Phake\Client\IClient $client, $static)
     {
-        $this->argumentMatcher  = $argumentMatcher;
-        $this->client     = $client;
+        $this->argumentMatcher = $argumentMatcher;
+        $this->client = $client;
         $this->static = $static;
     }
 
@@ -91,7 +92,7 @@ class CallVerifierProxy
      */
     public function isCalledOn(\Phake\IMock $obj, \Phake\CallRecorder\IVerifierMode $verifierMode = null)
     {
-        if ($verifierMode === null) {
+        if (null === $verifierMode) {
             $verifierMode = new \Phake\CallRecorder\VerifierMode\Times(1);
         }
 

@@ -46,7 +46,7 @@ class PhakeTest_VoidType
 {
     public $voidCallCount = 0;
 
-    public function voidMethod() : void
+    public function voidMethod(): void
     {
         $this->voidCallCount++;
     }

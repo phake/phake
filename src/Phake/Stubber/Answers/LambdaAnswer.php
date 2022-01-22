@@ -81,5 +81,3 @@ class LambdaAnswer implements \Phake\Stubber\IAnswer
         return $this->answerLambda;
     }
 }
-
-

@@ -80,10 +80,10 @@ class VerifierProxyTest extends TestCase
         $this->verifier = Phake::mock(Phake\CallRecorder\Verifier::class);
         $this->mode = Phake::mock(Phake\CallRecorder\IVerifierMode::class);
         $this->client = Phake::mock(Phake\Client\IClient::class);
-        $this->matchedCalls = array(
+        $this->matchedCalls = [
             Phake::mock(Phake\CallRecorder\CallInfo::class),
             Phake::mock(Phake\CallRecorder\CallInfo::class),
-        );
+        ];
 
         $this->proxy = new VerifierProxy($this->verifier, new Phake\Matchers\Factory(), $this->mode, $this->client);
         $obj         = $this->getMockBuilder(Phake\IMock::class)->getMock();
@@ -98,7 +98,7 @@ class VerifierProxyTest extends TestCase
     public function testVerifierCallsAreForwardedMethod()
     {
         Phake::when($this->verifier)->verifyCall(Phake::anyParameters())->thenReturn(
-            new Phake\CallRecorder\VerifierResult(true, array(Phake::mock('Phake\CallRecorder\CallInfo')))
+            new Phake\CallRecorder\VerifierResult(true, [Phake::mock('Phake\CallRecorder\CallInfo')])
         );
         $this->proxy->foo();
 
@@ -126,7 +126,7 @@ class VerifierProxyTest extends TestCase
         $argumentMatcher = Phake::mock('Phake\Matchers\IChainableArgumentMatcher');
 
         Phake::when($this->verifier)->verifyCall(Phake::anyParameters())->thenReturn(
-            new Phake\CallRecorder\VerifierResult(true, array(Phake::mock('Phake\CallRecorder\CallInfo')))
+            new Phake\CallRecorder\VerifierResult(true, [Phake::mock('Phake\CallRecorder\CallInfo')])
         );
         $this->proxy->foo($argumentMatcher);
 
@@ -142,7 +142,7 @@ class VerifierProxyTest extends TestCase
     {
         $argumentMatcher = new Phake\Matchers\EqualsMatcher('test', \SebastianBergmann\Comparator\Factory::getInstance());
         Phake::when($this->verifier)->verifyCall(Phake::anyParameters())->thenReturn(
-            new Phake\CallRecorder\VerifierResult(true, array(Phake::mock('Phake\CallRecorder\CallInfo')))
+            new Phake\CallRecorder\VerifierResult(true, [Phake::mock('Phake\CallRecorder\CallInfo')])
         );
         $this->proxy->foo('test');
 
@@ -171,11 +171,9 @@ class VerifierProxyTest extends TestCase
 
     public function magicGetInvalidData()
     {
-        return array(
-            array('1foo', 'cannot start with an integer'),
-            array(1,      'must be a string'),
-        );
+        return [
+            ['1foo', 'cannot start with an integer'],
+            [1,      'must be a string'],
+        ];
     }
 }
-
-

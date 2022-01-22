@@ -66,7 +66,7 @@ class AtLeastTest extends TestCase
     public function testVerifyMatches()
     {
         // Will throw an exception if it wasn't working
-        $matchedCalls = array('1item');
+        $matchedCalls = ['1item'];
         $this->assertTrue($this->verifierModeAtLeast->verify($matchedCalls)->getVerified());
     }
 
@@ -75,7 +75,7 @@ class AtLeastTest extends TestCase
      */
     public function testVerifyOver()
     {
-        $matchedCalls = array('1item', '2items');
+        $matchedCalls = ['1item', '2items'];
         $this->assertTrue($this->verifierModeAtLeast->verify($matchedCalls)->getVerified());
     }
 
@@ -84,7 +84,7 @@ class AtLeastTest extends TestCase
      */
     public function testVerifyUnder()
     {
-        $matchedCalls = array();
+        $matchedCalls = [];
         $result       = $this->verifierModeAtLeast->verify($matchedCalls);
         $this->assertFalse($result->getVerified());
         $this->assertEquals('actually called <0> times', $result->getFailureDescription());
@@ -92,6 +92,6 @@ class AtLeastTest extends TestCase
 
     public function testToString()
     {
-        $this->assertEquals("at least <1> times", $this->verifierModeAtLeast->__toString());
+        $this->assertEquals('at least <1> times', $this->verifierModeAtLeast->__toString());
     }
 }

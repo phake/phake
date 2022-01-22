@@ -76,5 +76,3 @@ class FreezerTest extends TestCase
         Phake::verify($this->mockInfo)->freezeObject();
     }
 }
-
-

@@ -77,10 +77,10 @@ class CallRecorderTest extends TestCase
         $mock = $this->getMockBuilder(Phake\IMock::class)
                     ->getMock();
 
-        $ref = array();
-        $this->handler->invoke($mock, 'foo', array(), $ref);
+        $ref = [];
+        $this->handler->invoke($mock, 'foo', [], $ref);
 
-        Phake::verify($this->callRecorder)->recordCall(new Phake\CallRecorder\Call($mock, 'foo', array()));
+        Phake::verify($this->callRecorder)->recordCall(new Phake\CallRecorder\Call($mock, 'foo', []));
     }
 
     public function testStaticCallIsRecorded()
@@ -89,10 +89,9 @@ class CallRecorderTest extends TestCase
                     ->getMock();
         $mockClass = get_class($mock);
 
-        $ref = array();
-        $this->handler->invoke($mockClass, 'foo', array(), $ref);
+        $ref = [];
+        $this->handler->invoke($mockClass, 'foo', [], $ref);
 
-        Phake::verify($this->callRecorder)->recordCall(new Phake\CallRecorder\Call($mockClass, 'foo', array()));
+        Phake::verify($this->callRecorder)->recordCall(new Phake\CallRecorder\Call($mockClass, 'foo', []));
     }
 }
-

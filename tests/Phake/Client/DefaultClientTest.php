@@ -64,17 +64,16 @@ class DefaultClientTest extends TestCase
 
     public function testProcessVerifierResultReturnsCallsOnTrue()
     {
-        $result = new Phake\CallRecorder\VerifierResult(true, array('call1'));
+        $result = new Phake\CallRecorder\VerifierResult(true, ['call1']);
 
-        $this->assertEquals(array('call1'), $this->client->processVerifierResult($result));
+        $this->assertEquals(['call1'], $this->client->processVerifierResult($result));
     }
 
     public function testProcessVerifierThrowsExceptionOnFalse()
     {
-        $result = new Phake\CallRecorder\VerifierResult(false, array(), 'failure message');
+        $result = new Phake\CallRecorder\VerifierResult(false, [], 'failure message');
 
         $this->expectException('Phake\Exception\VerificationException', 'failure message');
         $this->client->processVerifierResult($result);
     }
 }
-

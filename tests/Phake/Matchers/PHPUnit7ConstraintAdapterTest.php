@@ -45,8 +45,8 @@ namespace Phake\Matchers;
  * @link       http://www.digitalsandwich.com/
  */
 
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Constraint\Constraint;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests the adapting of phpunit constraints into Phake matchers
@@ -85,7 +85,7 @@ class PHPUnit7ConstraintAdapterTest extends TestCase
             ->with($this->equalTo('foo'))
             ->will($this->returnValue(true));
 
-        $value = array('foo');
+        $value = ['foo'];
         $this->assertNull($this->adapter->doArgumentsMatch($value));
     }
 

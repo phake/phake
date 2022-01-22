@@ -90,15 +90,15 @@ class VerifierTest extends TestCase
         $this->recorder     = Phake::mock(Recorder::class);
         $this->verifierMode = Phake::mock(IVerifierMode::class);
 
-        $this->callArray = array(
-            new Call($this->obj, 'foo', array()),
-            new Call($this->obj, 'bar', array()),
-            new Call($this->obj, 'foo', array(
+        $this->callArray = [
+            new Call($this->obj, 'foo', []),
+            new Call($this->obj, 'bar', []),
+            new Call($this->obj, 'foo', [
                 'bar',
                 'foo'
-            )),
-            new Call($this->obj, 'foo', array()),
-        );
+            ]),
+            new Call($this->obj, 'foo', []),
+        ];
 
         Phake::when($this->recorder)->getAllCalls()->thenReturn($this->callArray);
 
@@ -123,7 +123,7 @@ class VerifierTest extends TestCase
             new VerifierMode\Result(true, '')
         );
         $this->assertEquals(
-            new VerifierResult(true, array($return)),
+            new VerifierResult(true, [$return]),
             $this->verifier->verifyCall($expectation)
         );
     }
@@ -192,7 +192,7 @@ class VerifierTest extends TestCase
         $this->verifier->verifyCall($expectation);
 
         $this->assertEquals(
-            new VerifierResult(true, array($return, $return)),
+            new VerifierResult(true, [$return, $return]),
             $this->verifier->verifyCall($expectation)
         );
     }
@@ -218,7 +218,7 @@ class VerifierTest extends TestCase
         );
 
         $this->assertEquals(
-            new VerifierResult(true, array($return)),
+            new VerifierResult(true, [$return]),
             $this->verifier->verifyCall($expectation),
             'bar call was not found'
         );
@@ -243,8 +243,8 @@ class VerifierTest extends TestCase
             $this->verifierMode
         );
 
-        $recorder->recordCall(new Call($obj1, 'foo', array()));
-        $recorder->recordCall(new Call($obj2, 'foo', array()));
+        $recorder->recordCall(new Call($obj1, 'foo', []));
+        $recorder->recordCall(new Call($obj2, 'foo', []));
 
         $verifier = new Verifier($recorder, $obj1);
 
@@ -274,7 +274,7 @@ class VerifierTest extends TestCase
         $this->verifier->verifyCall($expectation);
 
         Phake::verify($this->verifierMode)->verify(Phake::capture($verifyCallInfo));
-        $this->assertEquals(array($return, $return), $verifyCallInfo);
+        $this->assertEquals([$return, $return], $verifyCallInfo);
     }
 
     public function testVerifierReturnsFalseWhenAnExpectationIsNotMet()
@@ -303,7 +303,7 @@ Other Invocations:
 ===';
 
         $this->assertEquals(
-            new VerifierResult(false, array(), $expectedMessage),
+            new VerifierResult(false, [], $expectedMessage),
             $this->verifier->verifyCall($expectation)
         );
     }
@@ -329,11 +329,11 @@ Other Invocations:
         );
 
         $this->assertEquals(
-            new VerifierResult(false, array(), 'Expected Phake\IMock->foo() to be called exactly 1 times, actually called 0 times. In fact, there are no interactions with this mock.'),
+            new VerifierResult(false, [], 'Expected Phake\IMock->foo() to be called exactly 1 times, actually called 0 times. In fact, there are no interactions with this mock.'),
             $this->verifier->verifyCall($expectation)
         );
 
-        Phake::verify($this->verifierMode)->verify(array());
+        Phake::verify($this->verifierMode)->verify([]);
     }
 
     public function testVerifierModifiesFailureDescriptionWithOtherCalls()
@@ -375,19 +375,19 @@ Other Invocations:
                 . "  Phake\IMock->foo()\n"
                 . "  Argument #1 failed test\n"
                 . "  Failed asserting that null matches expected 'test'.\n"
-                . "===";
+                . '===';
 
         $this->assertEquals(
-            new VerifierResult(false, array(), $expected_msg),
+            new VerifierResult(false, [], $expected_msg),
             $this->verifier->verifyCall($expectation)
         );
     }
 
     public function testVerifyNoCalls()
     {
-        Phake::when($this->recorder)->getAllCalls()->thenReturn(array());
+        Phake::when($this->recorder)->getAllCalls()->thenReturn([]);
 
-        $this->assertEquals(new VerifierResult(true, array()), $this->verifier->verifyNoCalls());
+        $this->assertEquals(new VerifierResult(true, []), $this->verifier->verifyNoCalls());
     }
 
     public function testVerifyNoCallsFailsWithOtherCallsListed()
@@ -401,7 +401,7 @@ Other Invocations:
                 . "  Phake\IMock->foo()";
 
         $this->assertEquals(
-            new VerifierResult(false, array(), $expected_msg),
+            new VerifierResult(false, [], $expected_msg),
             $this->verifier->verifyNoCalls()
         );
     }
@@ -462,5 +462,3 @@ Other Invocations:
         $this->assertEmpty($verifierResult->getMatchedCalls());
     }
 }
-
-

@@ -1,6 +1,7 @@
 <?php
 
 namespace Phake\ClassGenerator;
+
 /*
  * Phake - Mocking Framework
  *
@@ -54,7 +55,7 @@ class MockClass
     /**
      * @var array<class-string>
      */
-    private static $unsafeClasses = array(\Memcached::class);
+    private static $unsafeClasses = [\Memcached::class];
 
     /**
      * @var ILoader
@@ -84,33 +85,31 @@ class MockClass
      * @param class-string $newClassName - The name of the new class
      * @param class-string|array<class-string> $mockedClassName - The name of the class being mocked
      * @param \Phake\Mock\InfoRegistry $infoRegistry
-
+     *
      * @return void
      */
     public function generate($newClassName, $mockedClassName, \Phake\Mock\InfoRegistry $infoRegistry)
     {
         $extends    = '';
         $implements = '';
-        $interfaces = array();
+        $interfaces = [];
         $parent = null;
         $constructor = '';
 
         /** @var array<class-string> $mockedClassNames */
-        $mockedClassNames = (array)$mockedClassName;
-        $mockedClasses = array();
+        $mockedClassNames = (array) $mockedClassName;
+        $mockedClasses = [];
 
-        foreach ($mockedClassNames as $mockedClassName)
-        {
+        foreach ($mockedClassNames as $mockedClassName) {
             $mockedClass = new \ReflectionClass($mockedClassName);
             $mockedClasses[] = $mockedClass;
 
-            if($mockedClass->isFinal()) {
-                throw new \InvalidArgumentException("Final classes cannot be mocked.");
+            if ($mockedClass->isFinal()) {
+                throw new \InvalidArgumentException('Final classes cannot be mocked.');
             }
 
             if (!$mockedClass->isInterface()) {
-                if (!empty($parent))
-                {
+                if (!empty($parent)) {
                     throw new \RuntimeException("You cannot use two classes in the same mock: {$parent->getName()}, {$mockedClass->getName()}. Use interfaces instead.");
                 }
                 $parent = $mockedClass;
@@ -120,39 +119,34 @@ class MockClass
                     !$mockedClass->implementsInterface(\IteratorAggregate::class)
                 ) {
                     $interfaces[] = new \ReflectionClass(\Iterator::class);
-                    if ($mockedClass->getName() != 'Traversable') {
+                    if (\Traversable::class != $mockedClass->getName()) {
                         $interfaces[] = $mockedClass;
                     }
-                }
-                else
-                {
+                } else {
                     $interfaces[] = $mockedClass;
                 }
             }
         }
 
-       $interfaces = array_unique($interfaces);
+        $interfaces = array_unique($interfaces);
 
-        if (!empty($parent))
-        {
+        if (!empty($parent)) {
             $extends = "extends {$parent->getName()}";
         }
 
-        $interfaceNames = array_map(function (\ReflectionClass $c) { return $c->getName(); }, $interfaces);
-        if(($key = array_search(\Phake\IMock::class, $interfaceNames)) !== false) {
+        $interfaceNames = array_map(function (\ReflectionClass $c) {
+            return $c->getName();
+        }, $interfaces);
+        if (($key = array_search(\Phake\IMock::class, $interfaceNames)) !== false) {
             unset($interfaceNames[$key]);
         }
-        if (!empty($interfaceNames))
-        {
+        if (!empty($interfaceNames)) {
             $implements = ', ' . implode(',', $interfaceNames);
         }
 
-        if (empty($parent))
-        {
+        if (empty($parent)) {
             $mockedClass = array_shift($interfaces);
-        }
-        else
-        {
+        } else {
             $mockedClass = $parent;
         }
 
@@ -199,13 +193,11 @@ class {$newClassName} {$extends}
         $isUnsafe = in_array($mockedClassName, self::$unsafeClasses);
 
         $oldErrorReporting = error_reporting();
-        if ($isUnsafe)
-        {
+        if ($isUnsafe) {
             error_reporting($oldErrorReporting & ~E_STRICT);
         }
         $this->loader->loadClassByString($newClassName, $classDef);
-        if ($isUnsafe)
-        {
+        if ($isUnsafe) {
             error_reporting($oldErrorReporting);
         }
     }
@@ -230,7 +222,6 @@ class {$newClassName} {$extends}
         \Phake\Stubber\IAnswer $defaultAnswer,
         array $constructorArgs = null
     ) {
-
         $mockObject = $this->instantiator->instantiate($newClassName);
         assert($mockObject instanceof \Phake\IMock);
 
@@ -238,7 +229,7 @@ class {$newClassName} {$extends}
         $mockObject->__PHAKE_constructorArgs = $constructorArgs;
 
         if (null !== $constructorArgs && method_exists($mockObject, '__construct')) {
-            call_user_func_array(array($mockObject, '__construct'), $constructorArgs);
+            call_user_func_array([$mockObject, '__construct'], $constructorArgs);
         }
 
         return $mockObject;
@@ -253,7 +244,7 @@ class {$newClassName} {$extends}
      *
      * @return string
      */
-    protected function generateMockedMethods(\ReflectionClass $mockedClass, array $mockedInterfaces = array(), &$implementedMethods = array())
+    protected function generateMockedMethods(\ReflectionClass $mockedClass, array $mockedInterfaces = [], &$implementedMethods = [])
     {
         $methodDefs = '';
         $filter     = \ReflectionMethod::IS_ABSTRACT | \ReflectionMethod::IS_PROTECTED | \ReflectionMethod::IS_PUBLIC | ~\ReflectionMethod::IS_FINAL;
@@ -269,7 +260,7 @@ class {$newClassName} {$extends}
         }
 
         foreach ($mockedInterfaces as $interface) {
-            $methodDefs .= $this->generateMockedMethods($interface, array(), $implementedMethods);
+            $methodDefs .= $this->generateMockedMethods($interface, [], $implementedMethods);
         }
 
         return $methodDefs;
@@ -283,41 +274,34 @@ class {$newClassName} {$extends}
     {
         $constructor = $mockedClass->getConstructor();
 
-        if (empty($constructor) && $mockedClass->hasMethod('__construct'))
-        {
+        if (empty($constructor) && $mockedClass->hasMethod('__construct')) {
             $constructor = $mockedClass->getMethod('__construct');
         }
 
-        if (empty($constructor))
-        {
+        if (empty($constructor)) {
             return false;
         }
 
         $reflectionClass = $constructor->getDeclaringClass();
 
-        if ($reflectionClass->isInterface())
-        {
+        if ($reflectionClass->isInterface()) {
             return true;
         }
 
         /* @var \ReflectionClass $interface */
-        foreach ($reflectionClass->getInterfaces() as $interface)
-        {
-            if ($interface->getConstructor() !== null || $interface->hasMethod('__construct'))
-            {
+        foreach ($reflectionClass->getInterfaces() as $interface) {
+            if (null !== $interface->getConstructor() || $interface->hasMethod('__construct')) {
                 return true;
             }
         }
 
         $parent = $reflectionClass->getParentClass();
-        if (!empty($parent))
-        {
+        if (!empty($parent)) {
             return $this->isConstructorDefinedInInterface($parent);
         }
-        else
-        {
-            return false;
-        }
+
+
+        return false;
     }
 
     /**
@@ -338,21 +322,19 @@ class {$newClassName} {$extends}
      */
     private function generateSafeConstructorOverride(array $mockedClasses)
     {
+        $realClass = null;
         $overrideConstructor = true;
 
-        foreach ($mockedClasses as $class)
-        {
+        foreach ($mockedClasses as $class) {
             $overrideConstructor = $overrideConstructor
                 && !$this->isConstructorDefinedAndFinal($class)
                 && !$this->isConstructorDefinedInInterface($class);
 
-            if (!$class->isInterface())
-            {
+            if (!$class->isInterface()) {
                 $realClass = $class;
             }
         }
-        if ($overrideConstructor && !empty($realClass))
-        {
+        if ($overrideConstructor && !empty($realClass)) {
             $constructorDef = "
 	public function __construct()
 	{
@@ -361,10 +343,9 @@ class {$newClassName} {$extends}
 ";
             return $constructorDef;
         }
-        else
-        {
-            return '';
-        }
+
+
+        return '';
     }
 
 
@@ -383,7 +364,7 @@ class {$newClassName} {$extends}
 			call_user_func_array([parent::class, '__construct'], \$this->__PHAKE_constructorArgs);
 			\$this->__PHAKE_constructorArgs = null;
 		}
-		" : "";
+		" : '';
     }
 
     /**
@@ -404,12 +385,9 @@ class {$newClassName} {$extends}
 
         $reference = $method->returnsReference() ? '&' : '';
 
-        if ($static)
-        {
+        if ($static) {
             $context = '__CLASS__';
-        }
-        else
-        {
+        } else {
             $context = '$this';
         }
 
@@ -418,24 +396,20 @@ class {$newClassName} {$extends}
         $nullReturn = 'null';
         $resultReturn = '$__PHAKE_result';
         $return = 'return ';
-        if ($method->hasReturnType())
-        {
+        if ($method->hasReturnType()) {
             $returnType = $method->getReturnType();
             $returnTypeName = $this->implementType($returnType, $method->getDeclaringClass());
             $returnHint = ': ' . $returnTypeName;
 
-            if (PHP_VERSION_ID >= 80100 && $returnTypeName == 'never') {
+            if (PHP_VERSION_ID >= 80100 && 'never' == $returnTypeName) {
                 $nullReturn = '';
                 $resultReturn = '';
                 $return = "throw new \Phake\Exception\NeverReturnMethodCalledException()";
-            } elseif ($returnTypeName == 'void')
-            {
+            } elseif ('void' == $returnTypeName) {
                 $nullReturn = '';
                 $resultReturn = '';
             }
-        }
-        elseif (PHP_VERSION_ID >= 80100 && PHP_VERSION_ID < 90000 && $method->isInternal())
-        {
+        } elseif (PHP_VERSION_ID >= 80100 && PHP_VERSION_ID < 90000 && $method->isInternal()) {
             $attributes = '#[\ReturnTypeWillChange]';
         }
 
@@ -483,7 +457,7 @@ class {$newClassName} {$extends}
      */
     protected function generateMethodParameters(\ReflectionMethod $method)
     {
-        $parameters = array();
+        $parameters = [];
         foreach ($method->getParameters() as $parameter) {
             $parameters[] = $this->implementParameter($parameter);
         }
@@ -510,22 +484,18 @@ class {$newClassName} {$extends}
                 $variadicParameter = $parameter->getName();
                 break;
             }
-            else {
-                $name = $parameter->getName() ?: 'param' . $parameter->getPosition();
-                $copies .= "if ({$pos} < \$__PHAKE_numArgs) \$__PHAKE_args[] =& \${$name};\n\t\t";
-            }
+
+            $name = $parameter->getName() ?: 'param' . $parameter->getPosition();
+            $copies .= "if ({$pos} < \$__PHAKE_numArgs) \$__PHAKE_args[] =& \${$name};\n\t\t";
         }
 
-        if ($variadicParameter)
-        {
+        if ($variadicParameter) {
             $copies .= "foreach (\${$variadicParameter} as \$__PHAKE_variadicKey => \$__PHAKE_variadicValue) {\n\t\t";
             $copies .= "\tif (is_int(\$__PHAKE_variadicKey)) \$__PHAKE_args[] =& \${$variadicParameter}[\$__PHAKE_variadicKey];\n\t\t";
             $copies .= "\telse \$__PHAKE_args[\$__PHAKE_variadicKey] =& \${$variadicParameter}[\$__PHAKE_variadicKey];\n\t\t";
             $copies .= "}\n\t\t";
-        }
-        else
-        {
-            $copies .= "for (\$__PHAKE_i = " . $parameterCount . "; \$__PHAKE_i < \$__PHAKE_numArgs; \$__PHAKE_i++) \$__PHAKE_args[] = func_get_arg(\$__PHAKE_i);\n\t\t";
+        } else {
+            $copies .= 'for ($__PHAKE_i = ' . $parameterCount . "; \$__PHAKE_i < \$__PHAKE_numArgs; \$__PHAKE_i++) \$__PHAKE_args[] = func_get_arg(\$__PHAKE_i);\n\t\t";
         }
 
         return $copies;
@@ -533,7 +503,7 @@ class {$newClassName} {$extends}
 
     /**
      * Generate the code for an individual type
-     * 
+     *
      * @param \ReflectionType $type
      * @param \ReflectionClass $selfClass
      *
@@ -546,12 +516,12 @@ class {$newClassName} {$extends}
 
         if ($type instanceof \ReflectionNamedType) {
             $result = $type->getName();
-            if ($result == 'self') {
+            if ('self' == $result) {
                 $result = $selfClass->getName();
-            } elseif ($result == 'parent') {
+            } elseif ('parent' == $result) {
                 $result = $selfClass->getParentClass()->getName();
             }
-            if ($result != 'mixed' && $type->allowsNull()) {
+            if ('mixed' != $result && $type->allowsNull()) {
                 $nullable = '?';
             }
         } elseif ($type instanceof \ReflectionUnionType) {
@@ -595,18 +565,13 @@ class {$newClassName} {$extends}
         $default  = '';
         $type     = '';
 
-        try
-        {
+        try {
             if ($parameter->hasType()) {
                 $type = $this->implementType($parameter->getType(), $parameter->getDeclaringClass()) . ' ';
             }
-        }
-
-        catch (\ReflectionException $e)
-        {
+        } catch (\ReflectionException $e) {
             //HVVM is throwing an exception when pulling class name when said class does not exist
-            if (!defined('HHVM_VERSION'))
-            {
+            if (!defined('HHVM_VERSION')) {
                 throw $e;
             }
         }
@@ -646,13 +611,13 @@ class {$newClassName} {$extends}
         $info = new \Phake\Mock\Info($className, $recorder, $mapper, $defaultAnswer);
 
         $info->setHandlerChain(
-            new InvocationHandler\Composite(array(
+            new InvocationHandler\Composite([
                 new InvocationHandler\FrozenObjectCheck($info),
                 new InvocationHandler\CallRecorder($info->getCallRecorder()),
                 new InvocationHandler\MagicCallRecorder($info->getCallRecorder()),
                 new InvocationHandler\StubCaller($info->getStubMapper(), $info->getDefaultAnswer(
                 )),
-            ))
+            ])
         );
 
         $info->getStubMapper()->mapStubToMatcher(

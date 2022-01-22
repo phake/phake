@@ -122,12 +122,11 @@ class CallExpectation
 
     public function __toString()
     {
-        $arguments = array();
+        $arguments = [];
 
         $argumentMatcher = $this->argumentMatcher;
 
-        while (!empty($argumentMatcher))
-        {
+        while (!empty($argumentMatcher)) {
             $arguments[] = $argumentMatcher->__toString();
             $argumentMatcher = $argumentMatcher->getNextMatcher();
         }

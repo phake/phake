@@ -1,6 +1,7 @@
 <?php
 
 namespace Phake\Matchers;
+
 /*
  * Phake - Mocking Framework
  *
@@ -77,10 +78,10 @@ class MethodMatcherTest extends TestCase
      */
     public function testMatchesForwardsParameters()
     {
-        $arguments = array('foo', 'bar');
+        $arguments = ['foo', 'bar'];
         $this->matcher->matches('foo', $arguments);
 
-        Phake::verify($this->rootArgumentMatcher)->doArgumentsMatch(array('foo', 'bar'));
+        Phake::verify($this->rootArgumentMatcher)->doArgumentsMatch(['foo', 'bar']);
     }
 
     /**
@@ -90,7 +91,7 @@ class MethodMatcherTest extends TestCase
     {
         Phake::when($this->rootArgumentMatcher)->doArgumentsMatch->thenReturn(true);
 
-        $arguments = array('foo', 'bar');
+        $arguments = ['foo', 'bar'];
         $this->assertTrue($this->matcher->matches('foo', $arguments));
     }
 
@@ -101,7 +102,7 @@ class MethodMatcherTest extends TestCase
     {
         Phake::when($this->rootArgumentMatcher)->doArgumentsMatch->thenReturn(true);
 
-        $arguments = array('foo', 'bar');
+        $arguments = ['foo', 'bar'];
         $this->assertFalse($this->matcher->matches('test', $arguments));
     }
 
@@ -110,9 +111,9 @@ class MethodMatcherTest extends TestCase
      */
     public function testNoMatcherOnBadArg1()
     {
-        Phake::when($this->rootArgumentMatcher)->doArgumentsMatch->thenThrow(new Phake\Exception\MethodMatcherException);
+        Phake::when($this->rootArgumentMatcher)->doArgumentsMatch->thenThrow(new Phake\Exception\MethodMatcherException());
 
-        $arguments = array('foo', 'bar');
+        $arguments = ['foo', 'bar'];
         $this->assertFalse($this->matcher->matches('foo', $arguments));
     }
 
@@ -120,11 +121,11 @@ class MethodMatcherTest extends TestCase
     {
         $matcher = new MethodMatcher('method', new AnyParameters());
 
-        $arguments = array(1, 2, 3);
+        $arguments = [1, 2, 3];
         $this->assertTrue($matcher->matches('method', $arguments));
-        $arguments = array(2, 3, 4);
+        $arguments = [2, 3, 4];
         $this->assertTrue($matcher->matches('method', $arguments));
-        $arguments = array(3, 4, 5);
+        $arguments = [3, 4, 5];
         $this->assertTrue($matcher->matches('method', $arguments));
     }
 
@@ -133,7 +134,7 @@ class MethodMatcherTest extends TestCase
         $matcher = new MethodMatcher('method', new ReferenceSetter(42));
 
         $value        = 'blah';
-        $arguments    = array();
+        $arguments    = [];
         $arguments[0] =& $value;
 
         $matcher->matches('method', $arguments);
@@ -145,7 +146,7 @@ class MethodMatcherTest extends TestCase
     {
         $matcher = new MethodMatcher('method', null);
 
-        $emptyArray = array();
+        $emptyArray = [];
         $this->assertTrue($matcher->matches('method', $emptyArray));
     }
 
@@ -153,9 +154,7 @@ class MethodMatcherTest extends TestCase
     {
         $matcher = new MethodMatcher('method', null);
 
-        $arguments = array('foo');
+        $arguments = ['foo'];
         $this->assertFalse($matcher->matches('method', $arguments));
     }
 }
-
-

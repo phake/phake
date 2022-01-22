@@ -50,7 +50,6 @@ use PHPUnit\Framework\TestCase;
 
 class TestUtility
 {
-
 }
 
 class Phake_Annotation_MockInitializerWithNamespaceTest extends TestCase

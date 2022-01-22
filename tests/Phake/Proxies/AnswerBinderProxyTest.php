@@ -100,7 +100,7 @@ class AnswerBinderProxyTest extends TestCase
      */
     public function testThenReturnCallback()
     {
-        $func = function($arg1) {
+        $func = function ($arg1) {
             return $arg1;
         };
 
@@ -173,7 +173,8 @@ class AnswerBinderProxyTest extends TestCase
     {
         $this->binder->expects($this->once())
             ->method('bindAnswer')
-            ->with($this->isInstanceOf(Phake\Stubber\Answers\NoAnswer::class)
+            ->with(
+                $this->isInstanceOf(Phake\Stubber\Answers\NoAnswer::class)
             )
             ->will($this->returnValue($this->binder));
 
@@ -184,12 +185,11 @@ class AnswerBinderProxyTest extends TestCase
     {
         $this->binder->expects($this->once())
             ->method('bindAnswer')
-            ->with($this->isInstanceOf(Phake\Stubber\Answers\SelfAnswer::class)
+            ->with(
+                $this->isInstanceOf(Phake\Stubber\Answers\SelfAnswer::class)
             )
             ->will($this->returnValue($this->binder));
 
         $this->assertSame($this->binder, $this->proxy->thenReturnSelf());
     }
 }
-
-

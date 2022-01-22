@@ -83,7 +83,7 @@ class AnswerCollectionProxyTest extends TestCase
         Phake::verify($this->container)->addAnswer(Phake::capture($answer));
 
         $this->assertInstanceOf('Phake\Stubber\Answers\StaticAnswer', $answer);
-		$this->phakeAssertAttributeEqualTo(42, 'answer', $answer);
+        $this->phakeAssertAttributeEqualTo(42, 'answer', $answer);
     }
 
     /**
@@ -93,7 +93,7 @@ class AnswerCollectionProxyTest extends TestCase
      */
     public function testThenGetReturnByLambda()
     {
-        $func = function($arg1) {
+        $func = function ($arg1) {
             return $arg1;
         };
 
@@ -102,7 +102,7 @@ class AnswerCollectionProxyTest extends TestCase
         Phake::verify($this->container)->addAnswer(Phake::capture($answer));
 
         $this->assertInstanceOf('Phake\Stubber\Answers\LambdaAnswer', $answer);
-		$this->phakeAssertAttributeEqualTo($func, 'answerLambda', $answer);
+        $this->phakeAssertAttributeEqualTo($func, 'answerLambda', $answer);
     }
 
     /**
@@ -148,20 +148,16 @@ class AnswerCollectionProxyTest extends TestCase
         Phake::verify($this->container)->addAnswer(Phake::capture($answer));
 
         $this->assertInstanceOf('Phake\Stubber\Answers\ExceptionAnswer', $answer);
-		$this->phakeAssertAttributeEqualTo($exception, 'answer', $answer);
+        $this->phakeAssertAttributeEqualTo($exception, 'answer', $answer);
     }
 
     private function phakeAssertAttributeEqualTo($expectedValue, string $propertyName, $object)
     {
-         $reflectionObject = new \ReflectionObject($object);
-         $reflectionProperty = $reflectionObject->getProperty($propertyName);
-         $reflectionProperty->setAccessible(true);
-         $value = $reflectionProperty->getValue($object);
+        $reflectionObject = new \ReflectionObject($object);
+        $reflectionProperty = $reflectionObject->getProperty($propertyName);
+        $reflectionProperty->setAccessible(true);
+        $value = $reflectionProperty->getValue($object);
 
-         $this->assertEquals($expectedValue, $value);
+        $this->assertEquals($expectedValue, $value);
     }
-
-	
-
 }
-

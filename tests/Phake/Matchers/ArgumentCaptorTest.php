@@ -76,7 +76,7 @@ class ArgumentCaptorTest extends TestCase
      */
     public function testArgumentCapturing()
     {
-        $value = array('blah');
+        $value = ['blah'];
         $this->captor->doArgumentsMatch($value);
 
         $this->assertEquals('blah', $this->refVariable);
@@ -92,10 +92,10 @@ class ArgumentCaptorTest extends TestCase
 
         $this->captor->when($matcher);
 
-        $value = array('blah');
+        $value = ['blah'];
         $this->captor->doArgumentsMatch($value);
 
-        Phake::verify($matcher)->doArgumentsMatch(array('blah'));
+        Phake::verify($matcher)->doArgumentsMatch(['blah']);
 
         $this->assertEquals('blah', $this->refVariable);
     }
@@ -110,14 +110,12 @@ class ArgumentCaptorTest extends TestCase
 
         $this->captor->when($matcher);
 
-        $value = array('blah');
-        try
-        {
+        $value = ['blah'];
+        try {
             $this->captor->doArgumentsMatch($value);
         }
         //Need to atually catch the exception to validate that the refrence didn't change
-        catch (Phake\Exception\MethodMatcherException $e)
-        {
+        catch (Phake\Exception\MethodMatcherException $e) {
             $this->assertNull($this->refVariable);
         }
     }
@@ -125,19 +123,17 @@ class ArgumentCaptorTest extends TestCase
     public function testConditionalCaptureFailureUpdatesMessage()
     {
         $matcher = Phake::mock(IChainableArgumentMatcher::class);
-        Phake::when($matcher)->doArgumentsMatch->thenThrow(new Phake\Exception\MethodMatcherException("test"));
+        Phake::when($matcher)->doArgumentsMatch->thenThrow(new Phake\Exception\MethodMatcherException('test'));
 
         $this->captor->when($matcher);
 
-        $value = array('blah');
-        try
-        {
+        $value = ['blah'];
+        try {
             $this->captor->doArgumentsMatch($value);
         }
-            //Need to atually catch the exception to validate that the refrence didn't change
-        catch (Phake\Exception\MethodMatcherException $e)
-        {
-            $this->assertStringStartsWith("Failed in Phake::capture()->when()\n", $e->getMessage(), "The methodmatcherexception is not prepended with capture info");
+        //Need to atually catch the exception to validate that the refrence didn't change
+        catch (Phake\Exception\MethodMatcherException $e) {
+            $this->assertStringStartsWith("Failed in Phake::capture()->when()\n", $e->getMessage(), 'The methodmatcherexception is not prepended with capture info');
         }
     }
 
@@ -164,9 +160,9 @@ class ArgumentCaptorTest extends TestCase
 
     public function testBindAllCapturedValuePreMatch()
     {
-        $value1 = array(new \stdClass());
-        $value2 = array(new \stdClass());
-        $value3 = array(new \stdClass());
+        $value1 = [new \stdClass()];
+        $value2 = [new \stdClass()];
+        $value3 = [new \stdClass()];
 
         $this->captor->bindAllCapturedValues($allCaptures);
 
@@ -176,14 +172,14 @@ class ArgumentCaptorTest extends TestCase
 
         $this->assertSame($this->refVariable, $value3[0]);
 
-        $this->assertSame(array($value1[0], $value2[0], $value3[0]), $allCaptures);
+        $this->assertSame([$value1[0], $value2[0], $value3[0]], $allCaptures);
     }
 
     public function testBindAllCapturedValuePostMatch()
     {
-        $value1 = array(new \stdClass());
-        $value2 = array(new \stdClass());
-        $value3 = array(new \stdClass());
+        $value1 = [new \stdClass()];
+        $value2 = [new \stdClass()];
+        $value3 = [new \stdClass()];
 
         $this->captor->doArgumentsMatch($value1);
         $this->captor->doArgumentsMatch($value2);
@@ -193,8 +189,6 @@ class ArgumentCaptorTest extends TestCase
 
         $this->assertSame($this->refVariable, $value3[0]);
 
-        $this->assertSame(array($value1[0], $value2[0], $value3[0]), $allCaptures);
+        $this->assertSame([$value1[0], $value2[0], $value3[0]], $allCaptures);
     }
 }
-
-

@@ -110,4 +110,3 @@ class AnswerCollectionTest extends TestCase
         $this->assertSame($answer3, $this->collection->getAnswer());
     }
 }
-

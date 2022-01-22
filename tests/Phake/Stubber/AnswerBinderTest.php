@@ -104,5 +104,3 @@ class AnswerBinderTest extends TestCase
         $this->assertEquals($answer, $newBinder->getAnswer());
     }
 }
-
-

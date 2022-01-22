@@ -55,5 +55,4 @@ namespace Phake\Exception;
 
 class VerificationException extends \Exception
 {
-
 }

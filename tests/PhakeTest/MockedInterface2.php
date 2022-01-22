@@ -54,7 +54,7 @@ interface PhakeTest_MockedInterface2
 
     public function hintedArrayNull(array $hinted = null);
 
-    public function hintedArrayDefaulted(array $hinted = array(1, 2, 3));
+    public function hintedArrayDefaulted(array $hinted = [1, 2, 3]);
 
     public function reference(&$hinted);
 
@@ -62,5 +62,3 @@ interface PhakeTest_MockedInterface2
 
     public function referenceDefault(&$hinted = 'blah');
 }
-
-

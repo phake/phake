@@ -67,13 +67,13 @@ class RecorderTest extends TestCase
      */
     public function testRecord()
     {
-        $call         = new Call($this->mock, 'someMethod', array());
-        $call2        = new Call($this->mock, 'someMethod2', array());
+        $call         = new Call($this->mock, 'someMethod', []);
+        $call2        = new Call($this->mock, 'someMethod2', []);
         $callRecorder = new Recorder();
         $callRecorder->recordCall($call);
         $callRecorder->recordCall($call2);
 
-        $this->assertSame(array($call, $call2), $callRecorder->getAllCalls());
+        $this->assertSame([$call, $call2], $callRecorder->getAllCalls());
     }
 
     /**
@@ -81,15 +81,15 @@ class RecorderTest extends TestCase
      */
     public function testRemoveAllCalls()
     {
-        $call         = new Call($this->mock, 'someMethod', array());
-        $call2        = new Call($this->mock, 'someMethod2', array());
+        $call         = new Call($this->mock, 'someMethod', []);
+        $call2        = new Call($this->mock, 'someMethod2', []);
         $callRecorder = new Recorder();
         $callRecorder->recordCall($call);
         $callRecorder->recordCall($call2);
 
         $callRecorder->removeAllCalls();
 
-        $this->assertSame(array(), $callRecorder->getAllCalls());
+        $this->assertSame([], $callRecorder->getAllCalls());
     }
 
     /**
@@ -97,7 +97,7 @@ class RecorderTest extends TestCase
      */
     public function testRetrieveCallInfo()
     {
-        $call         = new Call($this->mock, 'someMethod', array());
+        $call         = new Call($this->mock, 'someMethod', []);
         $callRecorder = new Recorder();
         $callRecorder->recordCall($call);
 
@@ -113,7 +113,7 @@ class RecorderTest extends TestCase
      */
     public function testRetrieveCallInfoReturnsNull()
     {
-        $call         = new Call($this->mock, 'someMethod', array());
+        $call         = new Call($this->mock, 'someMethod', []);
         $callRecorder = new Recorder();
 
         $this->assertNull($callRecorder->getCallInfo($call));
@@ -134,20 +134,20 @@ class RecorderTest extends TestCase
         $objC->b = $objD;
         $objD->a = $objC;
 
-        $call         = new Call($this->mock, 'someMethod', array($objA));
+        $call         = new Call($this->mock, 'someMethod', [$objA]);
         $callRecorder = new Recorder();
         $callRecorder->recordCall($call);
 
-        $checkCall = new Call($this->mock, 'someMethod', array($objC));
+        $checkCall = new Call($this->mock, 'someMethod', [$objC]);
 
         $this->assertNull($callRecorder->getCallInfo($checkCall));
     }
 
     public function testMarkingCallsVerified()
     {
-        $call1 = new Call($this->mock, 'someMethod', array());
-        $call2 = new Call($this->mock, 'someMethod', array());
-        $call3 = new Call($this->mock, 'someMethod', array());
+        $call1 = new Call($this->mock, 'someMethod', []);
+        $call2 = new Call($this->mock, 'someMethod', []);
+        $call3 = new Call($this->mock, 'someMethod', []);
 
         $callRecorder = new Recorder();
         $callRecorder->recordCall($call1);
@@ -157,6 +157,6 @@ class RecorderTest extends TestCase
 
         $callRecorder->recordCall($call3);
 
-        $this->assertEquals(array($call1, $call3), $callRecorder->getUnverifiedCalls());
+        $this->assertEquals([$call1, $call3], $callRecorder->getUnverifiedCalls());
     }
 }

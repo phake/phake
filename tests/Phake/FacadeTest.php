@@ -156,7 +156,7 @@ class FacadeTest extends TestCase
      */
     public function testAutoLoadNotCalledOnMock()
     {
-        spl_autoload_register(array(__CLASS__, 'autoload'));
+        spl_autoload_register([__CLASS__, 'autoload']);
         try {
             $mockedClass   = 'stdClass';
             $mockGenerator = $this->getMockBuilder(Phake\ClassGenerator\MockClass::class)->getMock();
@@ -173,11 +173,9 @@ class FacadeTest extends TestCase
                 $this->getMockBuilder(Phake\Stubber\IAnswer::class)->getMock()
             );
 
-            spl_autoload_unregister(array(__CLASS__, 'autoload'));
-        }
-        catch (Exception $e)
-        {
-            spl_autoload_unregister(array(__CLASS__, 'autoload'));
+            spl_autoload_unregister([__CLASS__, 'autoload']);
+        } catch (Exception $e) {
+            spl_autoload_unregister([__CLASS__, 'autoload']);
             throw $e;
         }
     }
@@ -187,7 +185,7 @@ class FacadeTest extends TestCase
      */
     public static function autoload()
     {
-        $e = new Exception;
+        $e = new Exception();
         self::fail("The autoloader should not be called: \n{$e->getTraceAsString()}");
     }
 
@@ -233,5 +231,3 @@ class FacadeTest extends TestCase
             );
     }
 }
-
-

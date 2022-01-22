@@ -71,7 +71,7 @@ class SingleArgumentMatcherTest extends TestCase
 
     public function testMatches()
     {
-        $args = array('test arg1', 'test arg2');
+        $args = ['test arg1', 'test arg2'];
 
         Phake::when($this->matcher)->matches->thenReturn(true);
         Phake::when($this->nextMatcher)->doArgumentsMatch->thenReturn(true);
@@ -79,13 +79,13 @@ class SingleArgumentMatcherTest extends TestCase
         $result = $this->matcher->doArgumentsMatch($args);
 
         Phake::verify($this->matcher)->matches('test arg1');
-        Phake::verify($this->nextMatcher)->doArgumentsMatch(array('test arg2'));
+        Phake::verify($this->nextMatcher)->doArgumentsMatch(['test arg2']);
         $this->assertNull($result);
     }
 
     public function testDoesNotMatchWrapped()
     {
-        $args = array('test arg1', 'test arg2');
+        $args = ['test arg1', 'test arg2'];
 
         Phake::when($this->matcher)->matches->thenThrow(new Phake\Exception\MethodMatcherException());
         Phake::when($this->nextMatcher)->doArgumentsMatch->thenReturn(true);
@@ -96,7 +96,7 @@ class SingleArgumentMatcherTest extends TestCase
 
     public function testDoesNotMatchNext()
     {
-        $args = array('test arg1', 'test arg2');
+        $args = ['test arg1', 'test arg2'];
 
         Phake::when($this->matcher)->matches->thenReturn(true);
         Phake::when($this->nextMatcher)->doArgumentsMatch->thenThrow(new Phake\Exception\MethodMatcherException());
@@ -108,7 +108,7 @@ class SingleArgumentMatcherTest extends TestCase
     public function testMatchWithNoNext()
     {
         $this->matcher = Phake::partialMock(SingleArgumentMatcher::class);
-        $args = array('test arg1');
+        $args = ['test arg1'];
 
         Phake::when($this->matcher)->matches->thenReturn(true);
 
@@ -121,7 +121,7 @@ class SingleArgumentMatcherTest extends TestCase
     public function testMatchWithNoNextAndExtraParameters()
     {
         $this->matcher = Phake::partialMock(SingleArgumentMatcher::class);
-        $args = array('test arg1', 'test arg2');
+        $args = ['test arg1', 'test arg2'];
 
         Phake::when($this->matcher)->matches->thenReturn(true);
 
@@ -132,7 +132,7 @@ class SingleArgumentMatcherTest extends TestCase
     public function testReferencesPassedThrough()
     {
         $this->matcher = Phake::partialMock(SingleArgumentMatcher::class);
-        $args = array('test arg1');
+        $args = ['test arg1'];
 
         Phake::when($this->matcher)->matches(Phake::setReference('new value'))->thenReturn(true);
 

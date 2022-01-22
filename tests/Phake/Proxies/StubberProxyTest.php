@@ -143,20 +143,19 @@ class StubberProxyTest extends TestCase
 
     public function magicGetInvalidData()
     {
-        return array(
-            array('1foo', 'cannot start with an integer'),
-            array(1,      'must be a string'),
-        );
+        return [
+            ['1foo', 'cannot start with an integer'],
+            [1,      'must be a string'],
+        ];
     }
 
     private function phakeAssertAttributeInstanceOf(string $class, string $propertyName, $object)
     {
-         $reflectionObject = new \ReflectionObject($object);
-         $reflectionProperty = $reflectionObject->getProperty($propertyName);
-         $reflectionProperty->setAccessible(true);
-         $value = $reflectionProperty->getValue($object);
+        $reflectionObject = new \ReflectionObject($object);
+        $reflectionProperty = $reflectionObject->getProperty($propertyName);
+        $reflectionProperty->setAccessible(true);
+        $value = $reflectionProperty->getValue($object);
 
-         $this->assertInstanceOf($class, $value);
-     }
-
+        $this->assertInstanceOf($class, $value);
+    }
 }

@@ -45,39 +45,40 @@
 
 class PhakeTest_ScalarTypes
 {
-    public function scalarHints(int $a, int $b) : int {
+    public function scalarHints(int $a, int $b): int
+    {
         return $a + $b;
     }
 
-    public function objectReturn() : PhakeTest_A {
-
+    public function objectReturn(): PhakeTest_A
+    {
     }
 
-    public function intReturn() : int {
-
+    public function intReturn(): int
+    {
     }
 
-    public function floatReturn() : float {
-
+    public function floatReturn(): float
+    {
     }
 
-    public function stringReturn() : string {
-
+    public function stringReturn(): string
+    {
     }
 
-    public function boolReturn() : bool {
-
+    public function boolReturn(): bool
+    {
     }
 
-    public function arrayReturn() : array {
-
+    public function arrayReturn(): array
+    {
     }
 
-    public function callableReturn() : callable {
-
+    public function callableReturn(): callable
+    {
     }
 
-    public function selfReturn() : self {
-
+    public function selfReturn(): self
+    {
     }
 }

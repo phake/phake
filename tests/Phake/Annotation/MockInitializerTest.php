@@ -1,6 +1,7 @@
 <?php
 
 namespace Phake\Annotation;
+
 /*
  * Phake - Mocking Framework
  *
@@ -44,8 +45,8 @@ namespace Phake\Annotation;
  * @link       http://www.digitalsandwich.com/
  */
 
-use PHPUnit\Framework\TestCase;
 use PhakeTest\AnotherNamespacedClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @ann1 Test Annotation
@@ -131,10 +132,9 @@ class MockInitializerTest extends TestCase
             $this->markTestSkipped('Native attributes are not supported in PHP versions prior to 8.0');
         }
 
-        $this->initializer = new MockInitializer(new NativeReader);
+        $this->initializer = new MockInitializer(new NativeReader());
         $this->initializer->initialize($this);
 
         $this->assertInstanceOf('stdClass', $this->nativeMock);
     }
 }
-

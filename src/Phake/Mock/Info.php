@@ -50,7 +50,8 @@ namespace Phake\Mock;
  *
  * @author Mike Lively <m@digitalsandwich.com>
  */
-class Info {
+class Info
+{
     /**
      * @var string
      */

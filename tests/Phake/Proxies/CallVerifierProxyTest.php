@@ -74,10 +74,9 @@ class CallVerifierProxyTest extends TestCase
         $this->obj        = new Phake\CallRecorder\Recorder();
 
         $matcher1 = new Phake\Matchers\EqualsMatcher('foo', \SebastianBergmann\Comparator\Factory::getInstance());
-        $matcher2 = new Phake\Matchers\EqualsMatcher(array(), \SebastianBergmann\Comparator\Factory::getInstance());
+        $matcher2 = new Phake\Matchers\EqualsMatcher([], \SebastianBergmann\Comparator\Factory::getInstance());
         $matcher1->setNextMatcher($matcher2);
         $this->proxy = new CallVerifierProxy($matcher1, $this->client, false);
-
     }
 
     /**
@@ -96,7 +95,7 @@ class CallVerifierProxyTest extends TestCase
     public function testStaticIsCalledOn()
     {
         $matcher1 = new Phake\Matchers\EqualsMatcher('foo', \SebastianBergmann\Comparator\Factory::getInstance());
-        $matcher2 = new Phake\Matchers\EqualsMatcher(array(), \SebastianBergmann\Comparator\Factory::getInstance());
+        $matcher2 = new Phake\Matchers\EqualsMatcher([], \SebastianBergmann\Comparator\Factory::getInstance());
         $matcher1->setNextMatcher($matcher2);
         $this->proxy = new CallVerifierProxy($matcher1, $this->client, true);
 
@@ -108,5 +107,3 @@ class CallVerifierProxyTest extends TestCase
         $this->assertEquals(1, count($verifier));
     }
 }
-
-

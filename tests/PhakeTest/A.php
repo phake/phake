@@ -5,5 +5,4 @@
  */
 class PhakeTest_A
 {
-
 }

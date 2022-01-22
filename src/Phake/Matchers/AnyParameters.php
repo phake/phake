@@ -1,6 +1,7 @@
 <?php
 
 namespace Phake\Matchers;
+
 /*
  * Phake - Mocking Framework
  *
@@ -47,7 +48,7 @@ namespace Phake\Matchers;
 /**
  * A matcher that will return true for any invocation of a particular method
  */
-class AnyParameters extends  AbstractChainableArgumentMatcher
+class AnyParameters extends AbstractChainableArgumentMatcher
 {
     /**
      * Do nothing, any parameters always matches

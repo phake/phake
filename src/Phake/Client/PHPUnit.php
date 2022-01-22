@@ -83,10 +83,9 @@ class PHPUnit implements IClient
      */
     private function getConstraint()
     {
-        if (version_compare('3.6.0', PHPUnit_Runner_Version::id()) == 1) {
+        if (1 == version_compare('3.6.0', PHPUnit_Runner_Version::id())) {
             return new \Phake\PHPUnit\VerifierResultConstraint();
-        } else {
-            return new \Phake\PHPUnit\VerifierResultConstraintV3d6();
         }
+        return new \Phake\PHPUnit\VerifierResultConstraintV3d6();
     }
 }

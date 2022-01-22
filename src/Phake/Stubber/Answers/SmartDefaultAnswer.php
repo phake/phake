@@ -1,6 +1,7 @@
 <?php
 
 namespace Phake\Stubber\Answers;
+
 /*
  * Phake - Mocking Framework
  *
@@ -67,16 +68,18 @@ class SmartDefaultAnswer implements \Phake\Stubber\IAnswer
 
         $defaultAnswer = null;
 
-        if ($method->hasReturnType())
-        {
+        if ($method->hasReturnType()) {
             $returnType = $method->getReturnType();
             if ($returnType instanceof \ReflectionIntersectionType) {
-                $defaultAnswer = \Phake::mock(array_map(function($t) { return $t->getName(); }, $returnType->getTypes()));
+                $defaultAnswer = \Phake::mock(array_map(function ($t) {
+                    return $t->getName();
+                }, $returnType->getTypes()));
             } elseif (null !== $returnType) {
-                $typeNames = $returnType instanceof \ReflectionNamedType ? [ $returnType->getName() ] : array_map(function($t) { return $t->getName(); }, $returnType->getTypes());
+                $typeNames = $returnType instanceof \ReflectionNamedType ? [ $returnType->getName() ] : array_map(function ($t) {
+                    return $t->getName();
+                }, $returnType->getTypes());
                 foreach ($typeNames as $typeName) {
-                    switch ($typeName)
-                    {
+                    switch ($typeName) {
                         case 'int':
                             $defaultAnswer = 0;
                             break 2;
@@ -84,24 +87,24 @@ class SmartDefaultAnswer implements \Phake\Stubber\IAnswer
                             $defaultAnswer = 0.0;
                             break 2;
                         case 'string':
-                            $defaultAnswer = "";
+                            $defaultAnswer = '';
                             break 2;
                         case 'bool':
                         case 'false':
                             $defaultAnswer = false;
                             break 2;
                         case 'array':
-                            $defaultAnswer = array();
+                            $defaultAnswer = [];
                             break 2;
                         case 'callable':
-                            $defaultAnswer = function () {};
+                            $defaultAnswer = function () {
+                            };
                             break 2;
                         case 'self':
                             $defaultAnswer = \Phake::mock($method->getDeclaringClass()->getName());
                             break 2;
                         default:
-                            if (class_exists($typeName))
-                            {
+                            if (class_exists($typeName)) {
                                 $defaultAnswer = \Phake::mock($typeName);
                                 break 2;
                             }
@@ -111,11 +114,8 @@ class SmartDefaultAnswer implements \Phake\Stubber\IAnswer
             }
         }
 
-        return function (...$args) use ($defaultAnswer)
-        {
+        return function (...$args) use ($defaultAnswer) {
             return $defaultAnswer;
         };
     }
 }
-
-

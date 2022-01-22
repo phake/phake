@@ -62,11 +62,11 @@ class IgnoreRemainingMatcherTest extends TestCase
 
     public static function matchesDataProvider()
     {
-        return array(
-            array(array()),
-            array(array('foo')),
-            array(array('foo', 'bar')),
-        );
+        return [
+            [[]],
+            [['foo']],
+            [['foo', 'bar']],
+        ];
     }
 
     /**

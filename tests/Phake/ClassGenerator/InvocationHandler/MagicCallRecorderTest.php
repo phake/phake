@@ -76,11 +76,11 @@ class MagicCallRecorderTest extends TestCase
         $mock = $this->getMockBuilder(Phake\IMock::class)
                     ->getMock();
 
-        $ref = array('foo', array());
-        $this->handler->invoke($mock, '__call', array('foo', array()), $ref);
+        $ref = ['foo', []];
+        $this->handler->invoke($mock, '__call', ['foo', []], $ref);
 
         Phake::verify($this->callRecorder)->recordCall(
-            new Phake\CallRecorder\Call($mock, 'foo', array())
+            new Phake\CallRecorder\Call($mock, 'foo', [])
         );
     }
 
@@ -90,11 +90,11 @@ class MagicCallRecorderTest extends TestCase
                     ->getMock();
         $mockClass = get_class($mock);
 
-        $ref = array('foo', array());
-        $this->handler->invoke($mockClass, '__callStatic', array('foo', array()), $ref);
+        $ref = ['foo', []];
+        $this->handler->invoke($mockClass, '__callStatic', ['foo', []], $ref);
 
         Phake::verify($this->callRecorder)->recordCall(
-            new Phake\CallRecorder\Call($mockClass, 'foo', array())
+            new Phake\CallRecorder\Call($mockClass, 'foo', [])
         );
     }
 
@@ -103,8 +103,8 @@ class MagicCallRecorderTest extends TestCase
         $mock = $this->getMockBuilder(Phake\IMock::class)
                     ->getMock();
 
-        $ref = array();
-        $this->handler->invoke($mock, 'foo', array(), $ref);
+        $ref = [];
+        $this->handler->invoke($mock, 'foo', [], $ref);
 
         Phake::verifyNoInteraction($this->callRecorder);
     }

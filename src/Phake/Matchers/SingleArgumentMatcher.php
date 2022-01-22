@@ -1,6 +1,7 @@
 <?php
 
 namespace Phake\Matchers;
+
 /*
  * Phake - Mocking Framework
  *
@@ -47,8 +48,8 @@ namespace Phake\Matchers;
 /**
  * Implements matches so that you can easily match a single argument
  */
-abstract class SingleArgumentMatcher extends AbstractChainableArgumentMatcher {
-
+abstract class SingleArgumentMatcher extends AbstractChainableArgumentMatcher
+{
     /**
      * Executes the matcher on a given list of argument values. Returns TRUE on a match, FALSE otherwise.
      *
@@ -65,30 +66,24 @@ abstract class SingleArgumentMatcher extends AbstractChainableArgumentMatcher {
                 $nextArgument =& $arguments[$key];
                 array_shift($argumentCopy);
                 break;
-            } else {
-                if (null === $nextArgument) $nextArgument = [];
-                $nextArgument[$key] =& $arguments[$key];
-                array_shift($argumentCopy);
             }
+            if (null === $nextArgument) {
+                $nextArgument = [];
+            }
+            $nextArgument[$key] =& $arguments[$key];
+            array_shift($argumentCopy);
         }
         $this->matches($nextArgument);
 
         $nextMatcher = $this->getNextMatcher();
-        if (!isset($nextMatcher))
-        {
-            if (count($argumentCopy) != 0)
-            {
-                throw new \Phake\Exception\MethodMatcherException("There were more arguments than matchers");
+        if (!isset($nextMatcher)) {
+            if (0 != count($argumentCopy)) {
+                throw new \Phake\Exception\MethodMatcherException('There were more arguments than matchers');
             }
-        }
-        else
-        {
-            try
-            {
+        } else {
+            try {
                 $nextMatcher->doArgumentsMatch($argumentCopy);
-            }
-            catch (\Phake\Exception\MethodMatcherException $e)
-            {
+            } catch (\Phake\Exception\MethodMatcherException $e) {
                 $e->incrementArgumentPosition();
                 throw $e;
             }

@@ -42,6 +42,7 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-interface PhakeTest_StaticInterface {
+interface PhakeTest_StaticInterface
+{
     public static function staticMethod();
-} 
+}

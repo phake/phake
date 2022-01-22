@@ -71,8 +71,8 @@ class CallTest extends TestCase
     {
         $this->mock = Phake::mock(Phake\IMock::class);
 
-        $this->call = new Call($this->mock, 'someMethod', array('foo', 'bar'));
-        $this->staticCall = new Call(get_class($this->mock), 'someMethod', array('foo', 'bar'));
+        $this->call = new Call($this->mock, 'someMethod', ['foo', 'bar']);
+        $this->staticCall = new Call(get_class($this->mock), 'someMethod', ['foo', 'bar']);
     }
 
     /**
@@ -95,8 +95,8 @@ class CallTest extends TestCase
 
     public function testGetArguments()
     {
-        $this->assertEquals(array('foo', 'bar'), $this->call->getArguments());
-        $this->assertEquals(array('foo', 'bar'), $this->staticCall->getArguments());
+        $this->assertEquals(['foo', 'bar'], $this->call->getArguments());
+        $this->assertEquals(['foo', 'bar'], $this->staticCall->getArguments());
     }
 
     public function testToString()
@@ -107,20 +107,18 @@ class CallTest extends TestCase
 
     public function testToStringOnAllArgumentTypes()
     {
-        $call = new Call($this->mock, 'someMethod', array(
-            new \stdClass,
-            array(),
+        $call = new Call($this->mock, 'someMethod', [
+            new \stdClass(),
+            [],
             null,
             opendir('.'),
             'foo',
             42,
             true
-        ));
+        ]);
         $this->assertEquals(
             'Phake\IMock->someMethod(<object:stdClass>, <array>, <null>, <resource>, <string:foo>, <integer:42>, <boolean:true>)',
             $call->__toString()
         );
     }
 }
-
-

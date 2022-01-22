@@ -1,6 +1,7 @@
 <?php
 
 namespace Phake\Stubber\Answers;
+
 /*
  * Phake - Mocking Framework
  *
@@ -46,7 +47,6 @@ namespace Phake\Stubber\Answers;
 
 class SelfAnswer implements \Phake\Stubber\IAnswer
 {
-
     /**
      * Returns the answer that should be used when a method stubbed to this answer is called.
      *
@@ -59,12 +59,10 @@ class SelfAnswer implements \Phake\Stubber\IAnswer
      */
     public function getAnswerCallback($context, $method)
     {
-        if (!is_object($context))
-        {
-            throw new InvalidAnswerException("Invalid context for " . __CLASS__ . ". You can only use this answer on non-static methods");
+        if (!is_object($context)) {
+            throw new InvalidAnswerException('Invalid context for ' . self::class . '. You can only use this answer on non-static methods');
         }
-        return function (...$args) use ($context)
-        {
+        return function (...$args) use ($context) {
             return $context;
         };
     }

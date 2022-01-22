@@ -86,7 +86,7 @@ class HamcrestMatcherAdapterTest extends TestCase
             ->with($this->equalTo('foo'))
             ->will($this->returnValue(true));
 
-        $value = array('foo');
+        $value = ['foo'];
         $this->assertNull($this->adapter->doArgumentsMatch($value));
     }
 
@@ -95,5 +95,3 @@ class HamcrestMatcherAdapterTest extends TestCase
         $this->assertEquals('hamcrest matcher', $this->adapter->__toString());
     }
 }
-
-

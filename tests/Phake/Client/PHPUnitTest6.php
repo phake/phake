@@ -43,9 +43,9 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\ExpectationFailedException;
+use PHPUnit\Framework\TestCase;
 use PHPUnit\Runner\Version;
 
 class Phake_Client_PHPUnitTest6 extends TestCase
@@ -68,14 +68,14 @@ class Phake_Client_PHPUnitTest6 extends TestCase
 
     public function testProcessVerifierResultReturnsCallsOnTrue()
     {
-        $result = new Phake_CallRecorder_VerifierResult(true, array('call1'));
+        $result = new Phake_CallRecorder_VerifierResult(true, ['call1']);
 
-        $this->assertEquals(array('call1'), $this->client->processVerifierResult($result));
+        $this->assertEquals(['call1'], $this->client->processVerifierResult($result));
     }
 
     public function testProcessVerifierThrowsExceptionOnFalse()
     {
-        $result = new Phake_CallRecorder_VerifierResult(false, array(), 'failure message');
+        $result = new Phake_CallRecorder_VerifierResult(false, [], 'failure message');
 
         $this->expectException(ExpectationFailedException::class, 'failure message');
         $this->client->processVerifierResult($result);
@@ -83,7 +83,7 @@ class Phake_Client_PHPUnitTest6 extends TestCase
 
     public function testProcessVerifierIncrementsAssertionCount()
     {
-        $result = new Phake_CallRecorder_VerifierResult(true, array('call1'));
+        $result = new Phake_CallRecorder_VerifierResult(true, ['call1']);
 
         $assertionCount = Assert::getCount();
         $this->client->processVerifierResult($result);
@@ -104,4 +104,3 @@ class Phake_Client_PHPUnitTest6 extends TestCase
         $this->assertGreaterThan($assertionCount, $newAssertionCount);
     }
 }
-

@@ -1,6 +1,7 @@
 <?php
 
 namespace Phake\CallRecorder;
+
 /*
  * Phake - Mocking Framework
  *

@@ -44,5 +44,4 @@
 
 final class PhakeTest_FinalClass
 {
-
 }

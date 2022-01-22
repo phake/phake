@@ -1,6 +1,7 @@
 <?php
 
 namespace Phake\Proxies;
+
 /*
  * Phake - Mocking Framework
  *
@@ -87,5 +88,3 @@ class CallStubberProxy
         return new AnswerBinderProxy($binder);
     }
 }
-
-

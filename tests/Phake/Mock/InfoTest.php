@@ -48,7 +48,8 @@ namespace Phake\Mock;
 use Phake;
 use PHPUnit\Framework\TestCase;
 
-class InfoTest extends TestCase {
+class InfoTest extends TestCase
+{
     /**
      * @var Phake\Mock\Info
      */

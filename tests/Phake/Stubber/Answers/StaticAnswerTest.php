@@ -1,6 +1,7 @@
 <?php
 
 namespace Phake\Stubber\Answers;
+
 /*
  * Phake - Mocking Framework
  *
@@ -71,5 +72,3 @@ class StaticAnswerTest extends TestCase
         $this->assertEquals(42, call_user_func($this->answer->getAnswerCallback('someObject', 'testMethod')));
     }
 }
-
-

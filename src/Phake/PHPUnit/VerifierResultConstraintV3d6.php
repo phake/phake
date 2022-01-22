@@ -73,4 +73,3 @@ class VerifierResultConstraintV3d6 extends \PHPUnit_Framework_Constraint
         return $other->getFailureDescription();
     }
 }
-

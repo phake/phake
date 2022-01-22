@@ -42,8 +42,8 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\ExpectationFailedException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests the behavior of the Phake class.
@@ -456,16 +456,15 @@ class PhakeTest extends TestCase
         Phake::verifyStatic($mock)->staticMethod();
     }
 
-	public function testMockingPhar()
-	{
-		if (!class_exists('Phar'))
-		{
-			$this->markTestSkipped('Phar class does not exist');
-		}
-		$phar = Phake::mock('Phar');
+    public function testMockingPhar()
+    {
+        if (!class_exists('Phar')) {
+            $this->markTestSkipped('Phar class does not exist');
+        }
+        $phar = Phake::mock('Phar');
 
-		$this->assertInstanceOf('Phar', $phar);
-	}
+        $this->assertInstanceOf('Phar', $phar);
+    }
 
     /**
      * Tests that resetting a mock clears the stubber
@@ -930,7 +929,7 @@ class PhakeTest extends TestCase
     {
         $mock = Phake::mock('PhakeTest_MockedClass');
 
-        $obj = new stdClass;
+        $obj = new stdClass();
 
         $mock->fooWithArgument($obj);
 
@@ -946,7 +945,7 @@ class PhakeTest extends TestCase
     {
         $mock = Phake::mock('PhakeTest_MockedClass');
 
-        $obj = new stdClass;
+        $obj = new stdClass();
 
         Phake::when($mock)->fooWithArgument(Phake::capture($toArgument))->thenReturn(true);
 
@@ -959,9 +958,9 @@ class PhakeTest extends TestCase
     {
         $mock = Phake::mock('PhakeTest_MockedClass');
 
-        $obj1 = new stdClass;
-        $obj2 = new stdClass;
-        $obj3 = new stdClass;
+        $obj1 = new stdClass();
+        $obj2 = new stdClass();
+        $obj3 = new stdClass();
 
         $mock->fooWithArgument($obj1);
         $mock->fooWithArgument($obj2);
@@ -969,7 +968,7 @@ class PhakeTest extends TestCase
 
         Phake::verify($mock, Phake::atLeast(1))->fooWithArgument(Phake::captureAll($toArgument));
 
-        $this->assertSame(array($obj1, $obj2, $obj3), $toArgument);
+        $this->assertSame([$obj1, $obj2, $obj3], $toArgument);
     }
 
     /**
@@ -1047,7 +1046,7 @@ class PhakeTest extends TestCase
     {
         $mock = Phake::mock('PhakeTest_MockedClass');
 
-        $obj = new stdClass;
+        $obj = new stdClass();
         Phake::when($mock)->fooWithRefParm('test', Phake::setReference($obj))->thenReturn(null);
 
         $value = 25;
@@ -1198,7 +1197,7 @@ class PhakeTest extends TestCase
         $this->expectException(\AssertionError::class);
 
         $mock = Phake::mock('PhakeTest_MockedClass');
-        Phake::when($mock)->foo()->thenThrow(new \AssertionError);
+        Phake::when($mock)->foo()->thenThrow(new \AssertionError());
         $mock->foo();
     }
 
@@ -1314,7 +1313,7 @@ class PhakeTest extends TestCase
                 . "===\n"
                 . "  PhakeTest_MockedClass->foo(<string:test>)\n"
                 . "  No matchers were given to Phake::when(), but arguments were received by this method.\n"
-                . "==="
+                . '==='
         );
 
         Phake::verify($mock)->foo();
@@ -1477,8 +1476,7 @@ class PhakeTest extends TestCase
 
     public function testStubbingMemcacheSetMethod()
     {
-        if (!extension_loaded('memcache'))
-        {
+        if (!extension_loaded('memcache')) {
             $this->markTestSkipped('memcache extension not loaded');
         }
 
@@ -1491,7 +1489,7 @@ class PhakeTest extends TestCase
 
     public function testMockingMethodReturnByReference()
     {
-        $something            = array();
+        $something            = [];
         $referenceMethodClass = Phake::mock('PhakeTest_ReturnByReferenceMethodClass');
 
         Phake::when($referenceMethodClass)->getSomething()->thenReturn($something);
@@ -1582,7 +1580,6 @@ class PhakeTest extends TestCase
         $mock2 = Phake::mock('PhakeTest_StaticInterface');
         $mock2::staticMethod();
         Phake::verifyStatic($mock2)->staticMethod();
-
     }
 
     public function testMockPDO()
@@ -1608,8 +1605,7 @@ class PhakeTest extends TestCase
 
     public function testMockRedis()
     {
-        if (!extension_loaded('redis'))
-        {
+        if (!extension_loaded('redis')) {
             $this->markTestSkipped('Cannot run this test without mock redis');
         }
 
@@ -1670,8 +1666,7 @@ class PhakeTest extends TestCase
 
     public function testCallingPrivateMethods()
     {
-        if (defined('HHVM_VERSION'))
-        {
+        if (defined('HHVM_VERSION')) {
             $this->markTestSkipped("Can't call private methods with hhvm");
         }
         $mock = Phake::mock('PhakeTest_MockedClass');
@@ -1707,7 +1702,7 @@ class PhakeTest extends TestCase
 
     public function testMockingMultipleInterfaces()
     {
-        $mock = Phake::mock(array('PhakeTest_MockedInterface', 'PhakeTest_MockedClass'));
+        $mock = Phake::mock(['PhakeTest_MockedInterface', 'PhakeTest_MockedClass']);
         $this->assertInstanceOf('PhakeTest_MockedInterface', $mock);
         $this->assertInstanceOf('PhakeTest_MockedClass', $mock);
 
@@ -1732,8 +1727,9 @@ class PhakeTest extends TestCase
         $this->assertSame($mock, $mock->foo());
     }
 
-    public function testResetStaticPostCall() {
-        $obj = new PhakeTest_StaticMethod;
+    public function testResetStaticPostCall()
+    {
+        $obj = new PhakeTest_StaticMethod();
         $obj->className = Phake::mock('PhakeTest_ClassWithStaticMethod');
         Phake::whenStatic($obj->className)->ask()->thenReturn('ASKED');
 
@@ -1748,7 +1744,8 @@ class PhakeTest extends TestCase
         $this->assertEquals('Asked', $val);
     }
 
-    public function testCallingNeverReturnMockedMethodThrowsNeverReturnMethodCalledException() {
+    public function testCallingNeverReturnMockedMethodThrowsNeverReturnMethodCalledException()
+    {
         if (PHP_VERSION_ID < 80100) {
             $this->markTestSkipped('never type is not supported in PHP versions prior to 8.1');
         }
@@ -1759,7 +1756,8 @@ class PhakeTest extends TestCase
         $mock->neverReturn();
     }
 
-    public function testCallingNeverReturnMockedMethodWithThenThrows() {
+    public function testCallingNeverReturnMockedMethodWithThenThrows()
+    {
         if (PHP_VERSION_ID < 80100) {
             $this->markTestSkipped('never type is not supported in PHP versions prior to 8.1');
         }

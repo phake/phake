@@ -42,8 +42,8 @@
  * @link       http://www.digitalsandwich.com/
  */
 
-class PhakeTest_CallableTypehint {
-
+class PhakeTest_CallableTypehint
+{
     public function method(callable $callback)
     {
     }

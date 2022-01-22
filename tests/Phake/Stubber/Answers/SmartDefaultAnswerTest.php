@@ -67,13 +67,13 @@ class SmartDefaultAnswerTest extends TestCase
 
     public static function typeReturnMap()
     {
-        return array(
-            'int' => array('intReturn', 0),
-            'float' => array('floatReturn', 0.0),
-            'string' => array('stringReturn', ''),
-            'boolean' => array('boolReturn', false),
-            'array' => array('arrayReturn', array()),
-        );
+        return [
+            'int' => ['intReturn', 0],
+            'float' => ['floatReturn', 0.0],
+            'string' => ['stringReturn', ''],
+            'boolean' => ['boolReturn', false],
+            'array' => ['arrayReturn', []],
+        ];
     }
 
     /**
@@ -92,7 +92,8 @@ class SmartDefaultAnswerTest extends TestCase
         $context = new \PhakeTest_ScalarTypes();
         $cb = $this->answer->getAnswerCallback($context, 'callableReturn');
 
-        $this->assertEquals(function () {}, $cb());
+        $this->assertEquals(function () {
+        }, $cb());
     }
 
     public function testObjectReturn()
@@ -138,5 +139,3 @@ class SmartDefaultAnswerTest extends TestCase
         $this->assertInstanceOf('PhakeTest_ScalarTypes', $cb());
     }
 }
-
-

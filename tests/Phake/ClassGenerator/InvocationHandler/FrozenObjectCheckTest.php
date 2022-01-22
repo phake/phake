@@ -81,8 +81,8 @@ class FrozenObjectCheckTest extends TestCase
         Phake::when($this->mockInfo)->isObjectFrozen()->thenReturn(false);
 
         try {
-            $ref = array();
-            $this->handler->invoke($mock, 'foo', array(), $ref);
+            $ref = [];
+            $this->handler->invoke($mock, 'foo', [], $ref);
         } catch (Exception $e) {
             $this->fail('There should not have been an exception:' . $e->getMessage());
         }
@@ -97,8 +97,8 @@ class FrozenObjectCheckTest extends TestCase
 
         $this->expectException(Phake\Exception\VerificationException::class, 'This object has been frozen.');
         Phake::setClient(Phake::CLIENT_DEFAULT);
-        $ref = array();
-        $this->handler->invoke($mock, 'foo', array(), $ref);
+        $ref = [];
+        $this->handler->invoke($mock, 'foo', [], $ref);
     }
 
     public function testThrowsWhenObjectIsFrozenWithPHPUnit()
@@ -108,8 +108,7 @@ class FrozenObjectCheckTest extends TestCase
         Phake::when($this->mockInfo)->isObjectFrozen()->thenReturn(true);
 
         $this->expectException(ExpectationFailedException::class, 'This object has been frozen.');
-        $ref = array();
-        $this->handler->invoke($mock, 'foo', array(), $ref);
+        $ref = [];
+        $this->handler->invoke($mock, 'foo', [], $ref);
     }
 }
-

@@ -90,13 +90,11 @@ class CallStubberProxyTest extends TestCase
 
     private function phakeAssertAttributeInstanceOf(string $class, string $propertyName, $object)
     {
-         $reflectionObject = new \ReflectionObject($object);
-         $reflectionProperty = $reflectionObject->getProperty($propertyName);
-         $reflectionProperty->setAccessible(true);
-         $value = $reflectionProperty->getValue($object);
+        $reflectionObject = new \ReflectionObject($object);
+        $reflectionProperty = $reflectionObject->getProperty($propertyName);
+        $reflectionProperty->setAccessible(true);
+        $value = $reflectionProperty->getValue($object);
 
-         $this->assertInstanceOf($class, $value);
+        $this->assertInstanceOf($class, $value);
     }
 }
-
-

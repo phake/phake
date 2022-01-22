@@ -95,7 +95,7 @@ class MockInitializer
      */
     public function initialize($object)
     {
-        $class  = new \ReflectionClass($object);
+        $class = new \ReflectionClass($object);
 
         foreach ($this->reader->getPropertiesWithMockAnnotation($class) as $property) {
             $mockedClass = $this->reader->getMockType($property);

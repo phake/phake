@@ -1,6 +1,7 @@
 <?php
 
 namespace Phake\ClassGenerator;
+
 /*
  * Phake - Mocking Framework
  *

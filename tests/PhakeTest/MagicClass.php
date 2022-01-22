@@ -63,5 +63,4 @@ class PhakeTest_MagicClass
     {
         return 'defined';
     }
-
 }

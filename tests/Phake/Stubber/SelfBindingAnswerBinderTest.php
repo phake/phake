@@ -1,6 +1,7 @@
 <?php
 
 namespace Phake\Stubber;
+
 /*
  * Phake - Mocking Framework
  *
@@ -75,5 +76,3 @@ class SelfBindingAnswerBinderTest extends TestCase
         $this->assertSame($answer, $this->binder->getAnswer());
     }
 }
-
-

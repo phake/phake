@@ -82,7 +82,7 @@ class StubMapperTest extends TestCase
 
         $matcher->expects($this->any())
             ->method('matches')
-            ->with('foo', array('bar', 'test'))
+            ->with('foo', ['bar', 'test'])
             ->will($this->returnValue(true));
 
         $matcher->expects($this->any())
@@ -91,7 +91,7 @@ class StubMapperTest extends TestCase
 
         $this->mapper->mapStubToMatcher($stub, $matcher);
 
-        $arguments = array('bar', 'test');
+        $arguments = ['bar', 'test'];
         $this->assertEquals($stub, $this->mapper->getStubByCall('foo', $arguments));
     }
 
@@ -113,7 +113,7 @@ class StubMapperTest extends TestCase
 
         $this->mapper->mapStubToMatcher($stub, $matcher);
 
-        $arguments = array('bar', 'test');
+        $arguments = ['bar', 'test'];
         $this->assertNull($this->mapper->getStubByCall('foo', $arguments));
     }
 
@@ -136,7 +136,7 @@ class StubMapperTest extends TestCase
 
         $this->mapper->removeAllAnswers();
 
-        $arguments = array('bar', 'test');
+        $arguments = ['bar', 'test'];
         $this->assertNull($this->mapper->getStubByCall('foo', $arguments));
     }
 
@@ -168,7 +168,7 @@ class StubMapperTest extends TestCase
 
         $match_me->expects($this->any())
             ->method('matches')
-            ->with('foo', array('bar', 'test'))
+            ->with('foo', ['bar', 'test'])
             ->will($this->returnValue(true));
 
         $match_me->expects($this->any())
@@ -178,7 +178,7 @@ class StubMapperTest extends TestCase
         $this->mapper->mapStubToMatcher($also_matches_stub, $also_matches);
         $this->mapper->mapStubToMatcher($match_me_stub, $match_me);
 
-        $arguments = array('bar', 'test');
+        $arguments = ['bar', 'test'];
         $this->assertEquals($match_me_stub, $this->mapper->getStubByCall('foo', $arguments));
     }
 
@@ -190,7 +190,7 @@ class StubMapperTest extends TestCase
                         ->getMock();
 
         $value        = 'blah';
-        $arguments    = array();
+        $arguments    = [];
         $arguments[0] =& $value;
 
         $this->mapper->mapStubToMatcher($stub, $matcher);
@@ -200,5 +200,3 @@ class StubMapperTest extends TestCase
         $this->assertEquals(42, $value);
     }
 }
-
-

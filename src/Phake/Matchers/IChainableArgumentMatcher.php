@@ -1,6 +1,7 @@
 <?php
 
 namespace Phake\Matchers;
+
 /*
  * Phake - Mocking Framework
  *
@@ -89,4 +90,4 @@ interface IChainableArgumentMatcher
      * @return string
      */
     public function __toString();
-} 
+}

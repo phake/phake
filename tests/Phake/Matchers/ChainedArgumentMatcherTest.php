@@ -77,7 +77,7 @@ class ChainedArgumentMatcherTest extends TestCase
 
     public function testMatches()
     {
-        $args = array('test arg1', 'test arg2');
+        $args = ['test arg1', 'test arg2'];
 
         Phake::when($this->adapted)->matches->thenReturn(true);
         Phake::when($this->nextMatcher)->doArgumentsMatch->thenReturn(true);
@@ -85,7 +85,7 @@ class ChainedArgumentMatcherTest extends TestCase
         $result = $this->matcher->doArgumentsMatch($args);
 
         Phake::verify($this->adapted)->matches('test arg1');
-        Phake::verify($this->nextMatcher)->doArgumentsMatch(array('test arg2'));
+        Phake::verify($this->nextMatcher)->doArgumentsMatch(['test arg2']);
         $this->assertNull($result);
     }
 
@@ -93,7 +93,7 @@ class ChainedArgumentMatcherTest extends TestCase
     {
         $this->expectException(\Phake\Exception\MethodMatcherException::class);
 
-        $args = array('test arg1', 'test arg2');
+        $args = ['test arg1', 'test arg2'];
 
         Phake::when($this->adapted)->matches->thenReturn(false);
 

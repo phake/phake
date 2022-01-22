@@ -1,6 +1,7 @@
 <?php
 
 namespace Phake\Matchers;
+
 /*
  * Phake - Mocking Framework
  *
@@ -70,5 +71,4 @@ interface IMethodMatcher
      * @return string
      */
     public function getMethod();
-
 }

@@ -74,4 +74,3 @@ class VerifierResultConstraintV6 extends Constraint
         return $other->getFailureDescription();
     }
 }
-

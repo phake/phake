@@ -92,5 +92,3 @@ class CallInfoTest extends TestCase
         $this->assertSame($this->position, $this->callInfo->getPosition());
     }
 }
-
-

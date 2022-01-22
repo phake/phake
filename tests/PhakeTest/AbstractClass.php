@@ -52,7 +52,7 @@ abstract class PhakeTest_AbstractClass implements PhakeTest_MockedInterface
     {
     }
 
-    abstract function bar();
+    abstract public function bar();
 
     public function fooWithReturnValue()
     {
@@ -69,5 +69,3 @@ abstract class PhakeTest_AbstractClass implements PhakeTest_MockedInterface
         return 'test';
     }
 }
-
-

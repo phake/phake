@@ -1,6 +1,7 @@
 <?php
 
 namespace Phake\Proxies;
+
 /*
  * Phake - Mocking Framework
  *
@@ -46,7 +47,7 @@ namespace Phake\Proxies;
 
 /**
  * Defines an interface for anything that supports answers
- * 
+ *
  * @author Mike Lively <m@digitalsandwich.com>
  */
 interface AnswerProxyInterface

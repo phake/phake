@@ -74,14 +74,14 @@ class LegacyReader implements IReader
         $mockedClass = null;
         $annotations = $this->getPropertyAnnotations($property);
 
-		if ($annotations['Mock'] !== true) {
-			$mockedClass = $annotations['Mock'];
-		} elseif (isset($annotations['var'])) {
-			$mockedClass = $annotations['var'];
-		}
+        if (true !== $annotations['Mock']) {
+            $mockedClass = $annotations['Mock'];
+        } elseif (isset($annotations['var'])) {
+            $mockedClass = $annotations['var'];
+        }
 
-		if ($mockedClass && substr($mockedClass, 0, 1) !== '\\' &&  $this->useDoctrineParser()) {
-			$parser = new \Doctrine\Common\Annotations\PhpParser();
+        if ($mockedClass && '\\' !== substr($mockedClass, 0, 1) &&  $this->useDoctrineParser()) {
+            $parser = new \Doctrine\Common\Annotations\PhpParser();
 
             $reflectionClass = $property->getDeclaringClass();
             $useStatements   = $parser->parseClass($reflectionClass);
@@ -92,7 +92,7 @@ class LegacyReader implements IReader
             } elseif ($reflectionClass->getNamespaceName() && $this->definedUnderTestNamespace($mockedClass, $reflectionClass->getNamespaceName())) {
                 $mockedClass = $reflectionClass->getNamespaceName() . '\\' . $mockedClass;
             }
-		}
+        }
 
         return $mockedClass;
     }
@@ -110,7 +110,7 @@ class LegacyReader implements IReader
         if ($comment = $property->getDocComment()) {
             foreach (explode("\n", $comment) as $line) {
                 if (preg_match('#^\s+\*\s*@(\w+)(?:\s+(.*))?\s*$#', $line, $matches)) {
-                    $annotations[$matches[1]] = isset($matches[2]) ? $matches[2] : true;
+                    $annotations[$matches[1]] = $matches[2] ?? true;
                 }
             }
         }
@@ -119,7 +119,7 @@ class LegacyReader implements IReader
 
     private function useDoctrineParser(): bool
     {
-        return class_exists('Doctrine\Common\Annotations\PhpParser');
+        return class_exists(\Doctrine\Common\Annotations\PhpParser::class);
     }
 
     /**
