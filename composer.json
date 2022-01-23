@@ -44,6 +44,10 @@
             "dev-master": "4.2-dev"
         }
     },
+    "scripts": {
+        "test": "phpunit",
+        "psalm": "psalm.phar"
+    },
     "minimum-stability": "dev",
     "prefer-stable": true
 }
