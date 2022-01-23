@@ -1,7 +1,9 @@
 Phake
 =======
-[![Documentation Status](https://readthedocs.org/projects/phake/badge/?version=latest)](https://readthedocs.org/projects/phake/?badge=latest)
-[![Latest Stable Version](https://poser.pugx.org/phake/phake/v/stable.png)](https://packagist.org/packages/phake/phake) [![Total Downloads](https://poser.pugx.org/phake/phake/downloads.png)](https://packagist.org/packages/phake/phake) [![License](https://poser.pugx.org/phake/phake/license.png)](https://packagist.org/packages/phake/phake)
+[![Tests](https://github.com/phake/phake/actions/workflows/tests.yml/badge.svg)](https://github.com/phake/phake/actions/workflows/tests.yml)
+[![Latest Stable Version](https://poser.pugx.org/phake/phake/v/stable.png)](https://packagist.org/packages/phake/phake)
+[![Total Downloads](https://poser.pugx.org/phake/phake/downloads.png)](https://packagist.org/packages/phake/phake)
+[![License](https://poser.pugx.org/phake/phake/license.png)](https://packagist.org/packages/phake/phake)
 
 Phake is a framework for PHP that aims to provide mock objects, test doubles
 and method stubs.
@@ -37,7 +39,8 @@ Links
 
 There are a few links that have information on how you can utilize Phake.
 
-* [Phake Documentation](http://phake.readthedocs.org/en/latest/)
+* [Phake Website](https://phake.github.io)
+* [Phake Documentation](https://phake.github.io/doc/)
 * [Initial Phake Announcement](https://web.archive.org/web/20101230174850/http://digitalsandwich.com/archives/84-introducing-phake-mocking-framework.html)
 
 If you have an article or tutorial that you would like to share, feel free to open an [issue](https://github.com/phake/phake/issues) on github and I will add it to this list

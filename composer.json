@@ -3,7 +3,7 @@
     "type": "library",
     "description": "The Phake mock testing library",
     "keywords": ["phake", "testing", "mock", "stub", "spy", "test-doubles"],
-    "homepage": "https://github.com/phake/phake",
+    "homepage": "https://phake.github.io",
     "license": "BSD-3-Clause",
     "authors": [
         {
@@ -43,6 +43,9 @@
         "branch-alias": {
             "dev-master": "4.2-dev"
         }
+    },
+    "support": {
+        "docs": "https://phake.github.io/doc/"
     },
     "scripts": {
         "test": "phpunit",
