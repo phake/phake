@@ -34,7 +34,7 @@ jobs:
             phpunit: 9.0
           - php: 7.4
             phpunit: 9.5
-            analysis: true
+            # analysis: true
           - php: 8.0
             phpunit: 9.5
           - php: 8.1
