@@ -14,7 +14,7 @@ namespace Phake\Annotation;
 /*
  * Phake - Mocking Framework
  *
- * Copyright (c) 2010-2021, Mike Lively <mike.lively@sellingsource.com>
+ * Copyright (c) 2010-2022, Mike Lively <mike.lively@sellingsource.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
