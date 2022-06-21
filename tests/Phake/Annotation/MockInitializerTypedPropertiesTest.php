@@ -68,6 +68,8 @@ class MockInitializerTypesPropertiesTest extends TestCase
      */
     private \stdClass $mock;
 
+    private MockInitializer $initializer;
+
     #[Mock]
     private AnotherNamespacedClass $nativeMock;
 
