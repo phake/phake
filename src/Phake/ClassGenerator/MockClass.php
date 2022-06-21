@@ -424,7 +424,7 @@ class {$newClassName} {$extends}
 
         \$__PHAKE_info = Phake::getInfo({$context});
 		if (\$__PHAKE_info === null) {
-		    ${return}{$nullReturn};
+		    {$return}{$nullReturn};
 		}
 
 		\$__PHAKE_funcArgs = array_map(function (\$x) { return \$x; }, \$__PHAKE_args);
@@ -441,7 +441,7 @@ class {$newClassName} {$extends}
     	    \$__PHAKE_result = call_user_func_array(\$__PHAKE_callback, \$__PHAKE_args);
 	    }
 	    \$__PHAKE_answer->processAnswer(\$__PHAKE_result);
-	    ${return}{$resultReturn};
+	    {$return}{$resultReturn};
 	}
 ";
 
