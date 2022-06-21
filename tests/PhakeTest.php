@@ -1359,6 +1359,9 @@ class PhakeTest extends TestCase
 
     public function testMockingSoapClient()
     {
+        if (!extension_loaded('soap')) {
+            $this->markTestSkipped('Soap extension not loaded');
+        }
         // This test requires that E_STRICT be on
         // It will fail with it on, otherwise it wont' complain
         $mock = Phake::mock('SoapClient');
