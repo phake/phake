@@ -521,7 +521,7 @@ class {$newClassName} {$extends}
             } elseif ('parent' == $result) {
                 $result = $selfClass->getParentClass()->getName();
             }
-            if ('mixed' != $result && $type->allowsNull()) {
+            if ('mixed' !== $result && 'null' !==$result && $type->allowsNull()) {
                 $nullable = '?';
             }
         } elseif ($type instanceof \ReflectionUnionType) {

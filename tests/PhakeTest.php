@@ -1774,6 +1774,16 @@ class PhakeTest extends TestCase
         }
     }
 
+    public function testCallingNullReturnMockedMethodWillReturnNull()
+    {
+        if (PHP_VERSION_ID < 80200) {
+            $this->markTestSkipped('null type is not supported in PHP versions prior to 8.2');
+        }
+        $mock = Phake::mock(\PhakeTest_NullReturn::class);
+
+        $this->assertNull($mock->nullReturn());
+    }
+
     /**
      * For #239
      */
