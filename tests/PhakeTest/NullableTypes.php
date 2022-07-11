@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class PhakeTest_NullableTypes
 {
     public function objectReturn(): ?PhakeTest_A

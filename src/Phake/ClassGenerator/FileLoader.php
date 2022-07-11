@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Phake\ClassGenerator;
 
 /*
@@ -74,7 +76,9 @@ class FileLoader implements ILoader
     public function loadClassByString($className, $classDef)
     {
         $file = rtrim($this->dir, '/') . '/' . $className . '.php';
-        file_put_contents($file, "<?php \n" . $classDef);
+        file_put_contents($file, "<?php
+
+declare(strict_types=1); \n" . $classDef);
         require_once($file);
     }
 }
