@@ -400,7 +400,7 @@ class {$newClassName} {$extends}
         $return = 'return ';
         if ($method->hasReturnType()) {
             $returnType = $method->getReturnType();
-            $returnTypeName = $this->implementType($returnType, $method->getDeclaringClass());
+            $returnTypeName = $this->reflectionTypeToString($returnType, $method->getDeclaringClass());
             $returnHint = ': ' . $returnTypeName;
 
             if (PHP_VERSION_ID >= 80100 && 'never' == $returnTypeName) {
@@ -511,7 +511,7 @@ class {$newClassName} {$extends}
      *
      * @return string
      */
-    private function implementType(\ReflectionType $type, \ReflectionClass $selfClass)
+    private function reflectionTypeToString(\ReflectionType $type, \ReflectionClass $selfClass): string
     {
         $result = '';
         $nullable = '';
@@ -529,28 +529,20 @@ class {$newClassName} {$extends}
         } elseif ($type instanceof \ReflectionUnionType) {
             $types = [];
             foreach ($type->getTypes() as $singleType) {
-                switch ($t = $singleType->getName()) {
-                    case 'self':
-                        $types[] = $selfClass->getName();
-                        break;
-                    case 'parent':
-                        $types[] = $selfClass->getParentClass()->getName();
-                        break;
-                    case 'null':
-                        break;
-                    default:
-                        $types[] = $t;
-                        break;
+                if ($singleType instanceof \ReflectionIntersectionType) {
+                    $types[] = '(' . $this->reflectionTypeToString($singleType, $selfClass) . ')';
+                } else {
+                    $types[] = $this->reflectionTypeToString($singleType, $selfClass);
                 }
-            }
-            if ($type->allowsNull()) {
-                $types[] = 'null';
             }
             $result = implode('|', $types);
         } elseif ($type instanceof \ReflectionIntersectionType) {
-            $result = (string) $type;
+            $types = [];
+            foreach ($type->getTypes() as $singleType) {
+                $types[] = $this->reflectionTypeToString($singleType, $selfClass);
+            }
+            $result = implode('&', $types);
         }
-
         return $nullable . $result;
     }
 
@@ -569,7 +561,7 @@ class {$newClassName} {$extends}
 
         try {
             if ($parameter->hasType()) {
-                $type = $this->implementType($parameter->getType(), $parameter->getDeclaringClass()) . ' ';
+                $type = $this->reflectionTypeToString($parameter->getType(), $parameter->getDeclaringClass()) . ' ';
             }
         } catch (\ReflectionException $e) {
             //HVVM is throwing an exception when pulling class name when said class does not exist
