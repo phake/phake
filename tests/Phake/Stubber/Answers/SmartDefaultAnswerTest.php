@@ -69,13 +69,11 @@ class SmartDefaultAnswerTest extends TestCase
 
     public static function typeReturnMap()
     {
-        return [
-            'int' => ['intReturn', 0],
-            'float' => ['floatReturn', 0.0],
-            'string' => ['stringReturn', ''],
-            'boolean' => ['boolReturn', false],
-            'array' => ['arrayReturn', []],
-        ];
+        yield 'int' => ['intReturn', 0];
+        yield 'float' => ['floatReturn', 0.0];
+        yield 'string' => ['stringReturn', ''];
+        yield 'boolean' => ['boolReturn', false];
+        yield 'array' => ['arrayReturn', []];
     }
 
     /**
@@ -107,6 +105,14 @@ class SmartDefaultAnswerTest extends TestCase
         $this->assertInstanceOf('Phake\IMock', $cb());
     }
 
+    public function testSelfReturn()
+    {
+        $context = new \PhakeTest_ScalarTypes();
+        $cb = $this->answer->getAnswerCallback($context, 'selfReturn');
+
+        $this->assertInstanceOf('PhakeTest_ScalarTypes', $cb());
+    }
+
     public function testUnionTypeReturn()
     {
         if (PHP_VERSION_ID < 80000) {
@@ -133,11 +139,56 @@ class SmartDefaultAnswerTest extends TestCase
         $this->assertInstanceOf(\Countable::class, $result);
     }
 
-    public function testSelfReturn()
+    public function testDNFTypeReturn()
     {
-        $context = new \PhakeTest_ScalarTypes();
-        $cb = $this->answer->getAnswerCallback($context, 'selfReturn');
+        if (PHP_VERSION_ID < 80200) {
+            $this->markTestSkipped('DNF types are not supported in PHP versions prior to 8.2');
+        }
 
-        $this->assertInstanceOf('PhakeTest_ScalarTypes', $cb());
+        $context = new \PhakeTest_DNFTypes();
+        $cb = $this->answer->getAnswerCallback($context, 'dnfReturn');
+
+        $result = $cb();
+        $this->assertInstanceOf(\Traversable::class, $result);
+        $this->assertInstanceOf(\Countable::class, $result);
+    }
+
+    public function testReturnTrue()
+    {
+        if (PHP_VERSION_ID < 80200) {
+            $this->markTestSkipped('true return type is not supported in PHP versions prior to 8.2');
+        }
+
+        $context = new \PhakeTest_TrueType();
+        $cb = $this->answer->getAnswerCallback($context, 'trueReturn');
+
+        $result = $cb();
+        $this->assertTrue($result);
+    }
+
+    public function testReturnFalse()
+    {
+        if (PHP_VERSION_ID < 80200) {
+            $this->markTestSkipped('false return type is not supported in PHP versions prior to 8.2');
+        }
+
+        $context = new \PhakeTest_FalseType();
+        $cb = $this->answer->getAnswerCallback($context, 'falseReturn');
+
+        $result = $cb();
+        $this->assertFalse($result);
+    }
+
+    public function testReturnNull()
+    {
+        if (PHP_VERSION_ID < 80200) {
+            $this->markTestSkipped('null return type is not supported in PHP versions prior to 8.2');
+        }
+
+        $context = new \PhakeTest_NullType();
+        $cb = $this->answer->getAnswerCallback($context, 'nullReturn');
+
+        $result = $cb();
+        $this->assertNull($result);
     }
 }

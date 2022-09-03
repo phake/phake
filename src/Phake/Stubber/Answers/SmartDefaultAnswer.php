@@ -59,62 +59,63 @@ class SmartDefaultAnswer implements \Phake\Stubber\IAnswer
     }
 
     /**
-     * @psalm-suppress UndefinedMethod
      * @psalm-suppress MissingClosureParamType
      * @psalm-suppress MissingClosureReturnType
+     */
+    public function getReturnTypeResult(?\ReflectionType $returnType, \ReflectionMethod $method)
+    {
+        if (null === $returnType) {
+            return null;
+        } elseif ($returnType instanceof \ReflectionNamedType) {
+            switch ($typeName = $returnType->getName()) {
+                case 'int':
+                    return 0;
+                case 'float':
+                    return 0.0;
+                case 'string':
+                    return '';
+                case 'bool':
+                case 'false':
+                    return false;
+                case 'true':
+                    return true;
+                case 'array':
+                    return [];
+                case 'callable':
+                    return function() {};
+                case 'self':
+                    return \Phake::mock($method->getDeclaringClass()->getName());
+                case 'null':
+                case 'void':
+                case 'never':
+                    return null;
+                default:
+                    if (class_exists($typeName)) {
+                        return \Phake::mock($typeName);
+                    }
+                }
+        } elseif ($returnType instanceof \ReflectionIntersectionType) {
+            return \Phake::mock(array_map(function ($t) {
+                return $t->getName();
+            }, $returnType->getTypes()));
+        } elseif ($returnType instanceof \ReflectionUnionType) {
+            foreach ($returnType->getTypes() as $type) {
+                return $this->getReturnTypeResult($type, $method);
+            }
+        }
+
+        throw new \Exception('Unable to create a smart answer for type \'' . (string) $returnType . '\'');
+    }
+
+    /**
+     * @psalm-suppress UndefinedMethod
      */
     public function getAnswerCallback($context, $method)
     {
         $class = new \ReflectionClass($context);
         $method = $class->getMethod($method);
 
-        $defaultAnswer = null;
-
-        if ($method->hasReturnType()) {
-            $returnType = $method->getReturnType();
-            if ($returnType instanceof \ReflectionIntersectionType) {
-                $defaultAnswer = \Phake::mock(array_map(function ($t) {
-                    return $t->getName();
-                }, $returnType->getTypes()));
-            } elseif (null !== $returnType) {
-                $typeNames = $returnType instanceof \ReflectionNamedType ? [ $returnType->getName() ] : array_map(function ($t) {
-                    return $t->getName();
-                }, $returnType->getTypes());
-                foreach ($typeNames as $typeName) {
-                    switch ($typeName) {
-                        case 'int':
-                            $defaultAnswer = 0;
-                            break 2;
-                        case 'float':
-                            $defaultAnswer = 0.0;
-                            break 2;
-                        case 'string':
-                            $defaultAnswer = '';
-                            break 2;
-                        case 'bool':
-                        case 'false':
-                            $defaultAnswer = false;
-                            break 2;
-                        case 'array':
-                            $defaultAnswer = [];
-                            break 2;
-                        case 'callable':
-                            $defaultAnswer = function () {
-                            };
-                            break 2;
-                        case 'self':
-                            $defaultAnswer = \Phake::mock($method->getDeclaringClass()->getName());
-                            break 2;
-                        default:
-                            if (class_exists($typeName)) {
-                                $defaultAnswer = \Phake::mock($typeName);
-                                break 2;
-                            }
-                            break;
-                    }
-                }
-            }
-        }
+        $defaultAnswer = $this->getReturnTypeResult($method->getReturnType(), $method);
 
         return function (...$args) use ($defaultAnswer) {
             return $defaultAnswer;
