@@ -39,6 +39,8 @@ jobs:
             phpunit: 9.5
           - php: 8.1
             phpunit: 9.5
+          - php: 8.2
+            phpunit: ^9.5
 
 
     steps:
