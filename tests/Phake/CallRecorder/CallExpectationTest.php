@@ -55,16 +55,16 @@ class CallExpectationTest extends TestCase
     public function testToString()
     {
         /** @var $mock \Phake\IMock */
-        $mock = Phake::mock('Phake\IMock');
+        $mock = Phake::mock(\Phake\IMock::class);
 
-        $matcher1 = Phake::mock('Phake\Matchers\IChainableArgumentMatcher');
+        $matcher1 = Phake::mock(\Phake\Matchers\IChainableArgumentMatcher::class);
         Phake::when($matcher1)->__toString()->thenReturn('100');
-        $matcher2 = Phake::mock('Phake\Matchers\IChainableArgumentMatcher');
+        $matcher2 = Phake::mock(\Phake\Matchers\IChainableArgumentMatcher::class);
         Phake::when($matcher2)->__toString()->thenReturn('200');
 
         Phake::when($matcher1)->getNextMatcher->thenReturn($matcher2);
 
-        $verifierMode = Phake::mock('Phake\CallRecorder\IVerifierMode');
+        $verifierMode = Phake::mock(\Phake\CallRecorder\IVerifierMode::class);
         Phake::when($verifierMode)->__toString()->thenReturn('2 times');
 
         $expectation = new Phake\CallRecorder\CallExpectation($mock, 'method', $matcher1, $verifierMode);
@@ -77,16 +77,16 @@ class CallExpectationTest extends TestCase
     public function testStaticToString()
     {
         /** @var $mock \Phake\IMock */
-        $mock = Phake::mock('Phake\IMock');
+        $mock = Phake::mock(\Phake\IMock::class);
 
-        $matcher1 = Phake::mock('Phake\Matchers\IChainableArgumentMatcher');
+        $matcher1 = Phake::mock(\Phake\Matchers\IChainableArgumentMatcher::class);
         Phake::when($matcher1)->__toString()->thenReturn('100');
-        $matcher2 = Phake::mock('Phake\Matchers\IChainableArgumentMatcher');
+        $matcher2 = Phake::mock(\Phake\Matchers\IChainableArgumentMatcher::class);
         Phake::when($matcher2)->__toString()->thenReturn('200');
 
         Phake::when($matcher1)->getNextMatcher->thenReturn($matcher2);
 
-        $verifierMode = Phake::mock('Phake\CallRecorder\IVerifierMode');
+        $verifierMode = Phake::mock(\Phake\CallRecorder\IVerifierMode::class);
         Phake::when($verifierMode)->__toString()->thenReturn('2 times');
 
         $expectation = new Phake\CallRecorder\CallExpectation(get_class($mock), 'method', $matcher1, $verifierMode);

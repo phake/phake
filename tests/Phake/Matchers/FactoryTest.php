@@ -113,7 +113,7 @@ class FactoryTest extends TestCase
      */
     public function testHamcrestMatcher()
     {
-        $matcher = $this->getMockBuilder('Hamcrest\Matcher')->getMock();
+        $matcher = $this->getMockBuilder(\Hamcrest\Matcher::class)->getMock();
         $matcher->expects($this->once())
             ->method('matches')
             ->with($this->equalTo('foo'))

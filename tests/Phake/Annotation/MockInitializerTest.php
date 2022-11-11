@@ -104,8 +104,8 @@ class MockInitializerTest extends TestCase
 
         $this->assertInstanceOf('stdClass', $this->mock1);
         $this->assertInstanceOf('stdClass', $this->mock2);
-        $this->assertInstanceOf('Phake\IMock', $this->mock1);
-        $this->assertInstanceOf('Phake\IMock', $this->mock2);
+        $this->assertInstanceOf(\Phake\IMock::class, $this->mock1);
+        $this->assertInstanceOf(\Phake\IMock::class, $this->mock2);
     }
 
     /**
@@ -115,7 +115,7 @@ class MockInitializerTest extends TestCase
     {
         $this->initializer->initialize($this);
 
-        $this->assertInstanceOf('Phake\IMock', $this->shortNameMock1);
+        $this->assertInstanceOf(\Phake\IMock::class, $this->shortNameMock1);
     }
 
     /**
@@ -125,7 +125,7 @@ class MockInitializerTest extends TestCase
     {
         $this->initializer->initialize($this);
 
-        $this->assertInstanceOf('Phake\IMock', $this->shortNameMock2);
+        $this->assertInstanceOf(\Phake\IMock::class, $this->shortNameMock2);
     }
 
     public function testWithNativeReader()

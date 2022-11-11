@@ -63,7 +63,7 @@ class Phake_PHPUnit_VerifierResultConstraingV7Test extends TestCase
 
     public function testExtendsPHPUnitConstraint()
     {
-        $this->assertInstanceOf('PHPUnit\Framework\Constraint\Constraint', $this->constraint);
+        $this->assertInstanceOf(\PHPUnit\Framework\Constraint\Constraint::class, $this->constraint);
     }
 
     public function testEvaluateReturnsTrueIfVerifyResultIsTrue()

@@ -86,7 +86,7 @@ class IgnoreRemainingMatcherTest extends TestCase
 
     public function testSetNextThrowsInvalidException()
     {
-        $this->expectException('InvalidArgumentException', 'Other matchers cannot be checked after you ignore remaining parameters.');
+        $this->expectException('InvalidArgumentException');
         $this->matcher->setNextMatcher(Phake::mock(IChainableArgumentMatcher::class));
     }
 }

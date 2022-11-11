@@ -79,7 +79,7 @@ class Phake_Client_PHPUnitTest6 extends TestCase
     {
         $result = new Phake_CallRecorder_VerifierResult(false, [], 'failure message');
 
-        $this->expectException(ExpectationFailedException::class, 'failure message');
+        $this->expectException(ExpectationFailedException::class);
         $this->client->processVerifierResult($result);
     }
 

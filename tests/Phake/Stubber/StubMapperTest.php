@@ -75,10 +75,10 @@ class StubMapperTest extends TestCase
      */
     public function testMappingMatchers()
     {
-        $matcher = $this->getMockBuilder('Phake\Matchers\MethodMatcher')
+        $matcher = $this->getMockBuilder(\Phake\Matchers\MethodMatcher::class)
                         ->disableOriginalConstructor()
                         ->getMock();
-        $stub    = $this->getMockBuilder('Phake\Stubber\AnswerCollection')
+        $stub    = $this->getMockBuilder(\Phake\Stubber\AnswerCollection::class)
                         ->disableOriginalConstructor()
                         ->getMock();
 
@@ -102,10 +102,10 @@ class StubMapperTest extends TestCase
      */
     public function testMappingMatchersFailsOnNonMatch()
     {
-        $matcher = $this->getMockBuilder('Phake\Matchers\MethodMatcher')
+        $matcher = $this->getMockBuilder(\Phake\Matchers\MethodMatcher::class)
                         ->disableOriginalConstructor()
                         ->getMock();
-        $stub    = $this->getMockBuilder('Phake\Stubber\AnswerCollection')
+        $stub    = $this->getMockBuilder(\Phake\Stubber\AnswerCollection::class)
                         ->disableOriginalConstructor()
                         ->getMock();
 
@@ -124,10 +124,10 @@ class StubMapperTest extends TestCase
      */
     public function testRemoveAllAnswers()
     {
-        $matcher = $this->getMockBuilder('Phake\Matchers\MethodMatcher')
+        $matcher = $this->getMockBuilder(\Phake\Matchers\MethodMatcher::class)
                         ->disableOriginalConstructor()
                         ->getMock();
-        $stub    = $this->getMockBuilder('Phake\Stubber\AnswerCollection')
+        $stub    = $this->getMockBuilder(\Phake\Stubber\AnswerCollection::class)
                         ->disableOriginalConstructor()
                         ->getMock();
 
@@ -147,17 +147,17 @@ class StubMapperTest extends TestCase
      */
     public function testMatchesInReverseOrder()
     {
-        $match_me      = $this->getMockBuilder('Phake\Matchers\MethodMatcher')
+        $match_me      = $this->getMockBuilder(\Phake\Matchers\MethodMatcher::class)
                             ->disableOriginalConstructor()
                             ->getMock();
-        $match_me_stub = $this->getMockBuilder('Phake\Stubber\AnswerCollection')
+        $match_me_stub = $this->getMockBuilder(\Phake\Stubber\AnswerCollection::class)
                             ->disableOriginalConstructor()
                             ->getMock();
 
-        $also_matches      = $this->getMockBuilder('Phake\Matchers\MethodMatcher')
+        $also_matches      = $this->getMockBuilder(\Phake\Matchers\MethodMatcher::class)
                                 ->disableOriginalConstructor()
                                 ->getMock();
-        $also_matches_stub = $this->getMockBuilder('Phake\Stubber\AnswerCollection')
+        $also_matches_stub = $this->getMockBuilder(\Phake\Stubber\AnswerCollection::class)
                                 ->disableOriginalConstructor()
                                 ->getMock();
 
@@ -187,7 +187,7 @@ class StubMapperTest extends TestCase
     public function testMappingParameterSetter()
     {
         $matcher = new Phake\Matchers\MethodMatcher('method', new Phake\Matchers\ReferenceSetter(42));
-        $stub    = $this->getMockBuilder('Phake\Stubber\AnswerCollection')
+        $stub    = $this->getMockBuilder(\Phake\Stubber\AnswerCollection::class)
                         ->disableOriginalConstructor()
                         ->getMock();
 

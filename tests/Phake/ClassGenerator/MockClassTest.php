@@ -77,7 +77,7 @@ class MockClassTest extends TestCase
      */
     public function testGenerateCreatesClass()
     {
-        $newClassName = str_replace('\\', '_', __CLASS__) . '_TestClass1';
+        $newClassName = str_replace('\\', '_', self::class) . '_TestClass1';
         $mockedClass  = 'stdClass';
 
         $this->assertFalse(
@@ -98,7 +98,7 @@ class MockClassTest extends TestCase
      */
     public function testGenerateCreatesClassExtendingExistingClass()
     {
-        $newClassName = str_replace('\\', '_', __CLASS__) . '_TestClass2';
+        $newClassName = str_replace('\\', '_', self::class) . '_TestClass2';
         $mockedClass  = 'stdClass';
 
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
@@ -116,7 +116,7 @@ class MockClassTest extends TestCase
      */
     public function testGenerateCreatesClassWithExposedCallRecorder()
     {
-        $newClassName = str_replace('\\', '_', __CLASS__) . '_TestClass3';
+        $newClassName = str_replace('\\', '_', self::class) . '_TestClass3';
         $mockedClass  = 'stdClass';
 
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
@@ -134,7 +134,7 @@ class MockClassTest extends TestCase
      */
     public function testCallingMockedMethodRecordsCall()
     {
-        $newClassName = str_replace('\\', '_', __CLASS__) . '_TestClass4';
+        $newClassName = str_replace('\\', '_', self::class) . '_TestClass4';
         $mockedClass  = 'PhakeTest_MockedClass';
 
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
@@ -157,7 +157,7 @@ class MockClassTest extends TestCase
      */
     public function testCallingmockedMethodRecordsArguments()
     {
-        $newClassName = str_replace('\\', '_', __CLASS__) . '_TestClass9';
+        $newClassName = str_replace('\\', '_', self::class) . '_TestClass9';
         $mockedClass  = 'PhakeTest_MockedClass';
 
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
@@ -181,7 +181,7 @@ class MockClassTest extends TestCase
 
     public function testGeneratingClassFromMultipleInterfaces()
     {
-        $newClassName = str_replace('\\', '_', __CLASS__) . '_testClass28';
+        $newClassName = str_replace('\\', '_', self::class) . '_testClass28';
         $mockedClass = ['PhakeTest_MockedInterface', 'PhakeTest_ConstructorInterface'];
 
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
@@ -193,7 +193,7 @@ class MockClassTest extends TestCase
 
     public function testGeneratingClassFromSimilarInterfaces()
     {
-        $newClassName = str_replace('\\', '_', __CLASS__) . '_testClass29';
+        $newClassName = str_replace('\\', '_', self::class) . '_testClass29';
         $mockedClass = ['PhakeTest_MockedInterface', 'PhakeTest_MockedInterface2'];
 
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
@@ -205,7 +205,7 @@ class MockClassTest extends TestCase
 
     public function testGeneratingClassFromDuplicateInterfaces()
     {
-        $newClassName = str_replace('\\', '_', __CLASS__) . '_testClass30';
+        $newClassName = str_replace('\\', '_', self::class) . '_testClass30';
         $mockedClass = ['PhakeTest_MockedInterface', 'PhakeTest_MockedInterface'];
 
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
@@ -216,7 +216,7 @@ class MockClassTest extends TestCase
 
     public function testGeneratingClassFromInheritedInterfaces()
     {
-        $newClassName = str_replace('\\', '_', __CLASS__) . '_testClass31';
+        $newClassName = str_replace('\\', '_', self::class) . '_testClass31';
         $mockedClass = ['PhakeTest_MockedInterface', 'PhakeTest_MockedChildInterface'];
 
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
@@ -228,7 +228,7 @@ class MockClassTest extends TestCase
 
     public function testGeneratingClassFromMultipleClasses()
     {
-        $newClassName = str_replace('\\', '_', __CLASS__) . '_testClass32';
+        $newClassName = str_replace('\\', '_', self::class) . '_testClass32';
         $mockedClass = ['PhakeTest_MockedClass', 'PhakeTest_MockedConstructedClass'];
 
         $this->expectException('RuntimeException');
@@ -240,7 +240,7 @@ class MockClassTest extends TestCase
      */
     public function testInstantiate()
     {
-        $newClassName = str_replace('\\', '_', __CLASS__) . '_TestClass5';
+        $newClassName = str_replace('\\', '_', self::class) . '_TestClass5';
         $mockedClass  = 'PhakeTest_MockedClass';
 
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
@@ -259,7 +259,7 @@ class MockClassTest extends TestCase
      */
     public function testStubbedMethodsReturnStubbedAnswer()
     {
-        $newClassName = str_replace('\\', '_', __CLASS__) . '_TestClass7';
+        $newClassName = str_replace('\\', '_', self::class) . '_TestClass7';
         $mockedClass  = 'PhakeTest_MockedClass';
 
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
@@ -286,7 +286,7 @@ class MockClassTest extends TestCase
      */
     public function testStubbedMethodDoesNotCheckUnpassedDefaultParameters()
     {
-        $newClassName = str_replace('\\', '_', __CLASS__) . '_TestClass23';
+        $newClassName = str_replace('\\', '_', self::class) . '_TestClass23';
         $mockedClass  = 'PhakeTest_MockedClass';
 
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
@@ -313,7 +313,7 @@ class MockClassTest extends TestCase
      */
     public function testStubbableInterface()
     {
-        $newClassName = str_replace('\\', '_', __CLASS__) . '_TestClass8';
+        $newClassName = str_replace('\\', '_', self::class) . '_TestClass8';
         $mockedClass  = 'stdClass';
 
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
@@ -343,7 +343,7 @@ class MockClassTest extends TestCase
      */
     public function testUnstubbedMethodsReturnDefaultAnswer()
     {
-        $newClassName = str_replace('\\', '_', __CLASS__) . '_TestClass11';
+        $newClassName = str_replace('\\', '_', self::class) . '_TestClass11';
         $mockedClass  = 'PhakeTest_MockedClass';
 
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
@@ -364,7 +364,7 @@ class MockClassTest extends TestCase
      */
     public function testUnstubbedCallReturnsDefaultAnswer()
     {
-        $newClassName = str_replace('\\', '_', __CLASS__) . '_TestClass19';
+        $newClassName = str_replace('\\', '_', self::class) . '_TestClass19';
         $mockedClass  = 'PhakeTest_MagicClass';
 
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
@@ -382,7 +382,7 @@ class MockClassTest extends TestCase
 
     public function testMagicCallMethodsRecordTwice()
     {
-        $newClassName = str_replace('\\', '_', __CLASS__) . '_TestClass21';
+        $newClassName = str_replace('\\', '_', self::class) . '_TestClass21';
         $mockedClass  = 'PhakeTest_MagicClass';
 
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
@@ -404,7 +404,7 @@ class MockClassTest extends TestCase
 
     public function testMagicCallChecksFallbackStub()
     {
-        $newClassName = str_replace('\\', '_', __CLASS__) . '_TestClass22';
+        $newClassName = str_replace('\\', '_', self::class) . '_TestClass22';
         $mockedClass  = 'PhakeTest_MagicClass';
 
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
@@ -426,7 +426,7 @@ class MockClassTest extends TestCase
      */
     public function testGenerateOnInterface()
     {
-        $newClassName = str_replace('\\', '_', __CLASS__) . '_TestClass13';
+        $newClassName = str_replace('\\', '_', self::class) . '_TestClass13';
         $mockedClass  = 'PhakeTest_MockedInterface';
 
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
@@ -442,7 +442,7 @@ class MockClassTest extends TestCase
      */
     public function testMockName()
     {
-        $newClassName = str_replace('\\', '_', __CLASS__) . '_TestClass18';
+        $newClassName = str_replace('\\', '_', self::class) . '_TestClass18';
         $mockedClass  = 'PhakeTest_MockedClass';
 
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
@@ -461,7 +461,7 @@ class MockClassTest extends TestCase
      */
     public function testCallingOriginalConstructor()
     {
-        $newClassName = str_replace('\\', '_', __CLASS__) . '_TestClass16';
+        $newClassName = str_replace('\\', '_', self::class) . '_TestClass16';
         $mockedClass  = 'PhakeTest_MockedConstructedClass';
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
@@ -488,7 +488,7 @@ class MockClassTest extends TestCase
      */
     public function testCallingFinalOriginalConstructor()
     {
-        $newClassName = str_replace('\\', '_', __CLASS__) . '_TestClass26';
+        $newClassName = str_replace('\\', '_', self::class) . '_TestClass26';
         $mockedClass  = 'PhakeTest_MockedFinalConstructedClass';
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
@@ -516,7 +516,7 @@ class MockClassTest extends TestCase
      */
     public function testGenerateCreatesClassWithConstructorInInterfaceButNotInAbstractClass()
     {
-        $newClassName = str_replace('\\', '_', __CLASS__) . '_TestClass27';
+        $newClassName = str_replace('\\', '_', self::class) . '_TestClass27';
         $mockedClass = 'PhakeTest_ImplementConstructorInterface';
 
         $this->assertFalse(
@@ -537,7 +537,7 @@ class MockClassTest extends TestCase
      */
     public function testFinalMethodsAreNotOverridden()
     {
-        $newClassName = str_replace('\\', '_', __CLASS__) . '_TestClass17';
+        $newClassName = str_replace('\\', '_', self::class) . '_TestClass17';
         $mockedClass  = 'PhakeTest_FinalMethod';
 
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
@@ -562,7 +562,7 @@ class MockClassTest extends TestCase
      */
     public function testToStringReturnsString()
     {
-        $newClassName = str_replace('\\', '_', __CLASS__) . '_TestClass24';
+        $newClassName = str_replace('\\', '_', self::class) . '_TestClass24';
         $mockedClass  = 'PhakeTest_ToStringMethod';
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
@@ -581,7 +581,7 @@ class MockClassTest extends TestCase
 
     public function testDestructMocked()
     {
-        $newClassName = str_replace('\\', '_', __CLASS__) . '_TestClass' . bin2hex(random_bytes(7));
+        $newClassName = str_replace('\\', '_', self::class) . '_TestClass' . bin2hex(random_bytes(7));
         $mockedClass  = 'PhakeTest_DestructorClass';
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
@@ -599,7 +599,7 @@ class MockClassTest extends TestCase
 
     public function testSerializableMock()
     {
-        $newClassName = str_replace('\\', '_', __CLASS__) . '_TestClass' . uniqid();
+        $newClassName = str_replace('\\', '_', self::class) . '_TestClass' . uniqid();
         $mockedClass  = 'PhakeTest_SerializableClass';
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
@@ -645,7 +645,7 @@ class MockClassTest extends TestCase
 
     public function testGeneratedMockClassHasStaticInfo()
     {
-        $newClassName = str_replace('\\', '_', __CLASS__) . '_TestClass' . bin2hex(random_bytes(7));
+        $newClassName = str_replace('\\', '_', self::class) . '_TestClass' . bin2hex(random_bytes(7));
         $mockedClass  = 'stdClass';
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
@@ -662,7 +662,7 @@ class MockClassTest extends TestCase
 
     public function testGeneratedMockAddsSelfToRegistry()
     {
-        $newClassName = str_replace('\\', '_', __CLASS__) . '_TestClass' . uniqid();
+        $newClassName = str_replace('\\', '_', self::class) . '_TestClass' . uniqid();
         $mockedClass  = 'stdClass';
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
@@ -674,7 +674,7 @@ class MockClassTest extends TestCase
      */
     public function testGenerateMaintainsPhpDoc()
     {
-        $newClassName = str_replace('\\', '_', __CLASS__) . '_TestClass25';
+        $newClassName = str_replace('\\', '_', self::class) . '_TestClass25';
         $mockedClass = 'PhakeTest_MockedClass';
 
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);

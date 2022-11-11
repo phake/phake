@@ -86,15 +86,13 @@ class AnyParametersTest extends TestCase
 
     public function testSetNextThrowsInvalidException()
     {
-        $this->expectException('InvalidArgumentException', 'Other matchers cannot be passed with any '
-            . 'parameters. It will not work the way you think it works');
+        $this->expectException('InvalidArgumentException');
         $this->matcher->setNextMatcher(Phake::mock(IChainableArgumentMatcher::class));
     }
 
     public function testAssertPreviousMatcherThrowsInvalidException()
     {
-        $this->expectException('InvalidArgumentException', 'Other matchers cannot be passed with any '
-            . 'parameters. It will not work the way you think it works');
+        $this->expectException('InvalidArgumentException');
         $this->matcher->assertPreviousMatcher(Phake::mock(IChainableArgumentMatcher::class));
     }
 }

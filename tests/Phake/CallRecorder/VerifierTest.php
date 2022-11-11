@@ -233,9 +233,9 @@ class VerifierTest extends TestCase
     {
         $recorder = new Recorder();
 
-        $obj1     = $this->getMockBuilder('Phake\IMock')
+        $obj1     = $this->getMockBuilder(\Phake\IMock::class)
                         ->getMock();
-        $obj2     = $this->getMockBuilder('Phake\IMock')
+        $obj2     = $this->getMockBuilder(\Phake\IMock::class)
                         ->getMock();
 
         $expectation = new CallExpectation(
@@ -312,7 +312,7 @@ Other Invocations:
 
     public function testVerifierModifiesFailureDescriptionIfThereAreNoInteractions()
     {
-        $obj2        = Phake::mock('Phake\IMock');
+        $obj2        = Phake::mock(\Phake\IMock::class);
 
         $expectation = new CallExpectation(
             $obj2,

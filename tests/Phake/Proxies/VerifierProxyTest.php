@@ -105,7 +105,7 @@ class VerifierProxyTest extends TestCase
     public function testVerifierCallsAreForwardedMethod()
     {
         Phake::when($this->verifier)->verifyCall(Phake::anyParameters())->thenReturn(
-            new Phake\CallRecorder\VerifierResult(true, [Phake::mock('Phake\CallRecorder\CallInfo')])
+            new Phake\CallRecorder\VerifierResult(true, [Phake::mock(\Phake\CallRecorder\CallInfo::class)])
         );
         $this->proxy->foo();
 
@@ -130,10 +130,10 @@ class VerifierProxyTest extends TestCase
      */
     public function testVerifierCallsAreForwardedArguments()
     {
-        $argumentMatcher = Phake::mock('Phake\Matchers\IChainableArgumentMatcher');
+        $argumentMatcher = Phake::mock(\Phake\Matchers\IChainableArgumentMatcher::class);
 
         Phake::when($this->verifier)->verifyCall(Phake::anyParameters())->thenReturn(
-            new Phake\CallRecorder\VerifierResult(true, [Phake::mock('Phake\CallRecorder\CallInfo')])
+            new Phake\CallRecorder\VerifierResult(true, [Phake::mock(\Phake\CallRecorder\CallInfo::class)])
         );
         $this->proxy->foo($argumentMatcher);
 
@@ -149,7 +149,7 @@ class VerifierProxyTest extends TestCase
     {
         $argumentMatcher = new Phake\Matchers\EqualsMatcher('test', \SebastianBergmann\Comparator\Factory::getInstance());
         Phake::when($this->verifier)->verifyCall(Phake::anyParameters())->thenReturn(
-            new Phake\CallRecorder\VerifierResult(true, [Phake::mock('Phake\CallRecorder\CallInfo')])
+            new Phake\CallRecorder\VerifierResult(true, [Phake::mock(\Phake\CallRecorder\CallInfo::class)])
         );
         $this->proxy->foo('test');
 
@@ -172,7 +172,7 @@ class VerifierProxyTest extends TestCase
      */
     public function testMagicGetWithInvalidData($invalidData, $exceptionContains)
     {
-        $this->expectException('InvalidArgumentException', $exceptionContains);
+        $this->expectException('InvalidArgumentException');
         $this->proxy->__get($invalidData);
     }
 

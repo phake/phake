@@ -70,7 +70,7 @@ class HamcrestMatcherAdapterTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->matcher = $this->getMockBuilder('Hamcrest\BaseMatcher')->getMock();
+        $this->matcher = $this->getMockBuilder(\Hamcrest\BaseMatcher::class)->getMock();
         $this->matcher->expects($this->any())
             ->method('__toString')
             ->will($this->returnValue('hamcrest matcher'));

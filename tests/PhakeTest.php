@@ -417,7 +417,7 @@ class PhakeTest extends TestCase
 
         Phake::reset($mock);
 
-        $this->expectException('Phake\Exception\VerificationException');
+        $this->expectException(\Phake\Exception\VerificationException::class);
         Phake::setClient(Phake::CLIENT_DEFAULT);
 
         Phake::verify($mock)->foo();
@@ -452,7 +452,7 @@ class PhakeTest extends TestCase
 
         Phake::resetStatic($mock);
 
-        $this->expectException('Phake\Exception\VerificationException');
+        $this->expectException(\Phake\Exception\VerificationException::class);
         Phake::setClient(Phake::CLIENT_DEFAULT);
 
         Phake::verifyStatic($mock)->staticMethod();
@@ -706,7 +706,7 @@ class PhakeTest extends TestCase
         $mock->callInnerFunc();
         $mock->fooWithReturnValue();
 
-        $this->expectException('Phake\Exception\VerificationException');
+        $this->expectException(\Phake\Exception\VerificationException::class);
         Phake::setClient(Phake::CLIENT_DEFAULT);
 
         Phake::inOrder(
@@ -754,7 +754,7 @@ class PhakeTest extends TestCase
         $mock2->fooWithReturnValue();
         $mock2->callInnerFunc();
 
-        $this->expectException('Phake\Exception\VerificationException');
+        $this->expectException(\Phake\Exception\VerificationException::class);
         Phake::setClient(Phake::CLIENT_DEFAULT);
 
         Phake::inOrder(
@@ -791,7 +791,7 @@ class PhakeTest extends TestCase
 
         Phake::verifyNoFurtherInteraction($mock);
 
-        $this->expectException('Phake\Exception\VerificationException');
+        $this->expectException(\Phake\Exception\VerificationException::class);
         Phake::setClient(Phake::CLIENT_DEFAULT);
 
         $mock->foo();
@@ -805,7 +805,7 @@ class PhakeTest extends TestCase
 
         Phake::verifyNoFurtherInteraction($mock);
 
-        $this->expectException('Phake\Exception\VerificationException');
+        $this->expectException(\Phake\Exception\VerificationException::class);
         Phake::setClient(Phake::CLIENT_DEFAULT);
 
         $mock::staticMethod();
@@ -824,7 +824,7 @@ class PhakeTest extends TestCase
 
         Phake::verifyNoFurtherInteraction($mock1, $mock2);
 
-        $this->expectException('Phake\Exception\VerificationException');
+        $this->expectException(\Phake\Exception\VerificationException::class);
         Phake::setClient(Phake::CLIENT_DEFAULT);
 
         $mock2->foo();
@@ -841,7 +841,7 @@ class PhakeTest extends TestCase
 
         $mock->foo();
 
-        $this->expectException('Phake\Exception\VerificationException');
+        $this->expectException(\Phake\Exception\VerificationException::class);
         Phake::setClient(Phake::CLIENT_DEFAULT);
         Phake::verifyNoInteraction($mock);
     }
@@ -857,7 +857,7 @@ class PhakeTest extends TestCase
 
         $mock::staticMethod();
 
-        $this->expectException('Phake\Exception\VerificationException');
+        $this->expectException(\Phake\Exception\VerificationException::class);
         Phake::setClient(Phake::CLIENT_DEFAULT);
         Phake::verifyNoInteraction($mock);
     }
@@ -874,7 +874,7 @@ class PhakeTest extends TestCase
 
         $mock2->foo();
 
-        $this->expectException('Phake\Exception\VerificationException');
+        $this->expectException(\Phake\Exception\VerificationException::class);
         Phake::setClient(Phake::CLIENT_DEFAULT);
         Phake::verifyNoInteraction($mock1, $mock2);
     }
@@ -919,7 +919,7 @@ class PhakeTest extends TestCase
 
         $mock->fooWithArgument('FOO');
 
-        $this->expectException('Phake\Exception\VerificationException');
+        $this->expectException(\Phake\Exception\VerificationException::class);
         Phake::setClient(Phake::CLIENT_DEFAULT);
         Phake::verify($mock)->fooWithArgument(Phake::capture($toArgument)->when('BAR'));
     }
@@ -978,6 +978,7 @@ class PhakeTest extends TestCase
      */
     public function testCaptureAnswerReturnsParentValue()
     {
+        $return = null;
         $mock = Phake::mock('PhakeTest_MockedClass');
         Phake::when($mock)->fooWithReturnValue()->captureReturnTo($return);
 
@@ -989,6 +990,7 @@ class PhakeTest extends TestCase
      */
     public function testCaptureAnswerCapturesParentValue()
     {
+        $return = null;
         $mock = Phake::mock('PhakeTest_MockedClass');
         Phake::when($mock)->fooWithReturnValue()->captureReturnTo($return);
 
@@ -1002,6 +1004,7 @@ class PhakeTest extends TestCase
      */
     public function testSettingReferenceParameters()
     {
+        $value = null;
         $mock = Phake::mock('PhakeTest_MockedClass');
 
         Phake::when($mock)->fooWithRefParm('test', Phake::setReference(42))->thenReturn(null);
@@ -1075,7 +1078,7 @@ class PhakeTest extends TestCase
      */
     public function testVerifyTimesMismatch()
     {
-        $this->expectException('Phake\Exception\VerificationException');
+        $this->expectException(\Phake\Exception\VerificationException::class);
 
         Phake::setClient(Phake::CLIENT_DEFAULT);
         $mock = Phake::mock('PhakeTest_MockedClass');
@@ -1116,7 +1119,7 @@ class PhakeTest extends TestCase
      */
     public function testVerifyAtLeastMismatch()
     {
-        $this->expectException('Phake\Exception\VerificationException');
+        $this->expectException(\Phake\Exception\VerificationException::class);
 
         Phake::setClient(Phake::CLIENT_DEFAULT);
         $mock = Phake::mock('PhakeTest_MockedClass');
@@ -1210,7 +1213,7 @@ class PhakeTest extends TestCase
     {
         $matcher = Phake::anyParameters();
 
-        $this->assertInstanceOf("Phake\Matchers\AnyParameters", $matcher);
+        $this->assertInstanceOf(\Phake\Matchers\AnyParameters::class, $matcher);
     }
 
     /**
@@ -1236,8 +1239,7 @@ class PhakeTest extends TestCase
 
         $mock->fooWithLotsOfParameters(3, 2, 1);
 
-        $this->expectException('InvalidArgumentException', 'Other matchers cannot be passed with any '
-            . 'parameters. It will not work the way you think it works');
+        $this->expectException('InvalidArgumentException');
         Phake::verify($mock)->fooWithLotsOfParameters(Phake::anyParameters(), 1);
     }
 
@@ -1247,8 +1249,7 @@ class PhakeTest extends TestCase
 
         $mock->fooWithLotsOfParameters(3, 2, 1);
 
-        $this->expectException('InvalidArgumentException', 'Other matchers cannot be passed with any '
-            . 'parameters. It will not work the way you think it works');
+        $this->expectException('InvalidArgumentException');
         Phake::verify($mock)->fooWithLotsOfParameters(3, Phake::anyParameters());
     }
 
@@ -1272,7 +1273,7 @@ class PhakeTest extends TestCase
 
         $mock->fooWithLotsOfParameters(3, 2, 1);
 
-        $this->expectException('InvalidArgumentException', 'Other matchers cannot be checked after you ignore remaining parameters.');
+        $this->expectException('InvalidArgumentException');
         Phake::verify($mock)->fooWithLotsOfParameters(Phake::ignoreRemaining(), 1);
     }
 
@@ -1294,8 +1295,7 @@ class PhakeTest extends TestCase
         $mock = Phake::mock('PhakeTest_MockedClass');
 
         $this->expectException(
-            'Phake\Exception\VerificationException',
-            'Expected PhakeTest_MockedClass->foo() to be called exactly <1> times, actually called <0> times. In fact, there are no interactions with this mock.'
+            \Phake\Exception\VerificationException::class
         );
         Phake::setClient(Phake::CLIENT_DEFAULT);
         Phake::verify($mock)->foo();
@@ -1309,13 +1309,7 @@ class PhakeTest extends TestCase
 
         Phake::setClient(Phake::CLIENT_DEFAULT);
         $this->expectException(
-            'Phake\Exception\VerificationException',
-            'Expected PhakeTest_MockedClass->foo() to be called exactly <1> times, actually called <0> times.' . "\n"
-                . "Other Invocations:\n"
-                . "===\n"
-                . "  PhakeTest_MockedClass->foo(<string:test>)\n"
-                . "  No matchers were given to Phake::when(), but arguments were received by this method.\n"
-                . '==='
+            \Phake\Exception\VerificationException::class
         );
 
         Phake::verify($mock)->foo();
@@ -1377,7 +1371,7 @@ class PhakeTest extends TestCase
 
         Phake::setClient(null);
 
-        $this->assertInstanceOf('Phake\Client\DefaultClient', Phake::getClient());
+        $this->assertInstanceOf(\Phake\Client\DefaultClient::class, Phake::getClient());
 
         Phake::setClient($original_client);
     }
@@ -1386,7 +1380,7 @@ class PhakeTest extends TestCase
     {
         $original_client = Phake::getClient();
 
-        $client = Phake::mock('Phake\Client\IClient');
+        $client = Phake::mock(\Phake\Client\IClient::class);
         Phake::setClient($client);
 
         $this->assertSame($client, Phake::getClient());
@@ -1400,7 +1394,7 @@ class PhakeTest extends TestCase
 
         Phake::setClient(Phake::CLIENT_DEFAULT);
 
-        $this->assertInstanceOf('Phake\Client\DefaultClient', Phake::getClient());
+        $this->assertInstanceOf(\Phake\Client\DefaultClient::class, Phake::getClient());
 
         Phake::setClient($original_client);
     }
@@ -1411,7 +1405,7 @@ class PhakeTest extends TestCase
 
         Phake::setClient(Phake::CLIENT_PHPUNIT7);
 
-        $this->assertInstanceOf('Phake\Client\PHPUnit7', Phake::getClient());
+        $this->assertInstanceOf(\Phake\Client\PHPUnit7::class, Phake::getClient());
 
         Phake::setClient($original_client);
     }
@@ -1454,7 +1448,7 @@ class PhakeTest extends TestCase
     {
         $mock = Phake::mock('PhakeTest_StaticInterface');
 
-        $this->assertInstanceOf('Phake\IMock', $mock);
+        $this->assertInstanceOf(\Phake\IMock::class, $mock);
     }
 
     public function testCallingMockStaticMethod()
@@ -1553,12 +1547,12 @@ class PhakeTest extends TestCase
         }
 
         // Generated a fatal error before fixed
-        $this->assertInstanceOf('Phake\IMock', Phake::mock('PhakeTest_ConstructorInterface'));
+        $this->assertInstanceOf(\Phake\IMock::class, Phake::mock('PhakeTest_ConstructorInterface'));
     }
 
     public function testClassWithWakeupWorks()
     {
-        $this->assertInstanceOf('Phake\IMock', Phake::mock('PhakeTest_WakeupClass'));
+        $this->assertInstanceOf(\Phake\IMock::class, Phake::mock('PhakeTest_WakeupClass'));
     }
 
     public function testMockPDOStatement()
@@ -1642,7 +1636,7 @@ class PhakeTest extends TestCase
         $mock->foo('b');
 
         Phake::verify($mock)->foo('a');
-        $this->expectException('Phake\Exception\VerificationException');
+        $this->expectException(\Phake\Exception\VerificationException::class);
         Phake::setClient(Phake::CLIENT_DEFAULT);
         Phake::verifyNoOtherInteractions($mock);
     }

@@ -60,7 +60,7 @@ class RecorderTest extends TestCase
 
     public function setUp(): void
     {
-        $this->mock = $this->getMockBuilder('Phake\IMock')
+        $this->mock = $this->getMockBuilder(\Phake\IMock::class)
                     ->getMock();
     }
 

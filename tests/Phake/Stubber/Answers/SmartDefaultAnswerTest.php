@@ -102,7 +102,7 @@ class SmartDefaultAnswerTest extends TestCase
         $cb = $this->answer->getAnswerCallback($context, 'objectReturn');
 
         $this->assertInstanceOf('PhakeTest_A', $cb());
-        $this->assertInstanceOf('Phake\IMock', $cb());
+        $this->assertInstanceOf(\Phake\IMock::class, $cb());
     }
 
     public function testSelfReturn()

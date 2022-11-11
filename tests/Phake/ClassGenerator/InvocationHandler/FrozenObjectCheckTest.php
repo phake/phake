@@ -97,7 +97,7 @@ class FrozenObjectCheckTest extends TestCase
                     ->getMock();
         Phake::when($this->mockInfo)->isObjectFrozen()->thenReturn(true);
 
-        $this->expectException(Phake\Exception\VerificationException::class, 'This object has been frozen.');
+        $this->expectException(Phake\Exception\VerificationException::class);
         Phake::setClient(Phake::CLIENT_DEFAULT);
         $ref = [];
         $this->handler->invoke($mock, 'foo', [], $ref);
@@ -109,7 +109,7 @@ class FrozenObjectCheckTest extends TestCase
                     ->getMock();
         Phake::when($this->mockInfo)->isObjectFrozen()->thenReturn(true);
 
-        $this->expectException(ExpectationFailedException::class, 'This object has been frozen.');
+        $this->expectException(ExpectationFailedException::class);
         $ref = [];
         $this->handler->invoke($mock, 'foo', [], $ref);
     }
