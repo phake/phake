@@ -96,7 +96,6 @@ class MockClass
         $implements = '';
         $interfaces = [];
         $parent = null;
-        $constructor = '';
 
         /** @var array<class-string> $mockedClassNames */
         $mockedClassNames = (array) $mockedClassName;
@@ -169,8 +168,6 @@ class {$newClassName} {$extends}
 	const __PHAKE_name = '{$mockedClassName}';
 
 	public \$__PHAKE_constructorArgs;
-
-	{$constructor}
 
 	/**
 	 * @return void
