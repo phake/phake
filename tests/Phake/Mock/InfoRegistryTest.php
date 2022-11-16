@@ -37,9 +37,9 @@ class InfoRegistryTest extends TestCase
     {
         Phake::initAnnotations($this);
         $this->registry = new Phake\Mock\InfoRegistry();
-        $this->registry->addInfo($this->info1);
-        $this->registry->addInfo($this->info2);
-        $this->registry->addInfo($this->info3);
+        $this->registry->addInfo('foo', $this->info1);
+        $this->registry->addInfo('bar', $this->info2);
+        $this->registry->addInfo('baz', $this->info3);
     }
 
     public function testReset(): void

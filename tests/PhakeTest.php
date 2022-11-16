@@ -1553,7 +1553,7 @@ class PhakeTest extends TestCase
         $chocolateCookie = Phake::mock(\PhakeTest_A::class);
         $berryCookie = Phake::mock(\PhakeTest_A::class);
 
-        $this->assertNotEquals($chocolateCookie, $berryCookie);
+        $this->assertNotSame($chocolateCookie, $berryCookie);
     }
 
     public function testStaticClassesReset(): void

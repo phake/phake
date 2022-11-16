@@ -97,11 +97,25 @@ class Facade
 
         return $mockGenerator->instantiate(
             $this->cachedClasses[implode('__', $mockedClassList)],
+            $this->infoRegistry,
             $callRecorder,
             new Stubber\StubMapper(),
             $defaultAnswer,
             $constructorArgs
         );
+    }
+
+    /**
+     * @param class-string|\Phake\IMock $mock
+     */
+    public function getInfo(\Phake\IMock|string $mock): Mock\Info
+    {
+        return $this->infoRegistry->getInfo($mock);
+    }
+
+    public function getInfoRegistry(): Mock\InfoRegistry
+    {
+        return $this->infoRegistry;
     }
 
     public function resetStaticInfo(): void

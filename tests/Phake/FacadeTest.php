@@ -220,6 +220,7 @@ class FacadeTest extends TestCase
             ->method('instantiate')
             ->with(
                 $this->matchesRegularExpression('#^[A-Za-z0-9_]+$#'),
+                $this->equalTo($this->infoRegistry),
                 $this->equalTo($recorder),
                 $this->isInstanceOf(Phake\Stubber\StubMapper::class),
                 $this->equalTo($answer)

@@ -80,6 +80,7 @@ class MockClass
         $implements = '';
         $interfaces = [];
         $parent = null;
+        $modifiers = '';
 
         /** @var array<class-string> $mockedClassNames */
         $mockedClassNames = (array) $mockedClassName;
@@ -94,7 +95,7 @@ class MockClass
             }
 
             if (PHP_VERSION_ID >= 80200 && $mockedClass->isReadOnly()) {
-                throw new \InvalidArgumentException('Readonly classes cannot be mocked.');
+                $modifiers = 'readonly';
             }
 
             if (!$mockedClass->isInterface()) {
@@ -141,16 +142,10 @@ class MockClass
 
         /** @var class-string $mockedClassName */
         $classDef = "
-class {$newClassName} {$extends}
+{$modifiers} class {$newClassName} {$extends}
 	implements \Phake\IMock {$implements}
 {
-    public \$__PHAKE_info;
-
-    public static \$__PHAKE_staticInfo;
-
 	const __PHAKE_name = '{$mockedClassName}';
-
-	public \$__PHAKE_constructorArgs;
 
 	/**
 	 * @return void
@@ -164,8 +159,11 @@ class {$newClassName} {$extends}
 ";
 
         $this->loadClass($newClassName, $mockedClassName, $classDef);
-        $newClassName::$__PHAKE_staticInfo = $this->createMockInfo($mockedClassName, new \Phake\CallRecorder\Recorder(), new \Phake\Stubber\StubMapper(), new \Phake\Stubber\Answers\NoAnswer());
-        $infoRegistry->addInfo($newClassName::$__PHAKE_staticInfo);
+
+        $infoRegistry->addInfo(
+            $newClassName,
+            $this->createMockInfo($mockedClassName, new \Phake\CallRecorder\Recorder(), new \Phake\Stubber\StubMapper(), new \Phake\Stubber\Answers\NoAnswer())
+        );
     }
 
     /**
@@ -193,6 +191,7 @@ class {$newClassName} {$extends}
      */
     public function instantiate(
         string $newClassName,
+        \Phake\Mock\InfoRegistry $infoRegistry,
         \Phake\CallRecorder\Recorder $recorder,
         \Phake\Stubber\StubMapper $mapper,
         \Phake\Stubber\IAnswer $defaultAnswer,
@@ -201,8 +200,7 @@ class {$newClassName} {$extends}
         $mockObject = $this->instantiator->instantiate($newClassName);
         assert($mockObject instanceof \Phake\IMock);
 
-        $mockObject->__PHAKE_info = $this->createMockInfo($newClassName::__PHAKE_name, $recorder, $mapper, $defaultAnswer);
-        $mockObject->__PHAKE_constructorArgs = $constructorArgs;
+        $infoRegistry->addInfo($mockObject, $this->createMockInfo($newClassName::__PHAKE_name, $recorder, $mapper, $defaultAnswer));
 
         if (null !== $constructorArgs && method_exists($mockObject, '__construct')) {
             call_user_func_array([$mockObject, '__construct'], $constructorArgs);
@@ -298,7 +296,7 @@ class {$newClassName} {$extends}
         }
         if ($overrideConstructor && !empty($realClass)) {
             return "
-	public function __construct()
+	public function __construct(...\$params)
 	{
 	    {$this->getConstructorChaining($realClass)}
 	}
@@ -314,12 +312,7 @@ class {$newClassName} {$extends}
     protected function getConstructorChaining(\ReflectionClass $originalClass): string
     {
         return $originalClass->hasMethod('__construct') ? "
-
-		if (is_array(\$this->__PHAKE_constructorArgs))
-		{
-			call_user_func_array([parent::class, '__construct'], \$this->__PHAKE_constructorArgs);
-			\$this->__PHAKE_constructorArgs = null;
-		}
+        parent::__construct(...\$params);
 		" : '';
     }
 

@@ -6,3 +6,4 @@
 - Remove deprecated `AnswerProxyInterface::thenGetReturnByLambda()`
 - `Phake::verifyNoOtherInteractions()` is now variadic
 - Private methods will not be mocked anymore (there is no point to it).
+- Readonly classes are now mockable
