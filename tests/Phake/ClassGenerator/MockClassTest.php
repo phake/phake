@@ -1038,4 +1038,19 @@ class MockClassTest extends TestCase
         }
         $this->assertInstanceOf('PhakeTest_DNFTypes', Phake::mock('PhakeTest_DNFTypes'));
     }
+
+    public function testMockReadonlyClassThrowsException()
+    {
+        if (PHP_VERSION_ID < 80200) {
+            $this->markTestSkipped('Readonly classes are not supported in PHP versions prior to 8.2');
+        }
+        $expectedException = new \InvalidArgumentException('Readonly classes cannot be mocked.');
+
+        try {
+            $mock = Phake::mock('PhakeTest_ReadonlyClass');
+            $this->fail('Mocking a readonly class should throw an exception');
+        } catch (\InvalidArgumentException $actualException) {
+            $this->assertEquals($actualException, $expectedException);
+        }
+    }
 }

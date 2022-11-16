@@ -110,6 +110,10 @@ class MockClass
                 throw new \InvalidArgumentException('Final classes cannot be mocked.');
             }
 
+            if (PHP_VERSION_ID >= 80200 && $mockedClass->isReadOnly()) {
+                throw new \InvalidArgumentException('Readonly classes cannot be mocked.');
+            }
+
             if (!$mockedClass->isInterface()) {
                 if (!empty($parent)) {
                     throw new \RuntimeException("You cannot use two classes in the same mock: {$parent->getName()}, {$mockedClass->getName()}. Use interfaces instead.");
