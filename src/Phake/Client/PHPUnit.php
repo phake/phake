@@ -81,13 +81,10 @@ class PHPUnit implements IClient
      * @psalm-suppress MissingDependency
      * @psalm-suppress UndefinedClass
      *
-     * @return \Phake\PHPUnit\VerifierResultConstraint|\Phake\PHPUnit\VerifierResultConstraintV3d6
+     * @return \Phake\PHPUnit\VerifierResultConstraintV3d6
      */
     private function getConstraint()
     {
-        if (1 == version_compare('3.6.0', PHPUnit_Runner_Version::id())) {
-            return new \Phake\PHPUnit\VerifierResultConstraint();
-        }
         return new \Phake\PHPUnit\VerifierResultConstraintV3d6();
     }
 }

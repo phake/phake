@@ -76,10 +76,10 @@ class PHPUnit8 implements IClient
     }
 
     /**
-     * @return \Phake\PHPUnit\VerifierResultConstraintV7
+     * @return \Phake\PHPUnit\VerifierResultConstraintV6
      */
     private function getConstraint()
     {
-        return new \Phake\PHPUnit\VerifierResultConstraintV7();
+        return new \Phake\PHPUnit\VerifierResultConstraintV6();
     }
 }
