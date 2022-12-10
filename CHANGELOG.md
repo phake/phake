@@ -1,16 +1,19 @@
-## What's New in 4.2.0
+## What's New in 4.3
 
 ### New Features
 
-**#304 - Add support for PHP8.1 new in initializers**
-PHP8.1 introduced [new in initializers](https://wiki.php.net/rfc/new_in_initializers)
-Phake 4.2 can now create mock of object using this feature.
+**Add support for PHP8.2 null and false stand-alone types**
+PHP8.2 introduced [null and false stand-alone types](https://wiki.php.net/rfc/null-false-standalone-types).
+It's new possible to mock an object using those types.
 
-**#303 - Add support for PHP8.1 intersection types and never return type**
-PHP8.1 introduced [intersection types](https://wiki.php.net/rfc/pure-intersection-types]) and [never return type](https://wiki.php.net/rfc/noreturn_type).
-Phake 4.2 supports those new types. When a mocked method returning `never` is called, Phake will by default throw a `Phake\Exception\NeverReturnMethodCalledException` exception. Calling `Phake::when($mock)->thenReturn($x)` will have no effect on this method result.
+**Add support for PHP8.2 DNF Types**
+PHP8.2 introduced [Disjunctive Normal Form Types](https://wiki.php.net/rfc/dnf_types).
+It's now possible to mock an object using DNF types.
 
 ### Changes
 
-**#301 - Add `#[\ReturnTypeWillChange]` on mocked internal methods on PHP8.1+**
-All internal mocked method under PHP8.1+ will have `#[\ReturnTypeWillChange]` attribute to avoid any *Deprecation warnings*.
+**#308 - Unable to use PHP8 named arguments on static method**
+
+**#307 - Phake\Matchers\IArgumentMatcher doesn't work as expected**
+
+
