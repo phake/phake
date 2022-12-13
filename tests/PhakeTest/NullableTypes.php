@@ -8,6 +8,10 @@ class PhakeTest_NullableTypes
     {
     }
 
+    public function interfaceReturn(): ?PhakeTest_MockedInterface
+    {
+    }
+
     public function objectParameter(?PhakeTest_A $param)
     {
     }
