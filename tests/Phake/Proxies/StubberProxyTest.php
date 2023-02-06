@@ -143,7 +143,7 @@ class StubberProxyTest extends TestCase
         $this->proxy->__get($invalidData);
     }
 
-    public function magicGetInvalidData()
+    public static function magicGetInvalidData()
     {
         return [
             ['1foo', 'cannot start with an integer'],
