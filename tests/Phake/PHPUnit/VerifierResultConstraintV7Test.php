@@ -49,7 +49,7 @@ use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Runner\Version;
 
-class Phake_PHPUnit_VerifierResultConstraingV7Test extends TestCase
+class Phake_PHPUnit_VerifierResultConstraintV7Test extends TestCase
 {
     private $constraint;
 

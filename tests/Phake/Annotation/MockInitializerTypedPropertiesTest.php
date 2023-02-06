@@ -63,7 +63,7 @@ use PhakeTest\AnotherNamespacedClass;
  * @ann1 Test Annotation
  * @ann2
  */
-class MockInitializerTypesPropertiesTest extends TestCase
+class MockInitializerTypedPropertiesTest extends TestCase
 {
     /**
      * @Mock
