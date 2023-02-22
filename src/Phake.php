@@ -99,10 +99,12 @@ class Phake
     /**
      * Returns a new mock object based on the given class name.
      *
-     * @param string|array                    $className
-     * @param \Phake\Stubber\IAnswerContainer $defaultAnswer
+     * @phpstan-template T of object
      *
-     * @return mixed
+     * @param class-string<T>|array<class-string<T>> $className
+     * @param \Phake\Stubber\IAnswerContainer        $defaultAnswer
+     *
+     * @return \Phake\IMock&T
      */
     public static function mock($className, \Phake\Stubber\IAnswerContainer $defaultAnswer = null)
     {
@@ -128,9 +130,10 @@ class Phake
      *
      * Calls to this class will be recorded however they will still call the original functionality by default.
      *
-     * @param string $className class name
+     * @phpstan-template T of object
+     * @param class-string<T> $className class name
      * @param mixed ...$args the remaining arguments will be passed as constructor arguments
-     * @return \Phake\IMock
+     * @return \Phake\IMock&T
      */
     public static function partialMock($className, ...$args)
     {
@@ -149,9 +152,10 @@ class Phake
      * For backwards compatibility
      *
      * @see Phake::partialMock()
-     * @param string $className class name
+     * @phpstan-template T of object
+     * @param class-string<T> $className class name
      * @param mixed ...$args The remaining arguments will be passed as constructor arguments
-     * @return \Phake\IMock
+     * @return \Phake\IMock&T
      * @deprecated Please use Phake::partialMock() instead
      */
     public static function partMock($className, ...$args)
