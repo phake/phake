@@ -269,18 +269,20 @@ class Phake
      * Allows for verifying that no other interaction occurred with a mock object outside of what has already been
      * verified
      *
-     * @param Phake\IMock $mock
+     * @param Phake\IMock ...$mocks
      * @return void
      */
-    public static function verifyNoOtherInteractions(Phake\IMock $mock): void
+    public static function verifyNoOtherInteractions(Phake\IMock ...$mocks): void
     {
-        $callRecorder = Phake::getInfo($mock)->getCallRecorder();
-        $verifier = new Phake\CallRecorder\Verifier($callRecorder, $mock);
-        self::getClient()->processVerifierResult($verifier->verifyNoOtherCalls());
+        foreach ($mocks as $mock) {
+            $callRecorder = Phake::getInfo($mock)->getCallRecorder();
+            $verifier = new Phake\CallRecorder\Verifier($callRecorder, $mock);
+            self::getClient()->processVerifierResult($verifier->verifyNoOtherCalls());
 
-        $sCallRecorder = Phake::getInfo(get_class($mock))->getCallRecorder();
-        $sVerifier = new Phake\CallRecorder\Verifier($sCallRecorder, get_class($mock));
-        self::getClient()->processVerifierResult($sVerifier->verifyNoOtherCalls());
+            $sCallRecorder = Phake::getInfo(get_class($mock))->getCallRecorder();
+            $sVerifier = new Phake\CallRecorder\Verifier($sCallRecorder, get_class($mock));
+            self::getClient()->processVerifierResult($sVerifier->verifyNoOtherCalls());
+        }
     }
 
     /**
