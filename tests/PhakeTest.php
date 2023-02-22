@@ -1652,6 +1652,36 @@ class PhakeTest extends TestCase
         Phake::verifyNoOtherInteractions($mock);
     }
 
+    public function testVariadicVerifyNoOtherInteractions()
+    {
+        $mocks = [Phake::mock('PhakeTest_MockedInterface'), Phake::mock('PhakeTest_MockedClass')];
+        $mocks[0]->foo('a');
+        $mocks[0]->foo('b');
+        $mocks[1]->foo('z');
+        $mocks[1]->foo('y');
+
+        Phake::verify($mocks[0])->foo('a');
+        Phake::verify($mocks[1])->foo('y');
+        $this->expectException(\Phake\Exception\VerificationException::class);
+        Phake::setClient(Phake::CLIENT_DEFAULT);
+        Phake::verifyNoOtherInteractions(...$mocks);
+    }
+
+    public function testVariadicVerifyNoOtherInteractionsWorks()
+    {
+        $mocks = [Phake::mock('PhakeTest_MockedInterface'), Phake::mock('PhakeTest_MockedClass')];
+        $mocks[0]->foo('a');
+        $mocks[0]->foo('b');
+        $mocks[1]->foo('z');
+        $mocks[1]->foo('y');
+
+        Phake::verify($mocks[0])->foo('a');
+        Phake::verify($mocks[0])->foo('b');
+        Phake::verify($mocks[1])->foo('z');
+        Phake::verify($mocks[1])->foo('y');
+        Phake::verifyNoOtherInteractions(...$mocks);
+    }
+
     public function testCallingProtectedMethods()
     {
         $mock = Phake::mock('PhakeTest_MockedClass');
