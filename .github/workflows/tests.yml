@@ -10,30 +10,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - php: 7.1
-            phpunit: 6.5.14
-          - php: 7.1
-            phpunit: 7.5
-          - php: 7.2
-            phpunit: 6.5.14
-          - php: 7.2
-            phpunit: 7.5
-          - php: 7.2
-            phpunit: 8.1
-          - php: 7.3
-            phpunit: 7.5
-          - php: 7.3
-            phpunit: 8.1
-          - php: 7.3
-            phpunit: 9.0
-          - php: 7.3
-            phpunit: 9.5
-          - php: 7.4
-            phpunit: 8.5
-          - php: 7.4
-            phpunit: 9.0
-          - php: 7.4
-            phpunit: 9.5
           - php: 8.0
             phpunit: 9.5
           - php: 8.1
