@@ -1652,33 +1652,126 @@ class PhakeTest extends TestCase
         Phake::verifyNoOtherInteractions($mock);
     }
 
-    public function testVariadicVerifyNoOtherInteractions()
+    public static function provideVariadicVerifyNoOtherInteractionsWorks(): Generator
     {
-        $mocks = [Phake::mock('PhakeTest_MockedInterface'), Phake::mock('PhakeTest_MockedClass')];
-        $mocks[0]->foo('a');
-        $mocks[0]->foo('b');
-        $mocks[1]->foo('z');
-        $mocks[1]->foo('y');
-
-        Phake::verify($mocks[0])->foo('a');
-        Phake::verify($mocks[1])->foo('y');
-        $this->expectException(\Phake\Exception\VerificationException::class);
-        Phake::setClient(Phake::CLIENT_DEFAULT);
-        Phake::verifyNoOtherInteractions(...$mocks);
+        yield 'No mock' => [[], []];
+        yield 'Single mock, no call' => [[[]], [[]]];
+        yield 'Single mock, single call, all verified' => [[['a']], [['a']]];
+        yield 'Single mock, single call, none verified' => [[['a']], [[]]];
+        yield 'Single mock, multiple calls, all verified' => [[['a', 'b', 'c']], [['a', 'b', 'c']]];
+        yield 'Single mock, multiple calls, only first is verified' => [[['a', 'b', 'c']], [['a']]];
+        yield 'Single mock, multiple calls, only one is verified' => [[['a', 'b', 'c']], [['b']]];
+        yield 'Single mock, multiple calls, only last is verified' => [[['a', 'b', 'c']], [['c']]];
+        yield 'Single mock, multiple calls, none verified' => [[['a', 'b', 'c']], [[]]];
+        yield 'Two mocks, no calls' => [[[], []], [[], []]];
+        yield 'Two mocks, only first does single call, all verified' => [[['a'], []], [['a'], []]];
+        yield 'Two mocks, only first does single call, none verified' => [[['a'], []], [[], []]];
+        yield 'Two mocks, only first does multiple calls, all verified' => [
+            [['a', 'b', 'c'], []],
+            [['a', 'b', 'c'], []],
+        ];
+        yield 'Two mocks, only first does multiple calls, only first is verified' => [
+            [['a', 'b', 'c'], []],
+            [['a'], []],
+        ];
+        yield 'Two mocks, only first does multiple calls, only one is verified' => [
+            [['a', 'b', 'c'], []],
+            [['b'], []],
+        ];
+        yield 'Two mocks, only first does multiple calls, only last is verified' => [
+            [['a', 'b', 'c'], []],
+            [['c'], []],
+        ];
+        yield 'Two mocks, only first does multiple calls, none verified' => [
+            [['a', 'b', 'c'], []],
+            [[], []],
+        ];
+        yield 'Two mocks, only last does single call, all verified' => [
+            [[], ['x']],
+            [[], ['x']],
+        ];
+        yield 'Two mocks, only last does single call, none verified' => [
+            [[], ['x']],
+            [[], []],
+        ];
+        yield 'Two mocks, only last does multiple calls, all verified' => [
+            [[], ['x', 'y', 'z']],
+            [[], ['x', 'y', 'z']],
+        ];
+        yield 'Two mocks, only last does multiple calls, only first is verified' => [
+            [[], ['x', 'y', 'z']],
+            [[], ['x']],
+        ];
+        yield 'Two mocks, only last does multiple calls, only one is verified' => [
+            [[], ['x', 'y', 'z']],
+            [[], ['y']],
+        ];
+        yield 'Two mocks, only last does multiple calls, only last is verified' => [
+            [[], ['x', 'y', 'z']],
+            [[], ['z']],
+        ];
+        yield 'Two mocks, only last does multiple calls, none verified' => [
+            [[], ['x', 'y', 'z']],
+            [[], []],
+        ];
+        yield 'Two mocks, both do simple call, all verified' => [
+            [['a'], ['x']],
+            [['a'], ['x']],
+        ];
+        yield 'Two mocks, both do simple call, only call of first mock is verified' => [
+            [['a'], ['x']],
+            [['a'], []],
+        ];
+        yield 'Two mocks, both do simple call, only call of last mock is verified' => [
+            [['a'], ['x']],
+            [[], ['x']],
+        ];
+        yield 'Two mocks, both do simple call, none verified' => [
+            [['a'], ['x']],
+            [[], []],
+        ];
+        yield 'Two mocks, both do multiple calls, all verified' => [
+            [['a', 'b', 'c'], ['x', 'y', 'z']],
+            [['a', 'b', 'c'], ['x', 'y', 'z']],
+        ];
+        yield 'Two mocks, both do multiple calls, only calls of first mock are verified' => [
+            [['a', 'b', 'c'], ['x', 'y', 'z']],
+            [['a', 'b', 'c'], []],
+        ];
+        yield 'Two mocks, both do multiple calls, only one call of each mock is verified' => [
+            [['a', 'b', 'c'], ['x', 'y', 'z']],
+            [['b'], ['y']],
+        ];
+        yield 'Two mocks, both do multiple calls, only calls of last mock are verified' => [
+            [['a', 'b', 'c'], ['x', 'y', 'z']],
+            [[], ['x', 'y', 'z']],
+        ];
+        yield 'Two mocks, both do multiple calls, none verified' => [
+            [['a', 'b', 'c'], ['x', 'y', 'z']],
+            [[], []],
+        ];
     }
 
-    public function testVariadicVerifyNoOtherInteractionsWorks()
+    /**
+     * @dataProvider provideVariadicVerifyNoOtherInteractionsWorks
+     * @param array<array<string>> $calls List of calls for each mock
+     * @param array<array<string> $verifications List of calls that will be verified for each mock
+     */
+    public function testVariadicVerifyNoOtherInteractionsWorks(array $calls, array $verifications)
     {
-        $mocks = [Phake::mock('PhakeTest_MockedInterface'), Phake::mock('PhakeTest_MockedClass')];
-        $mocks[0]->foo('a');
-        $mocks[0]->foo('b');
-        $mocks[1]->foo('z');
-        $mocks[1]->foo('y');
+        $mocks = array_fill(0, count($calls), Phake::mock('PhakeTest_MockedClass'));
+        array_map(static function (\Phake\IMock $mock, array $calls) {
+            array_map([$mock, 'foo'], $calls);
+        }, $mocks, $calls);
 
-        Phake::verify($mocks[0])->foo('a');
-        Phake::verify($mocks[0])->foo('b');
-        Phake::verify($mocks[1])->foo('z');
-        Phake::verify($mocks[1])->foo('y');
+        array_map(static function (\Phake\IMock $mock, array $verifications) {
+            array_map([Phake::verify($mock), 'foo'], $verifications);
+        }, $mocks, $verifications);
+
+        if ($calls !== $verifications) {
+            $this->expectException(\Phake\Exception\VerificationException::class);
+            Phake::setClient(Phake::CLIENT_DEFAULT);
+        }
         Phake::verifyNoOtherInteractions(...$mocks);
     }
 
