@@ -40,7 +40,8 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "4.4-dev"
+            "dev-master": "5.0-dev",
+            "dev-4.4": "4.4"
         }
     },
     "support": {
