@@ -62,7 +62,7 @@ class PHPUnit implements IClient
      */
     public function processVerifierResult(\Phake\CallRecorder\VerifierResult $result)
     {
-        PHPUnit_Framework_Assert::assertThat($result, $this->getConstraint());
+        \PHPUnit_Framework_Assert::assertThat($result, $this->getConstraint());
 
         return $result->getMatchedCalls();
     }
@@ -74,7 +74,7 @@ class PHPUnit implements IClient
      */
     public function processObjectFreeze()
     {
-        PHPUnit_Framework_Assert::assertThat(true, PHPUnit_Framework_Assert::isTrue());
+        \PHPUnit_Framework_Assert::assertThat(true, \PHPUnit_Framework_Assert::isTrue());
     }
 
     /**

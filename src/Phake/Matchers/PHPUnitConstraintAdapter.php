@@ -56,16 +56,16 @@ namespace Phake\Matchers;
 class PHPUnitConstraintAdapter extends SingleArgumentMatcher
 {
     /**
-     * @var PHPUnit_Framework_Constraint
+     * @var \PHPUnit_Framework_Constraint
      */
     private $constraint;
 
     /**
      * @psalm-suppress UndefinedClass
      *
-     * @param PHPUnit_Framework_Constraint $constraint
+     * @param \PHPUnit_Framework_Constraint $constraint
      */
-    public function __construct(PHPUnit_Framework_Constraint $constraint)
+    public function __construct(\PHPUnit_Framework_Constraint $constraint)
     {
         $this->constraint = $constraint;
     }
@@ -86,9 +86,9 @@ class PHPUnitConstraintAdapter extends SingleArgumentMatcher
     {
         try {
             $this->constraint->evaluate($argument, '');
-        } catch (PHPUnit_Framework_ExpectationFailedException $e) {
+        } catch (\PHPUnit_Framework_ExpectationFailedException $e) {
             $failure = $e->getComparisonFailure();
-            if ($failure instanceof PHPUnit_Framework_ComparisonFailure) {
+            if ($failure instanceof \PHPUnit_Framework_ComparisonFailure) {
                 $failure = $failure->getDiff();
             } else {
                 $failure = '';
