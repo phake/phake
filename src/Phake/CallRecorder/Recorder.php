@@ -61,22 +61,22 @@ class Recorder
     /**
      * @var array<Call>
      */
-    private $calls = [];
+    private array $calls = [];
 
     /**
      * @var array<Position>
      */
-    private $positions = [];
+    private array $positions = [];
 
     /**
      * @var array<Call>
      */
-    private $unverifiedCalls = [];
+    private array $unverifiedCalls = [];
 
     /**
      * @var int
      */
-    private static $lastPosition = 0;
+    private static int $lastPosition = 0;
 
     /**
      * Records that a given
@@ -84,7 +84,7 @@ class Recorder
      * @param Call $call
      * @return void
      */
-    public function recordCall(Call $call)
+    public function recordCall(Call $call): void
     {
         $this->calls[]                           = $call;
         $this->positions[spl_object_hash($call)] = new Position(self::$lastPosition++);
@@ -95,7 +95,7 @@ class Recorder
      * Returns all calls recorded in the order they were recorded.
      * @return array
      */
-    public function getAllCalls()
+    public function getAllCalls(): array
     {
         return $this->calls;
     }
@@ -106,7 +106,7 @@ class Recorder
      * Also removes all positions
      * @return void
      */
-    public function removeAllCalls()
+    public function removeAllCalls(): void
     {
         $this->calls     = [];
         $this->positions = [];
@@ -120,7 +120,7 @@ class Recorder
      *
      * @return CallInfo|null
      */
-    public function getCallInfo(Call $call)
+    public function getCallInfo(Call $call): ?CallInfo
     {
         if (in_array($call, $this->calls, true)) {
             return new CallInfo($call, $this->positions[spl_object_hash($call)]);
@@ -134,7 +134,7 @@ class Recorder
      * @param Call $call
      * @return void
      */
-    public function markCallVerified(Call $call)
+    public function markCallVerified(Call $call): void
     {
         unset($this->unverifiedCalls[spl_object_hash($call)]);
     }
@@ -144,7 +144,7 @@ class Recorder
      *
      * @return array
      */
-    public function getUnverifiedCalls()
+    public function getUnverifiedCalls(): array
     {
         return array_values($this->unverifiedCalls);
     }

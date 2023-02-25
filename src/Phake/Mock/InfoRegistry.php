@@ -55,12 +55,12 @@ class InfoRegistry
     /**
      * @var array<Info>
      */
-    private $registry = [];
+    private array $registry = [];
 
     /**
      * @return void
      */
-    public function addInfo(Info $info)
+    public function addInfo(Info $info): void
     {
         $this->registry[] = $info;
     }
@@ -68,7 +68,7 @@ class InfoRegistry
     /**
      * @return void
      */
-    public function resetAll()
+    public function resetAll(): void
     {
         /* @var $info Info */
         foreach ($this->registry as $info) {

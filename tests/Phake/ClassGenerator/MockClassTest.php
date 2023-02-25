@@ -413,7 +413,7 @@ class MockClassTest extends TestCase
         $stubMapper   = Phake::mock(Phake\Stubber\StubMapper::class);
         $answer       = Phake::mock(Phake\Stubber\Answers\NoAnswer::class, Phake::ifUnstubbed()->thenCallParent());
         $mock         = $this->classGen->instantiate($newClassName, $callRecorder, $stubMapper, $answer);
-
+        Phake::when($stubMapper)->getStubByCall->thenReturn(null);
 
         $mock->foo('blah');
 

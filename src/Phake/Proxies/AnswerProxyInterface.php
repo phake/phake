@@ -61,7 +61,7 @@ interface AnswerProxyInterface
      *
      * @return \Phake\Stubber\IAnswerContainer
      */
-    public function thenReturn($value);
+    public function thenReturn(mixed $value): \Phake\Stubber\IAnswerContainer;
 
     /**
      * Binds a Lambda answer to the method
@@ -72,7 +72,7 @@ interface AnswerProxyInterface
      * @throws \InvalidArgumentException
      * @return \Phake\Stubber\IAnswerContainer
      */
-    public function thenGetReturnByLambda($value);
+    public function thenGetReturnByLambda(callable $value): \Phake\Stubber\IAnswerContainer;
 
     /**
      * Binds a callback answer to the method.
@@ -82,14 +82,14 @@ interface AnswerProxyInterface
      * @throws \InvalidArgumentException
      * @return \Phake\Stubber\IAnswerContainer
      */
-    public function thenReturnCallback($value);
+    public function thenReturnCallback(callable $value): \Phake\Stubber\IAnswerContainer;
 
 
     /**
      * Binds a delegated call that will call a given method's parent.
      * @return \Phake\Stubber\IAnswerContainer
      */
-    public function thenCallParent();
+    public function thenCallParent(): \Phake\Stubber\IAnswerContainer;
 
     /**
      * Binds an exception answer to the method and object in the proxied binder.
@@ -98,7 +98,7 @@ interface AnswerProxyInterface
      *
      * @return \Phake\Stubber\IAnswerContainer
      */
-    public function thenThrow(\Throwable $value);
+    public function thenThrow(\Throwable $value): \Phake\Stubber\IAnswerContainer;
 
     /**
      * Binds a delegated call that will call a given method's parent while capturing that value to the passed in variable.
@@ -107,15 +107,15 @@ interface AnswerProxyInterface
      *
      * @return \Phake\Stubber\IAnswerContainer
      */
-    public function captureReturnTo(&$captor);
+    public function captureReturnTo(mixed &$captor): \Phake\Stubber\IAnswerContainer;
 
     /**
      * @return \Phake\Stubber\IAnswerContainer
      */
-    public function thenDoNothing();
+    public function thenDoNothing(): \Phake\Stubber\IAnswerContainer;
 
     /**
      * @return \Phake\Stubber\IAnswerContainer
      */
-    public function thenReturnSelf();
+    public function thenReturnSelf(): \Phake\Stubber\IAnswerContainer;
 }

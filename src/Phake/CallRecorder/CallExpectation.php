@@ -55,22 +55,22 @@ class CallExpectation
     /**
      * @var \Phake\IMock|class-string
      */
-    private $object;
+    private \Phake\IMock|string $object;
 
     /**
      * @var string
      */
-    private $method;
+    private string $method;
 
     /**
      * @var \Phake\Matchers\IChainableArgumentMatcher|null
      */
-    private $argumentMatcher;
+    private ?\Phake\Matchers\IChainableArgumentMatcher $argumentMatcher;
 
     /**
      * @var IVerifierMode
      */
-    private $verifierMode;
+    private IVerifierMode $verifierMode;
 
     /**
      * @param \Phake\IMock|class-string $object
@@ -79,9 +79,9 @@ class CallExpectation
      * @param IVerifierMode $verificationMode
      */
     public function __construct(
-        $object,
-        $method,
-        \Phake\Matchers\IChainableArgumentMatcher $argumentMatcher = null,
+        \Phake\IMock|string $object,
+        string $method,
+        ?\Phake\Matchers\IChainableArgumentMatcher $argumentMatcher,
         IVerifierMode $verificationMode
     ) {
         $this->object           = $object;
@@ -93,7 +93,7 @@ class CallExpectation
     /**
      * @return \Phake\IMock|class-string
      */
-    public function getObject()
+    public function getObject(): \Phake\IMock|string
     {
         return $this->object;
     }
@@ -101,7 +101,7 @@ class CallExpectation
     /**
      * @return string
      */
-    public function getMethod()
+    public function getMethod(): string
     {
         return $this->method;
     }
@@ -109,7 +109,7 @@ class CallExpectation
     /**
      * @return \Phake\Matchers\IChainableArgumentMatcher|null
      */
-    public function getArgumentMatcher()
+    public function getArgumentMatcher(): ?\Phake\Matchers\IChainableArgumentMatcher
     {
         return $this->argumentMatcher;
     }
@@ -117,12 +117,12 @@ class CallExpectation
     /**
      * @return IVerifierMode
      */
-    public function getVerifierMode()
+    public function getVerifierMode(): IVerifierMode
     {
         return $this->verifierMode;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         $arguments = [];
 

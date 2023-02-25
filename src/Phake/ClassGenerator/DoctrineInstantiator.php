@@ -56,7 +56,7 @@ class DoctrineInstantiator implements IInstantiator
     /**
      * @var \Doctrine\Instantiator\Instantiator
      */
-    private $doctrineInstantiator;
+    private \Doctrine\Instantiator\Instantiator $doctrineInstantiator;
 
     public function __construct()
     {
@@ -68,7 +68,7 @@ class DoctrineInstantiator implements IInstantiator
      *
      * @return object
      */
-    public function instantiate($className)
+    public function instantiate(string $className): object
     {
         return $this->doctrineInstantiator->instantiate($className);
     }

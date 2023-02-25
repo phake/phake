@@ -57,14 +57,14 @@ class Times implements \Phake\CallRecorder\IVerifierMode
     /**
      * @var int
      */
-    private $times;
+    private int $times;
 
     /**
      * Constructs a Times verifier with the given <code>$times</code>.
      *
      * @param int $times
      */
-    public function __construct($times)
+    public function __construct(int $times)
     {
         $this->times = $times;
     }
@@ -77,7 +77,7 @@ class Times implements \Phake\CallRecorder\IVerifierMode
      *
      * @return Result
      */
-    public function verify(array $matchedCalls)
+    public function verify(array $matchedCalls): Result
     {
         $calledTimes = count($matchedCalls);
         if ($calledTimes == $this->times) {
@@ -89,7 +89,7 @@ class Times implements \Phake\CallRecorder\IVerifierMode
         ));
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return "exactly <{$this->times}> times";
     }

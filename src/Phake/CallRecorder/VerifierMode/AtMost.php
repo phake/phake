@@ -56,14 +56,14 @@ class AtMost implements \Phake\CallRecorder\IVerifierMode
     /**
      * @var int
      */
-    private $times;
+    private int $times;
 
     /**
      * Constructs a verifier with the given <code>$times</code>.
      *
      * @param int $times
      */
-    public function __construct($times)
+    public function __construct(int $times)
     {
         $this->times = $times;
     }
@@ -76,7 +76,7 @@ class AtMost implements \Phake\CallRecorder\IVerifierMode
      *
      * @return Result
      */
-    public function verify(array $matchedCalls)
+    public function verify(array $matchedCalls): Result
     {
         $calledTimes = count($matchedCalls);
         if ($calledTimes <= $this->times) {
@@ -88,7 +88,7 @@ class AtMost implements \Phake\CallRecorder\IVerifierMode
         ));
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return "at most <{$this->times}> times";
     }

@@ -59,7 +59,7 @@ class PHPUnit7ConstraintAdapter extends SingleArgumentMatcher
     /**
      * @var \PHPUnit\Framework\Constraint\Constraint
      */
-    private $constraint;
+    private \PHPUnit\Framework\Constraint\Constraint $constraint;
 
     /**
      * @param Constraint $constraint
@@ -80,7 +80,7 @@ class PHPUnit7ConstraintAdapter extends SingleArgumentMatcher
      * @throws \Phake\Exception\MethodMatcherException
      * @return void
      */
-    protected function matches(&$argument)
+    protected function matches(mixed &$argument): void
     {
         try {
             $this->constraint->evaluate($argument, '');
@@ -98,7 +98,7 @@ class PHPUnit7ConstraintAdapter extends SingleArgumentMatcher
     /**
      * @psalm-suppress InternalMethod
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->constraint->toString();
     }

@@ -59,7 +59,7 @@ abstract class SingleArgumentMatcher extends AbstractChainableArgumentMatcher
      * @throws \Phake\Exception\MethodMatcherException
      * @return void
      */
-    public function doArgumentsMatch(array &$arguments)
+    public function doArgumentsMatch(array &$arguments): void
     {
         $argumentCopy = $arguments;
         $nextArgument = null;
@@ -98,5 +98,5 @@ abstract class SingleArgumentMatcher extends AbstractChainableArgumentMatcher
      * @param mixed $argument
      * @return void
      */
-    abstract protected function matches(&$argument);
+    abstract protected function matches(mixed &$argument): void;
 }

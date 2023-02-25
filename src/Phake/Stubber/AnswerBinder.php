@@ -57,12 +57,12 @@ class AnswerBinder implements IAnswerBinder
     /**
      * @var \Phake\Matchers\MethodMatcher
      */
-    private $matcher;
+    private \Phake\Matchers\MethodMatcher $matcher;
 
     /**
      * @var StubMapper
      */
-    private $stubMapper;
+    private StubMapper $stubMapper;
 
     /**
      * Creates a new Answer Binder
@@ -83,7 +83,7 @@ class AnswerBinder implements IAnswerBinder
      *
      * @return \Phake\Proxies\AnswerCollectionProxy
      */
-    public function bindAnswer(IAnswer $answer)
+    public function bindAnswer(IAnswer $answer): \Phake\Proxies\AnswerCollectionProxy
     {
         $collection = new AnswerCollection($answer);
         $this->stubMapper->mapStubToMatcher($collection, $this->matcher);

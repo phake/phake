@@ -63,12 +63,12 @@ class StaticVisibilityProxy
     /**
      * @var class-string
      */
-    private $proxied;
+    private string $proxied;
 
     /**
      * @param mixed $proxied
      */
-    public function __construct($proxied)
+    public function __construct(mixed $proxied)
     {
         if (!is_object($proxied)) {
             throw new \InvalidArgumentException("\Phake\Proxies\VisibilityProxy was passed a non-object");
@@ -81,7 +81,7 @@ class StaticVisibilityProxy
      * @param array $arguments
      * @return mixed
      */
-    public function __call($method, $arguments)
+    public function __call(string $method, array $arguments): mixed
     {
         if (method_exists($this->proxied, $method)) {
             $reflMethod = new \ReflectionMethod($this->proxied, $method);

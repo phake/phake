@@ -55,7 +55,7 @@ class Composite implements IInvocationHandler
     /**
      * @var array
      */
-    private $handlers;
+    private array $handlers;
 
     /**
      * @param array $handlers
@@ -68,7 +68,7 @@ class Composite implements IInvocationHandler
     /**
      * {@inheritDoc}
      */
-    public function invoke($mock, $method, array $arguments, array &$argumentReference)
+    public function invoke(\Phake\IMock|string $mock, string $method, array $arguments, array &$argumentReference): mixed
     {
         $result = null;
         foreach ($this->handlers as $handler) {

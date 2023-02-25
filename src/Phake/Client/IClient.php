@@ -59,11 +59,11 @@ interface IClient
      * @param \Phake\CallRecorder\VerifierResult $result
      * @return array<int, \Phake\CallRecorder\CallInfo>
      */
-    public function processVerifierResult(\Phake\CallRecorder\VerifierResult $result);
+    public function processVerifierResult(\Phake\CallRecorder\VerifierResult $result): array;
 
     /**
      * Used to notify the client that a mock has been frozen.
      * @return void
      */
-    public function processObjectFreeze();
+    public function processObjectFreeze(): void;
 }

@@ -59,11 +59,11 @@ interface IArgumentMatcher
      *
      * @return boolean
      */
-    public function matches(&$argument);
+    public function matches(mixed &$argument): bool;
 
     /**
      * Returns a human readable description of the argument matcher
      * @return string
      */
-    public function __toString();
+    public function __toString(): string;
 }

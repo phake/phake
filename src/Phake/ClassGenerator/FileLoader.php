@@ -55,12 +55,12 @@ class FileLoader implements ILoader
     /**
      * @var string
      */
-    private $dir;
+    private string $dir;
 
     /**
      * @param string $dir
      */
-    public function __construct($dir)
+    public function __construct(string $dir)
     {
         $this->dir = $dir;
     }
@@ -73,7 +73,7 @@ class FileLoader implements ILoader
      *
      * @return void
      */
-    public function loadClassByString($className, $classDef)
+    public function loadClassByString(string $className, string $classDef): void
     {
         $file = rtrim($this->dir, '/') . '/' . $className . '.php';
         file_put_contents($file, "<?php

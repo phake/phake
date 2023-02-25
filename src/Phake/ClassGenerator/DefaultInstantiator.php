@@ -58,7 +58,7 @@ class DefaultInstantiator implements IInstantiator
      *
      * @return object
      */
-    public function instantiate($className)
+    public function instantiate(string $className): object
     {
         $reflClass = new \ReflectionClass($className);
         $constructor = $reflClass->getConstructor();

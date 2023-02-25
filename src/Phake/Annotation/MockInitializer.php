@@ -60,16 +60,16 @@ class MockInitializer
     /**
      * @var IReader|null
      */
-    private static $defaultReader;
+    private static ?IReader $defaultReader = null;
 
     /**
      * @var IReader
      */
-    private $reader;
+    private IReader $reader;
 
     public static function getDefaultReader(): IReader
     {
-        if (!self::$defaultReader) {
+        if (!isset(self::$defaultReader)) {
             self::$defaultReader = PHP_VERSION_ID < 80000 ? new LegacyReader() : new NativeReader();
         }
 
@@ -79,7 +79,7 @@ class MockInitializer
     /**
      * @return void
      */
-    public static function setDefaultReader(IReader $reader)
+    public static function setDefaultReader(IReader $reader): void
     {
         self::$defaultReader = $reader;
     }
@@ -90,12 +90,10 @@ class MockInitializer
     }
 
     /**
-     * @psalm-suppress RedundantCondition
-     *
      * @param object $object
      * @return void
      */
-    public function initialize($object)
+    public function initialize(object $object): void
     {
         $class = new \ReflectionClass($object);
 

@@ -57,18 +57,18 @@ class CallStubberProxy
     /**
      * @var \Phake\Matchers\IChainableArgumentMatcher|null
      */
-    private $argumentMatcher;
+    private ?\Phake\Matchers\IChainableArgumentMatcher $argumentMatcher;
 
     /**
      * @var bool
      */
-    private $static;
+    private bool $static;
 
     /**
      * @param \Phake\Matchers\IChainableArgumentMatcher|null $argumentMatcher
      * @param bool $static
      */
-    public function __construct(?\Phake\Matchers\IChainableArgumentMatcher $argumentMatcher, $static)
+    public function __construct(?\Phake\Matchers\IChainableArgumentMatcher $argumentMatcher, bool $static)
     {
         $this->argumentMatcher = $argumentMatcher;
         $this->static = $static;
@@ -81,7 +81,7 @@ class CallStubberProxy
      *
      * @return AnswerBinderProxy
      */
-    public function isCalledOn(\Phake\IMock $obj)
+    public function isCalledOn(\Phake\IMock $obj): AnswerBinderProxy
     {
         $context = $this->static ? get_class($obj) : $obj;
         $call = $this->static ? '__callStatic' : '__call';

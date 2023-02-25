@@ -55,13 +55,6 @@ use PHPUnit\Framework\TestCase;
  */
 class VisibilityProxyTest extends TestCase
 {
-    public function testCallingOnANonObject()
-    {
-        $this->expectException(\InvalidArgumentException::class);
-
-        $proxy = new VisibilityProxy(42);
-    }
-
     public function testCallingNonExistantMethod()
     {
         $test = new \PhakeTest_MockedClass();

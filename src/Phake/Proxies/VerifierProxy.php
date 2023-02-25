@@ -62,23 +62,22 @@ class VerifierProxy
     /**
      * @var \Phake\CallRecorder\Verifier
      */
-    private $verifier;
+    private \Phake\CallRecorder\Verifier $verifier;
 
     /**
      * @var \Phake\Matchers\Factory
      */
-    private $matcherFactory;
+    private \Phake\Matchers\Factory $matcherFactory;
 
     /**
      * @var \Phake\CallRecorder\IVerifierMode
      */
-    private $mode;
+    private \Phake\CallRecorder\IVerifierMode $mode;
 
     /**
-     *
      * @var \Phake\Client\IClient
      */
-    private $client;
+    private \Phake\Client\IClient $client;
 
     /**
      * @param \Phake\CallRecorder\Verifier      $verifier
@@ -106,7 +105,7 @@ class VerifierProxy
      *
      * @return array<int, \Phake\CallRecorder\CallInfo>
      */
-    public function __call($method, array $arguments)
+    public function __call(string $method, array $arguments): array
     {
         $arguments = $this->resolveNamedArguments($this->verifier->getObject(), $method, $arguments);
         $expectation = new \Phake\CallRecorder\CallExpectation(
@@ -124,16 +123,13 @@ class VerifierProxy
     /**
      * A magic call to verify a call with any parameters.
      *
-     * @psalm-suppress DocblockTypeContradiction
-     * @psalm-suppress RedundantConditionGivenDocblockType
-     *
-     * @param string $method
+     * @param string|object $method
      *
      * @throws \InvalidArgumentException if $method is not a valid parameter/method name
      *
      * @return array<int, \Phake\CallRecorder\CallInfo>
      */
-    public function __get($method)
+    public function __get(string|object $method): array
     {
         $obj = $this->verifier->getObject();
 
@@ -141,13 +137,13 @@ class VerifierProxy
             throw new \InvalidArgumentException('String parameter to __get() cannot start with an integer');
         }
 
-        if (!is_string($method) && !is_object($method)) {
-            $message = sprintf('Parameter to __get() must be a string, %s given', gettype($method));
-            throw new \InvalidArgumentException($message);
-        }
-
         if (method_exists($obj, '__get') && !(is_string($method) && method_exists($obj, $method))) {
             return $this->__call('__get', [$method]);
+        }
+
+        if (!is_string($method)) {
+            $message = sprintf('Parameter to __get() must be a string, %s given', gettype($method));
+            throw new \InvalidArgumentException($message);
         }
 
         return $this->__call($method, [new \Phake\Matchers\AnyParameters()]);

@@ -63,7 +63,7 @@ trait NamedArgumentsResolver
      *
      * @return array
      */
-    private function resolveNamedArguments($object, $method, array $arguments)
+    private function resolveNamedArguments(\Phake\IMock|string $object, string $method, array $arguments): array
     {
         $positionalArguments = [];
         $namedArguments      = [];

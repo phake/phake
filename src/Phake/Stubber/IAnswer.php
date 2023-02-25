@@ -58,12 +58,12 @@ interface IAnswer
      * @param string $method
      * @return callable
      */
-    public function getAnswerCallback($context, $method);
+    public function getAnswerCallback(mixed $context, string $method): callable;
 
     /**
      * Allows for post processing an answer if necessary
      * @param mixed $answer
      * @return void
      */
-    public function processAnswer($answer);
+    public function processAnswer(mixed $answer): void;
 }

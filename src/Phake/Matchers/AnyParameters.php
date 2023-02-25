@@ -57,7 +57,7 @@ class AnyParameters extends AbstractChainableArgumentMatcher
      *
      * @param array $arguments
      */
-    public function doArgumentsMatch(array &$arguments)
+    public function doArgumentsMatch(array &$arguments): void
     {
     }
 
@@ -65,18 +65,18 @@ class AnyParameters extends AbstractChainableArgumentMatcher
      * Returns a human readable description of the argument matcher
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return '<any parameters>';
     }
 
-    public function setNextMatcher(IChainableArgumentMatcher $matcher)
+    public function setNextMatcher(IChainableArgumentMatcher $matcher): void
     {
         throw new \InvalidArgumentException('Other matchers cannot be passed with any parameters. It will not work the '
             . 'way you think it works');
     }
 
-    public function assertPreviousMatcher(IChainableArgumentMatcher $matcher)
+    public function assertPreviousMatcher(IChainableArgumentMatcher $matcher): void
     {
         throw new \InvalidArgumentException('Other matchers cannot be passed with any parameters. It will not work the '
             . 'way you think it works');

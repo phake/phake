@@ -56,7 +56,7 @@ class Factory
     /**
      * @var \SebastianBergmann\Comparator\Factory
      */
-    private $comparatorFactory;
+    private \SebastianBergmann\Comparator\Factory $comparatorFactory;
 
     public function __construct()
     {
@@ -77,7 +77,7 @@ class Factory
      *
      * @return IChainableArgumentMatcher
      */
-    public function createMatcher($argument, IChainableArgumentMatcher $nextMatcher = null)
+    public function createMatcher(mixed $argument, IChainableArgumentMatcher $nextMatcher = null): IChainableArgumentMatcher
     {
         $return = null;
         if ($argument instanceof IChainableArgumentMatcher) {
@@ -106,7 +106,7 @@ class Factory
      *
      * @return IChainableArgumentMatcher|null
      */
-    public function createMatcherChain(array $arguments)
+    public function createMatcherChain(array $arguments): ?IChainableArgumentMatcher
     {
         if (!count($arguments)) {
             return null;

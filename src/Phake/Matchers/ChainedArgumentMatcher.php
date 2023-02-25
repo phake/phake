@@ -55,7 +55,7 @@ class ChainedArgumentMatcher extends SingleArgumentMatcher
     /**
      * @var IArgumentMatcher
      */
-    private $adaptedMatcher;
+    private IArgumentMatcher $adaptedMatcher;
 
     /**
      * @param IArgumentMatcher $adaptedMatcher
@@ -69,7 +69,7 @@ class ChainedArgumentMatcher extends SingleArgumentMatcher
      * Returns a human readable description of the argument matcher
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->adaptedMatcher->__toString();
     }
@@ -77,7 +77,7 @@ class ChainedArgumentMatcher extends SingleArgumentMatcher
     /**
      * @return IArgumentMatcher
      */
-    public function getAdaptedMatcher()
+    public function getAdaptedMatcher(): IArgumentMatcher
     {
         return $this->adaptedMatcher;
     }
@@ -88,7 +88,7 @@ class ChainedArgumentMatcher extends SingleArgumentMatcher
      * @param mixed $argument
      * @return void
      */
-    protected function matches(&$argument)
+    protected function matches(mixed &$argument): void
     {
         if (!$this->adaptedMatcher->matches($argument)) {
             throw new \Phake\Exception\MethodMatcherException(sprintf("Failed to match argument using '%s'", get_class($this->adaptedMatcher)));

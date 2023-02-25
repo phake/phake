@@ -55,7 +55,7 @@ class FrozenObjectCheck implements IInvocationHandler
     /**
      * @var \Phake\Mock\Info
      */
-    private $mockInfo;
+    private \Phake\Mock\Info $mockInfo;
 
     /**
      * @param \Phake\Mock\Info $mockInfo
@@ -68,7 +68,7 @@ class FrozenObjectCheck implements IInvocationHandler
     /**
      * {@inheritDoc}
      */
-    public function invoke($mock, $method, array $arguments, array &$argumentReference)
+    public function invoke(\Phake\IMock|string $mock, string $method, array $arguments, array &$argumentReference): mixed
     {
         if ($this->mockInfo->isObjectFrozen()) {
             $result = new \Phake\CallRecorder\VerifierResult(false, [], 'This object has been frozen.');

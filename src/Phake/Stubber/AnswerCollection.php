@@ -58,7 +58,7 @@ class AnswerCollection implements IAnswerContainer
     /**
      * @var array
      */
-    private $answers;
+    private array $answers;
 
     /**
      * Adds the passed answer to a new answer collection.
@@ -76,7 +76,7 @@ class AnswerCollection implements IAnswerContainer
      * @param IAnswer $answer
      * @return void
      */
-    public function addAnswer(IAnswer $answer)
+    public function addAnswer(IAnswer $answer): void
     {
         $this->answers[] = $answer;
     }
@@ -84,9 +84,9 @@ class AnswerCollection implements IAnswerContainer
     /**
      * Returns the next answer in the collection.
      *
-     * @return IAnswer
+     * @return IAnswer|null
      */
-    public function getAnswer()
+    public function getAnswer(): ?IAnswer
     {
         $answer = current($this->answers);
 

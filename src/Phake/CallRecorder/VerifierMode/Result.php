@@ -52,18 +52,18 @@ class Result
     /**
      * @var bool
      */
-    private $verified;
+    private bool $verified;
 
     /**
      * @var string
      */
-    private $failureDescription;
+    private string $failureDescription;
 
     /**
      * @param bool $verified
      * @param string $failureDescription
      */
-    public function __construct($verified, $failureDescription)
+    public function __construct(bool $verified, string $failureDescription)
     {
         $this->verified           = $verified;
         $this->failureDescription = $failureDescription;
@@ -72,7 +72,7 @@ class Result
     /**
      * @return bool
      */
-    public function getVerified()
+    public function getVerified(): bool
     {
         return $this->verified;
     }
@@ -80,7 +80,7 @@ class Result
     /**
      * @return string
      */
-    public function getFailureDescription()
+    public function getFailureDescription(): string
     {
         return $this->failureDescription;
     }

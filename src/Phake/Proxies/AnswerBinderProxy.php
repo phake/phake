@@ -57,7 +57,7 @@ class AnswerBinderProxy implements AnswerProxyInterface
     /**
      * @var \Phake\Stubber\IAnswerBinder
      */
-    private $binder;
+    private \Phake\Stubber\IAnswerBinder $binder;
 
     public function __construct(\Phake\Stubber\IAnswerBinder $binder)
     {
@@ -71,7 +71,7 @@ class AnswerBinderProxy implements AnswerProxyInterface
      *
      * @return \Phake\Stubber\IAnswerContainer
      */
-    public function thenReturn($value)
+    public function thenReturn(mixed $value): \Phake\Stubber\IAnswerContainer
     {
         return $this->binder->bindAnswer(new \Phake\Stubber\Answers\StaticAnswer($value));
     }
@@ -85,7 +85,7 @@ class AnswerBinderProxy implements AnswerProxyInterface
      * @throws \InvalidArgumentException
      * @return \Phake\Stubber\IAnswerContainer
      */
-    public function thenGetReturnByLambda($value)
+    public function thenGetReturnByLambda(callable $value): \Phake\Stubber\IAnswerContainer
     {
         trigger_error('Use thenReturnCallback instead.', E_USER_DEPRECATED);
         return $this->thenReturnCallback($value);
@@ -99,12 +99,8 @@ class AnswerBinderProxy implements AnswerProxyInterface
      * @throws \InvalidArgumentException
      * @return \Phake\Stubber\IAnswerContainer
      */
-    public function thenReturnCallback($value)
+    public function thenReturnCallback(callable $value): \Phake\Stubber\IAnswerContainer
     {
-        if (!is_callable($value)) {
-            throw new \InvalidArgumentException('Given lambda is not callable');
-        }
-
         return $this->binder->bindAnswer(new \Phake\Stubber\Answers\LambdaAnswer($value));
     }
 
@@ -112,7 +108,7 @@ class AnswerBinderProxy implements AnswerProxyInterface
      * Binds a delegated call that will call a given method's parent.
      * @return \Phake\Stubber\IAnswerContainer
      */
-    public function thenCallParent()
+    public function thenCallParent(): \Phake\Stubber\IAnswerContainer
     {
         return $this->binder->bindAnswer(new \Phake\Stubber\Answers\ParentDelegate());
     }
@@ -124,7 +120,7 @@ class AnswerBinderProxy implements AnswerProxyInterface
      *
      * @return \Phake\Stubber\IAnswerContainer
      */
-    public function thenThrow(\Throwable $value)
+    public function thenThrow(\Throwable $value): \Phake\Stubber\IAnswerContainer
     {
         return $this->binder->bindAnswer(new \Phake\Stubber\Answers\ExceptionAnswer($value));
     }
@@ -136,17 +132,17 @@ class AnswerBinderProxy implements AnswerProxyInterface
      *
      * @return \Phake\Stubber\IAnswerContainer
      */
-    public function captureReturnTo(&$captor)
+    public function captureReturnTo(mixed &$captor): \Phake\Stubber\IAnswerContainer
     {
         return $this->binder->bindAnswer(new \Phake\Stubber\Answers\ParentDelegate($captor));
     }
 
-    public function thenDoNothing()
+    public function thenDoNothing(): \Phake\Stubber\IAnswerContainer
     {
         return $this->binder->bindAnswer(new \Phake\Stubber\Answers\NoAnswer());
     }
 
-    public function thenReturnSelf()
+    public function thenReturnSelf(): \Phake\Stubber\IAnswerContainer
     {
         return $this->binder->bindAnswer(new \Phake\Stubber\Answers\SelfAnswer());
     }

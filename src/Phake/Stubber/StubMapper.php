@@ -57,7 +57,7 @@ class StubMapper
     /**
      * @var array
      */
-    private $matcherStubMap = [];
+    private array $matcherStubMap = [];
 
     /**
      * Maps a given answer collection to a given $matcher
@@ -66,7 +66,7 @@ class StubMapper
      * @param \Phake\Matchers\IMethodMatcher  $matcher
      * @return void
      */
-    public function mapStubToMatcher(AnswerCollection $answer, \Phake\Matchers\IMethodMatcher $matcher)
+    public function mapStubToMatcher(AnswerCollection $answer, \Phake\Matchers\IMethodMatcher $matcher): void
     {
         $this->matcherStubMap[$matcher->getMethod()][] = [$matcher, $answer];
     }
@@ -79,7 +79,7 @@ class StubMapper
      *
      * @return AnswerCollection|null
      */
-    public function getStubByCall($method, array &$args)
+    public function getStubByCall(string $method, array &$args): ?AnswerCollection
     {
         $matcherStubMap = isset($this->matcherStubMap[$method]) ? array_reverse($this->matcherStubMap[$method]) : [];
 
@@ -99,7 +99,7 @@ class StubMapper
      * Removes all answer collections from the stub mapper.
      * @return void
      */
-    public function removeAllAnswers()
+    public function removeAllAnswers(): void
     {
         $this->matcherStubMap = [];
     }

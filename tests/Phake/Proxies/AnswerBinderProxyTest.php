@@ -123,17 +123,6 @@ class AnswerBinderProxyTest extends TestCase
     }
 
     /**
-     * Tests that thenGetReturnByLambda throws an exception if the given lambda is not callable
-     */
-    public function testThenReturnCallbackThrowsExceptionForUncallableLambda()
-    {
-        $this->expectException('InvalidArgumentException');
-
-        $func = 'some_unknown_function';
-        $this->proxy->thenReturnCallback($func);
-    }
-
-    /**
      * Tests the thenCallParent functionality of the proxy
      */
     public function testThenCallParent()

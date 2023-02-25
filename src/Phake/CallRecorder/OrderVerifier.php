@@ -57,7 +57,7 @@ class OrderVerifier
      *
      * @return bool
      */
-    public function verifyCallsInOrder(array $calls)
+    public function verifyCallsInOrder(array $calls): bool
     {
         $call1 = array_shift($calls);
         $call2 = array_shift($call1);

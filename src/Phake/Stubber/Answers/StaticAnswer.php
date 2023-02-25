@@ -57,12 +57,12 @@ class StaticAnswer implements \Phake\Stubber\IAnswer
     /**
      * @var mixed
      */
-    private $answer;
+    private mixed $answer = null;
 
     /**
      * @param mixed $answer
      */
-    public function __construct($answer)
+    public function __construct(mixed $answer)
     {
         $this->answer = $answer;
     }
@@ -70,7 +70,7 @@ class StaticAnswer implements \Phake\Stubber\IAnswer
     /**
      * {@inheritdoc}
      */
-    public function processAnswer($answer)
+    public function processAnswer(mixed $answer): void
     {
     }
 
@@ -80,7 +80,7 @@ class StaticAnswer implements \Phake\Stubber\IAnswer
      *
      * {@inheritdoc}
      */
-    public function getAnswerCallback($context, $method)
+    public function getAnswerCallback(mixed $context, string $method): callable
     {
         $answer = $this->answer;
         return function (...$args) use ($answer) {

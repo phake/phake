@@ -57,7 +57,7 @@ class AnswerCollectionProxy implements \Phake\Stubber\IAnswerContainer, AnswerPr
     /**
      * @var \Phake\Stubber\AnswerCollection
      */
-    private $collection;
+    private \Phake\Stubber\AnswerCollection $collection;
 
     /**
      * @param \Phake\Stubber\AnswerCollection $collection
@@ -74,7 +74,7 @@ class AnswerCollectionProxy implements \Phake\Stubber\IAnswerContainer, AnswerPr
      *
      * @return AnswerCollectionProxy
      */
-    public function thenReturn($value)
+    public function thenReturn($value): self
     {
         $this->collection->addAnswer(new \Phake\Stubber\Answers\StaticAnswer($value));
         return $this;
@@ -88,12 +88,8 @@ class AnswerCollectionProxy implements \Phake\Stubber\IAnswerContainer, AnswerPr
      * @throws \InvalidArgumentException
      * @return AnswerCollectionProxy
      */
-    public function thenGetReturnByLambda($value)
+    public function thenGetReturnByLambda(callable $value): self
     {
-        if (!is_callable($value)) {
-            throw new \InvalidArgumentException('Given lambda is not callable');
-        }
-
         $this->collection->addAnswer(new \Phake\Stubber\Answers\LambdaAnswer($value));
 
         return $this;
@@ -103,7 +99,7 @@ class AnswerCollectionProxy implements \Phake\Stubber\IAnswerContainer, AnswerPr
      * Binds a delegated call that will call a given method's parent.
      * @return AnswerCollectionProxy
      */
-    public function thenCallParent()
+    public function thenCallParent(): self
     {
         $this->collection->addAnswer(new \Phake\Stubber\Answers\ParentDelegate());
         return $this;
@@ -116,7 +112,7 @@ class AnswerCollectionProxy implements \Phake\Stubber\IAnswerContainer, AnswerPr
      *
      * @return AnswerCollectionProxy
      */
-    public function thenThrow(\Throwable $value)
+    public function thenThrow(\Throwable $value): self
     {
         $this->collection->addAnswer(new \Phake\Stubber\Answers\ExceptionAnswer($value));
         return $this;
@@ -129,7 +125,7 @@ class AnswerCollectionProxy implements \Phake\Stubber\IAnswerContainer, AnswerPr
      *
      * @return AnswerCollectionProxy
      */
-    public function captureReturnTo(&$captor)
+    public function captureReturnTo(mixed &$captor): self
     {
         $this->collection->addAnswer(new \Phake\Stubber\Answers\ParentDelegate($captor));
         return $this;
@@ -141,21 +137,21 @@ class AnswerCollectionProxy implements \Phake\Stubber\IAnswerContainer, AnswerPr
      * @param \callable $value
      *
      * @throws \InvalidArgumentException
-     * @return \Phake\Stubber\IAnswerContainer
+     * @return AnswerCollectionProxy
      */
-    public function thenReturnCallback($value)
+    public function thenReturnCallback(callable $value): self
     {
         $this->collection->addAnswer(new \Phake\Stubber\Answers\LambdaAnswer($value));
         return $this;
     }
 
-    public function thenDoNothing()
+    public function thenDoNothing(): self
     {
         $this->collection->addAnswer(new \Phake\Stubber\Answers\NoAnswer());
         return $this;
     }
 
-    public function thenReturnSelf()
+    public function thenReturnSelf(): self
     {
         $this->collection->addAnswer(new \Phake\Stubber\Answers\SelfAnswer());
         return $this;
@@ -165,7 +161,7 @@ class AnswerCollectionProxy implements \Phake\Stubber\IAnswerContainer, AnswerPr
      * Returns an answer from the container
      * @return \Phake\Stubber\IAnswer
      */
-    public function getAnswer()
+    public function getAnswer(): ?\Phake\Stubber\IAnswer
     {
         return $this->collection->getAnswer();
     }

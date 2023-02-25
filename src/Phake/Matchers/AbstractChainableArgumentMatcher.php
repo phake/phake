@@ -55,9 +55,9 @@ abstract class AbstractChainableArgumentMatcher implements IChainableArgumentMat
     /**
      * @var IChainableArgumentMatcher|null
      */
-    private $nextMatcher;
+    private ?IChainableArgumentMatcher $nextMatcher = null;
 
-    public function setNextMatcher(IChainableArgumentMatcher $matcher)
+    public function setNextMatcher(IChainableArgumentMatcher $matcher): void
     {
         $matcher->assertPreviousMatcher($this);
         $this->nextMatcher = $matcher;
@@ -66,7 +66,7 @@ abstract class AbstractChainableArgumentMatcher implements IChainableArgumentMat
     /**
      * @return IChainableArgumentMatcher|null
      */
-    public function getNextMatcher()
+    public function getNextMatcher(): ?IChainableArgumentMatcher
     {
         return $this->nextMatcher;
     }
@@ -76,7 +76,7 @@ abstract class AbstractChainableArgumentMatcher implements IChainableArgumentMat
      * @throws \InvalidArgumentException When this matcher cannot be chained to the previous matcher.
      * @return void
      */
-    public function assertPreviousMatcher(IChainableArgumentMatcher $matcher)
+    public function assertPreviousMatcher(IChainableArgumentMatcher $matcher): void
     {
     }
 }

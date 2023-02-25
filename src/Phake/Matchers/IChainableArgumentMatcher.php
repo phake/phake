@@ -60,14 +60,14 @@ interface IChainableArgumentMatcher
      * @throw Exception
      * @return void
      */
-    public function doArgumentsMatch(array &$arguments);
+    public function doArgumentsMatch(array &$arguments): void;
 
     /**
      * returns the next matcher in the chain
      *
      * @return IChainableArgumentMatcher|null
      */
-    public function getNextMatcher();
+    public function getNextMatcher(): ?IChainableArgumentMatcher;
 
     /**
      * Sets the next matcher in the chain.
@@ -76,7 +76,7 @@ interface IChainableArgumentMatcher
      * @throws \InvalidArgumentException when the given matcher cannot be chained to this matcher
      * @return void
      */
-    public function setNextMatcher(IChainableArgumentMatcher $matcher);
+    public function setNextMatcher(IChainableArgumentMatcher $matcher): void;
 
     /**
      * Asserts whether or not this matcher can be chained to the the given matcher
@@ -85,11 +85,11 @@ interface IChainableArgumentMatcher
      * @throws \InvalidArgumentException When this matcher cannot be chained to the previous matcher.
      * @return void
      */
-    public function assertPreviousMatcher(IChainableArgumentMatcher $matcher);
+    public function assertPreviousMatcher(IChainableArgumentMatcher $matcher): void;
 
     /**
      * Returns a human readable description of the argument matcher
      * @return string
      */
-    public function __toString();
+    public function __toString(): string;
 }

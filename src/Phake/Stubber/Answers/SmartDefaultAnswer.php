@@ -54,7 +54,7 @@ namespace Phake\Stubber\Answers;
  */
 class SmartDefaultAnswer implements \Phake\Stubber\IAnswer
 {
-    public function processAnswer($answer)
+    public function processAnswer(mixed $answer): void
     {
     }
 
@@ -62,7 +62,7 @@ class SmartDefaultAnswer implements \Phake\Stubber\IAnswer
      * @psalm-suppress MissingClosureParamType
      * @psalm-suppress MissingClosureReturnType
      */
-    public function getReturnTypeResult(?\ReflectionType $returnType, \ReflectionMethod $method)
+    public function getReturnTypeResult(?\ReflectionType $returnType, \ReflectionMethod $method): mixed
     {
         if (null === $returnType) {
             return null;
@@ -112,14 +112,14 @@ class SmartDefaultAnswer implements \Phake\Stubber\IAnswer
     /**
      * @psalm-suppress UndefinedMethod
      */
-    public function getAnswerCallback($context, $method)
+    public function getAnswerCallback(mixed $context, string $method): callable
     {
         $class = new \ReflectionClass($context);
         $method = $class->getMethod($method);
 
         $defaultAnswer = $this->getReturnTypeResult($method->getReturnType(), $method);
 
-        return function (...$args) use ($defaultAnswer) {
+        return function (mixed ...$args) use ($defaultAnswer): mixed {
             return $defaultAnswer;
         };
     }

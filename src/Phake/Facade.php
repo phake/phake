@@ -55,21 +55,17 @@ namespace Phake;
 class Facade
 {
     /**
-     * @var array<string, class-string>
+     * @var array<class-string>
      */
-    private $cachedClasses;
+    private array $cachedClasses = [];
 
-    /**
-     * @var Mock\InfoRegistry
-     */
-    private $infoRegistry;
+    private Mock\InfoRegistry $infoRegistry;
 
     /**
      * @param Mock\InfoRegistry $infoRegistry
      */
     public function __construct(Mock\InfoRegistry $infoRegistry)
     {
-        $this->cachedClasses = [];
         $this->infoRegistry = $infoRegistry;
     }
 
@@ -83,15 +79,15 @@ class Facade
      * @param array                    $constructorArgs
      *
      * @throws \InvalidArgumentException
-     * @return mixed
+     * @return IMock
      */
     public function mock(
-        $mockedClassList,
+        string|array $mockedClassList,
         ClassGenerator\MockClass $mockGenerator,
         CallRecorder\Recorder $callRecorder,
         Stubber\IAnswer $defaultAnswer,
         array $constructorArgs = null
-    ) {
+    ): IMock {
         $mockedClassList = (array) $mockedClassList;
 
         foreach ($mockedClassList as $mockedClass) {
@@ -120,7 +116,7 @@ class Facade
     /**
      * @return void
      */
-    public function resetStaticInfo()
+    public function resetStaticInfo(): void
     {
         $this->infoRegistry->resetAll();
     }
@@ -136,7 +132,7 @@ class Facade
      *
      * @return class-string
      */
-    private function generateUniqueClassName(array $bases)
+    private function generateUniqueClassName(array $bases): string
     {
         $base_class_name = [];
         foreach ($bases as $base) {

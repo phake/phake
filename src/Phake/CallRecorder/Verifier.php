@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Phake\CallRecorder;
 
+use Phake\Exception\VerificationException;
+
+
 /*
  * Phake - Mocking Framework
  *
@@ -57,18 +60,18 @@ class Verifier
     /**
      * @var Recorder
      */
-    protected $recorder;
+    protected Recorder $recorder;
 
     /**
      * @var \Phake\IMock|class-string
      */
-    protected $obj;
+    protected \Phake\IMock|string $obj;
 
     /**
      * @param Recorder $recorder
      * @param \Phake\IMock|class-string $obj
      */
-    public function __construct(Recorder $recorder, $obj)
+    public function __construct(Recorder $recorder, \Phake\IMock|string $obj)
     {
         $this->recorder = $recorder;
         $this->obj      = $obj;
@@ -83,7 +86,7 @@ class Verifier
      *
      * @return VerifierResult
      */
-    public function verifyCall(CallExpectation $expectation)
+    public function verifyCall(CallExpectation $expectation): VerifierResult
     {
         $matcher = new \Phake\Matchers\MethodMatcher($expectation->getMethod(), $expectation->getArgumentMatcher());
         $calls   = $this->recorder->getAllCalls();
@@ -139,7 +142,7 @@ class Verifier
     /**
      * @return VerifierResult
      */
-    public function verifyNoCalls()
+    public function verifyNoCalls(): VerifierResult
     {
         $result = true;
 
@@ -162,7 +165,7 @@ class Verifier
      *
      * @return VerifierResult
      */
-    public function verifyNoOtherCalls()
+    public function verifyNoOtherCalls(): VerifierResult
     {
         $result = true;
 
@@ -183,7 +186,7 @@ class Verifier
     /**
      * @return \Phake\IMock|class-string
      */
-    public function getObject()
+    public function getObject(): \Phake\IMock|string
     {
         return $this->obj;
     }

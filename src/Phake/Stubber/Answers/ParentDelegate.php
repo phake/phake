@@ -60,22 +60,22 @@ class ParentDelegate implements \Phake\Stubber\IAnswer
     /**
      * @var mixed
      */
-    private $capturedReturn;
+    private mixed $capturedReturn;
 
     /**
      * @param mixed &$captor
      */
-    public function __construct(&$captor = null)
+    public function __construct(mixed &$captor = null)
     {
         $this->capturedReturn =& $captor;
     }
 
-    public function processAnswer($answer)
+    public function processAnswer(mixed $answer): void
     {
         $this->capturedReturn = $answer;
     }
 
-    public function getAnswerCallback($context, $method)
+    public function getAnswerCallback(mixed $context, string $method): callable
     {
         $fallback =  [$this, 'getFallback'];
         try {
@@ -105,7 +105,7 @@ class ParentDelegate implements \Phake\Stubber\IAnswer
      * @param mixed ...$args
      * @return mixed
      */
-    public function getFallback(...$args)
+    public function getFallback(mixed ...$args): mixed
     {
         return null;
     }

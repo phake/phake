@@ -57,23 +57,17 @@ class MockClass
     /**
      * @var array<class-string>
      */
-    private static $unsafeClasses = [\Memcached::class];
+    private static array $unsafeClasses = [\Memcached::class];
+
+    private ILoader $loader;
+
+    private IInstantiator $instantiator;
 
     /**
-     * @var ILoader
+     * @param ILoader|null $loader
+     * @param IInstantiator|null $instantiator
      */
-    private $loader;
-
-    /**
-     * @var IInstantiator
-     */
-    private $instantiator;
-
-    /**
-     * @param ILoader $loader
-     * @param IInstantiator $instantiator
-     */
-    public function __construct(ILoader $loader = null, IInstantiator $instantiator = null)
+    public function __construct(?ILoader $loader = null, ?IInstantiator $instantiator = null)
     {
         $this->loader = $loader ?: new EvalLoader();
         $this->instantiator = $instantiator ?: new DoctrineInstantiator();
@@ -90,7 +84,7 @@ class MockClass
      *
      * @return void
      */
-    public function generate($newClassName, $mockedClassName, \Phake\Mock\InfoRegistry $infoRegistry)
+    public function generate(string $newClassName, string|array $mockedClassName, \Phake\Mock\InfoRegistry $infoRegistry): void
     {
         $extends    = '';
         $implements = '';
@@ -191,7 +185,7 @@ class {$newClassName} {$extends}
      * @param string $classDef
      * @return void
      */
-    private function loadClass($newClassName, $mockedClassName, $classDef)
+    private function loadClass(string $newClassName, string $mockedClassName, string $classDef): void
     {
         $isUnsafe = in_array($mockedClassName, self::$unsafeClasses);
 
@@ -219,12 +213,12 @@ class {$newClassName} {$extends}
      * @return \Phake\IMock of type $newClassName
      */
     public function instantiate(
-        $newClassName,
+        string $newClassName,
         \Phake\CallRecorder\Recorder $recorder,
         \Phake\Stubber\StubMapper $mapper,
         \Phake\Stubber\IAnswer $defaultAnswer,
         array $constructorArgs = null
-    ) {
+    ): \Phake\IMock {
         $mockObject = $this->instantiator->instantiate($newClassName);
         assert($mockObject instanceof \Phake\IMock);
 
@@ -247,7 +241,7 @@ class {$newClassName} {$extends}
      *
      * @return string
      */
-    protected function generateMockedMethods(\ReflectionClass $mockedClass, array $mockedInterfaces = [], &$implementedMethods = [])
+    protected function generateMockedMethods(\ReflectionClass $mockedClass, array $mockedInterfaces = [], array &$implementedMethods = []): string
     {
         $methodDefs = '';
         $filter     = \ReflectionMethod::IS_ABSTRACT | \ReflectionMethod::IS_PROTECTED | \ReflectionMethod::IS_PUBLIC | ~\ReflectionMethod::IS_FINAL;
@@ -273,7 +267,7 @@ class {$newClassName} {$extends}
     /**
      * @return bool
      */
-    private function isConstructorDefinedInInterface(\ReflectionClass $mockedClass)
+    private function isConstructorDefinedInInterface(\ReflectionClass $mockedClass): bool
     {
         $constructor = $mockedClass->getConstructor();
 
@@ -310,7 +304,7 @@ class {$newClassName} {$extends}
     /**
      * @return bool
      */
-    private function isConstructorDefinedAndFinal(\ReflectionClass $mockedClass)
+    private function isConstructorDefinedAndFinal(\ReflectionClass $mockedClass): bool
     {
         $constructor = $mockedClass->getConstructor();
         if (!empty($constructor) && $constructor->isFinal()) {
@@ -323,7 +317,7 @@ class {$newClassName} {$extends}
     /**
      * @return string
      */
-    private function generateSafeConstructorOverride(array $mockedClasses)
+    private function generateSafeConstructorOverride(array $mockedClasses): string
     {
         $realClass = null;
         $overrideConstructor = true;
@@ -358,7 +352,7 @@ class {$newClassName} {$extends}
      * @param \ReflectionClass $originalClass
      * @return string
      */
-    protected function getConstructorChaining(\ReflectionClass $originalClass)
+    protected function getConstructorChaining(\ReflectionClass $originalClass): string
     {
         return $originalClass->hasMethod('__construct') ? "
 
@@ -379,7 +373,7 @@ class {$newClassName} {$extends}
      *
      * @return string
      */
-    protected function implementMethod(\ReflectionMethod $method, $static = false)
+    protected function implementMethod(\ReflectionMethod $method, bool $static = false): string
     {
         $modifiers = implode(
             ' ',
@@ -458,7 +452,7 @@ class {$newClassName} {$extends}
      *
      * @return string
      */
-    protected function generateMethodParameters(\ReflectionMethod $method)
+    protected function generateMethodParameters(\ReflectionMethod $method): string
     {
         $parameters = [];
         foreach ($method->getParameters() as $parameter) {
@@ -475,7 +469,7 @@ class {$newClassName} {$extends}
      *
      * @return string
      */
-    protected function copyMethodParameters(\ReflectionMethod $method)
+    protected function copyMethodParameters(\ReflectionMethod $method): string
     {
         $copies = "\$funcGetArgs = func_get_args();\n\t\t\$__PHAKE_numArgs = count(\$funcGetArgs);\n\t\t";
         $variadicParameter = false;
@@ -555,7 +549,7 @@ class {$newClassName} {$extends}
      *
      * @return string
      */
-    protected function implementParameter(\ReflectionParameter $parameter)
+    protected function implementParameter(\ReflectionParameter $parameter): string
     {
         $default  = '';
         $type     = '';
@@ -598,11 +592,12 @@ class {$newClassName} {$extends}
      * @return \Phake\Mock\Info
      */
     private function createMockInfo(
-        $className,
+        string $className,
         \Phake\CallRecorder\Recorder $recorder,
         \Phake\Stubber\StubMapper $mapper,
         \Phake\Stubber\IAnswer $defaultAnswer
-    ) {
+    ): \Phake\Mock\Info
+    {
         $info = new \Phake\Mock\Info($className, $recorder, $mapper, $defaultAnswer);
 
         $info->setHandlerChain(

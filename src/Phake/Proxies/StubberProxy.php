@@ -59,18 +59,18 @@ class StubberProxy
     /**
      * @var \Phake\IMock|class-string
      */
-    private $obj;
+    private \Phake\IMock|string $obj;
 
     /**
      * @var \Phake\Matchers\Factory
      */
-    private $matcherFactory;
+    private \Phake\Matchers\Factory $matcherFactory;
 
     /**
      * @param \Phake\IMock|class-string     $obj
      * @param \Phake\Matchers\Factory $matcherFactory
      */
-    public function __construct($obj, \Phake\Matchers\Factory $matcherFactory)
+    public function __construct(\Phake\IMock|string $obj, \Phake\Matchers\Factory $matcherFactory)
     {
         \Phake::assertValidMock($obj);
         $this->obj            = $obj;
@@ -85,7 +85,7 @@ class StubberProxy
      *
      * @return AnswerBinderProxy
      */
-    public function __call($method, array $arguments)
+    public function __call(string $method, array $arguments): AnswerBinderProxy
     {
         $matcher = new \Phake\Matchers\MethodMatcher($method, $this->matcherFactory->createMatcherChain($this->resolveNamedArguments($this->obj, $method, $arguments)));
         $binder  = new \Phake\Stubber\AnswerBinder($matcher, \Phake::getInfo($this->obj)->getStubMapper());
@@ -95,28 +95,25 @@ class StubberProxy
     /**
      * A magic call to instantiate an Answer Binder Proxy that matches any parameters.
      *
-     * @psalm-suppress RedundantConditionGivenDocblockType
-     * @psalm-suppress DocblockTypeContradiction
-     *
-     * @param string $method
+     * @param string|object $method
      *
      * @throws \InvalidArgumentException if $method is not a valid parameter/method name
      *
      * @return AnswerBinderProxy
      */
-    public function __get($method)
+    public function __get(string|object $method): AnswerBinderProxy
     {
         if (is_string($method) && ctype_digit($method[0])) {
             throw new \InvalidArgumentException('String parameter to __get() cannot start with an integer');
         }
 
-        if (!is_string($method) && !is_object($method)) { // assume an object is a matcher
-            $message = sprintf('Parameter to __get() must be a string, %s given', gettype($method));
-            throw new \InvalidArgumentException($message);
-        }
-
         if (method_exists($this->obj, '__get') && !(is_string($method) && method_exists($this->obj, $method))) {
             return $this->__call('__get', [$method]);
+        }
+
+        if (!is_string($method)) {
+            $message = sprintf('Parameter to __get() must be a string, %s given', gettype($method));
+            throw new \InvalidArgumentException($message);
         }
 
         return $this->__call($method, [new \Phake\Matchers\AnyParameters()]);

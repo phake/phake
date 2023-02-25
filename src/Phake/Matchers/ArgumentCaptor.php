@@ -57,22 +57,22 @@ class ArgumentCaptor extends SingleArgumentMatcher
     /**
      * @var mixed
      */
-    private $boundVariable;
+    private mixed $boundVariable;
 
     /**
      * @var array
      */
-    private $allCapturedValues;
+    private array $allCapturedValues;
 
     /**
      * @var IChainableArgumentMatcher|null
      */
-    private $matcher;
+    private ?IChainableArgumentMatcher $matcher = null;
 
     /**
      * @param mixed $boundVariable - reference parameter
      */
-    public function __construct(&$boundVariable)
+    public function __construct(mixed &$boundVariable)
     {
         $this->boundVariable =& $boundVariable;
         $this->allCapturedValues = [];
@@ -83,10 +83,10 @@ class ArgumentCaptor extends SingleArgumentMatcher
      *
      * $values will be set to an array
      *
-     * @param array $values
+     * @param mixed $values
      * @return void
      */
-    public function bindAllCapturedValues(&$values)
+    public function bindAllCapturedValues(mixed &$values): void
     {
         $values = $this->allCapturedValues;
         $this->allCapturedValues = &$values;
@@ -101,7 +101,7 @@ class ArgumentCaptor extends SingleArgumentMatcher
      * @throws \Phake\Exception\MethodMatcherException
      * @return void
      */
-    protected function matches(&$argument)
+    protected function matches(mixed &$argument): void
     {
         $args = [];
         $args[] =& $argument;
@@ -129,7 +129,7 @@ class ArgumentCaptor extends SingleArgumentMatcher
      *
      * @return ArgumentCaptor the current instance
      */
-    public function when($matcher)
+    public function when(mixed $matcher): self
     {
         $factory = new Factory();
 
@@ -138,7 +138,7 @@ class ArgumentCaptor extends SingleArgumentMatcher
         return $this;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return sprintf(
             '<captured parameter%s>',

@@ -55,13 +55,13 @@ class MethodMatcherException extends \Exception
     /**
      * @var int
      */
-    private $argument;
+    private int $argument;
 
     /**
      * @param string $message
      * @param \Exception $previous
      */
-    public function __construct($message = '', \Exception $previous = null)
+    public function __construct(string $message = '', \Exception $previous = null)
     {
         parent::__construct($message, 0, $previous);
         $this->argument = 0;
@@ -71,7 +71,7 @@ class MethodMatcherException extends \Exception
      * Updates the argument position (used in the argument chain)
      * @return void
      */
-    public function incrementArgumentPosition()
+    public function incrementArgumentPosition(): void
     {
         $this->argument++;
     }
@@ -80,7 +80,7 @@ class MethodMatcherException extends \Exception
      * Returns the argument's position (0 indexed)
      * @return int
      */
-    public function getArgumentPosition()
+    public function getArgumentPosition(): int
     {
         return $this->argument;
     }
@@ -91,7 +91,7 @@ class MethodMatcherException extends \Exception
      * @internal This is so we can lazy generate the comparison message.
      * @return string
      */
-    public function getMessageWithComparisonDiff()
+    public function getMessageWithComparisonDiff(): string
     {
         $previous = $this;
 

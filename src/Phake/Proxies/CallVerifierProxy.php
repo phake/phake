@@ -59,24 +59,24 @@ class CallVerifierProxy
     /**
      * @var \Phake\Matchers\IChainableArgumentMatcher|null
      */
-    private $argumentMatcher;
+    private ?\Phake\Matchers\IChainableArgumentMatcher $argumentMatcher;
 
     /**
      * @var \Phake\Client\IClient
      */
-    private $client;
+    private \Phake\Client\IClient $client;
 
     /**
      * @var bool
      */
-    private $static;
+    private bool $static;
 
     /**
      * @param \Phake\Matchers\IChainableArgumentMatcher|null $argumentMatcher
      * @param \Phake\Client\IClient $client
      * @param bool $static
      */
-    public function __construct(?\Phake\Matchers\IChainableArgumentMatcher $argumentMatcher, \Phake\Client\IClient $client, $static)
+    public function __construct(?\Phake\Matchers\IChainableArgumentMatcher $argumentMatcher, \Phake\Client\IClient $client, bool $static)
     {
         $this->argumentMatcher = $argumentMatcher;
         $this->client = $client;
@@ -92,7 +92,7 @@ class CallVerifierProxy
      *
      * @return array
      */
-    public function isCalledOn(\Phake\IMock $obj, \Phake\CallRecorder\IVerifierMode $verifierMode = null)
+    public function isCalledOn(\Phake\IMock $obj, ?\Phake\CallRecorder\IVerifierMode $verifierMode = null): array
     {
         if (null === $verifierMode) {
             $verifierMode = new \Phake\CallRecorder\VerifierMode\Times(1);

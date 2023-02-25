@@ -60,7 +60,7 @@ class PHPUnit9 implements IClient
     /**
      * {@inheritDoc}
      */
-    public function processVerifierResult(\Phake\CallRecorder\VerifierResult $result)
+    public function processVerifierResult(\Phake\CallRecorder\VerifierResult $result): array
     {
         Assert::assertThat($result, $this->getConstraint());
 
@@ -70,7 +70,7 @@ class PHPUnit9 implements IClient
     /**
      * {@inheritDoc}
      */
-    public function processObjectFreeze()
+    public function processObjectFreeze(): void
     {
         Assert::assertThat(true, Assert::isTrue());
     }
@@ -78,7 +78,7 @@ class PHPUnit9 implements IClient
     /**
      * @return \Phake\PHPUnit\VerifierResultConstraintV6
      */
-    private function getConstraint()
+    private function getConstraint(): \Phake\PHPUnit\VerifierResultConstraintV6
     {
         return new \Phake\PHPUnit\VerifierResultConstraintV6();
     }

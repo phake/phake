@@ -56,5 +56,5 @@ interface IAnswerContainer
      * Returns an answer from the container
      * @return IAnswer|null
      */
-    public function getAnswer();
+    public function getAnswer(): ?IAnswer;
 }

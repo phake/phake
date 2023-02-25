@@ -55,7 +55,7 @@ class DefaultClient implements IClient
     /**
      * {@inheritDoc}
      */
-    public function processVerifierResult(\Phake\CallRecorder\VerifierResult $result)
+    public function processVerifierResult(\Phake\CallRecorder\VerifierResult $result): array
     {
         if ($result->getVerified()) {
             return $result->getMatchedCalls();
@@ -66,7 +66,7 @@ class DefaultClient implements IClient
     /**
      * {@inheritDoc}
      */
-    public function processObjectFreeze()
+    public function processObjectFreeze(): void
     {
     }
 }

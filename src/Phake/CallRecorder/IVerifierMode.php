@@ -61,11 +61,11 @@ interface IVerifierMode
      *
      * @return VerifierMode\Result
      */
-    public function verify(array $matchedCalls);
+    public function verify(array $matchedCalls): VerifierMode\Result;
 
     /**
      * Returns a human readable description of the verifier mode
      * @return string
      */
-    public function __toString();
+    public function __toString(): string;
 }

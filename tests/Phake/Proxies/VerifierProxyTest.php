@@ -180,7 +180,6 @@ class VerifierProxyTest extends TestCase
     {
         return [
             ['1foo', 'cannot start with an integer'],
-            [1,      'must be a string'],
         ];
     }
 }

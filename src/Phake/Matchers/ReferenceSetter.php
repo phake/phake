@@ -52,17 +52,17 @@ class ReferenceSetter extends SingleArgumentMatcher
     /**
      * @var mixed
      */
-    private $value;
+    private mixed $value;
 
     /**
      * @var IChainableArgumentMatcher|null
      */
-    private $matcher;
+    private ?IChainableArgumentMatcher $matcher = null;
 
     /**
      * @param mixed $value The value to set the reference parameter to.
      */
-    public function __construct($value)
+    public function __construct(mixed $value)
     {
         $this->value = $value;
     }
@@ -76,7 +76,7 @@ class ReferenceSetter extends SingleArgumentMatcher
      * @throws \Phake\Exception\MethodMatcherException
      * @return void
      */
-    protected function matches(&$argument)
+    protected function matches(mixed &$argument): void
     {
         $args = [];
         $args[] =& $argument;
@@ -95,7 +95,7 @@ class ReferenceSetter extends SingleArgumentMatcher
      * Returns a human readable description of the argument matcher
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return '<reference parameter>';
     }
@@ -111,7 +111,7 @@ class ReferenceSetter extends SingleArgumentMatcher
      *
      * @return ReferenceSetter the current instance
      */
-    public function when($matcher)
+    public function when(mixed $matcher): self
     {
         $factory = new Factory();
 

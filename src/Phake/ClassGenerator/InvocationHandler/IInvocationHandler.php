@@ -61,5 +61,5 @@ interface IInvocationHandler
      * @param array $argumentReference
      * @return mixed
      */
-    public function invoke($mock, $method, array $arguments, array &$argumentReference);
+    public function invoke(\Phake\IMock|string $mock, string $method, array $arguments, array &$argumentReference): mixed;
 }

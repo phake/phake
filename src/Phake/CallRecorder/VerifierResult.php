@@ -55,24 +55,24 @@ class VerifierResult
     /**
      * @var bool
      */
-    private $verified;
+    private bool $verified;
 
     /**
      * @var array<int, CallInfo>
      */
-    private $matchedCalls;
+    private array $matchedCalls;
 
     /**
      * @var string
      */
-    private $failureDescription;
+    private string $failureDescription;
 
     /**
      * @param boolean               $verified
      * @param array<int, CallInfo>  $matchedCalls
      * @param string                $failureDescription
      */
-    public function __construct($verified, array $matchedCalls, $failureDescription = '')
+    public function __construct(bool $verified, array $matchedCalls, string $failureDescription = '')
     {
         $this->verified           = $verified;
         $this->matchedCalls       = $matchedCalls;
@@ -82,7 +82,7 @@ class VerifierResult
     /**
      * @return boolean
      */
-    public function getVerified()
+    public function getVerified(): bool
     {
         return $this->verified;
     }
@@ -90,7 +90,7 @@ class VerifierResult
     /**
      * @return array<int, CallInfo>
      */
-    public function getMatchedCalls()
+    public function getMatchedCalls(): array
     {
         return $this->matchedCalls;
     }
@@ -98,7 +98,7 @@ class VerifierResult
     /**
      * @return string
      */
-    public function getFailureDescription()
+    public function getFailureDescription(): string
     {
         return $this->failureDescription;
     }

@@ -55,12 +55,12 @@ class Position
     /**
      * @var int
      */
-    private $position;
+    private int $position;
 
     /**
      * @param int $position
      */
-    public function __construct($position)
+    public function __construct(int $position)
     {
         $this->position = $position;
     }
@@ -72,7 +72,7 @@ class Position
      *
      * @return boolean
      */
-    public function thisIsAfter(Position $other)
+    public function thisIsAfter(Position $other): bool
     {
         return ($this->position > $other->position);
     }

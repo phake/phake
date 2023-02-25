@@ -63,16 +63,13 @@ class VisibilityProxy
     /**
      * @var object
      */
-    private $proxied;
+    private object $proxied;
 
     /**
-     * @param mixed $proxied
+     * @param object $proxied
      */
-    public function __construct($proxied)
+    public function __construct(object $proxied)
     {
-        if (!is_object($proxied)) {
-            throw new \InvalidArgumentException("\Phake\Proxies\VisibilityProxy was passed a non-object");
-        }
         $this->proxied = $proxied;
     }
 
@@ -81,7 +78,7 @@ class VisibilityProxy
      * @param array $arguments
      * @return mixed
      */
-    public function __call($method, $arguments)
+    public function __call(string $method, array $arguments): mixed
     {
         if (method_exists($this->proxied, $method)) {
             $reflMethod = new \ReflectionMethod(get_class($this->proxied), $method);

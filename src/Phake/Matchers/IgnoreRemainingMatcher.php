@@ -58,7 +58,7 @@ class IgnoreRemainingMatcher extends AbstractChainableArgumentMatcher
      * @param array $arguments
      * @return void
      */
-    public function doArgumentsMatch(array &$arguments)
+    public function doArgumentsMatch(array &$arguments): void
     {
     }
 
@@ -66,12 +66,12 @@ class IgnoreRemainingMatcher extends AbstractChainableArgumentMatcher
      * Returns a human readable description of the argument matcher
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return '<any parameters>';
     }
 
-    public function setNextMatcher(IChainableArgumentMatcher $matcher)
+    public function setNextMatcher(IChainableArgumentMatcher $matcher): void
     {
         throw new \InvalidArgumentException('Other matchers cannot be checked after you ignore remaining parameters.');
     }

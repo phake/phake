@@ -55,18 +55,18 @@ class ParentDelegateCallback
     /**
      * @var class-string|\Phake\IMock
      */
-    private $context;
+    private \Phake\IMock|string $context;
 
     /**
      * @var \ReflectionMethod
      */
-    private $parentMethod;
+    private \ReflectionMethod $parentMethod;
 
     /**
      * @param class-string|\Phake\IMock $context
      * @param \ReflectionMethod $parentMethod
      */
-    public function __construct($context, \ReflectionMethod $parentMethod)
+    public function __construct(\Phake\IMock|string $context, \ReflectionMethod $parentMethod)
     {
         $this->context = $context;
         $this->parentMethod = $parentMethod;
@@ -75,7 +75,7 @@ class ParentDelegateCallback
     /**
      * @psalm-suppress PossiblyInvalidArgument
      */
-    public function __invoke(array $arguments)
+    public function __invoke(array $arguments): mixed
     {
         $this->parentMethod->setAccessible(true);
         if ($this->parentMethod->isStatic()) {

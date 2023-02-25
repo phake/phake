@@ -57,12 +57,12 @@ class LambdaAnswer implements \Phake\Stubber\IAnswer
     /**
      * @var mixed
      */
-    private $answerLambda;
+    private mixed $answerLambda;
 
     /**
      * @param mixed $answerLambda
      */
-    public function __construct($answerLambda)
+    public function __construct(mixed $answerLambda)
     {
         $this->answerLambda = $answerLambda;
     }
@@ -72,13 +72,13 @@ class LambdaAnswer implements \Phake\Stubber\IAnswer
      *
      * @param mixed $answer
      *
-     * @return null
+     * @return void
      */
-    public function processAnswer($answer)
+    public function processAnswer($answer): void
     {
     }
 
-    public function getAnswerCallback($context, $method)
+    public function getAnswerCallback(mixed $context, string $method): callable
     {
         return $this->answerLambda;
     }

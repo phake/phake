@@ -55,12 +55,12 @@ class EqualsMatcher extends SingleArgumentMatcher
     /**
      * @var mixed
      */
-    private $value;
+    private mixed $value;
 
     /**\
      * @var \SebastianBergmann\Comparator\Factory
      */
-    private $comparatorFactory;
+    private \SebastianBergmann\Comparator\Factory $comparatorFactory;
 
     /**
      * Pass in the value that the upcoming arguments is expected to equal.
@@ -68,7 +68,7 @@ class EqualsMatcher extends SingleArgumentMatcher
      * @param mixed $value
      * @param \SebastianBergmann\Comparator\Factory $comparatorFactory
      */
-    public function __construct($value, \SebastianBergmann\Comparator\Factory $comparatorFactory)
+    public function __construct(mixed $value, \SebastianBergmann\Comparator\Factory $comparatorFactory)
     {
         $this->value = $value;
         $this->comparatorFactory = $comparatorFactory;
@@ -80,7 +80,7 @@ class EqualsMatcher extends SingleArgumentMatcher
      * @param mixed &$argument
      * @return void
      */
-    protected function matches(&$argument)
+    protected function matches(mixed &$argument): void
     {
         if ($this->value === $argument) {
             /*
@@ -100,7 +100,7 @@ class EqualsMatcher extends SingleArgumentMatcher
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         $converter = new \Phake\String\Converter();
         return "equal to {$converter->convertToString($this->value)}";

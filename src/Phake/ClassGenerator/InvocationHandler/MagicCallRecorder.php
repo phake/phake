@@ -57,7 +57,7 @@ class MagicCallRecorder implements IInvocationHandler
     /**
      * @var \Phake\CallRecorder\Recorder
      */
-    private $callRecorder;
+    private \Phake\CallRecorder\Recorder $callRecorder;
 
     /**
      * @param \Phake\CallRecorder\Recorder $callRecorder
@@ -70,7 +70,7 @@ class MagicCallRecorder implements IInvocationHandler
     /**
      * {@inheritDoc}
      */
-    public function invoke($mock, $method, array $arguments, array &$argumentReference)
+    public function invoke(\Phake\IMock|string $mock, string $method, array $arguments, array &$argumentReference): mixed
     {
         if ('__call' == $method || '__callStatic' == $method) {
             $this->callRecorder->recordCall(

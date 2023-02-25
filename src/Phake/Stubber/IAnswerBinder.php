@@ -61,5 +61,5 @@ interface IAnswerBinder
      *
      * @return IAnswerContainer
      */
-    public function bindAnswer(IAnswer $answer);
+    public function bindAnswer(IAnswer $answer): IAnswerContainer;
 }

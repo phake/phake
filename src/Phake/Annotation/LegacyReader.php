@@ -106,7 +106,7 @@ class LegacyReader implements IReader
      *
      * @return array
      */
-    private function getPropertyAnnotations(\ReflectionProperty $property)
+    private function getPropertyAnnotations(\ReflectionProperty $property): array
     {
         $annotations = [];
         if ($comment = $property->getDocComment()) {
@@ -129,7 +129,7 @@ class LegacyReader implements IReader
      * @param string $testNamespace
      * @return bool
      */
-    private function definedUnderTestNamespace($mockedClass, $testNamespace): bool
+    private function definedUnderTestNamespace(string $mockedClass, string $testNamespace): bool
     {
         return class_exists($testNamespace . '\\' . $mockedClass);
     }

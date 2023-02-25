@@ -58,5 +58,5 @@ interface IInstantiator
      *
      * @return object
      */
-    public function instantiate($className);
+    public function instantiate(string $className): object;
 }

@@ -75,12 +75,8 @@ class CallInfoTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->call     = $this->getMockBuilder(Call::class)
-                                ->disableOriginalConstructor()
-                                ->getMock();
-        $this->position = $this->getMockBuilder(Position::class)
-                                ->disableOriginalConstructor()
-                                ->getMock();
+        $this->call     = new Call('context', 'method', []);
+        $this->position = new Position(0);
 
         $this->callInfo = new CallInfo($this->call, $this->position);
     }

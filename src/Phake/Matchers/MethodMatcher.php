@@ -57,17 +57,17 @@ class MethodMatcher implements IMethodMatcher
     /**
      * @var string
      */
-    private $expectedMethod;
+    private string $expectedMethod;
 
     /**
      * @var IChainableArgumentMatcher|null
      */
-    private $argumentMatcherChain;
+    private ?IChainableArgumentMatcher $argumentMatcherChain;
 
     /**
      * @param string $expectedMethod
      */
-    public function __construct($expectedMethod, IChainableArgumentMatcher $argumentMatcherChain = null)
+    public function __construct($expectedMethod, ?IChainableArgumentMatcher $argumentMatcherChain = null)
     {
         $this->expectedMethod = $expectedMethod;
         $this->argumentMatcherChain = $argumentMatcherChain;
@@ -82,7 +82,7 @@ class MethodMatcher implements IMethodMatcher
      *
      * @return boolean
      */
-    public function matches($method, array &$args)
+    public function matches(string $method, array &$args): bool
     {
         try {
             $this->assertMatches($method, $args);
@@ -101,7 +101,7 @@ class MethodMatcher implements IMethodMatcher
      * @return void
      * @throws \Phake\Exception\MethodMatcherException
      */
-    public function assertMatches($method, array &$args)
+    public function assertMatches(string $method, array &$args): void
     {
         if ($this->expectedMethod != $method) {
             throw new \Phake\Exception\MethodMatcherException("Expected method {$this->expectedMethod} but received {$method}");
@@ -119,7 +119,7 @@ class MethodMatcher implements IMethodMatcher
      * @return void
      * @throws \Phake\Exception\MethodMatcherException
      */
-    private function doArgumentsMatch(array &$args)
+    private function doArgumentsMatch(array &$args): void
     {
         if (null !== $this->argumentMatcherChain) {
             try {
@@ -136,7 +136,7 @@ class MethodMatcher implements IMethodMatcher
     /**
      * @return string
      */
-    public function getMethod()
+    public function getMethod(): string
     {
         return $this->expectedMethod;
     }

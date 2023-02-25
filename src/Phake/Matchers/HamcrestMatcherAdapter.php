@@ -57,7 +57,7 @@ class HamcrestMatcherAdapter extends SingleArgumentMatcher
     /**
      * @var \Hamcrest\Matcher
      */
-    private $matcher;
+    private Hamcrest\Matcher $matcher;
 
     /**
      * @param Hamcrest\Matcher $matcher
@@ -76,7 +76,7 @@ class HamcrestMatcherAdapter extends SingleArgumentMatcher
      * @throws \Phake\Exception\MethodMatcherException
      * @retrun void
      */
-    protected function matches(&$argument)
+    protected function matches(mixed &$argument): void
     {
         if (!$this->matcher->matches($argument)) {
             $description = new \Hamcrest\StringDescription();
@@ -89,7 +89,7 @@ class HamcrestMatcherAdapter extends SingleArgumentMatcher
         }
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->matcher->__toString();
     }

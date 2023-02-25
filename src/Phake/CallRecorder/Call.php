@@ -57,24 +57,24 @@ class Call
     /**
      * @var class-string|\Phake\IMock
      */
-    private $object;
+    private \Phake\IMock|string $object;
 
     /**
      * @var string
      */
-    private $method;
+    private string $method;
 
     /**
      * @var array
      */
-    private $arguments;
+    private array $arguments;
 
     /**
      * @param class-string|\Phake\IMock $context - The object the method was called on
      * @param string              $method - The method that was made
      * @param array               $arguments
      */
-    public function __construct($context, $method, array $arguments)
+    public function __construct(\Phake\IMock|string $context, string $method, array $arguments)
     {
         $this->object     = $context;
         $this->method     = $method;
@@ -84,7 +84,7 @@ class Call
     /**
      * @return class-string|\Phake\IMock
      */
-    public function getObject()
+    public function getObject(): \Phake\IMock|string
     {
         return $this->object;
     }
@@ -92,7 +92,7 @@ class Call
     /**
      * @return string
      */
-    public function getMethod()
+    public function getMethod(): string
     {
         return $this->method;
     }
@@ -100,7 +100,7 @@ class Call
     /**
      * @return array
      */
-    public function getArguments()
+    public function getArguments(): array
     {
         return $this->arguments;
     }
@@ -108,7 +108,7 @@ class Call
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         $converter = new \Phake\String\Converter();
         $arguments = [];

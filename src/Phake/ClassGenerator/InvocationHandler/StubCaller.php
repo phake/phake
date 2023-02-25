@@ -55,12 +55,12 @@ class StubCaller implements IInvocationHandler
     /**
      * @var \Phake\Stubber\StubMapper
      */
-    private $stubMapper;
+    private \Phake\Stubber\StubMapper $stubMapper;
 
     /**
      * @var \Phake\Stubber\IAnswer
      */
-    private $defaultAnswer;
+    private \Phake\Stubber\IAnswer $defaultAnswer;
 
     /**
      * @param \Phake\Stubber\StubMapper $stubMapper
@@ -75,7 +75,7 @@ class StubCaller implements IInvocationHandler
     /**
      * {@inheritDoc}
      */
-    public function invoke($mock, $method, array $arguments, array &$argumentReference)
+    public function invoke(\Phake\IMock|string $mock, string $method, array $arguments, array &$argumentReference): mixed
     {
         $stub = null;
 

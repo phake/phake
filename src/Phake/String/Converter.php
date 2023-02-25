@@ -58,7 +58,7 @@ class Converter
      * @param mixed $value
      * @return string
      */
-    public function convertToString($value)
+    public function convertToString(mixed $value): string
     {
         if (is_object($value)) {
             $strValue = '<object:' . get_class($value) . '>';

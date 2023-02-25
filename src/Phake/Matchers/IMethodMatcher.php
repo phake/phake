@@ -65,12 +65,12 @@ interface IMethodMatcher
      *
      * @return boolean
      */
-    public function matches($method, array &$args);
+    public function matches(string $method, array &$args): bool;
 
     /**
      * Accessor for the expected method.
      *
      * @return string
      */
-    public function getMethod();
+    public function getMethod(): string;
 }

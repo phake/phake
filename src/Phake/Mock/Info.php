@@ -57,42 +57,42 @@ class Info
     /**
      * @var string
      */
-    private $uniqId;
+    private string $uniqId;
 
     /**
      * @var \Phake\CallRecorder\Recorder
      */
-    private $recorder;
+    private \Phake\CallRecorder\Recorder $recorder;
 
     /**
      * @var \Phake\Stubber\StubMapper
      */
-    private $mapper;
+    private \Phake\Stubber\StubMapper $mapper;
 
     /**
      * @var \Phake\Stubber\IAnswer
      */
-    private $answer;
+    private \Phake\Stubber\IAnswer $answer;
 
     /**
      * @var bool
      */
-    private $frozen;
+    private bool $frozen;
 
     /**
      * @var class-string
      */
-    private $name;
+    private string $name;
 
     /**
      * @var \Phake\ClassGenerator\InvocationHandler\IInvocationHandler|null
      */
-    private $handlerChain;
+    private ?\Phake\ClassGenerator\InvocationHandler\IInvocationHandler $handlerChain = null;
 
     /**
      * @param class-string $name
      */
-    public function __construct($name, \Phake\CallRecorder\Recorder $recorder, \Phake\Stubber\StubMapper $mapper, \Phake\Stubber\IAnswer $defaultAnswer)
+    public function __construct(string $name, \Phake\CallRecorder\Recorder $recorder, \Phake\Stubber\StubMapper $mapper, \Phake\Stubber\IAnswer $defaultAnswer)
     {
         $this->uniqId = bin2hex(random_bytes(7));
         $this->recorder = $recorder;
@@ -105,7 +105,7 @@ class Info
     /**
      * @return \Phake\CallRecorder\Recorder
      */
-    public function getCallRecorder()
+    public function getCallRecorder(): \Phake\CallRecorder\Recorder
     {
         return $this->recorder;
     }
@@ -113,7 +113,7 @@ class Info
     /**
      * @return \Phake\Stubber\StubMapper
      */
-    public function getStubMapper()
+    public function getStubMapper(): \Phake\Stubber\StubMapper
     {
         return $this->mapper;
     }
@@ -121,7 +121,7 @@ class Info
     /**
      * @return \Phake\Stubber\IAnswer
      */
-    public function getDefaultAnswer()
+    public function getDefaultAnswer(): \Phake\Stubber\IAnswer
     {
         return $this->answer;
     }
@@ -129,7 +129,7 @@ class Info
     /**
      * @return bool
      */
-    public function isObjectFrozen()
+    public function isObjectFrozen(): bool
     {
         return $this->frozen;
     }
@@ -137,7 +137,7 @@ class Info
     /**
      * @return void
      */
-    public function freezeObject()
+    public function freezeObject(): void
     {
         $this->frozen = true;
     }
@@ -145,7 +145,7 @@ class Info
     /**
      * @return void
      */
-    public function thawObject()
+    public function thawObject(): void
     {
         $this->frozen = false;
     }
@@ -153,7 +153,7 @@ class Info
     /**
      * @return \Phake\ClassGenerator\InvocationHandler\IInvocationHandler|null
      */
-    public function getHandlerChain()
+    public function getHandlerChain(): ?\Phake\ClassGenerator\InvocationHandler\IInvocationHandler
     {
         return $this->handlerChain;
     }
@@ -161,7 +161,7 @@ class Info
     /**
      * @return void
      */
-    public function setHandlerChain(\Phake\ClassGenerator\InvocationHandler\IInvocationHandler $handlerChain)
+    public function setHandlerChain(\Phake\ClassGenerator\InvocationHandler\IInvocationHandler $handlerChain): void
     {
         $this->handlerChain = $handlerChain;
     }
@@ -169,7 +169,7 @@ class Info
     /**
      * @return class-string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -177,7 +177,7 @@ class Info
     /**
      * @return void
      */
-    public function resetInfo()
+    public function resetInfo(): void
     {
         $this->thawObject();
         $this->mapper->removeAllAnswers();

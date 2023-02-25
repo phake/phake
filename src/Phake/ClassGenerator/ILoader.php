@@ -58,5 +58,5 @@ interface ILoader
      *
      * @return void
      */
-    public function loadClassByString($className, $classDef);
+    public function loadClassByString(string $className, string $classDef): void;
 }

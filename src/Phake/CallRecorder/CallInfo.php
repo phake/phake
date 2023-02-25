@@ -55,12 +55,12 @@ class CallInfo
     /**
      * @var Call
      */
-    private $call;
+    private Call $call;
 
     /**
      * @var Position
      */
-    private $position;
+    private Position $position;
 
     /**
      * @param Call     $call
@@ -75,7 +75,7 @@ class CallInfo
     /**
      * @return Call
      */
-    public function getCall()
+    public function getCall(): Call
     {
         return $this->call;
     }
@@ -83,7 +83,7 @@ class CallInfo
     /**
      * @return Position
      */
-    public function getPosition()
+    public function getPosition(): Position
     {
         return $this->position;
     }

@@ -57,7 +57,7 @@ class ExceptionAnswer implements \Phake\Stubber\IAnswer
     /**
      * @var mixed
      */
-    private $answer;
+    private mixed $answer;
 
     /**
      * @param mixed $answer
@@ -71,7 +71,7 @@ class ExceptionAnswer implements \Phake\Stubber\IAnswer
      * @psalm-suppress MissingClosureParamType
      * @psalm-suppress MissingClosureReturnType
      */
-    public function getAnswerCallback($context, $method)
+    public function getAnswerCallback(mixed $context, string $method): callable
     {
         $answer = $this->answer;
         return function (...$args) use ($answer) {
@@ -79,7 +79,7 @@ class ExceptionAnswer implements \Phake\Stubber\IAnswer
         };
     }
 
-    public function processAnswer($answer)
+    public function processAnswer($answer): void
     {
     }
 }

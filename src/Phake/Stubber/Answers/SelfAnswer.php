@@ -59,7 +59,7 @@ class SelfAnswer implements \Phake\Stubber\IAnswer
      * @param string $method
      * @return callable
      */
-    public function getAnswerCallback($context, $method)
+    public function getAnswerCallback(mixed $context, string $method): callable
     {
         if (!is_object($context)) {
             throw new InvalidAnswerException('Invalid context for ' . self::class . '. You can only use this answer on non-static methods');
@@ -74,7 +74,7 @@ class SelfAnswer implements \Phake\Stubber\IAnswer
      * @param mixed $answer
      * @return void
      */
-    public function processAnswer($answer)
+    public function processAnswer(mixed $answer): void
     {
     }
 }

@@ -57,7 +57,7 @@ class SelfBindingAnswerBinder implements IAnswerBinder, IAnswerContainer
     /**
      * @var IAnswer|null
      */
-    private $answer;
+    private ?IAnswer $answer = null;
 
     /**
      * Binds the given answer to the current object.
@@ -66,7 +66,7 @@ class SelfBindingAnswerBinder implements IAnswerBinder, IAnswerContainer
      *
      * @return IAnswerContainer
      */
-    public function bindAnswer(IAnswer $answer)
+    public function bindAnswer(IAnswer $answer): IAnswerContainer
     {
         $this->answer = $answer;
 
@@ -78,7 +78,7 @@ class SelfBindingAnswerBinder implements IAnswerBinder, IAnswerContainer
      *
      * @return IAnswer|null
      */
-    public function getAnswer()
+    public function getAnswer(): ?IAnswer
     {
         return $this->answer;
     }
