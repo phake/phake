@@ -82,8 +82,6 @@ class Factory
         $return = null;
         if ($argument instanceof IChainableArgumentMatcher) {
             $return = $argument;
-        } elseif ($argument instanceof \PHPUnit_Framework_Constraint) {
-            $return = new PHPUnitConstraintAdapter($argument);
         } elseif ($argument instanceof \PHPUnit\Framework\Constraint\Constraint) {
             if (7 <= \PHPUnit\Runner\Version::id()) {
                 $return = new PHPUnit7ConstraintAdapter($argument);

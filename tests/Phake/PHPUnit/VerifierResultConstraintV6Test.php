@@ -55,10 +55,10 @@ class Phake_PHPUnit_VerifierResultConstraintV6Test extends TestCase
 
     public function setUp(): void
     {
-        if (1 != version_compare('6.0.0', Version::id())) {
+        if (version_compare(Version::id(), '6.0.0', '<')) {
             $this->markTestSkipped('The tested class is not compatible with current version of PHPUnit.');
         }
-        $this->constraint = new Phake_PHPUnit_VerifierResultConstraintV6();
+        $this->constraint = new Phake\PHPUnit\VerifierResultConstraintV6();
     }
 
     public function testExtendsPHPUnitConstraint()
@@ -68,13 +68,13 @@ class Phake_PHPUnit_VerifierResultConstraintV6Test extends TestCase
 
     public function testEvaluateReturnsTrueIfVerifyResultIsTrue()
     {
-        $result = new Phake_CallRecorder_VerifierResult(true, []);
+        $result = new Phake\CallRecorder\VerifierResult(true, []);
         $this->assertTrue($this->constraint->evaluate($result, '', true));
     }
 
     public function testEvaluateReturnsFalseWhenVerifierReturnsFalse()
     {
-        $result = new Phake_CallRecorder_VerifierResult(false, []);
+        $result = new Phake\CallRecorder\VerifierResult(false, []);
         $this->assertFalse($this->constraint->evaluate($result, '', true));
     }
 
@@ -92,7 +92,7 @@ class Phake_PHPUnit_VerifierResultConstraintV6Test extends TestCase
 
     public function testCustomFailureDescriptionReturnsDescriptionFromResult()
     {
-        $result = new Phake_CallRecorder_VerifierResult(false, [], 'The call failed!');
+        $result = new Phake\CallRecorder\VerifierResult(false, [], 'The call failed!');
 
         try {
             $this->constraint->evaluate($result, '');

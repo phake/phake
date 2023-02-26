@@ -94,7 +94,7 @@ class FactoryTest extends TestCase
     /**
      * Tests creating a phpunit adapter matcher
      */
-    public function testPHPUnit6Constraint()
+    public function testPHPUnitConstraint()
     {
         $matcher = $this->getMockBuilder(Constraint::class)->getMock();
         $matcher->expects($this->once())
