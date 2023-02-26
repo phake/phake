@@ -83,11 +83,7 @@ class Factory
         if ($argument instanceof IChainableArgumentMatcher) {
             $return = $argument;
         } elseif ($argument instanceof \PHPUnit\Framework\Constraint\Constraint) {
-            if (7 <= \PHPUnit\Runner\Version::id()) {
-                $return = new PHPUnit7ConstraintAdapter($argument);
-            } else {
-                $return = new PHPUnit6ConstraintAdapter($argument);
-            }
+            $return = new PHPUnit7ConstraintAdapter($argument);
         } elseif ($argument instanceof \Hamcrest\Matcher) {
             $return = new HamcrestMatcherAdapter($argument);
         } elseif ($argument instanceof IArgumentMatcher) {

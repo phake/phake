@@ -66,7 +66,7 @@ class FrozenObjectCheckTest extends TestCase
 
     public function setUp(): void
     {
-        Phake::setClient(Phake::CLIENT_PHPUNIT7);
+        Phake::setClient(Phake::CLIENT_PHPUNIT8);
         Phake::initAnnotations($this);
         $this->handler    = new FrozenObjectCheck($this->mockInfo);
     }

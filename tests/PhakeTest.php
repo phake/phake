@@ -58,13 +58,13 @@ class PhakeTest extends TestCase
 {
     public function setUp(): void
     {
-        Phake::setClient(Phake::CLIENT_PHPUNIT7);
+        Phake::setClient(Phake::CLIENT_PHPUNIT8);
     }
 
     protected function tearDown(): void
     {
         Phake::resetStaticInfo();
-        Phake::setClient(Phake::CLIENT_PHPUNIT7);
+        Phake::setClient(Phake::CLIENT_PHPUNIT8);
     }
 
     /**
@@ -1403,16 +1403,16 @@ class PhakeTest extends TestCase
     {
         $original_client = Phake::getClient();
 
-        Phake::setClient(Phake::CLIENT_PHPUNIT7);
+        Phake::setClient(Phake::CLIENT_PHPUNIT8);
 
-        $this->assertInstanceOf(\Phake\Client\PHPUnit7::class, Phake::getClient());
+        $this->assertInstanceOf(\Phake\Client\PHPUnit8::class, Phake::getClient());
 
         Phake::setClient($original_client);
     }
 
     public function testVerifyNoFurtherInteractionPassesStrict()
     {
-        Phake::setClient(Phake::CLIENT_PHPUNIT7);
+        Phake::setClient(Phake::CLIENT_PHPUNIT8);
         $mock = Phake::mock('stdClass');
 
         $assertionCount = self::getCount();
@@ -1424,7 +1424,7 @@ class PhakeTest extends TestCase
 
     public function testVerifyNoInteractionPassesStrict()
     {
-        Phake::setClient(Phake::CLIENT_PHPUNIT7);
+        Phake::setClient(Phake::CLIENT_PHPUNIT8);
         $mock = Phake::mock('stdClass');
 
         $assertionCount = self::getCount();
@@ -1512,7 +1512,7 @@ class PhakeTest extends TestCase
 
     public function testCallOrderInObjectFailsWithPHPUnit()
     {
-        Phake::setClient(Phake::CLIENT_PHPUNIT7);
+        Phake::setClient(Phake::CLIENT_PHPUNIT8);
 
         $mock = Phake::mock('PhakeTest_MockedClass');
 

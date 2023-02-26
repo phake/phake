@@ -61,10 +61,6 @@ class Phake_Client_PHPUnitXTest extends TestCase
             $this->client = new Phake\Client\PHPUnit9();
         } elseif (version_compare(\PHPUnit\Runner\Version::id(), '8.0.0') >= 0) {
             $this->client = new Phake\Client\PHPUnit8();
-        } elseif (version_compare(\PHPUnit\Runner\Version::id(), '7.0.0') >= 0) {
-            $this->client = new Phake\Client\PHPUnit7();
-        } elseif (version_compare(\PHPUnit\Runner\Version::id(), '6.0.0') >= 0) {
-            $this->client = new Phake\Client\PHPUnit6();
         } else {
             $this->markTestSkipped('The tested class is not compatible with current version of PHPUnit.');
         }
