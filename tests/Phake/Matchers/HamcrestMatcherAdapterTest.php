@@ -47,58 +47,53 @@ namespace Phake\Matchers;
  * @link       http://www.digitalsandwich.com/
  */
 
+use Phake;
+use PHPUnit\Framework\TestCase;
+
 /**
- * An adapter class allowing PHPUnit constraints to be treated as though they were Phake argument
- * matchers.
- *
- * @psalm-suppress UndefinedDocblockClass
+ * Tests the adapting of Hamcrest matchers to Phake matchers
  */
-class PHPUnitConstraintAdapter extends SingleArgumentMatcher
+class HamcrestMatcherAdapterTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_Constraint
+     * @var HamcrestMatcherAdapter
      */
-    private $constraint;
+    private $adapter;
 
     /**
-     * @psalm-suppress UndefinedClass
-     *
-     * @param \PHPUnit_Framework_Constraint $constraint
+     * @var Hamcrest\Matcher
      */
-    public function __construct(\PHPUnit_Framework_Constraint $constraint)
+    private $matcher;
+
+    /**
+     * Sets up the test fixture
+     */
+    public function setUp(): void
     {
-        $this->constraint = $constraint;
+        $this->matcher = $this->getMockBuilder(\Hamcrest\BaseMatcher::class)->getMock();
+        $this->matcher->expects($this->any())
+            ->method('__toString')
+            ->will($this->returnValue('hamcrest matcher'));
+
+        $this->adapter = new HamcrestMatcherAdapter($this->matcher);
     }
 
     /**
-     * Executes the matcher on a given argument value.
-     *
-     * Forwards the call to PHPUnit's evaluate() method.
-     *
-     * @psalm-suppress UndefinedClass
-     * @psalm-suppress InvalidArgument
-     *
-     * @param mixed $argument
-     * @throws \Phake\Exception\MethodMatcherException
-     * @return void
+     * Tests that calls to matches are forwarded to hamcrest's matcher method
      */
-    protected function matches(&$argument)
+    public function testMatchesCallsForwarded()
     {
-        try {
-            $this->constraint->evaluate($argument, '');
-        } catch (\PHPUnit_Framework_ExpectationFailedException $e) {
-            $failure = $e->getComparisonFailure();
-            if ($failure instanceof \PHPUnit_Framework_ComparisonFailure) {
-                $failure = $failure->getDiff();
-            } else {
-                $failure = '';
-            }
-            throw new \Phake\Exception\MethodMatcherException($e->getMessage() . "\n" . $failure, $e);
-        }
+        $this->matcher->expects($this->once())
+            ->method('matches')
+            ->with($this->equalTo('foo'))
+            ->will($this->returnValue(true));
+
+        $value = ['foo'];
+        $this->assertNull($this->adapter->doArgumentsMatch($value));
     }
 
-    public function __toString()
+    public function testToString()
     {
-        return $this->constraint->toString();
+        $this->assertEquals('hamcrest matcher', $this->adapter->__toString());
     }
 }
