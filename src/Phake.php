@@ -89,7 +89,6 @@ class Phake
      * Constants identifying supported clients
      */
     public const CLIENT_DEFAULT = 'DEFAULT';
-    public const CLIENT_PHPUNIT = 'PHPUNIT';
     public const CLIENT_PHPUNIT6 = 'PHPUNIT6';
     public const CLIENT_PHPUNIT7 = 'PHPUNIT7';
     public const CLIENT_PHPUNIT8 = 'PHPUNIT8';
@@ -608,10 +607,9 @@ class Phake
                     return self::$client = new \Phake\Client\PHPUnit8();
                 } elseif (version_compare(\PHPUnit\Runner\Version::id(), '7.0.0') >= 0) {
                     return self::$client = new \Phake\Client\PHPUnit7();
+                } elseif (version_compare(\PHPUnit\Runner\Version::id(), '6.0.0') >= 0) {
+                    return self::$client = new \Phake\Client\PHPUnit6();
                 }
-                return self::$client = new \Phake\Client\PHPUnit6();
-            } elseif (class_exists('PHPUnit_Framework_TestCase')) {
-                return self::$client = new \Phake\Client\PHPUnit();
             }
             return self::$client = new \Phake\Client\DefaultClient();
         }
@@ -630,8 +628,6 @@ class Phake
     {
         if ($client instanceof \Phake\Client\IClient) {
             self::$client = $client;
-        } elseif (self::CLIENT_PHPUNIT == $client) {
-            self::$client = new \Phake\Client\PHPUnit();
         } elseif (self::CLIENT_PHPUNIT6 == $client) {
             self::$client = new \Phake\Client\PHPUnit6();
         } elseif (self::CLIENT_PHPUNIT7 == $client) {

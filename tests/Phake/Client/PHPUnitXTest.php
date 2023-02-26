@@ -48,36 +48,44 @@ declare(strict_types=1);
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Runner\Version;
 
-class Phake_Client_PHPUnitTest6 extends TestCase
+class Phake_Client_PHPUnitXTest extends TestCase
 {
     private $client;
 
     public function setUp(): void
     {
-        if (version_compare(Version::id(), '6.0.0') < 0) {
+        if (version_compare(\PHPUnit\Runner\Version::id(), '10.0.0') >= 0) {
+            $this->client = new Phake\Client\PHPUnit10();
+        } elseif (version_compare(\PHPUnit\Runner\Version::id(), '9.0.0') >= 0) {
+            $this->client = new Phake\Client\PHPUnit9();
+        } elseif (version_compare(\PHPUnit\Runner\Version::id(), '8.0.0') >= 0) {
+            $this->client = new Phake\Client\PHPUnit8();
+        } elseif (version_compare(\PHPUnit\Runner\Version::id(), '7.0.0') >= 0) {
+            $this->client = new Phake\Client\PHPUnit7();
+        } elseif (version_compare(\PHPUnit\Runner\Version::id(), '6.0.0') >= 0) {
+            $this->client = new Phake\Client\PHPUnit6();
+        } else {
             $this->markTestSkipped('The tested class is not compatible with current version of PHPUnit.');
         }
 
-        $this->client = new Phake_Client_PHPUnit6();
     }
 
     public function testImplementsIClient()
     {
-        $this->assertInstanceOf('Phake_Client_IClient', $this->client);
+        $this->assertInstanceOf(Phake\Client\IClient::class, $this->client);
     }
 
     public function testProcessVerifierResultReturnsCallsOnTrue()
     {
-        $result = new Phake_CallRecorder_VerifierResult(true, ['call1']);
+        $result = new Phake\CallRecorder\VerifierResult(true, ['call1']);
 
         $this->assertEquals(['call1'], $this->client->processVerifierResult($result));
     }
 
     public function testProcessVerifierThrowsExceptionOnFalse()
     {
-        $result = new Phake_CallRecorder_VerifierResult(false, [], 'failure message');
+        $result = new Phake\CallRecorder\VerifierResult(false, [], 'failure message');
 
         $this->expectException(ExpectationFailedException::class);
         $this->client->processVerifierResult($result);
@@ -85,7 +93,7 @@ class Phake_Client_PHPUnitTest6 extends TestCase
 
     public function testProcessVerifierIncrementsAssertionCount()
     {
-        $result = new Phake_CallRecorder_VerifierResult(true, ['call1']);
+        $result = new Phake\CallRecorder\VerifierResult(true, ['call1']);
 
         $assertionCount = Assert::getCount();
         $this->client->processVerifierResult($result);
