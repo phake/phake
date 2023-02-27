@@ -4,3 +4,4 @@
 - Remove support for PHPUnit6 and PHPUnit7
 - Remove deprecated `Phake::partMock()`
 - Remove deprecated `AnswerProxyInterface::thenGetReturnByLambda()`
+- `Phake::verifyNoOtherInteractions()` is now variadic
