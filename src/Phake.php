@@ -128,21 +128,6 @@ class Phake
     }
 
     /**
-     * For backwards compatibility
-     *
-     * @see Phake::partialMock()
-     * @phpstan-template T of object
-     * @param class-string<T>|array<class-string<T>> $className class name
-     * @param mixed ...$args The remaining arguments will be passed as constructor arguments
-     * @return Phake\IMock&T
-     * @deprecated Please use Phake::partialMock() instead
-     */
-    public static function partMock(string|array $className, mixed ...$args): Phake\IMock
-    {
-        return self::partialMock($className, ...$args);
-    }
-
-    /**
      * Create a Phake\Matchers\Factory that we can re-use multiple times. Creating too many
      * instances of this object is expensive.
      *
