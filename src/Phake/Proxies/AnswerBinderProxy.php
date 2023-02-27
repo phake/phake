@@ -77,21 +77,6 @@ class AnswerBinderProxy implements AnswerProxyInterface
     }
 
     /**
-     * Binds a Lambda answer to the method
-     *
-     * @param \callable $value
-     *
-     * @deprecated Use thenReturnCallback instead.
-     * @throws \InvalidArgumentException
-     * @return \Phake\Stubber\IAnswerContainer
-     */
-    public function thenGetReturnByLambda(callable $value): \Phake\Stubber\IAnswerContainer
-    {
-        trigger_error('Use thenReturnCallback instead.', E_USER_DEPRECATED);
-        return $this->thenReturnCallback($value);
-    }
-
-    /**
      * Binds a callback answer to the method.
      *
      * @param \callable $value

@@ -81,21 +81,6 @@ class AnswerCollectionProxy implements \Phake\Stubber\IAnswerContainer, AnswerPr
     }
 
     /**
-     * Binds a Lambda answer to the method
-     *
-     * @param \callable $value
-     *
-     * @throws \InvalidArgumentException
-     * @return AnswerCollectionProxy
-     */
-    public function thenGetReturnByLambda(callable $value): self
-    {
-        $this->collection->addAnswer(new \Phake\Stubber\Answers\LambdaAnswer($value));
-
-        return $this;
-    }
-
-    /**
      * Binds a delegated call that will call a given method's parent.
      * @return AnswerCollectionProxy
      */

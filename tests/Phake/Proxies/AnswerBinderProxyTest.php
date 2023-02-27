@@ -104,7 +104,7 @@ class AnswerBinderProxyTest extends TestCase
     }
 
     /**
-     * Tests the thenGetReturnByLambda functionality of the proxy
+     * Tests the thenReturnCallback functionality of the proxy
      *
      * It should result in the binder being called with a lambda answer
      */

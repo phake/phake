@@ -89,17 +89,17 @@ class AnswerCollectionProxyTest extends TestCase
     }
 
     /**
-     * Tests the thenGetReturnByLambda functionality of the proxy
+     * Tests the thenReturnCallback functionality of the proxy
      *
      * It should result in the binder being called with a lambda answer
      */
-    public function testThenGetReturnByLambda()
+    public function testThenReturnCallback()
     {
         $func = function ($arg1) {
             return $arg1;
         };
 
-        $this->assertSame($this->proxy, $this->proxy->thenGetReturnByLambda($func));
+        $this->assertSame($this->proxy, $this->proxy->thenReturnCallback($func));
 
         Phake::verify($this->container)->addAnswer(Phake::capture($answer));
 

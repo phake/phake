@@ -64,17 +64,6 @@ interface AnswerProxyInterface
     public function thenReturn(mixed $value): \Phake\Stubber\IAnswerContainer;
 
     /**
-     * Binds a Lambda answer to the method
-     *
-     * @param \callable $value
-     *
-     * @deprecated Use thenReturnCallback instead.
-     * @throws \InvalidArgumentException
-     * @return \Phake\Stubber\IAnswerContainer
-     */
-    public function thenGetReturnByLambda(callable $value): \Phake\Stubber\IAnswerContainer;
-
-    /**
      * Binds a callback answer to the method.
      *
      * @param \callable $value
