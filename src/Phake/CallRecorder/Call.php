@@ -52,7 +52,7 @@ namespace Phake\CallRecorder;
  *
  * @author Mike Lively <m@digitalsandwich.com>
  */
-class Call
+class Call implements \Stringable
 {
     /**
      * @var class-string|\Phake\IMock

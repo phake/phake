@@ -50,7 +50,7 @@ namespace Phake\Matchers;
 /**
  * An argument collection matcher that can match 0 to many parameters
  */
-interface IChainableArgumentMatcher
+interface IChainableArgumentMatcher extends \Stringable
 {
     /**
      * Assert the matcher on a given list of argument values. Throws an exception if the matcher doesn't match
@@ -86,10 +86,4 @@ interface IChainableArgumentMatcher
      * @return void
      */
     public function assertPreviousMatcher(IChainableArgumentMatcher $matcher): void;
-
-    /**
-     * Returns a human readable description of the argument matcher
-     * @return string
-     */
-    public function __toString(): string;
 }

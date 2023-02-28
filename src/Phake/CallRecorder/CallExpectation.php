@@ -50,7 +50,7 @@ namespace Phake\CallRecorder;
 /**
  * A call or set of calls that was expected
  */
-class CallExpectation
+class CallExpectation implements \Stringable
 {
     /**
      * @var \Phake\IMock|class-string

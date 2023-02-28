@@ -50,7 +50,7 @@ namespace Phake\Matchers;
 /**
  * The interface for argument matchers
  */
-interface IArgumentMatcher
+interface IArgumentMatcher extends \Stringable
 {
     /**
      * Executes the matcher on a given argument value. Returns TRUE on a match, FALSE otherwise.
@@ -60,10 +60,4 @@ interface IArgumentMatcher
      * @return boolean
      */
     public function matches(mixed &$argument): bool;
-
-    /**
-     * Returns a human readable description of the argument matcher
-     * @return string
-     */
-    public function __toString(): string;
 }

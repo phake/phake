@@ -52,7 +52,7 @@ namespace Phake\CallRecorder;
  *
  * @author Brian Feaver <brian.feaver@gmail.com>
  */
-interface IVerifierMode
+interface IVerifierMode extends \Stringable
 {
     /**
      * Verifies that the number of <code>$matchedCalls</code> matches the number of invocations expected.
@@ -62,10 +62,4 @@ interface IVerifierMode
      * @return VerifierMode\Result
      */
     public function verify(array $matchedCalls): VerifierMode\Result;
-
-    /**
-     * Returns a human readable description of the verifier mode
-     * @return string
-     */
-    public function __toString(): string;
 }
