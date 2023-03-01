@@ -91,6 +91,6 @@ class HamcrestMatcherAdapter extends SingleArgumentMatcher
 
     public function __toString(): string
     {
-        return $this->matcher->__toString();
+        return '<hamcrest matcher>';
     }
 }
