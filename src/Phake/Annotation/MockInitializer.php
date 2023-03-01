@@ -107,6 +107,7 @@ class MockInitializer
             }
 
             if ($mockedClass) {
+                /** @var class-string $mockedClass */
                 $property->setAccessible(true);
                 $property->setValue($object, \Phake::mock($mockedClass));
             }

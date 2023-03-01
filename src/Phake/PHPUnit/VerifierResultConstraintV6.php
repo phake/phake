@@ -54,6 +54,9 @@ use PHPUnit\Framework\Constraint\Constraint;
  */
 class VerifierResultConstraintV6 extends Constraint
 {
+    /**
+     * @param mixed $other
+     */
     protected function matches($other): bool
     {
         if (!$other instanceof \Phake\CallRecorder\VerifierResult) {
@@ -67,6 +70,9 @@ class VerifierResultConstraintV6 extends Constraint
         return 'is called';
     }
 
+    /**
+     * @param mixed $other
+     */
     protected function failureDescription($other): string
     {
         if (!$other instanceof \Phake\CallRecorder\VerifierResult) {
