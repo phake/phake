@@ -1783,7 +1783,6 @@ class PhakeTest extends TestCase
 
         $returned = Phake::makeVisible($mock)->privateFunc();
 
-        Phake::verify($mock)->privateFunc();
         $this->assertSame('blah', $returned);
     }
 

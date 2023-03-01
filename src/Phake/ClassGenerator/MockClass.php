@@ -244,7 +244,7 @@ class {$newClassName} {$extends}
     protected function generateMockedMethods(\ReflectionClass $mockedClass, array $mockedInterfaces = [], array &$implementedMethods = []): string
     {
         $methodDefs = '';
-        $filter     = \ReflectionMethod::IS_ABSTRACT | \ReflectionMethod::IS_PROTECTED | \ReflectionMethod::IS_PUBLIC | ~\ReflectionMethod::IS_FINAL;
+        $filter     = \ReflectionMethod::IS_ABSTRACT | \ReflectionMethod::IS_PROTECTED | \ReflectionMethod::IS_PUBLIC;
 
         foreach ($mockedClass->getMethods($filter) as $method) {
             $methodName = $method->getName();

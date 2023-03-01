@@ -81,29 +81,11 @@ class VisibilityProxyTest extends TestCase
         if (defined('HHVM_VERSION')) {
             $this->markTestSkipped("Can't call private methods with hhvm");
         }
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
         $proxy = new VisibilityProxy($mock);
 
-        Phake::when($mock)->privateFunc()->thenReturn('bar');
+        $this->assertEquals('blah', $proxy->privateFunc());
 
-        $this->assertEquals('bar', $proxy->privateFunc());
-
-        Phake::verify($mock)->privateFunc();
-    }
-
-    public function testCallingPrivateMethodThatDelegatesToParent()
-    {
-        if (defined('HHVM_VERSION')) {
-            $this->markTestSkipped("Can't call private methods with hhvm");
-        }
-        $mock = Phake::mock('PhakeTest_MockedClass');
-        $proxy = new VisibilityProxy($mock);
-
-        Phake::when($mock)->privateFunc()->thenCallParent();
-
-        $proxy->privateFunc();
-
-        Phake::verify($mock)->privateFunc();
     }
 
     public function testCallingProtectedMethod()
