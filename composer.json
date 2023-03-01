@@ -20,7 +20,7 @@
         "doctrine/annotations": "^1.13",
         "phpunit/phpunit": "^6.5|^7.0|^8.0|^9.0|^10.0",
         "hamcrest/hamcrest-php": "^1.1|^2.0",
-        "psalm/phar": "^4.18"
+        "psalm/phar": "^5.7"
     },
     "config": {
         "bin-dir": "bin",
