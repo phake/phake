@@ -66,6 +66,7 @@ class NativeReader implements IReader
     {
         $properties = [];
         foreach ($class->getProperties() as $property) {
+            /** @psalm-suppress ArgumentTypeCoercion */
             $annotations = $property->getAttributes(self::ANNOTATION_NAME);
             if (array_pop($annotations)) {
                 $properties[] = $property;
@@ -77,6 +78,7 @@ class NativeReader implements IReader
 
     public function getMockType(ReflectionProperty $property): ?string
     {
+        /** @psalm-suppress ArgumentTypeCoercion */
         foreach ($property->getAttributes(self::ANNOTATION_NAME) as $attribute) {
             $args = $attribute->getArguments();
 

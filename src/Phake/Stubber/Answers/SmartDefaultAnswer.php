@@ -61,6 +61,8 @@ class SmartDefaultAnswer implements \Phake\Stubber\IAnswer
     /**
      * @psalm-suppress MissingClosureParamType
      * @psalm-suppress MissingClosureReturnType
+     *
+     * @return mixed
      */
     public function getReturnTypeResult(?\ReflectionType $returnType, \ReflectionMethod $method)
     {
@@ -119,6 +121,10 @@ class SmartDefaultAnswer implements \Phake\Stubber\IAnswer
 
         $defaultAnswer = $this->getReturnTypeResult($method->getReturnType(), $method);
 
+        /**
+         * @psalm-suppress MissingClosureParamType
+         * @psalm-suppress MissingClosureReturnType
+         */
         return function (...$args) use ($defaultAnswer) {
             return $defaultAnswer;
         };
