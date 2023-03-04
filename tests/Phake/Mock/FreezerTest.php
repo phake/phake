@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Mock;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,21 +42,21 @@ namespace Phake\Mock;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Mock;
+
 use Phake;
 use PHPUnit\Framework\TestCase;
 
 class FreezerTest extends TestCase
 {
-    /**
-     * @var Phake\Mock\Freezer
-     */
-    private $freezer;
+    private Phake\Mock\Freezer $freezer;
 
     /**
      * @Mock
-     * @var Phake\Mock\Info
      */
-    private $mockInfo;
+    private Phake\Mock\Info $mockInfo;
 
     public function setUp(): void
     {
@@ -69,7 +64,7 @@ class FreezerTest extends TestCase
         $this->freezer    = new Freezer();
     }
 
-    public function testFreeze()
+    public function testFreeze(): void
     {
         $client = Phake::mock(Phake\Client\IClient::class);
         $this->freezer->freeze($this->mockInfo, $client);

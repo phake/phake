@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Stubber\Answers;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\Stubber\Answers;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Stubber\Answers;
+
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -54,10 +53,7 @@ use PHPUnit\Framework\TestCase;
  */
 class SmartDefaultAnswerTest extends TestCase
 {
-    /**
-     * @var Phake\Stubber\Answers\SmartDefaultAnswer
-     */
-    private $answer;
+    private SmartDefaultAnswer $answer;
 
     /**
      * Sets up the test fixture
@@ -67,7 +63,7 @@ class SmartDefaultAnswerTest extends TestCase
         $this->answer = new SmartDefaultAnswer();
     }
 
-    public static function typeReturnMap()
+    public static function typeReturnMap(): iterable
     {
         yield 'int' => ['intReturn', 0];
         yield 'float' => ['floatReturn', 0.0];
@@ -79,7 +75,7 @@ class SmartDefaultAnswerTest extends TestCase
     /**
      * @dataProvider typeReturnMap
      */
-    public function testSimpleReturn($method, $expectedValue)
+    public function testSimpleReturn($method, $expectedValue): void
     {
         $context = new \PhakeTest_ScalarTypes();
         $cb = $this->answer->getAnswerCallback($context, $method);
@@ -87,7 +83,7 @@ class SmartDefaultAnswerTest extends TestCase
         $this->assertSame($expectedValue, $cb());
     }
 
-    public function testCallableReturn()
+    public function testCallableReturn(): void
     {
         $context = new \PhakeTest_ScalarTypes();
         $cb = $this->answer->getAnswerCallback($context, 'callableReturn');
@@ -96,16 +92,16 @@ class SmartDefaultAnswerTest extends TestCase
         }, $cb());
     }
 
-    public function testObjectReturn()
+    public function testObjectReturn(): void
     {
         $context = new \PhakeTest_ScalarTypes();
         $cb = $this->answer->getAnswerCallback($context, 'objectReturn');
 
-        $this->assertInstanceOf('PhakeTest_A', $cb());
+        $this->assertInstanceOf(\PhakeTest_A::class, $cb());
         $this->assertInstanceOf(\Phake\IMock::class, $cb());
     }
 
-    public function testNullableInterfaceReturn()
+    public function testNullableInterfaceReturn(): void
     {
         $context = new \PhakeTest_NullableTypes();
         $cb = $this->answer->getAnswerCallback($context, 'interfaceReturn');
@@ -113,15 +109,15 @@ class SmartDefaultAnswerTest extends TestCase
         $this->assertNull($cb());
     }
 
-    public function testSelfReturn()
+    public function testSelfReturn(): void
     {
         $context = new \PhakeTest_ScalarTypes();
         $cb = $this->answer->getAnswerCallback($context, 'selfReturn');
 
-        $this->assertInstanceOf('PhakeTest_ScalarTypes', $cb());
+        $this->assertInstanceOf(\PhakeTest_ScalarTypes::class, $cb());
     }
 
-    public function testUnionTypeReturn()
+    public function testUnionTypeReturn(): void
     {
         if (PHP_VERSION_ID < 80000) {
             $this->markTestSkipped('Union types are not supported in PHP versions prior to 8.0');
@@ -133,7 +129,7 @@ class SmartDefaultAnswerTest extends TestCase
         $this->assertTrue(in_array($cb(), [0, '']));
     }
 
-    public function testIntersectionTypeReturn()
+    public function testIntersectionTypeReturn(): void
     {
         if (PHP_VERSION_ID < 80100) {
             $this->markTestSkipped('Intersection types are not supported in PHP versions prior to 8.1');
@@ -147,7 +143,7 @@ class SmartDefaultAnswerTest extends TestCase
         $this->assertInstanceOf(\Countable::class, $result);
     }
 
-    public function testDNFTypeReturn()
+    public function testDNFTypeReturn(): void
     {
         if (PHP_VERSION_ID < 80200) {
             $this->markTestSkipped('DNF types are not supported in PHP versions prior to 8.2');
@@ -161,7 +157,7 @@ class SmartDefaultAnswerTest extends TestCase
         $this->assertInstanceOf(\Countable::class, $result);
     }
 
-    public function testReturnTrue()
+    public function testReturnTrue(): void
     {
         if (PHP_VERSION_ID < 80200) {
             $this->markTestSkipped('true return type is not supported in PHP versions prior to 8.2');
@@ -174,7 +170,7 @@ class SmartDefaultAnswerTest extends TestCase
         $this->assertTrue($result);
     }
 
-    public function testReturnFalse()
+    public function testReturnFalse(): void
     {
         if (PHP_VERSION_ID < 80200) {
             $this->markTestSkipped('false return type is not supported in PHP versions prior to 8.2');
@@ -187,7 +183,7 @@ class SmartDefaultAnswerTest extends TestCase
         $this->assertFalse($result);
     }
 
-    public function testReturnNull()
+    public function testReturnNull(): void
     {
         if (PHP_VERSION_ID < 80200) {
             $this->markTestSkipped('null return type is not supported in PHP versions prior to 8.2');

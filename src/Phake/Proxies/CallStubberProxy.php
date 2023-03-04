@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Proxies;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\Proxies;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Proxies;
+
 /**
  * A proxy to handle stubbing various calls to the magic __call method
  *
@@ -54,39 +53,23 @@ namespace Phake\Proxies;
  */
 class CallStubberProxy
 {
-    /**
-     * @var \Phake\Matchers\IChainableArgumentMatcher|null
-     */
-    private ?\Phake\Matchers\IChainableArgumentMatcher $argumentMatcher;
-
-    /**
-     * @var bool
-     */
-    private bool $static;
-
-    /**
-     * @param \Phake\Matchers\IChainableArgumentMatcher|null $argumentMatcher
-     * @param bool $static
-     */
-    public function __construct(?\Phake\Matchers\IChainableArgumentMatcher $argumentMatcher, bool $static)
-    {
-        $this->argumentMatcher = $argumentMatcher;
-        $this->static = $static;
+    public function __construct(
+        private ?\Phake\Matchers\IChainableArgumentMatcher $argumentMatcher,
+        private bool $static
+    ) {
     }
 
     /**
-     * Creates an answer binder proxy associated with the matchers from the constructor and the object passed here
-     *
-     * @param \Phake\IMock $obj
-     *
-     * @return AnswerBinderProxy
+     * Creates an answer binder proxy associated with the matchers from the
+     * constructor and the object passed here
      */
     public function isCalledOn(\Phake\IMock $obj): AnswerBinderProxy
     {
-        $context = $this->static ? get_class($obj) : $obj;
+        $context = $this->static ? $obj::class : $obj;
         $call = $this->static ? '__callStatic' : '__call';
         $matcher = new \Phake\Matchers\MethodMatcher($call, $this->argumentMatcher);
         $binder  = new \Phake\Stubber\AnswerBinder($matcher, \Phake::getInfo($context)->getStubMapper());
+
         return new AnswerBinderProxy($binder);
     }
 }

@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Matchers;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,14 +42,15 @@ namespace Phake\Matchers;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Matchers;
+
 /**
  * Implements the base setNextMatcher() getNextMatcher for chaining.
  */
 abstract class AbstractChainableArgumentMatcher implements IChainableArgumentMatcher
 {
-    /**
-     * @var IChainableArgumentMatcher|null
-     */
     private ?IChainableArgumentMatcher $nextMatcher = null;
 
     public function setNextMatcher(IChainableArgumentMatcher $matcher): void
@@ -63,18 +59,13 @@ abstract class AbstractChainableArgumentMatcher implements IChainableArgumentMat
         $this->nextMatcher = $matcher;
     }
 
-    /**
-     * @return IChainableArgumentMatcher|null
-     */
     public function getNextMatcher(): ?IChainableArgumentMatcher
     {
         return $this->nextMatcher;
     }
 
     /**
-     * @param IChainableArgumentMatcher $matcher
      * @throws \InvalidArgumentException When this matcher cannot be chained to the previous matcher.
-     * @return void
      */
     public function assertPreviousMatcher(IChainableArgumentMatcher $matcher): void
     {

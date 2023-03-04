@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Matchers;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,11 @@ namespace Phake\Matchers;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Matchers;
+
+use Hamcrest;
 use Phake;
 use PHPUnit\Framework\TestCase;
 
@@ -55,22 +55,16 @@ use PHPUnit\Framework\TestCase;
  */
 class HamcrestMatcherAdapterTest extends TestCase
 {
-    /**
-     * @var HamcrestMatcherAdapter
-     */
-    private $adapter;
+    private HamcrestMatcherAdapter $adapter;
 
-    /**
-     * @var Hamcrest\Matcher
-     */
-    private $matcher;
+    private Hamcrest\Matcher $matcher;
 
     /**
      * Sets up the test fixture
      */
     public function setUp(): void
     {
-        $this->matcher = $this->getMockBuilder(\Hamcrest\BaseMatcher::class)->getMock();
+        $this->matcher = $this->getMockBuilder(Hamcrest\BaseMatcher::class)->getMock();
 
         $this->adapter = new HamcrestMatcherAdapter($this->matcher);
     }
@@ -78,7 +72,7 @@ class HamcrestMatcherAdapterTest extends TestCase
     /**
      * Tests that calls to matches are forwarded to hamcrest's matcher method
      */
-    public function testMatchesCallsForwarded()
+    public function testMatchesCallsForwarded(): void
     {
         $this->matcher->expects($this->once())
             ->method('matches')
@@ -89,7 +83,7 @@ class HamcrestMatcherAdapterTest extends TestCase
         $this->assertNull($this->adapter->doArgumentsMatch($value));
     }
 
-    public function testToString()
+    public function testToString(): void
     {
         $this->assertEquals('<hamcrest matcher>', $this->adapter->__toString());
     }

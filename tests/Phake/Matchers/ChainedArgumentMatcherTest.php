@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Matchers;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,27 +42,26 @@ namespace Phake\Matchers;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Matchers;
+
 use Phake;
 use PHPUnit\Framework\TestCase;
 
 class ChainedArgumentMatcherTest extends TestCase
 {
-    /**
-     * @var ChainedArgumentMatcher
-     */
-    private $matcher;
+    private ChainedArgumentMatcher $matcher;
 
     /**
      * @Mock
-     * @var Phake\Matchers\IArgumentMatcher
      */
-    private $adapted;
+    private Phake\Matchers\IArgumentMatcher $adapted;
 
     /**
      * @Mock
-     * @var Phake\Matchers\IChainableArgumentMatcher
      */
-    private $nextMatcher;
+    private Phake\Matchers\IChainableArgumentMatcher $nextMatcher;
 
     public function setUp(): void
     {
@@ -77,7 +71,7 @@ class ChainedArgumentMatcherTest extends TestCase
         $this->matcher->setNextMatcher($this->nextMatcher);
     }
 
-    public function testMatches()
+    public function testMatches(): void
     {
         $args = ['test arg1', 'test arg2'];
 
@@ -91,7 +85,7 @@ class ChainedArgumentMatcherTest extends TestCase
         $this->assertNull($result);
     }
 
-    public function testMatchesError()
+    public function testMatchesError(): void
     {
         $this->expectException(\Phake\Exception\MethodMatcherException::class);
 
@@ -102,7 +96,7 @@ class ChainedArgumentMatcherTest extends TestCase
         $this->matcher->doArgumentsMatch($args);
     }
 
-    public function testToString()
+    public function testToString(): void
     {
         Phake::when($this->adapted)->__toString->thenReturn('test string');
 

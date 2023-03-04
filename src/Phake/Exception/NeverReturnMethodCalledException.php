@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Exception;
-
 /*
  * Phake - Mocking Framework
  *
@@ -46,6 +41,10 @@ namespace Phake\Exception;
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link       http://www.digitalsandwich.com/
  */
+
+declare(strict_types=1);
+
+namespace Phake\Exception;
 
 /**
  * Thrown when a never return method is called

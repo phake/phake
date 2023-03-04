@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Stubber\Answers;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\Stubber\Answers;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Stubber\Answers;
+
 /**
  * Allows providing an exception to throw to a stubbed method call.
  *
@@ -54,32 +53,21 @@ namespace Phake\Stubber\Answers;
  */
 class ExceptionAnswer implements \Phake\Stubber\IAnswer
 {
-    /**
-     * @var mixed
-     */
-    private mixed $answer;
-
-    /**
-     * @param mixed $answer
-     */
-    public function __construct(\Throwable $answer)
-    {
-        $this->answer = $answer;
+    public function __construct(
+        private \Throwable $answer
+    ) {
     }
 
-    /**
-     * @psalm-suppress MissingClosureParamType
-     * @psalm-suppress MissingClosureReturnType
-     */
     public function getAnswerCallback(mixed $context, string $method): callable
     {
         $answer = $this->answer;
-        return function (...$args) use ($answer) {
+
+        return function (mixed ...$args) use ($answer): mixed {
             throw $answer;
         };
     }
 
-    public function processAnswer($answer): void
+    public function processAnswer(mixed $answer): void
     {
     }
 }

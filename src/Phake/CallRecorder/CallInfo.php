@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\CallRecorder;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,42 +42,26 @@ namespace Phake\CallRecorder;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\CallRecorder;
+
 /**
  * Aggregates various objects holding information about a particular call.
  */
 class CallInfo
 {
-    /**
-     * @var Call
-     */
-    private Call $call;
-
-    /**
-     * @var Position
-     */
-    private Position $position;
-
-    /**
-     * @param Call     $call
-     * @param Position $position
-     */
-    public function __construct(Call $call, Position $position)
-    {
-        $this->call     = $call;
-        $this->position = $position;
+    public function __construct(
+        private Call $call,
+        private Position $position
+    ) {
     }
 
-    /**
-     * @return Call
-     */
     public function getCall(): Call
     {
         return $this->call;
     }
 
-    /**
-     * @return Position
-     */
     public function getPosition(): Position
     {
         return $this->position;

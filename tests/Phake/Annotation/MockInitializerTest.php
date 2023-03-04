@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Annotation;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\Annotation;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Annotation;
+
 use PhakeTest\AnotherNamespacedClass;
 use PHPUnit\Framework\TestCase;
 
@@ -56,10 +55,7 @@ use PHPUnit\Framework\TestCase;
  */
 class MockInitializerTest extends TestCase
 {
-    /**
-     * @var MockInitializer
-     */
-    private $initializer;
+    private MockInitializer $initializer;
 
     /**
      * @Mock stdClass
@@ -93,17 +89,16 @@ class MockInitializerTest extends TestCase
 
     protected function tearDown(): void
     {
-        $this->initializer    = null;
         $this->mock1          = $this->mock2 = null;
         $this->shortNameMock1 = $this->shortNameMock2 = null;
     }
 
-    public function testInitialize()
+    public function testInitialize(): void
     {
         $this->initializer->initialize($this);
 
-        $this->assertInstanceOf('stdClass', $this->mock1);
-        $this->assertInstanceOf('stdClass', $this->mock2);
+        $this->assertInstanceOf(\stdClass::class, $this->mock1);
+        $this->assertInstanceOf(\stdClass::class, $this->mock2);
         $this->assertInstanceOf(\Phake\IMock::class, $this->mock1);
         $this->assertInstanceOf(\Phake\IMock::class, $this->mock2);
     }
@@ -111,7 +106,7 @@ class MockInitializerTest extends TestCase
     /**
      * @depends testInitialize
      */
-    public function testNamespaceAliasOnVar()
+    public function testNamespaceAliasOnVar(): void
     {
         $this->initializer->initialize($this);
 
@@ -121,14 +116,14 @@ class MockInitializerTest extends TestCase
     /**
      * @depends testInitialize
      */
-    public function testNamespaceAliasOnMock()
+    public function testNamespaceAliasOnMock(): void
     {
         $this->initializer->initialize($this);
 
         $this->assertInstanceOf(\Phake\IMock::class, $this->shortNameMock2);
     }
 
-    public function testWithNativeReader()
+    public function testWithNativeReader(): void
     {
         if (PHP_VERSION_ID < 80000) {
             $this->markTestSkipped('Native attributes are not supported in PHP versions prior to 8.0');
@@ -137,6 +132,6 @@ class MockInitializerTest extends TestCase
         $this->initializer = new MockInitializer(new NativeReader());
         $this->initializer->initialize($this);
 
-        $this->assertInstanceOf('stdClass', $this->nativeMock);
+        $this->assertInstanceOf(\stdClass::class, $this->nativeMock);
     }
 }

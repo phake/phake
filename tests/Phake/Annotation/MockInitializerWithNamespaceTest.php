@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /*
  * Phake - Mocking Framework
  *
@@ -45,7 +42,9 @@ declare(strict_types=1);
  * @link       http://www.digitalsandwich.com/
  */
 
-namespace Test;
+declare(strict_types=1);
+
+namespace Phake\Annotation;
 
 use Phake;
 use PHPUnit\Framework\TestCase;
@@ -54,7 +53,7 @@ class TestUtility
 {
 }
 
-class Phake_Annotation_MockInitializerWithNamespaceTest extends TestCase
+class MockInitializerWithNamespaceTest extends TestCase
 {
     /**
      * @var TestUtility
@@ -67,7 +66,7 @@ class Phake_Annotation_MockInitializerWithNamespaceTest extends TestCase
         Phake::initAnnotations($this);
     }
 
-    public function testClassSuccessfullyMocked()
+    public function testClassSuccessfullyMocked(): void
     {
         $this->assertNotNull($this->testUtility);
     }

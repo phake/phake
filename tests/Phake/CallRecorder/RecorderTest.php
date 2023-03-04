@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\CallRecorder;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,11 @@ namespace Phake\CallRecorder;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\CallRecorder;
+
+use Phake;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -56,18 +56,18 @@ use PHPUnit\Framework\TestCase;
  */
 class RecorderTest extends TestCase
 {
-    private $mock;
+    private Phake\IMock $mock;
 
     public function setUp(): void
     {
-        $this->mock = $this->getMockBuilder(\Phake\IMock::class)
+        $this->mock = $this->getMockBuilder(Phake\IMock::class)
                     ->getMock();
     }
 
     /**
      * Tests that the recorder can log a call and then pull that same call back out.
      */
-    public function testRecord()
+    public function testRecord(): void
     {
         $call         = new Call($this->mock, 'someMethod', []);
         $call2        = new Call($this->mock, 'someMethod2', []);
@@ -81,7 +81,7 @@ class RecorderTest extends TestCase
     /**
      * Tests that the recorder can be rest to contain no calls.
      */
-    public function testRemoveAllCalls()
+    public function testRemoveAllCalls(): void
     {
         $call         = new Call($this->mock, 'someMethod', []);
         $call2        = new Call($this->mock, 'someMethod2', []);
@@ -97,7 +97,7 @@ class RecorderTest extends TestCase
     /**
      * Tests retrieving call info for a particular call.
      */
-    public function testRetrieveCallInfo()
+    public function testRetrieveCallInfo(): void
     {
         $call         = new Call($this->mock, 'someMethod', []);
         $callRecorder = new Recorder();
@@ -113,7 +113,7 @@ class RecorderTest extends TestCase
     /**
      * Tests that a non existant call returns null
      */
-    public function testRetrieveCallInfoReturnsNull()
+    public function testRetrieveCallInfoReturnsNull(): void
     {
         $call         = new Call($this->mock, 'someMethod', []);
         $callRecorder = new Recorder();
@@ -124,7 +124,7 @@ class RecorderTest extends TestCase
     /**
      * Tests an internal php nested object issue (#47)
      */
-    public function testRetrieveCallInfoUsesStrictChecking()
+    public function testRetrieveCallInfoUsesStrictChecking(): void
     {
         $objA    = new \stdClass();
         $objB    = new \stdClass();
@@ -145,7 +145,7 @@ class RecorderTest extends TestCase
         $this->assertNull($callRecorder->getCallInfo($checkCall));
     }
 
-    public function testMarkingCallsVerified()
+    public function testMarkingCallsVerified(): void
     {
         $call1 = new Call($this->mock, 'someMethod', []);
         $call2 = new Call($this->mock, 'someMethod', []);

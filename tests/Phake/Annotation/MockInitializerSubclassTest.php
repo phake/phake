@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /*
  * Phake - Mocking Framework
  *
@@ -45,11 +42,15 @@ declare(strict_types=1);
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Annotation;
+
 require_once 'MockInitializerParentTestCase.php';
 
-class Phake_Annotation_MockInitializerSubclassTest extends Phake_Annotation_MockInitializerParentTestCase
+class MockInitializerSubclassTest extends MockInitializerParentTestCase
 {
-    public function testAnnotationsReadFromParent()
+    public function testAnnotationsReadFromParent(): void
     {
         $this->assertNotNull($this->testMock);
     }

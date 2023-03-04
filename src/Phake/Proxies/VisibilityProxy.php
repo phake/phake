@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Proxies;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\Proxies;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Proxies;
+
 /**
  * Acts as a proxy to any object that allows calling any private or protected method on the wrapper and forward those
  * calls to the wrapped object.
@@ -60,36 +59,24 @@ namespace Phake\Proxies;
  */
 class VisibilityProxy
 {
-    /**
-     * @var object
-     */
-    private object $proxied;
-
-    /**
-     * @param object $proxied
-     */
-    public function __construct(object $proxied)
-    {
-        $this->proxied = $proxied;
+    public function __construct(
+        private object $proxied
+    ) {
     }
 
-    /**
-     * @param string $method
-     * @param array $arguments
-     * @return mixed
-     */
     public function __call(string $method, array $arguments): mixed
     {
         if (method_exists($this->proxied, $method)) {
-            $reflMethod = new \ReflectionMethod(get_class($this->proxied), $method);
+            $reflMethod = new \ReflectionMethod($this->proxied::class, $method);
             $reflMethod->setAccessible(true);
+
             return $reflMethod->invokeArgs($this->proxied, $arguments);
         } elseif (method_exists($this->proxied, '__call')) {
-            $reflMethod = new \ReflectionMethod(get_class($this->proxied), '__call');
+            $reflMethod = new \ReflectionMethod($this->proxied::class, '__call');
+
             return $reflMethod->invokeArgs($this->proxied, func_get_args());
         }
 
-
-        throw new \InvalidArgumentException("Method {$method} does not exist on " . get_class($this->proxied) . '.');
+        throw new \InvalidArgumentException("Method {$method} does not exist on " . $this->proxied::class . '.');
     }
 }

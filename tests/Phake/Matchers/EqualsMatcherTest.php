@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Matchers;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\Matchers;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Matchers;
+
 use Phake;
 use PHPUnit\Framework\TestCase;
 
@@ -55,10 +54,7 @@ use PHPUnit\Framework\TestCase;
  */
 class EqualsMatcherTest extends TestCase
 {
-    /**
-     * @var EqualsMatcher
-     */
-    private $matcher;
+    private EqualsMatcher $matcher;
 
     /**
      * Sets up the test fixture
@@ -71,7 +67,7 @@ class EqualsMatcherTest extends TestCase
     /**
      * Tests that matches return true
      */
-    public function testMatches()
+    public function testMatches(): void
     {
         $value = ['foo'];
         $this->assertNull($this->matcher->doArgumentsMatch($value));
@@ -80,14 +76,14 @@ class EqualsMatcherTest extends TestCase
     /**
      * Tests that non-matches return false
      */
-    public function testBadMatches()
+    public function testBadMatches(): void
     {
         $value = ['test'];
         $this->expectException('Exception');
         $this->matcher->doArgumentsMatch($value);
     }
 
-    public function testToString()
+    public function testToString(): void
     {
         $this->assertEquals('equal to <string:foo>', $this->matcher->__toString());
     }
@@ -97,7 +93,7 @@ class EqualsMatcherTest extends TestCase
      *
      * Closes Issue #14
      */
-    public function testToStringOnNonStringableObject()
+    public function testToStringOnNonStringableObject(): void
     {
         $this->matcher = new EqualsMatcher(new \stdClass(), \SebastianBergmann\Comparator\Factory::getInstance());
 
@@ -107,7 +103,7 @@ class EqualsMatcherTest extends TestCase
     /**
      * Tests that the equals matcher handles nested dependencies
      */
-    public function testNestedDependencies()
+    public function testNestedDependencies(): void
     {
         $a             = new \stdClass();
         $a->b          = new \stdClass();
@@ -123,7 +119,7 @@ class EqualsMatcherTest extends TestCase
         $this->assertNull($this->matcher->doArgumentsMatch($c));
     }
 
-    public function testDifferentClassObjects()
+    public function testDifferentClassObjects(): void
     {
         $this->matcher = new EqualsMatcher(new \PhakeTest_A(), \SebastianBergmann\Comparator\Factory::getInstance());
 
@@ -132,7 +128,7 @@ class EqualsMatcherTest extends TestCase
         $this->matcher->doArgumentsMatch($value);
     }
 
-    public function testArraysWithDifferentCounts()
+    public function testArraysWithDifferentCounts(): void
     {
         $this->matcher = new EqualsMatcher([1], \SebastianBergmann\Comparator\Factory::getInstance());
 
@@ -141,7 +137,7 @@ class EqualsMatcherTest extends TestCase
         $this->matcher->doArgumentsMatch($test);
     }
 
-    public function testArraysWithDifferentKeys()
+    public function testArraysWithDifferentKeys(): void
     {
         $this->matcher = new EqualsMatcher(['one' => 1], \SebastianBergmann\Comparator\Factory::getInstance());
 

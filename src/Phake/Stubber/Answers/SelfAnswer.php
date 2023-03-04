@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Stubber\Answers;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,32 +42,26 @@ namespace Phake\Stubber\Answers;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Stubber\Answers;
+
 class SelfAnswer implements \Phake\Stubber\IAnswer
 {
     /**
      * Returns the answer that should be used when a method stubbed to this answer is called.
-     *
-     * @psalm-suppress MissingClosureParamType
-     * @psalm-suppress MissingClosureReturnType
-     *
-     * @param mixed $context class name or object instance
-     * @param string $method
-     * @return callable
      */
     public function getAnswerCallback(mixed $context, string $method): callable
     {
         if (!is_object($context)) {
             throw new InvalidAnswerException('Invalid context for ' . self::class . '. You can only use this answer on non-static methods');
         }
-        return function (...$args) use ($context) {
-            return $context;
-        };
+
+        return static fn (mixed ...$args): mixed => $context;
     }
 
     /**
      * Allows for post processing an answer if necessary
-     * @param mixed $answer
-     * @return void
      */
     public function processAnswer(mixed $answer): void
     {

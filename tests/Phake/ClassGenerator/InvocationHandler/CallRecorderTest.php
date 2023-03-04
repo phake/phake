@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\ClassGenerator\InvocationHandler;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,21 +42,21 @@ namespace Phake\ClassGenerator\InvocationHandler;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\ClassGenerator\InvocationHandler;
+
 use Phake;
 use PHPUnit\Framework\TestCase;
 
 class CallRecorderTest extends TestCase
 {
-    /**
-     * @var CallRecorder
-     */
-    private $handler;
+    private CallRecorder $handler;
 
     /**
      * @Mock
-     * @var Phake\CallRecorder\Recorder
      */
-    private $callRecorder;
+    private Phake\CallRecorder\Recorder $callRecorder;
 
     public function setUp(): void
     {
@@ -69,12 +64,12 @@ class CallRecorderTest extends TestCase
         $this->handler    = new CallRecorder($this->callRecorder);
     }
 
-    public function testImplementIInvocationHandler()
+    public function testImplementIInvocationHandler(): void
     {
         $this->assertInstanceOf(IInvocationHandler::class, $this->handler);
     }
 
-    public function testCallIsRecorded()
+    public function testCallIsRecorded(): void
     {
         $mock = $this->getMockBuilder(Phake\IMock::class)
                     ->getMock();
@@ -85,7 +80,7 @@ class CallRecorderTest extends TestCase
         Phake::verify($this->callRecorder)->recordCall(new Phake\CallRecorder\Call($mock, 'foo', []));
     }
 
-    public function testStaticCallIsRecorded()
+    public function testStaticCallIsRecorded(): void
     {
         $mock = $this->getMockBuilder(Phake\IMock::class)
                     ->getMock();

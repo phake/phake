@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Matchers;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,26 +42,23 @@ namespace Phake\Matchers;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Matchers;
+
 use Phake;
 use PHPUnit\Framework\TestCase;
 
 class MethodMatcherTest extends TestCase
 {
-    /**
-     * @var MethodMatcher
-     */
-    private $matcher;
+    private MethodMatcher $matcher;
 
     /**
      * @Mock
-     * @var Phake\Matchers\IChainableArgumentMatcher
      */
-    private $rootArgumentMatcher;
+    private Phake\Matchers\IChainableArgumentMatcher $rootArgumentMatcher;
 
-    /**
-     * @var array
-     */
-    private $arguments;
+    private array $arguments;
 
     public function setUp(): void
     {
@@ -78,7 +70,7 @@ class MethodMatcherTest extends TestCase
     /**
      * Tests that the method matcher will forward arguments on.
      */
-    public function testMatchesForwardsParameters()
+    public function testMatchesForwardsParameters(): void
     {
         $arguments = ['foo', 'bar'];
         $this->matcher->matches('foo', $arguments);
@@ -89,7 +81,7 @@ class MethodMatcherTest extends TestCase
     /**
      * Tests that the method matcher will return true when all is well.
      */
-    public function testMatchesSuccessfullyMatches()
+    public function testMatchesSuccessfullyMatches(): void
     {
         Phake::when($this->rootArgumentMatcher)->doArgumentsMatch->thenReturn(true);
 
@@ -100,7 +92,7 @@ class MethodMatcherTest extends TestCase
     /**
      * Tests that the matcher will return false on mismatched method name.
      */
-    public function testNoMatcherOnBadMethod()
+    public function testNoMatcherOnBadMethod(): void
     {
         Phake::when($this->rootArgumentMatcher)->doArgumentsMatch->thenReturn(true);
 
@@ -111,7 +103,7 @@ class MethodMatcherTest extends TestCase
     /**
      * Tests that the matcher will return false on mismatched argument 1.
      */
-    public function testNoMatcherOnBadArg1()
+    public function testNoMatcherOnBadArg1(): void
     {
         Phake::when($this->rootArgumentMatcher)->doArgumentsMatch->thenThrow(new Phake\Exception\MethodMatcherException());
 
@@ -119,7 +111,7 @@ class MethodMatcherTest extends TestCase
         $this->assertFalse($this->matcher->matches('foo', $arguments));
     }
 
-    public function testAnyParameterMatching()
+    public function testAnyParameterMatching(): void
     {
         $matcher = new MethodMatcher('method', new AnyParameters());
 
@@ -131,20 +123,20 @@ class MethodMatcherTest extends TestCase
         $this->assertTrue($matcher->matches('method', $arguments));
     }
 
-    public function testSetterMatcher()
+    public function testSetterMatcher(): void
     {
         $matcher = new MethodMatcher('method', new ReferenceSetter(42));
 
         $value        = 'blah';
         $arguments    = [];
-        $arguments[0] =& $value;
+        $arguments[0] =&$value;
 
         $matcher->matches('method', $arguments);
 
         $this->assertEquals(42, $value);
     }
 
-    public function testNullMatcherWithNoArguments()
+    public function testNullMatcherWithNoArguments(): void
     {
         $matcher = new MethodMatcher('method', null);
 
@@ -152,7 +144,7 @@ class MethodMatcherTest extends TestCase
         $this->assertTrue($matcher->matches('method', $emptyArray));
     }
 
-    public function testNullMatcherWithArguments()
+    public function testNullMatcherWithArguments(): void
     {
         $matcher = new MethodMatcher('method', null);
 

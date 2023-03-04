@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\String;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\String;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\String;
+
 /**
  * A converter that accepts any variable and converts it to a printable string
  *
@@ -54,10 +53,6 @@ namespace Phake\String;
  */
 class Converter
 {
-    /**
-     * @param mixed $value
-     * @return string
-     */
     public function convertToString(mixed $value): string
     {
         if (is_object($value)) {

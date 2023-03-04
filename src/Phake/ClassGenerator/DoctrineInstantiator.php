@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\ClassGenerator;
-
 /*
  * Phake - Mocking Framework
  *
@@ -48,14 +43,15 @@ namespace Phake\ClassGenerator;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\ClassGenerator;
+
 /**
  * Create instance of a class using Doctrine instantiator
  */
 class DoctrineInstantiator implements IInstantiator
 {
-    /**
-     * @var \Doctrine\Instantiator\Instantiator
-     */
     private \Doctrine\Instantiator\Instantiator $doctrineInstantiator;
 
     public function __construct()
@@ -65,8 +61,6 @@ class DoctrineInstantiator implements IInstantiator
 
     /**
      * @param class-string $className
-     *
-     * @return object
      */
     public function instantiate(string $className): object
     {

@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Mock;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\Mock;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Mock;
+
 /**
  * Stores all Info instances for static classes.
  */
@@ -57,17 +56,11 @@ class InfoRegistry
      */
     private array $registry = [];
 
-    /**
-     * @return void
-     */
     public function addInfo(Info $info): void
     {
         $this->registry[] = $info;
     }
 
-    /**
-     * @return void
-     */
     public function resetAll(): void
     {
         /* @var $info Info */

@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Stubber;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\Stubber;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Stubber;
+
 /**
  * Allows mapping of Answer collections to methods.
  *
@@ -55,16 +54,12 @@ namespace Phake\Stubber;
 class StubMapper
 {
     /**
-     * @var array
+     * @var array<string, array<list{\Phake\Matchers\IMethodMatcher, AnswerCollection}>>
      */
     private array $matcherStubMap = [];
 
     /**
      * Maps a given answer collection to a given $matcher
-     *
-     * @param AnswerCollection $answer
-     * @param \Phake\Matchers\IMethodMatcher  $matcher
-     * @return void
      */
     public function mapStubToMatcher(AnswerCollection $answer, \Phake\Matchers\IMethodMatcher $matcher): void
     {
@@ -73,11 +68,6 @@ class StubMapper
 
     /**
      * Returns the answer collection based on a matcher that matches a given call
-     *
-     * @param string $method
-     * @param array  $args
-     *
-     * @return AnswerCollection|null
      */
     public function getStubByCall(string $method, array &$args): ?AnswerCollection
     {
@@ -86,7 +76,7 @@ class StubMapper
         foreach ($matcherStubMap as $item) {
             [$matcher, $answer] = $item;
 
-            /* @var $matcher \Phake\Matchers\MethodMatcher */
+            assert($matcher instanceof \Phake\Matchers\IMethodMatcher);
             if ($matcher->matches($method, $args)) {
                 return $answer;
             }
@@ -97,7 +87,6 @@ class StubMapper
 
     /**
      * Removes all answer collections from the stub mapper.
-     * @return void
      */
     public function removeAllAnswers(): void
     {

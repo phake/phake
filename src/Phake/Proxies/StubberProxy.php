@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Proxies;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\Proxies;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Proxies;
+
 /**
  * A proxy to handle stubbing a method on a mock object.
  *
@@ -56,50 +55,28 @@ class StubberProxy
 {
     use NamedArgumentsResolver;
 
-    /**
-     * @var \Phake\IMock|class-string
-     */
-    private \Phake\IMock|string $obj;
-
-    /**
-     * @var \Phake\Matchers\Factory
-     */
-    private \Phake\Matchers\Factory $matcherFactory;
-
-    /**
-     * @param \Phake\IMock|class-string     $obj
-     * @param \Phake\Matchers\Factory $matcherFactory
-     */
-    public function __construct(\Phake\IMock|string $obj, \Phake\Matchers\Factory $matcherFactory)
-    {
+    public function __construct(
+        private \Phake\IMock|string $obj,
+        private \Phake\Matchers\Factory $matcherFactory
+    ) {
         \Phake::assertValidMock($obj);
-        $this->obj            = $obj;
-        $this->matcherFactory = $matcherFactory;
     }
 
     /**
      * A magic call to instantiate an Answer Binder Proxy.
-     *
-     * @param string $method
-     * @param array  $arguments
-     *
-     * @return AnswerBinderProxy
      */
     public function __call(string $method, array $arguments): AnswerBinderProxy
     {
         $matcher = new \Phake\Matchers\MethodMatcher($method, $this->matcherFactory->createMatcherChain($this->resolveNamedArguments($this->obj, $method, $arguments)));
         $binder  = new \Phake\Stubber\AnswerBinder($matcher, \Phake::getInfo($this->obj)->getStubMapper());
+
         return new AnswerBinderProxy($binder);
     }
 
     /**
      * A magic call to instantiate an Answer Binder Proxy that matches any parameters.
      *
-     * @param string|object $method
-     *
      * @throws \InvalidArgumentException if $method is not a valid parameter/method name
-     *
-     * @return AnswerBinderProxy
      */
     public function __get(string|object $method): AnswerBinderProxy
     {

@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Proxies;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\Proxies;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Proxies;
+
 /**
  * A proxy class to provide a fluent interface into the answer binder.
  *
@@ -54,22 +53,13 @@ namespace Phake\Proxies;
  */
 class AnswerBinderProxy implements AnswerProxyInterface
 {
-    /**
-     * @var \Phake\Stubber\IAnswerBinder
-     */
-    private \Phake\Stubber\IAnswerBinder $binder;
-
-    public function __construct(\Phake\Stubber\IAnswerBinder $binder)
-    {
-        $this->binder = $binder;
+    public function __construct(
+        private \Phake\Stubber\IAnswerBinder $binder
+    ) {
     }
 
     /**
      * Binds a static answer to the method and object in the proxied binder.
-     *
-     * @param mixed $value
-     *
-     * @return \Phake\Stubber\IAnswerContainer
      */
     public function thenReturn(mixed $value): \Phake\Stubber\IAnswerContainer
     {
@@ -79,10 +69,7 @@ class AnswerBinderProxy implements AnswerProxyInterface
     /**
      * Binds a callback answer to the method.
      *
-     * @param \callable $value
-     *
      * @throws \InvalidArgumentException
-     * @return \Phake\Stubber\IAnswerContainer
      */
     public function thenReturnCallback(callable $value): \Phake\Stubber\IAnswerContainer
     {
@@ -91,7 +78,6 @@ class AnswerBinderProxy implements AnswerProxyInterface
 
     /**
      * Binds a delegated call that will call a given method's parent.
-     * @return \Phake\Stubber\IAnswerContainer
      */
     public function thenCallParent(): \Phake\Stubber\IAnswerContainer
     {
@@ -100,10 +86,6 @@ class AnswerBinderProxy implements AnswerProxyInterface
 
     /**
      * Binds an exception answer to the method and object in the proxied binder.
-     *
-     * @param \Throwable $value
-     *
-     * @return \Phake\Stubber\IAnswerContainer
      */
     public function thenThrow(\Throwable $value): \Phake\Stubber\IAnswerContainer
     {
@@ -111,11 +93,8 @@ class AnswerBinderProxy implements AnswerProxyInterface
     }
 
     /**
-     * Binds a delegated call that will call a given method's parent while capturing that value to the passed in variable.
-     *
-     * @param mixed $captor
-     *
-     * @return \Phake\Stubber\IAnswerContainer
+     * Binds a delegated call that will call a given method's parent
+     * while capturing that value to the passed in variable.
      */
     public function captureReturnTo(mixed &$captor): \Phake\Stubber\IAnswerContainer
     {

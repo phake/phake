@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Exception;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\Exception;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Exception;
+
 /**
  * Created by JetBrains PhpStorm.
  * User: mikel
@@ -54,7 +53,6 @@ namespace Phake\Exception;
  * Time: 10:09 PM
  * To change this template use File | Settings | File Templates.
  */
-
 class VerificationException extends \Exception
 {
 }

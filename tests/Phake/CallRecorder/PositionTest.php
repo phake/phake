@@ -70,7 +70,7 @@ class PositionTest extends TestCase
     /**
      * Tests that the system can properly detect positions after the current
      */
-    public function testIsAfterTrue()
+    public function testIsAfterTrue(): void
     {
         $position = new Position(9);
 
@@ -80,7 +80,7 @@ class PositionTest extends TestCase
     /**
      * Tests that the system can properly detect positions after the current
      */
-    public function testIsAfterFalse()
+    public function testIsAfterFalse(): void
     {
         $position = new Position(11);
 
@@ -89,9 +89,8 @@ class PositionTest extends TestCase
 
     /**
      * Creates a call object
-     * @return Call
      */
-    private function getCall()
+    private function getCall(): Call
     {
         return $this->getMockBuilder(Call::class)
                     ->disableOriginalConstructor()

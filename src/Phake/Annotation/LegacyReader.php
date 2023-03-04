@@ -1,12 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Annotation;
-
-use ReflectionClass;
-use ReflectionProperty;
-
 /*
  * Phake - Mocking Framework
  *
@@ -50,6 +42,13 @@ use ReflectionProperty;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Annotation;
+
+use ReflectionClass;
+use ReflectionProperty;
+
 class LegacyReader implements IReader
 {
     private const ANNOTATION_NAME = 'Mock';
@@ -68,9 +67,6 @@ class LegacyReader implements IReader
         return $properties;
     }
 
-    /**
-     * @psalm-suppress DeprecatedMethod
-     */
     public function getMockType(ReflectionProperty $property): ?string
     {
         $mockedClass = null;
@@ -99,14 +95,7 @@ class LegacyReader implements IReader
         return $mockedClass;
     }
 
-    /**
-     * Returns an associative array containing a property's annotations and their values.
-     *
-     * @param \ReflectionProperty $property
-     *
-     * @return array
-     */
-    private function getPropertyAnnotations(\ReflectionProperty $property): array
+    private function getPropertyAnnotations(ReflectionProperty $property): array
     {
         $annotations = [];
         if ($comment = $property->getDocComment()) {
@@ -116,6 +105,7 @@ class LegacyReader implements IReader
                 }
             }
         }
+
         return $annotations;
     }
 
@@ -124,11 +114,6 @@ class LegacyReader implements IReader
         return class_exists(\Doctrine\Common\Annotations\PhpParser::class);
     }
 
-    /**
-     * @param string $mockedClass
-     * @param string $testNamespace
-     * @return bool
-     */
     private function definedUnderTestNamespace(string $mockedClass, string $testNamespace): bool
     {
         return class_exists($testNamespace . '\\' . $mockedClass);

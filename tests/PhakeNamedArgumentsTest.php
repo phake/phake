@@ -1,15 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-if (PHP_VERSION_ID >= 80000) {
-    $fp = fopen(__FILE__, 'r');
-    fseek($fp, __COMPILER_HALT_OFFSET__);
-    eval(stream_get_contents($fp));
-}
-
-__halt_compiler();
-
 /*
  * Phake - Mocking Framework
  *
@@ -53,6 +42,17 @@ __halt_compiler();
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+if (PHP_VERSION_ID >= 80000) {
+    $fp = fopen(__FILE__, 'r');
+    fseek($fp, __COMPILER_HALT_OFFSET__);
+    eval(stream_get_contents($fp));
+}
+
+__halt_compiler();
+
+
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -64,9 +64,9 @@ use PHPUnit\Framework\TestCase;
  */
 class PhakeNamedArgumentsTest extends TestCase
 {
-    public function testNamedArgumentsInWhen()
+    public function testNamedArgumentsInWhen(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
         Phake::when($mock)->fooWithLotsOfParameters(parm3: 3, parm2: 2, parm1: 1)->thenReturn(42);
 
         $this->assertSame(42, $mock->fooWithLotsOfParameters(1, 2, 3));
@@ -74,9 +74,9 @@ class PhakeNamedArgumentsTest extends TestCase
         Phake::verify($mock)->fooWithLotsOfParameters(parm3: 3, parm2: 2, parm1: 1);
     }
 
-    public function testNamedArgumentsInCall()
+    public function testNamedArgumentsInCall(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
         Phake::when($mock)->fooWithLotsOfParameters(1, 2, 3)->thenReturn(42);
 
         $this->assertSame(42, $mock->fooWithLotsOfParameters(parm3: 3, parm2: 2, parm1: 1));
@@ -84,9 +84,9 @@ class PhakeNamedArgumentsTest extends TestCase
         Phake::verify($mock)->fooWithLotsOfParameters(1, 2, 3);
     }
 
-    public function testNamedArgumentsInBoth()
+    public function testNamedArgumentsInBoth(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
         Phake::when($mock)->fooWithLotsOfParameters(parm3: 3, parm2: 2, parm1: 1)->thenReturn(42);
 
         $this->assertSame(42, $mock->fooWithLotsOfParameters(parm3: 3, parm2: 2, parm1: 1));
@@ -94,9 +94,9 @@ class PhakeNamedArgumentsTest extends TestCase
         Phake::verify($mock)->fooWithLotsOfParameters(parm3: 3, parm2: 2, parm1: 1);
     }
 
-    public function testMixedNamedArguments()
+    public function testMixedNamedArguments(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
         Phake::when($mock)->fooWithLotsOfParameters(1, parm3: 3, parm2: 2)->thenReturn(42);
 
         $this->assertSame(42, $mock->fooWithLotsOfParameters(1, 2, 3));
@@ -104,9 +104,9 @@ class PhakeNamedArgumentsTest extends TestCase
         Phake::verify($mock)->fooWithLotsOfParameters(1, parm3: 3, parm2: 2);
     }
 
-    public function testNamedArgumentsWithNullValue()
+    public function testNamedArgumentsWithNullValue(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
         Phake::when($mock)->fooWithLotsOfParameters(parm3: 3, parm2: null, parm1: 1)->thenReturn(42);
 
         $this->assertSame(42, $mock->fooWithLotsOfParameters(parm3: 3, parm2: null, parm1: 1));
@@ -114,9 +114,9 @@ class PhakeNamedArgumentsTest extends TestCase
         Phake::verify($mock)->fooWithLotsOfParameters(parm3: 3, parm2: null, parm1: 1);
     }
 
-    public function testNamedArgumentsWithDefault()
+    public function testNamedArgumentsWithDefault(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         Phake::when($mock)->fooWithMultipleDefault(p2: 2)->thenReturn(42);
 
@@ -124,10 +124,10 @@ class PhakeNamedArgumentsTest extends TestCase
 
         Phake::verify($mock)->fooWithMultipleDefault(p2: 2);
     }
-   
-    public function testVariadicWithNamedParams()
+
+    public function testVariadicWithNamedParams(): void
     {
-        $mock = Phake::mock('PhakeTest_Variadic');
+        $mock = Phake::mock(\PhakeTest_Variadic::class);
         Phake::when($mock)->variadicMethod(1, 2, c: 3, d: 4)->thenReturn(42);
 
         $this->assertSame(42, $mock->variadicMethod(d: 4, c: 3, b: 2, a: 1));
@@ -135,9 +135,9 @@ class PhakeNamedArgumentsTest extends TestCase
         Phake::verify($mock)->variadicMethod(1, 2, c: 3, d: 4);
     }
 
-    public function testVariadicWithMixedNamedArguments()
+    public function testVariadicWithMixedNamedArguments(): void
     {
-        $mock = Phake::mock('PhakeTest_Variadic');
+        $mock = Phake::mock(\PhakeTest_Variadic::class);
         Phake::when($mock)->variadicMethod(1, 2, 3, 4, e: 5, f: 6)->thenReturn(42);
 
         $this->assertSame(42, $mock->variadicMethod(1, 2, 3, 4, e: 5, f: 6));
@@ -145,9 +145,9 @@ class PhakeNamedArgumentsTest extends TestCase
         Phake::verify($mock)->variadicMethod(1, 2, 3, 4, e: 5, f: 6);
     }
 
-    public function testVariadicWithNamedParametersShuffled()
+    public function testVariadicWithNamedParametersShuffled(): void
     {
-        $mock = Phake::mock('PhakeTest_Variadic');
+        $mock = Phake::mock(\PhakeTest_Variadic::class);
         Phake::when($mock)->variadicMethod(b: 2, a: 1, c: 3, d: 4)->thenReturn(42);
 
         $this->assertSame(42, $mock->variadicMethod(d: 4, c: 3, b: 2, a: 1));
@@ -155,9 +155,9 @@ class PhakeNamedArgumentsTest extends TestCase
         Phake::verify($mock)->variadicMethod(c: 3, d: 4, a: 1, b: 2);
     }
 
-    public function testWithNamedParanetersAndEmptyVariadic()
+    public function testWithNamedParanetersAndEmptyVariadic(): void
     {
-        $mock = Phake::mock('PhakeTest_Variadic');
+        $mock = Phake::mock(\PhakeTest_Variadic::class);
         Phake::when($mock)->variadicMethod(a: 'a', b: 'b')->thenReturn(42);
 
         $this->assertSame(42, $mock->variadicMethod('a', b: 'b'));
@@ -165,9 +165,9 @@ class PhakeNamedArgumentsTest extends TestCase
         Phake::verify($mock)->variadicMethod('a', b: 'b');
     }
 
-    public function testNamedArgumentsOnStaticMethod()
+    public function testNamedArgumentsOnStaticMethod(): void
     {
-        $mock = Phake::mock('PhakeTest_ClassWithStaticMethod');
+        $mock = Phake::mock(\PhakeTest_ClassWithStaticMethod::class);
         Phake::whenStatic($mock)->askWho(who: 'who ?')->thenReturn(10);
 
         $this->assertSame(10, $mock::askWho('who ?'));

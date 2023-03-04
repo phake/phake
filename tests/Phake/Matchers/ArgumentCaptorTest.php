@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Matchers;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\Matchers;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Matchers;
+
 use Phake;
 use PHPUnit\Framework\TestCase;
 
@@ -55,15 +54,9 @@ use PHPUnit\Framework\TestCase;
  */
 class ArgumentCaptorTest extends TestCase
 {
-    /**
-     * @var ArgumentCaptor
-     */
-    private $captor;
+    private ArgumentCaptor $captor;
 
-    /**
-     * @var string
-     */
-    private $refVariable;
+    private mixed $refVariable = null;
 
     /**
      * Sets up the test fixture
@@ -76,7 +69,7 @@ class ArgumentCaptorTest extends TestCase
     /**
      * Tests that arguments are captured when matches() is called
      */
-    public function testArgumentCapturing()
+    public function testArgumentCapturing(): void
     {
         $value = ['blah'];
         $this->captor->doArgumentsMatch($value);
@@ -87,7 +80,7 @@ class ArgumentCaptorTest extends TestCase
     /**
      * Tests that when a matcher is set on captor it will run the matcher first
      */
-    public function testConditionalCapturing()
+    public function testConditionalCapturing(): void
     {
         $matcher = Phake::mock(IChainableArgumentMatcher::class);
         Phake::when($matcher)->doArgumentsMatch->thenReturn(true);
@@ -105,7 +98,7 @@ class ArgumentCaptorTest extends TestCase
     /**
      * Tests that when a matcher is set on captor it will run the matcher first
      */
-    public function testConditionalCapturingWontCapture()
+    public function testConditionalCapturingWontCapture(): void
     {
         $matcher = Phake::mock(IChainableArgumentMatcher::class);
         Phake::when($matcher)->doArgumentsMatch->thenThrow(new Phake\Exception\MethodMatcherException());
@@ -116,13 +109,13 @@ class ArgumentCaptorTest extends TestCase
         try {
             $this->captor->doArgumentsMatch($value);
         }
-        //Need to atually catch the exception to validate that the refrence didn't change
+        // Need to atually catch the exception to validate that the refrence didn't change
         catch (Phake\Exception\MethodMatcherException $e) {
             $this->assertNull($this->refVariable);
         }
     }
 
-    public function testConditionalCaptureFailureUpdatesMessage()
+    public function testConditionalCaptureFailureUpdatesMessage(): void
     {
         $matcher = Phake::mock(IChainableArgumentMatcher::class);
         Phake::when($matcher)->doArgumentsMatch->thenThrow(new Phake\Exception\MethodMatcherException('test'));
@@ -133,7 +126,7 @@ class ArgumentCaptorTest extends TestCase
         try {
             $this->captor->doArgumentsMatch($value);
         }
-        //Need to atually catch the exception to validate that the refrence didn't change
+        // Need to atually catch the exception to validate that the refrence didn't change
         catch (Phake\Exception\MethodMatcherException $e) {
             $this->assertStringStartsWith("Failed in Phake::capture()->when()\n", $e->getMessage(), 'The methodmatcherexception is not prepended with capture info');
         }
@@ -142,17 +135,17 @@ class ArgumentCaptorTest extends TestCase
     /**
      * Tests that when returns an instance of the captor
      */
-    public function testWhenReturn()
+    public function testWhenReturn(): void
     {
         $this->assertSame($this->captor, $this->captor->when(null));
     }
 
-    public function testToString()
+    public function testToString(): void
     {
         $this->assertEquals('<captured parameter>', $this->captor->__toString());
     }
 
-    public function testToStringWithConditional()
+    public function testToStringWithConditional(): void
     {
         $matcher = Phake::mock(Phake\Matchers\IChainableArgumentMatcher::class);
         Phake::when($matcher)->__toString()->thenReturn('an argument');
@@ -160,7 +153,7 @@ class ArgumentCaptorTest extends TestCase
         $this->assertEquals('<captured parameter that is an argument>', $this->captor->__toString());
     }
 
-    public function testBindAllCapturedValuePreMatch()
+    public function testBindAllCapturedValuePreMatch(): void
     {
         $value1 = [new \stdClass()];
         $value2 = [new \stdClass()];
@@ -177,7 +170,7 @@ class ArgumentCaptorTest extends TestCase
         $this->assertSame([$value1[0], $value2[0], $value3[0]], $allCaptures);
     }
 
-    public function testBindAllCapturedValuePostMatch()
+    public function testBindAllCapturedValuePostMatch(): void
     {
         $value1 = [new \stdClass()];
         $value2 = [new \stdClass()];

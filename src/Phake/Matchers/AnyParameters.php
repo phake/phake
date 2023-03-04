@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Matchers;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\Matchers;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Matchers;
+
 /**
  * A matcher that will return true for any invocation of a particular method
  */
@@ -54,8 +53,6 @@ class AnyParameters extends AbstractChainableArgumentMatcher
 {
     /**
      * Do nothing, any parameters always matches
-     *
-     * @param array $arguments
      */
     public function doArgumentsMatch(array &$arguments): void
     {
@@ -63,7 +60,6 @@ class AnyParameters extends AbstractChainableArgumentMatcher
 
     /**
      * Returns a human readable description of the argument matcher
-     * @return string
      */
     public function __toString(): string
     {

@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /*
  * Phake - Mocking Framework
  *
@@ -45,10 +42,15 @@ declare(strict_types=1);
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Annotation;
+
+use Phake;
 use PhakeTest\NamespacedClass;
 use PHPUnit\Framework\TestCase;
 
-abstract class Phake_Annotation_MockInitializerParentTestCase extends TestCase
+abstract class MockInitializerParentTestCase extends TestCase
 {
     /**
      * @Mock

@@ -1,17 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-if (PHP_VERSION_ID >= 70400) {
-    $fp = fopen(__FILE__, 'r');
-    fseek($fp, __COMPILER_HALT_OFFSET__);
-    eval(stream_get_contents($fp));
-}
-
-__halt_compiler();
-
-namespace Phake\Annotation;
-
 /*
  * Phake - Mocking Framework
  *
@@ -55,6 +42,18 @@ namespace Phake\Annotation;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+if (PHP_VERSION_ID >= 70400) {
+    $fp = fopen(__FILE__, 'r');
+    fseek($fp, __COMPILER_HALT_OFFSET__);
+    eval(stream_get_contents($fp));
+}
+
+__halt_compiler();
+
+namespace Phake\Annotation;
+
 use Phake\Mock;
 use PHPUnit\Framework\TestCase;
 use PhakeTest\AnotherNamespacedClass;
@@ -80,14 +79,14 @@ class MockInitializerTypedPropertiesTest extends TestCase
         $this->initializer = new MockInitializer();
     }
 
-    public function testInitialize()
+    public function testInitialize(): void
     {
         $this->initializer->initialize($this);
 
         $this->assertInstanceOf(\stdClass::class, $this->mock);
     }
 
-    public function testWithNativeReader()
+    public function testWithNativeReader(): void
     {
         if (PHP_VERSION_ID < 80000) {
             $this->markTestSkipped('Native attributes are not supported in PHP versions prior to 8.0');

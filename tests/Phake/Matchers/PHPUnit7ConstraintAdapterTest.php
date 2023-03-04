@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Matchers;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\Matchers;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Matchers;
+
 use PHPUnit\Framework\Constraint\Constraint;
 use PHPUnit\Framework\TestCase;
 
@@ -55,15 +54,9 @@ use PHPUnit\Framework\TestCase;
  */
 class PHPUnit7ConstraintAdapterTest extends TestCase
 {
-    /**
-     * @var PHPUnitConstraintAdapter
-     */
-    private $adapter;
+    private PHPUnit7ConstraintAdapter $adapter;
 
-    /**
-     * @var Constraint
-     */
-    private $constraint;
+    private Constraint $constraint;
 
     /**
      * Sets up the test fixture
@@ -80,7 +73,7 @@ class PHPUnit7ConstraintAdapterTest extends TestCase
     /**
      * Tests that matches() will forward calls to evaluate()
      */
-    public function testMatchesCallsForwarded()
+    public function testMatchesCallsForwarded(): void
     {
         $this->constraint->expects($this->once())
             ->method('evaluate')
@@ -91,7 +84,7 @@ class PHPUnit7ConstraintAdapterTest extends TestCase
         $this->assertNull($this->adapter->doArgumentsMatch($value));
     }
 
-    public function testToString()
+    public function testToString(): void
     {
         $this->assertEquals('phpunit matcher', $this->adapter->__toString());
     }

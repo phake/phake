@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Matchers;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\Matchers;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Matchers;
+
 use PHPUnit\Framework\Constraint\Constraint;
 use PHPUnit\Framework\ExpectationFailedException;
 
@@ -56,14 +55,8 @@ use PHPUnit\Framework\ExpectationFailedException;
  */
 class PHPUnit7ConstraintAdapter extends SingleArgumentMatcher
 {
-    /**
-     * @var \PHPUnit\Framework\Constraint\Constraint
-     */
     private \PHPUnit\Framework\Constraint\Constraint $constraint;
 
-    /**
-     * @param Constraint $constraint
-     */
     public function __construct(Constraint $constraint)
     {
         $this->constraint = $constraint;
@@ -75,10 +68,6 @@ class PHPUnit7ConstraintAdapter extends SingleArgumentMatcher
      * Forwards the call to PHPUnit's evaluate() method.
      *
      * @psalm-suppress InternalMethod
-     *
-     * @param mixed $argument
-     * @throws \Phake\Exception\MethodMatcherException
-     * @return void
      */
     protected function matches(mixed &$argument): void
     {

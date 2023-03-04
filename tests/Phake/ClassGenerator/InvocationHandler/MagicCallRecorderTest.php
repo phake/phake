@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\ClassGenerator\InvocationHandler;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,20 +42,18 @@ namespace Phake\ClassGenerator\InvocationHandler;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\ClassGenerator\InvocationHandler;
+
 use Phake;
 use PHPUnit\Framework\TestCase;
 
 class MagicCallRecorderTest extends TestCase
 {
-    /**
-     * @var MagicCallRecorder
-     */
-    private $handler;
+    private MagicCallRecorder $handler;
 
-    /**
-     * @var Phake\CallRecorder\Recorder
-     */
-    private $callRecorder;
+    private Phake\CallRecorder\Recorder $callRecorder;
 
     public function setUp(): void
     {
@@ -68,12 +61,12 @@ class MagicCallRecorderTest extends TestCase
         $this->handler = new MagicCallRecorder($this->callRecorder);
     }
 
-    public function testImplementIInvocationHandler()
+    public function testImplementIInvocationHandler(): void
     {
         $this->assertInstanceOf(IInvocationHandler::class, $this->handler);
     }
 
-    public function testMagicCallIsRecorded()
+    public function testMagicCallIsRecorded(): void
     {
         $mock = $this->getMockBuilder(Phake\IMock::class)
                     ->getMock();
@@ -86,7 +79,7 @@ class MagicCallRecorderTest extends TestCase
         );
     }
 
-    public function testStaticMagicCallIsRecorded()
+    public function testStaticMagicCallIsRecorded(): void
     {
         $mock = $this->getMockBuilder(Phake\IMock::class)
                     ->getMock();
@@ -100,7 +93,7 @@ class MagicCallRecorderTest extends TestCase
         );
     }
 
-    public function testNonMagicCallDoesNothing()
+    public function testNonMagicCallDoesNothing(): void
     {
         $mock = $this->getMockBuilder(Phake\IMock::class)
                     ->getMock();

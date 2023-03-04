@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Stubber\Answers;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\Stubber\Answers;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Stubber\Answers;
+
 /**
  * Returns the proper default value for a method based on the return type.
  *
@@ -58,10 +57,6 @@ class SmartDefaultAnswer implements \Phake\Stubber\IAnswer
     {
     }
 
-    /**
-     * @psalm-suppress MissingClosureParamType
-     * @psalm-suppress MissingClosureReturnType
-     */
     public function getReturnTypeResult(?\ReflectionType $returnType, \ReflectionMethod $method): mixed
     {
         if (null === $returnType) {
@@ -82,7 +77,7 @@ class SmartDefaultAnswer implements \Phake\Stubber\IAnswer
                 case 'array':
                     return [];
                 case 'callable':
-                    return function() {};
+                    return function () {};
                 case 'self':
                     return \Phake::mock($method->getDeclaringClass()->getName());
                 case 'null':
@@ -95,11 +90,10 @@ class SmartDefaultAnswer implements \Phake\Stubber\IAnswer
                     } elseif ($returnType->allowsNull()) {
                         return null;
                     }
-                }
+            }
         } elseif ($returnType instanceof \ReflectionIntersectionType) {
-            return \Phake::mock(array_map(function ($t) {
-                return $t->getName();
-            }, $returnType->getTypes()));
+            /** @psalm-suppress ArgumentTypeCoercion */
+            return \Phake::mock(array_map(static fn (\ReflectionNamedType $t): string => $t->getName(), $returnType->getTypes()));
         } elseif ($returnType instanceof \ReflectionUnionType) {
             foreach ($returnType->getTypes() as $type) {
                 return $this->getReturnTypeResult($type, $method);
@@ -109,9 +103,6 @@ class SmartDefaultAnswer implements \Phake\Stubber\IAnswer
         throw new \Exception('Unable to create a smart answer for type \'' . (string) $returnType . '\'');
     }
 
-    /**
-     * @psalm-suppress UndefinedMethod
-     */
     public function getAnswerCallback(mixed $context, string $method): callable
     {
         $class = new \ReflectionClass($context);
@@ -119,8 +110,6 @@ class SmartDefaultAnswer implements \Phake\Stubber\IAnswer
 
         $defaultAnswer = $this->getReturnTypeResult($method->getReturnType(), $method);
 
-        return function (mixed ...$args) use ($defaultAnswer): mixed {
-            return $defaultAnswer;
-        };
+        return static fn (mixed ...$args): mixed => $defaultAnswer;
     }
 }

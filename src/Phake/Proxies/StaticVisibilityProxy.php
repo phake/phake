@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Proxies;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\Proxies;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Proxies;
+
 /**
  * Acts as a proxy to any object that allows calling any private or protected method on the wrapper and forward those
  * calls to the wrapped object.
@@ -65,33 +64,26 @@ class StaticVisibilityProxy
      */
     private string $proxied;
 
-    /**
-     * @param mixed $proxied
-     */
-    public function __construct(mixed $proxied)
+    public function __construct(object $proxied)
     {
         if (!is_object($proxied)) {
             throw new \InvalidArgumentException("\Phake\Proxies\VisibilityProxy was passed a non-object");
         }
-        $this->proxied = get_class($proxied);
+        $this->proxied = $proxied::class;
     }
 
-    /**
-     * @param string $method
-     * @param array $arguments
-     * @return mixed
-     */
     public function __call(string $method, array $arguments): mixed
     {
         if (method_exists($this->proxied, $method)) {
             $reflMethod = new \ReflectionMethod($this->proxied, $method);
             $reflMethod->setAccessible(true);
+
             return $reflMethod->invokeArgs(null, $arguments);
         } elseif (method_exists($this->proxied, '__callStatic')) {
             $reflMethod = new \ReflectionMethod($this->proxied, '__callStatic');
+
             return $reflMethod->invokeArgs(null, func_get_args());
         }
-
 
         throw new \InvalidArgumentException("Method {$method} does not exist on {$this->proxied}");
     }

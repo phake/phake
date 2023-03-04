@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Matchers;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\Matchers;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Matchers;
+
 /**
  * The interface for argument matchers
  */
@@ -54,10 +53,6 @@ interface IArgumentMatcher extends \Stringable
 {
     /**
      * Executes the matcher on a given argument value. Returns TRUE on a match, FALSE otherwise.
-     *
-     * @param mixed $argument
-     *
-     * @return boolean
      */
     public function matches(mixed &$argument): bool;
 }

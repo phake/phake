@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Stubber\Answers;
-
 /*
  * Phake - Mocking Framework
  *
@@ -46,6 +41,10 @@ namespace Phake\Stubber\Answers;
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link       http://www.digitalsandwich.com/
  */
+
+declare(strict_types=1);
+
+namespace Phake\Stubber\Answers;
 
 /**
  * Thrown when an invalid answer is created or used

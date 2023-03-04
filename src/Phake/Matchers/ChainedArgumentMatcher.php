@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Matchers;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,19 +42,17 @@ namespace Phake\Matchers;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Matchers;
+
 /**
  * Adapts argument matchers into chainable argument matchers.
  */
 class ChainedArgumentMatcher extends SingleArgumentMatcher
 {
-    /**
-     * @var IArgumentMatcher
-     */
     private IArgumentMatcher $adaptedMatcher;
 
-    /**
-     * @param IArgumentMatcher $adaptedMatcher
-     */
     public function __construct(IArgumentMatcher $adaptedMatcher)
     {
         $this->adaptedMatcher = $adaptedMatcher;
@@ -67,16 +60,12 @@ class ChainedArgumentMatcher extends SingleArgumentMatcher
 
     /**
      * Returns a human readable description of the argument matcher
-     * @return string
      */
     public function __toString(): string
     {
         return $this->adaptedMatcher->__toString();
     }
 
-    /**
-     * @return IArgumentMatcher
-     */
     public function getAdaptedMatcher(): IArgumentMatcher
     {
         return $this->adaptedMatcher;
@@ -84,9 +73,6 @@ class ChainedArgumentMatcher extends SingleArgumentMatcher
 
     /**
      * Executes the matcher on a given argument value. Returns TRUE on a match, FALSE otherwise.
-     *
-     * @param mixed $argument
-     * @return void
      */
     protected function matches(mixed &$argument): void
     {

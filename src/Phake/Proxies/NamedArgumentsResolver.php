@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Proxies;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\Proxies;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Proxies;
+
 /**
  * Resovle named arguments as positional arguments
  *
@@ -55,13 +54,7 @@ namespace Phake\Proxies;
 trait NamedArgumentsResolver
 {
     /**
-     * @psalm-suppress TypeDoesNotContainType
-     *
      * @param \Phake\IMock|class-string $object
-     * @param string $method
-     * @param array $arguments
-     *
-     * @return array
      */
     private function resolveNamedArguments(\Phake\IMock|string $object, string $method, array $arguments): array
     {
@@ -78,7 +71,7 @@ trait NamedArgumentsResolver
         if (!empty($namedArguments)) {
             try {
                 $parameters = (new \ReflectionClass($object))->getMethod($method)->getParameters();
-            } catch (\ReflectionException $e) {
+            } catch (\ReflectionException) {
                 $parameters = [];
             }
             foreach ($parameters as $position => $parameter) {

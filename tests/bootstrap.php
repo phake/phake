@@ -1,6 +1,4 @@
 <?php
-
-declare(strict_types=1);
 /*
  * Phake - Mocking Framework
  *
@@ -43,6 +41,8 @@ declare(strict_types=1);
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link       http://www.digitalsandwich.com/
  */
+
+declare(strict_types=1);
 
 error_reporting(E_ALL | E_STRICT);
 

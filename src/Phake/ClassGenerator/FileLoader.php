@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\ClassGenerator;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,19 +42,17 @@ namespace Phake\ClassGenerator;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\ClassGenerator;
+
 /**
  * Saves the files into a store directory with a file name the same as the class and then includes that file.
  */
 class FileLoader implements ILoader
 {
-    /**
-     * @var string
-     */
     private string $dir;
 
-    /**
-     * @param string $dir
-     */
     public function __construct(string $dir)
     {
         $this->dir = $dir;
@@ -67,11 +60,6 @@ class FileLoader implements ILoader
 
     /**
      * @psalm-suppress UnresolvableInclude
-     *
-     * @param string $className
-     * @param string $classDef
-     *
-     * @return void
      */
     public function loadClassByString(string $className, string $classDef): void
     {
@@ -79,6 +67,6 @@ class FileLoader implements ILoader
         file_put_contents($file, "<?php
 
 declare(strict_types=1); \n" . $classDef);
-        require_once($file);
+        require_once $file;
     }
 }

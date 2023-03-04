@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Proxies;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\Proxies;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Proxies;
+
 /**
  * Acts as a proxy to \Phake\CallRecorder\Verifier that allows verifying methods using the magic
  * __call() method in PHP.
@@ -59,49 +58,16 @@ class VerifierProxy
 {
     use NamedArgumentsResolver;
 
-    /**
-     * @var \Phake\CallRecorder\Verifier
-     */
-    private \Phake\CallRecorder\Verifier $verifier;
-
-    /**
-     * @var \Phake\Matchers\Factory
-     */
-    private \Phake\Matchers\Factory $matcherFactory;
-
-    /**
-     * @var \Phake\CallRecorder\IVerifierMode
-     */
-    private \Phake\CallRecorder\IVerifierMode $mode;
-
-    /**
-     * @var \Phake\Client\IClient
-     */
-    private \Phake\Client\IClient $client;
-
-    /**
-     * @param \Phake\CallRecorder\Verifier      $verifier
-     * @param \Phake\Matchers\Factory           $matcherFactory
-     * @param \Phake\CallRecorder\IVerifierMode $mode
-     * @param \Phake\Client\IClient             $client
-     */
     public function __construct(
-        \Phake\CallRecorder\Verifier $verifier,
-        \Phake\Matchers\Factory $matcherFactory,
-        \Phake\CallRecorder\IVerifierMode $mode,
-        \Phake\Client\IClient $client
+        private \Phake\CallRecorder\Verifier $verifier,
+        private \Phake\Matchers\Factory $matcherFactory,
+        private \Phake\CallRecorder\IVerifierMode $mode,
+        private \Phake\Client\IClient $client
     ) {
-        $this->verifier       = $verifier;
-        $this->matcherFactory = $matcherFactory;
-        $this->mode           = $mode;
-        $this->client         = $client;
     }
 
     /**
      * A call magic method to provide a more fluent interface to the verifier.
-     *
-     * @param string $method
-     * @param array  $arguments
      *
      * @return array<int, \Phake\CallRecorder\CallInfo>
      */
@@ -123,11 +89,8 @@ class VerifierProxy
     /**
      * A magic call to verify a call with any parameters.
      *
-     * @param string|object $method
-     *
-     * @throws \InvalidArgumentException if $method is not a valid parameter/method name
-     *
      * @return array<int, \Phake\CallRecorder\CallInfo>
+     * @throws \InvalidArgumentException if $method is not a valid parameter/method name
      */
     public function __get(string|object $method): array
     {

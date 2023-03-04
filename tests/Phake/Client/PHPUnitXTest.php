@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /*
  * Phake - Mocking Framework
  *
@@ -45,13 +42,18 @@ declare(strict_types=1);
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Client;
+
+use Phake;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 
-class Phake_Client_PHPUnitXTest extends TestCase
+class PHPUnitXTest extends TestCase
 {
-    private $client;
+    private IClient $client;
 
     public function setUp(): void
     {
@@ -64,22 +66,21 @@ class Phake_Client_PHPUnitXTest extends TestCase
         } else {
             $this->markTestSkipped('The tested class is not compatible with current version of PHPUnit.');
         }
-
     }
 
-    public function testImplementsIClient()
+    public function testImplementsIClient(): void
     {
         $this->assertInstanceOf(Phake\Client\IClient::class, $this->client);
     }
 
-    public function testProcessVerifierResultReturnsCallsOnTrue()
+    public function testProcessVerifierResultReturnsCallsOnTrue(): void
     {
         $result = new Phake\CallRecorder\VerifierResult(true, ['call1']);
 
         $this->assertEquals(['call1'], $this->client->processVerifierResult($result));
     }
 
-    public function testProcessVerifierThrowsExceptionOnFalse()
+    public function testProcessVerifierThrowsExceptionOnFalse(): void
     {
         $result = new Phake\CallRecorder\VerifierResult(false, [], 'failure message');
 
@@ -87,7 +88,7 @@ class Phake_Client_PHPUnitXTest extends TestCase
         $this->client->processVerifierResult($result);
     }
 
-    public function testProcessVerifierIncrementsAssertionCount()
+    public function testProcessVerifierIncrementsAssertionCount(): void
     {
         $result = new Phake\CallRecorder\VerifierResult(true, ['call1']);
 
@@ -101,7 +102,7 @@ class Phake_Client_PHPUnitXTest extends TestCase
     /**
      * Utilizes a dummy constraint to indicate that an assertion has happened.
      */
-    public function testProcessObjectFreeze()
+    public function testProcessObjectFreeze(): void
     {
         $assertionCount = Assert::getCount();
         $this->client->processObjectFreeze();

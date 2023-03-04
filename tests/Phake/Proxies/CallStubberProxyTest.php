@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Proxies;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,25 +42,20 @@ namespace Phake\Proxies;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Proxies;
+
 use Phake;
 use PHPUnit\Framework\TestCase;
 
 class CallStubberProxyTest extends TestCase
 {
-    /**
-     * @var Phake\Proxies\CallStubberProxy
-     */
-    private $proxy;
+    private CallStubberProxy $proxy;
 
-    /**
-     * @var Phake\Matchers\IChainableArgumentMatcher
-     */
-    private $matcher1;
+    private Phake\Matchers\IChainableArgumentMatcher $matcher1;
 
-    /**
-     * @var Phake\IMock
-     */
-    private $obj;
+    private Phake\IMock $obj;
 
     /**
      * Sets up test fixture
@@ -83,7 +73,7 @@ class CallStubberProxyTest extends TestCase
     /**
      * Tests setting a stub on a method in the stubbable object
      */
-    public function testIsCalledOn()
+    public function testIsCalledOn(): void
     {
         $answerBinder = $this->proxy->isCalledOn($this->obj);
 
@@ -92,7 +82,7 @@ class CallStubberProxyTest extends TestCase
         $this->phakeAssertAttributeInstanceOf(Phake\Stubber\AnswerBinder::class, 'binder', $answerBinder);
     }
 
-    private function phakeAssertAttributeInstanceOf(string $class, string $propertyName, $object)
+    private function phakeAssertAttributeInstanceOf(string $class, string $propertyName, $object): void
     {
         $reflectionObject = new \ReflectionObject($object);
         $reflectionProperty = $reflectionObject->getProperty($propertyName);

@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Matchers;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\Matchers;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Matchers;
+
 /**
  * Determines if a method and argument matchers match a given method call.
  *
@@ -54,19 +53,10 @@ namespace Phake\Matchers;
  */
 class MethodMatcher implements IMethodMatcher
 {
-    /**
-     * @var string
-     */
     private string $expectedMethod;
 
-    /**
-     * @var IChainableArgumentMatcher|null
-     */
     private ?IChainableArgumentMatcher $argumentMatcherChain;
 
-    /**
-     * @param string $expectedMethod
-     */
     public function __construct($expectedMethod, ?IChainableArgumentMatcher $argumentMatcherChain = null)
     {
         $this->expectedMethod = $expectedMethod;
@@ -76,16 +66,12 @@ class MethodMatcher implements IMethodMatcher
     /**
      * Determines if the given method and arguments match the configured method and argument matchers
      * in this object. Returns true on success, false otherwise.
-     *
-     * @param string $method
-     * @param array  $args
-     *
-     * @return boolean
      */
     public function matches(string $method, array &$args): bool
     {
         try {
             $this->assertMatches($method, $args);
+
             return true;
         } catch (\Phake\Exception\MethodMatcherException $e) {
             return false;
@@ -96,9 +82,6 @@ class MethodMatcher implements IMethodMatcher
      * Asserts whether or not the given method and arguments match the configured method and argument matchers in this \
      * object.
      *
-     * @param string $method
-     * @param array $args
-     * @return void
      * @throws \Phake\Exception\MethodMatcherException
      */
     public function assertMatches(string $method, array &$args): void
@@ -115,8 +98,6 @@ class MethodMatcher implements IMethodMatcher
      *
      * Throws an exception with a description if the arguments do not match.
      *
-     * @param array $args
-     * @return void
      * @throws \Phake\Exception\MethodMatcherException
      */
     private function doArgumentsMatch(array &$args): void
@@ -133,9 +114,6 @@ class MethodMatcher implements IMethodMatcher
         }
     }
 
-    /**
-     * @return string
-     */
     public function getMethod(): string
     {
         return $this->expectedMethod;

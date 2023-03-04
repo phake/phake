@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Stubber\Answers;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,42 +42,34 @@ namespace Phake\Stubber\Answers;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Stubber\Answers;
+
 /**
  * A callable class that allows for calling parent methods without losing references.
  */
 class ParentDelegateCallback
 {
     /**
-     * @var class-string|\Phake\IMock
-     */
-    private \Phake\IMock|string $context;
-
-    /**
-     * @var \ReflectionMethod
-     */
-    private \ReflectionMethod $parentMethod;
-
-    /**
      * @param class-string|\Phake\IMock $context
      * @param \ReflectionMethod $parentMethod
      */
-    public function __construct(\Phake\IMock|string $context, \ReflectionMethod $parentMethod)
-    {
-        $this->context = $context;
-        $this->parentMethod = $parentMethod;
+    public function __construct(
+        private \Phake\IMock|string $context,
+        private \ReflectionMethod $parentMethod
+    ) {
     }
 
-    /**
-     * @psalm-suppress PossiblyInvalidArgument
-     */
     public function __invoke(array $arguments): mixed
     {
         $this->parentMethod->setAccessible(true);
         if ($this->parentMethod->isStatic()) {
-            $context = null;
-        } else {
-            $context = $this->context;
+            return $this->parentMethod->invokeArgs(null, $arguments);
         }
-        return $this->parentMethod->invokeArgs($context, $arguments);
+
+        assert($this->context instanceof \Phake\IMock);
+
+        return $this->parentMethod->invokeArgs($this->context, $arguments);
     }
 }

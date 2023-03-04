@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Matchers;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\Matchers;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Matchers;
+
 /**
  * Defines the interface for a method matchers.
  *
@@ -59,18 +58,11 @@ interface IMethodMatcher
     /**
      * Determines if the given method and arguments match the configured method and argument matchers
      * in this object. Returns true on success, false otherwise.
-     *
-     * @param string $method
-     * @param array  $args
-     *
-     * @return boolean
      */
     public function matches(string $method, array &$args): bool;
 
     /**
      * Accessor for the expected method.
-     *
-     * @return string
      */
     public function getMethod(): string;
 }

@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Proxies;
-
 /*
  * Phake - Mocking Framework
  *
@@ -52,59 +47,41 @@ namespace Phake\Proxies;
  *
  * @author Mike Lively <m@digitalsandwich.com>
  */
+
+declare(strict_types=1);
+
+namespace Phake\Proxies;
+
 interface AnswerProxyInterface
 {
     /**
      * Binds a static answer to the method and object in the proxied binder.
-     *
-     * @param mixed $value
-     *
-     * @return \Phake\Stubber\IAnswerContainer
      */
     public function thenReturn(mixed $value): \Phake\Stubber\IAnswerContainer;
 
     /**
      * Binds a callback answer to the method.
      *
-     * @param \callable $value
-     *
      * @throws \InvalidArgumentException
-     * @return \Phake\Stubber\IAnswerContainer
      */
     public function thenReturnCallback(callable $value): \Phake\Stubber\IAnswerContainer;
 
-
     /**
      * Binds a delegated call that will call a given method's parent.
-     * @return \Phake\Stubber\IAnswerContainer
      */
     public function thenCallParent(): \Phake\Stubber\IAnswerContainer;
 
     /**
      * Binds an exception answer to the method and object in the proxied binder.
-     *
-     * @param \Throwable $value
-     *
-     * @return \Phake\Stubber\IAnswerContainer
      */
     public function thenThrow(\Throwable $value): \Phake\Stubber\IAnswerContainer;
 
     /**
      * Binds a delegated call that will call a given method's parent while capturing that value to the passed in variable.
-     *
-     * @param mixed $captor
-     *
-     * @return \Phake\Stubber\IAnswerContainer
      */
     public function captureReturnTo(mixed &$captor): \Phake\Stubber\IAnswerContainer;
 
-    /**
-     * @return \Phake\Stubber\IAnswerContainer
-     */
     public function thenDoNothing(): \Phake\Stubber\IAnswerContainer;
 
-    /**
-     * @return \Phake\Stubber\IAnswerContainer
-     */
     public function thenReturnSelf(): \Phake\Stubber\IAnswerContainer;
 }

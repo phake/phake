@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Mock;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\Mock;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Mock;
+
 /**
  * Stores data about the mock object.
  *
@@ -54,29 +53,14 @@ namespace Phake\Mock;
  */
 class Info
 {
-    /**
-     * @var string
-     */
     private string $uniqId;
 
-    /**
-     * @var \Phake\CallRecorder\Recorder
-     */
     private \Phake\CallRecorder\Recorder $recorder;
 
-    /**
-     * @var \Phake\Stubber\StubMapper
-     */
     private \Phake\Stubber\StubMapper $mapper;
 
-    /**
-     * @var \Phake\Stubber\IAnswer
-     */
     private \Phake\Stubber\IAnswer $answer;
 
-    /**
-     * @var bool
-     */
     private bool $frozen;
 
     /**
@@ -84,9 +68,6 @@ class Info
      */
     private string $name;
 
-    /**
-     * @var \Phake\ClassGenerator\InvocationHandler\IInvocationHandler|null
-     */
     private ?\Phake\ClassGenerator\InvocationHandler\IInvocationHandler $handlerChain = null;
 
     /**
@@ -102,65 +83,41 @@ class Info
         $this->name = $name;
     }
 
-    /**
-     * @return \Phake\CallRecorder\Recorder
-     */
     public function getCallRecorder(): \Phake\CallRecorder\Recorder
     {
         return $this->recorder;
     }
 
-    /**
-     * @return \Phake\Stubber\StubMapper
-     */
     public function getStubMapper(): \Phake\Stubber\StubMapper
     {
         return $this->mapper;
     }
 
-    /**
-     * @return \Phake\Stubber\IAnswer
-     */
     public function getDefaultAnswer(): \Phake\Stubber\IAnswer
     {
         return $this->answer;
     }
 
-    /**
-     * @return bool
-     */
     public function isObjectFrozen(): bool
     {
         return $this->frozen;
     }
 
-    /**
-     * @return void
-     */
     public function freezeObject(): void
     {
         $this->frozen = true;
     }
 
-    /**
-     * @return void
-     */
     public function thawObject(): void
     {
         $this->frozen = false;
     }
 
-    /**
-     * @return \Phake\ClassGenerator\InvocationHandler\IInvocationHandler|null
-     */
     public function getHandlerChain(): ?\Phake\ClassGenerator\InvocationHandler\IInvocationHandler
     {
         return $this->handlerChain;
     }
 
-    /**
-     * @return void
-     */
     public function setHandlerChain(\Phake\ClassGenerator\InvocationHandler\IInvocationHandler $handlerChain): void
     {
         $this->handlerChain = $handlerChain;
@@ -174,9 +131,6 @@ class Info
         return $this->name;
     }
 
-    /**
-     * @return void
-     */
     public function resetInfo(): void
     {
         $this->thawObject();

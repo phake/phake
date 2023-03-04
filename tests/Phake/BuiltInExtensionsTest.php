@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,11 +42,15 @@ namespace Phake;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake;
+
 use PHPUnit\Framework\TestCase;
 
 class BuiltinExtensionsTest extends TestCase
 {
-    public function testMemcachedGet()
+    public function testMemcachedGet(): void
     {
         if (!extension_loaded('memcached')) {
             $this->markTestSkipped('Cannot run test without memcached');

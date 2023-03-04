@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake;
+
 /**
  * A facade class providing functionality to interact with the Phake framework.
  *
@@ -61,9 +60,6 @@ class Facade
 
     private Mock\InfoRegistry $infoRegistry;
 
-    /**
-     * @param Mock\InfoRegistry $infoRegistry
-     */
     public function __construct(Mock\InfoRegistry $infoRegistry)
     {
         $this->infoRegistry = $infoRegistry;
@@ -72,14 +68,9 @@ class Facade
     /**
      * Creates a new mock class than can be stubbed and verified.
      *
-     * @param string|array<string>     $mockedClassList - The name(s) of the class to mock
-     * @param ClassGenerator\MockClass $mockGenerator - The generator used to construct mock classes
-     * @param CallRecorder\Recorder    $callRecorder
-     * @param Stubber\IAnswer          $defaultAnswer
-     * @param array                    $constructorArgs
+     * @param class-string|array<class-string> $mockedClassList
      *
      * @throws \InvalidArgumentException
-     * @return IMock
      */
     public function mock(
         string|array $mockedClassList,
@@ -113,9 +104,6 @@ class Facade
         );
     }
 
-    /**
-     * @return void
-     */
     public function resetStaticInfo(): void
     {
         $this->infoRegistry->resetAll();
@@ -125,8 +113,6 @@ class Facade
      * Generates a unique class name based on a given name.
      *
      * The $base will be used as the prefix for the new class name.
-     *
-     * @psalm-suppress MoreSpecificReturnType
      *
      * @param array<class-string> $bases
      *

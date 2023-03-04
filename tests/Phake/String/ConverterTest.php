@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\String;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,11 @@ namespace Phake\String;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\String;
+
+use Phake;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -56,10 +56,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ConverterTest extends TestCase
 {
-    /**
-     * @var Phake\String\Converter
-     */
-    private $converter;
+    private Converter $converter;
 
     /**
      * Sets up the mock generator
@@ -69,22 +66,22 @@ class ConverterTest extends TestCase
         $this->converter = new Converter();
     }
 
-    public function testObjectConversion()
+    public function testObjectConversion(): void
     {
         $this->assertEquals('<object:stdClass>', $this->converter->convertToString(new \stdClass()));
     }
 
-    public function testArrayConversion()
+    public function testArrayConversion(): void
     {
         $this->assertEquals('<array>', $this->converter->convertToString([]));
     }
 
-    public function testNullConversion()
+    public function testNullConversion(): void
     {
         $this->assertEquals('<null>', $this->converter->convertToString(null));
     }
 
-    public function testResourceConversion()
+    public function testResourceConversion(): void
     {
         $dir = opendir('/tmp');
         try {
@@ -97,23 +94,23 @@ class ConverterTest extends TestCase
         closedir($dir);
     }
 
-    public function testBoolConversion()
+    public function testBoolConversion(): void
     {
         $this->assertEquals('<boolean:true>', $this->converter->convertToString(true));
         $this->assertEquals('<boolean:false>', $this->converter->convertToString(false));
     }
 
-    public function testStringConversion()
+    public function testStringConversion(): void
     {
         $this->assertEquals('<string:foo>', $this->converter->convertToString('foo'));
     }
 
-    public function testIntConversion()
+    public function testIntConversion(): void
     {
         $this->assertEquals('<integer:42>', $this->converter->convertToString(42));
     }
 
-    public function testFloatConversion()
+    public function testFloatConversion(): void
     {
         $this->assertEquals('<double:42.01>', $this->converter->convertToString(42.01));
     }

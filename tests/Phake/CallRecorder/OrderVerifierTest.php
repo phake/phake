@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\CallRecorder;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\CallRecorder;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\CallRecorder;
+
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -54,10 +53,7 @@ use PHPUnit\Framework\TestCase;
  */
 class OrderVerifierTest extends TestCase
 {
-    /**
-     * @var OrderVerifier
-     */
-    private $verifier;
+    private OrderVerifier $verifier;
 
     /**
      * Sets up the test fixture
@@ -70,7 +66,7 @@ class OrderVerifierTest extends TestCase
     /**
      * Tests that in order items validate.
      */
-    public function testInOrderValidation()
+    public function testInOrderValidation(): void
     {
         $position1 = [new Position(1)];
         $position2 = [new Position(2)];
@@ -82,7 +78,7 @@ class OrderVerifierTest extends TestCase
     /**
      * Tests that out of order items don't validate.
      */
-    public function testOutOfOrderValidation()
+    public function testOutOfOrderValidation(): void
     {
         $position1 = [new Position(1)];
         $position2 = [new Position(3)];
@@ -94,7 +90,7 @@ class OrderVerifierTest extends TestCase
     /**
      * Tests that out of order items validate with multiple calls.
      */
-    public function testOutOfOrderValidationWithMultipleCalls()
+    public function testOutOfOrderValidationWithMultipleCalls(): void
     {
         $position1 = [new Position(1)];
         $position2 = [new Position(3)];

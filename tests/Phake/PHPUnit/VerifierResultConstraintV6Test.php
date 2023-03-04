@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /*
  * Phake - Mocking Framework
  *
@@ -45,13 +42,18 @@ declare(strict_types=1);
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\PHPUnit;
+
+use Phake;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Runner\Version;
 
-class Phake_PHPUnit_VerifierResultConstraintV6Test extends TestCase
+class VerifierResultConstraintV6Test extends TestCase
 {
-    private $constraint;
+    private Phake\PHPUnit\VerifierResultConstraintV6 $constraint;
 
     public function setUp(): void
     {
@@ -61,36 +63,36 @@ class Phake_PHPUnit_VerifierResultConstraintV6Test extends TestCase
         $this->constraint = new Phake\PHPUnit\VerifierResultConstraintV6();
     }
 
-    public function testExtendsPHPUnitConstraint()
+    public function testExtendsPHPUnitConstraint(): void
     {
         $this->assertInstanceOf(\PHPUnit\Framework\Constraint\Constraint::class, $this->constraint);
     }
 
-    public function testEvaluateReturnsTrueIfVerifyResultIsTrue()
+    public function testEvaluateReturnsTrueIfVerifyResultIsTrue(): void
     {
         $result = new Phake\CallRecorder\VerifierResult(true, []);
         $this->assertTrue($this->constraint->evaluate($result, '', true));
     }
 
-    public function testEvaluateReturnsFalseWhenVerifierReturnsFalse()
+    public function testEvaluateReturnsFalseWhenVerifierReturnsFalse(): void
     {
         $result = new Phake\CallRecorder\VerifierResult(false, []);
         $this->assertFalse($this->constraint->evaluate($result, '', true));
     }
 
-    public function testEvaluateThrowsWhenArgumentIsNotAResult()
+    public function testEvaluateThrowsWhenArgumentIsNotAResult(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
 
         $this->constraint->evaluate('');
     }
 
-    public function testToString()
+    public function testToString(): void
     {
         $this->assertEquals('is called', $this->constraint->toString());
     }
 
-    public function testCustomFailureDescriptionReturnsDescriptionFromResult()
+    public function testCustomFailureDescriptionReturnsDescriptionFromResult(): void
     {
         $result = new Phake\CallRecorder\VerifierResult(false, [], 'The call failed!');
 
@@ -102,9 +104,9 @@ class Phake_PHPUnit_VerifierResultConstraintV6Test extends TestCase
         }
     }
 
-    public function testFailThrowsWhenArgumentIsNotAResult()
+    public function testFailThrowsWhenArgumentIsNotAResult(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
 
         $this->constraint->evaluate('', '');
     }

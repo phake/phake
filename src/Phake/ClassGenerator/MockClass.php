@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\ClassGenerator;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\ClassGenerator;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\ClassGenerator;
+
 /**
  * Creates and executes the code necessary to create a mock class.
  *
@@ -63,10 +62,6 @@ class MockClass
 
     private IInstantiator $instantiator;
 
-    /**
-     * @param ILoader|null $loader
-     * @param IInstantiator|null $instantiator
-     */
     public function __construct(?ILoader $loader = null, ?IInstantiator $instantiator = null)
     {
         $this->loader = $loader ?: new EvalLoader();
@@ -76,13 +71,8 @@ class MockClass
     /**
      * Generates a new class with the given class name
      *
-     * @psalm-suppress InvalidPropertyFetch
-     *
-     * @param class-string $newClassName - The name of the new class
-     * @param class-string|array<class-string> $mockedClassName - The name of the class being mocked
-     * @param \Phake\Mock\InfoRegistry $infoRegistry
-     *
-     * @return void
+     * @param class-string $newClassName
+     * @param class-string|array<class-string> $mockedClassName
      */
     public function generate(string $newClassName, string|array $mockedClassName, \Phake\Mock\InfoRegistry $infoRegistry): void
     {
@@ -150,7 +140,6 @@ class MockClass
         }
 
         /** @var class-string $mockedClassName */
-
         $classDef = "
 class {$newClassName} {$extends}
 	implements \Phake\IMock {$implements}
@@ -182,8 +171,6 @@ class {$newClassName} {$extends}
     /**
      * @param class-string $newClassName
      * @param class-string $mockedClassName
-     * @param string $classDef
-     * @return void
      */
     private function loadClass(string $newClassName, string $mockedClassName, string $classDef): void
     {
@@ -202,15 +189,7 @@ class {$newClassName} {$extends}
     /**
      * Instantiates a new instance of the given mocked class, and configures Phake data structures on said object.
      *
-     * @psalm-suppress NoInterfaceProperties
-     *
-     * @param class-string                 $newClassName
-     * @param \Phake\CallRecorder\Recorder $recorder
-     * @param \Phake\Stubber\StubMapper    $mapper
-     * @param \Phake\Stubber\IAnswer       $defaultAnswer
-     * @param array                       $constructorArgs
-     *
-     * @return \Phake\IMock of type $newClassName
+     * @param class-string $newClassName
      */
     public function instantiate(
         string $newClassName,
@@ -235,11 +214,8 @@ class {$newClassName} {$extends}
     /**
      * Generate mock implementations of all public and protected methods in the mocked class.
      *
-     * @param \ReflectionClass      $mockedClass
      * @param \ReflectionClass[]    $mockedInterfaces
      * @param array<string, string> $implementedMethods
-     *
-     * @return string
      */
     protected function generateMockedMethods(\ReflectionClass $mockedClass, array $mockedInterfaces = [], array &$implementedMethods = []): string
     {
@@ -263,10 +239,6 @@ class {$newClassName} {$extends}
         return $methodDefs;
     }
 
-
-    /**
-     * @return bool
-     */
     private function isConstructorDefinedInInterface(\ReflectionClass $mockedClass): bool
     {
         $constructor = $mockedClass->getConstructor();
@@ -285,8 +257,8 @@ class {$newClassName} {$extends}
             return true;
         }
 
-        /* @var \ReflectionClass $interface */
         foreach ($reflectionClass->getInterfaces() as $interface) {
+            assert($interface instanceof \ReflectionClass);
             if (null !== $interface->getConstructor() || $interface->hasMethod('__construct')) {
                 return true;
             }
@@ -297,13 +269,9 @@ class {$newClassName} {$extends}
             return $this->isConstructorDefinedInInterface($parent);
         }
 
-
         return false;
     }
 
-    /**
-     * @return bool
-     */
     private function isConstructorDefinedAndFinal(\ReflectionClass $mockedClass): bool
     {
         $constructor = $mockedClass->getConstructor();
@@ -314,9 +282,6 @@ class {$newClassName} {$extends}
         return false;
     }
 
-    /**
-     * @return string
-     */
     private function generateSafeConstructorOverride(array $mockedClasses): string
     {
         $realClass = null;
@@ -332,25 +297,19 @@ class {$newClassName} {$extends}
             }
         }
         if ($overrideConstructor && !empty($realClass)) {
-            $constructorDef = "
+            return "
 	public function __construct()
 	{
 	    {$this->getConstructorChaining($realClass)}
 	}
 ";
-            return $constructorDef;
         }
-
 
         return '';
     }
 
-
     /**
      * Creates the constructor implementation
-     *
-     * @param \ReflectionClass $originalClass
-     * @return string
      */
     protected function getConstructorChaining(\ReflectionClass $originalClass): string
     {
@@ -366,12 +325,6 @@ class {$newClassName} {$extends}
 
     /**
      * Creates the implementation of a single method
-     *
-     * @psalm-suppress PossiblyNullArgument
-     * @param \ReflectionMethod $method
-     * @param bool             $static
-     *
-     * @return string
      */
     protected function implementMethod(\ReflectionMethod $method, bool $static = false): string
     {
@@ -447,10 +400,6 @@ class {$newClassName} {$extends}
 
     /**
      * Generates the code for all the parameters of a given method.
-     *
-     * @param \ReflectionMethod $method
-     *
-     * @return string
      */
     protected function generateMethodParameters(\ReflectionMethod $method): string
     {
@@ -464,10 +413,6 @@ class {$newClassName} {$extends}
 
     /**
      * Generates the code for all the parameters of a given method.
-     *
-     * @param \ReflectionMethod $method
-     *
-     * @return string
      */
     protected function copyMethodParameters(\ReflectionMethod $method): string
     {
@@ -477,7 +422,7 @@ class {$newClassName} {$extends}
         foreach ($method->getParameters() as $parameter) {
             $pos = $parameter->getPosition();
             if ($parameter->isVariadic()) {
-                $parameterCount--;
+                --$parameterCount;
                 $variadicParameter = $parameter->getName();
                 break;
             }
@@ -500,11 +445,6 @@ class {$newClassName} {$extends}
 
     /**
      * Generate the code for an individual type
-     *
-     * @param \ReflectionType $type
-     * @param \ReflectionClass $selfClass
-     *
-     * @return string
      */
     private function reflectionTypeToString(\ReflectionType $type, \ReflectionClass $selfClass): string
     {
@@ -538,16 +478,12 @@ class {$newClassName} {$extends}
             }
             $result = implode('&', $types);
         }
+
         return $nullable . $result;
     }
 
     /**
      * Generates the code for an individual method parameter.
-     *
-     * @psalm-suppress PossiblyNullArgument
-     * @param \ReflectionParameter $parameter
-     *
-     * @return string
      */
     protected function implementParameter(\ReflectionParameter $parameter): string
     {
@@ -559,7 +495,7 @@ class {$newClassName} {$extends}
                 $type = $this->reflectionTypeToString($parameter->getType(), $parameter->getDeclaringClass()) . ' ';
             }
         } catch (\ReflectionException $e) {
-            //HVVM is throwing an exception when pulling class name when said class does not exist
+            // HVVM is throwing an exception when pulling class name when said class does not exist
             if (!defined('HHVM_VERSION')) {
                 throw $e;
             }
@@ -586,18 +522,13 @@ class {$newClassName} {$extends}
 
     /**
      * @param class-string $className
-     * @param \Phake\CallRecorder\Recorder $recorder
-     * @param \Phake\Stubber\StubMapper $mapper
-     * @param \Phake\Stubber\IAnswer $defaultAnswer
-     * @return \Phake\Mock\Info
      */
     private function createMockInfo(
         string $className,
         \Phake\CallRecorder\Recorder $recorder,
         \Phake\Stubber\StubMapper $mapper,
         \Phake\Stubber\IAnswer $defaultAnswer
-    ): \Phake\Mock\Info
-    {
+    ): \Phake\Mock\Info {
         $info = new \Phake\Mock\Info($className, $recorder, $mapper, $defaultAnswer);
 
         $info->setHandlerChain(

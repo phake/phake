@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\CallRecorder;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,33 +42,25 @@ namespace Phake\CallRecorder;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\CallRecorder;
+
 /**
  * Provides information on the position of a given call.
  */
 class Position
 {
-    /**
-     * @var int
-     */
-    private int $position;
-
-    /**
-     * @param int $position
-     */
-    public function __construct(int $position)
-    {
-        $this->position = $position;
+    public function __construct(
+        private int $position
+    ) {
     }
 
     /**
      * Determines if this call position is after the given position
-     *
-     * @param Position $other
-     *
-     * @return boolean
      */
     public function thisIsAfter(Position $other): bool
     {
-        return ($this->position > $other->position);
+        return $this->position > $other->position;
     }
 }

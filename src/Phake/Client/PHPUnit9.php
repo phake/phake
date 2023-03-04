@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Client;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\Client;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Client;
+
 use PHPUnit\Framework\Assert;
 
 /**
@@ -75,9 +74,6 @@ class PHPUnit9 implements IClient
         Assert::assertThat(true, Assert::isTrue());
     }
 
-    /**
-     * @return \Phake\PHPUnit\VerifierResultConstraintV6
-     */
     private function getConstraint(): \Phake\PHPUnit\VerifierResultConstraintV6
     {
         return new \Phake\PHPUnit\VerifierResultConstraintV6();

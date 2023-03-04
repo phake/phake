@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Proxies;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\Proxies;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Proxies;
+
 /**
  * A proxy to handle verifying various calls to the magic __call method
  *
@@ -56,41 +55,15 @@ namespace Phake\Proxies;
  */
 class CallVerifierProxy
 {
-    /**
-     * @var \Phake\Matchers\IChainableArgumentMatcher|null
-     */
-    private ?\Phake\Matchers\IChainableArgumentMatcher $argumentMatcher;
-
-    /**
-     * @var \Phake\Client\IClient
-     */
-    private \Phake\Client\IClient $client;
-
-    /**
-     * @var bool
-     */
-    private bool $static;
-
-    /**
-     * @param \Phake\Matchers\IChainableArgumentMatcher|null $argumentMatcher
-     * @param \Phake\Client\IClient $client
-     * @param bool $static
-     */
-    public function __construct(?\Phake\Matchers\IChainableArgumentMatcher $argumentMatcher, \Phake\Client\IClient $client, bool $static)
-    {
-        $this->argumentMatcher = $argumentMatcher;
-        $this->client = $client;
-        $this->static = $static;
+    public function __construct(
+        private ?\Phake\Matchers\IChainableArgumentMatcher $argumentMatcher,
+        private \Phake\Client\IClient $client,
+        private bool $static
+    ) {
     }
-
 
     /**
      * Verifies that the call to __call was made on the given object with the parameters passed into the constructor
-     *
-     * @param \Phake\IMock                      $obj
-     * @param \Phake\CallRecorder\IVerifierMode $verifierMode
-     *
-     * @return array
      */
     public function isCalledOn(\Phake\IMock $obj, ?\Phake\CallRecorder\IVerifierMode $verifierMode = null): array
     {
@@ -98,7 +71,7 @@ class CallVerifierProxy
             $verifierMode = new \Phake\CallRecorder\VerifierMode\Times(1);
         }
 
-        $context = $this->static ? get_class($obj) : $obj;
+        $context = $this->static ? $obj::class : $obj;
         $call = $this->static ? '__callStatic' : '__call';
 
         $verifier    = new \Phake\CallRecorder\Verifier(\Phake::getInfo($context)->getCallRecorder(), $obj);

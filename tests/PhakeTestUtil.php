@@ -1,6 +1,4 @@
 <?php
-
-declare(strict_types=1);
 /*
  * Phake - Mocking Framework
  *
@@ -44,26 +42,24 @@ declare(strict_types=1);
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
 /**
  * Provides some commonly used functionality for tests
  */
 class PhakeTestUtil
 {
-    public static function setCallRecorder(Phake\IMock $mock, Phake\CallRecorder\Recorder $recorder)
+    public static function setCallRecorder(Phake\IMock $mock, Phake\CallRecorder\Recorder $recorder): void
     {
         Phake::when(static::getMockedInfo($mock))->getCallRecorder()->thenReturn($recorder);
     }
 
-    public static function setStubMapper(Phake\IMock $mock, Phake\Stubber\StubMapper $stubMapper)
+    public static function setStubMapper(Phake\IMock $mock, Phake\Stubber\StubMapper $stubMapper): void
     {
         Phake::when(static::getMockedInfo($mock))->getStubMapper()->thenReturn($stubMapper);
     }
 
-    /**
-     * @param Phake\IMock $mock
-     * @return Phake\Mock\Info
-     */
-    public static function getMockedInfo(Phake\IMock $mock)
+    public static function getMockedInfo(Phake\IMock $mock): Phake\Mock\Info
     {
         if (empty($mock->__PHAKE_info)) {
             $mock->__PHAKE_info = Phake::mock(Phake\Mock\Info::class);

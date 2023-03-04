@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Stubber\Answers;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\Stubber\Answers;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Stubber\Answers;
+
 use Phake;
 use PHPUnit\Framework\TestCase;
 
@@ -55,10 +54,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ParentDelegateTest extends TestCase
 {
-    /**
-     * @var Phake\Stubber\Answers\ParentDelegate
-     */
-    private $delegate;
+    private ParentDelegate $delegate;
 
     /**
      * Sets up the test fixture
@@ -71,9 +67,9 @@ class ParentDelegateTest extends TestCase
     /**
      * Tets that the delegate returns a callback to the parent class.
      */
-    public function testThatDelegateReturnsCorrectCallback()
+    public function testThatDelegateReturnsCorrectCallback(): void
     {
-        $m = Phake::mock('PhakeTest_MockedClass');
+        $m = Phake::mock(\PhakeTest_MockedClass::class);
         $callback = $this->delegate->getAnswerCallback($m, 'fooWithReturnValue');
 
         if (defined('HHVM_VERSION')) {
@@ -86,7 +82,7 @@ class ParentDelegateTest extends TestCase
     /**
      * Tests that processAnswer will set the captured value
      */
-    public function testProcessAnswerSetsCapturedValue()
+    public function testProcessAnswerSetsCapturedValue(): void
     {
         $value    = null;
         $delegate = new ParentDelegate($value);
@@ -95,58 +91,58 @@ class ParentDelegateTest extends TestCase
         $this->assertEquals('test', $value);
     }
 
-    public function testFallbackReturnNull()
+    public function testFallbackReturnNull(): void
     {
         $this->assertNull($this->delegate->getFallback());
     }
 
-    public function testGetAnswerCallbackReturnsFallbackOnMethodsWithNoParents()
+    public function testGetAnswerCallbackReturnsFallbackOnMethodsWithNoParents(): void
     {
-        $abstractMock = Phake::mock('PhakeTest_AbstractClass');
+        $abstractMock = Phake::mock(\PhakeTest_AbstractClass::class);
         $callback = $this->delegate->getAnswerCallback($abstractMock, 'bar');
 
         $this->assertEquals([$this->delegate, 'getFallback'], $callback);
     }
 
-    public function testGetCallbackReturnsFallbackOnClassesWithNoParents()
+    public function testGetCallbackReturnsFallbackOnClassesWithNoParents(): void
     {
-        $callback = $this->delegate->getAnswerCallback('PhakeTest_MockedClass', 'foo');
+        $callback = $this->delegate->getAnswerCallback(\PhakeTest_MockedClass::class, 'foo');
 
         $this->assertEquals([$this->delegate, 'getFallback'], $callback);
     }
 
-    public function testGetCallbackReturnsFallbackOnClassesWithNoMethod()
+    public function testGetCallbackReturnsFallbackOnClassesWithNoMethod(): void
     {
-        $callback = $this->delegate->getAnswerCallback('PhakeTest_ExtendedMockedConstructedClass', 'methodThatDoesntExist');
+        $callback = $this->delegate->getAnswerCallback(\PhakeTest_ExtendedMockedConstructedClass::class, 'methodThatDoesntExist');
 
         $this->assertEquals([$this->delegate, 'getFallback'], $callback);
     }
 
-    public function testGetCallbackReturnsFallbackClassThatDoesntExist()
+    public function testGetCallbackReturnsFallbackClassThatDoesntExist(): void
     {
         $callback = $this->delegate->getAnswerCallback('ClassThatDoesntExist', 'methodThatDoesntExist');
 
         $this->assertEquals([$this->delegate, 'getFallback'], $callback);
     }
 
-    public function testCallBackCanCallPrivateInTheParent()
+    public function testCallBackCanCallPrivateInTheParent(): void
     {
         if (defined('HHVM_VERSION')) {
             $this->markTestSkipped("Can't call private methods with hhvm");
         }
 
-        $callback = $this->delegate->getAnswerCallback(Phake::mock('PhakeTest_MockedClass'), 'privateFunc');
+        $callback = $this->delegate->getAnswerCallback(Phake::mock(\PhakeTest_MockedClass::class), 'privateFunc');
 
         $this->assertEquals('blah', call_user_func($callback, []));
     }
 
-    public function testCallBackCanCallPrivateStaticInTheParent()
+    public function testCallBackCanCallPrivateStaticInTheParent(): void
     {
         if (defined('HHVM_VERSION')) {
             $this->markTestSkipped("Can't call private methods with hhvm");
         }
 
-        $callback = $this->delegate->getAnswerCallback(Phake::mock('PhakeTest_MockedClass'), 'privateStaticFunc');
+        $callback = $this->delegate->getAnswerCallback(Phake::mock(\PhakeTest_MockedClass::class), 'privateStaticFunc');
 
         $this->assertEquals('blah static', call_user_func($callback, []));
     }

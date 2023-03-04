@@ -1,6 +1,4 @@
 <?php
-
-declare(strict_types=1);
 /*
  * Phake - Mocking Framework
  *
@@ -43,6 +41,8 @@ declare(strict_types=1);
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link       http://www.digitalsandwich.com/
  */
+
+declare(strict_types=1);
 
 /**
  * Phake - PHP Test Doubles Framework
@@ -130,8 +130,6 @@ class Phake
     /**
      * Create a Phake\Matchers\Factory that we can re-use multiple times. Creating too many
      * instances of this object is expensive.
-     *
-     * @return Phake\Matchers\Factory
      */
     private static function getMatchersFactory(): Phake\Matchers\Factory
     {
@@ -144,11 +142,6 @@ class Phake
 
     /**
      * Creates a new verifier for the given mock object.
-     *
-     * @param Phake\IMock                           $mock
-     * @param Phake\CallRecorder\IVerifierMode|null $mode
-     *
-     * @return Phake\Proxies\VerifierProxy
      */
     public static function verify(Phake\IMock $mock, ?Phake\CallRecorder\IVerifierMode $mode = null): Phake\Proxies\VerifierProxy
     {
@@ -164,11 +157,6 @@ class Phake
 
     /**
      * Creates a new verifier for the given mock object.
-     *
-     * @param Phake\IMock                           $mock
-     * @param Phake\CallRecorder\IVerifierMode|null $mode
-     *
-     * @return Phake\Proxies\VerifierProxy
      */
     public static function verifyStatic(Phake\IMock $mock, Phake\CallRecorder\IVerifierMode $mode = null): Phake\Proxies\VerifierProxy
     {
@@ -182,13 +170,8 @@ class Phake
         return new Phake\Proxies\VerifierProxy($verifier, self::getMatchersFactory(), $mode, self::getClient());
     }
 
-
     /**
      * Creates a new verifier for verifying the magic __call method
-     *
-     * @param mixed ...$arguments A vararg containing the expected arguments for this call
-     *
-     * @return Phake\Proxies\CallVerifierProxy
      */
     public static function verifyCallMethodWith(mixed ...$arguments): Phake\Proxies\CallVerifierProxy
     {
@@ -201,10 +184,6 @@ class Phake
 
     /**
      * Creates a new verifier for verifying the magic __call method
-     *
-     * @param mixed ...$arguments A vararg containing the expected arguments for this call
-     *
-     * @return Phake\Proxies\CallVerifierProxy
      */
     public static function verifyStaticCallMethodWith(mixed ...$arguments): Phake\Proxies\CallVerifierProxy
     {
@@ -217,8 +196,6 @@ class Phake
 
     /**
      * Allows verification of methods in a particular order
-     * @param array ...$calls
-     * @return void
      */
     public static function inOrder(array ...$calls): void
     {
@@ -232,9 +209,6 @@ class Phake
 
     /**
      * Allows for verifying that a mock object has no further calls made to it.
-     *
-     * @param Phake\IMock ...$mocks
-     * @return void
      */
     public static function verifyNoFurtherInteraction(Phake\IMock ...$mocks): void
     {
@@ -248,9 +222,6 @@ class Phake
 
     /**
      * Allows for verifying that no interaction occurred with a mock object
-     *
-     * @param Phake\IMock ...$mocks
-     * @return void
      */
     public static function verifyNoInteraction(Phake\IMock ...$mocks): void
     {
@@ -268,9 +239,6 @@ class Phake
     /**
      * Allows for verifying that no other interaction occurred with a mock object outside of what has already been
      * verified
-     *
-     * @param Phake\IMock ...$mocks
-     * @return void
      */
     public static function verifyNoOtherInteractions(Phake\IMock ...$mocks): void
     {
@@ -287,10 +255,6 @@ class Phake
 
     /**
      * Converts a bunch of call info objects to position objects.
-     *
-     * @param array $calls
-     *
-     * @return array
      */
     private static function pullPositionsFromCallInfos(array $calls): array
     {
@@ -302,15 +266,12 @@ class Phake
             }
             $transformed[] = $transformedList;
         }
+
         return $transformed;
     }
 
     /**
      * Returns a new stubber for the given mock object.
-     *
-     * @param Phake\IMock $mock
-     *
-     * @return Phake\Proxies\StubberProxy
      */
     public static function when(Phake\IMock $mock): Phake\Proxies\StubberProxy
     {
@@ -319,10 +280,6 @@ class Phake
 
     /**
      * Returns a new static stubber for the given mock object.
-     *
-     * @param Phake\IMock $mock
-     *
-     * @return Phake\Proxies\StubberProxy
      */
     public static function whenStatic(Phake\IMock $mock): Phake\Proxies\StubberProxy
     {
@@ -331,10 +288,6 @@ class Phake
 
     /**
      * Returns a new stubber specifically for the __call() method
-     *
-     * @param mixed ...$arguments A vararg containing the expected arguments for this call
-     *
-     * @return Phake\Proxies\CallStubberProxy
      */
     public static function whenCallMethodWith(mixed ...$arguments): Phake\Proxies\CallStubberProxy
     {
@@ -345,10 +298,6 @@ class Phake
 
     /**
      * Returns a new stubber specifically for the __call() method
-     *
-     * @param mixed ...$arguments A vararg containing the expected arguments for this call
-     *
-     * @return Phake\Proxies\CallStubberProxy
      */
     public static function whenStaticCallMethodWith(mixed ...$arguments): Phake\Proxies\CallStubberProxy
     {
@@ -359,9 +308,6 @@ class Phake
 
     /**
      * Resets all calls and stubs on the given mock object
-     *
-     * @param Phake\IMock $mock
-     * @return void
      */
     public static function reset(Phake\IMock $mock): void
     {
@@ -370,20 +316,17 @@ class Phake
 
     /**
      * Resets all calls and stubs on the given mock object and return the original class name
-     *
-     * @param Phake\IMock $mock
-     * @return string $name
      */
     public static function resetStatic(Phake\IMock $mock): string
     {
         $info = self::getInfo(get_class($mock));
         $info->resetInfo();
+
         return $info->getName();
     }
 
     /**
      * Resets all static calls, should be ran on tear downs
-     * @return void
      */
     public static function resetStaticInfo(): void
     {
@@ -392,18 +335,14 @@ class Phake
 
     /**
      * Provides methods for creating answers. Used in the api as a fluent way to set default stubs.
-     * @return Phake\Proxies\AnswerBinderProxy
      */
     public static function ifUnstubbed(): Phake\Proxies\AnswerBinderProxy
     {
         $binder = new Phake\Stubber\SelfBindingAnswerBinder();
+
         return new Phake\Proxies\AnswerBinderProxy($binder);
     }
 
-    /**
-     * @param Phake\Facade $phake
-     * @return void
-     */
     public static function setPhake(Phake\Facade $phake): void
     {
         self::$phake = $phake;
@@ -412,8 +351,6 @@ class Phake
     /**
      * @psalm-suppress NullableReturnStatement
      * @psalm-suppress InvalidNullableReturnType
-     *
-     * @return Phake\Facade
      */
     public static function getPhake(): Phake\Facade
     {
@@ -424,9 +361,6 @@ class Phake
         return self::$phake;
     }
 
-    /**
-     * @return Phake\Facade
-     */
     public static function createPhake(): Phake\Facade
     {
         return new Phake\Facade(new Phake\Mock\InfoRegistry());
@@ -434,10 +368,6 @@ class Phake
 
     /**
      * Returns an equals matcher for the given value.
-     *
-     * @param mixed $value
-     *
-     * @return Phake\Matchers\EqualsMatcher
      */
     public static function equalTo(mixed $value): Phake\Matchers\EqualsMatcher
     {
@@ -446,25 +376,16 @@ class Phake
 
     /**
      * Returns a capturing matcher that will set the value of a given argument to given variable.
-     *
-     * @param mixed $value - Will be set to the value of the called argument.
-     *
-     * @return Phake\Matchers\ArgumentCaptor
      */
     public static function capture(mixed &$value): Phake\Matchers\ArgumentCaptor
     {
         return new Phake\Matchers\ArgumentCaptor($value);
     }
 
-
     /**
      * Returns a capturing matcher that is bound to store ALL of its calls in the variable passed in.
      *
      * $value will initially be set to an empty array;
-     *
-     * @param mixed $value - Will be set to the value of the called argument.
-     *
-     * @return Phake\Matchers\ArgumentCaptor
      */
     public static function captureAll(mixed &$value): Phake\Matchers\ArgumentCaptor
     {
@@ -478,10 +399,6 @@ class Phake
     /**
      * Returns a setter matcher that will set a reference parameter passed in as an argument to the
      * given value.
-     *
-     * @param mixed $value - Will be written the reference parameter used by the calling method.
-     *
-     * @return Phake\Matchers\ReferenceSetter
      */
     public static function setReference(mixed $value): Phake\Matchers\ReferenceSetter
     {
@@ -492,10 +409,6 @@ class Phake
      * Allows verifying an exact number of invocations.
      *
      * @psalm-suppress RedundantCastGivenDocblockType
-     *
-     * @param int $count
-     *
-     * @return Phake\CallRecorder\IVerifierMode
      */
     public static function times(int $count): Phake\CallRecorder\IVerifierMode
     {
@@ -504,7 +417,6 @@ class Phake
 
     /**
      * Allows verifying that there were no invocations. Alias of <code>times(0)</code>.
-     * @return Phake\CallRecorder\IVerifierMode
      */
     public static function never(): Phake\CallRecorder\IVerifierMode
     {
@@ -515,10 +427,6 @@ class Phake
      * Allows verifying at least <code>$count</code> invocations.
      *
      * @psalm-suppress RedundantCastGivenDocblockType
-     *
-     * @param int $count
-     *
-     * @return Phake\CallRecorder\IVerifierMode
      */
     public static function atLeast(int $count): Phake\CallRecorder\IVerifierMode
     {
@@ -529,10 +437,6 @@ class Phake
      * Allows verifying at most <code>$count</code> invocations.
      *
      * @psalm-suppress RedundantCastGivenDocblockType
-     *
-     * @param int $count
-     *
-     * @return Phake\CallRecorder\IVerifierMode
      */
     public static function atMost(int $count): Phake\CallRecorder\IVerifierMode
     {
@@ -541,8 +445,6 @@ class Phake
 
     /**
      * Returns an any parameters matcher to allow matching all invocations of a particular method.
-     *
-     * @return Phake\Matchers\AnyParameters
      */
     public static function anyParameters(): Phake\Matchers\AnyParameters
     {
@@ -551,8 +453,6 @@ class Phake
 
     /**
      * Returns an any parameters matcher to allow matching all invocations of a particular method.
-     *
-     * @return Phake\Matchers\IgnoreRemainingMatcher
      */
     public static function ignoreRemaining(): Phake\Matchers\IgnoreRemainingMatcher
     {
@@ -561,8 +461,6 @@ class Phake
 
     /**
      * Returns the client currently being used by Phake
-     *
-     * @return Phake\Client\IClient
      */
     public static function getClient(): Phake\Client\IClient
     {
@@ -576,8 +474,10 @@ class Phake
                     return self::$client = new \Phake\Client\PHPUnit8();
                 }
             }
+
             return self::$client = new Phake\Client\DefaultClient();
         }
+
         return self::$client;
     }
 
@@ -585,9 +485,6 @@ class Phake
      * Sets the client currently being used by Phake.
      *
      * Accepts either an instance of a Phake\Client\IClient object OR a string identifying such an object.
-     *
-     * @param Phake\Client\IClient|string|null $client
-     * @return void
      */
     public static function setClient(Phake\Client\IClient|string|null $client): void
     {
@@ -604,9 +501,6 @@ class Phake
         }
     }
 
-    /**
-     * @return Phake\ClassGenerator\MockClass
-     */
     public static function getMockClassGenerator(): Phake\ClassGenerator\MockClass
     {
         if (!isset(self::$classGenerator)) {
@@ -619,8 +513,6 @@ class Phake
     /**
      * @psalm-suppress NullableReturnStatement
      * @psalm-suppress InvalidNullableReturnType
-     *
-     * @return Phake\ClassGenerator\ILoader
      */
     public static function getMockLoader(): Phake\ClassGenerator\ILoader
     {
@@ -631,9 +523,6 @@ class Phake
         return self::$loader;
     }
 
-    /**
-     * @return void
-     */
     public static function setMockLoader(Phake\ClassGenerator\ILoader $loader): void
     {
         self::$classGenerator = null;
@@ -643,8 +532,6 @@ class Phake
     /**
      * @psalm-suppress NullableReturnStatement
      * @psalm-suppress InvalidNullableReturnType
-     *
-     * @return Phake\ClassGenerator\IInstantiator
      */
     public static function getMockInstantiator(): Phake\ClassGenerator\IInstantiator
     {
@@ -655,19 +542,12 @@ class Phake
         return self::$instantiator;
     }
 
-    /**
-     * @return void
-     */
     public static function setMockInstantiator(Phake\ClassGenerator\IInstantiator $instantiator): void
     {
         self::$classGenerator = null;
         self::$instantiator = $instantiator;
     }
 
-    /**
-     * @param object $obj
-     * @return void
-     */
     public static function initAnnotations(object $obj): void
     {
         $initializer = new Phake\Annotation\MockInitializer();
@@ -678,9 +558,7 @@ class Phake
      * Used internally to validate mocks.
      *
      * @internal
-     * @param object|string $mock
      * @throws InvalidArgumentException
-     * @return void
      */
     public static function assertValidMock(object|string $mock): void
     {
@@ -704,11 +582,11 @@ class Phake
      * @internal
      * @param Phake\IMock|class-string $mock
      * @throws InvalidArgumentException
-     * @return string
      */
     public static function getName(Phake\IMock|string $mock): string
     {
         static::assertValidMock($mock);
+
         return $mock::__PHAKE_name;
     }
 
@@ -721,27 +599,23 @@ class Phake
      * @internal
      * @param Phake\IMock|class-string $mock
      * @throws InvalidArgumentException
-     * @return Phake\Mock\Info
      */
     public static function getInfo(Phake\IMock|string $mock): Phake\Mock\Info
     {
         static::assertValidMock($mock);
         if ($mock instanceof Phake\IMock) {
             assert(isset($mock->__PHAKE_info));
+
             return $mock->__PHAKE_info;
         }
 
         assert(isset($mock::$__PHAKE_staticInfo));
+
         return $mock::$__PHAKE_staticInfo;
     }
 
     /**
      * Increases allows calling private and protected instance methods on the given mock.
-     *
-     * @psalm-suppress InternalMethod
-     *
-     * @param Phake\IMock $mock
-     * @return Phake\Proxies\VisibilityProxy $mock
      */
     public static function makeVisible(Phake\IMock $mock): Phake\Proxies\VisibilityProxy
     {
@@ -750,11 +624,6 @@ class Phake
 
     /**
      * Increases allows calling private and protected static methods on the given mock.
-     *
-     * @psalm-suppress InternalMethod
-     *
-     * @param Phake\IMock $mock
-     * @return Phake\Proxies\StaticVisibilityProxy $mock
      */
     public static function makeStaticsVisible(Phake\IMock $mock): Phake\Proxies\StaticVisibilityProxy
     {

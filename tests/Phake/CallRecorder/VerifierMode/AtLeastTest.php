@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\CallRecorder\VerifierMode;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,7 +42,10 @@ namespace Phake\CallRecorder\VerifierMode;
  * @link       http://www.digitalsandwich.com/
  */
 
-use Phake;
+declare(strict_types=1);
+
+namespace Phake\CallRecorder\VerifierMode;
+
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -55,7 +53,7 @@ use PHPUnit\Framework\TestCase;
  */
 class AtLeastTest extends TestCase
 {
-    private $verifierModeAtLeast;
+    private AtLeast $verifierModeAtLeast;
 
     public function setUp(): void
     {
@@ -65,7 +63,7 @@ class AtLeastTest extends TestCase
     /**
      * Tests that the verifier passes if there are exactly enough items.
      */
-    public function testVerifyMatches()
+    public function testVerifyMatches(): void
     {
         // Will throw an exception if it wasn't working
         $matchedCalls = ['1item'];
@@ -75,7 +73,7 @@ class AtLeastTest extends TestCase
     /**
      * Tests that the verifier passes if there are more than enough items.
      */
-    public function testVerifyOver()
+    public function testVerifyOver(): void
     {
         $matchedCalls = ['1item', '2items'];
         $this->assertTrue($this->verifierModeAtLeast->verify($matchedCalls)->getVerified());
@@ -84,7 +82,7 @@ class AtLeastTest extends TestCase
     /**
      * Tests that the verifier fails if there weren't enough items.
      */
-    public function testVerifyUnder()
+    public function testVerifyUnder(): void
     {
         $matchedCalls = [];
         $result       = $this->verifierModeAtLeast->verify($matchedCalls);
@@ -92,7 +90,7 @@ class AtLeastTest extends TestCase
         $this->assertEquals('actually called <0> times', $result->getFailureDescription());
     }
 
-    public function testToString()
+    public function testToString(): void
     {
         $this->assertEquals('at least <1> times', $this->verifierModeAtLeast->__toString());
     }

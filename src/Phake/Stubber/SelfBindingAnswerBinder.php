@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Stubber;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\Stubber;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Stubber;
+
 /**
  * An answer binder that binds the answer to itself providing access via getAnswer()
  *
@@ -54,17 +53,10 @@ namespace Phake\Stubber;
  */
 class SelfBindingAnswerBinder implements IAnswerBinder, IAnswerContainer
 {
-    /**
-     * @var IAnswer|null
-     */
     private ?IAnswer $answer = null;
 
     /**
      * Binds the given answer to the current object.
-     *
-     * @param IAnswer $answer
-     *
-     * @return IAnswerContainer
      */
     public function bindAnswer(IAnswer $answer): IAnswerContainer
     {
@@ -75,8 +67,6 @@ class SelfBindingAnswerBinder implements IAnswerBinder, IAnswerContainer
 
     /**
      * Returns the answer bound to this object.
-     *
-     * @return IAnswer|null
      */
     public function getAnswer(): ?IAnswer
     {

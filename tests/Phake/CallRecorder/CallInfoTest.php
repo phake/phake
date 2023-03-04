@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\CallRecorder;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\CallRecorder;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\CallRecorder;
+
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -54,21 +53,11 @@ use PHPUnit\Framework\TestCase;
  */
 class CallInfoTest extends TestCase
 {
-    /**
-     * @var CallInfo
-     */
-    private $callInfo;
+    private CallInfo $callInfo;
 
-    /**
-     * @var Call
-     */
-    private $call;
+    private Call $call;
 
-    /**
-     * @var Position
-     */
-    private $position;
-
+    private Position $position;
 
     /**
      * Sets up the test fixture
@@ -81,10 +70,7 @@ class CallInfoTest extends TestCase
         $this->callInfo = new CallInfo($this->call, $this->position);
     }
 
-    /**
-     * ... :P
-     */
-    public function testGetters()
+    public function testGetters(): void
     {
         $this->assertSame($this->call, $this->callInfo->getCall());
         $this->assertSame($this->position, $this->callInfo->getPosition());

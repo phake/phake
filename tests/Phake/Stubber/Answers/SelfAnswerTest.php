@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Stubber\Answers;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,15 +42,16 @@ namespace Phake\Stubber\Answers;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Stubber\Answers;
+
 use Phake;
 use PHPUnit\Framework\TestCase;
 
 class SelfAnswerTest extends TestCase
 {
-    /**
-     * @var Phake\Stubber\Answers\SelfAnswer
-     */
-    private $answer;
+    private Phake\Stubber\Answers\SelfAnswer $answer;
 
     /**
      * Sets up the answer fixture
@@ -65,19 +61,19 @@ class SelfAnswerTest extends TestCase
         $this->answer = new SelfAnswer();
     }
 
-    public function testAnswer()
+    public function testAnswer(): void
     {
-        $testObj = Phake::mock('PhakeTest_MockedClass');
+        $testObj = Phake::mock(\PhakeTest_MockedClass::class);
         $callback = $this->answer->getAnswerCallback($testObj, 'foo');
 
         $this->assertSame($testObj, call_user_func_array($callback, []));
     }
 
-    public function testThrowsOnStatic()
+    public function testThrowsOnStatic(): void
     {
         $this->expectException(InvalidAnswerException::class);
 
-        $testObj = 'PhakeTest_StaticClass'; //class name indicates static method call
+        $testObj = \PhakeTest_StaticClass::class; // class name indicates static method call
         $this->answer->getAnswerCallback($testObj, 'staticMethod');
     }
 }

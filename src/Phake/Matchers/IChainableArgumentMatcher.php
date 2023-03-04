@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Matchers;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\Matchers;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Matchers;
+
 /**
  * An argument collection matcher that can match 0 to many parameters
  */
@@ -55,35 +54,26 @@ interface IChainableArgumentMatcher extends \Stringable
     /**
      * Assert the matcher on a given list of argument values. Throws an exception if the matcher doesn't match
      *
-     * @param array $arguments
-     *
      * @throw Exception
-     * @return void
      */
     public function doArgumentsMatch(array &$arguments): void;
 
     /**
      * returns the next matcher in the chain
-     *
-     * @return IChainableArgumentMatcher|null
      */
     public function getNextMatcher(): ?IChainableArgumentMatcher;
 
     /**
      * Sets the next matcher in the chain.
      *
-     * @param IChainableArgumentMatcher $matcher
      * @throws \InvalidArgumentException when the given matcher cannot be chained to this matcher
-     * @return void
      */
     public function setNextMatcher(IChainableArgumentMatcher $matcher): void;
 
     /**
      * Asserts whether or not this matcher can be chained to the the given matcher
      *
-     * @param IChainableArgumentMatcher $matcher
      * @throws \InvalidArgumentException When this matcher cannot be chained to the previous matcher.
-     * @return void
      */
     public function assertPreviousMatcher(IChainableArgumentMatcher $matcher): void;
 }

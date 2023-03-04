@@ -16,28 +16,22 @@ use PHPUnit\Framework\TestCase;
 
 class InfoRegistryTest extends TestCase
 {
-    /**
-     * @var InfoRegistry
-     */
-    private $registry;
+    private InfoRegistry $registry;
 
     /**
      * @Mock
-     * @var Phake\Mock\Info
      */
-    private $info1;
+    private Phake\Mock\Info $info1;
 
     /**
      * @Mock
-     * @var Phake\Mock\Info
      */
-    private $info2;
+    private Phake\Mock\Info $info2;
 
     /**
      * @Mock
-     * @var Phake\Mock\Info
      */
-    private $info3;
+    private Phake\Mock\Info $info3;
 
     public function setUp(): void
     {
@@ -48,7 +42,7 @@ class InfoRegistryTest extends TestCase
         $this->registry->addInfo($this->info3);
     }
 
-    public function testReset()
+    public function testReset(): void
     {
         $this->registry->resetAll();
 

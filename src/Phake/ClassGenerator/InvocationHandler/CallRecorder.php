@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\ClassGenerator\InvocationHandler;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,19 +42,17 @@ namespace Phake\ClassGenerator\InvocationHandler;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\ClassGenerator\InvocationHandler;
+
 /**
  * Records calls to a mock object's call recorder.
  */
 class CallRecorder implements IInvocationHandler
 {
-    /**
-     * @var \Phake\CallRecorder\Recorder
-     */
     private \Phake\CallRecorder\Recorder $callRecorder;
 
-    /**
-     * @param \Phake\CallRecorder\Recorder $callRecorder
-     */
     public function __construct(\Phake\CallRecorder\Recorder $callRecorder)
     {
         $this->callRecorder = $callRecorder;

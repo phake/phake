@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Proxies;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\Proxies;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Proxies;
+
 use Phake;
 use PHPUnit\Framework\TestCase;
 
@@ -57,15 +56,9 @@ use PHPUnit\Framework\TestCase;
  */
 class StubberProxyTest extends TestCase
 {
-    /**
-     * @var Phake\Proxies\StubberProxy
-     */
-    private $proxy;
+    private StubberProxy $proxy;
 
-    /**
-     * @var Phake\IMock
-     */
-    private $stubbable;
+    private Phake\IMock $stubbable;
 
     /**
      * Sets up test fixture
@@ -79,7 +72,7 @@ class StubberProxyTest extends TestCase
     /**
      * Tests setting a stub on a method in the stubbable object
      */
-    public function testCall()
+    public function testCall(): void
     {
         $answerBinder = $this->proxy->foo();
 
@@ -91,7 +84,7 @@ class StubberProxyTest extends TestCase
     /**
      * Tests setting a stub on a static method in the stubbable object
      */
-    public function testStaticCall()
+    public function testStaticCall(): void
     {
         $this->proxy     = new Phake\Proxies\StubberProxy(get_class($this->stubbable), new Phake\Matchers\Factory());
         $answerBinder = $this->proxy->foo();
@@ -104,7 +97,7 @@ class StubberProxyTest extends TestCase
     /**
      * Tests setting a stub with any parameters on a method in the stubbable object
      */
-    public function testGet()
+    public function testGet(): void
     {
         $answerBinder = $this->proxy->foo;
 
@@ -115,7 +108,7 @@ class StubberProxyTest extends TestCase
     /**
      * Tests setting a stub with any parameters on a method in the stubbable object
      */
-    public function testStaticGet()
+    public function testStaticGet(): void
     {
         $answerBinder = $this->proxy->foo;
 
@@ -123,9 +116,9 @@ class StubberProxyTest extends TestCase
         $this->phakeAssertAttributeInstanceOf(\Phake\Stubber\AnswerBinder::class, 'binder', $answerBinder);
     }
 
-    public function testGetWithMatcher()
+    public function testGetWithMatcher(): void
     {
-        $mock = Phake::mock('PhakeTest_MagicClass');
+        $mock = Phake::mock(\PhakeTest_MagicClass::class);
         $proxy = new StubberProxy($mock, new Phake\Matchers\Factory());
 
         $answerBinder = $proxy->__get($this->anything());
@@ -137,20 +130,20 @@ class StubberProxyTest extends TestCase
     /**
      * @dataProvider magicGetInvalidData
      */
-    public function testMagicGetWithInvalidData($invalidData, $exceptionContains)
+    public function testMagicGetWithInvalidData($invalidData, $exceptionContains): void
     {
-        $this->expectException('InvalidArgumentException');
+        $this->expectException(\InvalidArgumentException::class);
         $this->proxy->__get($invalidData);
     }
 
-    public static function magicGetInvalidData()
+    public static function magicGetInvalidData(): iterable
     {
         return [
             ['1foo', 'cannot start with an integer'],
         ];
     }
 
-    private function phakeAssertAttributeInstanceOf(string $class, string $propertyName, $object)
+    private function phakeAssertAttributeInstanceOf(string $class, string $propertyName, $object): void
     {
         $reflectionObject = new \ReflectionObject($object);
         $reflectionProperty = $reflectionObject->getProperty($propertyName);

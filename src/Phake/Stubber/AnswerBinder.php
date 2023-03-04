@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Stubber;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\Stubber;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Stubber;
+
 /**
  * Allows binding an answer to stubbable object's method.
  *
@@ -55,33 +54,16 @@ namespace Phake\Stubber;
 class AnswerBinder implements IAnswerBinder
 {
     /**
-     * @var \Phake\Matchers\MethodMatcher
-     */
-    private \Phake\Matchers\MethodMatcher $matcher;
-
-    /**
-     * @var StubMapper
-     */
-    private StubMapper $stubMapper;
-
-    /**
      * Creates a new Answer Binder
-     *
-     * @param \Phake\Matchers\MethodMatcher $matcher
-     * @param StubMapper     $stubMapper
      */
-    public function __construct(\Phake\Matchers\MethodMatcher $matcher, StubMapper $stubMapper)
-    {
-        $this->matcher    = $matcher;
-        $this->stubMapper = $stubMapper;
+    public function __construct(
+        private \Phake\Matchers\MethodMatcher $matcher,
+        private StubMapper $stubMapper
+    ) {
     }
 
     /**
      * Binds an answer to the the classes
-     *
-     * @param IAnswer $answer
-     *
-     * @return \Phake\Proxies\AnswerCollectionProxy
      */
     public function bindAnswer(IAnswer $answer): \Phake\Proxies\AnswerCollectionProxy
     {

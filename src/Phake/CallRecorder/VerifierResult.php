@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\CallRecorder;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,14 +42,15 @@ namespace Phake\CallRecorder;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\CallRecorder;
+
 /**
  * A value object containing the results of a run of verifyCall()
  */
 class VerifierResult
 {
-    /**
-     * @var bool
-     */
     private bool $verified;
 
     /**
@@ -62,15 +58,10 @@ class VerifierResult
      */
     private array $matchedCalls;
 
-    /**
-     * @var string
-     */
     private string $failureDescription;
 
     /**
-     * @param boolean               $verified
      * @param array<int, CallInfo>  $matchedCalls
-     * @param string                $failureDescription
      */
     public function __construct(bool $verified, array $matchedCalls, string $failureDescription = '')
     {
@@ -79,9 +70,6 @@ class VerifierResult
         $this->failureDescription = $failureDescription;
     }
 
-    /**
-     * @return boolean
-     */
     public function getVerified(): bool
     {
         return $this->verified;
@@ -95,9 +83,6 @@ class VerifierResult
         return $this->matchedCalls;
     }
 
-    /**
-     * @return string
-     */
     public function getFailureDescription(): string
     {
         return $this->failureDescription;

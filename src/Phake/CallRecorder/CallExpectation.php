@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\CallRecorder;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\CallRecorder;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\CallRecorder;
+
 /**
  * A call or set of calls that was expected
  */
@@ -57,26 +56,14 @@ class CallExpectation implements \Stringable
      */
     private \Phake\IMock|string $object;
 
-    /**
-     * @var string
-     */
     private string $method;
 
-    /**
-     * @var \Phake\Matchers\IChainableArgumentMatcher|null
-     */
     private ?\Phake\Matchers\IChainableArgumentMatcher $argumentMatcher;
 
-    /**
-     * @var IVerifierMode
-     */
     private IVerifierMode $verifierMode;
 
     /**
      * @param \Phake\IMock|class-string $object
-     * @param string $method
-     * @param \Phake\Matchers\IChainableArgumentMatcher|null $argumentMatcher
-     * @param IVerifierMode $verificationMode
      */
     public function __construct(
         \Phake\IMock|string $object,
@@ -90,33 +77,21 @@ class CallExpectation implements \Stringable
         $this->verifierMode     = $verificationMode;
     }
 
-    /**
-     * @return \Phake\IMock|class-string
-     */
     public function getObject(): \Phake\IMock|string
     {
         return $this->object;
     }
 
-    /**
-     * @return string
-     */
     public function getMethod(): string
     {
         return $this->method;
     }
 
-    /**
-     * @return \Phake\Matchers\IChainableArgumentMatcher|null
-     */
     public function getArgumentMatcher(): ?\Phake\Matchers\IChainableArgumentMatcher
     {
         return $this->argumentMatcher;
     }
 
-    /**
-     * @return IVerifierMode
-     */
     public function getVerifierMode(): IVerifierMode
     {
         return $this->verifierMode;

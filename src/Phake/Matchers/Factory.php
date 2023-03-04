@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Matchers;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,15 +42,16 @@ namespace Phake\Matchers;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Matchers;
+
 /**
  * Creates (or passes through) instances of IArgumentMatcher using Phake's
  * translation rules
  */
 class Factory
 {
-    /**
-     * @var \SebastianBergmann\Comparator\Factory
-     */
     private \SebastianBergmann\Comparator\Factory $comparatorFactory;
 
     public function __construct()
@@ -70,12 +66,6 @@ class Factory
      * through. If it is an instance of PHPUnit_Framework_Constraint a PHPUnit adapter is returned.
      * If it is an instance of Hamcrest_Matcher a Hamcrest adapter is returned. For everything else
      * a EqualsMatcher is returned set to the passed in value.
-     *
-     * @psalm-suppress UndefinedClass
-     *
-     * @param mixed $argument
-     *
-     * @return IChainableArgumentMatcher
      */
     public function createMatcher(mixed $argument, IChainableArgumentMatcher $nextMatcher = null): IChainableArgumentMatcher
     {
@@ -101,10 +91,6 @@ class Factory
 
     /**
      * Converts an argument array into a matcher chain
-     *
-     * @param array $arguments
-     *
-     * @return IChainableArgumentMatcher|null
      */
     public function createMatcherChain(array $arguments): ?IChainableArgumentMatcher
     {
@@ -118,6 +104,7 @@ class Factory
 
             $lastMatcher = $matcher;
         }
+
         return $lastMatcher;
     }
 }

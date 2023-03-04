@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\CallRecorder;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\CallRecorder;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\CallRecorder;
+
 /**
  * Represents a call. For use in storing with a call recorder.
  *
@@ -59,20 +58,12 @@ class Call implements \Stringable
      */
     private \Phake\IMock|string $object;
 
-    /**
-     * @var string
-     */
     private string $method;
 
-    /**
-     * @var array
-     */
     private array $arguments;
 
     /**
-     * @param class-string|\Phake\IMock $context - The object the method was called on
-     * @param string              $method - The method that was made
-     * @param array               $arguments
+     * @param class-string|\Phake\IMock $context
      */
     public function __construct(\Phake\IMock|string $context, string $method, array $arguments)
     {
@@ -89,25 +80,16 @@ class Call implements \Stringable
         return $this->object;
     }
 
-    /**
-     * @return string
-     */
     public function getMethod(): string
     {
         return $this->method;
     }
 
-    /**
-     * @return array
-     */
     public function getArguments(): array
     {
         return $this->arguments;
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         $converter = new \Phake\String\Converter();
@@ -118,6 +100,7 @@ class Call implements \Stringable
 
         $name = \Phake::getName($this->object);
         $access = is_string($this->object) ? '::' : '->';
+
         return "{$name}{$access}{$this->method}(" . implode(', ', $arguments) . ')';
     }
 }

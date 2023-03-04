@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\CallRecorder;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\CallRecorder;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\CallRecorder;
+
 use Phake;
 use PHPUnit\Framework\TestCase;
 
@@ -57,17 +56,11 @@ use PHPUnit\Framework\TestCase;
  */
 class CallTest extends TestCase
 {
-    /**
-     * @var Call
-     */
-    private $call;
+    private Call $call;
 
-    /**
-     * @var Call
-     */
-    private $staticCall;
+    private Call $staticCall;
 
-    private $mock;
+    private Phake\IMock $mock;
 
     public function setUp(): void
     {
@@ -80,7 +73,7 @@ class CallTest extends TestCase
     /**
      * Tests getObject()
      */
-    public function testGetObject()
+    public function testGetObject(): void
     {
         $this->assertSame($this->mock, $this->call->getObject());
         $this->assertSame(get_class($this->mock), $this->staticCall->getObject());
@@ -89,25 +82,25 @@ class CallTest extends TestCase
     /**
      * Tests getMethod()
      */
-    public function testGetMethod()
+    public function testGetMethod(): void
     {
         $this->assertEquals('someMethod', $this->call->getMethod());
         $this->assertEquals('someMethod', $this->staticCall->getMethod());
     }
 
-    public function testGetArguments()
+    public function testGetArguments(): void
     {
         $this->assertEquals(['foo', 'bar'], $this->call->getArguments());
         $this->assertEquals(['foo', 'bar'], $this->staticCall->getArguments());
     }
 
-    public function testToString()
+    public function testToString(): void
     {
         $this->assertEquals('Phake\IMock->someMethod(<string:foo>, <string:bar>)', $this->call->__toString());
         $this->assertEquals('Phake\IMock::someMethod(<string:foo>, <string:bar>)', $this->staticCall->__toString());
     }
 
-    public function testToStringOnAllArgumentTypes()
+    public function testToStringOnAllArgumentTypes(): void
     {
         $call = new Call($this->mock, 'someMethod', [
             new \stdClass(),
@@ -116,7 +109,7 @@ class CallTest extends TestCase
             opendir('.'),
             'foo',
             42,
-            true
+            true,
         ]);
         $this->assertEquals(
             'Phake\IMock->someMethod(<object:stdClass>, <array>, <null>, <resource>, <string:foo>, <integer:42>, <boolean:true>)',

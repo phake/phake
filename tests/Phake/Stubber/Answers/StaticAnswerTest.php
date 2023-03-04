@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Stubber\Answers;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,11 @@ namespace Phake\Stubber\Answers;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Stubber\Answers;
+
+use Phake;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -56,10 +56,7 @@ use PHPUnit\Framework\TestCase;
  */
 class StaticAnswerTest extends TestCase
 {
-    /**
-     * @var Phake\Stubber\Answers\StaticAnswer
-     */
-    private $answer;
+    private Phake\Stubber\Answers\StaticAnswer $answer;
 
     /**
      * Sets up the answer fixture
@@ -69,8 +66,8 @@ class StaticAnswerTest extends TestCase
         $this->answer = new StaticAnswer(42);
     }
 
-    public function testAnswer()
+    public function testAnswer(): void
     {
-        $this->assertEquals(42, call_user_func($this->answer->getAnswerCallback('someObject', 'testMethod')));
+        $this->assertEquals(42, $this->answer->getAnswerCallback('someObject', 'testMethod')());
     }
 }

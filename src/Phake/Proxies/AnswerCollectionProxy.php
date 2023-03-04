@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Proxies;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\Proxies;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Proxies;
+
 /**
  * A proxy class to provide Stub Chaining through use of an AnswerCollection
  *
@@ -54,97 +53,79 @@ namespace Phake\Proxies;
  */
 class AnswerCollectionProxy implements \Phake\Stubber\IAnswerContainer, AnswerProxyInterface
 {
-    /**
-     * @var \Phake\Stubber\AnswerCollection
-     */
-    private \Phake\Stubber\AnswerCollection $collection;
-
-    /**
-     * @param \Phake\Stubber\AnswerCollection $collection
-     */
-    public function __construct(\Phake\Stubber\AnswerCollection $collection)
-    {
-        $this->collection = $collection;
+    public function __construct(
+        private \Phake\Stubber\AnswerCollection $collection
+    ) {
     }
 
     /**
      * Binds a static answer to the method and object in the proxied binder.
-     *
-     * @param mixed $value
-     *
-     * @return AnswerCollectionProxy
      */
     public function thenReturn($value): self
     {
         $this->collection->addAnswer(new \Phake\Stubber\Answers\StaticAnswer($value));
+
         return $this;
     }
 
     /**
      * Binds a delegated call that will call a given method's parent.
-     * @return AnswerCollectionProxy
      */
     public function thenCallParent(): self
     {
         $this->collection->addAnswer(new \Phake\Stubber\Answers\ParentDelegate());
+
         return $this;
     }
 
     /**
      * Binds an exception answer to the method and object in the proxied binder.
-     *
-     * @param \Throwable $value
-     *
-     * @return AnswerCollectionProxy
      */
     public function thenThrow(\Throwable $value): self
     {
         $this->collection->addAnswer(new \Phake\Stubber\Answers\ExceptionAnswer($value));
+
         return $this;
     }
 
     /**
      * Binds a delegated call that will call a given method's parent while capturing that value to the passed in variable.
-     *
-     * @param mixed $captor
-     *
-     * @return AnswerCollectionProxy
      */
     public function captureReturnTo(mixed &$captor): self
     {
         $this->collection->addAnswer(new \Phake\Stubber\Answers\ParentDelegate($captor));
+
         return $this;
     }
 
     /**
      * Binds a callback answer to the method.
      *
-     * @param \callable $value
-     *
      * @throws \InvalidArgumentException
-     * @return AnswerCollectionProxy
      */
     public function thenReturnCallback(callable $value): self
     {
         $this->collection->addAnswer(new \Phake\Stubber\Answers\LambdaAnswer($value));
+
         return $this;
     }
 
     public function thenDoNothing(): self
     {
         $this->collection->addAnswer(new \Phake\Stubber\Answers\NoAnswer());
+
         return $this;
     }
 
     public function thenReturnSelf(): self
     {
         $this->collection->addAnswer(new \Phake\Stubber\Answers\SelfAnswer());
+
         return $this;
     }
 
     /**
      * Returns an answer from the container
-     * @return \Phake\Stubber\IAnswer
      */
     public function getAnswer(): ?\Phake\Stubber\IAnswer
     {

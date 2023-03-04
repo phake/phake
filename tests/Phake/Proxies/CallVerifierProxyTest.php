@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Proxies;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,25 +42,20 @@ namespace Phake\Proxies;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Proxies;
+
 use Phake;
 use PHPUnit\Framework\TestCase;
 
 class CallVerifierProxyTest extends TestCase
 {
-    /**
-     * @var Phake\Proxies\CallVerifierProxy
-     */
-    private $proxy;
+    private CallVerifierProxy $proxy;
 
-    /**
-     * @var Phake\CallRecorder\Recorder
-     */
-    private $obj;
+    private Phake\CallRecorder\Recorder $obj;
 
-    /**
-     * @var Phake\Client\IClient
-     */
-    private $client;
+    private Phake\Client\IClient $client;
 
     /**
      * Sets up test fixture
@@ -84,9 +74,9 @@ class CallVerifierProxyTest extends TestCase
     /**
      * Tests setting a stub on a method in the stubbable object
      */
-    public function testIsCalledOn()
+    public function testIsCalledOn(): void
     {
-        $mock = Phake::mock('PhakeTest_MagicClass');
+        $mock = Phake::mock(\PhakeTest_MagicClass::class);
         $mock->foo();
 
         $verifier = $this->proxy->isCalledOn($mock);
@@ -94,14 +84,14 @@ class CallVerifierProxyTest extends TestCase
         $this->assertEquals(1, count($verifier));
     }
 
-    public function testStaticIsCalledOn()
+    public function testStaticIsCalledOn(): void
     {
         $matcher1 = new Phake\Matchers\EqualsMatcher('foo', \SebastianBergmann\Comparator\Factory::getInstance());
         $matcher2 = new Phake\Matchers\EqualsMatcher([], \SebastianBergmann\Comparator\Factory::getInstance());
         $matcher1->setNextMatcher($matcher2);
         $this->proxy = new CallVerifierProxy($matcher1, $this->client, true);
 
-        $mock = Phake::mock('PhakeTest_MagicClass');
+        $mock = Phake::mock(\PhakeTest_MagicClass::class);
         $mock::foo();
 
         $verifier = $this->proxy->isCalledOn($mock);

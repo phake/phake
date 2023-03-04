@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake;
-
 /*
  * Phake - Mocking Framework
  *
@@ -46,6 +41,10 @@ namespace Phake;
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link       http://www.digitalsandwich.com/
  */
+
+declare(strict_types=1);
+
+namespace Phake;
 
 /**
  * The interface for Phake test double objects.

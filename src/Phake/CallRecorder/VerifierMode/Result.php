@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\CallRecorder\VerifierMode;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,39 +42,27 @@ namespace Phake\CallRecorder\VerifierMode;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\CallRecorder\VerifierMode;
+
 class Result
 {
-    /**
-     * @var bool
-     */
     private bool $verified;
 
-    /**
-     * @var string
-     */
     private string $failureDescription;
 
-    /**
-     * @param bool $verified
-     * @param string $failureDescription
-     */
     public function __construct(bool $verified, string $failureDescription)
     {
         $this->verified           = $verified;
         $this->failureDescription = $failureDescription;
     }
 
-    /**
-     * @return bool
-     */
     public function getVerified(): bool
     {
         return $this->verified;
     }
 
-    /**
-     * @return string
-     */
     public function getFailureDescription(): string
     {
         return $this->failureDescription;

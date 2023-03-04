@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\PHPUnit;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\PHPUnit;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\PHPUnit;
+
 use PHPUnit\Framework\Constraint\Constraint;
 
 /**
@@ -62,6 +61,7 @@ class VerifierResultConstraintV6 extends Constraint
         if (!$other instanceof \Phake\CallRecorder\VerifierResult) {
             throw new \InvalidArgumentException("You must pass an instance of \Phake\CallRecorder\VerifierResult");
         }
+
         return $other->getVerified();
     }
 

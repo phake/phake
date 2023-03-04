@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Stubber\Answers;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,24 +42,22 @@ namespace Phake\Stubber\Answers;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Stubber\Answers;
+
+use Phake;
+
 /**
  * Allows providing a static answer to a stubbed method call.
  *
  * @author Mike Lively <m@digitalsandwich.com>
  */
-class StaticAnswer implements \Phake\Stubber\IAnswer
+class StaticAnswer implements Phake\Stubber\IAnswer
 {
-    /**
-     * @var mixed
-     */
-    private mixed $answer = null;
-
-    /**
-     * @param mixed $answer
-     */
-    public function __construct(mixed $answer)
-    {
-        $this->answer = $answer;
+    public function __construct(
+        private mixed $answer
+    ) {
     }
 
     /**
@@ -75,16 +68,10 @@ class StaticAnswer implements \Phake\Stubber\IAnswer
     }
 
     /**
-     * @psalm-suppress MissingClosureParamType
-     * @psalm-suppress MissingClosureReturnType
-     *
      * {@inheritdoc}
      */
     public function getAnswerCallback(mixed $context, string $method): callable
     {
-        $answer = $this->answer;
-        return function (...$args) use ($answer) {
-            return $answer;
-        };
+        return fn (mixed ...$args): mixed => $this->answer;
     }
 }

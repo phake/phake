@@ -86,9 +86,9 @@ class FacadeTest extends TestCase
     /**
      * Tests that the mock generator is called properly
      */
-    public function testMock()
+    public function testMock(): void
     {
-        $mockedClass   = 'stdClass';
+        $mockedClass   = \stdClass::class;
         $mockGenerator = $this->getMockBuilder(Phake\ClassGenerator\MockClass::class)->getMock();
 
         $this->setMockGeneratorExpectations($mockedClass, $mockGenerator);
@@ -104,9 +104,9 @@ class FacadeTest extends TestCase
     /**
      * Tests that the mock generator is called properly
      */
-    public function testMockInterface()
+    public function testMockInterface(): void
     {
-        $mockedClass   = 'PhakeTest_MockedInterface';
+        $mockedClass   = \PhakeTest_MockedInterface::class;
         $mockGenerator = $this->getMockBuilder(Phake\ClassGenerator\MockClass::class)->getMock();
 
         $this->setMockGeneratorExpectations($mockedClass, $mockGenerator);
@@ -122,7 +122,7 @@ class FacadeTest extends TestCase
     /**
      * Tests that the mock generator will fail when given a class that does not exist.
      */
-    public function testMockThrowsOnNonExistantClass()
+    public function testMockThrowsOnNonExistantClass(): void
     {
         $this->expectException(\InvalidArgumentException::class);
 
@@ -139,9 +139,9 @@ class FacadeTest extends TestCase
     /**
      * Tests that Phake will pass necessary components to a generated class when instantiating it.
      */
-    public function testMockPassesNecessaryComponentsToInstantiatedClass()
+    public function testMockPassesNecessaryComponentsToInstantiatedClass(): void
     {
-        $mockedClass = 'stdClass';
+        $mockedClass = \stdClass::class;
 
         $recorder       = $this->getMockBuilder(Phake\CallRecorder\Recorder::class)->getMock();
         $classGenerator = $this->getMockBuilder(Phake\ClassGenerator\MockClass::class)->getMock();
@@ -156,11 +156,11 @@ class FacadeTest extends TestCase
     /**
      * Test that autoload doesn't get called on generated classes
      */
-    public function testAutoLoadNotCalledOnMock()
+    public function testAutoLoadNotCalledOnMock(): void
     {
         spl_autoload_register([self::class, 'autoload']);
         try {
-            $mockedClass   = 'stdClass';
+            $mockedClass   = \stdClass::class;
             $mockGenerator = $this->getMockBuilder(Phake\ClassGenerator\MockClass::class)->getMock();
 
             $mockGenerator->expects($this->once())
@@ -185,13 +185,13 @@ class FacadeTest extends TestCase
     /**
      * An autoload function that should never be called
      */
-    public static function autoload()
+    public static function autoload(): void
     {
         $e = new Exception();
         self::fail("The autoloader should not be called: \n{$e->getTraceAsString()}");
     }
 
-    public function testReset()
+    public function testReset(): void
     {
         $this->facade->resetStaticInfo();
 
@@ -200,11 +200,8 @@ class FacadeTest extends TestCase
 
     /**
      * Sets expectations for how the generator should be called
-     *
-     * @param string                         $mockedClass - The class name that we expect to mock
-     * @param Phake\ClassGenerator\MockClass $mockGenerator
      */
-    private function setMockGeneratorExpectations($mockedClass, Phake\ClassGenerator\MockClass $mockGenerator)
+    private function setMockGeneratorExpectations(string $mockedClass, Phake\ClassGenerator\MockClass $mockGenerator): void
     {
         $mockGenerator->expects($this->once())
             ->method('generate')
@@ -213,16 +210,12 @@ class FacadeTest extends TestCase
 
     /**
      * Sets expectations for how the mock class should be created from the class generator
-     *
-     * @param Phake\ClassGenerator\MockClass $mockGenerator
-     * @param Phake\CallRecorder\Recorder    $recorder
-     * @param Phake\Stubber\IAnswer          $answer
      */
     private function setMockInstantiatorExpectations(
         Phake\ClassGenerator\MockClass $mockGenerator,
         Phake\CallRecorder\Recorder $recorder,
         Phake\Stubber\IAnswer $answer
-    ) {
+    ): void {
         $mockGenerator->expects($this->once())
             ->method('instantiate')
             ->with(

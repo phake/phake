@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Matchers;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,16 +42,17 @@ namespace Phake\Matchers;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Matchers;
+
 use Phake;
 use PHPUnit\Framework\Constraint\Constraint;
 use PHPUnit\Framework\TestCase;
 
 class FactoryTest extends TestCase
 {
-    /**
-     * @var Factory
-     */
-    private $factory;
+    private Factory $factory;
 
     /**
      * Sets up the test fixture
@@ -69,7 +65,7 @@ class FactoryTest extends TestCase
     /**
      * Tests creating a default matcher
      */
-    public function testDefaultMatcher()
+    public function testDefaultMatcher(): void
     {
         $matcher = $this->factory->createMatcher('foo');
 
@@ -82,7 +78,7 @@ class FactoryTest extends TestCase
     /**
      * Tests creating a pass through matcher
      */
-    public function testPassThroughMatcher()
+    public function testPassThroughMatcher(): void
     {
         $matcher = $this->getMockBuilder(IChainableArgumentMatcher::class)->getMock();
 
@@ -94,7 +90,7 @@ class FactoryTest extends TestCase
     /**
      * Tests creating a phpunit adapter matcher
      */
-    public function testPHPUnit7Constraint()
+    public function testPHPUnit7Constraint(): void
     {
         $matcher = $this->getMockBuilder(Constraint::class)->getMock();
         $matcher->expects($this->once())
@@ -111,7 +107,7 @@ class FactoryTest extends TestCase
     /**
      * Tests creating a hamcrest adapter matcher
      */
-    public function testHamcrestMatcher()
+    public function testHamcrestMatcher(): void
     {
         $matcher = $this->getMockBuilder(\Hamcrest\Matcher::class)->getMock();
         $matcher->expects($this->once())
@@ -125,7 +121,7 @@ class FactoryTest extends TestCase
         $this->assertNull($retMatcher->doArgumentsMatch($value));
     }
 
-    public function testOldMatcherAdaptsToNewFormat()
+    public function testOldMatcherAdaptsToNewFormat(): void
     {
         $oldMatcher = Phake::mock(IArgumentMatcher::class);
         $newMatcher = $this->factory->createMatcher($oldMatcher);
@@ -135,11 +131,10 @@ class FactoryTest extends TestCase
         $this->assertInstanceOf(IChainableArgumentMatcher::class, $newMatcher);
     }
 
-    public function testMatcherSetsNextMatcherInChain()
+    public function testMatcherSetsNextMatcherInChain(): void
     {
         $matcher1 = Phake::mock(IChainableArgumentMatcher::class);
         $matcher2 = Phake::mock(IChainableArgumentMatcher::class);
-        /* @var $newMatcher Phake_Matchers_IChainableArgumentMatcher */
         $this->factory->createMatcher($matcher2);
         $this->factory->createMatcher($matcher1, $matcher2);
 
@@ -147,7 +142,7 @@ class FactoryTest extends TestCase
         Phake::verify($matcher1)->setNextMatcher(Phake::equalTo($matcher2));
     }
 
-    public function testMatcherChainReturnsAMatcherChain()
+    public function testMatcherChainReturnsAMatcherChain(): void
     {
         $matcher1 = Phake::mock(IChainableArgumentMatcher::class);
         $matcher2 = Phake::mock(IChainableArgumentMatcher::class);
@@ -162,7 +157,7 @@ class FactoryTest extends TestCase
         Phake::verify($matcher3, Phake::never())->setNextMatcher(Phake::anyParameters());
     }
 
-    public function testMatcherChainReturnsNullOnNoArguments()
+    public function testMatcherChainReturnsNullOnNoArguments(): void
     {
         $this->assertNull($this->factory->createMatcherChain([]));
     }

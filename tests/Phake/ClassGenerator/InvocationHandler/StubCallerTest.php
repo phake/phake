@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\ClassGenerator\InvocationHandler;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,35 +42,24 @@ namespace Phake\ClassGenerator\InvocationHandler;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\ClassGenerator\InvocationHandler;
+
 use Phake;
 use PHPUnit\Framework\TestCase;
 
 class StubCallerTest extends TestCase
 {
-    /**
-     * @var StubCaller
-     */
-    private $handler;
+    private StubCaller $handler;
 
-    /**
-     * @var Phake\IMock
-     */
-    private $mock;
+    private Phake\IMock $mock;
 
-    /**
-     * @var Phake\Stubber\AnswerCollection
-     */
-    private $answerCollection;
+    private Phake\Stubber\AnswerCollection $answerCollection;
 
-    /**
-     * @var Phake\Stubber\StubMapper
-     */
-    private $stubMapper;
+    private Phake\Stubber\StubMapper $stubMapper;
 
-    /**
-     * @var Phake\Stubber\IAnswer
-     */
-    private $defaultAnswer;
+    private Phake\Stubber\IAnswer $defaultAnswer;
 
     public function setUp(): void
     {
@@ -98,12 +82,12 @@ class StubCallerTest extends TestCase
         $this->handler = new StubCaller($this->stubMapper, $this->defaultAnswer);
     }
 
-    public function testImplementIInvocationHandler()
+    public function testImplementIInvocationHandler(): void
     {
         $this->assertInstanceOf(IInvocationHandler::class, $this->handler);
     }
 
-    public function testStubIsPulled()
+    public function testStubIsPulled(): void
     {
         $ref = ['bar'];
         $this->handler->invoke($this->mock, 'foo', $ref, $ref);
@@ -111,14 +95,14 @@ class StubCallerTest extends TestCase
         Phake::verify($this->stubMapper)->getStubByCall('foo', ['bar']);
     }
 
-    public function testAnswerReturned()
+    public function testAnswerReturned(): void
     {
         $ref = ['bar'];
 
         $this->assertEquals('42', call_user_func($this->handler->invoke($this->mock, 'foo', $ref, $ref)->getAnswerCallback($this->mock, 'foo'), 'bar'));
     }
 
-    public function testMagicCallMethodChecksForImplicitStubFirst()
+    public function testMagicCallMethodChecksForImplicitStubFirst(): void
     {
         $ref = ['foo', ['bar']];
         Phake::when($this->stubMapper)->getStubByCall(Phake::anyParameters())->thenReturn(null);
@@ -131,7 +115,7 @@ class StubCallerTest extends TestCase
         );
     }
 
-    public function testMagicStaticCallMethodChecksForImplicitStubFirst()
+    public function testMagicStaticCallMethodChecksForImplicitStubFirst(): void
     {
         $ref = ['foo', ['bar']];
         Phake::when($this->stubMapper)->getStubByCall(Phake::anyParameters())->thenReturn(null);
@@ -144,7 +128,7 @@ class StubCallerTest extends TestCase
         );
     }
 
-    public function testMagicCallMethodBypassesExplicitStub()
+    public function testMagicCallMethodBypassesExplicitStub(): void
     {
         $ref = ['foo', ['bar']];
 

@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\ClassGenerator\InvocationHandler;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,22 +42,22 @@ namespace Phake\ClassGenerator\InvocationHandler;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\ClassGenerator\InvocationHandler;
+
 use Phake;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 
 class FrozenObjectCheckTest extends TestCase
 {
-    /**
-     * @var FrozenObjectCheck
-     */
-    private $handler;
+    private FrozenObjectCheck $handler;
 
     /**
      * @Mock
-     * @var Phake\Mock\Info
      */
-    private $mockInfo;
+    private Phake\Mock\Info $mockInfo;
 
     public function setUp(): void
     {
@@ -71,12 +66,12 @@ class FrozenObjectCheckTest extends TestCase
         $this->handler    = new FrozenObjectCheck($this->mockInfo);
     }
 
-    public function testImplementIInvocationHandler()
+    public function testImplementIInvocationHandler(): void
     {
         $this->assertInstanceOf(IInvocationHandler::class, $this->handler);
     }
 
-    public function testReturnsWithNoIssuesIfObjectIsNotFrozen()
+    public function testReturnsWithNoIssuesIfObjectIsNotFrozen(): void
     {
         $mock = $this->getMockBuilder(Phake\IMock::class)
                     ->getMock();
@@ -91,7 +86,7 @@ class FrozenObjectCheckTest extends TestCase
         Phake::verify($this->mockInfo)->isObjectFrozen();
     }
 
-    public function testThrowsWhenObjectIsFrozen()
+    public function testThrowsWhenObjectIsFrozen(): void
     {
         $mock = $this->getMockBuilder(Phake\IMock::class)
                     ->getMock();
@@ -103,7 +98,7 @@ class FrozenObjectCheckTest extends TestCase
         $this->handler->invoke($mock, 'foo', [], $ref);
     }
 
-    public function testThrowsWhenObjectIsFrozenWithPHPUnit()
+    public function testThrowsWhenObjectIsFrozenWithPHPUnit(): void
     {
         $mock = $this->getMockBuilder(Phake\IMock::class)
                     ->getMock();

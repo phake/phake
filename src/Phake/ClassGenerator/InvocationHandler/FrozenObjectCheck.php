@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\ClassGenerator\InvocationHandler;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,19 +42,17 @@ namespace Phake\ClassGenerator\InvocationHandler;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\ClassGenerator\InvocationHandler;
+
 /**
  * Tests a mock to see if it is frozen.
  */
 class FrozenObjectCheck implements IInvocationHandler
 {
-    /**
-     * @var \Phake\Mock\Info
-     */
     private \Phake\Mock\Info $mockInfo;
 
-    /**
-     * @param \Phake\Mock\Info $mockInfo
-     */
     public function __construct(\Phake\Mock\Info $mockInfo)
     {
         $this->mockInfo = $mockInfo;

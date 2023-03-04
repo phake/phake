@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Mock;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\Mock;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Mock;
+
 /**
  * Freezes a mock so that no other calls can be made
  *
@@ -56,10 +55,6 @@ class Freezer
 {
     /**
      * Freezes the given $mock and notifies the given $client
-     *
-     * @param Info $mockInfo
-     * @param \Phake\Client\IClient $client
-     * @return void
      */
     public function freeze(Info $mockInfo, \Phake\Client\IClient $client): void
     {

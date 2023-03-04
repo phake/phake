@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Exception;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,20 +42,17 @@ namespace Phake\Exception;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Exception;
+
 /**
  * Thrown when a method call doesn't match an expection
  */
 class MethodMatcherException extends \Exception
 {
-    /**
-     * @var int
-     */
     private int $argument;
 
-    /**
-     * @param string $message
-     * @param \Exception $previous
-     */
     public function __construct(string $message = '', \Exception $previous = null)
     {
         parent::__construct($message, 0, $previous);
@@ -69,16 +61,14 @@ class MethodMatcherException extends \Exception
 
     /**
      * Updates the argument position (used in the argument chain)
-     * @return void
      */
     public function incrementArgumentPosition(): void
     {
-        $this->argument++;
+        ++$this->argument;
     }
 
     /**
      * Returns the argument's position (0 indexed)
-     * @return int
      */
     public function getArgumentPosition(): int
     {
@@ -88,8 +78,7 @@ class MethodMatcherException extends \Exception
     /**
      * Get the message, but include the comparison diff.
      *
-     * @internal This is so we can lazy generate the comparison message.
-     * @return string
+     * @internal this is so we can lazy generate the comparison message
      */
     public function getMessageWithComparisonDiff(): string
     {

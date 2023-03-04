@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\ClassGenerator\InvocationHandler;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\ClassGenerator\InvocationHandler;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\ClassGenerator\InvocationHandler;
+
 /**
  * An interface for invocation handlers.
  *
@@ -56,10 +55,6 @@ interface IInvocationHandler
 {
     /**
      * @param \Phake\IMock|class-string $mock
-     * @param string $method
-     * @param array $arguments
-     * @param array $argumentReference
-     * @return mixed
      */
     public function invoke(\Phake\IMock|string $mock, string $method, array $arguments, array &$argumentReference): mixed;
 }

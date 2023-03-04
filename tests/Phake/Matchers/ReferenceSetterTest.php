@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Matchers;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\Matchers;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Matchers;
+
 use Phake;
 use PHPUnit\Framework\TestCase;
 
@@ -55,10 +54,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ReferenceSetterTest extends TestCase
 {
-    /**
-     * @var ReferenceSetter
-     */
-    private $setter;
+    private ReferenceSetter $setter;
 
     /**
      * Sets up the test fixture
@@ -71,7 +67,7 @@ class ReferenceSetterTest extends TestCase
     /**
      * Tests that reference parameter is set
      */
-    public function testSettingParameter()
+    public function testSettingParameter(): void
     {
         $value = [''];
         $this->assertNull($this->setter->doArgumentsMatch($value));
@@ -82,12 +78,13 @@ class ReferenceSetterTest extends TestCase
     /**
      * Tests that when a matcher is set on setter it will run the matcher first
      */
-    public function testConditionalSetting()
+    public function testConditionalSetting(): void
     {
         $matcher = Phake::mock(IChainableArgumentMatcher::class);
         $check = '';
         Phake::when($matcher)->doArgumentsMatch->thenReturnCallback(function ($arg) use (&$check) {
             $check = $arg[0];
+
             return true;
         });
 
@@ -102,7 +99,7 @@ class ReferenceSetterTest extends TestCase
     /**
      * Tests that when a matcher is set on setter it will run the matcher first
      */
-    public function testConditionalSettingWontSet()
+    public function testConditionalSettingWontSet(): void
     {
         $matcher = Phake::mock(IChainableArgumentMatcher::class);
         $check = '';
@@ -117,7 +114,7 @@ class ReferenceSetterTest extends TestCase
         $this->assertEquals('blah', $value[0]);
     }
 
-    public function testConditionalSettingFailureUpdatesMessage()
+    public function testConditionalSettingFailureUpdatesMessage(): void
     {
         $matcher = Phake::mock(IChainableArgumentMatcher::class);
         $check = '';
@@ -137,12 +134,12 @@ class ReferenceSetterTest extends TestCase
     /**
      * Tests that when returns an instance of the setter
      */
-    public function testWhenReturn()
+    public function testWhenReturn(): void
     {
         $this->assertSame($this->setter, $this->setter->when(null));
     }
 
-    public function testToString()
+    public function testToString(): void
     {
         $this->assertEquals('<reference parameter>', $this->setter->__toString());
     }

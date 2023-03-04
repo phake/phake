@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\CallRecorder;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,12 +42,16 @@ namespace Phake\CallRecorder;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\CallRecorder;
+
 use Phake;
 use PHPUnit\Framework\TestCase;
 
 class CallExpectationTest extends TestCase
 {
-    public function testToString()
+    public function testToString(): void
     {
         /** @var $mock \Phake\IMock */
         $mock = Phake::mock(\Phake\IMock::class);
@@ -74,7 +73,7 @@ class CallExpectationTest extends TestCase
         );
     }
 
-    public function testStaticToString()
+    public function testStaticToString(): void
     {
         /** @var $mock \Phake\IMock */
         $mock = Phake::mock(\Phake\IMock::class);

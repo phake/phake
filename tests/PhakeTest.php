@@ -1,6 +1,4 @@
 <?php
-
-declare(strict_types=1);
 /*
  * Phake - Mocking Framework
  *
@@ -44,6 +42,8 @@ declare(strict_types=1);
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 
@@ -70,17 +70,17 @@ class PhakeTest extends TestCase
     /**
      * General test for Phake::mock() that it returns a class that inherits from the passed class.
      */
-    public function testMock()
+    public function testMock(): void
     {
-        $this->assertThat(Phake::mock('stdClass'), $this->isInstanceOf('stdClass'));
+        $this->assertThat(Phake::mock(\stdClass::class), $this->isInstanceOf(\stdClass::class));
     }
 
     /**
      * Tests that a simple method call can be verified
      */
-    public function testSimpleVerifyPasses()
+    public function testSimpleVerifyPasses(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         $mock->foo();
 
@@ -91,12 +91,12 @@ class PhakeTest extends TestCase
      * Tests that a simple method call verification with throw an exception if that method was not
      * called.
      */
-    public function testSimpleVerifyThrowsExceptionOnFail()
+    public function testSimpleVerifyThrowsExceptionOnFail(): void
     {
         $this->expectException(Phake\Exception\VerificationException::class);
 
         Phake::setClient(Phake::CLIENT_DEFAULT);
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         Phake::verify($mock)->foo();
     }
@@ -104,9 +104,9 @@ class PhakeTest extends TestCase
     /**
      * Tests that a simple method call can be stubbed to return an expected value.
      */
-    public function testSimpleStub()
+    public function testSimpleStub(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         Phake::when($mock)->foo()
             ->thenReturn(42);
@@ -114,9 +114,9 @@ class PhakeTest extends TestCase
         $this->assertEquals(42, $mock->foo());
     }
 
-    public function testStaticStub()
+    public function testStaticStub(): void
     {
-        $mock = Phake::mock('PhakeTest_StaticInterface');
+        $mock = Phake::mock(\PhakeTest_StaticInterface::class);
 
         Phake::whenStatic($mock)->staticMethod()->thenReturn(42);
 
@@ -126,9 +126,9 @@ class PhakeTest extends TestCase
     /**
      * Tests default parameters
      */
-    public function testStubWithDefaultParam()
+    public function testStubWithDefaultParam(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         Phake::when($mock)->fooWithDefault()
             ->thenReturn(42);
@@ -139,9 +139,9 @@ class PhakeTest extends TestCase
     /**
      * Tests that a stub can be redefined.
      */
-    public function testRedefineStub()
+    public function testRedefineStub(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         Phake::when($mock)->foo()->thenReturn(24);
         Phake::when($mock)->foo()->thenReturn(42);
@@ -152,9 +152,9 @@ class PhakeTest extends TestCase
     /**
      * Tests that a stub method can be defined with shorthand notation.
      */
-    public function testShorthandVerify()
+    public function testShorthandVerify(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
         $mock->foo();
         $mock->foo('bar');
 
@@ -164,9 +164,9 @@ class PhakeTest extends TestCase
     /**
      * Tests that a stub method can be defined with shorthand notation.
      */
-    public function testShorthandStub()
+    public function testShorthandStub(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         Phake::when($mock)->foo->thenReturn(42);
 
@@ -177,9 +177,9 @@ class PhakeTest extends TestCase
     /**
      * Tests that a stub method can be defined with shorthand notation later.
      */
-    public function testFirstShorthandStub()
+    public function testFirstShorthandStub(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         Phake::when($mock)->foo->thenReturn(42);
         Phake::when($mock)->foo('param')->thenReturn(51);
@@ -191,9 +191,9 @@ class PhakeTest extends TestCase
     /**
      * Tests that a stub method can be redefined with shorthand notation.
      */
-    public function testRedefinedShorthandStub()
+    public function testRedefinedShorthandStub(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         Phake::when($mock)->foo->thenReturn(42);
         Phake::when($mock)->foo->thenReturn(2);
@@ -204,9 +204,9 @@ class PhakeTest extends TestCase
     /**
      * Tests that a stub method can be defined with shorthand notation even with __get().
      */
-    public function testMagicClassShorthandStub()
+    public function testMagicClassShorthandStub(): void
     {
-        $mock = Phake::mock('PhakeTest_MagicClass');
+        $mock = Phake::mock(\PhakeTest_MagicClass::class);
 
         Phake::when($mock)->definedMethod->thenReturn(64);
         Phake::when($mock)->__get->thenReturn(75);
@@ -220,9 +220,9 @@ class PhakeTest extends TestCase
     /**
      * Tests using multiple stubs.
      */
-    public function testMultipleStubs()
+    public function testMultipleStubs(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         Phake::when($mock)->foo()->thenReturn(24);
         Phake::when($mock)->fooWithReturnValue()->thenReturn(42);
@@ -234,9 +234,9 @@ class PhakeTest extends TestCase
     /**
      * Tests using multiple stubs.
      */
-    public function testConsecutiveCalls()
+    public function testConsecutiveCalls(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         Phake::when($mock)->foo()->thenReturn(24)->thenReturn(42);
 
@@ -247,9 +247,9 @@ class PhakeTest extends TestCase
     /**
      * Tests passing a basic equals matcher to the verify method will correctly verify a call.
      */
-    public function testVerifyCallWithEqualsMatcher()
+    public function testVerifyCallWithEqualsMatcher(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         $mock->fooWithArgument('bar');
 
@@ -259,12 +259,12 @@ class PhakeTest extends TestCase
     /**
      * Tests passing a basic equals matcher to the verify method will correctly fail when matcher is not satisfied.
      */
-    public function testVerifyCallWithEqualsMatcherFails()
+    public function testVerifyCallWithEqualsMatcherFails(): void
     {
         $this->expectException(Phake\Exception\VerificationException::class);
 
         Phake::setClient(Phake::CLIENT_DEFAULT);
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         $mock->fooWithArgument('test');
 
@@ -274,9 +274,9 @@ class PhakeTest extends TestCase
     /**
      * Tests that we can implicitely indicate an equalTo matcher when we pass in a non-matcher value.
      */
-    public function testVerifyCallWithDefaultMatcher()
+    public function testVerifyCallWithDefaultMatcher(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         $mock->fooWithArgument('bar');
 
@@ -286,12 +286,12 @@ class PhakeTest extends TestCase
     /**
      * Tests passing a default matcher type to the verify method will correctly fail when matcher is not satisfied.
      */
-    public function testVerifyCallWithDefaultMatcherFails()
+    public function testVerifyCallWithDefaultMatcherFails(): void
     {
         $this->expectException(Phake\Exception\VerificationException::class);
 
         Phake::setClient(Phake::CLIENT_DEFAULT);
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         $mock->fooWithArgument('test');
 
@@ -301,9 +301,9 @@ class PhakeTest extends TestCase
     /**
      * Tests passing in a PHPUnit constraint to the verifier
      */
-    public function testVerifyCallWithPHPUnitMatcher()
+    public function testVerifyCallWithPHPUnitMatcher(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         $mock->fooWithArgument('bar');
 
@@ -313,12 +313,12 @@ class PhakeTest extends TestCase
     /**
      * Tests passing in a PHPUnit constraint to the verifier fails when constraint not met.
      */
-    public function testVerifyCallWithPHPUnitMatcherFails()
+    public function testVerifyCallWithPHPUnitMatcherFails(): void
     {
         $this->expectException(Phake\Exception\VerificationException::class);
 
         Phake::setClient(Phake::CLIENT_DEFAULT);
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         $mock->fooWithArgument('test');
 
@@ -328,9 +328,9 @@ class PhakeTest extends TestCase
     /**
      * Tests passing in a Hamcrest matcher to the verifier
      */
-    public function testVerifyCallWithHamcrestMatcher()
+    public function testVerifyCallWithHamcrestMatcher(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         $mock->fooWithArgument('bar');
 
@@ -340,12 +340,12 @@ class PhakeTest extends TestCase
     /**
      * Tests passing in a Hamcrest matcher to the verifier fails when constraint not met.
      */
-    public function testVerifyCallWithHamcrestMatcherFails()
+    public function testVerifyCallWithHamcrestMatcherFails(): void
     {
         $this->expectException(Phake\Exception\VerificationException::class);
 
         Phake::setClient(Phake::CLIENT_DEFAULT);
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         $mock->fooWithArgument('test');
 
@@ -355,9 +355,9 @@ class PhakeTest extends TestCase
     /**
      * Tests using an equalTo argument matcher with a method stub
      */
-    public function testStubWithEqualsMatcher()
+    public function testStubWithEqualsMatcher(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         Phake::when($mock)->fooWithArgument(Phake::equalTo('bar'))->thenReturn(42);
 
@@ -368,9 +368,9 @@ class PhakeTest extends TestCase
     /**
      * Tests using an implicit equalTo argument matcher with a method stub
      */
-    public function testStubWithDefaultMatcher()
+    public function testStubWithDefaultMatcher(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         Phake::when($mock)->fooWithArgument('bar')->thenReturn(42);
 
@@ -381,9 +381,9 @@ class PhakeTest extends TestCase
     /**
      * Tests using a phpunit constraint with a method stub
      */
-    public function testStubWithPHPUnitConstraint()
+    public function testStubWithPHPUnitConstraint(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         Phake::when($mock)->fooWithArgument($this->equalTo('bar'))->thenReturn(42);
 
@@ -394,9 +394,9 @@ class PhakeTest extends TestCase
     /**
      * Tests using a hamcrest matcher with a method stub
      */
-    public function testStubWithHamcrestConstraint()
+    public function testStubWithHamcrestConstraint(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         Phake::when($mock)->fooWithArgument(equalTo('bar'))->thenReturn(42);
 
@@ -407,9 +407,9 @@ class PhakeTest extends TestCase
     /**
      * Tests that resetting a mock clears the call recorder
      */
-    public function testResettingCallRecorder()
+    public function testResettingCallRecorder(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         $mock->foo();
 
@@ -426,9 +426,9 @@ class PhakeTest extends TestCase
     /**
      * Tests that resetting a mock clears the stubber
      */
-    public function testResettingStubMapper()
+    public function testResettingStubMapper(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         Phake::when($mock)->foo()->thenReturn(42);
 
@@ -442,9 +442,9 @@ class PhakeTest extends TestCase
     /**
      * Tests that resetting a mock clears the call recorder
      */
-    public function testResettingStaticCallRecorder()
+    public function testResettingStaticCallRecorder(): void
     {
-        $mock = Phake::mock('PhakeTest_StaticInterface');
+        $mock = Phake::mock(\PhakeTest_StaticInterface::class);
 
         $mock::staticMethod();
 
@@ -458,7 +458,7 @@ class PhakeTest extends TestCase
         Phake::verifyStatic($mock)->staticMethod();
     }
 
-    public function testMockingPhar()
+    public function testMockingPhar(): void
     {
         if (!class_exists('Phar')) {
             $this->markTestSkipped('Phar class does not exist');
@@ -471,9 +471,9 @@ class PhakeTest extends TestCase
     /**
      * Tests that resetting a mock clears the stubber
      */
-    public function testResettingStaticStubMapper()
+    public function testResettingStaticStubMapper(): void
     {
-        $mock = Phake::mock('PhakeTest_StaticInterface');
+        $mock = Phake::mock(\PhakeTest_StaticInterface::class);
 
         Phake::whenStatic($mock)->staticMethod()->thenReturn(42);
 
@@ -487,9 +487,9 @@ class PhakeTest extends TestCase
     /**
      * Tests setting a default answer for stubs
      */
-    public function testDefaultAnswerForStubs()
+    public function testDefaultAnswerForStubs(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass', Phake::ifUnstubbed()->thenReturn(42));
+        $mock = Phake::mock(\PhakeTest_MockedClass::class, Phake::ifUnstubbed()->thenReturn(42));
 
         $this->assertEquals(42, $mock->foo());
     }
@@ -497,9 +497,9 @@ class PhakeTest extends TestCase
     /**
      * Tests setting a default answer for stubs
      */
-    public function testDefaultAnswerForInterfaces()
+    public function testDefaultAnswerForInterfaces(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedInterface', Phake::ifUnstubbed()->thenReturn(42));
+        $mock = Phake::mock(\PhakeTest_MockedInterface::class, Phake::ifUnstubbed()->thenReturn(42));
 
         $this->assertEquals(42, $mock->foo());
     }
@@ -507,9 +507,9 @@ class PhakeTest extends TestCase
     /**
      * Tests setting a default answer for only the __call magic method
      */
-    public function testDefaultAnswerForStubsOfCall()
+    public function testDefaultAnswerForStubsOfCall(): void
     {
-        $mock = Phake::mock('PhakeTest_MagicClass');
+        $mock = Phake::mock(\PhakeTest_MagicClass::class);
 
         Phake::whenCallMethodWith(Phake::anyParameters())->isCalledOn($mock)->thenReturn(42);
 
@@ -519,9 +519,9 @@ class PhakeTest extends TestCase
     /**
      * Tests setting a default answer for only the __call magic method
      */
-    public function testDefaultAnswerForStaticStubsOfCall()
+    public function testDefaultAnswerForStaticStubsOfCall(): void
     {
-        $mock = Phake::mock('PhakeTest_MagicClass');
+        $mock = Phake::mock(\PhakeTest_MagicClass::class);
 
         Phake::whenStaticCallMethodWith(Phake::anyParameters())->isCalledOn($mock)->thenReturn(42);
 
@@ -531,9 +531,9 @@ class PhakeTest extends TestCase
     /**
      * Tests validating calls to __call
      */
-    public function testVerificationOfCall()
+    public function testVerificationOfCall(): void
     {
-        $mock = Phake::mock('PhakeTest_MagicClass');
+        $mock = Phake::mock(\PhakeTest_MagicClass::class);
 
         $mock->foo();
 
@@ -543,9 +543,9 @@ class PhakeTest extends TestCase
     /**
      * Tests validating calls to __callStatic
      */
-    public function testVerificationOfStaticCall()
+    public function testVerificationOfStaticCall(): void
     {
-        $mock = Phake::mock('PhakeTest_MagicClass');
+        $mock = Phake::mock(\PhakeTest_MagicClass::class);
 
         $mock::foo();
 
@@ -555,9 +555,9 @@ class PhakeTest extends TestCase
     /**
      * Tests stubbing a mocked method to call its parent.
      */
-    public function testStubbingMethodToCallParent()
+    public function testStubbingMethodToCallParent(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         Phake::when($mock)->fooWithReturnValue()->thenCallParent();
 
@@ -567,9 +567,9 @@ class PhakeTest extends TestCase
     /**
      * Tests calling through a chain of calls
      */
-    public function testStubbingChainedMethodsToCallParent()
+    public function testStubbingChainedMethodsToCallParent(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass', Phake::ifUnstubbed()->thenCallParent());
+        $mock = Phake::mock(\PhakeTest_MockedClass::class, Phake::ifUnstubbed()->thenCallParent());
 
         $this->assertEquals('test', $mock->callInnerFunc());
     }
@@ -577,18 +577,18 @@ class PhakeTest extends TestCase
     /**
      * Tests partial mock functionality to make sure original method is called.
      */
-    public function testPartialMockCallsOriginal()
+    public function testPartialMockCallsOriginal(): void
     {
-        $pmock = Phake::partialMock('PhakeTest_MockedClass');
+        $pmock = Phake::partialMock(\PhakeTest_MockedClass::class);
         $this->assertEquals('blah', $pmock->fooWithReturnValue());
     }
 
     /**
      * Tests partial mock calls are recorded
      */
-    public function testPartialMockRecordsCall()
+    public function testPartialMockRecordsCall(): void
     {
-        $pmock = Phake::partialMock('PhakeTest_MockedClass');
+        $pmock = Phake::partialMock(\PhakeTest_MockedClass::class);
         $pmock->foo();
 
         Phake::verify($pmock)->foo();
@@ -597,9 +597,9 @@ class PhakeTest extends TestCase
     /**
      * Tests that partial mock calls can chain properly
      */
-    public function testPartialMockInternalMethodCalls()
+    public function testPartialMockInternalMethodCalls(): void
     {
-        $pmock = Phake::partialMock('PhakeTest_MockedClass');
+        $pmock = Phake::partialMock(\PhakeTest_MockedClass::class);
         Phake::when($pmock)->innerFunc()->thenReturn('blah');
 
         $this->assertEquals('blah', $pmock->chainedCall());
@@ -609,9 +609,9 @@ class PhakeTest extends TestCase
      * Tests that partial mock can overwrite methods
      * so that they don't do anything when they get called
      */
-    public function testPartialMockCanReturnNothing()
+    public function testPartialMockCanReturnNothing(): void
     {
-        $pmock = Phake::partialMock('PhakeTest_MockedClass');
+        $pmock = Phake::partialMock(\PhakeTest_MockedClass::class);
         Phake::when($pmock)->innerFunc()->thenDoNothing();
 
         $this->assertNull($pmock->chainedCall());
@@ -620,9 +620,9 @@ class PhakeTest extends TestCase
     /**
      * Tests that partial mocks listen to the constructor args given
      */
-    public function testPartialMockCallsConstructor()
+    public function testPartialMockCallsConstructor(): void
     {
-        $pmock = Phake::partialMock('PhakeTest_MockedConstructedClass', 'val1', 'val2', 'val3');
+        $pmock = Phake::partialMock(\PhakeTest_MockedConstructedClass::class, 'val1', 'val2', 'val3');
 
         $this->assertEquals('val1', $pmock->getProp1());
         $this->assertEquals('val2', $pmock->getProp2());
@@ -632,9 +632,9 @@ class PhakeTest extends TestCase
     /**
      * Tests that partial mocks with constructors higher in the chain have their constructors called
      */
-    public function testPartialMockCallsParentConstructor()
+    public function testPartialMockCallsParentConstructor(): void
     {
-        $pmock = Phake::partialMock('PhakeTest_ExtendedMockedConstructedClass', 'val1', 'val2', 'val3');
+        $pmock = Phake::partialMock(\PhakeTest_ExtendedMockedConstructedClass::class, 'val1', 'val2', 'val3');
 
         $this->assertEquals('val1', $pmock->getProp1());
         $this->assertEquals('val2', $pmock->getProp2());
@@ -644,9 +644,9 @@ class PhakeTest extends TestCase
     /**
      * Tests mocking of an interface
      */
-    public function testMockingInterface()
+    public function testMockingInterface(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedInterface');
+        $mock = Phake::mock(\PhakeTest_MockedInterface::class);
 
         Phake::when($mock)->foo()->thenReturn('bar');
 
@@ -656,9 +656,9 @@ class PhakeTest extends TestCase
     /**
      * Tests mocking of an abstract class
      */
-    public function testMockingAbstract()
+    public function testMockingAbstract(): void
     {
-        $mock = Phake::mock('PhakeTest_AbstractClass');
+        $mock = Phake::mock(\PhakeTest_AbstractClass::class);
 
         Phake::when($mock)->foo()->thenReturn('bar');
 
@@ -668,9 +668,9 @@ class PhakeTest extends TestCase
     /**
      * Tests verifying the call order of particular methods within an object
      */
-    public function testCallOrderInObject()
+    public function testCallOrderInObject(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         $mock->foo();
         $mock->fooWithReturnValue();
@@ -686,9 +686,9 @@ class PhakeTest extends TestCase
     /**
      * Tests verifying the call order of particular methods within an object
      */
-    public function testCallOrderInObjectFails()
+    public function testCallOrderInObjectFails(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         $mock->foo();
         $mock->callInnerFunc();
@@ -707,10 +707,10 @@ class PhakeTest extends TestCase
     /**
      * Tests verifying the call order of particular methods across objects
      */
-    public function testCallOrderAccrossObjects()
+    public function testCallOrderAccrossObjects(): void
     {
-        $mock1 = Phake::mock('PhakeTest_MockedClass');
-        $mock2 = Phake::mock('PhakeTest_MockedClass');
+        $mock1 = Phake::mock(\PhakeTest_MockedClass::class);
+        $mock2 = Phake::mock(\PhakeTest_MockedClass::class);
 
         $mock1->foo();
         $mock2->foo();
@@ -730,10 +730,10 @@ class PhakeTest extends TestCase
     /**
      * Tests verifying the call order of particular methods across objects
      */
-    public function testCallOrderAccrossObjectsFail()
+    public function testCallOrderAccrossObjectsFail(): void
     {
-        $mock1 = Phake::mock('PhakeTest_MockedClass');
-        $mock2 = Phake::mock('PhakeTest_MockedClass');
+        $mock1 = Phake::mock(\PhakeTest_MockedClass::class);
+        $mock2 = Phake::mock(\PhakeTest_MockedClass::class);
 
         $mock1->foo();
         $mock2->foo();
@@ -751,10 +751,10 @@ class PhakeTest extends TestCase
         );
     }
 
-    public function testCallOrderWithStatics()
+    public function testCallOrderWithStatics(): void
     {
-        $mock1 = Phake::mock('PhakeTest_MockedClass');
-        $mock2 = Phake::mock('PhakeTest_StaticInterface');
+        $mock1 = Phake::mock(\PhakeTest_MockedClass::class);
+        $mock2 = Phake::mock(\PhakeTest_StaticInterface::class);
 
         $mock1->foo();
         $mock2::staticMethod();
@@ -771,9 +771,9 @@ class PhakeTest extends TestCase
     /**
      * Tests freezing mocks
      */
-    public function testMockFreezing()
+    public function testMockFreezing(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         $mock->foo();
 
@@ -785,9 +785,9 @@ class PhakeTest extends TestCase
         $mock->foo();
     }
 
-    public function testStaticMockFreezing()
+    public function testStaticMockFreezing(): void
     {
-        $mock = Phake::mock('PhakeTest_StaticInterface');
+        $mock = Phake::mock(\PhakeTest_StaticInterface::class);
 
         $mock::staticMethod();
 
@@ -802,10 +802,10 @@ class PhakeTest extends TestCase
     /**
      * Tests freezing mocks
      */
-    public function testMockFreezingWithMultipleMocks()
+    public function testMockFreezingWithMultipleMocks(): void
     {
-        $mock1 = Phake::mock('PhakeTest_MockedClass');
-        $mock2 = Phake::mock('PhakeTest_MockedClass');
+        $mock1 = Phake::mock(\PhakeTest_MockedClass::class);
+        $mock2 = Phake::mock(\PhakeTest_MockedClass::class);
 
         $mock1->foo();
         $mock2->foo();
@@ -821,9 +821,9 @@ class PhakeTest extends TestCase
     /**
      * Tests verifying that no interaction occured
      */
-    public function testVerifyingZeroInteraction()
+    public function testVerifyingZeroInteraction(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         Phake::verifyNoInteraction($mock);
 
@@ -837,9 +837,9 @@ class PhakeTest extends TestCase
     /**
      * Tests verifying that no interaction occured
      */
-    public function testVerifyingZeroInteractionIncludesStatic()
+    public function testVerifyingZeroInteractionIncludesStatic(): void
     {
-        $mock = Phake::mock('PhakeTest_StaticInterface');
+        $mock = Phake::mock(\PhakeTest_StaticInterface::class);
 
         Phake::verifyNoInteraction($mock);
 
@@ -853,10 +853,10 @@ class PhakeTest extends TestCase
     /**
      * Tests verifying that no interaction occured
      */
-    public function testVerifyingZeroInteractionWithMultipleArgs()
+    public function testVerifyingZeroInteractionWithMultipleArgs(): void
     {
-        $mock1 = Phake::mock('PhakeTest_MockedClass');
-        $mock2 = Phake::mock('PhakeTest_MockedClass');
+        $mock1 = Phake::mock(\PhakeTest_MockedClass::class);
+        $mock2 = Phake::mock(\PhakeTest_MockedClass::class);
 
         Phake::verifyNoInteraction($mock1, $mock2);
 
@@ -870,9 +870,9 @@ class PhakeTest extends TestCase
     /**
      * Tests argument capturing
      */
-    public function testArugmentCapturing()
+    public function testArugmentCapturing(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         $mock->fooWithArgument('TEST');
 
@@ -884,9 +884,9 @@ class PhakeTest extends TestCase
     /**
      * Tests conditional argument capturing
      */
-    public function testConditionalArugmentCapturing()
+    public function testConditionalArugmentCapturing(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         $mock->fooWithArgument('FOO');
 
@@ -901,9 +901,9 @@ class PhakeTest extends TestCase
     /**
      * Make sure arguments aren't captured if the conditions don't match
      */
-    public function testConditionalArugmentCapturingFails()
+    public function testConditionalArugmentCapturingFails(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         $mock->fooWithArgument('FOO');
 
@@ -915,9 +915,9 @@ class PhakeTest extends TestCase
     /**
      * Make sure arguments are captured with no issues
      */
-    public function testArgumentCapturingWorksOnObjects()
+    public function testArgumentCapturingWorksOnObjects(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         $obj = new stdClass();
 
@@ -931,9 +931,9 @@ class PhakeTest extends TestCase
     /**
      * Make sure arguments are captured with no issues
      */
-    public function testArgumentCapturingWorksOnStubbing()
+    public function testArgumentCapturingWorksOnStubbing(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         $obj = new stdClass();
 
@@ -944,9 +944,9 @@ class PhakeTest extends TestCase
         $this->assertSame($obj, $toArgument);
     }
 
-    public function testArgumentCapturingAllValls()
+    public function testArgumentCapturingAllValls(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         $obj1 = new stdClass();
         $obj2 = new stdClass();
@@ -964,10 +964,10 @@ class PhakeTest extends TestCase
     /**
      * Make sure stub return value capturing returns the parent value
      */
-    public function testCaptureAnswerReturnsParentValue()
+    public function testCaptureAnswerReturnsParentValue(): void
     {
         $return = null;
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
         Phake::when($mock)->fooWithReturnValue()->captureReturnTo($return);
 
         $this->assertEquals('blah', $mock->fooWithReturnValue());
@@ -976,10 +976,10 @@ class PhakeTest extends TestCase
     /**
      * Make sure stub return value capturing returns the parent value
      */
-    public function testCaptureAnswerCapturesParentValue()
+    public function testCaptureAnswerCapturesParentValue(): void
     {
         $return = null;
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
         Phake::when($mock)->fooWithReturnValue()->captureReturnTo($return);
 
         $mock->fooWithReturnValue();
@@ -990,10 +990,10 @@ class PhakeTest extends TestCase
     /**
      * Tests setting reference parameters
      */
-    public function testSettingReferenceParameters()
+    public function testSettingReferenceParameters(): void
     {
         $value = null;
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         Phake::when($mock)->fooWithRefParm('test', Phake::setReference(42))->thenReturn(null);
 
@@ -1005,9 +1005,9 @@ class PhakeTest extends TestCase
     /**
      * Tests conditional reference parameter setting
      */
-    public function testConditionalReferenceParameterSetting()
+    public function testConditionalReferenceParameterSetting(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         Phake::when($mock)->fooWithRefParm('test', Phake::setReference(42)->when(24))->thenReturn(null);
 
@@ -1020,9 +1020,9 @@ class PhakeTest extends TestCase
     /**
      * Make sure reference parameters aren't set if the conditions don't match
      */
-    public function testConditionalReferenceParameterSettingFails()
+    public function testConditionalReferenceParameterSettingFails(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         Phake::when($mock)->fooWithRefParm('test', Phake::setReference(42)->when(24))->thenReturn(null);
 
@@ -1035,9 +1035,9 @@ class PhakeTest extends TestCase
     /**
      * Make sure paremeters are set to objects with no issues
      */
-    public function testReferenceParameterSettingWorksOnObjects()
+    public function testReferenceParameterSettingWorksOnObjects(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         $obj = new stdClass();
         Phake::when($mock)->fooWithRefParm('test', Phake::setReference($obj))->thenReturn(null);
@@ -1051,9 +1051,9 @@ class PhakeTest extends TestCase
     /**
      * Tests times matches exactly
      */
-    public function testVerifyTimesExact()
+    public function testVerifyTimesExact(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         $mock->foo();
         $mock->foo();
@@ -1064,12 +1064,12 @@ class PhakeTest extends TestCase
     /**
      * Tests times doesn't match
      */
-    public function testVerifyTimesMismatch()
+    public function testVerifyTimesMismatch(): void
     {
         $this->expectException(\Phake\Exception\VerificationException::class);
 
         Phake::setClient(Phake::CLIENT_DEFAULT);
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         $mock->foo();
         $mock->foo();
@@ -1080,9 +1080,9 @@ class PhakeTest extends TestCase
     /**
      * Tests at least matches with exact calls
      */
-    public function testVerifyAtLeastExact()
+    public function testVerifyAtLeastExact(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         $mock->foo();
 
@@ -1092,9 +1092,9 @@ class PhakeTest extends TestCase
     /**
      * Tests at least matches with greater calls
      */
-    public function testVerifyAtLeastGreater()
+    public function testVerifyAtLeastGreater(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         $mock->foo();
         $mock->foo();
@@ -1105,12 +1105,12 @@ class PhakeTest extends TestCase
     /**
      * Tests that at least doesn't match
      */
-    public function testVerifyAtLeastMismatch()
+    public function testVerifyAtLeastMismatch(): void
     {
         $this->expectException(\Phake\Exception\VerificationException::class);
 
         Phake::setClient(Phake::CLIENT_DEFAULT);
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         Phake::verify($mock, Phake::atLeast(1))->foo();
     }
@@ -1118,21 +1118,21 @@ class PhakeTest extends TestCase
     /**
      * Tests that never matches
      */
-    public function testNeverMatches()
+    public function testNeverMatches(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
         Phake::verify($mock, Phake::never())->foo();
     }
 
     /**
      * Tests that never catches an invocation
      */
-    public function testNeverMismatch()
+    public function testNeverMismatch(): void
     {
         $this->expectException(Phake\Exception\VerificationException::class);
 
         Phake::setClient(Phake::CLIENT_DEFAULT);
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
         $mock->foo();
         Phake::verify($mock, Phake::never())->foo();
     }
@@ -1140,9 +1140,9 @@ class PhakeTest extends TestCase
     /**
      * Tests that atMost passes with exact
      */
-    public function testAtMostExactly()
+    public function testAtMostExactly(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
         $mock->foo();
         Phake::verify($mock, Phake::atMost(1))->foo();
     }
@@ -1150,21 +1150,21 @@ class PhakeTest extends TestCase
     /**
      * Tests that atMost passes with under expected calls
      */
-    public function testAtMostUnder()
+    public function testAtMostUnder(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
         Phake::verify($mock, Phake::atMost(1))->foo();
     }
 
     /**
      * Tests that atMost fails on over calls
      */
-    public function testAtMostOver()
+    public function testAtMostOver(): void
     {
         $this->expectException(Phake\Exception\VerificationException::class);
 
         Phake::setClient(Phake::CLIENT_DEFAULT);
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
         $mock->foo();
         $mock->foo();
         Phake::verify($mock, Phake::atMost(1))->foo();
@@ -1173,11 +1173,11 @@ class PhakeTest extends TestCase
     /**
      * Tests that the given exception is thrown on thenThrow.
      */
-    public function testStubThenThrow()
+    public function testStubThenThrow(): void
     {
         $this->expectException(Phake\Exception\VerificationException::class);
 
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
         Phake::when($mock)->foo()->thenThrow(new Phake\Exception\VerificationException());
         $mock->foo();
     }
@@ -1185,11 +1185,11 @@ class PhakeTest extends TestCase
     /**
      * Tests that the thenThrow also now supports throwable
      */
-    public function testStubThenThrowWithThrowable()
+    public function testStubThenThrowWithThrowable(): void
     {
         $this->expectException(\AssertionError::class);
 
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
         Phake::when($mock)->foo()->thenThrow(new \AssertionError());
         $mock->foo();
     }
@@ -1197,7 +1197,7 @@ class PhakeTest extends TestCase
     /**
      * Tests that Phake::anyParameters() returns an instance of Phake\Matchers\AnyParameters
      */
-    public function testAnyParameters()
+    public function testAnyParameters(): void
     {
         $matcher = Phake::anyParameters();
 
@@ -1207,9 +1207,9 @@ class PhakeTest extends TestCase
     /**
      * Tests that Phake::anyParameters() really matches any invocation
      */
-    public function testAnyParametersMatchesEverything()
+    public function testAnyParametersMatchesEverything(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         $mock->fooWithLotsOfParameters(1, 2, 3);
         $mock->fooWithLotsOfParameters(1, 3, 2);
@@ -1221,29 +1221,29 @@ class PhakeTest extends TestCase
         Phake::verify($mock, Phake::times(6))->fooWithLotsOfParameters(Phake::anyParameters());
     }
 
-    public function testAnyParametersThrowsAnErrorWithTrailingParameters()
+    public function testAnyParametersThrowsAnErrorWithTrailingParameters(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         $mock->fooWithLotsOfParameters(3, 2, 1);
 
-        $this->expectException('InvalidArgumentException');
+        $this->expectException(\InvalidArgumentException::class);
         Phake::verify($mock)->fooWithLotsOfParameters(Phake::anyParameters(), 1);
     }
 
-    public function testAnyParametersThrowsAnErrorWithPrecedingParameters()
+    public function testAnyParametersThrowsAnErrorWithPrecedingParameters(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         $mock->fooWithLotsOfParameters(3, 2, 1);
 
-        $this->expectException('InvalidArgumentException');
+        $this->expectException(\InvalidArgumentException::class);
         Phake::verify($mock)->fooWithLotsOfParameters(3, Phake::anyParameters());
     }
 
-    public function testIgnoreRemainingMatchesEverything()
+    public function testIgnoreRemainingMatchesEverything(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         $mock->fooWithLotsOfParameters(1, 2, 3);
         $mock->fooWithLotsOfParameters(1, 3, 2);
@@ -1255,22 +1255,22 @@ class PhakeTest extends TestCase
         Phake::verify($mock, Phake::times(6))->fooWithLotsOfParameters(1, Phake::ignoreRemaining());
     }
 
-    public function testIgnoreRemainingThrowsAnErrorWithTrailingParameters()
+    public function testIgnoreRemainingThrowsAnErrorWithTrailingParameters(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         $mock->fooWithLotsOfParameters(3, 2, 1);
 
-        $this->expectException('InvalidArgumentException');
+        $this->expectException(\InvalidArgumentException::class);
         Phake::verify($mock)->fooWithLotsOfParameters(Phake::ignoreRemaining(), 1);
     }
 
     /**
      * Tests that when stubs are defined, they're matched in reverse order.
      */
-    public function testMatchesInReverseOrder()
+    public function testMatchesInReverseOrder(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         Phake::when($mock)->fooWithArgument($this->anything())->thenReturn(false);
         Phake::when($mock)->fooWithArgument('foo')->thenReturn(true);
@@ -1278,9 +1278,9 @@ class PhakeTest extends TestCase
         $this->assertTrue($mock->fooWithArgument('foo'));
     }
 
-    public function testFailedVerificationWithNoMockInteractions()
+    public function testFailedVerificationWithNoMockInteractions(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         $this->expectException(
             \Phake\Exception\VerificationException::class
@@ -1289,9 +1289,9 @@ class PhakeTest extends TestCase
         Phake::verify($mock)->foo();
     }
 
-    public function testFailedVerificationWithNonmatchingMethodCalls()
+    public function testFailedVerificationWithNonmatchingMethodCalls(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         $mock->foo('test');
 
@@ -1303,28 +1303,28 @@ class PhakeTest extends TestCase
         Phake::verify($mock)->foo();
     }
 
-    public function testStubbingMagicCallMethod()
+    public function testStubbingMagicCallMethod(): void
     {
-        $mock = Phake::mock('PhakeTest_MagicClass');
+        $mock = Phake::mock(\PhakeTest_MagicClass::class);
 
         Phake::when($mock)->magicCall()->thenReturn('magicCalled');
 
         $this->assertEquals('magicCalled', $mock->magicCall());
     }
 
-    public function testVerifyingMagicCallMethod()
+    public function testVerifyingMagicCallMethod(): void
     {
-        $mock = Phake::mock('PhakeTest_MagicClass');
+        $mock = Phake::mock(\PhakeTest_MagicClass::class);
 
         $mock->magicCall();
 
         Phake::verify($mock)->magicCall();
     }
 
-    public function testStubbingMagicMethodsAlsoResortsToCallIfNoStubsDefined()
+    public function testStubbingMagicMethodsAlsoResortsToCallIfNoStubsDefined(): void
     {
         $expected = '__call';
-        $mock     = Phake::partialMock('PhakeTest_MagicClass');
+        $mock     = Phake::partialMock(\PhakeTest_MagicClass::class);
 
         Phake::when($mock)->magicCall()->thenReturn('magicCalled');
 
@@ -1332,16 +1332,16 @@ class PhakeTest extends TestCase
         $this->assertEquals($expected, $mock->unStubbedCall());
     }
 
-    public function testStubbingMagicStaticCallMethod()
+    public function testStubbingMagicStaticCallMethod(): void
     {
-        $mock = Phake::mock('PhakeTest_MagicClass');
+        $mock = Phake::mock(\PhakeTest_MagicClass::class);
 
         Phake::whenStatic($mock)->magicCall()->thenReturn('magicCalled');
 
         $this->assertEquals('magicCalled', $mock::magicCall());
     }
 
-    public function testMockingSoapClient()
+    public function testMockingSoapClient(): void
     {
         if (!extension_loaded('soap')) {
             $this->markTestSkipped('Soap extension not loaded');
@@ -1353,7 +1353,7 @@ class PhakeTest extends TestCase
         $this->addToAssertionCount(1);
     }
 
-    public function testDefaultClient()
+    public function testDefaultClient(): void
     {
         $original_client = Phake::getClient();
 
@@ -1364,7 +1364,7 @@ class PhakeTest extends TestCase
         Phake::setClient($original_client);
     }
 
-    public function testSettingClient()
+    public function testSettingClient(): void
     {
         $original_client = Phake::getClient();
 
@@ -1376,7 +1376,7 @@ class PhakeTest extends TestCase
         Phake::setClient($original_client);
     }
 
-    public function testSettingDefaultClientByString()
+    public function testSettingDefaultClientByString(): void
     {
         $original_client = Phake::getClient();
 
@@ -1387,7 +1387,7 @@ class PhakeTest extends TestCase
         Phake::setClient($original_client);
     }
 
-    public function testSettingPHPUnitClientByString()
+    public function testSettingPHPUnitClientByString(): void
     {
         $original_client = Phake::getClient();
 
@@ -1398,10 +1398,10 @@ class PhakeTest extends TestCase
         Phake::setClient($original_client);
     }
 
-    public function testVerifyNoFurtherInteractionPassesStrict()
+    public function testVerifyNoFurtherInteractionPassesStrict(): void
     {
         Phake::setClient(Phake::CLIENT_PHPUNIT8);
-        $mock = Phake::mock('stdClass');
+        $mock = Phake::mock(\stdClass::class);
 
         $assertionCount = self::getCount();
         Phake::verifyNoFurtherInteraction($mock);
@@ -1410,10 +1410,10 @@ class PhakeTest extends TestCase
         $this->assertGreaterThan($assertionCount, $newAssertionCount);
     }
 
-    public function testVerifyNoInteractionPassesStrict()
+    public function testVerifyNoInteractionPassesStrict(): void
     {
         Phake::setClient(Phake::CLIENT_PHPUNIT8);
-        $mock = Phake::mock('stdClass');
+        $mock = Phake::mock(\stdClass::class);
 
         $assertionCount = self::getCount();
         Phake::verifyNoInteraction($mock);
@@ -1422,9 +1422,9 @@ class PhakeTest extends TestCase
         $this->assertGreaterThan($assertionCount, $newAssertionCount);
     }
 
-    public function testMockingStaticClass()
+    public function testMockingStaticClass(): void
     {
-        $mock = Phake::mock('PhakeTest_StaticClass');
+        $mock = Phake::mock(\PhakeTest_StaticClass::class);
 
         Phake::whenStatic($mock)->staticMethod()->thenReturn('bar');
 
@@ -1432,52 +1432,52 @@ class PhakeTest extends TestCase
         Phake::verifyStatic($mock)->staticMethod();
     }
 
-    public function testMockingStaticInterface()
+    public function testMockingStaticInterface(): void
     {
-        $mock = Phake::mock('PhakeTest_StaticInterface');
+        $mock = Phake::mock(\PhakeTest_StaticInterface::class);
 
         $this->assertInstanceOf(\Phake\IMock::class, $mock);
     }
 
-    public function testCallingMockStaticMethod()
+    public function testCallingMockStaticMethod(): void
     {
-        $mock = Phake::mock('PhakeTest_StaticInterface');
+        $mock = Phake::mock(\PhakeTest_StaticInterface::class);
 
         $this->assertNull($mock::staticMethod());
     }
 
-    public function testVerifyingMockStaticMethod()
+    public function testVerifyingMockStaticMethod(): void
     {
-        $mock = Phake::mock('PhakeTest_StaticInterface');
+        $mock = Phake::mock(\PhakeTest_StaticInterface::class);
 
         $mock::staticMethod();
 
         Phake::verifyStatic($mock)->staticMethod();
     }
 
-    public function testMockingAbstractClass()
+    public function testMockingAbstractClass(): void
     {
-        $mock = Phake::partialMock('PhakeTest_AbstractClass');
+        $mock = Phake::partialMock(\PhakeTest_AbstractClass::class);
         $this->assertNull($mock->referenceDefault());
     }
 
-    public function testStubbingMemcacheSetMethod()
+    public function testStubbingMemcacheSetMethod(): void
     {
         if (!extension_loaded('memcache')) {
             $this->markTestSkipped('memcache extension not loaded');
         }
 
-        $memcache = Phake::mock('Memcache');
+        $memcache = Phake::mock(\Memcache::class);
 
         Phake::when($memcache)->set('key', 'value')->thenReturn(true);
 
         $this->assertTrue($memcache->set('key', 'value'));
     }
 
-    public function testMockingMethodReturnByReference()
+    public function testMockingMethodReturnByReference(): void
     {
         $something            = [];
-        $referenceMethodClass = Phake::mock('PhakeTest_ReturnByReferenceMethodClass');
+        $referenceMethodClass = Phake::mock(\PhakeTest_ReturnByReferenceMethodClass::class);
 
         Phake::when($referenceMethodClass)->getSomething()->thenReturn($something);
 
@@ -1487,9 +1487,9 @@ class PhakeTest extends TestCase
         $this->assertNotContains('foo', $returnSomething);
     }
 
-    public function testGetOnMockedClass()
+    public function testGetOnMockedClass(): void
     {
-        $mock = Phake::mock('PhakeTest_MagicClass');
+        $mock = Phake::mock(\PhakeTest_MagicClass::class);
         Phake::when($mock)->__get('myId')->thenReturn(500)->thenReturn(501);
 
         $this->assertEquals(500, $mock->myId);
@@ -1498,11 +1498,11 @@ class PhakeTest extends TestCase
         Phake::verify($mock, Phake::times(2))->__get('myId');
     }
 
-    public function testCallOrderInObjectFailsWithPHPUnit()
+    public function testCallOrderInObjectFailsWithPHPUnit(): void
     {
         Phake::setClient(Phake::CLIENT_PHPUNIT8);
 
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         $mock->foo();
         $mock->callInnerFunc();
@@ -1517,9 +1517,9 @@ class PhakeTest extends TestCase
         );
     }
 
-    public function testGetMockedClassAnythingMatcher()
+    public function testGetMockedClassAnythingMatcher(): void
     {
-        $mock = Phake::mock('PhakeTest_MagicClass');
+        $mock = Phake::mock(\PhakeTest_MagicClass::class);
 
         Phake::when($mock)->__get($this->anything())->thenReturn(500);
 
@@ -1528,79 +1528,79 @@ class PhakeTest extends TestCase
         Phake::verify($mock)->__get($this->anything());
     }
 
-    public function testConstructorInterfaceCanBeMocked()
+    public function testConstructorInterfaceCanBeMocked(): void
     {
         if (defined('HHVM_VERSION')) {
             $this->markTestSkipped('This test causes a fatal error under HHVM.');
         }
 
         // Generated a fatal error before fixed
-        $this->assertInstanceOf(\Phake\IMock::class, Phake::mock('PhakeTest_ConstructorInterface'));
+        $this->assertInstanceOf(\Phake\IMock::class, Phake::mock(\PhakeTest_ConstructorInterface::class));
     }
 
-    public function testClassWithWakeupWorks()
+    public function testClassWithWakeupWorks(): void
     {
-        $this->assertInstanceOf(\Phake\IMock::class, Phake::mock('PhakeTest_WakeupClass'));
+        $this->assertInstanceOf(\Phake\IMock::class, Phake::mock(\PhakeTest_WakeupClass::class));
     }
 
-    public function testMockPDOStatement()
+    public function testMockPDOStatement(): void
     {
-        $this->assertInstanceOf('PDOStatement', Phake::mock('PDOStatement'));
+        $this->assertInstanceOf(\PDOStatement::class, Phake::mock(\PDOStatement::class));
     }
 
-    public function testMocksNotEqual()
+    public function testMocksNotEqual(): void
     {
-        $chocolateCookie = Phake::mock('PhakeTest_A');
-        $berryCookie = Phake::mock('PhakeTest_A');
+        $chocolateCookie = Phake::mock(\PhakeTest_A::class);
+        $berryCookie = Phake::mock(\PhakeTest_A::class);
 
         $this->assertNotEquals($chocolateCookie, $berryCookie);
     }
 
-    public function testStaticClassesReset()
+    public function testStaticClassesReset(): void
     {
-        $mock1 = Phake::mock('PhakeTest_StaticInterface');
+        $mock1 = Phake::mock(\PhakeTest_StaticInterface::class);
         $mock1::staticMethod();
         Phake::verifyStatic($mock1)->staticMethod();
 
         Phake::resetStaticInfo();
 
-        $mock2 = Phake::mock('PhakeTest_StaticInterface');
+        $mock2 = Phake::mock(\PhakeTest_StaticInterface::class);
         $mock2::staticMethod();
         Phake::verifyStatic($mock2)->staticMethod();
     }
 
-    public function testMockPDO()
+    public function testMockPDO(): void
     {
-        $this->assertInstanceOf('PDO', Phake::mock('PDO'));
+        $this->assertInstanceOf(\PDO::class, Phake::mock(\PDO::class));
     }
 
-    public function testMockPDOExtendingStatementClass()
+    public function testMockPDOExtendingStatementClass(): void
     {
         $this->assertInstanceOf(
-            'PhakeTest_PDOStatementExtendingClass',
-            Phake::mock('PhakeTest_PDOStatementExtendingClass')
+            \PhakeTest_PDOStatementExtendingClass::class,
+            Phake::mock(\PhakeTest_PDOStatementExtendingClass::class)
         );
     }
 
-    public function testMockPDOExtendingClass()
+    public function testMockPDOExtendingClass(): void
     {
         $this->assertInstanceOf(
-            'PhakeTest_PDOExtendingClass',
-            Phake::mock('PhakeTest_PDOExtendingClass')
+            \PhakeTest_PDOExtendingClass::class,
+            Phake::mock(\PhakeTest_PDOExtendingClass::class)
         );
     }
 
-    public function testMockRedis()
+    public function testMockRedis(): void
     {
         if (!extension_loaded('redis')) {
             $this->markTestSkipped('Cannot run this test without mock redis');
         }
 
-        $mock = Phake::mock('Redis');
-        $this->assertInstanceOf('Redis', $mock);
+        $mock = Phake::mock(\Redis::class);
+        $this->assertInstanceOf(\Redis::class, $mock);
     }
 
-    public function testFinallyBlockFiresVerifications()
+    public function testFinallyBlockFiresVerifications(): void
     {
         eval('
             $this->expectException("InvalidArgumentException");
@@ -1617,9 +1617,9 @@ class PhakeTest extends TestCase
         ');
     }
 
-    public function testVerifyNoOtherInteractions()
+    public function testVerifyNoOtherInteractions(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
         $mock->foo('a');
         $mock->foo('b');
 
@@ -1629,9 +1629,9 @@ class PhakeTest extends TestCase
         Phake::verifyNoOtherInteractions($mock);
     }
 
-    public function testVerifyNoOtherInteractionsWorks()
+    public function testVerifyNoOtherInteractionsWorks(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
         $mock->foo('a');
         $mock->foo('b');
 
@@ -1744,9 +1744,9 @@ class PhakeTest extends TestCase
      * @param array<array<string>> $calls List of calls for each mock
      * @param array<array<string> $verifications List of calls that will be verified for each mock
      */
-    public function testVariadicVerifyNoOtherInteractionsWorks(array $calls, array $verifications)
+    public function testVariadicVerifyNoOtherInteractionsWorks(array $calls, array $verifications): void
     {
-        $mocks = array_fill(0, count($calls), Phake::mock('PhakeTest_MockedClass'));
+        $mocks = array_fill(0, count($calls), Phake::mock(\PhakeTest_MockedClass::class));
         array_map(static function (\Phake\IMock $mock, array $calls) {
             array_map([$mock, 'foo'], $calls);
         }, $mocks, $calls);
@@ -1762,9 +1762,9 @@ class PhakeTest extends TestCase
         Phake::verifyNoOtherInteractions(...$mocks);
     }
 
-    public function testCallingProtectedMethods()
+    public function testCallingProtectedMethods(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
         Phake::when($mock)->innerFunc()->thenCallParent();
 
         $returned = Phake::makeVisible($mock)->innerFunc();
@@ -1773,12 +1773,12 @@ class PhakeTest extends TestCase
         $this->assertSame('test', $returned);
     }
 
-    public function testCallingPrivateMethods()
+    public function testCallingPrivateMethods(): void
     {
         if (defined('HHVM_VERSION')) {
             $this->markTestSkipped("Can't call private methods with hhvm");
         }
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
         Phake::when($mock)->privateFunc()->thenCallParent();
 
         $returned = Phake::makeVisible($mock)->privateFunc();
@@ -1786,9 +1786,9 @@ class PhakeTest extends TestCase
         $this->assertSame('blah', $returned);
     }
 
-    public function testCallingProtectedStaticMethods()
+    public function testCallingProtectedStaticMethods(): void
     {
-        $mock = Phake::mock('PhakeTest_StaticClass');
+        $mock = Phake::mock(\PhakeTest_StaticClass::class);
         Phake::whenStatic($mock)->protectedStaticMethod()->thenCallParent();
 
         $returned = Phake::makeStaticsVisible($mock)->protectedStaticMethod();
@@ -1797,9 +1797,9 @@ class PhakeTest extends TestCase
         $this->assertSame('foo', $returned);
     }
 
-    public function testThenReturnCallback()
+    public function testThenReturnCallback(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
         Phake::when($mock)->foo->thenReturnCallback(function () {
             return true;
@@ -1808,11 +1808,11 @@ class PhakeTest extends TestCase
         $this->assertTrue($mock->foo());
     }
 
-    public function testMockingMultipleInterfaces()
+    public function testMockingMultipleInterfaces(): void
     {
-        $mock = Phake::mock(['PhakeTest_MockedInterface', 'PhakeTest_MockedClass']);
-        $this->assertInstanceOf('PhakeTest_MockedInterface', $mock);
-        $this->assertInstanceOf('PhakeTest_MockedClass', $mock);
+        $mock = Phake::mock([\PhakeTest_MockedInterface::class, \PhakeTest_MockedClass::class]);
+        $this->assertInstanceOf(\PhakeTest_MockedInterface::class, $mock);
+        $this->assertInstanceOf(\PhakeTest_MockedClass::class, $mock);
 
         Phake::when($mock)->foo->thenReturn('bar');
         Phake::when($mock)->reference->thenReturn('foo');
@@ -1827,18 +1827,18 @@ class PhakeTest extends TestCase
         Phake::verify($mock)->fooWithArgument('blah');
     }
 
-    public function testReturningSelf()
+    public function testReturningSelf(): void
     {
-        $mock = Phake::mock('PhakeTest_MockedClass');
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
         Phake::when($mock)->foo->thenReturnSelf();
 
         $this->assertSame($mock, $mock->foo());
     }
 
-    public function testResetStaticPostCall()
+    public function testResetStaticPostCall(): void
     {
         $obj = new PhakeTest_StaticMethod();
-        $obj->className = Phake::mock('PhakeTest_ClassWithStaticMethod');
+        $obj->className = Phake::mock(\PhakeTest_ClassWithStaticMethod::class);
         Phake::whenStatic($obj->className)->ask()->thenReturn('ASKED');
 
         $val = $obj->askSomething();
@@ -1852,7 +1852,7 @@ class PhakeTest extends TestCase
         $this->assertEquals('Asked', $val);
     }
 
-    public function testCallingNeverReturnMockedMethodThrowsNeverReturnMethodCalledException()
+    public function testCallingNeverReturnMockedMethodThrowsNeverReturnMethodCalledException(): void
     {
         if (PHP_VERSION_ID < 80100) {
             $this->markTestSkipped('never type is not supported in PHP versions prior to 8.1');
@@ -1864,7 +1864,7 @@ class PhakeTest extends TestCase
         $mock->neverReturn();
     }
 
-    public function testCallingNeverReturnMockedMethodWithThenThrows()
+    public function testCallingNeverReturnMockedMethodWithThenThrows(): void
     {
         if (PHP_VERSION_ID < 80100) {
             $this->markTestSkipped('never type is not supported in PHP versions prior to 8.1');
@@ -1879,7 +1879,7 @@ class PhakeTest extends TestCase
         }
     }
 
-    public function testCallingNullReturnMockedMethodWillReturnNull()
+    public function testCallingNullReturnMockedMethodWillReturnNull(): void
     {
         if (PHP_VERSION_ID < 80200) {
             $this->markTestSkipped('null type is not supported in PHP versions prior to 8.2');
@@ -1889,7 +1889,7 @@ class PhakeTest extends TestCase
         $this->assertNull($mock->nullReturn());
     }
 
-    public function testCallingFalseReturnMockedMethodWillReturnFalse()
+    public function testCallingFalseReturnMockedMethodWillReturnFalse(): void
     {
         if (PHP_VERSION_ID < 80200) {
             $this->markTestSkipped('false type is not supported in PHP versions prior to 8.2');
@@ -1899,7 +1899,7 @@ class PhakeTest extends TestCase
         $this->assertFalse($mock->falseReturn());
     }
 
-    public function testCallingTrueReturnMockedMethodWillReturnTrue()
+    public function testCallingTrueReturnMockedMethodWillReturnTrue(): void
     {
         if (PHP_VERSION_ID < 80200) {
             $this->markTestSkipped('true type is not supported in PHP versions prior to 8.2');
@@ -1912,7 +1912,7 @@ class PhakeTest extends TestCase
     /**
      * For #239
      */
-    public function testChainingDoNothing()
+    public function testChainingDoNothing(): void
     {
         $mock = Phake::mock(PhakeTest_MockedClass::class);
 

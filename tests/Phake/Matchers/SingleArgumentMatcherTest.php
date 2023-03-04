@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Matchers;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,21 +42,21 @@ namespace Phake\Matchers;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Matchers;
+
 use Phake;
 use PHPUnit\Framework\TestCase;
 
 class SingleArgumentMatcherTest extends TestCase
 {
-    /**
-     * @var Phake\Matchers\SingleArgumentMatcher
-     */
-    private $matcher;
+    private Phake\Matchers\SingleArgumentMatcher $matcher;
 
     /**
      * @Mock
-     * @var Phake\Matchers\IChainableArgumentMatcher
      */
-    private $nextMatcher;
+    private Phake\Matchers\IChainableArgumentMatcher $nextMatcher;
 
     public function setUp(): void
     {
@@ -71,7 +66,7 @@ class SingleArgumentMatcherTest extends TestCase
         $this->matcher->setNextMatcher($this->nextMatcher);
     }
 
-    public function testMatches()
+    public function testMatches(): void
     {
         $args = ['test arg1', 'test arg2'];
 
@@ -85,7 +80,7 @@ class SingleArgumentMatcherTest extends TestCase
         $this->assertNull($result);
     }
 
-    public function testDoesNotMatchWrapped()
+    public function testDoesNotMatchWrapped(): void
     {
         $args = ['test arg1', 'test arg2'];
 
@@ -96,7 +91,7 @@ class SingleArgumentMatcherTest extends TestCase
         $this->matcher->doArgumentsMatch($args);
     }
 
-    public function testDoesNotMatchNext()
+    public function testDoesNotMatchNext(): void
     {
         $args = ['test arg1', 'test arg2'];
 
@@ -107,7 +102,7 @@ class SingleArgumentMatcherTest extends TestCase
         $this->matcher->doArgumentsMatch($args);
     }
 
-    public function testMatchWithNoNext()
+    public function testMatchWithNoNext(): void
     {
         $this->matcher = Phake::partialMock(SingleArgumentMatcher::class);
         $args = ['test arg1'];
@@ -120,7 +115,7 @@ class SingleArgumentMatcherTest extends TestCase
         $this->assertNull($result);
     }
 
-    public function testMatchWithNoNextAndExtraParameters()
+    public function testMatchWithNoNextAndExtraParameters(): void
     {
         $this->matcher = Phake::partialMock(SingleArgumentMatcher::class);
         $args = ['test arg1', 'test arg2'];
@@ -131,7 +126,7 @@ class SingleArgumentMatcherTest extends TestCase
         $this->matcher->doArgumentsMatch($args);
     }
 
-    public function testReferencesPassedThrough()
+    public function testReferencesPassedThrough(): void
     {
         $this->matcher = Phake::partialMock(SingleArgumentMatcher::class);
         $args = ['test arg1'];

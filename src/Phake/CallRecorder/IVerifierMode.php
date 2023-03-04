@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\CallRecorder;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\CallRecorder;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\CallRecorder;
+
 /**
  * Allows verifying that call invocations occurred some number of times.
  *
@@ -56,10 +55,6 @@ interface IVerifierMode extends \Stringable
 {
     /**
      * Verifies that the number of <code>$matchedCalls</code> matches the number of invocations expected.
-     *
-     * @param array $matchedCalls
-     *
-     * @return VerifierMode\Result
      */
     public function verify(array $matchedCalls): VerifierMode\Result;
 }

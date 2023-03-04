@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Stubber;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\Stubber;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Stubber;
+
 /**
  * Defines an interface for answers
  */
@@ -54,16 +53,11 @@ interface IAnswer
 {
     /**
      * Returns the answer that should be used when a method stubbed to this answer is called.
-     * @param mixed $context class name or object instance
-     * @param string $method
-     * @return callable
      */
     public function getAnswerCallback(mixed $context, string $method): callable;
 
     /**
      * Allows for post processing an answer if necessary
-     * @param mixed $answer
-     * @return void
      */
     public function processAnswer(mixed $answer): void;
 }

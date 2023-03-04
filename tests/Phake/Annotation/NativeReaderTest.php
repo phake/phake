@@ -1,18 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-if (PHP_VERSION_ID >= 80000) {
-    $fp = fopen(__FILE__, 'r');
-    fseek($fp, __COMPILER_HALT_OFFSET__);
-    eval(stream_get_contents($fp));
-}
-
-__halt_compiler();
-
-
-namespace Phake\Annotation;
-
 /*
  * Phake - Mocking Framework
  *
@@ -56,11 +42,23 @@ namespace Phake\Annotation;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+if (PHP_VERSION_ID >= 80000) {
+    $fp = fopen(__FILE__, 'r');
+    fseek($fp, __COMPILER_HALT_OFFSET__);
+    eval(stream_get_contents($fp));
+}
+
+__halt_compiler();
+
+namespace Phake\Annotation;
+
 use PHPUnit\Framework\TestCase;
 
 class NativeReaderTest extends TestCase
 {
-    private $reader;
+    private NativeReader $reader;
 
     #[\Phake\Mock]
     private $mock;
@@ -79,7 +77,7 @@ class NativeReaderTest extends TestCase
         $this->reader = new NativeReader();
     }
 
-    public function testGettingPropertiesWithMockAnnotations()
+    public function testGettingPropertiesWithMockAnnotations(): void
     {
         $properties = array_map(
             function($p) { return $p->getName(); },
@@ -96,7 +94,7 @@ class NativeReaderTest extends TestCase
         $this->assertSame($expectedProperties, $properties);
     }
 
-    public static function getMockTypeDataProvider()
+    public static function getMockTypeDataProvider(): iterable
     {
         yield 'no type' => [ null, 'mock' ];
         yield 'mock ordered type' => [ self::class, 'mockWithOrderedType' ];
@@ -107,7 +105,7 @@ class NativeReaderTest extends TestCase
     /**
      * @dataProvider getMockTypeDataProvider
      */
-    public function testGettingMockType(?string $expectedType, string $propertyName)
+    public function testGettingMockType(?string $expectedType, string $propertyName): void
     {
         $this->assertSame($expectedType, $this->reader->getMockType(new \ReflectionProperty($this, $propertyName)));
     }

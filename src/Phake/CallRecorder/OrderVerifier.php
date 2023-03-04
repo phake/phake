@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\CallRecorder;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,16 +42,15 @@ namespace Phake\CallRecorder;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\CallRecorder;
+
 /**
  * Verifies whether given positions are given in order.
  */
 class OrderVerifier
 {
-    /**
-     * @param array $calls
-     *
-     * @return bool
-     */
     public function verifyCallsInOrder(array $calls): bool
     {
         $call1 = array_shift($calls);

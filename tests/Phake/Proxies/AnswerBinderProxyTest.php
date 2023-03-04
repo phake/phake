@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Proxies;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\Proxies;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Proxies;
+
 use Phake;
 use PHPUnit\Framework\TestCase;
 
@@ -57,20 +56,11 @@ use PHPUnit\Framework\TestCase;
  */
 class AnswerBinderProxyTest extends TestCase
 {
-    /**
-     * @var AnswerBinderProxy
-     */
-    private $proxy;
+    private AnswerBinderProxy $proxy;
 
-    /**
-     * @var Phake\Stubber\AnswerBinder
-     */
-    private $binder;
+    private Phake\Stubber\AnswerBinder $binder;
 
-    /**
-     * @var Phake\Proxies\AnswerCollectionProxy
-     */
-    private $answerContainer;
+    private Phake\Proxies\AnswerCollectionProxy $answerContainer;
 
     /**
      * Sets up the test fixture
@@ -93,7 +83,7 @@ class AnswerBinderProxyTest extends TestCase
      *
      * @todo we need argument capturing so I can make sure the answer matches.
      */
-    public function testThenReturn()
+    public function testThenReturn(): void
     {
         $this->binder->expects($this->once())
             ->method('bindAnswer')
@@ -108,7 +98,7 @@ class AnswerBinderProxyTest extends TestCase
      *
      * It should result in the binder being called with a lambda answer
      */
-    public function testThenReturnCallback()
+    public function testThenReturnCallback(): void
     {
         $func = function ($arg1) {
             return $arg1;
@@ -125,7 +115,7 @@ class AnswerBinderProxyTest extends TestCase
     /**
      * Tests the thenCallParent functionality of the proxy
      */
-    public function testThenCallParent()
+    public function testThenCallParent(): void
     {
         $this->binder->expects($this->once())
             ->method('bindAnswer')
@@ -138,7 +128,7 @@ class AnswerBinderProxyTest extends TestCase
     /**
      * Tests that captureReturnTo does it's thing
      */
-    public function testCaptureReturnTo()
+    public function testCaptureReturnTo(): void
     {
         $this->binder->expects($this->once())
             ->method('bindAnswer')
@@ -151,7 +141,7 @@ class AnswerBinderProxyTest extends TestCase
     /**
      * Tests the thenThrow functionality of the proxy.
      */
-    public function testThenThrow()
+    public function testThenThrow(): void
     {
         $exception = new \RuntimeException();
 
@@ -168,7 +158,7 @@ class AnswerBinderProxyTest extends TestCase
      *
      * It should result in the binder being called with no answer.
      */
-    public function testThenDoNothing()
+    public function testThenDoNothing(): void
     {
         $this->binder->expects($this->once())
             ->method('bindAnswer')
@@ -180,7 +170,7 @@ class AnswerBinderProxyTest extends TestCase
         $this->assertSame($this->answerContainer, $this->proxy->thenDoNothing());
     }
 
-    public function testThenReturnSelf()
+    public function testThenReturnSelf(): void
     {
         $this->binder->expects($this->once())
             ->method('bindAnswer')

@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Client;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,31 +42,35 @@ namespace Phake\Client;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Client;
+
 use Phake;
 use PHPUnit\Framework\TestCase;
 
 class DefaultClientTest extends TestCase
 {
-    private $client;
+    private DefaultClient $client;
 
     public function setUp(): void
     {
         $this->client = new DefaultClient();
     }
 
-    public function testImplementsIClient()
+    public function testImplementsIClient(): void
     {
         $this->assertInstanceOf(IClient::class, $this->client);
     }
 
-    public function testProcessVerifierResultReturnsCallsOnTrue()
+    public function testProcessVerifierResultReturnsCallsOnTrue(): void
     {
         $result = new Phake\CallRecorder\VerifierResult(true, ['call1']);
 
         $this->assertEquals(['call1'], $this->client->processVerifierResult($result));
     }
 
-    public function testProcessVerifierThrowsExceptionOnFalse()
+    public function testProcessVerifierThrowsExceptionOnFalse(): void
     {
         $result = new Phake\CallRecorder\VerifierResult(false, [], 'failure message');
 

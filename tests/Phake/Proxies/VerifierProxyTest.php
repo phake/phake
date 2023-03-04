@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Proxies;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\Proxies;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Proxies;
+
 use Phake;
 use PHPUnit\Framework\TestCase;
 
@@ -57,30 +56,15 @@ use PHPUnit\Framework\TestCase;
  */
 class VerifierProxyTest extends TestCase
 {
-    /**
-     * @var Phake\CallRecorder\Verifier
-     */
-    private $verifier;
+    private Phake\CallRecorder\Verifier $verifier;
 
-    /**
-     * @var Phake\Proxies\VerifierProxy
-     */
-    private $proxy;
+    private VerifierProxy $proxy;
 
-    /**
-     * @var Phake\Client\IClient
-     */
-    private $client;
+    private Phake\Client\IClient $client;
 
-    /**
-     * @var array
-     */
-    private $matchedCalls;
+    private array $matchedCalls;
 
-    /**
-     * @var Phake\CallRecorder\IVerifierMode
-     */
-    private $mode;
+    private Phake\CallRecorder\IVerifierMode $mode;
 
     public function setUp(): void
     {
@@ -102,7 +86,7 @@ class VerifierProxyTest extends TestCase
     /**
      * Tests that the proxy will call the verifier with the method properly forwarded
      */
-    public function testVerifierCallsAreForwardedMethod()
+    public function testVerifierCallsAreForwardedMethod(): void
     {
         Phake::when($this->verifier)->verifyCall(Phake::anyParameters())->thenReturn(
             new Phake\CallRecorder\VerifierResult(true, [Phake::mock(\Phake\CallRecorder\CallInfo::class)])
@@ -116,7 +100,7 @@ class VerifierProxyTest extends TestCase
     /**
      * Tests that call information from the proxied verifier is returned
      */
-    public function testVerifierReturnsCallInfoData()
+    public function testVerifierReturnsCallInfoData(): void
     {
         Phake::when($this->verifier)->verifyCall(Phake::anyParameters())->thenReturn(
             new Phake\CallRecorder\VerifierResult(true, $this->matchedCalls)
@@ -128,7 +112,7 @@ class VerifierProxyTest extends TestCase
     /**
      * Tests that verifier calls will forward method arguments properly
      */
-    public function testVerifierCallsAreForwardedArguments()
+    public function testVerifierCallsAreForwardedArguments(): void
     {
         $argumentMatcher = Phake::mock(\Phake\Matchers\IChainableArgumentMatcher::class);
 
@@ -145,7 +129,7 @@ class VerifierProxyTest extends TestCase
      * Tests that verifier calls that are not given an argument matcher will generate an equals matcher
      * with the given value.
      */
-    public function testProxyTransformsNonMatchersToEqualsMatcher()
+    public function testProxyTransformsNonMatchersToEqualsMatcher(): void
     {
         $argumentMatcher = new Phake\Matchers\EqualsMatcher('test', \SebastianBergmann\Comparator\Factory::getInstance());
         Phake::when($this->verifier)->verifyCall(Phake::anyParameters())->thenReturn(
@@ -157,7 +141,7 @@ class VerifierProxyTest extends TestCase
         $this->assertEquals($argumentMatcher, $expectation->getArgumentMatcher());
     }
 
-    public function testClientResultProcessorIsCalled()
+    public function testClientResultProcessorIsCalled(): void
     {
         $result = new Phake\CallRecorder\VerifierResult(true, $this->matchedCalls);
         Phake::when($this->verifier)->verifyCall(Phake::anyParameters())->thenReturn($result);
@@ -170,13 +154,13 @@ class VerifierProxyTest extends TestCase
     /**
      * @dataProvider magicGetInvalidData
      */
-    public function testMagicGetWithInvalidData($invalidData, $exceptionContains)
+    public function testMagicGetWithInvalidData(string $invalidData, string $exceptionContains): void
     {
         $this->expectException('InvalidArgumentException');
         $this->proxy->__get($invalidData);
     }
 
-    public static function magicGetInvalidData()
+    public static function magicGetInvalidData(): iterable
     {
         return [
             ['1foo', 'cannot start with an integer'],

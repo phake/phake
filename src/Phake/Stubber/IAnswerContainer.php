@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Stubber;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\Stubber;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Stubber;
+
 /**
  * Answer containers are classes used to store answers.
  */
@@ -54,7 +53,6 @@ interface IAnswerContainer
 {
     /**
      * Returns an answer from the container
-     * @return IAnswer|null
      */
     public function getAnswer(): ?IAnswer;
 }

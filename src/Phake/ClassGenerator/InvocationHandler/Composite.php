@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\ClassGenerator\InvocationHandler;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,18 +42,22 @@ namespace Phake\ClassGenerator\InvocationHandler;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\ClassGenerator\InvocationHandler;
+
 /**
  * A composite invocation handler
  */
 class Composite implements IInvocationHandler
 {
     /**
-     * @var array
+     * @var IIvocationHandler[]
      */
     private array $handlers;
 
     /**
-     * @param array $handlers
+     * @param IIvocationHandler[] $handlers
      */
     public function __construct(array $handlers)
     {

@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Matchers;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,22 +42,23 @@ namespace Phake\Matchers;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Matchers;
+
 use Phake;
 use PHPUnit\Framework\TestCase;
 
 class AnyParametersTest extends TestCase
 {
-    /**
-     * @var AnyParameters
-     */
-    private $matcher;
+    private AnyParameters $matcher;
 
     public function setUp(): void
     {
         $this->matcher = new AnyParameters();
     }
 
-    public static function matchesDataProvider()
+    public static function matchesDataProvider(): iterable
     {
         return [
             [[]],
@@ -74,23 +70,23 @@ class AnyParametersTest extends TestCase
     /**
      * @dataProvider matchesDataProvider
      */
-    public function testMatches($arg)
+    public function testMatches($arg): void
     {
         $this->assertNull($this->matcher->doArgumentsMatch($arg));
     }
 
-    public function testToString()
+    public function testToString(): void
     {
         $this->assertEquals('<any parameters>', $this->matcher->__toString());
     }
 
-    public function testSetNextThrowsInvalidException()
+    public function testSetNextThrowsInvalidException(): void
     {
         $this->expectException('InvalidArgumentException');
         $this->matcher->setNextMatcher(Phake::mock(IChainableArgumentMatcher::class));
     }
 
-    public function testAssertPreviousMatcherThrowsInvalidException()
+    public function testAssertPreviousMatcherThrowsInvalidException(): void
     {
         $this->expectException('InvalidArgumentException');
         $this->matcher->assertPreviousMatcher(Phake::mock(IChainableArgumentMatcher::class));

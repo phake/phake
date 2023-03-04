@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\CallRecorder\VerifierMode;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,21 +42,20 @@ namespace Phake\CallRecorder\VerifierMode;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\CallRecorder\VerifierMode;
+
 /**
  * Verifier mode that checks that the number of matched items are equal to or greater than the expected amount.
  * @author Brian Feaver <brian.feaver@gmail.com>
  */
 class AtLeast implements \Phake\CallRecorder\IVerifierMode
 {
-    /**
-     * @var int
-     */
     private int $times;
 
     /**
      * Constructs a verifier with the given <code>$times</code>.
-     *
-     * @param int $times
      */
     public function __construct(int $times)
     {
@@ -71,10 +65,6 @@ class AtLeast implements \Phake\CallRecorder\IVerifierMode
     /**
      * Verifies that the number of <code>$matchedCalls</code> is equal to or greater than the
      * value this object was instantiated with.
-     *
-     * @param array $matchedCalls
-     *
-     * @return Result
      */
     public function verify(array $matchedCalls): Result
     {
@@ -82,6 +72,7 @@ class AtLeast implements \Phake\CallRecorder\IVerifierMode
         if ($calledTimes >= $this->times) {
             return new Result(true, '');
         }
+
         return new Result(false, sprintf(
             'actually called <%s> times',
             count($matchedCalls)

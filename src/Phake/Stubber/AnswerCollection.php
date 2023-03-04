@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Stubber;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\Stubber;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Stubber;
+
 /**
  * Allows iteration over a series of answers. Simply calling getAnswer() will result in the appropriate
  * answer being returned. You do not need to manage the iteration manually.
@@ -55,15 +54,10 @@ namespace Phake\Stubber;
  */
 class AnswerCollection implements IAnswerContainer
 {
-    /**
-     * @var array
-     */
     private array $answers;
 
     /**
      * Adds the passed answer to a new answer collection.
-     *
-     * @param IAnswer $answer
      */
     public function __construct(IAnswer $answer)
     {
@@ -72,9 +66,6 @@ class AnswerCollection implements IAnswerContainer
 
     /**
      * Adds a new answer to the end of the collection.
-     *
-     * @param IAnswer $answer
-     * @return void
      */
     public function addAnswer(IAnswer $answer): void
     {
@@ -83,8 +74,6 @@ class AnswerCollection implements IAnswerContainer
 
     /**
      * Returns the next answer in the collection.
-     *
-     * @return IAnswer|null
      */
     public function getAnswer(): ?IAnswer
     {

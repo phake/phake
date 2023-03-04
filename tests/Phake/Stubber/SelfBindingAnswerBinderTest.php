@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Stubber;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\Stubber;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Stubber;
+
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -54,14 +53,8 @@ use PHPUnit\Framework\TestCase;
  */
 class SelfBindingAnswerBinderTest extends TestCase
 {
-    /**
-     * @var SelfBindingAnswerBinder
-     */
-    private $binder;
+    private SelfBindingAnswerBinder $binder;
 
-    /**
-     * Sets up the test fixture
-     */
     public function setUp(): void
     {
         $this->binder = new SelfBindingAnswerBinder();
@@ -70,11 +63,11 @@ class SelfBindingAnswerBinderTest extends TestCase
     /**
      * Tests that the given answer is exposed.
      */
-    public function testGetAnswer()
+    public function testGetAnswer(): void
     {
         $answer = $this->getMockBuilder(IAnswer::class)->getMock();
-        $this->assertSame($this->binder, $this->binder->bindAnswer($answer));
 
+        $this->assertSame($this->binder, $this->binder->bindAnswer($answer));
         $this->assertSame($answer, $this->binder->getAnswer());
     }
 }

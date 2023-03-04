@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Matchers;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,21 +42,21 @@ namespace Phake\Matchers;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Matchers;
+
 use Phake;
 use PHPUnit\Framework\TestCase;
 
 class AbstractChainableArgumentMatcherTest extends TestCase
 {
-    /**
-     * @var AbstractChainableArgumentMatcher
-     */
-    private $matcher;
+    private AbstractChainableArgumentMatcher $matcher;
 
     /**
      * @Mock
-     * @var Phake\Matchers\IChainableArgumentMatcher
      */
-    private $nextMatcher;
+    private Phake\Matchers\IChainableArgumentMatcher $nextMatcher;
 
     public function setUp(): void
     {
@@ -70,19 +65,19 @@ class AbstractChainableArgumentMatcherTest extends TestCase
         $this->matcher = Phake::partialMock(AbstractChainableArgumentMatcher::class);
     }
 
-    public function testGetNext()
+    public function testGetNext(): void
     {
         $this->matcher->setNextMatcher($this->nextMatcher);
 
         $this->assertSame($this->nextMatcher, $this->matcher->getNextMatcher());
     }
 
-    public function testAssertPreviousMatcher()
+    public function testAssertPreviousMatcher(): void
     {
         $this->assertNull($this->matcher->assertPreviousMatcher($this->nextMatcher));
     }
 
-    public function testSetNextMatcherCallsAssertPreviousMatcher()
+    public function testSetNextMatcherCallsAssertPreviousMatcher(): void
     {
         Phake::when($this->nextMatcher)->assertPreviousMatcher->thenThrow(new \InvalidArgumentException());
 

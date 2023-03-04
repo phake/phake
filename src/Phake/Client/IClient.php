@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Client;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\Client;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Client;
+
 /**
  * Defines the interface for Phake clients.
  */
@@ -56,14 +55,12 @@ interface IClient
      * Handles the processing of a verifier result. When the verifier is true it should return the matched calls.
      * The behavior for if the verifier is false is up to the client.
      *
-     * @param \Phake\CallRecorder\VerifierResult $result
      * @return array<int, \Phake\CallRecorder\CallInfo>
      */
     public function processVerifierResult(\Phake\CallRecorder\VerifierResult $result): array;
 
     /**
      * Used to notify the client that a mock has been frozen.
-     * @return void
      */
     public function processObjectFreeze(): void;
 }

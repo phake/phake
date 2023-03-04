@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Stubber;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\Stubber;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Stubber;
+
 /**
  * Provides the interface for an answer binder
  */
@@ -56,10 +55,6 @@ interface IAnswerBinder
      * Binds the given answer to an object.
      *
      * Returns an answer container that will contain the given answer.
-     *
-     * @param IAnswer $answer
-     *
-     * @return IAnswerContainer
      */
     public function bindAnswer(IAnswer $answer): IAnswerContainer;
 }

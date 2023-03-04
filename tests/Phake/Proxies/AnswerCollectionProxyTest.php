@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Proxies;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,20 +42,18 @@ namespace Phake\Proxies;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Proxies;
+
 use Phake;
 use PHPUnit\Framework\TestCase;
 
 class AnswerCollectionProxyTest extends TestCase
 {
-    /**
-     * @var Phake\Proxies\AnswerCollectionProxyTest
-     */
-    private $proxy;
+    private AnswerCollectionProxy $proxy;
 
-    /**
-     * @var Phake\Stubber\AnswerCollection
-     */
-    private $container;
+    private Phake\Stubber\AnswerCollection $container;
 
     /**
      * Sets up the test fixture
@@ -78,7 +71,7 @@ class AnswerCollectionProxyTest extends TestCase
      *
      * @todo we need argument capturing so I can make sure the answer matches.
      */
-    public function testThenReturn()
+    public function testThenReturn(): void
     {
         $this->assertSame($this->proxy, $this->proxy->thenReturn(42));
 
@@ -93,7 +86,7 @@ class AnswerCollectionProxyTest extends TestCase
      *
      * It should result in the binder being called with a lambda answer
      */
-    public function testThenReturnCallback()
+    public function testThenReturnCallback(): void
     {
         $func = function ($arg1) {
             return $arg1;
@@ -110,7 +103,7 @@ class AnswerCollectionProxyTest extends TestCase
     /**
      * Tests the thenCallParent functionality of the proxy
      */
-    public function testThenCallParent()
+    public function testThenCallParent(): void
     {
         $this->assertSame($this->proxy, $this->proxy->thenCallParent());
 
@@ -120,7 +113,7 @@ class AnswerCollectionProxyTest extends TestCase
     /**
      * Tests that captureReturnTo does it's thing
      */
-    public function testCaptureReturnTo()
+    public function testCaptureReturnTo(): void
     {
         $var = null;
         $this->assertSame($this->proxy, $this->proxy->captureReturnTo($var));
@@ -131,7 +124,7 @@ class AnswerCollectionProxyTest extends TestCase
     /**
      * Tests the thenThrow functionality of the proxy.
      */
-    public function testThenThrow()
+    public function testThenThrow(): void
     {
         $exception = new \RuntimeException();
 
@@ -143,7 +136,7 @@ class AnswerCollectionProxyTest extends TestCase
         $this->phakeAssertAttributeEqualTo($exception, 'answer', $answer);
     }
 
-    private function phakeAssertAttributeEqualTo($expectedValue, string $propertyName, $object)
+    private function phakeAssertAttributeEqualTo($expectedValue, string $propertyName, $object): void
     {
         $reflectionObject = new \ReflectionObject($object);
         $reflectionProperty = $reflectionObject->getProperty($propertyName);

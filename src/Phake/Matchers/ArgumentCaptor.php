@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Matchers;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\Matchers;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Matchers;
+
 /**
  * Used to capture the value passed as a parameter to a verified method for further assertions.
  *
@@ -54,24 +53,12 @@ namespace Phake\Matchers;
  */
 class ArgumentCaptor extends SingleArgumentMatcher
 {
-    /**
-     * @var mixed
-     */
     private mixed $boundVariable;
 
-    /**
-     * @var array
-     */
     private array $allCapturedValues;
 
-    /**
-     * @var IChainableArgumentMatcher|null
-     */
     private ?IChainableArgumentMatcher $matcher = null;
 
-    /**
-     * @param mixed $boundVariable - reference parameter
-     */
     public function __construct(mixed &$boundVariable)
     {
         $this->boundVariable =& $boundVariable;
@@ -82,9 +69,6 @@ class ArgumentCaptor extends SingleArgumentMatcher
      * Binds the passed in variable to the allCapturedValues array
      *
      * $values will be set to an array
-     *
-     * @param mixed $values
-     * @return void
      */
     public function bindAllCapturedValues(mixed &$values): void
     {
@@ -97,9 +81,7 @@ class ArgumentCaptor extends SingleArgumentMatcher
      *
      * Will bind the argument to the variable passed to the constructor.
      *
-     * @param mixed $argument
      * @throws \Phake\Exception\MethodMatcherException
-     * @return void
      */
     protected function matches(mixed &$argument): void
     {
@@ -124,10 +106,6 @@ class ArgumentCaptor extends SingleArgumentMatcher
      * is useful if one method is called multiple times.
      *
      * The same matcher factory used by the verifier and stubber is used here.
-     *
-     * @param mixed $matcher
-     *
-     * @return ArgumentCaptor the current instance
      */
     public function when(mixed $matcher): self
     {

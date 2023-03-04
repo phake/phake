@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Annotation;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,11 +42,15 @@ namespace Phake\Annotation;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Annotation;
+
 use PHPUnit\Framework\TestCase;
 
 class LegacyReaderTest extends TestCase
 {
-    private $reader;
+    private LegacyReader $reader;
 
     /**
      * @Mock
@@ -80,7 +79,7 @@ class LegacyReaderTest extends TestCase
         $this->reader    = new LegacyReader();
     }
 
-    public function testGettingPropertiesWithMockAnnotations()
+    public function testGettingPropertiesWithMockAnnotations(): void
     {
         $properties = array_map(
             function ($p) {
@@ -99,7 +98,7 @@ class LegacyReaderTest extends TestCase
         $this->assertSame($expectedProperties, $properties);
     }
 
-    public static function getMockTypeDataProvider()
+    public static function getMockTypeDataProvider(): iterable
     {
         yield 'no type' => [ null, 'mock' ];
         yield 'mock type' => [ 'Mock\Class\Name', 'mockWithType' ];
@@ -110,7 +109,7 @@ class LegacyReaderTest extends TestCase
     /**
      * @dataProvider getMockTypeDataProvider
      */
-    public function testGettingMockType(?string $expectedType, string $propertyName)
+    public function testGettingMockType(?string $expectedType, string $propertyName): void
     {
         $this->assertSame($expectedType, $this->reader->getMockType(new \ReflectionProperty($this, $propertyName)));
     }

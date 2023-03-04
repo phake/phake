@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Mock;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\Mock;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Mock;
+
 use Phake;
 use PHPUnit\Framework\TestCase;
 
@@ -55,31 +54,27 @@ class InfoTest extends TestCase
     /**
      * @var Phake\Mock\Info
      */
-    private $info;
+    private Phake\Mock\Info $info;
 
     /**
      * @Mock
-     * @var Phake\CallRecorder\Recorder
      */
-    private $recorder;
+    private Phake\CallRecorder\Recorder $recorder;
 
     /**
      * @Mock
-     * @var Phake\Stubber\StubMapper
      */
-    private $mapper;
+    private Phake\Stubber\StubMapper $mapper;
 
     /**
      * @Mock
-     * @var Phake\Stubber\IAnswer
      */
-    private $answer;
+    private Phake\Stubber\IAnswer $answer;
 
     /**
      * @Mock
-     * @var Phake\ClassGenerator\InvocationHandler\IInvocationHandler
      */
-    private $handlerChain;
+    private Phake\ClassGenerator\InvocationHandler\IInvocationHandler $handlerChain;
 
     public function setUp(): void
     {
@@ -87,7 +82,7 @@ class InfoTest extends TestCase
         $this->info = $this->getSUT();
     }
 
-    private function getSUT()
+    private function getSUT(): Info
     {
         return new Info('name', $this->recorder, $this->mapper, $this->answer);
     }
@@ -95,19 +90,19 @@ class InfoTest extends TestCase
     /**
      * Tests for the uniqid which is to ensure mocks are always different.
      */
-    public function testObjectsNotEqual()
+    public function testObjectsNotEqual(): void
     {
         $secondInfo = $this->getSUT();
 
         $this->assertNotEquals($secondInfo, $this->info);
     }
 
-    public function testGetCallRecorder()
+    public function testGetCallRecorder(): void
     {
         $this->assertSame($this->recorder, $this->info->getCallRecorder());
     }
 
-    public function testIsFrozen()
+    public function testIsFrozen(): void
     {
         $this->assertFalse($this->info->isObjectFrozen());
 
@@ -118,28 +113,28 @@ class InfoTest extends TestCase
         $this->assertFalse($this->info->isObjectFrozen());
     }
 
-    public function testGetStubMapper()
+    public function testGetStubMapper(): void
     {
         $this->assertSame($this->mapper, $this->info->getStubMapper());
     }
 
-    public function testGetDefaultAnswer()
+    public function testGetDefaultAnswer(): void
     {
         $this->assertSame($this->answer, $this->info->getDefaultAnswer());
     }
 
-    public function testSetHandlerChain()
+    public function testSetHandlerChain(): void
     {
         $this->info->setHandlerChain($this->handlerChain);
         $this->assertSame($this->handlerChain, $this->info->getHandlerChain());
     }
 
-    public function testName()
+    public function testName(): void
     {
         $this->assertEquals('name', $this->info->getName());
     }
 
-    public function testReset()
+    public function testReset(): void
     {
         $this->info->freezeObject();
         $this->info->resetInfo();

@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Proxies;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\Proxies;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Proxies;
+
 use Phake;
 use PHPUnit\Framework\TestCase;
 
@@ -55,25 +54,18 @@ use PHPUnit\Framework\TestCase;
  */
 class StaticVisibilityProxyTest extends TestCase
 {
-    public function testCallingOnANonObject()
-    {
-        $this->expectException(\InvalidArgumentException::class);
-
-        $proxy = new StaticVisibilityProxy(42);
-    }
-
-    public function testCallingNonExistantMethod()
+    public function testCallingNonExistantMethod(): void
     {
         $test = new \PhakeTest_StaticClass();
         $proxy = new StaticVisibilityProxy($test);
 
-        $this->expectException('InvalidArgumentException');
+        $this->expectException(\InvalidArgumentException::class);
         $proxy->badFunctionName();
     }
 
-    public function testCallingMagicMethod()
+    public function testCallingMagicMethod(): void
     {
-        $mock = Phake::mock('PhakeTest_MagicClass');
+        $mock = Phake::mock(\PhakeTest_MagicClass::class);
         $proxy = new StaticVisibilityProxy($mock);
 
         Phake::whenStatic($mock)->test()->thenReturn('bar');
@@ -83,9 +75,9 @@ class StaticVisibilityProxyTest extends TestCase
         $this->assertEquals('bar', $test);
     }
 
-    public function testCallingProtectedMethod()
+    public function testCallingProtectedMethod(): void
     {
-        $mock = Phake::mock('PhakeTest_StaticClass');
+        $mock = Phake::mock(\PhakeTest_StaticClass::class);
         $proxy = new StaticVisibilityProxy($mock);
 
         Phake::whenStatic($mock)->protectedStaticMethod()->thenReturn('bar');
@@ -95,9 +87,9 @@ class StaticVisibilityProxyTest extends TestCase
         Phake::verifyStatic($mock)->protectedStaticMethod();
     }
 
-    public function testCallingPublicMethod()
+    public function testCallingPublicMethod(): void
     {
-        $mock = Phake::mock('PhakeTest_StaticClass');
+        $mock = Phake::mock(\PhakeTest_StaticClass::class);
         $proxy = new StaticVisibilityProxy($mock);
 
         Phake::whenStatic($mock)->staticMethod()->thenReturn('bar');

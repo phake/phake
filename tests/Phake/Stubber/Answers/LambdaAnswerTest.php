@@ -8,13 +8,11 @@ use PHPUnit\Framework\TestCase;
 
 class LambdaAnswerTest extends TestCase
 {
-    public function testLambdaAnswerAcceptsOldschoolLambda()
+    public function testLambdaAnswerAcceptsOldschoolLambda(): void
     {
-        $func   = function ($arg1) {
-            return $arg1;
-        };
+        $func   = fn ($arg1) => $arg1;
         $answer = new LambdaAnswer($func);
-        $result = call_user_func($answer->getAnswerCallback('someObject', 'testMethod'), 'bar');
+        $result = $answer->getAnswerCallback('someObject', 'testMethod')('bar');
         $this->assertSame('bar', $result);
     }
 }

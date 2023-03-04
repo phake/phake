@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Annotation;
-
 /*
  * Phake - Mocking Framework
  *
@@ -48,6 +43,10 @@ namespace Phake\Annotation;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Annotation;
+
 /**
  * Initializes all properties of a given object that have the @Mock annotation.
  *
@@ -57,14 +56,8 @@ namespace Phake\Annotation;
  */
 class MockInitializer
 {
-    /**
-     * @var IReader|null
-     */
     private static ?IReader $defaultReader = null;
 
-    /**
-     * @var IReader
-     */
     private IReader $reader;
 
     public static function getDefaultReader(): IReader
@@ -76,9 +69,6 @@ class MockInitializer
         return self::$defaultReader;
     }
 
-    /**
-     * @return void
-     */
     public static function setDefaultReader(IReader $reader): void
     {
         self::$defaultReader = $reader;
@@ -89,10 +79,6 @@ class MockInitializer
         $this->reader = $reader ?: self::getDefaultReader();
     }
 
-    /**
-     * @param object $object
-     * @return void
-     */
     public function initialize(object $object): void
     {
         $class = new \ReflectionClass($object);

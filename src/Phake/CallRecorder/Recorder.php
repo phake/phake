@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\CallRecorder;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\CallRecorder;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\CallRecorder;
+
 /**
  * Records calls made to particular objects.
  *
@@ -73,27 +72,20 @@ class Recorder
      */
     private array $unverifiedCalls = [];
 
-    /**
-     * @var int
-     */
     private static int $lastPosition = 0;
 
     /**
      * Records that a given
-     *
-     * @param Call $call
-     * @return void
      */
     public function recordCall(Call $call): void
     {
-        $this->calls[]                           = $call;
+        $this->calls[] = $call;
         $this->positions[spl_object_hash($call)] = new Position(self::$lastPosition++);
         $this->unverifiedCalls[spl_object_hash($call)] = $call;
     }
 
     /**
      * Returns all calls recorded in the order they were recorded.
-     * @return array
      */
     public function getAllCalls(): array
     {
@@ -104,35 +96,28 @@ class Recorder
      * Removes all calls from the call recorder.
      *
      * Also removes all positions
-     * @return void
      */
     public function removeAllCalls(): void
     {
-        $this->calls     = [];
+        $this->calls = [];
         $this->positions = [];
         $this->unverifiedCalls = [];
     }
 
     /**
      * Retrieves call info for a particular call
-     *
-     * @param Call $call
-     *
-     * @return CallInfo|null
      */
     public function getCallInfo(Call $call): ?CallInfo
     {
         if (in_array($call, $this->calls, true)) {
             return new CallInfo($call, $this->positions[spl_object_hash($call)]);
         }
+
         return null;
     }
 
     /**
      * Marks an individual call as being verified
-     *
-     * @param Call $call
-     * @return void
      */
     public function markCallVerified(Call $call): void
     {
@@ -141,8 +126,6 @@ class Recorder
 
     /**
      * Returns all unverified calls from the recorder
-     *
-     * @return array
      */
     public function getUnverifiedCalls(): array
     {

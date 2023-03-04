@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Stubber\Answers;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\Stubber\Answers;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Stubber\Answers;
+
 /**
  * Allows providing a static answer to a stubbed method call.
  *
@@ -55,12 +54,12 @@ namespace Phake\Stubber\Answers;
 class LambdaAnswer implements \Phake\Stubber\IAnswer
 {
     /**
-     * @var mixed
+     * @var callable
      */
     private mixed $answerLambda;
 
     /**
-     * @param mixed $answerLambda
+     * @param callable $answerLambda
      */
     public function __construct(mixed $answerLambda)
     {
@@ -69,12 +68,8 @@ class LambdaAnswer implements \Phake\Stubber\IAnswer
 
     /**
      * Nothing to process
-     *
-     * @param mixed $answer
-     *
-     * @return void
      */
-    public function processAnswer($answer): void
+    public function processAnswer(mixed $answer): void
     {
     }
 

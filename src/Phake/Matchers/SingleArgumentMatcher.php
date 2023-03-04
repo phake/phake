@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Matchers;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\Matchers;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Matchers;
+
 /**
  * Implements matches so that you can easily match a single argument
  */
@@ -55,9 +54,7 @@ abstract class SingleArgumentMatcher extends AbstractChainableArgumentMatcher
     /**
      * Executes the matcher on a given list of argument values. Returns TRUE on a match, FALSE otherwise.
      *
-     * @param array $arguments
      * @throws \Phake\Exception\MethodMatcherException
-     * @return void
      */
     public function doArgumentsMatch(array &$arguments): void
     {
@@ -94,9 +91,6 @@ abstract class SingleArgumentMatcher extends AbstractChainableArgumentMatcher
 
     /**
      * Asserts the matcher on a given argument value. Throws an exception on false
-     *
-     * @param mixed $argument
-     * @return void
      */
     abstract protected function matches(mixed &$argument): void;
 }

@@ -1,12 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\CallRecorder;
-
-use Phake\Exception\VerificationException;
-
-
 /*
  * Phake - Mocking Framework
  *
@@ -50,6 +42,10 @@ use Phake\Exception\VerificationException;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\CallRecorder;
+
 /**
  * Can verify calls recorded into the given recorder.
  *
@@ -57,9 +53,6 @@ use Phake\Exception\VerificationException;
  */
 class Verifier
 {
-    /**
-     * @var Recorder
-     */
     protected Recorder $recorder;
 
     /**
@@ -68,7 +61,6 @@ class Verifier
     protected \Phake\IMock|string $obj;
 
     /**
-     * @param Recorder $recorder
      * @param \Phake\IMock|class-string $obj
      */
     public function __construct(Recorder $recorder, \Phake\IMock|string $obj)
@@ -79,12 +71,6 @@ class Verifier
 
     /**
      * Returns whether or not a call has been made in the associated call recorder.
-     *
-     * @todo Maybe rename this to findMatchedCalls?
-     *
-     * @param CallExpectation $expectation
-     *
-     * @return VerifierResult
      */
     public function verifyCall(CallExpectation $expectation): VerifierResult
     {
@@ -135,13 +121,9 @@ class Verifier
             );
         }
 
-
         return new VerifierResult(true, $matchedCalls);
     }
 
-    /**
-     * @return VerifierResult
-     */
     public function verifyNoCalls(): VerifierResult
     {
         $result = true;
@@ -157,13 +139,12 @@ class Verifier
         }
         $desc = 'Expected no interaction with mock' . "\n"
                 . 'Invocations:' . "\n  ";
+
         return new VerifierResult(false, [], $desc . implode("\n  ", $reportedCalls));
     }
 
     /**
      * Ensures all calls for this verifier have actually been verified
-     *
-     * @return VerifierResult
      */
     public function verifyNoOtherCalls(): VerifierResult
     {
@@ -180,6 +161,7 @@ class Verifier
         }
         $desc = 'Expected no interaction with mock' . "\n"
                 . 'Invocations:' . "\n  ";
+
         return new VerifierResult(false, [], $desc . implode("\n  ", $reportedCalls));
     }
 

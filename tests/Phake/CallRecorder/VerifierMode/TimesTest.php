@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\CallRecorder\VerifierMode;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\CallRecorder\VerifierMode;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\CallRecorder\VerifierMode;
+
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -54,7 +53,7 @@ use PHPUnit\Framework\TestCase;
  */
 class TimesTest extends TestCase
 {
-    private $verifierModeTimes;
+    private Times $verifierModeTimes;
 
     public function setUp(): void
     {
@@ -64,7 +63,7 @@ class TimesTest extends TestCase
     /**
      * Tests that the Times verifier passes if there are exactly enough items.
      */
-    public function testVerifyMatches()
+    public function testVerifyMatches(): void
     {
         // Will throw an exception if it wasn't working
         $matchedCalls = ['1item'];
@@ -74,7 +73,7 @@ class TimesTest extends TestCase
     /**
      * Tests that the Times verifier fails if there are more than enough items.
      */
-    public function testVerifyFailsOnOver()
+    public function testVerifyFailsOnOver(): void
     {
         $matchedCalls = ['1item', '2items'];
         $result       = $this->verifierModeTimes->verify($matchedCalls);
@@ -85,7 +84,7 @@ class TimesTest extends TestCase
     /**
      * Tests that the Times verifier fails if there weren't enough items.
      */
-    public function testVerifyFailsOnUnder()
+    public function testVerifyFailsOnUnder(): void
     {
         $matchedCalls = [];
         $result       = $this->verifierModeTimes->verify($matchedCalls);
@@ -93,7 +92,7 @@ class TimesTest extends TestCase
         $this->assertEquals('actually called <0> times', $result->getFailureDescription());
     }
 
-    public function testToString()
+    public function testToString(): void
     {
         $this->assertEquals('exactly <1> times', $this->verifierModeTimes->__toString());
     }

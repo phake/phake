@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Matchers;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,21 +42,16 @@ namespace Phake\Matchers;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Matchers;
+
 class ReferenceSetter extends SingleArgumentMatcher
 {
-    /**
-     * @var mixed
-     */
     private mixed $value;
 
-    /**
-     * @var IChainableArgumentMatcher|null
-     */
     private ?IChainableArgumentMatcher $matcher = null;
 
-    /**
-     * @param mixed $value The value to set the reference parameter to.
-     */
     public function __construct(mixed $value)
     {
         $this->value = $value;
@@ -72,9 +62,7 @@ class ReferenceSetter extends SingleArgumentMatcher
      *
      * Sets the $argument to the value passed in the constructor
      *
-     * @param mixed $argument
      * @throws \Phake\Exception\MethodMatcherException
-     * @return void
      */
     protected function matches(mixed &$argument): void
     {
@@ -93,7 +81,6 @@ class ReferenceSetter extends SingleArgumentMatcher
 
     /**
      * Returns a human readable description of the argument matcher
-     * @return string
      */
     public function __toString(): string
     {
@@ -106,10 +93,6 @@ class ReferenceSetter extends SingleArgumentMatcher
      * This allows an argument to only be set if the original argument meets a specific criteria.
      *
      * The same matcher factory used by the verifier and stubber is used here.
-     *
-     * @param mixed $matcher
-     *
-     * @return ReferenceSetter the current instance
      */
     public function when(mixed $matcher): self
     {

@@ -1,11 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Matchers;
-
-use Hamcrest;
-
 /*
  * Phake - Mocking Framework
  *
@@ -49,19 +42,19 @@ use Hamcrest;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Matchers;
+
+use Hamcrest;
+
 /**
  * An adapter class allowing hamcrest matchers to be used as Phake matchers
  */
 class HamcrestMatcherAdapter extends SingleArgumentMatcher
 {
-    /**
-     * @var \Hamcrest\Matcher
-     */
     private Hamcrest\Matcher $matcher;
 
-    /**
-     * @param Hamcrest\Matcher $matcher
-     */
     public function __construct(Hamcrest\Matcher $matcher)
     {
         $this->matcher = $matcher;
@@ -72,9 +65,7 @@ class HamcrestMatcherAdapter extends SingleArgumentMatcher
      *
      * Forwards the call to Hamcrest's matches() method.
      *
-     * @param mixed $argument
      * @throws \Phake\Exception\MethodMatcherException
-     * @retrun void
      */
     protected function matches(mixed &$argument): void
     {

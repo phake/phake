@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\ClassGenerator\InvocationHandler;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,25 +42,19 @@ namespace Phake\ClassGenerator\InvocationHandler;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\ClassGenerator\InvocationHandler;
+
 /**
  * Records calls to a mock object's call recorder.
  */
 class StubCaller implements IInvocationHandler
 {
-    /**
-     * @var \Phake\Stubber\StubMapper
-     */
     private \Phake\Stubber\StubMapper $stubMapper;
 
-    /**
-     * @var \Phake\Stubber\IAnswer
-     */
     private \Phake\Stubber\IAnswer $defaultAnswer;
 
-    /**
-     * @param \Phake\Stubber\StubMapper $stubMapper
-     * @param \Phake\Stubber\IAnswer $defaultAnswer
-     */
     public function __construct(\Phake\Stubber\StubMapper $stubMapper, \Phake\Stubber\IAnswer $defaultAnswer)
     {
         $this->stubMapper = $stubMapper;

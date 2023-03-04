@@ -1,7 +1,4 @@
 <?php
-
-namespace Phake\Matchers;
-
 /*
  * Phake - Mocking Framework
  *
@@ -45,6 +42,10 @@ namespace Phake\Matchers;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Matchers;
+
 /**
  * A matcher to validate that an argument equals a particular value.
  *
@@ -52,21 +53,12 @@ namespace Phake\Matchers;
  */
 class EqualsMatcher extends SingleArgumentMatcher
 {
-    /**
-     * @var mixed
-     */
     private mixed $value;
 
-    /**\
-     * @var \SebastianBergmann\Comparator\Factory
-     */
     private \SebastianBergmann\Comparator\Factory $comparatorFactory;
 
     /**
      * Pass in the value that the upcoming arguments is expected to equal.
-     *
-     * @param mixed $value
-     * @param \SebastianBergmann\Comparator\Factory $comparatorFactory
      */
     public function __construct(mixed $value, \SebastianBergmann\Comparator\Factory $comparatorFactory)
     {
@@ -76,9 +68,6 @@ class EqualsMatcher extends SingleArgumentMatcher
 
     /**
      * Returns whether or not the passed argument matches the matcher.
-     *
-     * @param mixed &$argument
-     * @return void
      */
     protected function matches(mixed &$argument): void
     {
@@ -97,12 +86,10 @@ class EqualsMatcher extends SingleArgumentMatcher
         }
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         $converter = new \Phake\String\Converter();
+
         return "equal to {$converter->convertToString($this->value)}";
     }
 }

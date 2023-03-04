@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\ClassGenerator;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,17 +42,15 @@ namespace Phake\ClassGenerator;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\ClassGenerator;
+
 /**
  * Loads classes into the system via the eval method
  */
 class EvalLoader implements ILoader
 {
-    /**
-     * @param string $className
-     * @param string $classDef
-     *
-     * @return void
-     */
     public function loadClassByString(string $className, string $classDef): void
     {
         eval($classDef);

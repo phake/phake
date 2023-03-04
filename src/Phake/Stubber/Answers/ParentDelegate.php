@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Stubber\Answers;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,6 +42,10 @@ namespace Phake\Stubber\Answers;
  * @link       http://www.digitalsandwich.com/
  */
 
+declare(strict_types=1);
+
+namespace Phake\Stubber\Answers;
+
 /**
  * An answer delegate that allows mocked methods to call their parent methods.
  *
@@ -57,14 +56,8 @@ namespace Phake\Stubber\Answers;
  */
 class ParentDelegate implements \Phake\Stubber\IAnswer
 {
-    /**
-     * @var mixed
-     */
     private mixed $capturedReturn;
 
-    /**
-     * @param mixed &$captor
-     */
     public function __construct(mixed &$captor = null)
     {
         $this->capturedReturn =& $captor;
@@ -93,18 +86,14 @@ class ParentDelegate implements \Phake\Stubber\IAnswer
                     return ['parent', $method];
                 }
 
-
                 return new ParentDelegateCallback($context, $reflMethod);
             }
-        } catch (\ReflectionException $e) {
+        } catch (\ReflectionException) {
         }
+
         return $fallback;
     }
 
-    /**
-     * @param mixed ...$args
-     * @return mixed
-     */
     public function getFallback(mixed ...$args): mixed
     {
         return null;

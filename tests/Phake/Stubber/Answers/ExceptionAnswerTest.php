@@ -1,9 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Stubber\Answers;
-
 /*
  * Phake - Mocking Framework
  *
@@ -47,46 +42,43 @@ namespace Phake\Stubber\Answers;
  * @link       http://www.digitalsandwich.com/
  */
 
-use PHPUnit\Framework\TestCase;
+declare(strict_types=1);
 
-/**
- * @author Brian Feaver <brian.feaver@gmail.com>
- */
+namespace Phake\Stubber\Answers;
+
+use Phake;
+use PHPUnit\Framework\TestCase;
+use RuntimeException;
+
 class ExceptionAnswerTest extends TestCase
 {
-    /**
-     * @var Phake\Stubber\Answers\ExceptionAnswer
-     */
-    private $answer;
+    private Phake\Stubber\Answers\ExceptionAnswer $answer;
 
-    /**
-     * @var RuntimeException
-     */
-    private $exception;
+    private RuntimeException $exception;
 
     /**
      * Sets up the answer fixture
      */
     public function setUp(): void
     {
-        $this->exception = new \RuntimeException();
+        $this->exception = new RuntimeException();
         $this->answer    = new ExceptionAnswer($this->exception);
     }
 
-    public function testAnswer()
+    public function testAnswer(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
 
-        call_user_func($this->answer->getAnswerCallback('stdClass', 'testMethod'));
+        $this->answer->getAnswerCallback(\stdClass::class, 'testMethod')();
     }
 
     /**
      * Tests that we throw the same exception instantiated in the answer.
      */
-    public function testSameException()
+    public function testSameException(): void
     {
         try {
-            call_user_func($this->answer->getAnswerCallback('someObject', 'testMethod'));
+            $this->answer->getAnswerCallback('someObject', 'testMethod')();
         } catch (\Exception $e) {
             $this->assertSame($this->exception, $e);
         }
