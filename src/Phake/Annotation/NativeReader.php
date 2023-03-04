@@ -54,13 +54,6 @@ class NativeReader implements IReader
 {
     private const ANNOTATION_NAME = 'Phake\Mock';
 
-    public function __construct()
-    {
-        if (PHP_VERSION_ID < 80000) {
-            throw new \RuntimeException('NativeReader is only available for PHP >= 8.0.0');
-        }
-    }
-
     public function getPropertiesWithMockAnnotation(ReflectionClass $class): iterable
     {
         $properties = [];

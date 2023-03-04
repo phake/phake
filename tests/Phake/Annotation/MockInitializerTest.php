@@ -125,10 +125,6 @@ class MockInitializerTest extends TestCase
 
     public function testWithNativeReader(): void
     {
-        if (PHP_VERSION_ID < 80000) {
-            $this->markTestSkipped('Native attributes are not supported in PHP versions prior to 8.0');
-        }
-
         $this->initializer = new MockInitializer(new NativeReader());
         $this->initializer->initialize($this);
 

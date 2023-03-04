@@ -44,14 +44,6 @@
 
 declare(strict_types=1);
 
-if (PHP_VERSION_ID >= 70400) {
-    $fp = fopen(__FILE__, 'r');
-    fseek($fp, __COMPILER_HALT_OFFSET__);
-    eval(stream_get_contents($fp));
-}
-
-__halt_compiler();
-
 namespace Phake\Annotation;
 
 use Phake\Mock;
@@ -88,10 +80,6 @@ class MockInitializerTypedPropertiesTest extends TestCase
 
     public function testWithNativeReader(): void
     {
-        if (PHP_VERSION_ID < 80000) {
-            $this->markTestSkipped('Native attributes are not supported in PHP versions prior to 8.0');
-        }
-
         $this->initializer = new MockInitializer(new NativeReader);
         $this->initializer->initialize($this);
 

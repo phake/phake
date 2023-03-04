@@ -835,19 +835,11 @@ class MockClassTest extends TestCase
 
     public function testStubbingUnionTypes(): void
     {
-        if (PHP_VERSION_ID < 80000) {
-            $this->markTestSkipped('Union types are not supported in PHP versions prior to 8.0');
-        }
-
         $this->assertInstanceOf(\PhakeTest_UnionTypes::class, Phake::mock(\PhakeTest_UnionTypes::class));
     }
 
     public function testStubbingUnionParameterHints(): void
     {
-        if (PHP_VERSION_ID < 80000) {
-            $this->markTestSkipped('Union types are not supported in PHP versions prior to 8.0');
-        }
-
         $mock = Phake::mock(\PhakeTest_UnionTypes::class);
 
         try {
@@ -862,10 +854,6 @@ class MockClassTest extends TestCase
 
     public function testStubbingUnionParameterHintsWrongType(): void
     {
-        if (PHP_VERSION_ID < 80000) {
-            $this->markTestSkipped('Union types are not supported in PHP versions prior to 8.0');
-        }
-
         $mock = Phake::mock(\PhakeTest_UnionTypes::class);
 
         try {
@@ -880,10 +868,6 @@ class MockClassTest extends TestCase
 
     public function testStubbingNullableUnionParameterHints(): void
     {
-        if (PHP_VERSION_ID < 80000) {
-            $this->markTestSkipped('Union types are not supported in PHP versions prior to 8.0');
-        }
-
         $mock = Phake::mock(\PhakeTest_UnionTypes::class);
 
         try {
@@ -900,10 +884,6 @@ class MockClassTest extends TestCase
 
     public function testStubbingUnionReturnType(): void
     {
-        if (PHP_VERSION_ID < 80000) {
-            $this->markTestSkipped('Union types are not supported in PHP versions prior to 8.0');
-        }
-
         $mock = Phake::mock(\PhakeTest_UnionTypes::class);
         Phake::when($mock)->unionReturn()->thenReturn(1)->thenreturn('foo');
 
@@ -917,10 +897,6 @@ class MockClassTest extends TestCase
 
     public function testStubbingUnionReturnWrongType(): void
     {
-        if (PHP_VERSION_ID < 80000) {
-            $this->markTestSkipped('Union types are not supported in PHP versions prior to 8.0');
-        }
-
         $mock = Phake::mock(\PhakeTest_UnionTypes::class);
         Phake::when($mock)->unionReturn()->thenReturn(null);
 
@@ -936,10 +912,6 @@ class MockClassTest extends TestCase
 
     public function testStubbingUnionReturnNullableType(): void
     {
-        if (PHP_VERSION_ID < 80000) {
-            $this->markTestSkipped('Union types are not supported in PHP versions prior to 8.0');
-        }
-
         $mock = Phake::mock(\PhakeTest_UnionTypes::class);
         Phake::when($mock)->unionReturnNullable()->thenReturn(1)->thenreturn('foo')->thenReturn(null);
 
@@ -954,10 +926,6 @@ class MockClassTest extends TestCase
 
     public function testStubbingUnionSelfParameterHints(): void
     {
-        if (PHP_VERSION_ID < 80000) {
-            $this->markTestSkipped('Union types are not supported in PHP versions prior to 8.0');
-        }
-
         $mock = Phake::mock(\PhakeTest_UnionTypes::class);
 
         try {
@@ -971,10 +939,6 @@ class MockClassTest extends TestCase
 
     public function testStubbingUnionReturnWithSelf(): void
     {
-        if (PHP_VERSION_ID < 80000) {
-            $this->markTestSkipped('Union types are not supported in PHP versions prior to 8.0');
-        }
-
         $mock = Phake::mock(\PhakeTest_UnionTypes::class);
         Phake::when($mock)->unionReturnWithSelf()->thenReturnSelf();
 

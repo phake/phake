@@ -119,10 +119,6 @@ class SmartDefaultAnswerTest extends TestCase
 
     public function testUnionTypeReturn(): void
     {
-        if (PHP_VERSION_ID < 80000) {
-            $this->markTestSkipped('Union types are not supported in PHP versions prior to 8.0');
-        }
-
         $context = new \PhakeTest_UnionTypes();
         $cb = $this->answer->getAnswerCallback($context, 'unionReturn');
 
