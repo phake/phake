@@ -82,7 +82,7 @@ class LegacyReader implements IReader
             $parser = new \Doctrine\Common\Annotations\PhpParser();
 
             $reflectionClass = $property->getDeclaringClass();
-            $useStatements   = $parser->parseClass($reflectionClass);
+            $useStatements   = $parser->parseUseStatements($reflectionClass);
             $key             = strtolower($mockedClass);
 
             if (array_key_exists($key, $useStatements)) {
