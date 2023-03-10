@@ -66,9 +66,6 @@ class StaticVisibilityProxy
 
     public function __construct(object $proxied)
     {
-        if (!is_object($proxied)) {
-            throw new \InvalidArgumentException("\Phake\Proxies\VisibilityProxy was passed a non-object");
-        }
         $this->proxied = $proxied::class;
     }
 

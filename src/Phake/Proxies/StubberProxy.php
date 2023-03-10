@@ -55,6 +55,9 @@ class StubberProxy
 {
     use NamedArgumentsResolver;
 
+    /**
+     * @param \Phake\IMock|class-string $obj
+     */
     public function __construct(
         private \Phake\IMock|string $obj,
         private \Phake\Matchers\Factory $matcherFactory

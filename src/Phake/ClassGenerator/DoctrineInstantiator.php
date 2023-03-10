@@ -60,7 +60,7 @@ class DoctrineInstantiator implements IInstantiator
     }
 
     /**
-     * @param class-string $className
+     * {@inheritdoc}
      */
     public function instantiate(string $className): object
     {

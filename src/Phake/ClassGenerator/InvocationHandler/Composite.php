@@ -52,12 +52,12 @@ namespace Phake\ClassGenerator\InvocationHandler;
 class Composite implements IInvocationHandler
 {
     /**
-     * @var IIvocationHandler[]
+     * @var array<IInvocationHandler>
      */
     private array $handlers;
 
     /**
-     * @param IIvocationHandler[] $handlers
+     * @param array<IInvocationHandler> $handlers
      */
     public function __construct(array $handlers)
     {

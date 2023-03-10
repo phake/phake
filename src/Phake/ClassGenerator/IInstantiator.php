@@ -53,7 +53,9 @@ namespace Phake\ClassGenerator;
 interface IInstantiator
 {
     /**
-     * @param class-string $className
+     * @template T of object
+     * @param class-string<T> $className
+     * @return T
      */
     public function instantiate(string $className): object;
 }

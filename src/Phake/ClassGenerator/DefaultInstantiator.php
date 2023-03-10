@@ -53,7 +53,7 @@ namespace Phake\ClassGenerator;
 class DefaultInstantiator implements IInstantiator
 {
     /**
-     * @param class-string $className
+     * {@inheritdoc}
      */
     public function instantiate(string $className): object
     {

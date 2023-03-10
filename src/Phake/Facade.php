@@ -68,7 +68,9 @@ class Facade
     /**
      * Creates a new mock class than can be stubbed and verified.
      *
-     * @param class-string|array<class-string> $mockedClassList
+     * @template T of object
+     * @param class-string<T>|array<class-string<T>> $mockedClassList
+     * @return IMock&T
      *
      * @throws \InvalidArgumentException
      */
@@ -127,6 +129,8 @@ class Facade
      * Generates a unique class name based on a given name.
      *
      * The $base will be used as the prefix for the new class name.
+     *
+     * @psalm-suppress MoreSpecificReturnType
      *
      * @param array<class-string> $bases
      *

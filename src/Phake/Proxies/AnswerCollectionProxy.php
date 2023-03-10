@@ -61,7 +61,7 @@ class AnswerCollectionProxy implements \Phake\Stubber\IAnswerContainer, AnswerPr
     /**
      * Binds a static answer to the method and object in the proxied binder.
      */
-    public function thenReturn($value): self
+    public function thenReturn(mixed $value): self
     {
         $this->collection->addAnswer(new \Phake\Stubber\Answers\StaticAnswer($value));
 

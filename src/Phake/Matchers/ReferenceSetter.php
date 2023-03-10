@@ -66,8 +66,7 @@ class ReferenceSetter extends SingleArgumentMatcher
      */
     protected function matches(mixed &$argument): void
     {
-        $args = [];
-        $args[] =& $argument;
+        $args = [ &$argument ];
         if (null !== $this->matcher) {
             try {
                 $this->matcher->doArgumentsMatch($args);

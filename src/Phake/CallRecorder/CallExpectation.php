@@ -77,6 +77,9 @@ class CallExpectation implements \Stringable
         $this->verifierMode     = $verificationMode;
     }
 
+    /**
+     * @return \Phake\IMock|class-string
+     */
     public function getObject(): \Phake\IMock|string
     {
         return $this->object;

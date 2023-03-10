@@ -57,7 +57,7 @@ class MethodMatcher implements IMethodMatcher
 
     private ?IChainableArgumentMatcher $argumentMatcherChain;
 
-    public function __construct($expectedMethod, ?IChainableArgumentMatcher $argumentMatcherChain = null)
+    public function __construct(string $expectedMethod, ?IChainableArgumentMatcher $argumentMatcherChain = null)
     {
         $this->expectedMethod = $expectedMethod;
         $this->argumentMatcherChain = $argumentMatcherChain;

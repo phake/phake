@@ -81,13 +81,13 @@ class InfoRegistry
     /**
      * @param \Phake\IMock|class-string $mock
      */
-    public function getInfo(\Phake\IMock|string $mock): ?Info
+    public function getInfo(\Phake\IMock|string $mock): Info
     {
         if ($mock instanceof \Phake\IMock) {
-            return $this->registry[$mock] ?? null;
+            return $this->registry[$mock];
         }
 
-        return $this->staticRegistry[$mock] ?? null;
+        return $this->staticRegistry[$mock];
     }
 
     public function resetAll(): void
