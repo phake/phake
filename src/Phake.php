@@ -71,6 +71,7 @@ class Phake
      * Constants identifying supported clients
      */
     public const CLIENT_DEFAULT = 'DEFAULT';
+    public const CLIENT_PHPUNIT = 'PHPUNIT';
     public const CLIENT_PHPUNIT8 = 'PHPUNIT8';
     public const CLIENT_PHPUNIT9 = 'PHPUNIT9';
     public const CLIENT_PHPUNIT10 = 'PHPUNIT10';
@@ -456,21 +457,18 @@ class Phake
 
     /**
      * Returns the client currently being used by Phake
+     *
+     * @psalm-suppress NullableReturnStatement
+     * @psalm-suppress InvalidNullableReturnType
      */
     public static function getClient(): Phake\Client\IClient
     {
         if (!isset(self::$client)) {
             if (class_exists(\PHPUnit\Framework\TestCase::class)) {
-                if (version_compare(\PHPUnit\Runner\Version::id(), '10.0.0') >= 0) {
-                    return self::$client = new Phake\Client\PHPUnit10();
-                } elseif (version_compare(\PHPUnit\Runner\Version::id(), '9.0.0') >= 0) {
-                    return self::$client = new Phake\Client\PHPUnit9();
-                } elseif (version_compare(\PHPUnit\Runner\Version::id(), '8.0.0') >= 0) {
-                    return self::$client = new \Phake\Client\PHPUnit8();
-                }
+                self::setClient(self::CLIENT_PHPUNIT);
+            } else {
+                self::setClient(self::CLIENT_DEFAULT);
             }
-
-            return self::$client = new Phake\Client\DefaultClient();
         }
 
         return self::$client;
@@ -491,6 +489,18 @@ class Phake
             self::$client = new Phake\Client\PHPUnit9();
         } elseif (self::CLIENT_PHPUNIT10 == $client) {
             self::$client = new Phake\Client\PHPUnit10();
+        } elseif (self::CLIENT_PHPUNIT == $client) {
+            if (class_exists(\PHPUnit\Framework\TestCase::class)) {
+                if (version_compare(\PHPUnit\Runner\Version::id(), '10.0.0') >= 0) {
+                    self::$client = new Phake\Client\PHPUnit10();
+                } elseif (version_compare(\PHPUnit\Runner\Version::id(), '9.0.0') >= 0) {
+                    self::$client = new Phake\Client\PHPUnit9();
+                } elseif (version_compare(\PHPUnit\Runner\Version::id(), '8.0.0') >= 0) {
+                    self::$client = new \Phake\Client\PHPUnit8();
+                }
+            } else {
+                throw new \InvalidArgumentException('PHPUnit is not installed');
+            }
         } else {
             self::$client = new Phake\Client\DefaultClient();
         }
