@@ -42,5 +42,6 @@ There are a few links that have information on how you can utilize Phake.
 * [Phake Website](https://phake.github.io)
 * [Phake Documentation](https://phake.github.io/doc/)
 * [Initial Phake Announcement](https://web.archive.org/web/20101230174850/http://digitalsandwich.com/archives/84-introducing-phake-mocking-framework.html)
+* [PHPStorm Plugin](https://plugins.jetbrains.com/plugin/17261-phake)
 
 If you have an article or tutorial that you would like to share, feel free to open an [issue](https://github.com/phake/phake/issues) on github and I will add it to this list
