@@ -50,4 +50,10 @@ namespace Phake;
 #[\Attribute(\Attribute::TARGET_PROPERTY)]
 final class Mock
 {
+    public ?string $class;
+
+    public function __construct(?string $class = null)
+    {
+        $this->class = $class;
+    }
 }

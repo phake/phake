@@ -80,9 +80,9 @@ class NativeReader implements IReader
     {
         /** @psalm-suppress ArgumentTypeCoercion */
         foreach ($property->getAttributes(self::ANNOTATION_NAME) as $attribute) {
-            $args = $attribute->getArguments();
+            $instance = $attribute->newInstance();
 
-            return $args[0] ?? $args['class'] ?? null;
+            return $instance->class;
         }
 
         return null;

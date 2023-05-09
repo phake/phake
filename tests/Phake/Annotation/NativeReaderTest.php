@@ -57,6 +57,7 @@ namespace Phake\Annotation;
  */
 
 use PHPUnit\Framework\TestCase;
+use Phake\IMock;
 
 class NativeReaderTest extends TestCase
 {
@@ -71,8 +72,11 @@ class NativeReaderTest extends TestCase
     #[\Phake\Mock(class: self::class)]
     private $mockWithNamedType;
 
-    #[\Phake\Mock(foo: self::class)]
-    private $mockWithNoType;
+    #[\Phake\Mock()]
+    private IMock $mockWithNativeType;
+
+    #[\Phake\Mock(IMock::class)]
+    private IMock $mockWithImportedType;
 
     protected function setUp(): void
     {
@@ -90,7 +94,8 @@ class NativeReaderTest extends TestCase
             'mock',
             'mockWithOrderedType',
             'mockWithNamedType',
-            'mockWithNoType',
+            'mockWithNativeType',
+            'mockWithImportedType',
         ];
 
         $this->assertSame($expectedProperties, $properties);
@@ -101,7 +106,8 @@ class NativeReaderTest extends TestCase
         yield 'no type' => [ null, 'mock' ];
         yield 'mock ordered type' => [ self::class, 'mockWithOrderedType' ];
         yield 'mock named type' => [ self::class, 'mockWithNamedType' ];
-        yield 'no type 2' => [ null , 'mockWithNoType' ];
+        yield 'mock native type' => [ null, 'mockWithNativeType' ];
+        yield 'mock imported type' => [ IMock::class, 'mockWithImportedType' ];
     }
 
     /**
