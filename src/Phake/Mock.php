@@ -1,12 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
-namespace Phake\Annotation;
-
-use ReflectionClass;
-use ReflectionProperty;
-
 /*
  * Phake - Mocking Framework
  *
@@ -51,40 +43,17 @@ use ReflectionProperty;
  * @link       http://www.digitalsandwich.com/
  */
 
-class NativeReader implements IReader
+declare(strict_types=1);
+
+namespace Phake;
+
+#[\Attribute(\Attribute::TARGET_PROPERTY)]
+final class Mock
 {
-    private const ANNOTATION_NAME = 'Phake\Mock';
+    public ?string $class;
 
-    public function __construct()
+    public function __construct(?string $class = null)
     {
-        if (PHP_VERSION_ID < 80000) {
-            throw new \RuntimeException('NativeReader is only available for PHP >= 8.0.0');
-        }
-    }
-
-    public function getPropertiesWithMockAnnotation(ReflectionClass $class): iterable
-    {
-        $properties = [];
-        foreach ($class->getProperties() as $property) {
-            /** @psalm-suppress ArgumentTypeCoercion */
-            $annotations = $property->getAttributes(self::ANNOTATION_NAME);
-            if (array_pop($annotations)) {
-                $properties[] = $property;
-            }
-        }
-
-        return $properties;
-    }
-
-    public function getMockType(ReflectionProperty $property): ?string
-    {
-        /** @psalm-suppress ArgumentTypeCoercion */
-        foreach ($property->getAttributes(self::ANNOTATION_NAME) as $attribute) {
-            $instance = $attribute->newInstance();
-
-            return $instance->class;
-        }
-
-        return null;
+        $this->class = $class;
     }
 }
