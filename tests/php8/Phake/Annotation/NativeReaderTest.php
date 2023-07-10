@@ -2,15 +2,6 @@
 
 declare(strict_types=1);
 
-if (PHP_VERSION_ID >= 80000) {
-    $fp = fopen(__FILE__, 'r');
-    fseek($fp, __COMPILER_HALT_OFFSET__);
-    eval(stream_get_contents($fp));
-}
-
-__halt_compiler();
-
-
 namespace Phake\Annotation;
 
 /*
