@@ -49,7 +49,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           fetch-depth: 2
 
@@ -65,7 +65,7 @@ jobs:
         run: "composer require --dev phpunit/phpunit:${{ matrix.phpunit }}"
 
       - name: Install dependencies with Composer
-        uses: ramsey/composer-install@v1
+        uses: ramsey/composer-install@v2
 
       - name: Tests
         run: bin/phpunit --coverage-clover clover.xml
