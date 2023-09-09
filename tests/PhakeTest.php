@@ -1812,4 +1812,26 @@ class PhakeTest extends TestCase
         $this->assertEquals(42, $mock->foo());
         $this->assertNull($mock->foo());
     }
+
+    public function testChainingReturnSelf()
+    {
+        $mock = Phake::mock(PhakeTest_MockedClass::class);
+
+        Phake::when($mock)->foo->thenReturn(42)->thenReturnSelf();
+
+        $this->assertEquals(42, $mock->foo());
+        $this->assertSame($mock, $mock->foo());
+    }
+
+    public function testChainingReturnCallback()
+    {
+        $mock = Phake::mock(PhakeTest_MockedClass::class);
+
+        Phake::when($mock)->foo->thenReturn(42)->thenReturnCallback(function () {
+            return true;
+        });
+
+        $this->assertEquals(42, $mock->foo());
+        $this->assertTrue($mock->foo());
+    }
 }
