@@ -47,6 +47,7 @@ declare(strict_types=1);
 namespace Phake\Annotation;
 
 use PhakeTest\AnotherNamespacedClass;
+use PHPUnit\Framework\Attributes\Depends;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -106,6 +107,7 @@ class MockInitializerTest extends TestCase
     /**
      * @depends testInitialize
      */
+    #[Depends('testInitialize')]
     public function testNamespaceAliasOnVar(): void
     {
         $this->initializer->initialize($this);
@@ -116,6 +118,7 @@ class MockInitializerTest extends TestCase
     /**
      * @depends testInitialize
      */
+    #[Depends('testInitialize')]
     public function testNamespaceAliasOnMock(): void
     {
         $this->initializer->initialize($this);

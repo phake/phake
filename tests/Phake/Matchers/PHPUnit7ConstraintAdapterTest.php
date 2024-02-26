@@ -67,7 +67,7 @@ class PHPUnit7ConstraintAdapterTest extends TestCase
         $this->adapter    = new PHPUnit7ConstraintAdapter($this->constraint);
         $this->constraint->expects($this->any())
             ->method('toString')
-            ->will($this->returnValue('phpunit matcher'));
+            ->willReturn('phpunit matcher');
     }
 
     /**
