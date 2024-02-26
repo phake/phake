@@ -111,6 +111,7 @@ class MockInitializerTest extends TestCase
     /**
      * @depends testInitialize
      */
+    #[\PHPUnit\Framework\Attributes\Depends('testInitialize')]
     public function testNamespaceAliasOnVar()
     {
         $this->initializer->initialize($this);
@@ -121,6 +122,7 @@ class MockInitializerTest extends TestCase
     /**
      * @depends testInitialize
      */
+    #[\PHPUnit\Framework\Attributes\Depends('testInitialize')]
     public function testNamespaceAliasOnMock()
     {
         $this->initializer->initialize($this);

@@ -74,6 +74,7 @@ class IgnoreRemainingMatcherTest extends TestCase
     /**
      * @dataProvider matchesDataProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('matchesDataProvider')]
     public function testMatches($arg)
     {
         $this->assertNull($this->matcher->doArgumentsMatch($arg));
