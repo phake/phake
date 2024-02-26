@@ -96,7 +96,7 @@ class FactoryTest extends TestCase
         $matcher->expects($this->once())
             ->method('evaluate')
             ->with($this->equalTo('foo'))
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $retMatcher = $this->factory->createMatcher($matcher);
 
@@ -113,7 +113,7 @@ class FactoryTest extends TestCase
         $matcher->expects($this->once())
             ->method('matches')
             ->with($this->equalTo('foo'))
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $retMatcher = $this->factory->createMatcher($matcher);
 

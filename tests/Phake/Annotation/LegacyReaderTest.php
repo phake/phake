@@ -46,6 +46,7 @@ declare(strict_types=1);
 
 namespace Phake\Annotation;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class LegacyReaderTest extends TestCase
@@ -109,6 +110,7 @@ class LegacyReaderTest extends TestCase
     /**
      * @dataProvider getMockTypeDataProvider
      */
+    #[DataProvider('getMockTypeDataProvider')]
     public function testGettingMockType(?string $expectedType, string $propertyName): void
     {
         $this->assertSame($expectedType, $this->reader->getMockType(new \ReflectionProperty($this, $propertyName)));

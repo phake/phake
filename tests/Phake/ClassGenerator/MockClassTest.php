@@ -47,6 +47,7 @@ declare(strict_types=1);
 namespace Phake\ClassGenerator;
 
 use Phake;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -253,6 +254,7 @@ class MockClassTest extends TestCase
      * Tests that calling a stubbed method will result in the stubbed answer being returned.
      * @group testonly
      */
+    #[Group('testonly')]
     public function testStubbedMethodsReturnStubbedAnswer(): void
     {
         $newClassName = str_replace('\\', '_', self::class) . '_TestClass7';
@@ -268,7 +270,7 @@ class MockClassTest extends TestCase
         $stubMapper->expects($this->once())
             ->method('getStubByCall')
             ->with($this->equalTo('fooWithArgument'), ['bar'])
-            ->will($this->returnValue(new Phake\Stubber\AnswerCollection($answer)));
+            ->willReturn(new Phake\Stubber\AnswerCollection($answer));
 
         $mock->fooWithArgument('bar');
 
@@ -293,7 +295,7 @@ class MockClassTest extends TestCase
         $stubMapper->expects($this->once())
             ->method('getStubByCall')
             ->with($this->equalTo('fooWithDefault'), [])
-            ->will($this->returnValue(new Phake\Stubber\AnswerCollection($answer)));
+            ->willReturn(new Phake\Stubber\AnswerCollection($answer));
 
         $mock->fooWithDefault();
 

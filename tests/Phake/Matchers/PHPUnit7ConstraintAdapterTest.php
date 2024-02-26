@@ -78,7 +78,7 @@ class PHPUnit7ConstraintAdapterTest extends TestCase
         $this->constraint->expects($this->once())
             ->method('evaluate')
             ->with($this->equalTo('foo'))
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $value = ['foo'];
         $this->assertNull($this->adapter->doArgumentsMatch($value));

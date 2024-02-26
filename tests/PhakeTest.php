@@ -44,6 +44,7 @@
 
 declare(strict_types=1);
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 
@@ -1744,6 +1745,7 @@ class PhakeTest extends TestCase
      * @param array<array<string>> $calls List of calls for each mock
      * @param array<array<string> $verifications List of calls that will be verified for each mock
      */
+    #[DataProvider('provideVariadicVerifyNoOtherInteractionsWorks')]
     public function testVariadicVerifyNoOtherInteractionsWorks(array $calls, array $verifications): void
     {
         $mocks = array_fill(0, count($calls), Phake::mock(\PhakeTest_MockedClass::class));
