@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="tests/bootstrap.php" colors="true" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
-  <coverage>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="tests/bootstrap.php" colors="true" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.0/phpunit.xsd">
+  <coverage> <!-- Deprecated way to configure coverage filter as of PHPUnit 10. -->
     <include>
       <directory>src</directory>
     </include>
   </coverage>
+  <source> <!-- Coverage filter configuration has changed to "source" since PHPUnit 10. -->
+    <include>
+      <directory>src</directory>
+    </include>
+  </source>
   <testsuites>
     <testsuite name="Phake Test Suite">
       <directory suffix="Test.php">tests</directory>
