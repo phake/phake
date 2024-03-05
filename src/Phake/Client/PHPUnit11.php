@@ -44,63 +44,38 @@
 
 declare(strict_types=1);
 
-namespace Phake\Annotation;
+namespace Phake\Client;
 
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Assert;
 
-class NativeReaderTest extends TestCase
+/**
+ * The client adapter used for PHPUnit.
+ *
+ * This adapter allows PHPUnit to report failed verify() calls as test failures instead of errors. It also counts
+ * verify() calls as assertions.
+ */
+class PHPUnit11 implements IClient
 {
-    private NativeReader $reader;
-
-    #[\Phake\Mock]
-    private $mock;
-
-    #[\Phake\Mock(self::class)]
-    private $mockWithOrderedType;
-
-    #[\Phake\Mock(class: self::class)]
-    private $mockWithNamedType;
-
-    #[\Phake\Mock(foo: self::class)]
-    private $mockWithNoType;
-
-    protected function setUp(): void
+    /**
+     * {@inheritDoc}
+     */
+    public function processVerifierResult(\Phake\CallRecorder\VerifierResult $result): array
     {
-        $this->reader = new NativeReader();
-    }
+        Assert::assertThat($result, $this->getConstraint());
 
-    public function testGettingPropertiesWithMockAnnotations(): void
-    {
-        $properties = array_map(
-            function($p) { return $p->getName(); },
-            $this->reader->getPropertiesWithMockAnnotation(new \ReflectionClass($this))
-        );
-
-        $expectedProperties = [
-            'mock',
-            'mockWithOrderedType',
-            'mockWithNamedType',
-            'mockWithNoType',
-        ];
-
-        $this->assertSame($expectedProperties, $properties);
-    }
-
-    public static function getMockTypeDataProvider(): iterable
-    {
-        yield 'no type' => [ null, 'mock' ];
-        yield 'mock ordered type' => [ self::class, 'mockWithOrderedType' ];
-        yield 'mock named type' => [ self::class, 'mockWithNamedType' ];
-        yield 'no type 2' => [ null , 'mockWithNoType' ];
+        return $result->getMatchedCalls();
     }
 
     /**
-     * @dataProvider getMockTypeDataProvider
+     * {@inheritDoc}
      */
-    #[DataProvider('getMockTypeDataProvider')]
-    public function testGettingMockType(?string $expectedType, string $propertyName): void
+    public function processObjectFreeze(): void
     {
-        $this->assertSame($expectedType, $this->reader->getMockType(new \ReflectionProperty($this, $propertyName)));
+        Assert::assertThat(true, Assert::isTrue());
+    }
+
+    private function getConstraint(): \Phake\PHPUnit\VerifierResultConstraintV6
+    {
+        return new \Phake\PHPUnit\VerifierResultConstraintV6();
     }
 }

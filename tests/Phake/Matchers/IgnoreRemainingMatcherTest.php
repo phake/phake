@@ -47,6 +47,7 @@ declare(strict_types=1);
 namespace Phake\Matchers;
 
 use Phake;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class IgnoreRemainingMatcherTest extends TestCase
@@ -70,6 +71,7 @@ class IgnoreRemainingMatcherTest extends TestCase
     /**
      * @dataProvider matchesDataProvider
      */
+    #[DataProvider('matchesDataProvider')]
     public function testMatches($arg): void
     {
         $this->assertNull($this->matcher->doArgumentsMatch($arg));

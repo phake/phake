@@ -47,6 +47,7 @@ declare(strict_types=1);
 namespace Phake\Proxies;
 
 use Phake;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -130,6 +131,7 @@ class StubberProxyTest extends TestCase
     /**
      * @dataProvider magicGetInvalidData
      */
+    #[DataProvider('magicGetInvalidData')]
     public function testMagicGetWithInvalidData($invalidData, $exceptionContains): void
     {
         $this->expectException(\InvalidArgumentException::class);

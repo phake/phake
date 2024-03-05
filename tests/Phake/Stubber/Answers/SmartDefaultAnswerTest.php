@@ -46,6 +46,7 @@ declare(strict_types=1);
 
 namespace Phake\Stubber\Answers;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -75,6 +76,7 @@ class SmartDefaultAnswerTest extends TestCase
     /**
      * @dataProvider typeReturnMap
      */
+    #[DataProvider('typeReturnMap')]
     public function testSimpleReturn($method, $expectedValue): void
     {
         $context = new \PhakeTest_ScalarTypes();

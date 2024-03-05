@@ -88,7 +88,7 @@ class AnswerBinderProxyTest extends TestCase
         $this->binder->expects($this->once())
             ->method('bindAnswer')
             ->with($this->isInstanceOf(Phake\Stubber\Answers\StaticAnswer::class))
-            ->will($this->returnValue($this->answerContainer));
+            ->willReturn($this->answerContainer);
 
         $this->assertSame($this->answerContainer, $this->proxy->thenReturn(42));
     }
@@ -107,7 +107,7 @@ class AnswerBinderProxyTest extends TestCase
         $this->binder->expects($this->once())
             ->method('bindAnswer')
             ->with($this->isInstanceOf(Phake\Stubber\Answers\LambdaAnswer::class))
-            ->will($this->returnValue($this->answerContainer));
+            ->willReturn($this->answerContainer);
 
         $this->assertSame($this->answerContainer, $this->proxy->thenReturnCallback($func));
     }
@@ -120,7 +120,7 @@ class AnswerBinderProxyTest extends TestCase
         $this->binder->expects($this->once())
             ->method('bindAnswer')
             ->with($this->isInstanceOf(Phake\Stubber\Answers\ParentDelegate::class))
-            ->will($this->returnValue($this->answerContainer));
+            ->willReturn($this->answerContainer);
 
         $this->assertSame($this->answerContainer, $this->proxy->thenCallParent());
     }
@@ -133,7 +133,7 @@ class AnswerBinderProxyTest extends TestCase
         $this->binder->expects($this->once())
             ->method('bindAnswer')
             ->with($this->isInstanceOf(Phake\Stubber\Answers\ParentDelegate::class))
-            ->will($this->returnValue($this->answerContainer));
+            ->willReturn($this->answerContainer);
 
         $this->assertSame($this->answerContainer, $this->proxy->captureReturnTo($var));
     }
@@ -148,7 +148,7 @@ class AnswerBinderProxyTest extends TestCase
         $this->binder->expects($this->once())
             ->method('bindAnswer')
             ->with($this->isInstanceOf(Phake\Stubber\Answers\ExceptionAnswer::class))
-            ->will($this->returnValue($this->answerContainer));
+            ->willReturn($this->answerContainer);
 
         $this->assertSame($this->answerContainer, $this->proxy->thenThrow($exception));
     }
@@ -162,10 +162,8 @@ class AnswerBinderProxyTest extends TestCase
     {
         $this->binder->expects($this->once())
             ->method('bindAnswer')
-            ->with(
-                $this->isInstanceOf(Phake\Stubber\Answers\NoAnswer::class)
-            )
-            ->will($this->returnValue($this->answerContainer));
+            ->with($this->isInstanceOf(Phake\Stubber\Answers\NoAnswer::class))
+            ->willReturn($this->answerContainer);
 
         $this->assertSame($this->answerContainer, $this->proxy->thenDoNothing());
     }
@@ -174,10 +172,8 @@ class AnswerBinderProxyTest extends TestCase
     {
         $this->binder->expects($this->once())
             ->method('bindAnswer')
-            ->with(
-                $this->isInstanceOf(Phake\Stubber\Answers\SelfAnswer::class)
-            )
-            ->will($this->returnValue($this->answerContainer));
+            ->with($this->isInstanceOf(Phake\Stubber\Answers\SelfAnswer::class))
+            ->willReturn($this->answerContainer);
 
         $this->assertSame($this->answerContainer, $this->proxy->thenReturnSelf());
     }

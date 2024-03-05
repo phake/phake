@@ -77,7 +77,7 @@ class HamcrestMatcherAdapterTest extends TestCase
         $this->matcher->expects($this->once())
             ->method('matches')
             ->with($this->equalTo('foo'))
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $value = ['foo'];
         $this->assertNull($this->adapter->doArgumentsMatch($value));

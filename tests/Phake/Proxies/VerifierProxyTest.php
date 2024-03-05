@@ -47,6 +47,7 @@ declare(strict_types=1);
 namespace Phake\Proxies;
 
 use Phake;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -154,6 +155,7 @@ class VerifierProxyTest extends TestCase
     /**
      * @dataProvider magicGetInvalidData
      */
+    #[DataProvider('magicGetInvalidData')]
     public function testMagicGetWithInvalidData(string $invalidData, string $exceptionContains): void
     {
         $this->expectException('InvalidArgumentException');
