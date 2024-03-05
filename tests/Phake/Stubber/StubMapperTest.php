@@ -85,11 +85,11 @@ class StubMapperTest extends TestCase
         $matcher->expects($this->any())
             ->method('matches')
             ->with('foo', ['bar', 'test'])
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $matcher->expects($this->any())
             ->method('getMethod')
-            ->will($this->returnValue('foo'));
+            ->willReturn('foo');
 
         $this->mapper->mapStubToMatcher($stub, $matcher);
 
@@ -109,9 +109,9 @@ class StubMapperTest extends TestCase
                         ->disableOriginalConstructor()
                         ->getMock();
 
-        $matcher->expects($this->any())
+        $matcher
             ->method('matches')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->mapper->mapStubToMatcher($stub, $matcher);
 
@@ -166,16 +166,16 @@ class StubMapperTest extends TestCase
 
         $also_matches->expects($this->any())
             ->method('getMethod')
-            ->will($this->returnvalue('foo'));
+            ->willReturn('foo');
 
         $match_me->expects($this->any())
             ->method('matches')
             ->with('foo', ['bar', 'test'])
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $match_me->expects($this->any())
             ->method('getMethod')
-            ->will($this->returnvalue('foo'));
+            ->willReturn('foo');
 
         $this->mapper->mapStubToMatcher($also_matches_stub, $also_matches);
         $this->mapper->mapStubToMatcher($match_me_stub, $match_me);

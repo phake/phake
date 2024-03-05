@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="tests/bootstrap.php" colors="true" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.0/phpunit.xsd">
+  <source>
+    <include>
+      <directory>src</directory>
+    </include>
+  </source>
+  <testsuites>
+    <testsuite name="Phake Test Suite">
+     <directory suffix="Test.php">tests</directory>
+     <exclude>tests/php7.4/</exclude>
+     <exclude>tests/php8/</exclude>
+    </testsuite>
+    <testsuite name="Phake Test Suite PHP 7.4">
+     <directory phpVersion="7.4.0" phpVersionOperator=">=">tests/php7.4/</directory>
+    </testsuite>
+    <testsuite name="Phake Test Suite PHP 8.0">
+     <directory phpVersion="8.0.0" phpVersionOperator=">=">tests/php8/</directory>
+    </testsuite>
+  </testsuites>
+</phpunit>

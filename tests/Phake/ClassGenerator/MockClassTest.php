@@ -257,6 +257,7 @@ class MockClassTest extends TestCase
      * Tests that calling a stubbed method will result in the stubbed answer being returned.
      * @group testonly
      */
+    #[\PHPUnit\Framework\Attributes\Group('testonly')]
     public function testStubbedMethodsReturnStubbedAnswer()
     {
         $newClassName = str_replace('\\', '_', self::class) . '_TestClass7';
@@ -274,7 +275,7 @@ class MockClassTest extends TestCase
         $stubMapper->expects($this->once())
             ->method('getStubByCall')
             ->with($this->equalTo('fooWithArgument'), ['bar'])
-            ->will($this->returnValue(new Phake\Stubber\AnswerCollection($answer)));
+            ->willReturn(new Phake\Stubber\AnswerCollection($answer));
 
         $mock->fooWithArgument('bar');
 
@@ -300,7 +301,7 @@ class MockClassTest extends TestCase
         $stubMapper->expects($this->once())
             ->method('getStubByCall')
             ->with($this->equalTo('fooWithDefault'), [])
-            ->will($this->returnValue(new Phake\Stubber\AnswerCollection($answer)));
+            ->willReturn(new Phake\Stubber\AnswerCollection($answer));
 
         $mock->fooWithDefault();
 

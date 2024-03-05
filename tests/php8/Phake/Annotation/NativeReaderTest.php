@@ -98,6 +98,7 @@ class NativeReaderTest extends TestCase
     /**
      * @dataProvider getMockTypeDataProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getMockTypeDataProvider')]
     public function testGettingMockType(?string $expectedType, string $propertyName)
     {
         $this->assertSame($expectedType, $this->reader->getMockType(new \ReflectionProperty($this, $propertyName)));

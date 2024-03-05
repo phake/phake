@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Phake\Matchers;
+namespace Phake\Client;
 
 /*
  * Phake - Mocking Framework
  *
- * Copyright (c) 2010-2022, Mike Lively <m@digitalsandwich.com>
+ * Copyright (c) 2010-2022, Mike Lively <mike.lively@sellingsource.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -47,53 +47,39 @@ namespace Phake\Matchers;
  * @link       http://www.digitalsandwich.com/
  */
 
-use Phake;
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Assert;
 
-class AnyParametersTest extends TestCase
+/**
+ * The client adapter used for PHPUnit.
+ *
+ * This adapter allows PHPUnit to report failed verify() calls as test failures instead of errors. It also counts
+ * verify() calls as assertions.
+ */
+class PHPUnit11 implements IClient
 {
     /**
-     * @var AnyParameters
+     * {@inheritDoc}
      */
-    private $matcher;
-
-    public function setUp(): void
+    public function processVerifierResult(\Phake\CallRecorder\VerifierResult $result)
     {
-        $this->matcher = new AnyParameters();
-    }
+        Assert::assertThat($result, $this->getConstraint());
 
-    public static function matchesDataProvider()
-    {
-        return [
-            [[]],
-            [['foo']],
-            [['foo', 'bar']],
-        ];
+        return $result->getMatchedCalls();
     }
 
     /**
-     * @dataProvider matchesDataProvider
+     * {@inheritDoc}
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('matchesDataProvider')]
-    public function testMatches($arg)
+    public function processObjectFreeze()
     {
-        $this->assertNull($this->matcher->doArgumentsMatch($arg));
+        Assert::assertThat(true, Assert::isTrue());
     }
 
-    public function testToString()
+    /**
+     * @return \Phake\PHPUnit\VerifierResultConstraintV6
+     */
+    private function getConstraint()
     {
-        $this->assertEquals('<any parameters>', $this->matcher->__toString());
-    }
-
-    public function testSetNextThrowsInvalidException()
-    {
-        $this->expectException('InvalidArgumentException');
-        $this->matcher->setNextMatcher(Phake::mock(IChainableArgumentMatcher::class));
-    }
-
-    public function testAssertPreviousMatcherThrowsInvalidException()
-    {
-        $this->expectException('InvalidArgumentException');
-        $this->matcher->assertPreviousMatcher(Phake::mock(IChainableArgumentMatcher::class));
+        return new \Phake\PHPUnit\VerifierResultConstraintV6();
     }
 }

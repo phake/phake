@@ -79,6 +79,7 @@ class SmartDefaultAnswerTest extends TestCase
     /**
      * @dataProvider typeReturnMap
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('typeReturnMap')]
     public function testSimpleReturn($method, $expectedValue)
     {
         $context = new \PhakeTest_ScalarTypes();

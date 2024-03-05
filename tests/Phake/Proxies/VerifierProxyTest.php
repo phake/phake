@@ -170,6 +170,7 @@ class VerifierProxyTest extends TestCase
     /**
      * @dataProvider magicGetInvalidData
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('magicGetInvalidData')]
     public function testMagicGetWithInvalidData($invalidData, $exceptionContains)
     {
         $this->expectException('InvalidArgumentException');
