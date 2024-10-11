@@ -89,6 +89,8 @@ class SmartDefaultAnswer implements \Phake\Stubber\IAnswer
                         return \Phake::mock($typeName);
                     } elseif ($returnType->allowsNull()) {
                         return null;
+                    } elseif (interface_exists($typeName)) {
+                        return \Phake::mock($typeName);
                     }
             }
         } elseif ($returnType instanceof \ReflectionIntersectionType) {
