@@ -52,6 +52,10 @@ class PhakeTest_ScalarTypes
         return $a + $b;
     }
 
+    public function interfaceReturn(): PhakeTest_MockedInterface
+    {
+    }
+
     public function objectReturn(): PhakeTest_A
     {
     }

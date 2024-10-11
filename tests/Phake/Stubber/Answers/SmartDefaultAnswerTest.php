@@ -114,6 +114,15 @@ class SmartDefaultAnswerTest extends TestCase
         $this->assertNull($cb());
     }
 
+    public function testInterfaceReturn()
+    {
+        $context = new \PhakeTest_ScalarTypes();
+        $cb = $this->answer->getAnswerCallback($context, 'interfaceReturn');
+
+        $this->assertInstanceOf('PhakeTest_MockedInterface', $cb());
+        $this->assertInstanceOf(\Phake\IMock::class, $cb());
+    }
+
     public function testSelfReturn()
     {
         $context = new \PhakeTest_ScalarTypes();
