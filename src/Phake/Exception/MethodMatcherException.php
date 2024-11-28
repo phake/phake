@@ -53,7 +53,7 @@ class MethodMatcherException extends \Exception
 {
     private int $argument;
 
-    public function __construct(string $message = '', \Exception $previous = null)
+    public function __construct(string $message = '', ?\Exception $previous = null)
     {
         parent::__construct($message, 0, $previous);
         $this->argument = 0;

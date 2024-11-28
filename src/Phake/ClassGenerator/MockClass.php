@@ -197,7 +197,7 @@ class MockClass
         \Phake\CallRecorder\Recorder $recorder,
         \Phake\Stubber\StubMapper $mapper,
         \Phake\Stubber\IAnswer $defaultAnswer,
-        array $constructorArgs = null
+        ?array $constructorArgs = null
     ): \Phake\IMock {
         $mockObject = $this->instantiator->instantiate($newClassName);
         assert($mockObject instanceof \Phake\IMock);

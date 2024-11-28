@@ -74,7 +74,7 @@ class MockInitializer
         self::$defaultReader = $reader;
     }
 
-    public function __construct(IReader $reader = null)
+    public function __construct(?IReader $reader = null)
     {
         $this->reader = $reader ?: self::getDefaultReader();
     }

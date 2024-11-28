@@ -160,7 +160,7 @@ class Phake
     /**
      * Creates a new verifier for the given mock object.
      */
-    public static function verifyStatic(Phake\IMock $mock, Phake\CallRecorder\IVerifierMode $mode = null): Phake\Proxies\VerifierProxy
+    public static function verifyStatic(Phake\IMock $mock, ?Phake\CallRecorder\IVerifierMode $mode = null): Phake\Proxies\VerifierProxy
     {
         if (is_null($mode)) {
             $mode = self::times(1);

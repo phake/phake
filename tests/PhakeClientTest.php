@@ -13,7 +13,7 @@ class PhakeClientTest extends TestCase
         $refClass = new ReflectionClass('Phake');
         $clientProperty = $refClass->getProperty('client');
         $clientProperty->setAccessible(true);
-        $clientProperty->setValue(null);
+        $clientProperty->setValue(null, null);
     }
 
     public function testAutoDetectsPHPUnitClient(): void

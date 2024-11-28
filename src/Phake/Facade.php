@@ -79,7 +79,7 @@ class Facade
         ClassGenerator\MockClass $mockGenerator,
         CallRecorder\Recorder $callRecorder,
         Stubber\IAnswer $defaultAnswer,
-        array $constructorArgs = null
+        ?array $constructorArgs = null
     ): IMock {
         $mockedClassList = (array) $mockedClassList;
 

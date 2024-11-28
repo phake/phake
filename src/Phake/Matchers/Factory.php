@@ -67,7 +67,7 @@ class Factory
      * If it is an instance of Hamcrest_Matcher a Hamcrest adapter is returned. For everything else
      * a EqualsMatcher is returned set to the passed in value.
      */
-    public function createMatcher(mixed $argument, IChainableArgumentMatcher $nextMatcher = null): IChainableArgumentMatcher
+    public function createMatcher(mixed $argument, ?IChainableArgumentMatcher $nextMatcher = null): IChainableArgumentMatcher
     {
         $return = null;
         if ($argument instanceof IChainableArgumentMatcher) {
