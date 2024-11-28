@@ -44,7 +44,7 @@ declare(strict_types=1);
  * @link       http://www.digitalsandwich.com/
  */
 
-error_reporting(E_ALL | E_STRICT);
+error_reporting(E_ALL);
 
 /** @var $loader \Composer\Autoload\ClassLoader */
 $loader = require dirname(__DIR__) . '/vendor/autoload.php';

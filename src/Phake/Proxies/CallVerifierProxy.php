@@ -92,7 +92,7 @@ class CallVerifierProxy
      *
      * @return array
      */
-    public function isCalledOn(\Phake\IMock $obj, \Phake\CallRecorder\IVerifierMode $verifierMode = null)
+    public function isCalledOn(\Phake\IMock $obj, ?\Phake\CallRecorder\IVerifierMode $verifierMode = null)
     {
         if (null === $verifierMode) {
             $verifierMode = new \Phake\CallRecorder\VerifierMode\Times(1);

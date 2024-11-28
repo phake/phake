@@ -50,11 +50,11 @@ interface PhakeTest_MockedInterface
 
     public function hinted(PhakeTest_MockedInterface $hinted);
 
-    public function hintedNull(PhakeTest_MockedInterface $hinted = null);
+    public function hintedNull(?PhakeTest_MockedInterface $hinted = null);
 
     public function hintedArray(array $hinted);
 
-    public function hintedArrayNull(array $hinted = null);
+    public function hintedArrayNull(?array $hinted = null);
 
     public function hintedArrayDefaulted(array $hinted = [1, 2, 3]);
 

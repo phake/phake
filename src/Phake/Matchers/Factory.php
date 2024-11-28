@@ -77,7 +77,7 @@ class Factory
      *
      * @return IChainableArgumentMatcher
      */
-    public function createMatcher($argument, IChainableArgumentMatcher $nextMatcher = null)
+    public function createMatcher($argument, ?IChainableArgumentMatcher $nextMatcher = null)
     {
         $return = null;
         if ($argument instanceof IChainableArgumentMatcher) {

@@ -73,7 +73,7 @@ class MockClass
      * @param ILoader $loader
      * @param IInstantiator $instantiator
      */
-    public function __construct(ILoader $loader = null, IInstantiator $instantiator = null)
+    public function __construct(?ILoader $loader = null, ?IInstantiator $instantiator = null)
     {
         $this->loader = $loader ?: new EvalLoader();
         $this->instantiator = $instantiator ?: new DoctrineInstantiator();
@@ -223,7 +223,7 @@ class {$newClassName} {$extends}
         \Phake\CallRecorder\Recorder $recorder,
         \Phake\Stubber\StubMapper $mapper,
         \Phake\Stubber\IAnswer $defaultAnswer,
-        array $constructorArgs = null
+        ?array $constructorArgs = null
     ) {
         $mockObject = $this->instantiator->instantiate($newClassName);
         assert($mockObject instanceof \Phake\IMock);

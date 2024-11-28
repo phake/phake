@@ -106,7 +106,7 @@ class Phake
      *
      * @return \Phake\IMock&T
      */
-    public static function mock($className, \Phake\Stubber\IAnswerContainer $defaultAnswer = null)
+    public static function mock($className, ?\Phake\Stubber\IAnswerContainer $defaultAnswer = null)
     {
         if (null === $defaultAnswer) {
             $answer = new \Phake\Stubber\Answers\SmartDefaultAnswer();
@@ -186,7 +186,7 @@ class Phake
      *
      * @return \Phake\Proxies\VerifierProxy
      */
-    public static function verify(\Phake\IMock $mock, \Phake\CallRecorder\IVerifierMode $mode = null)
+    public static function verify(\Phake\IMock $mock, ?\Phake\CallRecorder\IVerifierMode $mode = null)
     {
         if (is_null($mode)) {
             $mode = self::times(1);
@@ -207,7 +207,7 @@ class Phake
      *
      * @return \Phake\Proxies\VerifierProxy
      */
-    public static function verifyStatic(\Phake\IMock $mock, \Phake\CallRecorder\IVerifierMode $mode = null)
+    public static function verifyStatic(\Phake\IMock $mock, ?\Phake\CallRecorder\IVerifierMode $mode = null)
     {
         if (is_null($mode)) {
             $mode = self::times(1);

@@ -81,7 +81,7 @@ class CallExpectation
     public function __construct(
         $object,
         $method,
-        \Phake\Matchers\IChainableArgumentMatcher $argumentMatcher = null,
+        ?\Phake\Matchers\IChainableArgumentMatcher $argumentMatcher,
         IVerifierMode $verificationMode
     ) {
         $this->object           = $object;
