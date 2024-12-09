@@ -85,7 +85,9 @@ class SmartDefaultAnswer implements \Phake\Stubber\IAnswer
                 case 'never':
                     return null;
                 default:
-                    if (class_exists($typeName)) {
+                    if (function_exists('enum_exists') && enum_exists($typeName)) {
+                        return $typeName::cases()[0];
+                    } elseif (class_exists($typeName)) {
                         return \Phake::mock($typeName);
                     } elseif ($returnType->allowsNull()) {
                         return null;
