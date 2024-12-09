@@ -157,6 +157,20 @@ class SmartDefaultAnswerTest extends TestCase
         $this->assertInstanceOf(\Countable::class, $result);
     }
 
+    public function testEnumReturnType()
+    {
+        if (PHP_VERSION_ID < 80100) {
+            $this->markTestSkipped('Intersection types are not supported in PHP versions prior to 8.1');
+        }
+
+        $context = new \PhakeTest_EnumType();
+        $cb = $this->answer->getAnswerCallback($context, 'enumReturn');
+
+        $result = $cb();
+        $this->assertInstanceOf(\SomeEnum::class, $result);
+
+    }
+
     public function testDNFTypeReturn()
     {
         if (PHP_VERSION_ID < 80200) {
