@@ -1,9 +1,9 @@
 Phake
 =======
 [![Tests](https://github.com/phake/phake/actions/workflows/tests.yml/badge.svg)](https://github.com/phake/phake/actions/workflows/tests.yml)
-[![Latest Stable Version](https://poser.pugx.org/phake/phake/v/stable.png)](https://packagist.org/packages/phake/phake)
-[![Total Downloads](https://poser.pugx.org/phake/phake/downloads.png)](https://packagist.org/packages/phake/phake)
-[![License](https://poser.pugx.org/phake/phake/license.png)](https://packagist.org/packages/phake/phake)
+[![Latest Stable Version](http://poser.pugx.org/phake/phake/v)](https://packagist.org/packages/phake/phake)
+[![Total Downloads](http://poser.pugx.org/phake/phake/downloads)](https://packagist.org/packages/phake/phake)
+[![License](http://poser.pugx.org/phake/phake/license)](https://packagist.org/packages/phake/phake)
 
 Phake is a framework for PHP that aims to provide mock objects, test doubles
 and method stubs.
