@@ -52,10 +52,12 @@ namespace Phake\Matchers;
  */
 class Factory
 {
+    private bool $strictDefaultMatchers;
     private \SebastianBergmann\Comparator\Factory $comparatorFactory;
 
-    public function __construct()
+    public function __construct(bool $strictDefaultMatchers = true)
     {
+        $this->strictDefaultMatchers = $strictDefaultMatchers;
         $this->comparatorFactory = \SebastianBergmann\Comparator\Factory::getInstance();
     }
 
@@ -78,6 +80,8 @@ class Factory
             $return = new HamcrestMatcherAdapter($argument);
         } elseif ($argument instanceof IArgumentMatcher) {
             $return = new ChainedArgumentMatcher($argument);
+        } elseif ($this->strictDefaultMatchers) {
+            $return = new StrictlyEqualsMatcher($argument);
         } else {
             $return = new EqualsMatcher($argument, $this->comparatorFactory);
         }

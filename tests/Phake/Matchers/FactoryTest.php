@@ -69,7 +69,7 @@ class FactoryTest extends TestCase
     {
         $matcher = $this->factory->createMatcher('foo');
 
-        $this->assertInstanceOf(EqualsMatcher::class, $matcher);
+        $this->assertInstanceOf(StrictlyEqualsMatcher::class, $matcher);
 
         $value = ['foo'];
         $this->assertNull($matcher->doArgumentsMatch($value));

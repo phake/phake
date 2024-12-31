@@ -121,7 +121,7 @@ class PhakeNamedArgumentsTest extends TestCase
         $mock = Phake::mock(\PhakeTest_Variadic::class);
         Phake::when($mock)->variadicMethod(1, 2, c: 3, d: 4)->thenReturn(42);
 
-        $this->assertSame(42, $mock->variadicMethod(d: 4, c: 3, b: 2, a: 1));
+        $this->assertSame(42, $mock->variadicMethod(c: 3, d: 4, b: 2, a: 1));
 
         Phake::verify($mock)->variadicMethod(1, 2, c: 3, d: 4);
     }
@@ -141,7 +141,7 @@ class PhakeNamedArgumentsTest extends TestCase
         $mock = Phake::mock(\PhakeTest_Variadic::class);
         Phake::when($mock)->variadicMethod(b: 2, a: 1, c: 3, d: 4)->thenReturn(42);
 
-        $this->assertSame(42, $mock->variadicMethod(d: 4, c: 3, b: 2, a: 1));
+        $this->assertSame(42, $mock->variadicMethod(c: 3, d: 4, b: 2, a: 1));
 
         Phake::verify($mock)->variadicMethod(c: 3, d: 4, a: 1, b: 2);
     }

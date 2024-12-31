@@ -55,6 +55,8 @@ declare(strict_types=1);
  */
 class Phake
 {
+    private static bool $strictDefaultMatchers = true;
+
     private static ?Phake\Facade $phake = null;
 
     private static ?Phake\Client\IClient $client = null;
@@ -129,6 +131,14 @@ class Phake
         );
     }
 
+    public static function setStrictDefaultMatchers(bool $strict): void
+    {
+        if (self::$strictDefaultMatchers !== $strict) {
+            self::$strictDefaultMatchers = $strict;
+            self::$matchersFactory = null;
+        }
+    }
+
     /**
      * Create a Phake\Matchers\Factory that we can re-use multiple times. Creating too many
      * instances of this object is expensive.
@@ -136,7 +146,7 @@ class Phake
     private static function getMatchersFactory(): Phake\Matchers\Factory
     {
         if (!isset(self::$matchersFactory)) {
-            self::$matchersFactory = new Phake\Matchers\Factory();
+            self::$matchersFactory = new Phake\Matchers\Factory(self::$strictDefaultMatchers);
         }
 
         return self::$matchersFactory;

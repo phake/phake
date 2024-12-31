@@ -1945,4 +1945,21 @@ class PhakeTest extends TestCase
         $this->assertEquals(42, $mock->foo());
         $this->assertTrue($mock->foo());
     }
+
+    public function testSetStrictDefaultMatching()
+    {
+        try {
+            $mock = Phake::mock(PhakeTest_MockedClass::class);
+            Phake::when($mock)->fooWithArgument(new stdClass)->thenReturn(42);
+            $this->assertNull($mock->fooWithArgument(new stdClass));
+
+            Phake::setStrictDefaultMatchers(false);
+
+            $mock = Phake::mock(PhakeTest_MockedClass::class);
+            Phake::when($mock)->fooWithArgument(new stdClass)->thenReturn(42);
+            $this->assertSame(42, $mock->fooWithArgument(new stdClass));
+        } finally {
+            Phake::setStrictDefaultMatchers(true);
+        }
+    }
 }

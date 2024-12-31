@@ -75,7 +75,7 @@ class MagicCallRecorderTest extends TestCase
         $this->handler->invoke($mock, '__call', ['foo', []], $ref);
 
         Phake::verify($this->callRecorder)->recordCall(
-            new Phake\CallRecorder\Call($mock, 'foo', [])
+            $this->equalTo(new Phake\CallRecorder\Call($mock, 'foo', []))
         );
     }
 
@@ -89,7 +89,7 @@ class MagicCallRecorderTest extends TestCase
         $this->handler->invoke($mockClass, '__callStatic', ['foo', []], $ref);
 
         Phake::verify($this->callRecorder)->recordCall(
-            new Phake\CallRecorder\Call($mockClass, 'foo', [])
+            $this->equalTo(new Phake\CallRecorder\Call($mockClass, 'foo', []))
         );
     }
 

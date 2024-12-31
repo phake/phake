@@ -2,7 +2,7 @@
 /*
  * Phake - Mocking Framework
  *
- * Copyright (c) 2010-2022, Mike Lively <mike.lively@sellingsource.com>
+ * Copyright (c) 2010-2022, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -44,55 +44,44 @@
 
 declare(strict_types=1);
 
-namespace Phake\ClassGenerator\InvocationHandler;
+namespace Phake\Matchers;
 
-use Phake;
-use PHPUnit\Framework\TestCase;
-
-class CallRecorderTest extends TestCase
+/**
+ * A matcher to validate that an argument equals a particular value.
+ *
+ * This matcher utilizes the same functionality as non-strict equality in php, in other words '=='
+ */
+class StrictlyEqualsMatcher extends SingleArgumentMatcher
 {
-    private CallRecorder $handler;
+    private mixed $value;
 
     /**
-     * @Mock
+     * Pass in the value that the upcoming arguments is expected to equal.
      */
-    private Phake\CallRecorder\Recorder $callRecorder;
-
-    public function setUp(): void
+    public function __construct(mixed $value)
     {
-        Phake::initAnnotations($this);
-        $this->handler    = new CallRecorder($this->callRecorder);
+        $this->value = $value;
     }
 
-    public function testImplementIInvocationHandler(): void
+    /**
+     * Returns whether or not the passed argument matches the matcher.
+     */
+    protected function matches(mixed &$argument): void
     {
-        $this->assertInstanceOf(IInvocationHandler::class, $this->handler);
-    }
+        if ($this->value === $argument) {
+            return;
+        }
+        $converter = new \Phake\String\Converter();
 
-    public function testCallIsRecorded(): void
-    {
-        $mock = $this->getMockBuilder(Phake\IMock::class)
-                    ->getMock();
-
-        $ref = [];
-        $this->handler->invoke($mock, 'foo', [], $ref);
-
-        Phake::verify($this->callRecorder)->recordCall(
-            $this->equalTo(new Phake\CallRecorder\Call($mock, 'foo', []))
+        throw new \Phake\Exception\MethodMatcherException(
+            "Expected argument to be same as {$converter->convertToString($this->value)} but was {$converter->convertToString($argument)}"
         );
     }
 
-    public function testStaticCallIsRecorded(): void
+    public function __toString(): string
     {
-        $mock = $this->getMockBuilder(Phake\IMock::class)
-                    ->getMock();
-        $mockClass = get_class($mock);
+        $converter = new \Phake\String\Converter();
 
-        $ref = [];
-        $this->handler->invoke($mockClass, 'foo', [], $ref);
-
-        Phake::verify($this->callRecorder)->recordCall(
-            $this->equalTo(new Phake\CallRecorder\Call($mockClass, 'foo', []))
-        );
+        return "same as {$converter->convertToString($this->value)}";
     }
 }
