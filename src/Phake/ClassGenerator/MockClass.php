@@ -422,13 +422,14 @@ class MockClass
             }
 
             $name = $parameter->getName() ?: 'param' . $parameter->getPosition();
-            $copies .= "if ({$pos} < \$__PHAKE_numArgs) \$__PHAKE_args[] =& \${$name};\n\t\t";
+            $copies .= "if ({$pos} < \$__PHAKE_numArgs) \$__PHAKE_args[{$pos}] =& \${$name};\n\t\t";
         }
 
         if ($variadicParameter) {
+            $copies .= "\$pos = {$pos};\n\t\t";
             $copies .= "foreach (\${$variadicParameter} as \$__PHAKE_variadicKey => \$__PHAKE_variadicValue) {\n\t\t";
-            $copies .= "\tif (is_int(\$__PHAKE_variadicKey)) \$__PHAKE_args[] =& \${$variadicParameter}[\$__PHAKE_variadicKey];\n\t\t";
-            $copies .= "\telse \$__PHAKE_args[\$__PHAKE_variadicKey] =& \${$variadicParameter}[\$__PHAKE_variadicKey];\n\t\t";
+            $copies .= "\tif (is_int(\$__PHAKE_variadicKey)) \$__PHAKE_args[\$pos++] =& \${$variadicParameter}[\$__PHAKE_variadicKey];\n\t\t";
+            $copies .= "\telse \$__PHAKE_args[\$pos][\$__PHAKE_variadicKey] =& \${$variadicParameter}[\$__PHAKE_variadicKey];\n\t\t";
             $copies .= "}\n\t\t";
         } else {
             $copies .= 'for ($__PHAKE_i = ' . $parameterCount . "; \$__PHAKE_i < \$__PHAKE_numArgs; \$__PHAKE_i++) \$__PHAKE_args[] = func_get_arg(\$__PHAKE_i);\n\t\t";

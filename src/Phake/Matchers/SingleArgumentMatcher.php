@@ -61,14 +61,9 @@ abstract class SingleArgumentMatcher extends AbstractChainableArgumentMatcher
         $argumentCopy = $arguments;
         $nextArgument = null;
 
-        $key = array_key_first($arguments);
-        if (is_int($key)) {
-            $nextArgument =& $arguments[$key];
-            array_shift($argumentCopy);
-        } else if (!empty($arguments)) {
-            $nextArgument = &$arguments;
-            $argumentCopy = [];
-        }
+        $nextArgument =& $arguments[0];
+        array_shift($argumentCopy);
+
         $this->matches($nextArgument);
 
         $nextMatcher = $this->getNextMatcher();
