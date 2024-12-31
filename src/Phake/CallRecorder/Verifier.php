@@ -81,7 +81,7 @@ class Verifier
         $methodNonMatched = [];
         $obj_interactions = false;
         foreach ($calls as $call) {
-            /* @var $call Call */
+            assert($call instanceof Call);
             if ($call->getObject() === $expectation->getObject()) {
                 $obj_interactions = true;
                 $args             = $call->getArguments();

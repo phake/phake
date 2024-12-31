@@ -141,7 +141,7 @@ class MockClassTest extends TestCase
         $answer       = new Phake\Stubber\Answers\NoAnswer();
         $mock         = $this->classGen->instantiate($newClassName, $this->infoRegistry, $callRecorder, $stubMapper, $answer);
 
-        /* @var $callRecorder Phake\CallRecorder\Recorder */
+        assert($callRecorder instanceof Phake\CallRecorder\Recorder);
         $callRecorder->expects($this->once())
             ->method('recordCall')
             ->with($this->equalTo(new Phake\CallRecorder\Call($mock, 'foo', [])));
@@ -164,7 +164,7 @@ class MockClassTest extends TestCase
         $answer       = new Phake\Stubber\Answers\NoAnswer();
         $mock         = $this->classGen->instantiate($newClassName, $this->infoRegistry, $callRecorder, $stubMapper, $answer);
 
-        /* @var $callRecorder Phake\CallRecorder\Recorder */
+        assert($callRecorder instanceof Phake\CallRecorder\Recorder);
         $callRecorder->expects($this->once())
             ->method('recordCall')
             ->with(
@@ -313,10 +313,10 @@ class MockClassTest extends TestCase
 
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
-        /** @var $callRecorder Phake\CallRecorder\Recorder */
         $callRecorder = $this->getMockBuilder(Phake\CallRecorder\Recorder::class)->getMock();
-        /** @var $stubMapper Phake\Stubber\StubMapper */
+        assert($callRecorder instanceof Phake\CallRecorder\Recorder);
         $stubMapper = $this->getMockBuilder(Phake\Stubber\StubMapper::class)->getMock();
+        assert($stubMapper instanceof Phake\Stubber\StubMapper);
         $answer     = $this->getMockBuilder(Phake\Stubber\IAnswer::class)->getMock();
         $mock       = $this->classGen->instantiate($newClassName, $this->infoRegistry, $callRecorder, $stubMapper, $answer);
 
@@ -460,10 +460,10 @@ class MockClassTest extends TestCase
         $mockedClass  = \PhakeTest_MockedConstructedClass::class;
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
-        /** @var $callRecorder Phake#CallRecorder\Recorder */
         $callRecorder = $this->getMockBuilder(Phake\CallRecorder\Recorder::class)->getMock();
-        /** @var $stubMapper Phake\Stubber\StubMapper */
+        assert($callRecorder instanceof Phake\CallRecorder\Recorder);
         $stubMapper = $this->getMockBuilder(Phake\Stubber\StubMapper::class)->getMock();
+        assert($stubMapper instanceof Phake\Stubber\StubMapper);
         $answer     = new Phake\Stubber\Answers\ParentDelegate();
         $mock       = $this->classGen->instantiate(
             $newClassName,
@@ -488,10 +488,10 @@ class MockClassTest extends TestCase
         $mockedClass  = \PhakeTest_MockedFinalConstructedClass::class;
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
-        /** @var $callRecorder Phake#CallRecorder\Recorder */
         $callRecorder = $this->getMockBuilder(Phake\CallRecorder\Recorder::class)->getMock();
-        /** @var $stubMapper Phake\Stubber\StubMapper */
+        assert($callRecorder instanceof Phake\CallRecorder\Recorder);
         $stubMapper = $this->getMockBuilder(Phake\Stubber\StubMapper::class)->getMock();
+        assert($stubMapper instanceof Phake\Stubber\StubMapper);
         $answer     = new Phake\Stubber\Answers\ParentDelegate();
         $mock       = $this->classGen->instantiate(
             $newClassName,
@@ -562,8 +562,8 @@ class MockClassTest extends TestCase
         $mockedClass  = \PhakeTest_ToStringMethod::class;
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
-        /** @var $recorder Phake#CallRecorder\Recorder */
         $recorder = $this->getMockBuilder(Phake\CallRecorder\Recorder::class)->getMock();
+        assert($recorder instanceof Phake\CallRecorder\Recorder);
         $mapper   = new Phake\Stubber\StubMapper();
         $answer   = new Phake\Stubber\Answers\ParentDelegate();
 
@@ -581,8 +581,8 @@ class MockClassTest extends TestCase
         $mockedClass  = \PhakeTest_DestructorClass::class;
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
-        /** @var $recorder Phake#CallRecorder\Recorder */
         $recorder = $this->getMockBuilder(Phake\CallRecorder\Recorder::class)->getMock();
+        assert($recorder instanceof Phake\CallRecorder\Recorder);
         $mapper   = new Phake\Stubber\StubMapper();
         $answer   = new Phake\Stubber\Answers\ParentDelegate();
 
@@ -599,8 +599,8 @@ class MockClassTest extends TestCase
         $mockedClass  = \PhakeTest_SerializableClass::class;
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
-        /** @var $recorder Phake#CallRecorder\Recorder */
         $recorder = $this->getMockBuilder(Phake\CallRecorder\Recorder::class)->getMock();
+        assert($recorder instanceof Phake\CallRecorder\Recorder);
         $mapper   = new Phake\Stubber\StubMapper();
         $answer   = new Phake\Stubber\Answers\ParentDelegate();
 
@@ -645,8 +645,8 @@ class MockClassTest extends TestCase
         $mockedClass  = \stdClass::class;
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
-        /* @var $info Phake\Mock\Info */
         $info = $this->infoRegistry->getInfo($newClassName);
+        assert($info instanceof Phake\Mock\Info);
         $this->assertInstanceOf(Phake\Mock\Info::class, $info);
 
         $this->assertInstanceOf(Phake\Stubber\IAnswer::class, $info->getDefaultAnswer());

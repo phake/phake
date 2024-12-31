@@ -53,8 +53,8 @@ class CallExpectationTest extends TestCase
 {
     public function testToString(): void
     {
-        /** @var $mock \Phake\IMock */
         $mock = Phake::mock(\Phake\IMock::class);
+        assert($mock instanceof \Phake\IMock);
 
         $matcher1 = Phake::mock(\Phake\Matchers\IChainableArgumentMatcher::class);
         Phake::when($matcher1)->__toString()->thenReturn('100');
@@ -75,8 +75,8 @@ class CallExpectationTest extends TestCase
 
     public function testStaticToString(): void
     {
-        /** @var $mock \Phake\IMock */
         $mock = Phake::mock(\Phake\IMock::class);
+        assert($mock instanceof \Phake\IMock);
 
         $matcher1 = Phake::mock(\Phake\Matchers\IChainableArgumentMatcher::class);
         Phake::when($matcher1)->__toString()->thenReturn('100');

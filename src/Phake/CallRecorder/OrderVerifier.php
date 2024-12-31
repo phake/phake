@@ -61,7 +61,7 @@ class OrderVerifier
 
             $callFound = false;
             foreach ($callList as $call) {
-                /* @var $call Position */
+                assert($call instanceof Position);
                 if ($call->thisIsAfter($call2)) {
                     $callFound = true;
                     $call2     = $call;

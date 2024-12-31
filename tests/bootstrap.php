@@ -46,8 +46,8 @@ declare(strict_types=1);
 
 error_reporting(E_ALL);
 
-/** @var $loader \Composer\Autoload\ClassLoader */
 $loader = require dirname(__DIR__) . '/vendor/autoload.php';
+assert($loader instanceof \Composer\Autoload\ClassLoader);
 $loader->add('PhakeTest', __DIR__);
 
 require dirname(__DIR__) . '/vendor/hamcrest/hamcrest-php/hamcrest/Hamcrest.php';

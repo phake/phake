@@ -92,8 +92,8 @@ class InfoRegistry
 
     public function resetAll(): void
     {
-        /* @var $info Info */
         foreach ($this->staticRegistry as $info) {
+            assert($info instanceof Info);
             $info->resetInfo();
         }
     }
