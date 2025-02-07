@@ -41,12 +41,18 @@ jobs:
           - php: 8.3
             phpunit: ^11.0
             phpunit_config_file: 'phpunit10.xml.dist'
+          - php: 8.3
+            phpunit: ^12.0
+            phpunit_config_file: 'phpunit10.xml.dist'
           - php: 8.4
             phpunit: ^10.0
             phpunit_config_file: 'phpunit10.xml.dist'
           - php: 8.4
             phpunit: ^11.0
             phpunit_config_file: 'phpunit10.xml.dist'
+          - php: 8.4
+            phpunit: ^12.0
+            phpunit_config_file: 'phpunit10.xml.dist
 
     steps:
       - name: Checkout
