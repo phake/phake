@@ -52,7 +52,7 @@ jobs:
             phpunit_config_file: 'phpunit10.xml.dist'
           - php: 8.4
             phpunit: ^12.0
-            phpunit_config_file: 'phpunit10.xml.dist
+            phpunit_config_file: 'phpunit10.xml.dist'
 
     steps:
       - name: Checkout
