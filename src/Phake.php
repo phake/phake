@@ -95,6 +95,7 @@ class Phake
     public const CLIENT_PHPUNIT9 = 'PHPUNIT9';
     public const CLIENT_PHPUNIT10 = 'PHPUNIT10';
     public const CLIENT_PHPUNIT11 = 'PHPUNIT11';
+    public const CLIENT_PHPUNIT12 = 'PHPUNIT12';
 
     /**
      * Returns a new mock object based on the given class name.
@@ -600,7 +601,9 @@ class Phake
     {
         if (!isset(self::$client)) {
             if (class_exists(\PHPUnit\Framework\TestCase::class)) {
-                if (version_compare(\PHPUnit\Runner\Version::id(), '11.0.0') >= 0) {
+                if (version_compare(\PHPUnit\Runner\Version::id(), '12.0.0') >= 0) {
+                    return self::$client = new \Phake\Client\PHPUnit12();
+                } elseif (version_compare(\PHPUnit\Runner\Version::id(), '11.0.0') >= 0) {
                     return self::$client = new \Phake\Client\PHPUnit11();
                 } elseif (version_compare(\PHPUnit\Runner\Version::id(), '10.0.0') >= 0) {
                     return self::$client = new \Phake\Client\PHPUnit10();
@@ -643,6 +646,8 @@ class Phake
             self::$client = new \Phake\Client\PHPUnit10();
         } elseif (self::CLIENT_PHPUNIT11 == $client) {
             self::$client = new \Phake\Client\PHPUnit11();
+        } elseif (self::CLIENT_PHPUNIT12 == $client) {
+            self::$client = new \Phake\Client\PHPUnit12();
         } else {
             self::$client = new \Phake\Client\DefaultClient();
         }
