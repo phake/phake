@@ -1,3 +1,9 @@
+## Phake 4.6.0
+
+### New Feature
+
+**#326 Add support for Comparator 7 / PHPUnit 12**
+
 ## Phake 4.5.0
 
 ### New Feature
