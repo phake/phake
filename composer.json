@@ -13,7 +13,7 @@
     ],
     "require": {
         "php": "^7.1|^8.0",
-        "sebastian/comparator": "^1.1|^2.0|^3.0|^4.0|^5.0|^6.0|7.0",
+        "sebastian/comparator": "^1.1|^2.0|^3.0|^4.0|^5.0|^6.0|^7.0",
         "doctrine/instantiator": "^1.4"
     },
     "require-dev": {
