@@ -58,11 +58,21 @@ class InfoRegistry
      */
     private array $staticRegistry = [];
 
-    private WeakMap $registry;
+    /**
+     * @var array<string, ReflectionProperty>
+     */
+    private array $reflectionCache = [];
 
-    public function __construct()
+    private function injectInfo(\Phake\IMock $mock, Info $info): void
     {
-        $this->registry = new WeakMap();
+        $class = get_class($mock);
+        if (!isset($this->reflectionCache[$class])) {
+            $rc = new \ReflectionClass($mock);
+            $rp = $rc->getProperty('__PHAKE_info');
+            $rp->setAccessible(true);
+            $this->reflectionCache[$class] = $rp;
+        }
+        $this->reflectionCache[$class]->setValue($mock, $info);
     }
 
     /**
@@ -71,7 +81,7 @@ class InfoRegistry
     public function addInfo(\Phake\IMock|string $mock, Info $info): void
     {
         if ($mock instanceof \Phake\IMock) {
-            $this->registry[$mock] = $info;
+            $this->injectInfo($mock, $info);
             return;
         }
 
@@ -84,7 +94,7 @@ class InfoRegistry
     public function getInfo(\Phake\IMock|string $mock): Info
     {
         if ($mock instanceof \Phake\IMock) {
-            return $this->registry[$mock];
+            return $mock->__PHAKE_info;
         }
 
         return $this->staticRegistry[$mock];
