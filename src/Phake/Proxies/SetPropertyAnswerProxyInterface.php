@@ -42,34 +42,25 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+/**
+ * Defines an interface for anything that supports answers
+ *
+ * @author Mike Lively <m@digitalsandwich.com>
+ */
+
 declare(strict_types=1);
 
-namespace Phake\Stubber\Answers;
+namespace Phake\Proxies;
 
-/**
- * A callable class that allows for calling parent methods without losing references.
- */
-class ParentDelegateCallback
+interface SetPropertyAnswerProxyInterface
 {
     /**
-     * @param class-string|\Phake\IMock $context
-     * @param \ReflectionMethod $parentMethod
+     * Binds a delegated call that will call a given method's parent.
      */
-    public function __construct(
-        private \Phake\IMock|string $context,
-        private \ReflectionMethod|\ReflectionProperty $parentMethod
-    ) {
-    }
+    public function thenCallParent(): \Phake\Stubber\IAnswerContainer;
 
-    public function __invoke(array $arguments = []): mixed
-    {
-        $this->parentMethod->setAccessible(true);
-        if ($this->parentMethod->isStatic()) {
-            return $this->parentMethod->invokeArgs(null, $arguments);
-        }
-
-        assert($this->context instanceof \Phake\IMock);
-
-        return $this->parentMethod->invokeArgs($this->context, $arguments);
-    }
+    /**
+     * Binds an exception answer to the method and object in the proxied binder.
+     */
+    public function thenThrow(\Throwable $value): \Phake\Stubber\IAnswerContainer;
 }

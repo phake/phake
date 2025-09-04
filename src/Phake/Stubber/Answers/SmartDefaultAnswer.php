@@ -57,7 +57,7 @@ class SmartDefaultAnswer implements \Phake\Stubber\IAnswer
     {
     }
 
-    public function getReturnTypeResult(?\ReflectionType $returnType, \ReflectionMethod $method): mixed
+    public function getReturnTypeResult(?\ReflectionType $returnType, \ReflectionClass $class): mixed
     {
         if (null === $returnType) {
             return null;
@@ -79,7 +79,7 @@ class SmartDefaultAnswer implements \Phake\Stubber\IAnswer
                 case 'callable':
                     return function () {};
                 case 'self':
-                    return \Phake::mock($method->getDeclaringClass()->getName());
+                    return \Phake::mock($class->getName());
                 case 'null':
                 case 'void':
                 case 'never':
@@ -100,20 +100,28 @@ class SmartDefaultAnswer implements \Phake\Stubber\IAnswer
             return \Phake::mock(array_map(static fn (\ReflectionNamedType $t): string => $t->getName(), $returnType->getTypes()));
         } elseif ($returnType instanceof \ReflectionUnionType) {
             foreach ($returnType->getTypes() as $type) {
-                return $this->getReturnTypeResult($type, $method);
+                return $this->getReturnTypeResult($type, $class);
             }
         }
 
         throw new \Exception('Unable to create a smart answer for type \'' . (string) $returnType . '\'');
     }
 
-    public function getAnswerCallback(mixed $context, string $method): callable
+    public function getAnswerCallback(mixed $context, string $name): callable
     {
         $class = new \ReflectionClass($context);
-        $method = $class->getMethod($method);
+        if ($class->hasMethod($name)) {
+            $name = $class->getMethod($name);
+            $defaultAnswer = $this->getReturnTypeResult($name->getReturnType(), $name->getDeclaringClass());
 
-        $defaultAnswer = $this->getReturnTypeResult($method->getReturnType(), $method);
-
+        } else {
+            $property = $class->getProperty($name);
+            if ($property->hasDefaultValue()) {
+                $defaultAnswer = $property->getDefaultValue();
+            } else {
+                $defaultAnswer = $this->getReturnTypeResult($property->getType(), $name->getDeclaringClass());
+            }
+        }
         return static fn (mixed ...$args): mixed => $defaultAnswer;
     }
 }

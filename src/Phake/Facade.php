@@ -142,7 +142,7 @@ class Facade
         foreach ($bases as $base) {
             $ns_parts        = explode('\\', $base);
             $base            = array_pop($ns_parts);
-            $base_class_name[] = $base . '_PHAKE' . bin2hex(random_bytes(7));
+            $base_class_name[] = $base; // . '_PHAKE' . bin2hex(random_bytes(7));
         }
 
         $i = 1;

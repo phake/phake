@@ -76,4 +76,17 @@ class Composite implements IInvocationHandler
 
         return $result;
     }
+
+    /**                                                                                                                                                                               
+     * {@inheritDoc}                                                                                                                                                                  
+     */                                                                                                                                                                               
+    public function invokePropertyHook(\Phake\IMock $mock, string $property, $hook, array $arguments = []): mixed
+    {                
+        $result = null;
+        foreach ($this->handlers as $handler) {
+            $result = $handler->invokePropertyHook($mock, $property, $hook, $arguments);
+        }
+
+        return $result;
+    } 
 }

@@ -73,4 +73,12 @@ class MagicCallRecorder implements IInvocationHandler
 
         return null;
     }
+
+    /**                                                                                                                                                                               
+     * {@inheritDoc}                                                                                                                                                                  
+     */                                                                                                                                                                               
+    public function invokePropertyHook(\Phake\IMock $mock, string $property, $hook, array $arguments = []): mixed
+    {
+        return null;
+    } 
 }

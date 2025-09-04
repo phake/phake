@@ -84,4 +84,20 @@ class StubCaller implements IInvocationHandler
 
         return $answer;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function invokePropertyHook(\Phake\IMock $mock, string $property, $hook, array $arguments = []): mixed
+    {
+        $stub = $this->stubMapper->getStubByProperty($property, $hook, $arguments);
+
+        if (null === $stub) {
+            $answer = $this->defaultAnswer;
+        } else {
+            $answer = $stub->getAnswer();
+        }
+
+        return $answer;
+    }
 }
