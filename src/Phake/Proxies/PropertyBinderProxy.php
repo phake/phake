@@ -25,7 +25,7 @@ class PropertyBinderProxy implements GetPropertyAnswerProxyInterface
     }
 
     public function get(): GetPropertyAnswerProxyInterface {
-        $matcher = new \Phake\Matchers\PropertyHookMatcher($this->property, 'get', $this->matcherFactory->createMatcherChain([]));
+        $matcher = new \Phake\Matchers\PropertyHookMatcher($this->property, 'get', null);
         $binder  = new \Phake\Stubber\PropertyHookBinder($matcher, \Phake::getInfo($this->obj)->getStubMapper());
 
         return new GetPropertyBinderProxy($binder);
