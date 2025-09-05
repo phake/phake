@@ -166,6 +166,10 @@ class PhakeTest extends TestCase
      */
     public function testShorthandStub()
     {
+        if (method_exists($this, 'expectDeprecation')) {
+            $this->expectDeprecation();
+        }
+
         $mock = Phake::mock('PhakeTest_MockedClass');
 
         Phake::when($mock)->foo->thenReturn(42);
@@ -179,6 +183,9 @@ class PhakeTest extends TestCase
      */
     public function testFirstShorthandStub()
     {
+        if (method_exists($this, 'expectDeprecation')) {
+            $this->expectDeprecation();
+        }
         $mock = Phake::mock('PhakeTest_MockedClass');
 
         Phake::when($mock)->foo->thenReturn(42);
@@ -193,6 +200,10 @@ class PhakeTest extends TestCase
      */
     public function testRedefinedShorthandStub()
     {
+        if (method_exists($this, 'expectDeprecation')) {
+            $this->expectDeprecation();
+        }
+
         $mock = Phake::mock('PhakeTest_MockedClass');
 
         Phake::when($mock)->foo->thenReturn(42);
@@ -206,6 +217,9 @@ class PhakeTest extends TestCase
      */
     public function testMagicClassShorthandStub()
     {
+        if (method_exists($this, 'expectDeprecation')) {
+            $this->expectDeprecation();
+        }
         $mock = Phake::mock('PhakeTest_MagicClass');
 
         Phake::when($mock)->definedMethod->thenReturn(64);
