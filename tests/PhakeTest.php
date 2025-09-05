@@ -1917,5 +1917,19 @@ class PhakeTest extends TestCase
         $this->assertSame('foobar', $mock->publicPropWithHooks);
     }
 
+    public function testVerifyNoFurtherInteractionWithPropertyHooks(): void
+    {
+        if (PHP_VERSION_ID < 80400) {
+            $this->markTestSkipped('never type is not supported in PHP versions prior to 8.4');
+        }
 
+        $this->expectException(\Phake\Exception\VerificationException::class);
+
+        $mock = Phake::mock(\PhakeTest_PropertyHooks::class);
+
+        Phake::verifyNoFurtherInteraction($mock);
+        Phake::setClient(Phake::CLIENT_DEFAULT);
+
+        $mock->publicPropWithHooks = 'setValue1';
+    }
 }
