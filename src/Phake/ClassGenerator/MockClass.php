@@ -247,6 +247,8 @@ class MockClass
 
     protected function generateMockedProperties(\ReflectionClass $mockedClass, array $mockedInterfaces = [], array &$implementedProperties = []): string
     {
+        if (PHP_VERSION_ID < 80400) return '';
+
         $propDefs = '';
 
         $filter = \ReflectionProperty::IS_PUBLIC;
