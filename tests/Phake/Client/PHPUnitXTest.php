@@ -57,7 +57,11 @@ class PHPUnitXTest extends TestCase
 
     public function setUp(): void
     {
-        if (version_compare(\PHPUnit\Runner\Version::id(), '10.0.0') >= 0) {
+        if (version_compare(\PHPUnit\Runner\Version::id(), '12.0.0') >= 0) {
+            $this->client = new Phake\Client\PHPUnit12();
+        } elseif (version_compare(\PHPUnit\Runner\Version::id(), '11.0.0') >= 0) {
+            $this->client = new Phake\Client\PHPUnit11();
+        } elseif (version_compare(\PHPUnit\Runner\Version::id(), '10.0.0') >= 0) {
             $this->client = new Phake\Client\PHPUnit10();
         } elseif (version_compare(\PHPUnit\Runner\Version::id(), '9.0.0') >= 0) {
             $this->client = new Phake\Client\PHPUnit9();
