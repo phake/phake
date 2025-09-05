@@ -95,6 +95,9 @@ class VerifierProxy
         $obj = $this->verifier->getObject();
 
         if (is_string($name) && property_exists($obj, $name)) {
+            if (PHP_VERSION_ID < 80400) {
+                throw new \RuntimeException('Property verification requires PHP 8.4 or higher');
+            }
             return new PropertyVerifierProxy($this->verifier, $this->matcherFactory, $this->mode, $this->client, $name);
         }
 

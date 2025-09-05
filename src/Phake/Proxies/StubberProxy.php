@@ -82,6 +82,9 @@ class StubberProxy
     public function __get(string|object $name): AnswerBinderProxy|PropertyBinderProxy
     {
         if (is_string($name) && property_exists($this->obj, $name)) {
+            if (PHP_VERSION_ID < 80400) {
+                throw new \RuntimeException('Stubbing public properties requires PHP 8.4 or higher');
+            }
             return new PropertyBinderProxy($name, $this->obj, $this->matcherFactory);
         }
 
