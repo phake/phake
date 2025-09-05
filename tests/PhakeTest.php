@@ -1692,7 +1692,7 @@ class PhakeTest extends TestCase
     {
         $mock = Phake::mock('PhakeTest_MockedClass');
 
-        Phake::when($mock)->foo->thenReturnCallback(function () {
+        Phake::when($mock)->foo(Phake::anyParameters())->thenReturnCallback(function () {
             return true;
         });
 
@@ -1705,9 +1705,9 @@ class PhakeTest extends TestCase
         $this->assertInstanceOf('PhakeTest_MockedInterface', $mock);
         $this->assertInstanceOf('PhakeTest_MockedClass', $mock);
 
-        Phake::when($mock)->foo->thenReturn('bar');
-        Phake::when($mock)->reference->thenReturn('foo');
-        Phake::when($mock)->fooWithArgument->thenReturn(42);
+        Phake::when($mock)->foo(Phake::anyParameters())->thenReturn('bar');
+        Phake::when($mock)->reference(Phake::anyParameters())->thenReturn('foo');
+        Phake::when($mock)->fooWithArgument(Phake::anyParameters())->thenReturn(42);
 
         $this->assertEquals('bar', $mock->foo());
         $this->assertEquals('foo', $mock->reference($test));
@@ -1721,7 +1721,7 @@ class PhakeTest extends TestCase
     public function testReturningSelf()
     {
         $mock = Phake::mock('PhakeTest_MockedClass');
-        Phake::when($mock)->foo->thenReturnSelf();
+        Phake::when($mock)->foo(Phake::anyParameters())->thenReturnSelf();
 
         $this->assertSame($mock, $mock->foo());
     }
@@ -1807,7 +1807,7 @@ class PhakeTest extends TestCase
     {
         $mock = Phake::mock(PhakeTest_MockedClass::class);
 
-        Phake::when($mock)->foo->thenReturn(42)->thenDoNothing();
+        Phake::when($mock)->foo(Phake::anyParameters())->thenReturn(42)->thenDoNothing();
 
         $this->assertEquals(42, $mock->foo());
         $this->assertNull($mock->foo());
@@ -1817,7 +1817,7 @@ class PhakeTest extends TestCase
     {
         $mock = Phake::mock(PhakeTest_MockedClass::class);
 
-        Phake::when($mock)->foo->thenReturn(42)->thenReturnSelf();
+        Phake::when($mock)->foo(Phake::anyParameters())->thenReturn(42)->thenReturnSelf();
 
         $this->assertEquals(42, $mock->foo());
         $this->assertSame($mock, $mock->foo());
@@ -1827,7 +1827,7 @@ class PhakeTest extends TestCase
     {
         $mock = Phake::mock(PhakeTest_MockedClass::class);
 
-        Phake::when($mock)->foo->thenReturn(42)->thenReturnCallback(function () {
+        Phake::when($mock)->foo(Phake::anyParameters())->thenReturn(42)->thenReturnCallback(function () {
             return true;
         });
 

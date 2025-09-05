@@ -119,6 +119,8 @@ class StubberProxy
             return $this->__call('__get', [$method]);
         }
 
+        trigger_error('Using Phake::when($mock)->method is deprecated. Use Phake::when($mock)->method(Phake::anyParameters()) instead.', E_USER_DEPRECATED);
+
         return $this->__call($method, [new \Phake\Matchers\AnyParameters()]);
     }
 }

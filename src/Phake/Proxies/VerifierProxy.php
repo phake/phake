@@ -150,6 +150,8 @@ class VerifierProxy
             return $this->__call('__get', [$method]);
         }
 
+        trigger_error('Using Phake::verify($mock)->method is deprecated. Use Phake::when($mock)->verify(Phake::anyParameters()) instead.', E_USER_DEPRECATED);
+
         return $this->__call($method, [new \Phake\Matchers\AnyParameters()]);
     }
 }

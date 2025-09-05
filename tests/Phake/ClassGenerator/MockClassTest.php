@@ -693,7 +693,7 @@ class MockClassTest extends TestCase
     {
         $mock = Phake::mock('PhakeTest_Variadic');
 
-        Phake::when($mock)->variadicMethod->thenCallParent();
+        Phake::when($mock)->variadicMethod(Phake::anyParameters())->thenCallParent();
 
         $this->assertEquals([1,2,3,4], $mock->variadicMethod(1, 2, 3, 4));
     }
@@ -711,7 +711,7 @@ class MockClassTest extends TestCase
     {
         $mock = Phake::mock('PhakeTest_ScalarTypes');
 
-        Phake::when($mock)->scalarHints->thenReturn(2);
+        Phake::when($mock)->scalarHints(Phake::anyParameters())->thenReturn(2);
 
         $this->assertEquals(2, $mock->scalarHints(1, 1));
     }
@@ -720,7 +720,7 @@ class MockClassTest extends TestCase
     {
         $mock = Phake::mock('PhakeTest_ScalarTypes');
 
-        Phake::when($mock)->scalarHints->thenReturn([]);
+        Phake::when($mock)->scalarHints(Phake::anyParameters())->thenReturn([]);
 
         try {
             $this->assertEquals([], $mock->scalarHints(1, 1));
@@ -756,7 +756,7 @@ class MockClassTest extends TestCase
         $mock = Phake::mock('PhakeTest_VoidType');
 
         $expectedException = new \Exception('Test Exception');
-        Phake::when($mock)->voidMethod->thenThrow($expectedException);
+        Phake::when($mock)->voidMethod(Phake::anyParameters())->thenThrow($expectedException);
 
         try {
             $mock->voidMethod();
@@ -770,7 +770,7 @@ class MockClassTest extends TestCase
     {
         $mock = Phake::mock('PhakeTest_VoidType');
 
-        Phake::when($mock)->voidMethod->thenCallParent();
+        Phake::when($mock)->voidMethod(Phake::anyParameters())->thenCallParent();
 
         $mock->voidMethod();
 
@@ -781,7 +781,7 @@ class MockClassTest extends TestCase
     {
         $mock = Phake::mock('PhakeTest_ScalarTypes');
 
-        Phake::when($mock)->objectReturn->thenReturn(null);
+        Phake::when($mock)->objectReturn(Phake::anyParameters())->thenReturn(null);
 
         try {
             $mock->objectReturn();
@@ -794,7 +794,7 @@ class MockClassTest extends TestCase
     public function testStubbingNullableReturnHints()
     {
         $mock = Phake::mock('PhakeTest_NullableTypes');
-        Phake::when($mock)->objectReturn->thenReturn(null);
+        Phake::when($mock)->objectReturn(Phake::anyParameters())->thenReturn(null);
 
         try {
             $this->assertSame(null, $mock->objectReturn());
@@ -821,7 +821,7 @@ class MockClassTest extends TestCase
     public function testStubbingNullableReturnWrongType()
     {
         $mock = Phake::mock('PhakeTest_NullableTypes');
-        Phake::when($mock)->objectReturn->thenReturn([]);
+        Phake::when($mock)->objectReturn(Phake::anyParameters())->thenReturn([]);
 
         try {
             $mock->objectReturn();
