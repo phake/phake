@@ -119,7 +119,7 @@ class SmartDefaultAnswer implements \Phake\Stubber\IAnswer
             if ($property->hasDefaultValue()) {
                 $defaultAnswer = $property->getDefaultValue();
             } else {
-                $defaultAnswer = $this->getReturnTypeResult($property->getType(), $name->getDeclaringClass());
+                $defaultAnswer = $this->getReturnTypeResult($property->getType(), $property->getDeclaringClass());
             }
         }
         return static fn (mixed ...$args): mixed => $defaultAnswer;
