@@ -58,5 +58,5 @@ interface IInvocationHandler
      */
     public function invoke(\Phake\IMock|string $mock, string $method, array $arguments, array &$argumentReference): mixed;
 
-    public function invokePropertyHook(\Phake\IMock $mock, string $property, $hook, array $arguments = []): mixed;
+    public function invokePropertyHook(\Phake\IMock $mock, string $property, string $hook, array $arguments = []): mixed;
 }

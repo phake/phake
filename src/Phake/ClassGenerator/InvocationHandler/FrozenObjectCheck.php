@@ -74,7 +74,7 @@ class FrozenObjectCheck implements IInvocationHandler
     /**                                                                                                                                                                               
      * {@inheritDoc}                                                                                                                                                                  
      */                                                                                                                                                                               
-    public function invokePropertyHook(\Phake\IMock $mock, string $property, $hook, array $arguments = []): mixed
+    public function invokePropertyHook(\Phake\IMock $mock, string $property, string $hook, array $arguments = []): mixed
     {
         return null;
     } 
