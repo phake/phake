@@ -58,22 +58,12 @@ class StubMapper
      */
     private array $matcherStubMap = [];
 
-    private array $propertyMap = [];
-
     /**
      * Maps a given answer collection to a given $matcher
      */
     public function mapStubToMatcher(AnswerCollection $answer, \Phake\Matchers\IMethodMatcher $matcher): void
     {
         $this->matcherStubMap[$matcher->getMethod()][] = [$matcher, $answer];
-    }
-
-    /**
-     * Maps a given property
-     */
-    public function mapPropertyStub(AnswerCollection $answer, \Phake\Matchers\IPropertyHookMatcher $matcher): void
-    {
-        $this->propertyMap[$matcher->getProperty()][$matcher->getHook()][] = [$matcher, $answer];
     }
 
     /**
@@ -96,30 +86,10 @@ class StubMapper
     }
 
     /**
-     * Returns the anwer collection based on the property name
-     */
-    public function getStubByProperty(string $property, string $hook, array &$args = []): ?AnswerCollection
-    {
-        $matchers = array_reverse($this->propertyMap[$property][$hook] ?? []);
-
-        foreach ($matchers as $item) {
-            [$matcher, $answer] = $item;
-
-            assert($matcher instanceof \Phake\Matchers\IPropertyHookMatcher);
-            if ($matcher->matches($property, $hook, $args)) {
-                return $answer;
-            }
-        }
-
-        return null;
-    }
-
-    /**
      * Removes all answer collections from the stub mapper.
      */
     public function removeAllAnswers(): void
     {
         $this->matcherStubMap = [];
-        $this->propertyMap = [];
     }
 }

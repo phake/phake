@@ -57,7 +57,7 @@ class SmartDefaultAnswer implements \Phake\Stubber\IAnswer
     {
     }
 
-    public function getReturnTypeResult(?\ReflectionType $returnType, \ReflectionClass $class): mixed
+    private function getReturnTypeResult(?\ReflectionType $returnType, \ReflectionClass $class): mixed
     {
         if (null === $returnType) {
             return null;

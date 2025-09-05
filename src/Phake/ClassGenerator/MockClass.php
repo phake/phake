@@ -289,8 +289,9 @@ class MockClass
     protected function implementGetPropertyHook(\ReflectionProperty $property): string
     {
         return "\n\t\tget {
+            \$__PHAKE_args = array();
             \$__PHAKE_info = Phake::getInfo(\$this);
-            \$__PHAKE_answer = \$__PHAKE_info->getHandlerChain()->invokePropertyHook(\$this, '{$property->getName()}', 'get');
+            \$__PHAKE_answer = \$__PHAKE_info->getHandlerChain()->invoke(\$this, '{$property->getName()}::get', [], \$__PHAKE_args);
             \$__PHAKE_callback = \$__PHAKE_answer->getAnswerCallback(\$this, '{$property->getName()}');
 
             if (\$__PHAKE_callback instanceof \Phake\Stubber\Answers\ParentDelegateCallback)
@@ -309,8 +310,9 @@ class MockClass
     protected function implementSetPropertyHook(\ReflectionProperty $property): string
     {
         return "\n\t\tset {
+            \$__PHAKE_args = array(\$value);
             \$__PHAKE_info = Phake::getInfo(\$this);
-            \$__PHAKE_answer = \$__PHAKE_info->getHandlerChain()->invokePropertyHook(\$this, '{$property->getName()}', 'set', [ \$value ]);
+            \$__PHAKE_answer = \$__PHAKE_info->getHandlerChain()->invoke(\$this, '{$property->getName()}::set', [ \$value ], \$__PHAKE_args);
             \$__PHAKE_callback = \$__PHAKE_answer->getAnswerCallback(\$this, '{$property->getName()}');
 
             if (\$__PHAKE_callback instanceof \Phake\Stubber\Answers\ParentDelegateCallback)

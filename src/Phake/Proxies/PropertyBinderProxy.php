@@ -18,15 +18,15 @@ class PropertyBinderProxy implements GetPropertyAnswerProxyInterface
     }
 
     public function set(mixed $value): SetPropertyBinderProxy  {
-        $matcher = new \Phake\Matchers\PropertyHookMatcher($this->property, 'set', $this->matcherFactory->createMatcherChain([$value]));
-        $binder  = new \Phake\Stubber\PropertyHookBinder($matcher, \Phake::getInfo($this->obj)->getStubMapper());
+        $matcher = new \Phake\Matchers\MethodMatcher($this->property . '::set', $this->matcherFactory->createMatcherChain([$value]));
+        $binder  = new \Phake\Stubber\AnswerBinder($matcher, \Phake::getInfo($this->obj)->getStubMapper());
 
         return new SetPropertyBinderProxy($binder);
     }
 
     public function get(): GetPropertyAnswerProxyInterface {
-        $matcher = new \Phake\Matchers\PropertyHookMatcher($this->property, 'get', null);
-        $binder  = new \Phake\Stubber\PropertyHookBinder($matcher, \Phake::getInfo($this->obj)->getStubMapper());
+        $matcher = new \Phake\Matchers\MethodMatcher($this->property . '::get', null);
+        $binder  = new \Phake\Stubber\AnswerBinder($matcher, \Phake::getInfo($this->obj)->getStubMapper());
 
         return new GetPropertyBinderProxy($binder);
     }

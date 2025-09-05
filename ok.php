@@ -7,9 +7,7 @@ require __DIR__ . '/vendor/autoload.php';
 use Phake;
 
 class Foo {
-    public string $foo = 'Unset' {
-        set => $value;
-    }
+    public string $foo = 'Unset';
 }
 
 Phake::setMockLoader(new Phake\ClassGenerator\FileLoader(sys_get_temp_dir()));

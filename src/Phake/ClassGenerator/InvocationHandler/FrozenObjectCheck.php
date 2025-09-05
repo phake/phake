@@ -70,17 +70,4 @@ class FrozenObjectCheck implements IInvocationHandler
 
         return null;
     }
-
-    /**                                                                                                                                                                               
-     * {@inheritDoc}                                                                                                                                                                  
-     */                                                                                                                                                                               
-    public function invokePropertyHook(\Phake\IMock $mock, string $property, string $hook, array $arguments = []): mixed
-    {
-        if ($this->mockInfo->isObjectFrozen()) {
-            $result = new \Phake\CallRecorder\VerifierResult(false, [], 'This object has been frozen.');
-            \Phake::getClient()->processVerifierResult($result);
-        }
-
-        return null;
-    } 
 }

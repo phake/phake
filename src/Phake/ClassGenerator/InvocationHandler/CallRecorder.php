@@ -69,16 +69,4 @@ class CallRecorder implements IInvocationHandler
 
         return null;
     }
-
-    /**                                                                                                                                                                               
-     * {@inheritDoc}                                                                                                                                                                  
-     */                                                                                                                                                                               
-    public function invokePropertyHook(\Phake\IMock $mock, string $property, string $hook, array $arguments = []): mixed
-    {
-        $this->callRecorder->recordCall(
-            new \Phake\CallRecorder\Call($mock, sprintf('%s::%s', $property, $hook), $arguments)
-        );
-
-        return null;
-    } 
 }

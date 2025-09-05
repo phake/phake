@@ -89,10 +89,9 @@ class ParentDelegate implements \Phake\Stubber\IAnswer
                     return new ParentDelegateCallback($context, $reflMethod);
                 }
             } elseif ($reflParent->hasProperty($method)) {
-                $reflProperty = $reflParent->getProperty($method);
-                return new ParentDelegateCallback($context, $reflProperty);
+                return new ParentDelegateCallback($context, null);
             }
-        } catch (\ReflectionException $e) {
+        } catch (\ReflectionException) {
         }
 
         return $fallback;
