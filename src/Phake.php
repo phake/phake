@@ -497,7 +497,9 @@ class Phake
             self::$client = new Phake\Client\PHPUnit12();
         } elseif (self::CLIENT_PHPUNIT == $client) {
             if (class_exists(\PHPUnit\Framework\TestCase::class)) {
-                if (version_compare(\PHPUnit\Runner\Version::id(), '11.0.0') >= 0) {
+                if (version_compare(\PHPUnit\Runner\Version::id(), '12.0.0') >= 0) {
+                    self::$client = new Phake\Client\PHPUnit12();
+                } elseif (version_compare(\PHPUnit\Runner\Version::id(), '11.0.0') >= 0) {
                     self::$client = new Phake\Client\PHPUnit11();
                 } elseif (version_compare(\PHPUnit\Runner\Version::id(), '10.0.0') >= 0) {
                     self::$client = new Phake\Client\PHPUnit10();
