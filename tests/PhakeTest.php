@@ -158,7 +158,9 @@ class PhakeTest extends TestCase
         $mock->foo();
         $mock->foo('bar');
 
-        Phake::verify($mock, Phake::times(2))->foo;
+        $this->noDeprecation(function() use ($mock) {
+            Phake::verify($mock, Phake::times(2))->foo;
+        });
     }
 
     /**
@@ -168,7 +170,9 @@ class PhakeTest extends TestCase
     {
         $mock = Phake::mock('PhakeTest_MockedClass');
 
-        Phake::when($mock)->foo->thenReturn(42);
+        $this->noDeprecation(function() use ($mock) {
+            Phake::when($mock)->foo->thenReturn(42);
+        });
 
         $this->assertEquals(42, $mock->foo());
         $this->assertEquals(42, $mock->foo('param'));
@@ -181,8 +185,10 @@ class PhakeTest extends TestCase
     {
         $mock = Phake::mock('PhakeTest_MockedClass');
 
-        Phake::when($mock)->foo->thenReturn(42);
-        Phake::when($mock)->foo('param')->thenReturn(51);
+        $this->noDeprecation(function() use ($mock) {
+            Phake::when($mock)->foo->thenReturn(42);
+            Phake::when($mock)->foo('param')->thenReturn(51);
+        });
 
         $this->assertEquals(51, $mock->foo('param'));
         $this->assertEquals(42, $mock->foo());
@@ -195,8 +201,10 @@ class PhakeTest extends TestCase
     {
         $mock = Phake::mock('PhakeTest_MockedClass');
 
-        Phake::when($mock)->foo->thenReturn(42);
-        Phake::when($mock)->foo->thenReturn(2);
+        $this->noDeprecation(function() use ($mock) {
+            Phake::when($mock)->foo->thenReturn(42);
+            Phake::when($mock)->foo->thenReturn(2);
+        });
 
         $this->assertEquals(2, $mock->foo());
     }
@@ -208,13 +216,26 @@ class PhakeTest extends TestCase
     {
         $mock = Phake::mock('PhakeTest_MagicClass');
 
-        Phake::when($mock)->definedMethod->thenReturn(64);
-        Phake::when($mock)->__get->thenReturn(75);
-        Phake::when($mock)->magicProperty->thenReturn(42);
+        $this->noDeprecation(function() use ($mock) {
+            Phake::when($mock)->definedMethod->thenReturn(64);
+            Phake::when($mock)->__get->thenReturn(75);
+            Phake::when($mock)->magicProperty->thenReturn(42);
+        });
 
         $this->assertSame(64, $mock->definedMethod());
         $this->assertSame(75, $mock->otherMagicProperties);
         $this->assertSame(42, $mock->magicProperty);
+    }
+
+    private function noDeprecation($callable) {
+        set_error_handler(function ($errno, $errstr) {
+            if ($errno === E_USER_DEPRECATED) {
+                return true;
+            }
+            return false;
+        });
+        $callable();
+        restore_error_handler();
     }
 
     /**
@@ -1692,7 +1713,7 @@ class PhakeTest extends TestCase
     {
         $mock = Phake::mock('PhakeTest_MockedClass');
 
-        Phake::when($mock)->foo->thenReturnCallback(function () {
+        Phake::when($mock)->foo(Phake::anyParameters())->thenReturnCallback(function () {
             return true;
         });
 
@@ -1705,9 +1726,9 @@ class PhakeTest extends TestCase
         $this->assertInstanceOf('PhakeTest_MockedInterface', $mock);
         $this->assertInstanceOf('PhakeTest_MockedClass', $mock);
 
-        Phake::when($mock)->foo->thenReturn('bar');
-        Phake::when($mock)->reference->thenReturn('foo');
-        Phake::when($mock)->fooWithArgument->thenReturn(42);
+        Phake::when($mock)->foo(Phake::anyParameters())->thenReturn('bar');
+        Phake::when($mock)->reference(Phake::anyParameters())->thenReturn('foo');
+        Phake::when($mock)->fooWithArgument(Phake::anyParameters())->thenReturn(42);
 
         $this->assertEquals('bar', $mock->foo());
         $this->assertEquals('foo', $mock->reference($test));
@@ -1721,7 +1742,7 @@ class PhakeTest extends TestCase
     public function testReturningSelf()
     {
         $mock = Phake::mock('PhakeTest_MockedClass');
-        Phake::when($mock)->foo->thenReturnSelf();
+        Phake::when($mock)->foo(Phake::anyParameters())->thenReturnSelf();
 
         $this->assertSame($mock, $mock->foo());
     }
@@ -1807,7 +1828,7 @@ class PhakeTest extends TestCase
     {
         $mock = Phake::mock(PhakeTest_MockedClass::class);
 
-        Phake::when($mock)->foo->thenReturn(42)->thenDoNothing();
+        Phake::when($mock)->foo(Phake::anyParameters())->thenReturn(42)->thenDoNothing();
 
         $this->assertEquals(42, $mock->foo());
         $this->assertNull($mock->foo());
@@ -1817,7 +1838,7 @@ class PhakeTest extends TestCase
     {
         $mock = Phake::mock(PhakeTest_MockedClass::class);
 
-        Phake::when($mock)->foo->thenReturn(42)->thenReturnSelf();
+        Phake::when($mock)->foo(Phake::anyParameters())->thenReturn(42)->thenReturnSelf();
 
         $this->assertEquals(42, $mock->foo());
         $this->assertSame($mock, $mock->foo());
@@ -1827,7 +1848,7 @@ class PhakeTest extends TestCase
     {
         $mock = Phake::mock(PhakeTest_MockedClass::class);
 
-        Phake::when($mock)->foo->thenReturn(42)->thenReturnCallback(function () {
+        Phake::when($mock)->foo(Phake::anyParameters())->thenReturn(42)->thenReturnCallback(function () {
             return true;
         });
 

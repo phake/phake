@@ -106,7 +106,14 @@ class StubberProxyTest extends TestCase
      */
     public function testGet()
     {
+        set_error_handler(function ($errno, $errstr) {
+            if ($errno === E_USER_DEPRECATED) {
+                return true;
+            }
+            return false;
+        });
         $answerBinder = $this->proxy->foo;
+        restore_error_handler();
 
         $this->assertInstanceOf(\Phake\Proxies\AnswerBinderProxy::class, $answerBinder);
         $this->phakeAssertAttributeInstanceOf(\Phake\Stubber\AnswerBinder::class, 'binder', $answerBinder);
@@ -117,11 +124,24 @@ class StubberProxyTest extends TestCase
      */
     public function testStaticGet()
     {
+        set_error_handler(function ($errno, $errstr) {
+            if ($errno === E_USER_DEPRECATED) {
+                return true;
+            }
+            return false;
+        });
         $answerBinder = $this->proxy->foo;
+        restore_error_handler();
 
         $this->assertInstanceOf(\Phake\Proxies\AnswerBinderProxy::class, $answerBinder);
         $this->phakeAssertAttributeInstanceOf(\Phake\Stubber\AnswerBinder::class, 'binder', $answerBinder);
     }
+
+    private function noDeprecation($callable) {
+        $callable();
+        restore_error_handler();
+    }
+
 
     public function testGetWithMatcher()
     {

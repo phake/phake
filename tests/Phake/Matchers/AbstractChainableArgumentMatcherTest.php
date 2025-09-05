@@ -84,7 +84,7 @@ class AbstractChainableArgumentMatcherTest extends TestCase
 
     public function testSetNextMatcherCallsAssertPreviousMatcher()
     {
-        Phake::when($this->nextMatcher)->assertPreviousMatcher->thenThrow(new \InvalidArgumentException());
+        Phake::when($this->nextMatcher)->assertPreviousMatcher(Phake::anyParameters())->thenThrow(new \InvalidArgumentException());
 
         $this->expectException(\InvalidArgumentException::class);
         $this->matcher->setNextMatcher($this->nextMatcher);
