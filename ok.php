@@ -14,18 +14,20 @@ class Foo {
 
 Phake::setMockLoader(new Phake\ClassGenerator\FileLoader(sys_get_temp_dir()));
 
-$ok = Phake::mock(Foo::class);
+$mock = Phake::mock(Foo::class);
 
-Phake::when($ok)->foo->get()->thenReturn('Hello Pierrick')->thenReturn('Hello Ethan')->thenReturnCallback(fn() => 'Hello Annie')->thenCallParent();
-var_dump($ok->foo);
-var_dump($ok->foo);
-var_dump($ok->foo);
+Phake::when($mock)->foo->get()->thenReturn('Hello Pierrick')->thenReturn('Hello Ethan')->thenReturnCallback(fn() => 'Hello Annie')->thenCallParent();
+var_dump($mock->foo);
+var_dump($mock->foo);
+var_dump($mock->foo);
 
-Phake::when($ok)->foo->get()->thenCallParent();
-Phake::when($ok)->foo->set('lol')->thenCallParent();
-$ok->foo = 'ARG';
-var_dump($ok->foo);
-$ok->foo = 'lol';
+Phake::when($mock)->foo->get()->thenCallParent();
+Phake::when($mock)->foo->set('lol')->thenCallParent();
+$mock->foo = 'ARG';
+var_dump($mock->foo);
+Phake::verifyNoFurtherInteraction($mock);
+var_dump($mock->foo);
+//$mock->foo = 'lol';
 
-Phake::verify($ok)->foo->set(Phake::capture($arg)->when("lol"));
-var_dump($arg);
+//Phake::verify($ok)->foo->set(Phake::capture($arg)->when("lol"));
+//var_dump($arg);
