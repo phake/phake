@@ -51,20 +51,11 @@ class PhakeTestUtil
 {
     public static function setCallRecorder(Phake\IMock $mock, Phake\CallRecorder\Recorder $recorder): void
     {
-        Phake::when(static::getMockedInfo($mock))->getCallRecorder()->thenReturn($recorder);
+        Phake::when($mock)->getCallRecorder()->thenReturn($recorder);
     }
 
     public static function setStubMapper(Phake\IMock $mock, Phake\Stubber\StubMapper $stubMapper): void
     {
-        Phake::when(static::getMockedInfo($mock))->getStubMapper()->thenReturn($stubMapper);
-    }
-
-    public static function getMockedInfo(Phake\IMock $mock): Phake\Mock\Info
-    {
-        if (empty($mock->__PHAKE_info)) {
-            $mock->__PHAKE_info = Phake::mock(Phake\Mock\Info::class);
-        }
-
-        return $mock->__PHAKE_info;
+        Phake::when($mock)->getStubMapper()->thenReturn($stubMapper);
     }
 }

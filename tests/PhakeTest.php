@@ -1854,6 +1854,20 @@ class PhakeTest extends TestCase
         $this->assertEquals('Asked', $val);
     }
 
+    public function testCloneMock(): void
+    {
+        $mock = Phake::mock(\PhakeTest_MockedClass::class);
+        Phake::when($mock)->foo->thenReturn('bar');
+
+        $this->assertEquals('bar', $mock->foo());
+
+        $clonedMock = clone $mock;
+        $this->assertEquals('bar', $clonedMock->foo());
+
+        Phake::verify($clonedMock)->foo();
+        Phake::verify($mock)->foo();
+    }
+
     public function testCallingNeverReturnMockedMethodThrowsNeverReturnMethodCalledException(): void
     {
         if (PHP_VERSION_ID < 80100) {

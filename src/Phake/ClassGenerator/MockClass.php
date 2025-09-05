@@ -140,12 +140,16 @@ class MockClass
             $mockedClass = $parent;
         }
 
+        $readonly = (PHP_VERSION_ID >= 80100) ? 'readonly':'';
+
         /** @var class-string $mockedClassName */
         $classDef = "
 {$modifiers} class {$newClassName} {$extends}
 	implements \Phake\IMock {$implements}
 {
 	const __PHAKE_name = '{$mockedClassName}';
+
+    public {$readonly} \Phake\Mock\Info \$__PHAKE_info;
 
 	/**
 	 * @return void
