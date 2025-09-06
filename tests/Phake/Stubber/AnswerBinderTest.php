@@ -77,7 +77,10 @@ class AnswerBinderTest extends TestCase
 
         $this->binder->bindAnswer($answer);
 
-        Phake::verify($this->stubMapper)->mapStubToMatcher(new Phake\Stubber\AnswerCollection($answer), $this->matcher);
+        Phake::verify($this->stubMapper)->mapStubToMatcher(
+            $this->equalTo(new Phake\Stubber\AnswerCollection($answer)), 
+            $this->matcher
+        );
     }
 
     public function testBindAnswerReturnsAnswerCollectionBinder(): void

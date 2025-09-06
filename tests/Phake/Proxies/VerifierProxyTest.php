@@ -132,7 +132,7 @@ class VerifierProxyTest extends TestCase
      */
     public function testProxyTransformsNonMatchersToEqualsMatcher(): void
     {
-        $argumentMatcher = new Phake\Matchers\EqualsMatcher('test', \SebastianBergmann\Comparator\Factory::getInstance());
+        $argumentMatcher = new Phake\Matchers\StrictlyEqualsMatcher('test');
         Phake::when($this->verifier)->verifyCall(Phake::anyParameters())->thenReturn(
             new Phake\CallRecorder\VerifierResult(true, [Phake::mock(\Phake\CallRecorder\CallInfo::class)])
         );

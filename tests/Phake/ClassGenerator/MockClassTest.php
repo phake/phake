@@ -390,10 +390,10 @@ class MockClassTest extends TestCase
         $mock->foo('blah');
 
         Phake::verify($callRecorder)->recordCall(
-            new Phake\CallRecorder\Call($mock, 'foo', ['blah'])
+            $this->equalTo(new Phake\CallRecorder\Call($mock, 'foo', ['blah']))
         );
         Phake::verify($callRecorder)->recordCall(
-            new Phake\CallRecorder\Call($mock, '__call', ['foo', ['blah']])
+            $this->equalTo(new Phake\CallRecorder\Call($mock, '__call', ['foo', ['blah']]))
         );
     }
 
