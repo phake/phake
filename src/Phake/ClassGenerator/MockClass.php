@@ -254,7 +254,7 @@ class MockClass
         $filter = \ReflectionProperty::IS_PUBLIC;
 
         foreach ($mockedClass->getProperties($filter) as $property) {
-            if (!$property->isFinal() && !$property->isStatic()) {
+            if (!$property->isFinal() && !$property->isStatic() && !$property->isReadOnly()) {
                 $propertyName = $property->getName();
                 $implementedProperties[$propertyName] = $propertyName;
                 $propDefs .= $this->implementProperty($property) . "\n    ";
@@ -288,6 +288,10 @@ class MockClass
 
     protected function implementGetPropertyHook(\ReflectionProperty $property): string
     {
+        $parentHook = $property->getHook(\PropertyHookType::Get);
+        if ($parentHook?->isFinal()) {
+            return '';
+        }
         return "\n\t\tget {
             \$__PHAKE_args = array();
             \$__PHAKE_info = Phake::getInfo(\$this);
@@ -309,6 +313,10 @@ class MockClass
 
     protected function implementSetPropertyHook(\ReflectionProperty $property): string
     {
+        $parentHook = $property->getHook(\PropertyHookType::Set);
+        if ($parentHook?->isFinal()) {
+            return '';
+        }
         return "\n\t\tset {
             \$__PHAKE_args = array(\$value);
             \$__PHAKE_info = Phake::getInfo(\$this);

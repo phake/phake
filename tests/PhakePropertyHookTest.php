@@ -69,6 +69,20 @@ class PhakePropertyHookTest extends TestCase
         Phake::setClient(Phake::CLIENT_PHPUNIT);
     }
 
+    public function testCanMockPropertyHooks(): void
+    {
+        $mock = Phake::mock(PhakeTest\PropertyHooks::class);
+        $this->assertInstanceOf(PhakeTest\PropertyHooks::class, $mock);
+        $this->assertInstanceOf(Phake\IMock::class, $mock);
+    }
+
+    public function testCanMockPropertyHooksOnInterface(): void
+    {
+        $mock = Phake::mock(PhakeTest\PropertyHooksInterface::class);
+        $this->assertInstanceOf(PhakeTest\PropertyHooksInterface::class, $mock);
+        $this->assertInstanceOf(Phake\IMock::class, $mock);
+    }
+
     public function testPropertyHooksGetter(): void
     {
         $mock = Phake::mock(PhakeTest\PropertyHooks::class);

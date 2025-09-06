@@ -14,4 +14,13 @@ class PropertyHooks
     public int $intWithDefaultValue = 42;
     public int $intWithoutDefaultValue;
 
+    public readonly int $readOnlyProperty;
+
+    final public string $finalProperty = 'final';
+
+    public string $hookWithFinalSet {
+        get => $this->hookWithFinalSet;
+        final set => $value;
+    }
+
 }
