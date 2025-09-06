@@ -89,7 +89,7 @@ class StubberProxy
         }
 
         if (method_exists($this->obj, '__get')) {
-            return $this->__call('__get', [$method]);
+            return $this->__call('__get', [$name]);
         }
 
         throw new \InvalidArgumentException(sprintf("Property '%s' does not exist and __get is not defined", is_string($name) ? $name : gettype($name)));
