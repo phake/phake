@@ -57,12 +57,15 @@ class ParentDelegateCallback
      */
     public function __construct(
         private \Phake\IMock|string $context,
-        private \ReflectionMethod $parentMethod
+        private ?\ReflectionMethod $parentMethod = null,
     ) {
     }
 
     public function __invoke(array $arguments): mixed
     {
+        if (!$this->parentMethod) {
+            return null;
+        }
         $this->parentMethod->setAccessible(true);
         if ($this->parentMethod->isStatic()) {
             return $this->parentMethod->invokeArgs(null, $arguments);

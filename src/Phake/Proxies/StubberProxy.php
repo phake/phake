@@ -79,12 +79,19 @@ class StubberProxy
     /**
      * @throws \InvalidArgumentException if `__get` is not defined
      */
-    public function __get(string|object $method): AnswerBinderProxy
+    public function __get(string|object $name): AnswerBinderProxy|PropertyBinderProxy
     {
-        if (method_exists($this->obj, '__get')) {
-            return $this->__call('__get', [$method]);
+        if (is_string($name) && property_exists($this->obj, $name)) {
+            if (PHP_VERSION_ID < 80400) {
+                throw new \RuntimeException('Stubbing public properties requires PHP 8.4 or higher');
+            }
+            return new PropertyBinderProxy($name, $this->obj, $this->matcherFactory);
         }
 
-        throw new \InvalidArgumentException('__get method is not defined.');
+        if (method_exists($this->obj, '__get')) {
+            return $this->__call('__get', [$name]);
+        }
+
+        throw new \InvalidArgumentException(sprintf("Property '%s' does not exist and __get is not defined", is_string($name) ? $name : gettype($name)));
     }
 }

@@ -90,14 +90,21 @@ class VerifierProxy
      * @return array<int, \Phake\CallRecorder\CallInfo>
      * @throws \InvalidArgumentException if __get is not defined
      */
-    public function __get(string|object $method): array
+    public function __get(string|object $name): array|PropertyVerifierProxy
     {
         $obj = $this->verifier->getObject();
 
-        if (method_exists($obj, '__get')) {
-            return $this->__call('__get', [$method]);
+        if (is_string($name) && property_exists($obj, $name)) {
+            if (PHP_VERSION_ID < 80400) {
+                throw new \RuntimeException('Property verification requires PHP 8.4 or higher');
+            }
+            return new PropertyVerifierProxy($this->verifier, $this->matcherFactory, $this->mode, $this->client, $name);
         }
 
-        throw new \InvalidArgumentException('__get method is not defined.');
+        if (method_exists($obj, '__get')) {
+            return $this->__call('__get', [$name]);
+        }
+
+        throw new \InvalidArgumentException(sprintf("Property '%s' does not exist and __get is not defined", is_string($name) ? $name : gettype($name)));
     }
 }

@@ -764,9 +764,7 @@ class MockClassTest extends TestCase
 
     public function testVoidStubCanCallParent(): void
     {
-        $mock = Phake::mock(\PhakeTest\VoidType::class);
-
-        Phake::when($mock)->voidMethod(Phake::anyParameters())->thenCallParent();
+        $mock = Phake::partialMock(\PhakeTest\VoidType::class);
 
         $mock->voidMethod();
 

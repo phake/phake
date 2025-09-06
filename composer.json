@@ -61,6 +61,7 @@
     },
     "scripts": {
         "test": "phpunit",
+        "coverage": "phpunit --coverage-html coverage",
         "psalm": "psalm.phar"
     },
     "minimum-stability": "dev",
