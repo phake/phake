@@ -21,22 +21,22 @@ class InfoRegistryTest extends TestCase
     /**
      * @Mock
      */
-    private Phake\Mock\Info $info1;
+    private Info $info1;
 
     /**
      * @Mock
      */
-    private Phake\Mock\Info $info2;
+    private Info $info2;
 
     /**
      * @Mock
      */
-    private Phake\Mock\Info $info3;
+    private Info $info3;
 
     public function setUp(): void
     {
         Phake::initAnnotations($this);
-        $this->registry = new Phake\Mock\InfoRegistry();
+        $this->registry = new InfoRegistry();
         $this->registry->addInfo('foo', $this->info1);
         $this->registry->addInfo('bar', $this->info2);
         $this->registry->addInfo('baz', $this->info3);

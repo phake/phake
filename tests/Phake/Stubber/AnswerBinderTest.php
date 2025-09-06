@@ -58,7 +58,7 @@ class AnswerBinderTest extends TestCase
 
     private Phake\Matchers\MethodMatcher $matcher;
 
-    private Phake\Stubber\StubMapper $stubMapper;
+    private StubMapper $stubMapper;
 
     public function setUp(): void
     {
@@ -66,23 +66,23 @@ class AnswerBinderTest extends TestCase
                               ->disableOriginalConstructor()
                               ->getMock();
 
-        $this->stubMapper = Phake::mock(Phake\Stubber\StubMapper::class);
+        $this->stubMapper = Phake::mock(StubMapper::class);
 
-        $this->binder = new Phake\Stubber\AnswerBinder($this->matcher, $this->stubMapper);
+        $this->binder = new AnswerBinder($this->matcher, $this->stubMapper);
     }
 
     public function testBindAnswer(): void
     {
-        $answer = $this->getMockBuilder(Phake\Stubber\IAnswer::class)->getMock();
+        $answer = $this->getMockBuilder(IAnswer::class)->getMock();
 
         $this->binder->bindAnswer($answer);
 
-        Phake::verify($this->stubMapper)->mapStubToMatcher(new Phake\Stubber\AnswerCollection($answer), $this->matcher);
+        Phake::verify($this->stubMapper)->mapStubToMatcher(new AnswerCollection($answer), $this->matcher);
     }
 
     public function testBindAnswerReturnsAnswerCollectionBinder(): void
     {
-        $answer = $this->getMockBuilder(Phake\Stubber\IAnswer::class)->getMock();
+        $answer = $this->getMockBuilder(IAnswer::class)->getMock();
         $newBinder = $this->binder->bindAnswer($answer);
 
         $this->assertInstanceOf(Phake\Proxies\AnswerCollectionProxy::class, $newBinder);

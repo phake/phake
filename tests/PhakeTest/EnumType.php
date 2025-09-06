@@ -2,13 +2,15 @@
 
 declare(strict_types=1);
 
+namespace PhakeTest;
+
 enum SomeEnum: string
 {
     case A = 'a';
     case B = 'b';
 }
 
-class PhakeTest_EnumType
+class EnumType
 {
     public function enumReturn(): SomeEnum
     {

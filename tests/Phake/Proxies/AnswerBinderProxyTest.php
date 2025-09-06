@@ -60,7 +60,7 @@ class AnswerBinderProxyTest extends TestCase
 
     private Phake\Stubber\AnswerBinder $binder;
 
-    private Phake\Proxies\AnswerCollectionProxy $answerContainer;
+    private AnswerCollectionProxy $answerContainer;
 
     /**
      * Sets up the test fixture
@@ -70,7 +70,7 @@ class AnswerBinderProxyTest extends TestCase
         $this->binder = $this->getMockBuilder(Phake\Stubber\AnswerBinder::class)
                             ->disableOriginalConstructor()
                             ->getMock();
-        $this->answerContainer = $this->getMockBuilder(Phake\Proxies\AnswerCollectionProxy::class)
+        $this->answerContainer = $this->getMockBuilder(AnswerCollectionProxy::class)
                             ->disableOriginalConstructor()
                             ->getMock();
         $this->proxy  = new AnswerBinderProxy($this->binder);

@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
-interface PhakeTest_TraversableInterface extends Traversable
+namespace PhakeTest;
+
+interface TraversableInterface extends \Traversable
 {
 }

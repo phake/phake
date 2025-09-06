@@ -77,9 +77,9 @@ class StubberProxyTest extends TestCase
     {
         $answerBinder = $this->proxy->foo();
 
-        $this->assertThat($answerBinder, $this->isInstanceOf(\Phake\Proxies\AnswerBinderProxy::class));
+        $this->assertThat($answerBinder, $this->isInstanceOf(AnswerBinderProxy::class));
 
-        $this->phakeAssertAttributeInstanceOf(\Phake\Stubber\AnswerBinder::class, 'binder', $answerBinder);
+        $this->phakeAssertAttributeInstanceOf(Phake\Stubber\AnswerBinder::class, 'binder', $answerBinder);
     }
 
     /**
@@ -87,12 +87,12 @@ class StubberProxyTest extends TestCase
      */
     public function testStaticCall(): void
     {
-        $this->proxy     = new Phake\Proxies\StubberProxy(get_class($this->stubbable), new Phake\Matchers\Factory());
+        $this->proxy     = new StubberProxy(get_class($this->stubbable), new Phake\Matchers\Factory());
         $answerBinder = $this->proxy->foo();
 
-        $this->assertThat($answerBinder, $this->isInstanceOf(\Phake\Proxies\AnswerBinderProxy::class));
+        $this->assertThat($answerBinder, $this->isInstanceOf(AnswerBinderProxy::class));
 
-        $this->phakeAssertAttributeInstanceOf(\Phake\Stubber\AnswerBinder::class, 'binder', $answerBinder);
+        $this->phakeAssertAttributeInstanceOf(Phake\Stubber\AnswerBinder::class, 'binder', $answerBinder);
     }
 
     /**
@@ -102,8 +102,8 @@ class StubberProxyTest extends TestCase
     {
         $answerBinder = $this->proxy->foo(Phake::anyParameters());
 
-        $this->assertInstanceOf(\Phake\Proxies\AnswerBinderProxy::class, $answerBinder);
-        $this->phakeAssertAttributeInstanceOf(\Phake\Stubber\AnswerBinder::class, 'binder', $answerBinder);
+        $this->assertInstanceOf(AnswerBinderProxy::class, $answerBinder);
+        $this->phakeAssertAttributeInstanceOf(Phake\Stubber\AnswerBinder::class, 'binder', $answerBinder);
     }
 
     /**
@@ -113,18 +113,18 @@ class StubberProxyTest extends TestCase
     {
         $answerBinder = $this->proxy->foo(Phake::anyParameters());
 
-        $this->assertInstanceOf(\Phake\Proxies\AnswerBinderProxy::class, $answerBinder);
-        $this->phakeAssertAttributeInstanceOf(\Phake\Stubber\AnswerBinder::class, 'binder', $answerBinder);
+        $this->assertInstanceOf(AnswerBinderProxy::class, $answerBinder);
+        $this->phakeAssertAttributeInstanceOf(Phake\Stubber\AnswerBinder::class, 'binder', $answerBinder);
     }
 
     public function testGetWithMatcher(): void
     {
-        $mock = Phake::mock(\PhakeTest_MagicClass::class);
+        $mock = Phake::mock(\PhakeTest\MagicClass::class);
         $proxy = new StubberProxy($mock, new Phake\Matchers\Factory());
 
         $answerBinder = $proxy->__get($this->anything());
 
-        $this->assertInstanceOf(\Phake\Proxies\AnswerBinderProxy::class, $answerBinder);
+        $this->assertInstanceOf(AnswerBinderProxy::class, $answerBinder);
     }
 
 

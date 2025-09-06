@@ -44,10 +44,11 @@ declare(strict_types=1);
  * @link       http://www.digitalsandwich.com/
  */
 
+namespace PhakeTest;
 
-abstract class PhakeTest_AbstractImplementConstructorInterface implements PhakeTest_ConstructorInterface
+abstract class AbstractImplementConstructorInterface implements ConstructorInterface
 {
-    public function __construct(PhakeTest_A $a)
+    public function __construct(A $a)
     {
         // TODO: Implement __construct() method.
     }

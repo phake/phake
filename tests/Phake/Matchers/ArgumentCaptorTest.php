@@ -147,7 +147,7 @@ class ArgumentCaptorTest extends TestCase
 
     public function testToStringWithConditional(): void
     {
-        $matcher = Phake::mock(Phake\Matchers\IChainableArgumentMatcher::class);
+        $matcher = Phake::mock(IChainableArgumentMatcher::class);
         Phake::when($matcher)->__toString()->thenReturn('an argument');
         $this->captor->when($matcher);
         $this->assertEquals('<captured parameter that is an argument>', $this->captor->__toString());

@@ -44,7 +44,9 @@ declare(strict_types=1);
  * @link       http://www.digitalsandwich.com/
  */
 
-class PhakeTest_DestructorClass
+namespace PhakeTest;
+
+class DestructorClass
 {
     public static $destructCalled = false;
     public function __destruct()

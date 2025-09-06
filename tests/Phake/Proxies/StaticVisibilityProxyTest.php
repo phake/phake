@@ -56,7 +56,7 @@ class StaticVisibilityProxyTest extends TestCase
 {
     public function testCallingNonExistantMethod(): void
     {
-        $test = new \PhakeTest_StaticClass();
+        $test = new \PhakeTest\StaticClass();
         $proxy = new StaticVisibilityProxy($test);
 
         $this->expectException(\InvalidArgumentException::class);
@@ -65,7 +65,7 @@ class StaticVisibilityProxyTest extends TestCase
 
     public function testCallingMagicMethod(): void
     {
-        $mock = Phake::mock(\PhakeTest_MagicClass::class);
+        $mock = Phake::mock(\PhakeTest\MagicClass::class);
         $proxy = new StaticVisibilityProxy($mock);
 
         Phake::whenStatic($mock)->test()->thenReturn('bar');
@@ -77,7 +77,7 @@ class StaticVisibilityProxyTest extends TestCase
 
     public function testCallingProtectedMethod(): void
     {
-        $mock = Phake::mock(\PhakeTest_StaticClass::class);
+        $mock = Phake::mock(\PhakeTest\StaticClass::class);
         $proxy = new StaticVisibilityProxy($mock);
 
         Phake::whenStatic($mock)->protectedStaticMethod()->thenReturn('bar');
@@ -89,7 +89,7 @@ class StaticVisibilityProxyTest extends TestCase
 
     public function testCallingPublicMethod(): void
     {
-        $mock = Phake::mock(\PhakeTest_StaticClass::class);
+        $mock = Phake::mock(\PhakeTest\StaticClass::class);
         $proxy = new StaticVisibilityProxy($mock);
 
         Phake::whenStatic($mock)->staticMethod()->thenReturn('bar');

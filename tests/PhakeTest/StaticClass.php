@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace PhakeTest;
+
 /*
  * Phake - Mocking Framework
  *
@@ -45,7 +47,7 @@ declare(strict_types=1);
  * @link       http://www.digitalsandwich.com/
  */
 
-class PhakeTest_StaticClass
+class StaticClass
 {
     public static function staticMethod()
     {

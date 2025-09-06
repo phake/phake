@@ -76,7 +76,7 @@ class CallVerifierProxyTest extends TestCase
      */
     public function testIsCalledOn(): void
     {
-        $mock = Phake::mock(\PhakeTest_MagicClass::class);
+        $mock = Phake::mock(\PhakeTest\MagicClass::class);
         $mock->foo();
 
         $verifier = $this->proxy->isCalledOn($mock);
@@ -91,7 +91,7 @@ class CallVerifierProxyTest extends TestCase
         $matcher1->setNextMatcher($matcher2);
         $this->proxy = new CallVerifierProxy($matcher1, $this->client, true);
 
-        $mock = Phake::mock(\PhakeTest_MagicClass::class);
+        $mock = Phake::mock(\PhakeTest\MagicClass::class);
         $mock::foo();
 
         $verifier = $this->proxy->isCalledOn($mock);

@@ -56,12 +56,12 @@ class ChainedArgumentMatcherTest extends TestCase
     /**
      * @Mock
      */
-    private Phake\Matchers\IArgumentMatcher $adapted;
+    private IArgumentMatcher $adapted;
 
     /**
      * @Mock
      */
-    private Phake\Matchers\IChainableArgumentMatcher $nextMatcher;
+    private IChainableArgumentMatcher $nextMatcher;
 
     public function setUp(): void
     {
@@ -87,7 +87,7 @@ class ChainedArgumentMatcherTest extends TestCase
 
     public function testMatchesError(): void
     {
-        $this->expectException(\Phake\Exception\MethodMatcherException::class);
+        $this->expectException(Phake\Exception\MethodMatcherException::class);
 
         $args = ['test arg1', 'test arg2'];
 

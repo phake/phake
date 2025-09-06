@@ -47,8 +47,8 @@ declare(strict_types=1);
 namespace Phake\Annotation;
 
 use Phake\Mock;
-use PHPUnit\Framework\TestCase;
 use PhakeTest\AnotherNamespacedClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @ann1 Test Annotation
@@ -86,4 +86,3 @@ class MockInitializerTypedPropertiesTest extends TestCase
         $this->assertInstanceOf(AnotherNamespacedClass::class, $this->nativeMock);
     }
 }
-

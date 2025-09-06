@@ -44,7 +44,9 @@ declare(strict_types=1);
  * @link       http://www.digitalsandwich.com/
  */
 
-abstract class PhakeTest_AbstractClass implements PhakeTest_MockedInterface
+namespace PhakeTest;
+
+abstract class AbstractClass implements MockedInterface
 {
     public function foo()
     {

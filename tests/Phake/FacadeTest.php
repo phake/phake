@@ -63,13 +63,13 @@ class FacadeTest extends TestCase
     private $facade;
 
     /**
-     * @var Phake\ClassGenerator\MockClass
+     * @var ClassGenerator\MockClass
      */
     private $mockGenerator;
 
     /**
      * @Mock
-     * @var Phake\Mock\InfoRegistry
+     * @var Mock\InfoRegistry
      */
     private $infoRegistry;
 
@@ -79,7 +79,7 @@ class FacadeTest extends TestCase
     public function setUp(): void
     {
         Phake::initAnnotations($this);
-        $this->mockGenerator = $this->getMockBuilder(Phake\ClassGenerator\MockClass::class)->getMock();
+        $this->mockGenerator = $this->getMockBuilder(ClassGenerator\MockClass::class)->getMock();
         $this->facade        = new Facade($this->infoRegistry);
     }
 
@@ -89,15 +89,15 @@ class FacadeTest extends TestCase
     public function testMock(): void
     {
         $mockedClass   = \stdClass::class;
-        $mockGenerator = $this->getMockBuilder(Phake\ClassGenerator\MockClass::class)->getMock();
+        $mockGenerator = $this->getMockBuilder(ClassGenerator\MockClass::class)->getMock();
 
         $this->setMockGeneratorExpectations($mockedClass, $mockGenerator);
 
         $this->facade->mock(
             $mockedClass,
             $mockGenerator,
-            $this->getMockBuilder(Phake\CallRecorder\Recorder::class)->getMock(),
-            $this->getMockBuilder(Phake\Stubber\IAnswer::class)->getMock()
+            $this->getMockBuilder(CallRecorder\Recorder::class)->getMock(),
+            $this->getMockBuilder(Stubber\IAnswer::class)->getMock()
         );
     }
 
@@ -106,16 +106,16 @@ class FacadeTest extends TestCase
      */
     public function testMockInterface(): void
     {
-        $mockedClass   = \PhakeTest_MockedInterface::class;
-        $mockGenerator = $this->getMockBuilder(Phake\ClassGenerator\MockClass::class)->getMock();
+        $mockedClass   = \PhakeTest\MockedInterface::class;
+        $mockGenerator = $this->getMockBuilder(ClassGenerator\MockClass::class)->getMock();
 
         $this->setMockGeneratorExpectations($mockedClass, $mockGenerator);
 
         $this->facade->mock(
             $mockedClass,
             $mockGenerator,
-            $this->getMockBuilder(Phake\CallRecorder\Recorder::class)->getMock(),
-            $this->getMockBuilder(Phake\Stubber\IAnswer::class)->getMock()
+            $this->getMockBuilder(CallRecorder\Recorder::class)->getMock(),
+            $this->getMockBuilder(Stubber\IAnswer::class)->getMock()
         );
     }
 
@@ -130,9 +130,9 @@ class FacadeTest extends TestCase
 
         $this->facade->mock(
             $mockedClass,
-            $this->getMockBuilder(Phake\ClassGenerator\MockClass::class)->getMock(),
-            $this->getMockBuilder(Phake\CallRecorder\Recorder::class)->getMock(),
-            $this->getMockBuilder(Phake\Stubber\IAnswer::class)->getMock()
+            $this->getMockBuilder(ClassGenerator\MockClass::class)->getMock(),
+            $this->getMockBuilder(CallRecorder\Recorder::class)->getMock(),
+            $this->getMockBuilder(Stubber\IAnswer::class)->getMock()
         );
     }
 
@@ -143,9 +143,9 @@ class FacadeTest extends TestCase
     {
         $mockedClass = \stdClass::class;
 
-        $recorder       = $this->getMockBuilder(Phake\CallRecorder\Recorder::class)->getMock();
-        $classGenerator = $this->getMockBuilder(Phake\ClassGenerator\MockClass::class)->getMock();
-        $answer         = $this->getMockBuilder(Phake\Stubber\IAnswer::class)->getMock();
+        $recorder       = $this->getMockBuilder(CallRecorder\Recorder::class)->getMock();
+        $classGenerator = $this->getMockBuilder(ClassGenerator\MockClass::class)->getMock();
+        $answer         = $this->getMockBuilder(Stubber\IAnswer::class)->getMock();
 
 
         $this->setMockInstantiatorExpectations($classGenerator, $recorder, $answer);
@@ -161,7 +161,7 @@ class FacadeTest extends TestCase
         spl_autoload_register([self::class, 'autoload']);
         try {
             $mockedClass   = \stdClass::class;
-            $mockGenerator = $this->getMockBuilder(Phake\ClassGenerator\MockClass::class)->getMock();
+            $mockGenerator = $this->getMockBuilder(ClassGenerator\MockClass::class)->getMock();
 
             $mockGenerator->expects($this->once())
                 ->method('instantiate')
@@ -171,8 +171,8 @@ class FacadeTest extends TestCase
             $this->facade->mock(
                 $mockedClass,
                 $mockGenerator,
-                $this->getMockBuilder(Phake\CallRecorder\Recorder::class)->getMock(),
-                $this->getMockBuilder(Phake\Stubber\IAnswer::class)->getMock()
+                $this->getMockBuilder(CallRecorder\Recorder::class)->getMock(),
+                $this->getMockBuilder(Stubber\IAnswer::class)->getMock()
             );
 
             spl_autoload_unregister([self::class, 'autoload']);
@@ -201,7 +201,7 @@ class FacadeTest extends TestCase
     /**
      * Sets expectations for how the generator should be called
      */
-    private function setMockGeneratorExpectations(string $mockedClass, Phake\ClassGenerator\MockClass $mockGenerator): void
+    private function setMockGeneratorExpectations(string $mockedClass, ClassGenerator\MockClass $mockGenerator): void
     {
         $mockGenerator->expects($this->once())
             ->method('generate')
@@ -212,9 +212,9 @@ class FacadeTest extends TestCase
      * Sets expectations for how the mock class should be created from the class generator
      */
     private function setMockInstantiatorExpectations(
-        Phake\ClassGenerator\MockClass $mockGenerator,
-        Phake\CallRecorder\Recorder $recorder,
-        Phake\Stubber\IAnswer $answer
+        ClassGenerator\MockClass $mockGenerator,
+        CallRecorder\Recorder $recorder,
+        Stubber\IAnswer $answer
     ): void {
         $mockGenerator->expects($this->once())
             ->method('instantiate')
@@ -222,7 +222,7 @@ class FacadeTest extends TestCase
                 $this->matchesRegularExpression('#^[A-Za-z0-9_]+$#'),
                 $this->equalTo($this->infoRegistry),
                 $this->equalTo($recorder),
-                $this->isInstanceOf(Phake\Stubber\StubMapper::class),
+                $this->isInstanceOf(Stubber\StubMapper::class),
                 $this->equalTo($answer)
             );
     }

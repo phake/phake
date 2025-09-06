@@ -1,6 +1,9 @@
 <?php
 
 declare(strict_types=1);
+
+namespace PhakeTest;
+
 /*
  * Phake - Mocking Framework
  *
@@ -45,7 +48,7 @@ declare(strict_types=1);
  */
 
 
-class PhakeTest_Variadic
+class Variadic
 {
     public function variadicMethod($a, $b, ...$c)
     {

@@ -77,7 +77,7 @@ class AnswerCollectionProxyTest extends TestCase
 
         Phake::verify($this->container)->addAnswer(Phake::capture($answer));
 
-        $this->assertInstanceOf(\Phake\Stubber\Answers\StaticAnswer::class, $answer);
+        $this->assertInstanceOf(Phake\Stubber\Answers\StaticAnswer::class, $answer);
         $this->phakeAssertAttributeEqualTo(42, 'answer', $answer);
     }
 
@@ -96,7 +96,7 @@ class AnswerCollectionProxyTest extends TestCase
 
         Phake::verify($this->container)->addAnswer(Phake::capture($answer));
 
-        $this->assertInstanceOf(\Phake\Stubber\Answers\LambdaAnswer::class, $answer);
+        $this->assertInstanceOf(Phake\Stubber\Answers\LambdaAnswer::class, $answer);
         $this->phakeAssertAttributeEqualTo($func, 'answerLambda', $answer);
     }
 
@@ -107,7 +107,7 @@ class AnswerCollectionProxyTest extends TestCase
     {
         $this->assertSame($this->proxy, $this->proxy->thenCallParent());
 
-        Phake::verify($this->container)->addAnswer($this->isInstanceOf(\Phake\Stubber\Answers\ParentDelegate::class));
+        Phake::verify($this->container)->addAnswer($this->isInstanceOf(Phake\Stubber\Answers\ParentDelegate::class));
     }
 
     /**
@@ -118,7 +118,7 @@ class AnswerCollectionProxyTest extends TestCase
         $var = null;
         $this->assertSame($this->proxy, $this->proxy->captureReturnTo($var));
 
-        Phake::verify($this->container)->addAnswer($this->isInstanceOf(\Phake\Stubber\Answers\ParentDelegate::class));
+        Phake::verify($this->container)->addAnswer($this->isInstanceOf(Phake\Stubber\Answers\ParentDelegate::class));
     }
 
     /**
@@ -132,7 +132,7 @@ class AnswerCollectionProxyTest extends TestCase
 
         Phake::verify($this->container)->addAnswer(Phake::capture($answer));
 
-        $this->assertInstanceOf(\Phake\Stubber\Answers\ExceptionAnswer::class, $answer);
+        $this->assertInstanceOf(Phake\Stubber\Answers\ExceptionAnswer::class, $answer);
         $this->phakeAssertAttributeEqualTo($exception, 'answer', $answer);
     }
 

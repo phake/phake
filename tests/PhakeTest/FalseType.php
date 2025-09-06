@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-class PhakeTest_FalseType
+namespace PhakeTest;
+
+class FalseType
 {
     public function falseParam(false $param)
     {

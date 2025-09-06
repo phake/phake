@@ -121,9 +121,9 @@ class EqualsMatcherTest extends TestCase
 
     public function testDifferentClassObjects(): void
     {
-        $this->matcher = new EqualsMatcher(new \PhakeTest_A(), \SebastianBergmann\Comparator\Factory::getInstance());
+        $this->matcher = new EqualsMatcher(new \PhakeTest\A(), \SebastianBergmann\Comparator\Factory::getInstance());
 
-        $value = [new \PhakeTest_B()];
+        $value = [new \PhakeTest\B()];
         $this->expectException('Exception');
         $this->matcher->doArgumentsMatch($value);
     }

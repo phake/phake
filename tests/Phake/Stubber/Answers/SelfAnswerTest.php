@@ -51,7 +51,7 @@ use PHPUnit\Framework\TestCase;
 
 class SelfAnswerTest extends TestCase
 {
-    private Phake\Stubber\Answers\SelfAnswer $answer;
+    private SelfAnswer $answer;
 
     /**
      * Sets up the answer fixture
@@ -63,7 +63,7 @@ class SelfAnswerTest extends TestCase
 
     public function testAnswer(): void
     {
-        $testObj = Phake::mock(\PhakeTest_MockedClass::class);
+        $testObj = Phake::mock(\PhakeTest\MockedClass::class);
         $callback = $this->answer->getAnswerCallback($testObj, 'foo');
 
         $this->assertSame($testObj, call_user_func_array($callback, []));
@@ -73,7 +73,7 @@ class SelfAnswerTest extends TestCase
     {
         $this->expectException(InvalidAnswerException::class);
 
-        $testObj = \PhakeTest_StaticClass::class; // class name indicates static method call
+        $testObj = \PhakeTest\StaticClass::class; // class name indicates static method call
         $this->answer->getAnswerCallback($testObj, 'staticMethod');
     }
 }

@@ -56,7 +56,7 @@ class MethodMatcherTest extends TestCase
     /**
      * @Mock
      */
-    private Phake\Matchers\IChainableArgumentMatcher $rootArgumentMatcher;
+    private IChainableArgumentMatcher $rootArgumentMatcher;
 
     private array $arguments;
 

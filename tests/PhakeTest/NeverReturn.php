@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-class PhakeTest_NeverReturn
+namespace PhakeTest;
+
+class NeverReturn
 {
     public function neverReturn(): never
     {

@@ -2,7 +2,12 @@
 
 declare(strict_types=1);
 
-class PhakeTest_IntersectionTypes
+namespace PhakeTest;
+
+use ArrayAccess;
+use Countable;
+
+class IntersectionTypes
 {
     public function intersectionParam(Countable & ArrayAccess $param)
     {

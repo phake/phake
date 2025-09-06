@@ -73,7 +73,7 @@ class NativeReaderTest extends TestCase
     public function testGettingPropertiesWithMockAnnotations(): void
     {
         $properties = array_map(
-            function($p) { return $p->getName(); },
+            function ($p) { return $p->getName(); },
             $this->reader->getPropertiesWithMockAnnotation(new \ReflectionClass($this))
         );
 

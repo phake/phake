@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-class PhakeTest_ReturnByReferenceMethodClass
+namespace PhakeTest;
+
+class ReturnByReferenceMethodClass
 {
     private $something = [];
 

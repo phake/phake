@@ -2,17 +2,19 @@
 
 declare(strict_types=1);
 
-class PhakeTest_NullableTypes
+namespace PhakeTest;
+
+class NullableTypes
 {
-    public function objectReturn(): ?PhakeTest_A
+    public function objectReturn(): ?A
     {
     }
 
-    public function interfaceReturn(): ?PhakeTest_MockedInterface
+    public function interfaceReturn(): ?MockedInterface
     {
     }
 
-    public function objectParameter(?PhakeTest_A $param)
+    public function objectParameter(?A $param)
     {
     }
 

@@ -1,6 +1,9 @@
 <?php
 
 declare(strict_types=1);
+
+namespace PhakeTest;
+
 /*
  * Phake - Mocking Framework
  *
@@ -45,6 +48,6 @@ declare(strict_types=1);
  */
 
 
-class PhakeTest_ImplementConstructorInterface extends PhakeTest_AbstractImplementConstructorInterface
+class ImplementConstructorInterface extends AbstractImplementConstructorInterface
 {
 }

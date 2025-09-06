@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 /*
  * Phake - Mocking Framework
  *
@@ -44,7 +45,9 @@ declare(strict_types=1);
  * @link       http://www.digitalsandwich.com/
  */
 
-class PhakeTest_CallableTypehint
+namespace PhakeTest;
+
+class CallableTypehint
 {
     public function method(callable $callback)
     {

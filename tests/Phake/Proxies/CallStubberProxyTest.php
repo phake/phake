@@ -75,7 +75,7 @@ class CallStubberProxyTest extends TestCase
     {
         $answerBinder = $this->proxy->isCalledOn($this->obj);
 
-        $this->assertThat($answerBinder, $this->isInstanceOf(Phake\Proxies\AnswerBinderProxy::class));
+        $this->assertThat($answerBinder, $this->isInstanceOf(AnswerBinderProxy::class));
 
         $this->phakeAssertAttributeInstanceOf(Phake\Stubber\AnswerBinder::class, 'binder', $answerBinder);
     }

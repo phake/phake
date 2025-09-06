@@ -51,12 +51,12 @@ use PHPUnit\Framework\TestCase;
 
 class FreezerTest extends TestCase
 {
-    private Phake\Mock\Freezer $freezer;
+    private Freezer $freezer;
 
     /**
      * @Mock
      */
-    private Phake\Mock\Info $mockInfo;
+    private Info $mockInfo;
 
     public function setUp(): void
     {

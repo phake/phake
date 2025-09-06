@@ -53,20 +53,20 @@ class CallExpectationTest extends TestCase
 {
     public function testToString(): void
     {
-        $mock = Phake::mock(\Phake\IMock::class);
-        assert($mock instanceof \Phake\IMock);
+        $mock = Phake::mock(Phake\IMock::class);
+        assert($mock instanceof Phake\IMock);
 
-        $matcher1 = Phake::mock(\Phake\Matchers\IChainableArgumentMatcher::class);
+        $matcher1 = Phake::mock(Phake\Matchers\IChainableArgumentMatcher::class);
         Phake::when($matcher1)->__toString()->thenReturn('100');
-        $matcher2 = Phake::mock(\Phake\Matchers\IChainableArgumentMatcher::class);
+        $matcher2 = Phake::mock(Phake\Matchers\IChainableArgumentMatcher::class);
         Phake::when($matcher2)->__toString()->thenReturn('200');
 
         Phake::when($matcher1)->getNextMatcher(Phake::anyParameters())->thenReturn($matcher2);
 
-        $verifierMode = Phake::mock(\Phake\CallRecorder\IVerifierMode::class);
+        $verifierMode = Phake::mock(IVerifierMode::class);
         Phake::when($verifierMode)->__toString()->thenReturn('2 times');
 
-        $expectation = new Phake\CallRecorder\CallExpectation($mock, 'method', $matcher1, $verifierMode);
+        $expectation = new CallExpectation($mock, 'method', $matcher1, $verifierMode);
         $this->assertEquals(
             "Expected Phake\IMock->method(100, 200) to be called 2 times",
             $expectation->__toString()
@@ -75,20 +75,20 @@ class CallExpectationTest extends TestCase
 
     public function testStaticToString(): void
     {
-        $mock = Phake::mock(\Phake\IMock::class);
-        assert($mock instanceof \Phake\IMock);
+        $mock = Phake::mock(Phake\IMock::class);
+        assert($mock instanceof Phake\IMock);
 
-        $matcher1 = Phake::mock(\Phake\Matchers\IChainableArgumentMatcher::class);
+        $matcher1 = Phake::mock(Phake\Matchers\IChainableArgumentMatcher::class);
         Phake::when($matcher1)->__toString()->thenReturn('100');
-        $matcher2 = Phake::mock(\Phake\Matchers\IChainableArgumentMatcher::class);
+        $matcher2 = Phake::mock(Phake\Matchers\IChainableArgumentMatcher::class);
         Phake::when($matcher2)->__toString()->thenReturn('200');
 
         Phake::when($matcher1)->getNextMatcher(Phake::anyParameters())->thenReturn($matcher2);
 
-        $verifierMode = Phake::mock(\Phake\CallRecorder\IVerifierMode::class);
+        $verifierMode = Phake::mock(IVerifierMode::class);
         Phake::when($verifierMode)->__toString()->thenReturn('2 times');
 
-        $expectation = new Phake\CallRecorder\CallExpectation(get_class($mock), 'method', $matcher1, $verifierMode);
+        $expectation = new CallExpectation(get_class($mock), 'method', $matcher1, $verifierMode);
         $this->assertEquals(
             "Expected Phake\IMock::method(100, 200) to be called 2 times",
             $expectation->__toString()

@@ -1,6 +1,9 @@
 <?php
 
 declare(strict_types=1);
+
+namespace PhakeTest;
+
 /*
  * Phake - Mocking Framework
  *
@@ -45,11 +48,11 @@ declare(strict_types=1);
  */
 
 /**
- * Class PhakeTest_MockedFinalConstructedClass
+ * Class MockedFinalConstructedClass
  *
  * @author Nicolas Thal<nico.th4l@gmail.com>
  */
-class PhakeTest_MockedFinalConstructedClass
+class MockedFinalConstructedClass
 {
     private $prop1;
     private $prop2;

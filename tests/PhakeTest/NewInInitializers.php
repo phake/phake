@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-class PhakeTest_NewInInitializers
+namespace PhakeTest;
+
+class NewInInitializers
 {
     public function simpleNew($param = new \stdClass())
     {

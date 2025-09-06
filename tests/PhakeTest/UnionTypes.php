@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-class PhakeTest_UnionTypes
+namespace PhakeTest;
+
+class UnionTypes
 {
     public function unionParam(int|string $param)
     {

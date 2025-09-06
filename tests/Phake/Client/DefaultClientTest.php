@@ -74,7 +74,7 @@ class DefaultClientTest extends TestCase
     {
         $result = new Phake\CallRecorder\VerifierResult(false, [], 'failure message');
 
-        $this->expectException(\Phake\Exception\VerificationException::class);
+        $this->expectException(Phake\Exception\VerificationException::class);
         $this->client->processVerifierResult($result);
     }
 }

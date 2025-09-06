@@ -71,7 +71,7 @@ class VerifierTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->obj        = Phake::mock(\Phake\IMock::class);
+        $this->obj        = Phake::mock(Phake\IMock::class);
 
         $this->recorder     = Phake::mock(Recorder::class);
         $this->verifierMode = Phake::mock(IVerifierMode::class);
@@ -139,8 +139,8 @@ class VerifierTest extends TestCase
      */
     public function testVerifierDoesNotFindCallWithUnmatchedArguments(): void
     {
-        $matcher1 = new \Phake\Matchers\EqualsMatcher('test', \SebastianBergmann\Comparator\Factory::getInstance());
-        $matcher2 = new \Phake\Matchers\EqualsMatcher('test', \SebastianBergmann\Comparator\Factory::getInstance());
+        $matcher1 = new Phake\Matchers\EqualsMatcher('test', \SebastianBergmann\Comparator\Factory::getInstance());
+        $matcher2 = new Phake\Matchers\EqualsMatcher('test', \SebastianBergmann\Comparator\Factory::getInstance());
         $matcher1->setNextMatcher($matcher2);
         $expectation = new CallExpectation(
             $this->obj,
@@ -191,7 +191,7 @@ class VerifierTest extends TestCase
         $expectation = new CallExpectation(
             $this->obj,
             'bar',
-            new \Phake\Matchers\AnyParameters(),
+            new Phake\Matchers\AnyParameters(),
             $this->verifierMode
         );
 
@@ -216,9 +216,9 @@ class VerifierTest extends TestCase
     {
         $recorder = new Recorder();
 
-        $obj1     = $this->getMockBuilder(\Phake\IMock::class)
+        $obj1     = $this->getMockBuilder(Phake\IMock::class)
                         ->getMock();
-        $obj2     = $this->getMockBuilder(\Phake\IMock::class)
+        $obj2     = $this->getMockBuilder(Phake\IMock::class)
                         ->getMock();
 
         $expectation = new CallExpectation(
@@ -295,7 +295,7 @@ Other Invocations:
 
     public function testVerifierModifiesFailureDescriptionIfThereAreNoInteractions(): void
     {
-        $obj2        = Phake::mock(\Phake\IMock::class);
+        $obj2        = Phake::mock(Phake\IMock::class);
 
         $expectation = new CallExpectation(
             $obj2,
@@ -326,7 +326,7 @@ Other Invocations:
         $expectation = new CallExpectation(
             $this->obj,
             'foo',
-            new \Phake\Matchers\EqualsMatcher('test', \SebastianBergmann\Comparator\Factory::getInstance()),
+            new Phake\Matchers\EqualsMatcher('test', \SebastianBergmann\Comparator\Factory::getInstance()),
             $this->verifierMode
         );
 

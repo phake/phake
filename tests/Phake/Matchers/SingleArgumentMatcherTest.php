@@ -51,12 +51,12 @@ use PHPUnit\Framework\TestCase;
 
 class SingleArgumentMatcherTest extends TestCase
 {
-    private Phake\Matchers\SingleArgumentMatcher $matcher;
+    private SingleArgumentMatcher $matcher;
 
     /**
      * @Mock
      */
-    private Phake\Matchers\IChainableArgumentMatcher $nextMatcher;
+    private IChainableArgumentMatcher $nextMatcher;
 
     public function setUp(): void
     {

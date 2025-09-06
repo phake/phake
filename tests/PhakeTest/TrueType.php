@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-class PhakeTest_TrueType
+namespace PhakeTest;
+
+class TrueType
 {
     public function trueParam(true $param)
     {

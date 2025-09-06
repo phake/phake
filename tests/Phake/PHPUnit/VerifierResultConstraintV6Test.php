@@ -53,14 +53,14 @@ use PHPUnit\Runner\Version;
 
 class VerifierResultConstraintV6Test extends TestCase
 {
-    private Phake\PHPUnit\VerifierResultConstraintV6 $constraint;
+    private VerifierResultConstraintV6 $constraint;
 
     public function setUp(): void
     {
         if (version_compare(Version::id(), '6.0.0', '<')) {
             $this->markTestSkipped('The tested class is not compatible with current version of PHPUnit.');
         }
-        $this->constraint = new Phake\PHPUnit\VerifierResultConstraintV6();
+        $this->constraint = new VerifierResultConstraintV6();
     }
 
     public function testExtendsPHPUnitConstraint(): void

@@ -1,6 +1,9 @@
 <?php
 
 declare(strict_types=1);
+
+namespace PhakeTest;
+
 /*
  * Phake - Mocking Framework
  *
@@ -44,6 +47,6 @@ declare(strict_types=1);
  * @link       http://www.digitalsandwich.com/
  */
 
-final class PhakeTest_FinalClass
+final class FinalClass
 {
 }

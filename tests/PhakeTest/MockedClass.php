@@ -1,6 +1,9 @@
 <?php
 
 declare(strict_types=1);
+
+namespace PhakeTest;
+
 /*
  * Phake - Mocking Framework
  *
@@ -49,7 +52,7 @@ declare(strict_types=1);
  *
  * @author Mike Lively <m@digitalsandwich.com>
  */
-class PhakeTest_MockedClass
+class MockedClass
 {
     public function foo()
     {

@@ -132,7 +132,7 @@ class MockClassTest extends TestCase
     public function testCallingMockedMethodRecordsCall(): void
     {
         $newClassName = str_replace('\\', '_', self::class) . '_TestClass4';
-        $mockedClass  = \PhakeTest_MockedClass::class;
+        $mockedClass  = \PhakeTest\MockedClass::class;
 
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
@@ -155,7 +155,7 @@ class MockClassTest extends TestCase
     public function testCallingmockedMethodRecordsArguments(): void
     {
         $newClassName = str_replace('\\', '_', self::class) . '_TestClass9';
-        $mockedClass  = \PhakeTest_MockedClass::class;
+        $mockedClass  = \PhakeTest\MockedClass::class;
 
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
@@ -179,54 +179,54 @@ class MockClassTest extends TestCase
     public function testGeneratingClassFromMultipleInterfaces(): void
     {
         $newClassName = str_replace('\\', '_', self::class) . '_testClass28';
-        $mockedClass = [\PhakeTest_MockedInterface::class, \PhakeTest_ConstructorInterface::class];
+        $mockedClass = [\PhakeTest\MockedInterface::class, \PhakeTest\ConstructorInterface::class];
 
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
         $reflClass = new \ReflectionClass($newClassName);
-        $this->assertTrue($reflClass->implementsInterface(\PhakeTest_MockedInterface::class), 'Implements PhakeTest_MockedInterface');
-        $this->assertTrue($reflClass->implementsInterface(\PhakeTest_ConstructorInterface::class), 'Implements PhakeTest_ConstructorInterface');
+        $this->assertTrue($reflClass->implementsInterface(\PhakeTest\MockedInterface::class), 'Implements PhakeTest\MockedInterface');
+        $this->assertTrue($reflClass->implementsInterface(\PhakeTest\ConstructorInterface::class), 'Implements PhakeTest\ConstructorInterface');
     }
 
     public function testGeneratingClassFromSimilarInterfaces(): void
     {
         $newClassName = str_replace('\\', '_', self::class) . '_testClass29';
-        $mockedClass = [\PhakeTest_MockedInterface::class, \PhakeTest_MockedInterface2::class];
+        $mockedClass = [\PhakeTest\MockedInterface::class, \PhakeTest\MockedInterface2::class];
 
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
         $reflClass = new \ReflectionClass($newClassName);
-        $this->assertTrue($reflClass->implementsInterface(\PhakeTest_MockedInterface::class), 'Implements PhakeTest_MockedInterface');
-        $this->assertTrue($reflClass->implementsInterface(\PhakeTest_MockedInterface2::class), 'Implements PhakeTest_ConstructorInterface');
+        $this->assertTrue($reflClass->implementsInterface(\PhakeTest\MockedInterface::class), 'Implements PhakeTest\MockedInterface');
+        $this->assertTrue($reflClass->implementsInterface(\PhakeTest\MockedInterface2::class), 'Implements PhakeTest\ConstructorInterface');
     }
 
     public function testGeneratingClassFromDuplicateInterfaces(): void
     {
         $newClassName = str_replace('\\', '_', self::class) . '_testClass30';
-        $mockedClass = [\PhakeTest_MockedInterface::class, \PhakeTest_MockedInterface::class];
+        $mockedClass = [\PhakeTest\MockedInterface::class, \PhakeTest\MockedInterface::class];
 
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
         $reflClass = new \ReflectionClass($newClassName);
-        $this->assertTrue($reflClass->implementsInterface(\PhakeTest_MockedInterface::class), 'Implements PhakeTest_MockedInterface');
+        $this->assertTrue($reflClass->implementsInterface(\PhakeTest\MockedInterface::class), 'Implements PhakeTest\MockedInterface');
     }
 
     public function testGeneratingClassFromInheritedInterfaces(): void
     {
         $newClassName = str_replace('\\', '_', self::class) . '_testClass31';
-        $mockedClass = [\PhakeTest_MockedInterface::class, \PhakeTest_MockedChildInterface::class];
+        $mockedClass = [\PhakeTest\MockedInterface::class, \PhakeTest\MockedChildInterface::class];
 
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
         $reflClass = new \ReflectionClass($newClassName);
-        $this->assertTrue($reflClass->implementsInterface(\PhakeTest_MockedInterface::class), 'Implements PhakeTest_MockedInterface');
-        $this->assertTrue($reflClass->implementsInterface(\PhakeTest_MockedChildInterface::class), 'Implements PhakeTest_MockedInterface');
+        $this->assertTrue($reflClass->implementsInterface(\PhakeTest\MockedInterface::class), 'Implements PhakeTest\MockedInterface');
+        $this->assertTrue($reflClass->implementsInterface(\PhakeTest\MockedChildInterface::class), 'Implements PhakeTest\MockedInterface');
     }
 
     public function testGeneratingClassFromMultipleClasses(): void
     {
         $newClassName = str_replace('\\', '_', self::class) . '_testClass32';
-        $mockedClass = [\PhakeTest_MockedClass::class, \PhakeTest_MockedConstructedClass::class];
+        $mockedClass = [\PhakeTest\MockedClass::class, \PhakeTest\MockedConstructedClass::class];
 
         $this->expectException('RuntimeException');
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
@@ -238,7 +238,7 @@ class MockClassTest extends TestCase
     public function testInstantiate(): void
     {
         $newClassName = str_replace('\\', '_', self::class) . '_TestClass5';
-        $mockedClass  = \PhakeTest_MockedClass::class;
+        $mockedClass  = \PhakeTest\MockedClass::class;
 
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
@@ -258,7 +258,7 @@ class MockClassTest extends TestCase
     public function testStubbedMethodsReturnStubbedAnswer(): void
     {
         $newClassName = str_replace('\\', '_', self::class) . '_TestClass7';
-        $mockedClass  = \PhakeTest_MockedClass::class;
+        $mockedClass  = \PhakeTest\MockedClass::class;
 
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
@@ -283,7 +283,7 @@ class MockClassTest extends TestCase
     public function testStubbedMethodDoesNotCheckUnpassedDefaultParameters(): void
     {
         $newClassName = str_replace('\\', '_', self::class) . '_TestClass23';
-        $mockedClass  = \PhakeTest_MockedClass::class;
+        $mockedClass  = \PhakeTest\MockedClass::class;
 
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
@@ -339,7 +339,7 @@ class MockClassTest extends TestCase
     public function testUnstubbedMethodsReturnDefaultAnswer(): void
     {
         $newClassName = str_replace('\\', '_', self::class) . '_TestClass11';
-        $mockedClass  = \PhakeTest_MockedClass::class;
+        $mockedClass  = \PhakeTest\MockedClass::class;
 
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
@@ -360,7 +360,7 @@ class MockClassTest extends TestCase
     public function testUnstubbedCallReturnsDefaultAnswer(): void
     {
         $newClassName = str_replace('\\', '_', self::class) . '_TestClass19';
-        $mockedClass  = \PhakeTest_MagicClass::class;
+        $mockedClass  = \PhakeTest\MagicClass::class;
 
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
@@ -378,7 +378,7 @@ class MockClassTest extends TestCase
     public function testMagicCallMethodsRecordTwice(): void
     {
         $newClassName = str_replace('\\', '_', self::class) . '_TestClass21';
-        $mockedClass  = \PhakeTest_MagicClass::class;
+        $mockedClass  = \PhakeTest\MagicClass::class;
 
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
@@ -400,7 +400,7 @@ class MockClassTest extends TestCase
     public function testMagicCallChecksFallbackStub(): void
     {
         $newClassName = str_replace('\\', '_', self::class) . '_TestClass22';
-        $mockedClass  = \PhakeTest_MagicClass::class;
+        $mockedClass  = \PhakeTest\MagicClass::class;
 
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
@@ -422,7 +422,7 @@ class MockClassTest extends TestCase
     public function testGenerateOnInterface(): void
     {
         $newClassName = str_replace('\\', '_', self::class) . '_TestClass13';
-        $mockedClass  = \PhakeTest_MockedInterface::class;
+        $mockedClass  = \PhakeTest\MockedInterface::class;
 
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
@@ -438,7 +438,7 @@ class MockClassTest extends TestCase
     public function testMockName(): void
     {
         $newClassName = str_replace('\\', '_', self::class) . '_TestClass18';
-        $mockedClass  = \PhakeTest_MockedClass::class;
+        $mockedClass  = \PhakeTest\MockedClass::class;
 
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
@@ -447,8 +447,8 @@ class MockClassTest extends TestCase
         $answer       = $this->getMockBuilder(Phake\Stubber\IAnswer::class)->getMock();
         $mock         = $this->classGen->instantiate($newClassName, $this->infoRegistry, $callRecorder, $stubMapper, $answer);
 
-        $this->assertEquals(\PhakeTest_MockedClass::class, $mock::__PHAKE_name);
-        $this->assertEquals(\PhakeTest_MockedClass::class, Phake::getInfo($mock)->getName());
+        $this->assertEquals(\PhakeTest\MockedClass::class, $mock::__PHAKE_name);
+        $this->assertEquals(\PhakeTest\MockedClass::class, Phake::getInfo($mock)->getName());
     }
 
     /**
@@ -457,7 +457,7 @@ class MockClassTest extends TestCase
     public function testCallingOriginalConstructor(): void
     {
         $newClassName = str_replace('\\', '_', self::class) . '_TestClass16';
-        $mockedClass  = \PhakeTest_MockedConstructedClass::class;
+        $mockedClass  = \PhakeTest\MockedConstructedClass::class;
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
         $callRecorder = $this->getMockBuilder(Phake\CallRecorder\Recorder::class)->getMock();
@@ -485,7 +485,7 @@ class MockClassTest extends TestCase
     public function testCallingFinalOriginalConstructor(): void
     {
         $newClassName = str_replace('\\', '_', self::class) . '_TestClass26';
-        $mockedClass  = \PhakeTest_MockedFinalConstructedClass::class;
+        $mockedClass  = \PhakeTest\MockedFinalConstructedClass::class;
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
         $callRecorder = $this->getMockBuilder(Phake\CallRecorder\Recorder::class)->getMock();
@@ -513,7 +513,7 @@ class MockClassTest extends TestCase
     public function testGenerateCreatesClassWithConstructorInInterfaceButNotInAbstractClass(): void
     {
         $newClassName = str_replace('\\', '_', self::class) . '_TestClass27';
-        $mockedClass = \PhakeTest_ImplementConstructorInterface::class;
+        $mockedClass = \PhakeTest\ImplementConstructorInterface::class;
 
         $this->assertFalse(
             class_exists($newClassName, false),
@@ -534,7 +534,7 @@ class MockClassTest extends TestCase
     public function testFinalMethodsAreNotOverridden(): void
     {
         $newClassName = str_replace('\\', '_', self::class) . '_TestClass17';
-        $mockedClass  = \PhakeTest_FinalMethod::class;
+        $mockedClass  = \PhakeTest\FinalMethod::class;
 
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
@@ -546,7 +546,7 @@ class MockClassTest extends TestCase
         $expectedException = new \InvalidArgumentException('Final classes cannot be mocked.');
 
         try {
-            $mock = Phake::mock(\PhakeTest_FinalClass::class);
+            $mock = Phake::mock(\PhakeTest\FinalClass::class);
             $this->fail('The mocked final method did not throw an exception');
         } catch (\InvalidArgumentException $actualException) {
             $this->assertEquals($actualException, $expectedException);
@@ -559,7 +559,7 @@ class MockClassTest extends TestCase
     public function testToStringReturnsString(): void
     {
         $newClassName = str_replace('\\', '_', self::class) . '_TestClass24';
-        $mockedClass  = \PhakeTest_ToStringMethod::class;
+        $mockedClass  = \PhakeTest\ToStringMethod::class;
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
         $recorder = $this->getMockBuilder(Phake\CallRecorder\Recorder::class)->getMock();
@@ -572,13 +572,13 @@ class MockClassTest extends TestCase
         $string = $mock->__toString();
 
         $this->assertNotNull($string, '__toString() should not return NULL');
-        $this->assertEquals('Mock for PhakeTest_ToStringMethod', $string);
+        $this->assertEquals('Mock for PhakeTest\ToStringMethod', $string);
     }
 
     public function testDestructMocked(): void
     {
         $newClassName = str_replace('\\', '_', self::class) . '_TestClass' . bin2hex(random_bytes(7));
-        $mockedClass  = \PhakeTest_DestructorClass::class;
+        $mockedClass  = \PhakeTest\DestructorClass::class;
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
         $recorder = $this->getMockBuilder(Phake\CallRecorder\Recorder::class)->getMock();
@@ -588,15 +588,15 @@ class MockClassTest extends TestCase
 
         $mock = $this->classGen->instantiate($newClassName, $this->infoRegistry, $recorder, $mapper, $answer);
 
-        \PhakeTest_DestructorClass::$destructCalled = false;
+        \PhakeTest\DestructorClass::$destructCalled = false;
         unset($mock);
-        $this->assertFalse(\PhakeTest_DestructorClass::$destructCalled, 'It appears that the destructor was called');
+        $this->assertFalse(\PhakeTest\DestructorClass::$destructCalled, 'It appears that the destructor was called');
     }
 
     public function testSerializableMock(): void
     {
         $newClassName = str_replace('\\', '_', self::class) . '_TestClass' . uniqid();
-        $mockedClass  = \PhakeTest_SerializableClass::class;
+        $mockedClass  = \PhakeTest\SerializableClass::class;
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
         $recorder = $this->getMockBuilder(Phake\CallRecorder\Recorder::class)->getMock();
@@ -606,7 +606,7 @@ class MockClassTest extends TestCase
 
         try {
             $mock = $this->classGen->instantiate($newClassName, $this->infoRegistry, $recorder, $mapper, $answer);
-            $this->assertInstanceOf(\PhakeTest_SerializableClass::class, $mock);
+            $this->assertInstanceOf(\PhakeTest\SerializableClass::class, $mock);
         } catch (\Exception $e) {
             $this->fail("Can't instantiate Serializable Object");
         }
@@ -619,7 +619,7 @@ class MockClassTest extends TestCase
 
     public function testTraversableExtendedInterfaceIncludesOriginalInterface(): void
     {
-        $this->assertInstanceOf(\PhakeTest_TraversableInterface::class, Phake::mock(\PhakeTest_TraversableInterface::class));
+        $this->assertInstanceOf(\PhakeTest\TraversableInterface::class, Phake::mock(\PhakeTest\TraversableInterface::class));
     }
 
     /**
@@ -627,12 +627,12 @@ class MockClassTest extends TestCase
      */
     public function testCallableTypeHint(): void
     {
-        $this->assertInstanceOf(\PhakeTest_CallableTypehint::class, Phake::mock(\PhakeTest_CallableTypehint::class));
+        $this->assertInstanceOf(\PhakeTest\CallableTypehint::class, Phake::mock(\PhakeTest\CallableTypehint::class));
     }
 
     public function testMockVariableNumberOfArguments(): void
     {
-        $mockedClass = Phake::mock(\PhakeTest_MockedClass::class);
+        $mockedClass = Phake::mock(\PhakeTest\MockedClass::class);
         [$arg1, $arg2, $arg3] = [1, 2, 3];
         $mockedClass->fooWithVariableNumberOfArguments($arg1, $arg2, $arg3);
 
@@ -671,7 +671,7 @@ class MockClassTest extends TestCase
     public function testGenerateMaintainsPhpDoc(): void
     {
         $newClassName = str_replace('\\', '_', self::class) . '_TestClass25';
-        $mockedClass = \PhakeTest_MockedClass::class;
+        $mockedClass = \PhakeTest\MockedClass::class;
 
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
@@ -686,7 +686,7 @@ class MockClassTest extends TestCase
 
     public function testStubbingVariadics(): void
     {
-        $mock = Phake::mock(\PhakeTest_Variadic::class);
+        $mock = Phake::mock(\PhakeTest\Variadic::class);
 
         Phake::when($mock)->variadicMethod(Phake::anyParameters())->thenCallParent();
 
@@ -695,7 +695,7 @@ class MockClassTest extends TestCase
 
     public function testMockingVariadics(): void
     {
-        $mock = Phake::mock(\PhakeTest_Variadic::class);
+        $mock = Phake::mock(\PhakeTest\Variadic::class);
 
         $mock->variadicMethod(1, 2, 3, 4, 5, 6);
 
@@ -704,7 +704,7 @@ class MockClassTest extends TestCase
 
     public function testStubbingScalarReturnHints(): void
     {
-        $mock = Phake::mock(\PhakeTest_ScalarTypes::class);
+        $mock = Phake::mock(\PhakeTest\ScalarTypes::class);
 
         Phake::when($mock)->scalarHints(Phake::anyParameters())->thenReturn(2);
 
@@ -713,7 +713,7 @@ class MockClassTest extends TestCase
 
     public function testStubbingScalarReturnsWrongType(): void
     {
-        $mock = Phake::mock(\PhakeTest_ScalarTypes::class);
+        $mock = Phake::mock(\PhakeTest\ScalarTypes::class);
 
         Phake::when($mock)->scalarHints(Phake::anyParameters())->thenReturn([]);
 
@@ -731,7 +731,7 @@ class MockClassTest extends TestCase
 
     public function testDefaultStubChanged(): void
     {
-        $mock = Phake::mock(\PhakeTest_ScalarTypes::class);
+        $mock = Phake::mock(\PhakeTest\ScalarTypes::class);
 
         $mock->scalarHints(1, 1);
 
@@ -740,7 +740,7 @@ class MockClassTest extends TestCase
 
     public function testVoidStubReturnsProperly(): void
     {
-        $mock = Phake::mock(\PhakeTest_VoidType::class);
+        $mock = Phake::mock(\PhakeTest\VoidType::class);
 
         $this->assertNull($mock->voidMethod());
 
@@ -749,7 +749,7 @@ class MockClassTest extends TestCase
 
     public function testVoidStubThrowsException(): void
     {
-        $mock = Phake::mock(\PhakeTest_VoidType::class);
+        $mock = Phake::mock(\PhakeTest\VoidType::class);
 
         $expectedException = new \Exception('Test Exception');
         Phake::when($mock)->voidMethod(Phake::anyParameters())->thenThrow($expectedException);
@@ -764,7 +764,7 @@ class MockClassTest extends TestCase
 
     public function testVoidStubCanCallParent(): void
     {
-        $mock = Phake::mock(\PhakeTest_VoidType::class);
+        $mock = Phake::mock(\PhakeTest\VoidType::class);
 
         Phake::when($mock)->voidMethod(Phake::anyParameters())->thenCallParent();
 
@@ -775,7 +775,7 @@ class MockClassTest extends TestCase
 
     public function testStubbingNotNullableReturnHint(): void
     {
-        $mock = Phake::mock(\PhakeTest_ScalarTypes::class);
+        $mock = Phake::mock(\PhakeTest\ScalarTypes::class);
 
         Phake::when($mock)->objectReturn(Phake::anyParameters())->thenReturn(null);
 
@@ -789,7 +789,7 @@ class MockClassTest extends TestCase
 
     public function testStubbingNullableReturnHints(): void
     {
-        $mock = Phake::mock(\PhakeTest_NullableTypes::class);
+        $mock = Phake::mock(\PhakeTest\NullableTypes::class);
         Phake::when($mock)->objectReturn(Phake::anyParameters())->thenReturn(null);
 
         try {
@@ -803,7 +803,7 @@ class MockClassTest extends TestCase
 
     public function testStubbingNullableParameterHints(): void
     {
-        $mock = Phake::mock(\PhakeTest_NullableTypes::class);
+        $mock = Phake::mock(\PhakeTest\NullableTypes::class);
 
         try {
             $mock->objectParameter(null);
@@ -816,7 +816,7 @@ class MockClassTest extends TestCase
 
     public function testStubbingNullableReturnWrongType(): void
     {
-        $mock = Phake::mock(\PhakeTest_NullableTypes::class);
+        $mock = Phake::mock(\PhakeTest\NullableTypes::class);
         Phake::when($mock)->objectReturn(Phake::anyParameters())->thenReturn([]);
 
         try {
@@ -834,18 +834,18 @@ class MockClassTest extends TestCase
 
     public function testDefaultReturnType(): void
     {
-        $mock = Phake::mock(\PhakeTest_NullableTypes::class);
-        $this->assertTrue($mock->objectReturn() instanceof \PhakeTest_A);
+        $mock = Phake::mock(\PhakeTest\NullableTypes::class);
+        $this->assertTrue($mock->objectReturn() instanceof \PhakeTest\A);
     }
 
     public function testStubbingUnionTypes(): void
     {
-        $this->assertInstanceOf(\PhakeTest_UnionTypes::class, Phake::mock(\PhakeTest_UnionTypes::class));
+        $this->assertInstanceOf(\PhakeTest\UnionTypes::class, Phake::mock(\PhakeTest\UnionTypes::class));
     }
 
     public function testStubbingUnionParameterHints(): void
     {
-        $mock = Phake::mock(\PhakeTest_UnionTypes::class);
+        $mock = Phake::mock(\PhakeTest\UnionTypes::class);
 
         try {
             $mock->unionParam(1);
@@ -859,7 +859,7 @@ class MockClassTest extends TestCase
 
     public function testStubbingUnionParameterHintsWrongType(): void
     {
-        $mock = Phake::mock(\PhakeTest_UnionTypes::class);
+        $mock = Phake::mock(\PhakeTest\UnionTypes::class);
 
         try {
             $mock->unionParam(null);
@@ -873,7 +873,7 @@ class MockClassTest extends TestCase
 
     public function testStubbingNullableUnionParameterHints(): void
     {
-        $mock = Phake::mock(\PhakeTest_UnionTypes::class);
+        $mock = Phake::mock(\PhakeTest\UnionTypes::class);
 
         try {
             $mock->unionParamNullable(1);
@@ -889,7 +889,7 @@ class MockClassTest extends TestCase
 
     public function testStubbingUnionReturnType(): void
     {
-        $mock = Phake::mock(\PhakeTest_UnionTypes::class);
+        $mock = Phake::mock(\PhakeTest\UnionTypes::class);
         Phake::when($mock)->unionReturn()->thenReturn(1)->thenreturn('foo');
 
         try {
@@ -902,7 +902,7 @@ class MockClassTest extends TestCase
 
     public function testStubbingUnionReturnWrongType(): void
     {
-        $mock = Phake::mock(\PhakeTest_UnionTypes::class);
+        $mock = Phake::mock(\PhakeTest\UnionTypes::class);
         Phake::when($mock)->unionReturn()->thenReturn(null);
 
         try {
@@ -917,7 +917,7 @@ class MockClassTest extends TestCase
 
     public function testStubbingUnionReturnNullableType(): void
     {
-        $mock = Phake::mock(\PhakeTest_UnionTypes::class);
+        $mock = Phake::mock(\PhakeTest\UnionTypes::class);
         Phake::when($mock)->unionReturnNullable()->thenReturn(1)->thenreturn('foo')->thenReturn(null);
 
         try {
@@ -931,7 +931,7 @@ class MockClassTest extends TestCase
 
     public function testStubbingUnionSelfParameterHints(): void
     {
-        $mock = Phake::mock(\PhakeTest_UnionTypes::class);
+        $mock = Phake::mock(\PhakeTest\UnionTypes::class);
 
         try {
             $mock->unionParamWithSelf($mock);
@@ -944,7 +944,7 @@ class MockClassTest extends TestCase
 
     public function testStubbingUnionReturnWithSelf(): void
     {
-        $mock = Phake::mock(\PhakeTest_UnionTypes::class);
+        $mock = Phake::mock(\PhakeTest\UnionTypes::class);
         Phake::when($mock)->unionReturnWithSelf()->thenReturnSelf();
 
         try {
@@ -959,7 +959,7 @@ class MockClassTest extends TestCase
         if (PHP_VERSION_ID < 80100) {
             $this->markTestSkipped('Intersection types are not supported in PHP versions prior to 8.1');
         }
-        $this->assertInstanceOf(\PhakeTest_IntersectionTypes::class, Phake::mock(\PhakeTest_IntersectionTypes::class));
+        $this->assertInstanceOf(\PhakeTest\IntersectionTypes::class, Phake::mock(\PhakeTest\IntersectionTypes::class));
     }
 
     public function testStubbingIntersectionReturnType(): void
@@ -968,7 +968,7 @@ class MockClassTest extends TestCase
             $this->markTestSkipped('Intersection types are not supported in PHP versions prior to 8.1');
         }
 
-        $mock = Phake::mock(\PhakeTest_IntersectionTypes::class);
+        $mock = Phake::mock(\PhakeTest\IntersectionTypes::class);
         $expectedResult = new \ArrayObject();
         Phake::when($mock)->intersectionReturn()->thenReturn($expectedResult);
 
@@ -984,7 +984,7 @@ class MockClassTest extends TestCase
         if (PHP_VERSION_ID < 80100) {
             $this->markTestSkipped('never type is not supported in PHP versions prior to 8.1');
         }
-        $this->assertInstanceOf(\PhakeTest_NeverReturn::class, Phake::mock(\PhakeTest_NeverReturn::class));
+        $this->assertInstanceOf(\PhakeTest\NeverReturn::class, Phake::mock(\PhakeTest\NeverReturn::class));
     }
 
     public function testStubbingClassWithNewInInitializers(): void
@@ -992,7 +992,7 @@ class MockClassTest extends TestCase
         if (PHP_VERSION_ID < 80100) {
             $this->markTestSkipped('new in initializer is not supported in PHP versions prior to 8.1');
         }
-        $this->assertInstanceOf(\PhakeTest_NewInInitializers::class, Phake::mock(\PhakeTest_NewInInitializers::class));
+        $this->assertInstanceOf(\PhakeTest\NewInInitializers::class, Phake::mock(\PhakeTest\NewInInitializers::class));
     }
 
     public function testStubbingDNFTypes(): void
@@ -1000,7 +1000,7 @@ class MockClassTest extends TestCase
         if (PHP_VERSION_ID < 80200) {
             $this->markTestSkipped('DNF types are not supported in PHP versions prior to 8.2');
         }
-        $this->assertInstanceOf(\PhakeTest_DNFTypes::class, Phake::mock(\PhakeTest_DNFTypes::class));
+        $this->assertInstanceOf(\PhakeTest\DNFTypes::class, Phake::mock(\PhakeTest\DNFTypes::class));
     }
 
     public function testMockReadonlyClassThrowsException(): void
@@ -1009,9 +1009,9 @@ class MockClassTest extends TestCase
             $this->markTestSkipped('Readonly classes are not supported in PHP versions prior to 8.2');
         }
 
-        $mock = Phake::mock(\PhakeTest_ReadonlyClass::class);
+        $mock = Phake::mock(\PhakeTest\ReadonlyClass::class);
 
-        $this->assertInstanceOf(\PhakeTest_ReadonlyClass::class, $mock);
-        $this->assertInstanceOf(\Phake\IMock::class, $mock);
+        $this->assertInstanceOf(\PhakeTest\ReadonlyClass::class, $mock);
+        $this->assertInstanceOf(Phake\IMock::class, $mock);
     }
 }

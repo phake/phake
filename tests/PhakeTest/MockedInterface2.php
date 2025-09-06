@@ -1,6 +1,9 @@
 <?php
 
 declare(strict_types=1);
+
+namespace PhakeTest;
+
 /*
  * Phake - Mocking Framework
  *
@@ -44,13 +47,13 @@ declare(strict_types=1);
  * @link       http://www.digitalsandwich.com/
  */
 
-interface PhakeTest_MockedInterface2
+interface MockedInterface2
 {
     public function foo();
 
-    public function hinted(PhakeTest_MockedInterface $hinted);
+    public function hinted(MockedInterface $hinted);
 
-    public function hintedNull(?PhakeTest_MockedInterface $hinted = null);
+    public function hintedNull(?MockedInterface $hinted = null);
 
     public function hintedArray(array $hinted);
 
@@ -60,7 +63,7 @@ interface PhakeTest_MockedInterface2
 
     public function reference(&$hinted);
 
-    public function referenceHinted(PhakeTest_MockedInterface &$hinted);
+    public function referenceHinted(MockedInterface &$hinted);
 
     public function referenceDefault(&$hinted = 'blah');
 }

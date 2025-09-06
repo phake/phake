@@ -46,7 +46,6 @@ declare(strict_types=1);
 
 namespace Phake\Stubber\Answers;
 
-use Phake;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -56,7 +55,7 @@ use PHPUnit\Framework\TestCase;
  */
 class StaticAnswerTest extends TestCase
 {
-    private Phake\Stubber\Answers\StaticAnswer $answer;
+    private StaticAnswer $answer;
 
     /**
      * Sets up the answer fixture

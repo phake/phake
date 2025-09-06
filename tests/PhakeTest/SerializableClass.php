@@ -2,8 +2,10 @@
 
 declare(strict_types=1);
 
+namespace PhakeTest;
+
 if (PHP_VERSION_ID < 80100) {
-    class PhakeTest_SerializableClass implements \Serializable
+    class SerializableClass implements \Serializable
     {
         public function serialize()
         {
@@ -14,7 +16,7 @@ if (PHP_VERSION_ID < 80100) {
         }
     }
 } else {
-    class PhakeTest_SerializableClass
+    class SerializableClass
     {
         public function __serialize()
         {

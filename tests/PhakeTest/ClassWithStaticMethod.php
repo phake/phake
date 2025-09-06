@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-class PhakeTest_ClassWithStaticMethod
+namespace PhakeTest;
+
+class ClassWithStaticMethod
 {
     public static function ask()
     {

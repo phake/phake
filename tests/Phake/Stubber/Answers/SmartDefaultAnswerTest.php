@@ -46,6 +46,7 @@ declare(strict_types=1);
 
 namespace Phake\Stubber\Answers;
 
+use PhakeTest;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -79,7 +80,7 @@ class SmartDefaultAnswerTest extends TestCase
     #[DataProvider('typeReturnMap')]
     public function testSimpleReturn($method, $expectedValue): void
     {
-        $context = new \PhakeTest_ScalarTypes();
+        $context = new PhakeTest\ScalarTypes();
         $cb = $this->answer->getAnswerCallback($context, $method);
 
         $this->assertSame($expectedValue, $cb());
@@ -87,7 +88,7 @@ class SmartDefaultAnswerTest extends TestCase
 
     public function testCallableReturn(): void
     {
-        $context = new \PhakeTest_ScalarTypes();
+        $context = new PhakeTest\ScalarTypes();
         $cb = $this->answer->getAnswerCallback($context, 'callableReturn');
 
         $this->assertIsCallable($cb());
@@ -95,16 +96,16 @@ class SmartDefaultAnswerTest extends TestCase
 
     public function testObjectReturn(): void
     {
-        $context = new \PhakeTest_ScalarTypes();
+        $context = new PhakeTest\ScalarTypes();
         $cb = $this->answer->getAnswerCallback($context, 'objectReturn');
 
-        $this->assertInstanceOf(\PhakeTest_A::class, $cb());
+        $this->assertInstanceOf(PhakeTest\A::class, $cb());
         $this->assertInstanceOf(\Phake\IMock::class, $cb());
     }
 
     public function testNullableInterfaceReturn(): void
     {
-        $context = new \PhakeTest_NullableTypes();
+        $context = new PhakeTest\NullableTypes();
         $cb = $this->answer->getAnswerCallback($context, 'interfaceReturn');
 
         $this->assertNull($cb());
@@ -112,24 +113,24 @@ class SmartDefaultAnswerTest extends TestCase
 
     public function testInterfaceReturn(): void
     {
-        $context = new \PhakeTest_ScalarTypes();
+        $context = new PhakeTest\ScalarTypes();
         $cb = $this->answer->getAnswerCallback($context, 'interfaceReturn');
 
-        $this->assertInstanceOf('PhakeTest_MockedInterface', $cb());
+        $this->assertInstanceOf('PhakeTest\MockedInterface', $cb());
         $this->assertInstanceOf(\Phake\IMock::class, $cb());
     }
 
     public function testSelfReturn(): void
     {
-        $context = new \PhakeTest_ScalarTypes();
+        $context = new PhakeTest\ScalarTypes();
         $cb = $this->answer->getAnswerCallback($context, 'selfReturn');
 
-        $this->assertInstanceOf(\PhakeTest_ScalarTypes::class, $cb());
+        $this->assertInstanceOf(PhakeTest\ScalarTypes::class, $cb());
     }
 
     public function testUnionTypeReturn(): void
     {
-        $context = new \PhakeTest_UnionTypes();
+        $context = new PhakeTest\UnionTypes();
         $cb = $this->answer->getAnswerCallback($context, 'unionReturn');
 
         $this->assertTrue(in_array($cb(), [0, '']));
@@ -141,7 +142,7 @@ class SmartDefaultAnswerTest extends TestCase
             $this->markTestSkipped('Intersection types are not supported in PHP versions prior to 8.1');
         }
 
-        $context = new \PhakeTest_IntersectionTypes();
+        $context = new PhakeTest\IntersectionTypes();
         $cb = $this->answer->getAnswerCallback($context, 'intersectionReturn');
 
         $result = $cb();
@@ -155,11 +156,11 @@ class SmartDefaultAnswerTest extends TestCase
             $this->markTestSkipped('Intersection types are not supported in PHP versions prior to 8.1');
         }
 
-        $context = new \PhakeTest_EnumType();
+        $context = new PhakeTest\EnumType();
         $cb = $this->answer->getAnswerCallback($context, 'enumReturn');
 
         $result = $cb();
-        $this->assertInstanceOf(\SomeEnum::class, $result);
+        $this->assertInstanceOf(PhakeTest\SomeEnum::class, $result);
 
     }
 
@@ -169,7 +170,7 @@ class SmartDefaultAnswerTest extends TestCase
             $this->markTestSkipped('DNF types are not supported in PHP versions prior to 8.2');
         }
 
-        $context = new \PhakeTest_DNFTypes();
+        $context = new PhakeTest\DNFTypes();
         $cb = $this->answer->getAnswerCallback($context, 'dnfReturn');
 
         $result = $cb();
@@ -183,7 +184,7 @@ class SmartDefaultAnswerTest extends TestCase
             $this->markTestSkipped('true return type is not supported in PHP versions prior to 8.2');
         }
 
-        $context = new \PhakeTest_TrueType();
+        $context = new PhakeTest\TrueType();
         $cb = $this->answer->getAnswerCallback($context, 'trueReturn');
 
         $result = $cb();
@@ -196,7 +197,7 @@ class SmartDefaultAnswerTest extends TestCase
             $this->markTestSkipped('false return type is not supported in PHP versions prior to 8.2');
         }
 
-        $context = new \PhakeTest_FalseType();
+        $context = new PhakeTest\FalseType();
         $cb = $this->answer->getAnswerCallback($context, 'falseReturn');
 
         $result = $cb();
@@ -209,7 +210,7 @@ class SmartDefaultAnswerTest extends TestCase
             $this->markTestSkipped('null return type is not supported in PHP versions prior to 8.2');
         }
 
-        $context = new \PhakeTest_NullType();
+        $context = new PhakeTest\NullType();
         $cb = $this->answer->getAnswerCallback($context, 'nullReturn');
 
         $result = $cb();

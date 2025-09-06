@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-interface PhakeTest_ConstructorInterface
+namespace PhakeTest;
+
+interface ConstructorInterface
 {
-    public function __construct(PhakeTest_A $a);
+    public function __construct(A $a);
 }

@@ -2,7 +2,12 @@
 
 declare(strict_types=1);
 
-class PhakeTest_DNFTypes
+namespace PhakeTest;
+
+use Countable;
+use Traversable;
+
+class DNFTypes
 {
     public function dnfParam((Traversable&Countable)|false $param)
     {

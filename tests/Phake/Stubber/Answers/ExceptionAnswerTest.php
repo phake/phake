@@ -46,13 +46,12 @@ declare(strict_types=1);
 
 namespace Phake\Stubber\Answers;
 
-use Phake;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 class ExceptionAnswerTest extends TestCase
 {
-    private Phake\Stubber\Answers\ExceptionAnswer $answer;
+    private ExceptionAnswer $answer;
 
     private RuntimeException $exception;
 

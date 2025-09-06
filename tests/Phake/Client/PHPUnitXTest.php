@@ -58,15 +58,15 @@ class PHPUnitXTest extends TestCase
     public function setUp(): void
     {
         if (version_compare(\PHPUnit\Runner\Version::id(), '12.0.0') >= 0) {
-            $this->client = new Phake\Client\PHPUnit12();
+            $this->client = new PHPUnit12();
         } elseif (version_compare(\PHPUnit\Runner\Version::id(), '11.0.0') >= 0) {
-            $this->client = new Phake\Client\PHPUnit11();
+            $this->client = new PHPUnit11();
         } elseif (version_compare(\PHPUnit\Runner\Version::id(), '10.0.0') >= 0) {
-            $this->client = new Phake\Client\PHPUnit10();
+            $this->client = new PHPUnit10();
         } elseif (version_compare(\PHPUnit\Runner\Version::id(), '9.0.0') >= 0) {
-            $this->client = new Phake\Client\PHPUnit9();
+            $this->client = new PHPUnit9();
         } elseif (version_compare(\PHPUnit\Runner\Version::id(), '8.0.0') >= 0) {
-            $this->client = new Phake\Client\PHPUnit8();
+            $this->client = new PHPUnit8();
         } else {
             $this->markTestSkipped('The tested class is not compatible with current version of PHPUnit.');
         }
@@ -74,7 +74,7 @@ class PHPUnitXTest extends TestCase
 
     public function testImplementsIClient(): void
     {
-        $this->assertInstanceOf(Phake\Client\IClient::class, $this->client);
+        $this->assertInstanceOf(IClient::class, $this->client);
     }
 
     public function testProcessVerifierResultReturnsCallsOnTrue(): void

@@ -52,9 +52,9 @@ use PHPUnit\Framework\TestCase;
 class InfoTest extends TestCase
 {
     /**
-     * @var Phake\Mock\Info
+     * @var Info
      */
-    private Phake\Mock\Info $info;
+    private Info $info;
 
     /**
      * @Mock

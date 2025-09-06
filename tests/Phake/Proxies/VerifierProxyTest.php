@@ -90,7 +90,7 @@ class VerifierProxyTest extends TestCase
     public function testVerifierCallsAreForwardedMethod(): void
     {
         Phake::when($this->verifier)->verifyCall(Phake::anyParameters())->thenReturn(
-            new Phake\CallRecorder\VerifierResult(true, [Phake::mock(\Phake\CallRecorder\CallInfo::class)])
+            new Phake\CallRecorder\VerifierResult(true, [Phake::mock(Phake\CallRecorder\CallInfo::class)])
         );
         $this->proxy->foo();
 
@@ -115,10 +115,10 @@ class VerifierProxyTest extends TestCase
      */
     public function testVerifierCallsAreForwardedArguments(): void
     {
-        $argumentMatcher = Phake::mock(\Phake\Matchers\IChainableArgumentMatcher::class);
+        $argumentMatcher = Phake::mock(Phake\Matchers\IChainableArgumentMatcher::class);
 
         Phake::when($this->verifier)->verifyCall(Phake::anyParameters())->thenReturn(
-            new Phake\CallRecorder\VerifierResult(true, [Phake::mock(\Phake\CallRecorder\CallInfo::class)])
+            new Phake\CallRecorder\VerifierResult(true, [Phake::mock(Phake\CallRecorder\CallInfo::class)])
         );
         $this->proxy->foo($argumentMatcher);
 
@@ -134,7 +134,7 @@ class VerifierProxyTest extends TestCase
     {
         $argumentMatcher = new Phake\Matchers\EqualsMatcher('test', \SebastianBergmann\Comparator\Factory::getInstance());
         Phake::when($this->verifier)->verifyCall(Phake::anyParameters())->thenReturn(
-            new Phake\CallRecorder\VerifierResult(true, [Phake::mock(\Phake\CallRecorder\CallInfo::class)])
+            new Phake\CallRecorder\VerifierResult(true, [Phake::mock(Phake\CallRecorder\CallInfo::class)])
         );
         $this->proxy->foo('test');
 

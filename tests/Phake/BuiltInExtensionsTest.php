@@ -48,7 +48,7 @@ namespace Phake;
 
 use PHPUnit\Framework\TestCase;
 
-class BuiltinExtensionsTest extends TestCase
+class BuiltInExtensionsTest extends TestCase
 {
     public function testMemcachedGet(): void
     {

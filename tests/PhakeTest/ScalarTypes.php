@@ -44,19 +44,20 @@ declare(strict_types=1);
  * @link       http://www.digitalsandwich.com/
  */
 
+namespace PhakeTest;
 
-class PhakeTest_ScalarTypes
+class ScalarTypes
 {
     public function scalarHints(int $a, int $b): int
     {
         return $a + $b;
     }
 
-    public function interfaceReturn(): PhakeTest_MockedInterface
+    public function interfaceReturn(): MockedInterface
     {
     }
 
-    public function objectReturn(): PhakeTest_A
+    public function objectReturn(): A
     {
     }
 

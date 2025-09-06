@@ -37,9 +37,15 @@
     },
     "autoload": {
         "psr-4": {
-            "Phake\\": "src/Phake"
+            "Phake\\": "src/Phake/"
         },
         "files": ["src/Phake.php"]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PhakeTest\\": "tests/PhakeTest/"
+        },
+        "files": ["tests/PhakeTestUtil.php"]
     },
     "suggest": {
         "doctrine/annotations": "Allows mock annotations to use import statements for classes.",

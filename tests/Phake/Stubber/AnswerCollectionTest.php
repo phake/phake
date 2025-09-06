@@ -51,9 +51,9 @@ use PHPUnit\Framework\TestCase;
 
 class AnswerCollectionTest extends TestCase
 {
-    private Phake\Stubber\AnswerCollection $collection;
+    private AnswerCollection $collection;
 
-    private Phake\Stubber\IAnswer $answer;
+    private IAnswer $answer;
 
     public function setUp(): void
     {

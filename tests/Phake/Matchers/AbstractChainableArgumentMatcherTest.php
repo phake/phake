@@ -56,7 +56,7 @@ class AbstractChainableArgumentMatcherTest extends TestCase
     /**
      * @Mock
      */
-    private Phake\Matchers\IChainableArgumentMatcher $nextMatcher;
+    private IChainableArgumentMatcher $nextMatcher;
 
     public function setUp(): void
     {

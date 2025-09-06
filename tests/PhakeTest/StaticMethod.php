@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
-class PhakeTest_StaticMethod
+namespace PhakeTest;
+
+class StaticMethod
 {
-    public $className = \PhakeTest_ClassWithStaticMethod::class;
+    public $className = \ClassWithStaticMethod::class;
 
     public function askSomething()
     {
