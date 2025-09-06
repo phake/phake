@@ -87,28 +87,17 @@ class VerifierProxy
     }
 
     /**
-     * A magic call to verify a call with any parameters.
-     *
      * @return array<int, \Phake\CallRecorder\CallInfo>
-     * @throws \InvalidArgumentException if $method is not a valid parameter/method name
+     * @throws \InvalidArgumentException if __get is not defined
      */
     public function __get(string|object $method): array
     {
         $obj = $this->verifier->getObject();
 
-        if (is_string($method) && ctype_digit($method[0])) {
-            throw new \InvalidArgumentException('String parameter to __get() cannot start with an integer');
-        }
-
-        if (method_exists($obj, '__get') && !(is_string($method) && method_exists($obj, $method))) {
+        if (method_exists($obj, '__get')) {
             return $this->__call('__get', [$method]);
         }
 
-        if (!is_string($method)) {
-            $message = sprintf('Parameter to __get() must be a string, %s given', gettype($method));
-            throw new \InvalidArgumentException($message);
-        }
-
-        return $this->__call($method, [new \Phake\Matchers\AnyParameters()]);
+        throw new \InvalidArgumentException('__get method is not defined.');
     }
 }

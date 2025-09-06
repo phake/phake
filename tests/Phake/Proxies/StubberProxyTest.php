@@ -100,7 +100,7 @@ class StubberProxyTest extends TestCase
      */
     public function testGet(): void
     {
-        $answerBinder = $this->proxy->foo;
+        $answerBinder = $this->proxy->foo(Phake::anyParameters());
 
         $this->assertInstanceOf(\Phake\Proxies\AnswerBinderProxy::class, $answerBinder);
         $this->phakeAssertAttributeInstanceOf(\Phake\Stubber\AnswerBinder::class, 'binder', $answerBinder);
@@ -111,7 +111,7 @@ class StubberProxyTest extends TestCase
      */
     public function testStaticGet(): void
     {
-        $answerBinder = $this->proxy->foo;
+        $answerBinder = $this->proxy->foo(Phake::anyParameters());
 
         $this->assertInstanceOf(\Phake\Proxies\AnswerBinderProxy::class, $answerBinder);
         $this->phakeAssertAttributeInstanceOf(\Phake\Stubber\AnswerBinder::class, 'binder', $answerBinder);

@@ -151,74 +151,6 @@ class PhakeTest extends TestCase
     }
 
     /**
-     * Tests that a stub method can be defined with shorthand notation.
-     */
-    public function testShorthandVerify(): void
-    {
-        $mock = Phake::mock(\PhakeTest_MockedClass::class);
-        $mock->foo();
-        $mock->foo('bar');
-
-        Phake::verify($mock, Phake::times(2))->foo;
-    }
-
-    /**
-     * Tests that a stub method can be defined with shorthand notation.
-     */
-    public function testShorthandStub(): void
-    {
-        $mock = Phake::mock(\PhakeTest_MockedClass::class);
-
-        Phake::when($mock)->foo->thenReturn(42);
-
-        $this->assertEquals(42, $mock->foo());
-        $this->assertEquals(42, $mock->foo('param'));
-    }
-
-    /**
-     * Tests that a stub method can be defined with shorthand notation later.
-     */
-    public function testFirstShorthandStub(): void
-    {
-        $mock = Phake::mock(\PhakeTest_MockedClass::class);
-
-        Phake::when($mock)->foo->thenReturn(42);
-        Phake::when($mock)->foo('param')->thenReturn(51);
-
-        $this->assertEquals(51, $mock->foo('param'));
-        $this->assertEquals(42, $mock->foo());
-    }
-
-    /**
-     * Tests that a stub method can be redefined with shorthand notation.
-     */
-    public function testRedefinedShorthandStub(): void
-    {
-        $mock = Phake::mock(\PhakeTest_MockedClass::class);
-
-        Phake::when($mock)->foo->thenReturn(42);
-        Phake::when($mock)->foo->thenReturn(2);
-
-        $this->assertEquals(2, $mock->foo());
-    }
-
-    /**
-     * Tests that a stub method can be defined with shorthand notation even with __get().
-     */
-    public function testMagicClassShorthandStub(): void
-    {
-        $mock = Phake::mock(\PhakeTest_MagicClass::class);
-
-        Phake::when($mock)->definedMethod->thenReturn(64);
-        Phake::when($mock)->__get->thenReturn(75);
-        Phake::when($mock)->magicProperty->thenReturn(42);
-
-        $this->assertSame(64, $mock->definedMethod());
-        $this->assertSame(75, $mock->otherMagicProperties);
-        $this->assertSame(42, $mock->magicProperty);
-    }
-
-    /**
      * Tests using multiple stubs.
      */
     public function testMultipleStubs(): void
@@ -1803,7 +1735,7 @@ class PhakeTest extends TestCase
     {
         $mock = Phake::mock(\PhakeTest_MockedClass::class);
 
-        Phake::when($mock)->foo->thenReturnCallback(function () {
+        Phake::when($mock)->foo(Phake::anyParameters())->thenReturnCallback(function () {
             return true;
         });
 
@@ -1816,9 +1748,9 @@ class PhakeTest extends TestCase
         $this->assertInstanceOf(\PhakeTest_MockedInterface::class, $mock);
         $this->assertInstanceOf(\PhakeTest_MockedClass::class, $mock);
 
-        Phake::when($mock)->foo->thenReturn('bar');
-        Phake::when($mock)->reference->thenReturn('foo');
-        Phake::when($mock)->fooWithArgument->thenReturn(42);
+        Phake::when($mock)->foo(Phake::anyParameters())->thenReturn('bar');
+        Phake::when($mock)->reference(Phake::anyParameters())->thenReturn('foo');
+        Phake::when($mock)->fooWithArgument(Phake::anyParameters())->thenReturn(42);
 
         $this->assertEquals('bar', $mock->foo());
         $this->assertEquals('foo', $mock->reference($test));
@@ -1832,7 +1764,7 @@ class PhakeTest extends TestCase
     public function testReturningSelf(): void
     {
         $mock = Phake::mock(\PhakeTest_MockedClass::class);
-        Phake::when($mock)->foo->thenReturnSelf();
+        Phake::when($mock)->foo(Phake::anyParameters())->thenReturnSelf();
 
         $this->assertSame($mock, $mock->foo());
     }
@@ -1857,7 +1789,7 @@ class PhakeTest extends TestCase
     public function testCloneMock(): void
     {
         $mock = Phake::mock(\PhakeTest_MockedClass::class);
-        Phake::when($mock)->foo->thenReturn('bar');
+        Phake::when($mock)->foo(Phake::anyParameters())->thenReturn('bar');
 
         $this->assertEquals('bar', $mock->foo());
 
@@ -1932,7 +1864,7 @@ class PhakeTest extends TestCase
     {
         $mock = Phake::mock(PhakeTest_MockedClass::class);
 
-        Phake::when($mock)->foo->thenReturn(42)->thenDoNothing();
+        Phake::when($mock)->foo(Phake::anyParameters())->thenReturn(42)->thenDoNothing();
 
         $this->assertEquals(42, $mock->foo());
         $this->assertNull($mock->foo());
@@ -1942,7 +1874,7 @@ class PhakeTest extends TestCase
     {
         $mock = Phake::mock(PhakeTest_MockedClass::class);
 
-        Phake::when($mock)->foo->thenReturn(42)->thenReturnSelf();
+        Phake::when($mock)->foo(Phake::anyParameters())->thenReturn(42)->thenReturnSelf();
 
         $this->assertEquals(42, $mock->foo());
         $this->assertSame($mock, $mock->foo());
@@ -1952,7 +1884,7 @@ class PhakeTest extends TestCase
     {
         $mock = Phake::mock(PhakeTest_MockedClass::class);
 
-        Phake::when($mock)->foo->thenReturn(42)->thenReturnCallback(function () {
+        Phake::when($mock)->foo(Phake::anyParameters())->thenReturn(42)->thenReturnCallback(function () {
             return true;
         });
 

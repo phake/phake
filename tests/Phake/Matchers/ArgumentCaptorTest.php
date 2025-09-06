@@ -83,7 +83,7 @@ class ArgumentCaptorTest extends TestCase
     public function testConditionalCapturing(): void
     {
         $matcher = Phake::mock(IChainableArgumentMatcher::class);
-        Phake::when($matcher)->doArgumentsMatch->thenReturn(true);
+        Phake::when($matcher)->doArgumentsMatch(Phake::anyParameters())->thenReturn(true);
 
         $this->captor->when($matcher);
 
@@ -101,7 +101,7 @@ class ArgumentCaptorTest extends TestCase
     public function testConditionalCapturingWontCapture(): void
     {
         $matcher = Phake::mock(IChainableArgumentMatcher::class);
-        Phake::when($matcher)->doArgumentsMatch->thenThrow(new Phake\Exception\MethodMatcherException());
+        Phake::when($matcher)->doArgumentsMatch(Phake::anyParameters())->thenThrow(new Phake\Exception\MethodMatcherException());
 
         $this->captor->when($matcher);
 
@@ -118,7 +118,7 @@ class ArgumentCaptorTest extends TestCase
     public function testConditionalCaptureFailureUpdatesMessage(): void
     {
         $matcher = Phake::mock(IChainableArgumentMatcher::class);
-        Phake::when($matcher)->doArgumentsMatch->thenThrow(new Phake\Exception\MethodMatcherException('test'));
+        Phake::when($matcher)->doArgumentsMatch(Phake::anyParameters())->thenThrow(new Phake\Exception\MethodMatcherException('test'));
 
         $this->captor->when($matcher);
 

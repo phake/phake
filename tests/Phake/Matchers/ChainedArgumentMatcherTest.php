@@ -75,8 +75,8 @@ class ChainedArgumentMatcherTest extends TestCase
     {
         $args = ['test arg1', 'test arg2'];
 
-        Phake::when($this->adapted)->matches->thenReturn(true);
-        Phake::when($this->nextMatcher)->doArgumentsMatch->thenReturn(true);
+        Phake::when($this->adapted)->matches(Phake::anyParameters())->thenReturn(true);
+        Phake::when($this->nextMatcher)->doArgumentsMatch(Phake::anyParameters())->thenReturn(true);
 
         $result = $this->matcher->doArgumentsMatch($args);
 
@@ -91,14 +91,14 @@ class ChainedArgumentMatcherTest extends TestCase
 
         $args = ['test arg1', 'test arg2'];
 
-        Phake::when($this->adapted)->matches->thenReturn(false);
+        Phake::when($this->adapted)->matches(Phake::anyParameters())->thenReturn(false);
 
         $this->matcher->doArgumentsMatch($args);
     }
 
     public function testToString(): void
     {
-        Phake::when($this->adapted)->__toString->thenReturn('test string');
+        Phake::when($this->adapted)->__toString(Phake::anyParameters())->thenReturn('test string');
 
         $result = $this->matcher->__toString();
 

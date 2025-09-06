@@ -61,7 +61,7 @@ class CallExpectationTest extends TestCase
         $matcher2 = Phake::mock(\Phake\Matchers\IChainableArgumentMatcher::class);
         Phake::when($matcher2)->__toString()->thenReturn('200');
 
-        Phake::when($matcher1)->getNextMatcher->thenReturn($matcher2);
+        Phake::when($matcher1)->getNextMatcher(Phake::anyParameters())->thenReturn($matcher2);
 
         $verifierMode = Phake::mock(\Phake\CallRecorder\IVerifierMode::class);
         Phake::when($verifierMode)->__toString()->thenReturn('2 times');
@@ -83,7 +83,7 @@ class CallExpectationTest extends TestCase
         $matcher2 = Phake::mock(\Phake\Matchers\IChainableArgumentMatcher::class);
         Phake::when($matcher2)->__toString()->thenReturn('200');
 
-        Phake::when($matcher1)->getNextMatcher->thenReturn($matcher2);
+        Phake::when($matcher1)->getNextMatcher(Phake::anyParameters())->thenReturn($matcher2);
 
         $verifierMode = Phake::mock(\Phake\CallRecorder\IVerifierMode::class);
         Phake::when($verifierMode)->__toString()->thenReturn('2 times');

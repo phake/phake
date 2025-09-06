@@ -82,7 +82,7 @@ class ReferenceSetterTest extends TestCase
     {
         $matcher = Phake::mock(IChainableArgumentMatcher::class);
         $check = '';
-        Phake::when($matcher)->doArgumentsMatch->thenReturnCallback(function ($arg) use (&$check) {
+        Phake::when($matcher)->doArgumentsMatch(Phake::anyParameters())->thenReturnCallback(function ($arg) use (&$check) {
             $check = $arg[0];
 
             return true;
@@ -103,7 +103,7 @@ class ReferenceSetterTest extends TestCase
     {
         $matcher = Phake::mock(IChainableArgumentMatcher::class);
         $check = '';
-        Phake::when($matcher)->doArgumentsMatch->thenThrow(new Phake\Exception\MethodMatcherException());
+        Phake::when($matcher)->doArgumentsMatch(Phake::anyParameters())->thenThrow(new Phake\Exception\MethodMatcherException());
 
         $this->setter->when($matcher);
 
@@ -118,7 +118,7 @@ class ReferenceSetterTest extends TestCase
     {
         $matcher = Phake::mock(IChainableArgumentMatcher::class);
         $check = '';
-        Phake::when($matcher)->doArgumentsMatch->thenThrow(new Phake\Exception\MethodMatcherException('test'));
+        Phake::when($matcher)->doArgumentsMatch(Phake::anyParameters())->thenThrow(new Phake\Exception\MethodMatcherException('test'));
 
         $this->setter->when($matcher);
 

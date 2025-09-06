@@ -77,25 +77,14 @@ class StubberProxy
     }
 
     /**
-     * A magic call to instantiate an Answer Binder Proxy that matches any parameters.
-     *
-     * @throws \InvalidArgumentException if $method is not a valid parameter/method name
+     * @throws \InvalidArgumentException if `__get` is not defined
      */
     public function __get(string|object $method): AnswerBinderProxy
     {
-        if (is_string($method) && ctype_digit($method[0])) {
-            throw new \InvalidArgumentException('String parameter to __get() cannot start with an integer');
-        }
-
-        if (method_exists($this->obj, '__get') && !(is_string($method) && method_exists($this->obj, $method))) {
+        if (method_exists($this->obj, '__get')) {
             return $this->__call('__get', [$method]);
         }
 
-        if (!is_string($method)) {
-            $message = sprintf('Parameter to __get() must be a string, %s given', gettype($method));
-            throw new \InvalidArgumentException($message);
-        }
-
-        return $this->__call($method, [new \Phake\Matchers\AnyParameters()]);
+        throw new \InvalidArgumentException('__get method is not defined.');
     }
 }

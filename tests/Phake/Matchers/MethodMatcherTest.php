@@ -83,7 +83,7 @@ class MethodMatcherTest extends TestCase
      */
     public function testMatchesSuccessfullyMatches(): void
     {
-        Phake::when($this->rootArgumentMatcher)->doArgumentsMatch->thenReturn(true);
+        Phake::when($this->rootArgumentMatcher)->doArgumentsMatch(Phake::anyParameters())->thenReturn(true);
 
         $arguments = ['foo', 'bar'];
         $this->assertTrue($this->matcher->matches('foo', $arguments));
@@ -94,7 +94,7 @@ class MethodMatcherTest extends TestCase
      */
     public function testNoMatcherOnBadMethod(): void
     {
-        Phake::when($this->rootArgumentMatcher)->doArgumentsMatch->thenReturn(true);
+        Phake::when($this->rootArgumentMatcher)->doArgumentsMatch(Phake::anyParameters())->thenReturn(true);
 
         $arguments = ['foo', 'bar'];
         $this->assertFalse($this->matcher->matches('test', $arguments));
@@ -105,7 +105,7 @@ class MethodMatcherTest extends TestCase
      */
     public function testNoMatcherOnBadArg1(): void
     {
-        Phake::when($this->rootArgumentMatcher)->doArgumentsMatch->thenThrow(new Phake\Exception\MethodMatcherException());
+        Phake::when($this->rootArgumentMatcher)->doArgumentsMatch(Phake::anyParameters())->thenThrow(new Phake\Exception\MethodMatcherException());
 
         $arguments = ['foo', 'bar'];
         $this->assertFalse($this->matcher->matches('foo', $arguments));

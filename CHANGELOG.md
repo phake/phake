@@ -9,6 +9,7 @@ Phake 5.0.0 introduces significant updates and improvements, including removals 
 ## Deprecated Features Removed
 - `Phake::partMock()` has been removed. Use `Phake::partialMock()` instead.
 - `AnswerProxyInterface::thenGetReturnByLambda()` has been removed.
+- Shorthand Stub and Verify notation has been removed.
 
 ## Notable Changes
 - **Private Methods**: Phake no longer mocks private methods, as mocking them offers no practical value.
