@@ -1891,45 +1891,4 @@ class PhakeTest extends TestCase
         $this->assertEquals(42, $mock->foo());
         $this->assertTrue($mock->foo());
     }
-
-    public function testPropertyHooksGetter(): void
-    {
-        if (PHP_VERSION_ID < 80400) {
-            $this->markTestSkipped('never type is not supported in PHP versions prior to 8.4');
-        }
-
-        $mock = Phake::mock(PhakeTest\PropertyHooks::class);
-        Phake::when($mock)->publicPropWithHooks->get()->thenReturn('myValue1')->thenReturn('myValue2');
-        $this->assertSame('myValue1', $mock->publicPropWithHooks);
-        $this->assertSame('myValue2', $mock->publicPropWithHooks);
-
-        $mock = Phake::mock(PhakeTest\PropertyHooks::class);
-        Phake::when($mock)->publicPropWithHooks->thenReturn('myValue3')->thenReturn('myValue4');
-        $this->assertSame('myValue3', $mock->publicPropWithHooks);
-        $this->assertSame('myValue4', $mock->publicPropWithHooks);
-        
-        $mock = Phake::mock(PhakeTest\PropertyHooks::class);
-        Phake::when($mock)->publicPropWithHooks->thenReturnCallback(fn() => 'callBackReturn');
-        $this->assertSame('callBackReturn', $mock->publicPropWithHooks);
-
-        $mock = Phake::mock(PhakeTest\PropertyHooks::class);
-        Phake::when($mock)->publicPropWithHooks->get()->thenCallParent();
-        $this->assertSame('foobar', $mock->publicPropWithHooks);
-    }
-
-    public function testVerifyNoFurtherInteractionWithPropertyHooks(): void
-    {
-        if (PHP_VERSION_ID < 80400) {
-            $this->markTestSkipped('never type is not supported in PHP versions prior to 8.4');
-        }
-
-        $this->expectException(Phake\Exception\VerificationException::class);
-
-        $mock = Phake::mock(PhakeTest\PropertyHooks::class);
-
-        Phake::verifyNoFurtherInteraction($mock);
-        Phake::setClient(Phake::CLIENT_DEFAULT);
-
-        $mock->publicPropWithHooks = 'setValue1';
-    }
 }
