@@ -44,8 +44,7 @@
     "autoload-dev": {
         "psr-4": {
             "PhakeTest\\": "tests/PhakeTest/"
-        },
-        "files": ["tests/PhakeTestUtil.php"]
+        }
     },
     "suggest": {
         "doctrine/annotations": "Allows mock annotations to use import statements for classes.",
