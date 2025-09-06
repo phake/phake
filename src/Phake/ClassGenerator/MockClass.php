@@ -154,7 +154,7 @@ class MockClass
 	/**
 	 * @return void
 	 */
-    public function __destruct() {}
+	public function __destruct() {}
 
         {$this->generateMockedProperties($mockedClass, $interfaces)}
 
