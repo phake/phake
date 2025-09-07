@@ -6,7 +6,10 @@ namespace PhakeTest;
 
 class PropertyHooks
 {
-    public string $publicPropWithHooks = 'foobar';
+    public string $publicPropWithHooks = 'foobar' {
+        get => $this->publicPropWithHooks;
+        set => $value;
+    }
 
     public string $stringWithDefaultValue = 'default';
     public string $stringWithoutDefaultValue;
