@@ -289,7 +289,7 @@ class MockClass
     protected function implementGetPropertyHook(\ReflectionProperty $property): string
     {
         $parentHook = $property->getHook(\PropertyHookType::Get);
-        if ($parentHook?->isFinal()) {
+        if ($parentHook?->isFinal() || (!$parentHook && $property->isVirtual())) {
             return '';
         }
         return "\n\t\tget {
@@ -314,7 +314,7 @@ class MockClass
     protected function implementSetPropertyHook(\ReflectionProperty $property): string
     {
         $parentHook = $property->getHook(\PropertyHookType::Set);
-        if ($parentHook?->isFinal()) {
+        if ($parentHook?->isFinal() || (!$parentHook && $property->isVirtual())) {
             return '';
         }
         return "\n\t\tset {

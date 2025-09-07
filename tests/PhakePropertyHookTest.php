@@ -303,6 +303,26 @@ class PhakePropertyHookTest extends TestCase
         $this->assertSame('setValue1', $arg);
     }
 
+    public function testVirtualReadOnlyProperty(): void
+    {
+        $this->expectException(Error::class);
+        $this->expectExceptionMessageMatches('/virtualReadOnly is read-only/');
+
+        $mock = Phake::mock(PhakeTest\PropertyHooks::class);
+        $_ = $mock->virtualReadOnly;
+        $mock->virtualReadOnly = 'test';
+    }
+
+    public function testVirtualWriteOnlyProperty(): void
+    {
+        $this->expectException(Error::class);
+        $this->expectExceptionMessageMatches('/virtualWriteOnly is write-only/');
+
+        $mock = Phake::mock(PhakeTest\PropertyHooks::class);
+        $mock->virtualWriteOnly = 'test';
+        $_ = $mock->virtualWriteOnly;
+    }
+        
     private function assertSameException(\Throwable $expected, callable $func): void
     {
         try {

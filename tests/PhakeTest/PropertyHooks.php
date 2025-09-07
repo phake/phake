@@ -23,4 +23,10 @@ class PropertyHooks
         final set => $value;
     }
 
+    public string $virtualReadOnly {
+        get => 'virtualRO';
+    }
+    public string $virtualWriteOnly {
+        set { $this->stringWithoutDefaultValue = $value; }
+    }
 }
