@@ -227,7 +227,7 @@ class SmartDefaultAnswerTest extends TestCase
 
     public function testPropertyReturnDefaultValue(): void
     {
-        $context = new PhakeTest\PropertyHooks;
+        $context = new PhakeTest\Properties;
 
         $cb = $this->answer->getAnswerCallback($context, 'stringWithDefaultValue');
         $this->assertSame('default', $cb());
