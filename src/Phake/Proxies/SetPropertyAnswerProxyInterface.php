@@ -2,7 +2,7 @@
 /*
  * Phake - Mocking Framework
  *
- * Copyright (c) 2010-2025, Mike Lively <m@digitalsandwich.com>
+ * Copyright (c) 2010-2022, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -42,63 +42,25 @@
  * @link       http://www.digitalsandwich.com/
  */
 
+/**
+ * Defines an interface for anything that supports answers
+ *
+ * @author Mike Lively <m@digitalsandwich.com>
+ */
+
 declare(strict_types=1);
 
-namespace Phake\Stubber\Answers;
+namespace Phake\Proxies;
 
-/**
- * An answer delegate that allows mocked methods to call their parent methods.
- *
- * If a particular method does not have a parent (ie abstract methods) then a static null answer (effectively) is used
- * instead.
- *
- * This class is both the delegator and the delegate.
- */
-class ParentDelegate implements \Phake\Stubber\IAnswer
+interface SetPropertyAnswerProxyInterface
 {
-    private mixed $capturedReturn;
+    /**
+     * Binds a delegated call that will call a given method's parent.
+     */
+    public function thenCallParent(): \Phake\Stubber\IAnswerContainer;
 
-    public function __construct(mixed &$captor = null)
-    {
-        $this->capturedReturn =& $captor;
-    }
-
-    public function processAnswer(mixed $answer): void
-    {
-        $this->capturedReturn = $answer;
-    }
-
-    public function getAnswerCallback(mixed $context, string $method): callable
-    {
-        $fallback =  [$this, 'getFallback'];
-        try {
-            $reflClass = new \ReflectionClass($context);
-            $reflParent = $reflClass->getParentClass();
-
-            if (!is_object($reflParent)) {
-                return $fallback;
-            }
-
-            if ($reflParent->hasMethod($method)) {
-                $reflMethod = $reflParent->getMethod($method);
-                if (!$reflMethod->isAbstract()) {
-                    if (defined('HHVM_VERSION')) {
-                        return ['parent', $method];
-                    }
-
-                    return new ParentDelegateCallback($context, $reflMethod);
-                }
-            } elseif ($reflParent->hasProperty($method)) {
-                return new ParentDelegateCallback($context, null);
-            }
-        } catch (\ReflectionException) {
-        }
-
-        return $fallback;
-    }
-
-    public function getFallback(mixed ...$args): mixed
-    {
-        return null;
-    }
+    /**
+     * Binds an exception answer to the method and object in the proxied binder.
+     */
+    public function thenThrow(\Throwable $value): \Phake\Stubber\IAnswerContainer;
 }

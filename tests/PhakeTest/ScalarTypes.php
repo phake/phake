@@ -88,4 +88,8 @@ class ScalarTypes
     public function selfReturn(): self
     {
     }
+
+    public function unknownReturn(): unknownObject
+    {
+    }
 }

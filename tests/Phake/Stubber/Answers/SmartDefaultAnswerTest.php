@@ -94,6 +94,14 @@ class SmartDefaultAnswerTest extends TestCase
         $this->assertIsCallable($cb());
     }
 
+    public function testUnknownReturn(): void
+    {
+        $this->expectException(\Exception::class);
+
+        $context = new PhakeTest\ScalarTypes();
+        $cb = $this->answer->getAnswerCallback($context, 'unknownReturn');
+    }
+
     public function testObjectReturn(): void
     {
         $context = new PhakeTest\ScalarTypes();
@@ -215,5 +223,22 @@ class SmartDefaultAnswerTest extends TestCase
 
         $result = $cb();
         $this->assertNull($result);
+    }
+
+    public function testPropertyReturnDefaultValue(): void
+    {
+        $context = new PhakeTest\Properties;
+
+        $cb = $this->answer->getAnswerCallback($context, 'stringWithDefaultValue');
+        $this->assertSame('default', $cb());
+
+        $cb = $this->answer->getAnswerCallback($context, 'stringWithoutDefaultValue');
+        $this->assertSame('', $cb());
+
+        $cb = $this->answer->getAnswerCallback($context, 'intWithDefaultValue'); 
+        $this->assertSame(42, $cb());
+
+        $cb = $this->answer->getAnswerCallback($context, 'intWithoutDefaultValue');
+        $this->assertSame(0, $cb());
     }
 }

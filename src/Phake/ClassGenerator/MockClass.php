@@ -156,6 +156,8 @@ class MockClass
 	 */
 	public function __destruct() {}
 
+        {$this->generateMockedProperties($mockedClass, $interfaces)}
+
  	{$this->generateSafeConstructorOverride($mockedClasses)}
 
 	{$this->generateMockedMethods($mockedClass, $interfaces)}
@@ -241,6 +243,95 @@ class MockClass
         }
 
         return $methodDefs;
+    }
+
+    protected function generateMockedProperties(\ReflectionClass $mockedClass, array $mockedInterfaces = [], array &$implementedProperties = []): string
+    {
+        if (PHP_VERSION_ID < 80400) return '';
+
+        $propDefs = '';
+
+        $filter = \ReflectionProperty::IS_PUBLIC;
+
+        foreach ($mockedClass->getProperties($filter) as $property) {
+            if (!$property->isFinal() && !$property->isStatic() && !$property->isReadOnly()) {
+                $propertyName = $property->getName();
+                $implementedProperties[$propertyName] = $propertyName;
+                $propDefs .= $this->implementProperty($property) . "\n    ";
+            }
+        }
+
+        foreach ($mockedInterfaces as $interface) {
+            $propDefs .= $this->generateMockedProperties($interface, [], $implementedProperties);
+        }
+
+        return $propDefs;
+    }
+
+    protected function implementProperty(\ReflectionProperty $property): string
+    {
+        $type = $defaultValue = '';
+
+        if ($property->hasType()) {
+            /** @psalm-suppress PossiblyNullArgument */
+            $type = $this->reflectionTypeToString($property->getType(), $property->getDeclaringClass()) . ' ';
+        }
+        if ($property->hasDefaultValue()) {
+            $defaultValue = ' = ' . var_export($property->getDefaultValue(), true);
+        }
+
+        return "public {$type}\${$property->getName()}{$defaultValue} {"
+            . $this->implementGetPropertyHook($property)
+            . $this->implementSetPropertyHook($property)
+            . "\n\t}";
+    }
+
+    protected function implementGetPropertyHook(\ReflectionProperty $property): string
+    {
+        $parentHook = $property->getHook(\PropertyHookType::Get);
+        if ($parentHook?->isFinal() || (!$parentHook && $property->isVirtual())) {
+            return '';
+        }
+        return "\n\t\tget {
+            \$__PHAKE_args = array();
+            \$__PHAKE_info = Phake::getInfo(\$this);
+            \$__PHAKE_answer = \$__PHAKE_info->getHandlerChain()->invoke(\$this, '{$property->getName()}::get', [], \$__PHAKE_args);
+            \$__PHAKE_callback = \$__PHAKE_answer->getAnswerCallback(\$this, '{$property->getName()}');
+
+            if (\$__PHAKE_callback instanceof \Phake\Stubber\Answers\ParentDelegateCallback)
+            {
+                \$__PHAKE_result = parent::\${$property->getName()}::get();
+            }
+            else
+            {
+                \$__PHAKE_result = call_user_func_array(\$__PHAKE_callback, []);
+            }
+            \$__PHAKE_answer->processAnswer(\$__PHAKE_result);
+            return \$__PHAKE_result;
+        }";
+    }
+
+    protected function implementSetPropertyHook(\ReflectionProperty $property): string
+    {
+        $parentHook = $property->getHook(\PropertyHookType::Set);
+        if ($parentHook?->isFinal() || (!$parentHook && $property->isVirtual())) {
+            return '';
+        }
+        return "\n\t\tset {
+            \$__PHAKE_args = array(\$value);
+            \$__PHAKE_info = Phake::getInfo(\$this);
+            \$__PHAKE_answer = \$__PHAKE_info->getHandlerChain()->invoke(\$this, '{$property->getName()}::set', [ \$value ], \$__PHAKE_args);
+            \$__PHAKE_callback = \$__PHAKE_answer->getAnswerCallback(\$this, '{$property->getName()}');
+
+            if (\$__PHAKE_callback instanceof \Phake\Stubber\Answers\ParentDelegateCallback)
+            {
+                parent::\${$property->getName()}::set(\$value);
+            }
+            else
+            {
+                call_user_func_array(\$__PHAKE_callback, []);
+            }
+        }";
     }
 
     private function isConstructorDefinedInInterface(\ReflectionClass $mockedClass): bool
@@ -537,8 +628,7 @@ class MockClass
                 new InvocationHandler\FrozenObjectCheck($info),
                 new InvocationHandler\CallRecorder($info->getCallRecorder()),
                 new InvocationHandler\MagicCallRecorder($info->getCallRecorder()),
-                new InvocationHandler\StubCaller($info->getStubMapper(), $info->getDefaultAnswer(
-                )),
+                new InvocationHandler\StubCaller($info->getStubMapper(), $info->getDefaultAnswer()),
             ])
         );
 
