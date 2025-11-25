@@ -85,7 +85,9 @@ class StaticVisibilityProxy
     {
         if (method_exists($this->proxied, $method)) {
             $reflMethod = new \ReflectionMethod($this->proxied, $method);
-            $reflMethod->setAccessible(true);
+            if (PHP_VERSION_ID < 80100) {
+                $reflMethod->setAccessible(true);
+            }
             return $reflMethod->invokeArgs(null, $arguments);
         } elseif (method_exists($this->proxied, '__callStatic')) {
             $reflMethod = new \ReflectionMethod($this->proxied, '__callStatic');

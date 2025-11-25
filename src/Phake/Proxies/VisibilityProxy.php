@@ -85,7 +85,9 @@ class VisibilityProxy
     {
         if (method_exists($this->proxied, $method)) {
             $reflMethod = new \ReflectionMethod(get_class($this->proxied), $method);
-            $reflMethod->setAccessible(true);
+            if (PHP_VERSION_ID < 80100) {
+                $reflMethod->setAccessible(true);
+            }
             return $reflMethod->invokeArgs($this->proxied, $arguments);
         } elseif (method_exists($this->proxied, '__call')) {
             $reflMethod = new \ReflectionMethod(get_class($this->proxied), '__call');
