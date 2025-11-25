@@ -77,7 +77,9 @@ class ParentDelegateCallback
      */
     public function __invoke(array $arguments)
     {
-        $this->parentMethod->setAccessible(true);
+        if (PHP_VERSION_ID < 80100) {
+            $this->parentMethod->setAccessible(true);
+        }
         if ($this->parentMethod->isStatic()) {
             $context = null;
         } else {
