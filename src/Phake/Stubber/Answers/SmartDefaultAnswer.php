@@ -79,6 +79,7 @@ class SmartDefaultAnswer implements \Phake\Stubber\IAnswer
                 case 'callable':
                     return function () {};
                 case 'self':
+                case 'static':
                     return \Phake::mock($method->getDeclaringClass()->getName());
                 case 'null':
                 case 'void':
