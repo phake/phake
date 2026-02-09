@@ -6,6 +6,8 @@ jobs:
   tests:
     name: Tests PHP ${{ matrix.php }} / PHPUnit ${{ matrix.phpunit }}
     runs-on: ubuntu-latest
+    env:
+      COMPOSER_NO_SECURITY_BLOCKING: 1
     strategy:
       fail-fast: false
       matrix:
