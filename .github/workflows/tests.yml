@@ -55,7 +55,6 @@ jobs:
           - php: 8.1
             phpunit: ^10.0
             phpunit_config_file: 'phpunit10.xml.dist'
-            analysis: true
           - php: 8.2
             phpunit: ^9.5
             phpunit_config_file: 'phpunit.xml.dist'
@@ -97,10 +96,3 @@ jobs:
 
       - name: Tests
         run: bin/phpunit --configuration ${{ matrix.phpunit_config_file }} --coverage-clover clover.xml
-
-      - name: Upload Scrutinizer coverage
-        if: matrix.analysis
-        uses: sudo-bot/action-scrutinizer@latest
-        with:
-          cli-args: "--format=php-clover clover.xml --revision=${{ github.event.pull_request.head.sha || github.sha }}"
-
