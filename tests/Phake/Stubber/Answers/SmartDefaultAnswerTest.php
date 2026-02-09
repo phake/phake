@@ -91,7 +91,7 @@ class SmartDefaultAnswerTest extends TestCase
         $context = new PhakeTest\ScalarTypes();
         $cb = $this->answer->getAnswerCallback($context, 'callableReturn');
 
-        $this->assertIsCallable($cb());
+        $this->assertInstanceOf(\Closure::class, $cb());
     }
 
     public function testObjectReturn(): void

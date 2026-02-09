@@ -149,7 +149,9 @@ class StubberProxyTest extends TestCase
     {
         $reflectionObject = new \ReflectionObject($object);
         $reflectionProperty = $reflectionObject->getProperty($propertyName);
-        $reflectionProperty->setAccessible(true);
+        if (PHP_VERSION_ID < 80100) {
+            $reflectionProperty->setAccessible(true);
+        }
         $value = $reflectionProperty->getValue($object);
 
         $this->assertInstanceOf($class, $value);

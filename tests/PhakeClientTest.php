@@ -12,7 +12,9 @@ class PhakeClientTest extends TestCase
         // unset the $client in Phake
         $refClass = new ReflectionClass('Phake');
         $clientProperty = $refClass->getProperty('client');
-        $clientProperty->setAccessible(true);
+        if (PHP_VERSION_ID < 80100) {
+            $clientProperty->setAccessible(true);
+        }
         $clientProperty->setValue(null, null);
     }
 

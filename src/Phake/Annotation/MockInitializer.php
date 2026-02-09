@@ -94,7 +94,9 @@ class MockInitializer
 
             if ($mockedClass) {
                 /** @var class-string $mockedClass */
-                $property->setAccessible(true);
+                if (PHP_VERSION_ID < 80100) {
+                    $property->setAccessible(true);
+                }
                 $property->setValue($object, \Phake::mock($mockedClass));
             }
         }

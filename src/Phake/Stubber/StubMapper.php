@@ -63,7 +63,7 @@ class StubMapper
      */
     public function mapStubToMatcher(AnswerCollection $answer, \Phake\Matchers\IMethodMatcher $matcher): void
     {
-        $this->matcherStubMap[$matcher->getMethod()][] = [$matcher, $answer];
+        $this->matcherStubMap[(string) $matcher->getMethod()][] = [$matcher, $answer];
     }
 
     /**
