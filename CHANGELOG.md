@@ -1,9 +1,13 @@
 ## Phake 4.7.0
 
+### New Feature
+
+**#334 Add support for Comparator 8 / PHPUnit 13**
+
 ### Deprecation
+
 **Shorthand Stub and Verify notation are deprecated**
 Replace `Phake::when($mock)->foo by Phake::when($mock)->foo(Phake::anyParameters())` and `Phake::verify($mock)->foo` by `Phake::verify($mock)->foo(Phake::anyParameters())`.
-
 
 ## Phake 4.6.0
 
